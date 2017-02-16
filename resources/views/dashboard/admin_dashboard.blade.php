@@ -8,7 +8,7 @@
 				<div class="inner">
 					<h3>{{ ($newprogrammes) ? $newprogrammes : '0' }}  <sup style="font-size: 20px"></sup></h3>
 
-					<p>New Programmes</p>
+					<p>New Programmes (git test)</p>
 				</div>
 				<div class="icon">
 					<i class="ion ion-stats-bars"></i>
