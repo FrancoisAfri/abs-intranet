@@ -94,7 +94,7 @@ Route::patch('contacts/company/{company}', 'ContactCompaniesController@update');
 
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
-//Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
+Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
 //General Use (API)
 
