@@ -49,6 +49,38 @@ class DatabaseSeeder extends Seeder
         $person->status = 1;
         $user->addPerson($person);
 
+        //insert default user
+        $user = new User;
+        $user->email = 'nkosana@afrixcel.co.za';
+        $user->password = Hash::make('123456');
+        $user->type = 3;
+        $user->status = 1;
+        $user->save();
+
+        //insert default user's hr record
+        $person = new HRPerson();
+        $person->first_name = 'Nkosana';
+        $person->surname = 'Biyela';
+        $person->email = 'nkosana@afrixcel.co.za';
+        $person->status = 1;
+        $user->addPerson($person);
+
+        //insert default user
+        $user = new User;
+        $user->email = 'thato@afrixcel.co.za';
+        $user->password = Hash::make('123456');
+        $user->type = 3;
+        $user->status = 1;
+        $user->save();
+
+        //insert default user's hr record
+        $person = new HRPerson();
+        $person->first_name = 'Thato';
+        $person->surname = 'Lechuti';
+        $person->email = 'thato@afrixcel.co.za';
+        $person->status = 1;
+        $user->addPerson($person);
+
         //insert default country
         $country = new Country;
         $country->name = 'South Africa';
@@ -171,7 +203,7 @@ class DatabaseSeeder extends Seeder
         $module->path = 'contacts';
         $module->font_awesome = 'fa-users';
         $module->save();
-
+/*
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
@@ -259,7 +291,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'education/search';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-
+*/
         $module = new modules();
         $module->active = 1;
         $module->name = 'Security';
@@ -293,7 +325,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'users/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-
+/*
         $module = new modules();
         $module->active = 1;
         $module->name = 'Partners';
@@ -318,5 +350,6 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'contacts/provider/create';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
+*/
     }
 }
