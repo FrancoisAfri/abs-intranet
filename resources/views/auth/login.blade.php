@@ -27,7 +27,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <img src="{{ Storage::disk('local')->url('logos/logo.png') }}" width="100%" class="img-responsive" alt="Company Logo">
+        <img src="{{ Storage::disk('local')->url('logos/logo.jpg') }}" width="100%" class="img-responsive" alt="Company Logo">
         <!-- <a href="/"><b>NU-LAXMI</b> LEASING</a> -->
     </div>
     <!-- /.login-logo -->

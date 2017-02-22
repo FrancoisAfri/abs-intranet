@@ -55,7 +55,7 @@ class AppServiceProvider extends ServiceProvider
                 }])
                 ->orderBy('name', 'ASC')->get();
 
-            $data['company_logo'] = Storage::disk('local')->url('logos/_logo.png');
+            $data['company_logo'] = Storage::disk('local')->url('logos/logo.jpg');
 			$data['modulesAccess'] = $modulesAccess;
             $view->with($data);
         });
