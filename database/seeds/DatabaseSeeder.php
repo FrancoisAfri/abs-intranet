@@ -325,6 +325,82 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'users/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+		
+		$module = new modules(); //Employee Records
+        $module->active = 1;
+        $module->name = 'Employee Records';
+        $module->path = 'hr ';
+        $module->font_awesome = 'fa-users';
+        $module->save();
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Job Titles';
+        $ribbon->description = 'Job Titles';
+        $ribbon->ribbon_path = 'hr/job_title';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Company Setup';
+        $ribbon->description = 'Company Setup';
+        $ribbon->ribbon_path = 'hr/company_setup';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'hr/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+		$module = new modules(); //Leave Management
+        $module->active = 1;
+        $module->name = 'Leave Management';
+        $module->path = 'leave';
+        $module->font_awesome = 'fa-glass';
+        $module->save();
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Apply';
+        $ribbon->description = 'Leave Application';
+        $ribbon->ribbon_path = 'leave/application';
+        $ribbon->access_level = 1;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Approval';
+        $ribbon->description = 'Leave Approval';
+        $ribbon->ribbon_path = 'leave/approval';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'leave/reports';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'leave/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
 /*
         $module = new modules();
         $module->active = 1;
