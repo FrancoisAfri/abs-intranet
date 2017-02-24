@@ -35,10 +35,14 @@ Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
 Route::get('users/setup', 'UsersController@setup');
+Route::get('leave/setup', 'LeaveController@setup');
 Route::post('users/setup/modules', 'UsersController@addmodules');
+Route::post('leave/setup/LeaveSetUp', 'LeaveController@addleave');
+
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
 Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
+Route::patch('/leave/leave_edit/{lev}', 'LeaveController@editLeaveType');
 Route::patch('/ribbon/{ribbon}', 'UsersController@editRibbon');
 Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
