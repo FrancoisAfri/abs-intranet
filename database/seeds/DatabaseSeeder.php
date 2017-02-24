@@ -7,6 +7,7 @@ use App\Country;
 use App\Province;
 use App\modules;
 use App\module_ribbons;
+use App\DivisionLevel;
 
 class DatabaseSeeder extends Seeder
 {
@@ -68,7 +69,7 @@ class DatabaseSeeder extends Seeder
         //insert default user
         $user = new User;
         $user->email = 'thato@afrixcel.co.za';
-        $user->password = Hash::make('123456');
+        $user->password = Hash::make('h@kers');
         $user->type = 3;
         $user->status = 1;
         $user->save();
@@ -169,6 +170,36 @@ class DatabaseSeeder extends Seeder
             'value' => 'Indian',
             'status' => 1,
         ]);
+
+        //insert the employees group levels (division departments)
+        $groupLevel = new DivisionLevel();
+        $groupLevel->level = 1;
+        $groupLevel->name = "Department";
+        $groupLevel->plural_name = "Departments";
+        $groupLevel->active = 1;
+        $groupLevel->save();
+        
+        $groupLevel = new DivisionLevel();
+        $groupLevel->level = 2;
+        $groupLevel->name = "Division";
+        $groupLevel->plural_name = "Divisions";
+        $groupLevel->active = 1;
+        $groupLevel->save();
+
+        $groupLevel = new DivisionLevel();
+        $groupLevel->level = 3;
+        $groupLevel->active = 0;
+        $groupLevel->save();
+
+        $groupLevel = new DivisionLevel();
+        $groupLevel->level = 4;
+        $groupLevel->active = 0;
+        $groupLevel->save();
+
+        $groupLevel = new DivisionLevel();
+        $groupLevel->level = 5;
+        $groupLevel->active = 0;
+        $groupLevel->save();
 
         //insert some positions
         DB::table('hr_positions')->insert([

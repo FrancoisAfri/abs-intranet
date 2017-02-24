@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DivisionLevel;
 use App\Mail\ConfirmRegistration;
 use Illuminate\Http\Request;
 
@@ -247,6 +248,7 @@ class UsersController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->get();
+        $divisionLevels = DivisionLevel::where('status', 1)->odrerBy('id', 'desc');
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update user details";
         $data['back'] = "/users";
@@ -256,6 +258,7 @@ class UsersController extends Controller
         $data['provinces'] = $provinces;
         $data['ethnicities'] = $ethnicities;
         $data['positions'] = $positions;
+        $data['division_levels'] = $divisionLevels;
         $data['marital_statuses'] = $marital_statuses;
         $data['breadcrumb'] = [
             ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],

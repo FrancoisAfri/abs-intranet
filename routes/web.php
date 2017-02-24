@@ -48,6 +48,8 @@ Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
+Route::get('/hr/setup', 'HrController@showSetup');
+
 
 //Contacts related requests
 Route::get('contacts', 'ContactsController@index');
