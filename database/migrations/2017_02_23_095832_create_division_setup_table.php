@@ -31,6 +31,6 @@ class CreateDivisionSetupTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('division_setup');
     }
 }
