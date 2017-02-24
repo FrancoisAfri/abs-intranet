@@ -11,6 +11,6 @@ class DivisionLevel extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'level', 'name', 'active'
+        'name', 'active'
     ];
 }

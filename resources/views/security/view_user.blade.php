@@ -11,7 +11,7 @@
 @section('content')
     <div class="row">
         <!-- User Form -->
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
             <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -26,10 +26,30 @@
                     {{ method_field('PATCH') }}
 
                     <div class="box-body">
-                        <div class="form-group">
-                            <label for="first_name" class="col-sm-3 control-label">First Name</label>
+                        @if (isset($view_by_admin) && $view_by_admin === 1)
+                            @foreach($division_levels as $division_level)@endforeach
+                            <div class="form-group">
+                                <label for="position" class="col-sm-2 control-label">Position</label>
 
-                            <div class="col-sm-9">
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select name="position" class="form-control">
+                                            <option value="">*** Select a Position ***</option>
+                                            @foreach($positions as $position)
+                                                <option value="{{ $position->id }}" {{ ($user->person->position == $position->id) ? ' selected' : '' }}>{{ $position->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="form-group">
+                            <label for="first_name" class="col-sm-2 control-label">First Name</label>
+
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -39,9 +59,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="surname" class="col-sm-3 control-label">Surname</label>
+                            <label for="surname" class="col-sm-2 control-label">Surname</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -52,9 +72,9 @@
                         </div>
                         @if (isset($view_by_admin) && $view_by_admin === 1)
                             <div class="form-group">
-                                <label for="position" class="col-sm-3 control-label">Position</label>
+                                <label for="position" class="col-sm-2 control-label">Position</label>
 
-                                <div class="col-sm-9">
+                                <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-black-tie"></i>
@@ -71,9 +91,9 @@
                         @endif
 
                         <div class="form-group">
-                            <label for="cell_number" class="col-sm-3 control-label">Cell Number</label>
+                            <label for="cell_number" class="col-sm-2 control-label">Cell Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-phone"></i>
@@ -83,9 +103,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="email" class="col-sm-3 control-label">Email</label>
+                            <label for="email" class="col-sm-2 control-label">Email</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-envelope"></i>
@@ -95,9 +115,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_address" class="col-sm-3 control-label">Address</label>
+                            <label for="res_address" class="col-sm-2 control-label">Address</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
@@ -107,9 +127,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_suburb" class="col-sm-3 control-label">Suburb</label>
+                            <label for="res_suburb" class="col-sm-2 control-label">Suburb</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
@@ -119,9 +139,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_city" class="col-sm-3 control-label">City</label>
+                            <label for="res_city" class="col-sm-2 control-label">City</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
@@ -131,9 +151,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_postal_code" class="col-sm-3 control-label">Postal Code</label>
+                            <label for="res_postal_code" class="col-sm-2 control-label">Postal Code</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
@@ -143,9 +163,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_province_id" class="col-sm-3 control-label">Province</label>
+                            <label for="res_province_id" class="col-sm-2 control-label">Province</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
@@ -160,9 +180,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="date_of_birth" class="col-sm-3 control-label">Date of Birth</label>
+                            <label for="date_of_birth" class="col-sm-2 control-label">Date of Birth</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group date">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
@@ -172,9 +192,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="gender" class="col-sm-3 control-label">Gender</label>
+                            <label for="gender" class="col-sm-2 control-label">Gender</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-venus-mars"></i>
@@ -188,9 +208,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="id_number" class="col-sm-3 control-label">ID Number</label>
+                            <label for="id_number" class="col-sm-2 control-label">ID Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
@@ -200,9 +220,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="passport_number" class="col-sm-3 control-label">Passport Number</label>
+                            <label for="passport_number" class="col-sm-2 control-label">Passport Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
@@ -212,9 +232,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="marital_status" class="col-sm-3 control-label">Marital Status</label>
+                            <label for="marital_status" class="col-sm-2 control-label">Marital Status</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-venus-mars"></i>
@@ -229,9 +249,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="ethnicity" class="col-sm-3 control-label">Ethnicity</label>
+                            <label for="ethnicity" class="col-sm-2 control-label">Ethnicity</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-bar-chart"></i>
@@ -246,9 +266,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="profile_pic" class="col-sm-3 control-label">Profile Picture</label>
+                            <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 @if(!empty($avatar))
                                     <div style="margin-bottom: 10px;">
                                         <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
@@ -259,10 +279,10 @@
                         </div>
                         <hr>
                         <div class="form-group">
-                            <label for="change_password" class="col-sm-3 control-label">Password</label>
+                            <label for="change_password" class="col-sm-2 control-label">Password</label>
 
-                            <div class="col-sm-9">
-                                <button type="button" id="change_password" class="btn btn-link" data-toggle="modal" data-target="#myPasswordModal"><font data-toggle="tooltip" title="Click here to change password.">Change Password</font></button>
+                            <div class="col-sm-10">
+                                <font data-toggle="tooltip" title="Click here to change password."><button type="button" id="change_password" class="btn btn-default btn-flat btn-block" data-toggle="modal" data-target="#myPasswordModal"><i class="fa fa-lock"></i> Change Password</button></font>
                             </div>
                         </div>
                     </div>

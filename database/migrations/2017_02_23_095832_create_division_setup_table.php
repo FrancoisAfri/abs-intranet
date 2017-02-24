@@ -18,6 +18,7 @@ class CreateDivisionSetupTable extends Migration
             $table->increments('id');
             $table->integer('level')->nullable();
             $table->string('name')->nullable();
+            $table->string('plural_name')->nullable();
             $table->smallInteger('active')->nullable();
             $table->timestamps();
         });
