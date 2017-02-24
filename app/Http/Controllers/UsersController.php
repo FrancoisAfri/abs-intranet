@@ -254,7 +254,7 @@ class UsersController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->get();
-        $divisionLevels = DivisionLevel::where('status', 1)->odrerBy('id', 'desc');
+        $divisionLevels = DivisionLevel::where('status', 1)->orderBy('id', 'desc');
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update user details";
         $data['back'] = "/users";
