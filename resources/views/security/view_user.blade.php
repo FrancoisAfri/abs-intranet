@@ -294,6 +294,12 @@
 						@if (isset($view_by_admin) && $view_by_admin === 1)
 						<button type="button" class="btn btn-primary" id="access_button" onclick="postData({{$user->id}}, 'access');">Modules Access</button>
 						@endif
+						@if (isset($view_by_admin) && $view_by_admin === 1)
+						<button type="button" class="btn btn-warning" id="delete_button" name="command"
+								onclick="if(confirm('Are you sure you want to delete this User ?')){ deleteRecord()} else {return false;}"
+                                value="Delete"><i class="fa fa-trash"></i> Delete User
+                        </button>
+						@endif
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -519,6 +525,9 @@
 		{
 			if (data == 'access')
 				location.href = "/users/module_access/" + id;
+		}
+		function deleteRecord() {
+			location.href = "/user/delete/{{ $user->id }}";
 		}
     </script>
 @endsection

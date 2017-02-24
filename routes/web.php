@@ -97,7 +97,19 @@ Route::patch('contacts/company/{company}', 'ContactCompaniesController@update');
 //AGM
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');
-
+# Employee Records Module
+Route::get('hr/job_title', 'EmployeeJobTitleController@index');
+Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
+Route::patch('hr/category_edit/{jobCategory}', 'EmployeeJobTitleController@editCategory');
+Route::get('hr/jobtitles/{jobCategory}', 'EmployeeJobTitleController@jobView');
+Route::get('/hr/category_active/{jobCategory}', 'EmployeeJobTitleController@categoryAct');
+Route::get('/hr/job_title_active/{jobTitle}', 'EmployeeJobTitleController@jobtitleAct');
+Route::post('hr/add_jobtitle/{jobCategory}', 'EmployeeJobTitleController@addJobTitle');
+Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
+# Audit Module
+Route::get('audit/reports', 'AuditReportsController@index');
+Route::post('audits', 'AuditReportsController@getReport');
+Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
