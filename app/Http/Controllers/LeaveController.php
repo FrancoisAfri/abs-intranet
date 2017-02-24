@@ -36,8 +36,8 @@ class LeaveController extends Controller
 			['title' => 'Security', 'path' => '/leave/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
 			['title' => 'Setup', 'active' => 1, 'is_module' => 0]
 		];
-		$data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Setup';
+		$data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Leave Types';
 		$data['leaveTypes'] = $leaveTypes;
         //return $leaveTypes;
 		AuditReportsController::store('Leave', 'Setup Page Accessed', "Accessed By User", 0);
@@ -46,7 +46,7 @@ class LeaveController extends Controller
         
         
     }
-public function editLeaveType(Request $request, LeaveType $lev)
+	public function editLeaveType(Request $request, LeaveType $lev)
 	{
         $this->validate($request, [
             'name' => 'required',
@@ -63,7 +63,7 @@ public function editLeaveType(Request $request, LeaveType $lev)
         AuditReportsController::store('Leave', 'leavetype Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json(['new_name' => $lev->name, 'description' => $lev->description], 200);
     }
-   public function addleave(Request $request) {
+	public function addleave(Request $request) {
 	       $this->validate($request, [
             'name' => 'required',
            // 'description' => 'required',
