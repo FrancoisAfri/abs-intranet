@@ -25,7 +25,7 @@ class CreateAddCategoryIdToHrPositionTable extends Migration
      */
     public function down()
     {
-        Schema::table('contacts_companies', function($table) {
+        Schema::table('hr_positions', function($table) {
             $table->dropColumn('category_id');
         });
     }
