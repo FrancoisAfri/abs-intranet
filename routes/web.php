@@ -112,6 +112,16 @@ Route::get('/hr/setup', 'HrController@showSetup');
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
+
+# Performance Appraisals Module
+Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
+Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
+Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
+Route::get('/appraisal/template_active/{template}', 'AppraisalTemplatesController@templateAct');
+Route::get('appraisal/template/{template}', 'AppraisalTemplatesController@jobView');
+
+//Route::post('audits', 'AuditReportsController@getReport');
+//Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
