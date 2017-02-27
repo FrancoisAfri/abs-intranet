@@ -30,7 +30,7 @@ class LeaveController extends Controller
     public function types(){
         
         $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
-		$data['page_title'] = "leave Setup";
+		$data['page_title'] = "leave Types";
 		$data['page_description'] = "Admin page for leave related settings";
 		$data['breadcrumb'] = [
 			['title' => 'Security', 'path' => '/leave/types', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],

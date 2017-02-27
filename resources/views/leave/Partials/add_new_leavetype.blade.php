@@ -16,7 +16,7 @@
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Module Name" >
+                                <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Leave Type Name" >
                             </div>
                         </div>
                     </div> 

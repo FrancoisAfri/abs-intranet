@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter leavetype Name" required>
+                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter leave type Name" required>
                         </div>
                     </div>
                     <div class="form-group">
