@@ -39,13 +39,18 @@ Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
 Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
+
 Route::patch('/ribbon/{ribbon}', 'UsersController@editRibbon');
 Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
-Route::get('/hr/setup', 'HrController@showSetup');
 
+#Leave Management
+Route::get('leave/types', 'LeaveController@types');
+Route::post('leave/type/add_leave', 'LeaveController@addleave');
+Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
+Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 
 //Contacts related requests
 Route::get('contacts', 'ContactsController@index');
@@ -93,7 +98,20 @@ Route::patch('contacts/company/{company}', 'ContactCompaniesController@update');
 //AGM
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');
-
+# Employee Records Module
+Route::get('hr/job_title', 'EmployeeJobTitleController@index');
+Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
+Route::patch('hr/category_edit/{jobCategory}', 'EmployeeJobTitleController@editCategory');
+Route::get('hr/jobtitles/{jobCategory}', 'EmployeeJobTitleController@jobView');
+Route::get('/hr/category_active/{jobCategory}', 'EmployeeJobTitleController@categoryAct');
+Route::get('/hr/job_title_active/{jobTitle}', 'EmployeeJobTitleController@jobtitleAct');
+Route::post('hr/add_jobtitle/{jobCategory}', 'EmployeeJobTitleController@addJobTitle');
+Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
+Route::get('/hr/setup', 'HrController@showSetup');
+# Audit Module
+Route::get('audit/reports', 'AuditReportsController@index');
+Route::post('audits', 'AuditReportsController@getReport');
+Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');

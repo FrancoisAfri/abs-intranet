@@ -26,7 +26,7 @@ class HrController extends Controller
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'setup';
         $data['division_types'] = $division_types;
-		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
+		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('hr.setup')->with($data);
     }
 }
