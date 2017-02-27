@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDivisionSetupTable extends Migration
+class CreateDivisionLevelGroupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateDivisionSetupTable extends Migration
      */
     public function up()
     {
-        Schema::create('division_setup', function (Blueprint $table) {
+        Schema::create('division_level_groups', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('level')->nullable();
             $table->string('name')->nullable();
-            $table->string('plural_name')->nullable();
             $table->smallInteger('active')->nullable();
+            $table->integer('manager_id')->unsigned()->index()->nullable();
+            $table->integer('division_level_id')->unsigned()->index()->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateDivisionSetupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('division_setup');
+        Schema::dropIfExists('division_level_groups');
     }
 }

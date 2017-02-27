@@ -23,4 +23,9 @@ class HRPerson extends Model
     public function programme() {
         return $this->hasMany(programme::class, 'manager_id');
     }
+
+    //Relationship hr_person (manager) and Division level group
+    public function divisionLevelGroup() {
+        return $this->hasOne(DivisionLevelGroup::class, 'manager_id');
+    }
 }

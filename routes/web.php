@@ -99,6 +99,7 @@ Route::patch('contacts/company/{company}', 'ContactCompaniesController@update');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
 //General Use (API)
+Route::post('api/divisionsdropdown', 'DivisionLevelGroupController@divLevelGroupDD')->name('divisionsdropdown');
 
 //Email Test
 Route::get('testemail', function () {
