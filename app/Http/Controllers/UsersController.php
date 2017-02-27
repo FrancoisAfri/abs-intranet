@@ -181,6 +181,12 @@ class UsersController extends Controller
     }
 	public function addmodules(Request $request) {
 	
+		$this->validate($request, [
+            'module_name' => 'required',
+            'module_path' => 'required',
+            'font_awesome' => 'required',
+        
+        ]);
 		$moduleData = $request->all();
 		unset($moduleData['_token']);
 		$module = new modules($moduleData);

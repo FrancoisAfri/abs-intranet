@@ -202,7 +202,7 @@ class DatabaseSeeder extends Seeder
         $groupLevel->save();
 
         //insert some positions
-        DB::table('hr_positions')->insert([
+       /* DB::table('hr_positions')->insert([
             'name' => 'General Manager',
             'status' => 1,
         ]);
@@ -226,7 +226,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Facilitator',
             'status' => 1,
         ]);
-
+*/
         //Insert navigation menus
         $module = new modules(); //Contacts
         $module->active = 1;
@@ -390,6 +390,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'hr/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+		
 		$module = new modules(); //Leave Management
         $module->active = 1;
         $module->name = 'Leave Management';
@@ -427,9 +428,50 @@ class DatabaseSeeder extends Seeder
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Leave Types';
+        $ribbon->description = 'Leave Types';
+        $ribbon->ribbon_path = 'leave/types';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'leave/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+		
+		$module = new modules(); //Audit Management
+        $module->active = 1;
+        $module->name = 'Audit';
+        $module->path = 'Audit Management';
+        $module->font_awesome = 'fa-eye';
+        $module->save();
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Audit Report';
+        $ribbon->description = 'Audit Report';
+        $ribbon->ribbon_path = 'audit/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$module = new modules(); //Performance Appraisal
+        $module->active = 1;
+        $module->name = 'Performance Appraisal';
+        $module->path = 'appraisal';
+        $module->font_awesome = 'fa-glass';
+        $module->save();
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 /*

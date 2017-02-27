@@ -13,73 +13,20 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-				<table class="table table-bordered"> 
-                <thead> <th>Level</th>
-                     <th>Name</th>
-                     <th style="width: 5px; text-align: center;">Active</th> 
-                  </thead>
-                     <tbody>
-                       <tr>
-                        <td>Level 1</td>
-                        <td><input class="form-control" type="text" id="text" /></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 2</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 3</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 4</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"</td><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 5</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>              
-                        </tr>  
-                     </tbody>
-                    
-           <!--     @if (count($division_types) > 0)
-						@foreach($division_types as $division_type)
-						
-                             <input type="checkbox" id="textedit" style="text-align: center; vertical-align: middle;">
-                         </td>
+				
+              <table class="table table-bordered"> 
+                <tr><th>Level</th><th>Name</th><th style="width: 5px; text-align: center;">Active</th></tr>
+                 
+                @foreach ($division_types as $division_type)
+                <tr>
+                    <td>Module Level {{ $division_type->level }}</td>
+                    <td><input class="form-control" type="text" id="text" value ="{{ $division_type->name }}"/></td>
+                    <td style="text-align: center;"><input type="checkbox" id="textedit" {{ $division_type->active === 1 ? 'checked' : '' }}/></td>
+                </tr>
+                @endforeach
+                </table>
 
-                              
-						  <!----<td nowrap>
-                             <button type="button" id="view_ribbons" class="btn btn-primary  btn-xs" onclick="postData({{$module->id}}, 'ribbons');"><i class="fa fa-eye"></i> Ribbons</button>
-                              <button type="button" id="edit_module" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-module-modal" data-id="{{ $module->id }}" data-name="{{ $module->name }}" data-path="{{ $module->path }}" data-font_awesome="{{ $module->font_awesome }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                          </td>-
-						  <td>{{ $division_type->Level }} </td>
-						  <td>
-							{{ (!empty($division_type->Name) && $division_type->Name != '') ? str_replace('\/',"/",$division_type->Name) : ''  }}
-						  </td>
-						  <td>{{ $division_type->Active }} </td>
-						 <!-- <td>
-                              <button type="button" id="view_ribbons" class="btn {{ (!empty($module->active) && $module->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$module->id}}, 'actdeac');"><i class="fa {{ (!empty($module->active) && $module->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($module->active) && $module->active == 1) ? "De-Activate" : "Activate"}}</button>
-                          </td>
-						</tr>
-						@endforeach
-                    @else
-						<tr id="modules-list">
-						<td colspan="5">
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No Module to display, please start by adding a new module.
-                        </div>
-						</td>
-						</tr>
-                    @endif---->
-				</table>
-                </div>
+
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" id="add-new-module"  class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-module-modal"><i class="fa fa-floppy-o"></i> Save</button>

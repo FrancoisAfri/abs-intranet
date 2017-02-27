@@ -34,18 +34,18 @@ class AuditReportsController extends Controller
         $data['page_title'] = "Audit Report";
         $data['page_description'] = "Audit Report";
         $data['breadcrumb'] = [
-            ['title' => 'Reports', 'path' => '/reports/audit', 'icon' => 'fa fa-graduation-cap', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/reports/audit', 'icon' => 'fa fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Reports';
-        $data['active_rib'] = 'Audit';
+        $data['active_mod'] = 'Audit';
+        $data['active_rib'] = 'Audit Report';
 		
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
 		$data['users'] = $users;
-		AuditReportsController::store('Reports', 'View Audit Search', "view Reports", 0);
-        return view('reports.audit_search')->with($data);
+		AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
+        return view('audit.audit_search')->with($data);
     }
     /**
      * Store a newly created resource in storage.
@@ -113,14 +113,14 @@ class AuditReportsController extends Controller
 		$data['page_title'] = "Audit Report";
         $data['page_description'] = "Audit Report";
         $data['breadcrumb'] = [
-            ['title' => 'Reports', 'path' => '/reports/audit', 'icon' => 'fa fa-graduation-cap', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/reports/audit', 'icon' => 'fa fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Reports';
-        $data['active_rib'] = 'Audit';
-		AuditReportsController::store('Reports', 'View Audit Search Results', "view Reports Results", 0);
-        return view('reports.audit_results')->with($data);
+        $data['active_mod'] = 'Audit';
+        $data['active_rib'] = 'Audit Report';
+		AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('audit.audit_results')->with($data);
     }
 	// Print audit report acccording to sent criteria
 	public function printreport(Request $request)
@@ -166,21 +166,21 @@ class AuditReportsController extends Controller
         $data['page_title'] = "Audit Report";
         $data['page_description'] = "Audit Report";
         $data['breadcrumb'] = [
-            ['title' => 'Reports', 'path' => '/reports/audit', 'icon' => 'fa fa-graduation-cap', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/reports/audit', 'icon' => 'fa fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Reports';
-        $data['active_rib'] = 'Audit';
+        $data['active_mod'] = 'Audit';
+        $data['active_rib'] = 'Audit Report';
 		$user = Auth::user()->load('person');
 		$data['support_email'] = 'support@afrixcel.co.za';
         $data['company_name'] = 'OSIZWENI EDUCATIONAL AND DEVELOPMENT \TRUST';
-        $data['company_logo'] = 'http://osizweni.afrixcel.co.za' . Storage::disk('local')->url('logos/logo.png');
+        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.png');
 		$data['date'] = date("d-m-Y");
 		$data['user'] = $user;
 		//return $data;
-		AuditReportsController::store('Reports', 'Print Audit Search Results', "Print Reports Results", 0);
-        return view('reports.audit_print')->with($data);
+		AuditReportsController::store('Audit', 'Print Audit Search Results', "Print Audit Results", 0);
+        return view('audit.audit_print')->with($data);
     }
     
 }
