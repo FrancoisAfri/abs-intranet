@@ -46,38 +46,6 @@
                           </td>              
                         </tr>  
                      </tbody>
-                    
-           <!--     @if (count($division_types) > 0)
-						@foreach($division_types as $division_type)
-						
-                             <input type="checkbox" id="textedit" style="text-align: center; vertical-align: middle;">
-                         </td>
-
-                              
-						  <!----<td nowrap>
-                             <button type="button" id="view_ribbons" class="btn btn-primary  btn-xs" onclick="postData({{$module->id}}, 'ribbons');"><i class="fa fa-eye"></i> Ribbons</button>
-                              <button type="button" id="edit_module" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-module-modal" data-id="{{ $module->id }}" data-name="{{ $module->name }}" data-path="{{ $module->path }}" data-font_awesome="{{ $module->font_awesome }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                          </td>-
-						  <td>{{ $division_type->Level }} </td>
-						  <td>
-							{{ (!empty($division_type->Name) && $division_type->Name != '') ? str_replace('\/',"/",$division_type->Name) : ''  }}
-						  </td>
-						  <td>{{ $division_type->Active }} </td>
-						 <!-- <td>
-                              <button type="button" id="view_ribbons" class="btn {{ (!empty($module->active) && $module->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$module->id}}, 'actdeac');"><i class="fa {{ (!empty($module->active) && $module->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($module->active) && $module->active == 1) ? "De-Activate" : "Activate"}}</button>
-                          </td>
-						</tr>
-						@endforeach
-                    @else
-						<tr id="modules-list">
-						<td colspan="5">
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No Module to display, please start by adding a new module.
-                        </div>
-						</td>
-						</tr>
-                    @endif---->
 				</table>
                 </div>
                 <!-- /.box-body -->

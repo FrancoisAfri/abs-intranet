@@ -27,21 +27,21 @@ class LeaveController extends Controller
 //        $data['page_description'] = "Search Users";
     }
     
-    public function Setup(){
+    public function types(){
         
         $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
 		$data['page_title'] = "leave Setup";
 		$data['page_description'] = "Admin page for leave related settings";
 		$data['breadcrumb'] = [
-			['title' => 'Security', 'path' => '/leave/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-			['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+			['title' => 'Security', 'path' => '/leave/types', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+			['title' => '', 'active' => 1, 'is_module' => 0]
 		];
 		$data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Leave Types';
 		$data['leaveTypes'] = $leaveTypes;
         //return $leaveTypes;
-		AuditReportsController::store('Leave', 'Setup Page Accessed', "Accessed By User", 0);
-        return view('leave.setup')->with($data);
+		AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
+        return view('leave.leave_types')->with($data);
         
         
         

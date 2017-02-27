@@ -35,7 +35,7 @@
 						<td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No leave types to display, please start by adding a new module.
+                            No leave types to display, please start by adding a new leave type.
                         </div>
 						</td>
 						</tr>
@@ -44,7 +44,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="button" id="add-new-leave" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-leave-modal">Add New leave</button>
+                    <button type="button" id="add-new-leave" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-leave-modal">Add Leave Type</button>
                 </div>
             </div>
         </div>
@@ -114,12 +114,12 @@
                
                $('#add_leave').on('click', function() {
 //                console.log('gettest');
-                postModuleForm('POST', '/leave/setup/LeaveSetUp', 'add_new_leavetype-form');
+                postModuleForm('POST', '/leave/type/add_leave', 'add_new_leavetype-form');
             });
 
             $('#update-leave_type').on('click', function() {
                
-                postModuleForm('PATCH', '/leave/leave_edit/' + leaveTypeId , 'edit_leavetype-form');
+                postModuleForm('PATCH', '/leave/leave_type_edit/' + leaveTypeId , 'edit_leavetype-form');
             });
            });
 

@@ -428,6 +428,15 @@ class DatabaseSeeder extends Seeder
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Leave Types';
+        $ribbon->description = 'Leave Types';
+        $ribbon->ribbon_path = 'leave/types';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'leave/setup';
@@ -448,6 +457,22 @@ class DatabaseSeeder extends Seeder
         $ribbon->description = 'Audit Report';
         $ribbon->ribbon_path = 'audit/reports';
         $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$module = new modules(); //Performance Appraisal
+        $module->active = 1;
+        $module->name = 'Performance Appraisal';
+        $module->path = 'appraisal';
+        $module->font_awesome = 'fa-glass';
+        $module->save();
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'appraisal/setup';
+        $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 /*
         $module = new modules();

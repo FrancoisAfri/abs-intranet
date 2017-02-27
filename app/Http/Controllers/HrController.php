@@ -17,7 +17,7 @@ class HrController extends Controller
     }
     public function showSetup() {
     	$division_types = DB::table('division_setup')->orderBy('name', 'asc')->get();
-        $data['page_title'] = "HR";
+        $data['page_title'] = "Setup";
         $data['page_description'] = "Employee records";
         $data['breadcrumb'] = [
             ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
@@ -26,7 +26,7 @@ class HrController extends Controller
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'setup';
         $data['division_types'] = $division_types;
-		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
+		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('hr.setup')->with($data);
     }
 }
