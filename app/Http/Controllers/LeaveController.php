@@ -79,5 +79,14 @@ class LeaveController extends Controller
 		AuditReportsController::store('leave', 'leavetype Added', "leave type Name: $leave->name", 0);
 		return response()->json(['name' => $leave->name, 'description' => $leave->description], 200);
 	}
+    public function leaveAct(LeaveType $lev) 
+    {
+        if ($lev->status == 1) $stastus = 0;
+        else $stastus = 1;
+        
+        $lev->status = $stastus;    
+        $lev->update();
+        return back();
+    }
  
 }

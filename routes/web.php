@@ -50,6 +50,8 @@ Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
+Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
+
 //Contacts related requests
 Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
