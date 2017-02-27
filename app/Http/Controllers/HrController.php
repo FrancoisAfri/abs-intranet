@@ -16,7 +16,7 @@ class HrController extends Controller
         $this->middleware('auth');
     }
     public function showSetup() {
-    	$division_types = DB::table('division_setup')->orderBy('name', 'asc')->get();
+    	$division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $data['page_title'] = "HR";
         $data['page_description'] = "Employee records";
         $data['breadcrumb'] = [
