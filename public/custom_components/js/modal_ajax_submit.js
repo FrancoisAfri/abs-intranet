@@ -1,9 +1,10 @@
-function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, successMsgTitle, successMsg) {
+function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod) {
     successMsgTitle = successMsgTitle || 'Success!';
     successMsg = successMsg || 'Action Performed Successfully.';
     redirectUrl = redirectUrl || -1;
+    formMethod = formMethod || 'POST';
     $.ajax({
-        method: 'POST',
+        method: formMethod,
         url: strUrl,
         data: objData,
         success: function(success) {

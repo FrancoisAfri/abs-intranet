@@ -108,6 +108,8 @@ Route::get('/hr/job_title_active/{jobTitle}', 'EmployeeJobTitleController@jobtit
 Route::post('hr/add_jobtitle/{jobCategory}', 'EmployeeJobTitleController@addJobTitle');
 Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
 Route::get('/hr/setup', 'HrController@showSetup');
+Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
+Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
 # Audit Module
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
