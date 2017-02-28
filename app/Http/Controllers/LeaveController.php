@@ -66,8 +66,6 @@ class LeaveController extends Controller
 	public function addleave(Request $request) {
 	       $this->validate($request, [
             'name' => 'required',
-           // 'description' => 'required',
-            //'font_awesome' => 'required',
         
         ]);
 

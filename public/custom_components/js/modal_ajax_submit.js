@@ -1,18 +1,19 @@
-function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, successMsgTitle, successMsg) {
+function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod) {
     successMsgTitle = successMsgTitle || 'Success!';
     successMsg = successMsg || 'Action Performed Successfully.';
     redirectUrl = redirectUrl || -1;
+    formMethod = formMethod || 'POST';
     $.ajax({
-        method: 'POST',
+        method: formMethod,
         url: strUrl,
         data: objData,
         success: function(success) {
-            $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
+            $('#'+modalID).find('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
             //$('form[name=set-rates-form]').trigger('reset'); //Reset the form
 
             var successHTML = '<button type="button" id="close-invalid-input-alert" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> ' + successMsgTitle + '</h4>';
             successHTML += successMsg;
-            $('#success-alert').addClass('alert alert-success alert-dismissible')
+            $('#'+modalID).find('#success-alert').addClass('alert alert-success alert-dismissible')
                 .fadeIn()
                 .html(successHTML);
 
@@ -21,11 +22,11 @@ function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, succ
             window.setTimeout(function() { $("#"+modalID).modal('hide'); }, 5000);
 
             //auto close alert after 5 seconds
-            $("#success-alert").alert();
-            window.setTimeout(function() { $("#success-alert").fadeOut('slow'); }, 5000);
+            $('#'+modalID).find("#success-alert").alert();
+            window.setTimeout(function() { $('#'+modalID).find("#success-alert").fadeOut('slow'); }, 5000);
 
             //hide modal submit button after success action
-            $("#"+submitBtnID).hide();
+            $('#'+modalID).find("#"+submitBtnID).hide();
 
             //redirect after success action on modal hide(close)
             $('#'+modalID).on('hidden.bs.modal', function () {
@@ -38,7 +39,7 @@ function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, succ
             if(xhr.status === 422) {
                 var errors = xhr.responseJSON; //get the errors response data
 
-                $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
+                $('#'+modalID).find('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
 
                 var errorsHTML = '<button type="button" id="close-invalid-input-alert" class="close" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i> Invalid Input(s)!</h4><ul>';
                 $.each(errors, function (key, value) {
@@ -48,17 +49,17 @@ function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, succ
                 });
                 errorsHTML += '</ul>';
 
-                $('#invalid-input-alert').addClass('alert alert-danger alert-dismissible')
+                $('#'+modalID).find('#invalid-input-alert').addClass('alert alert-danger alert-dismissible')
                     .fadeIn()
                     .html(errorsHTML);
 
                 //autoclose alert after 7 seconds
-                $("#invalid-input-alert").alert();
-                window.setTimeout(function() { $("#invalid-input-alert").fadeOut('slow'); }, 7000);
+                $('#'+modalID).find("#invalid-input-alert").alert();
+                window.setTimeout(function() { $('#'+modalID).find("#invalid-input-alert").fadeOut('slow'); }, 7000);
 
                 //Close btn click
-                $('#close-invalid-input-alert').on('click', function () {
-                    $("#invalid-input-alert").fadeOut('slow');
+                $('#'+modalID).find('#close-invalid-input-alert').on('click', function () {
+                    $('#'+modalID).find("#invalid-input-alert").fadeOut('slow');
                 });
             }
         }

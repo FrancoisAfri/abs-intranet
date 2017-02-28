@@ -42,16 +42,22 @@
                     </tr> @endif </table>
             </div>
             <!-- /.box-body -->
-            <div class="box-footer">
+            <div class="modal-footer">
                 <button type="button" id="add-new-leave" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-leave-modal">Add Leave Type</button>
-            </div>
+            {{--hr leave approval--}}
+
+                </div >
         </div>
     </div>
     <!-- Include add new prime rate modal -->
 @include('leave.partials.add_new_leavetype')
 @include('leave.partials.edit_leavetype')
+
 </div> @endsection
 <!--        edit ribbon-->
+<!-- Ajax form submit -->
+<script src="/custom_components/js/modal_ajax_submit.js"></script>
+
 @section('page_script')
 <script>
     function postData(id, data) {
@@ -68,7 +74,7 @@
 		 }
     
     //function to post module form to server using ajaxs
-    function postModuleForm(formMethod, postUrl, formName) {
+   /* function postModuleForm(formMethod, postUrl, formName) {
         //alert('do you get here');
         $.ajax({
             method: formMethod
@@ -92,7 +98,7 @@
                 $('#leave-list').html(newLeaveList);
                 //auto hide modal after 7 seconds
                 $("#add_new_leavetype").alert();
-                window.setTimeout(function () {
+                window.setTimeout(function/leave/types/leave/types/leave/types/leave/types/leave/types/leave/types/leave/types/leave/typesZZZZZ () {
                     $("#add_new_leavetype-form").modal('hide');
                 }, 5000);
                 //autoclose alert after 7 seconds
@@ -127,7 +133,7 @@
                 }
             }
         });
-    }
+    }*/
     $(function () {
         var moduleId;
         //Tooltip
@@ -166,11 +172,38 @@
         });
         //Post module form to server using ajax (ADD)
         $('#add_leave').on('click', function () {
-            console.log('gettest');
-            postModuleForm('POST', '/leave/type/add_leave', 'add_new_leavetype-form');
+            var strUrl = '/leave/type/add_leave';
+            var objData = {
+                name: $('#add-new-leave-modal').find('#name').val()
+                , description: $('#add-new-leave-modal').find('#description').val(),
+                _token:$('#add-new-leave-modal').find('input[name=_token]').val()
+            };
+            var modalID = 'add-new-leave-modal';
+            var submitBtnID = 'add_leave';
+            var redirectUrl = '/leave/types';
+            var successMsgTitle = 'Changes Saved!';
+            var successMsg = 'Leave has been successfully added.';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
         $('#update-leave_type').on('click', function () {
-            postModuleForm('PATCH', '/leave/leave_type_edit/' + leaveTypeId, 'edit_leavetype-form');
+            var strUrl ='/leave/leave_type_edit/' + leaveTypeId;
+            var objData = {
+                name: $('#edit-leave-modal').find('#name').val()
+                , description: $('#edit-leave-modal').find('#description').val(),
+                _token: $('#edit-leave-modal').find('input[name=_token]').val()
+            };
+            var modalID = 'edit-leave-modal';
+            var submitBtnID = 'update-leave_type';
+            var redirectUrl = '/leave/types';
+            var successMsgTitle = 'Changes Saved!';
+            var successMsg = 'Leave type has been changed successfully.';
+            var method = 'PATCH';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
         });
+
+        //Post password form to server using ajax
+
+
     });
+
 </script> @endsection
