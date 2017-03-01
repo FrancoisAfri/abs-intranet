@@ -14,6 +14,16 @@ class DivisionLevel extends Model
         'name', 'plural_name', 'active'
     ];
 
+    //relationship division level name and each division level(one to many)
+    public function divisionLevelGroup() {
+        return $this->hasMany(DivisionLevelOne::class, 'division_level_id');
+    }
+    //function to add a div level group
+
+
+
+
+
     //Relationship Division level and Division level group
     public function divisionLevelGroup() {
         return $this->hasMany(DivisionLevelGroup::class, 'division_level_id');
