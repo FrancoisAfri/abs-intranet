@@ -18,29 +18,29 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th style="width: 40px"></th>
-                    </tr> @if (count($leaveTypes) > 0) @foreach($leaveTypes as $leaveType)
-                    <tr id="modules-list">
-                        <td nowrap>
-                            <!--                              <button type="button" id="view_ribbons" class="btn btn-primary  btn-xs" onclick="postData({{$leaveType->id}}, 'ribbons');"><i class="fa fa-eye"></i> Ribbons</button>-->
-                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-description="{{ $leaveType->description }}"> <i class="fa fa-pencil-square-o">
-                                </i> Edit</button>
-                        </td>
-                        <td>{{ $leaveType->name }} </td>
-                        <td>{{ $leaveType->description }} </td>
-                        <td>
-                            <!--                              <button type="button" class="btn {{ $leaveType->status === 1 ? "btn-danger" : "btn-primary" }} btn-xs"><i class="fa {{ $leaveType->status === 1 ? "fa-times" : "fa-check" }}"></i> {{ $leaveType->status === 1 ? "De-activate" : "Activate" }}</button>-->
-                            <!--   leave here  -->
-                            <button type="button" id="view_ribbons" class="btn {{ (!empty($leaveType->status) && $leaveType->status == 1) ? " btn-danger " : "btn-success " }}
-							  btn-xs" onclick="postData({{$leaveType->id}}, 'actdeac');"><i class="fa {{ (!empty($leaveType->status) && $leaveType->status == 1) ? 
-							  " fa-times " : "fa-check " }}"></i> {{(!empty($leaveType->status) && $leaveType->status == 1) ? "De-Activate" : "Activate"}}</button>
-                        </td>
-                    </tr> @endforeach @else
-                    <tr id="modules-list">
-                        <td colspan="5">
-                            <div class="alert alert-danger alert-dismissable">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No leave types to display, please start by adding a new leave type. </div>
-                        </td>
-                    </tr> @endif
+                    {{--</tr> @if (count($leaveTypes) > 0) @foreach($leaveTypes as $leaveType)--}}
+                    {{--<tr id="modules-list">--}}
+                        {{--<td nowrap>--}}
+                            {{--<!--                              <button type="button" id="view_ribbons" class="btn btn-primary  btn-xs" onclick="postData({{$leaveType->id}}, 'ribbons');"><i class="fa fa-eye"></i> Ribbons</button>-->--}}
+                            {{--<button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-description="{{ $leaveType->description }}"> <i class="fa fa-pencil-square-o">--}}
+                                {{--</i> Edit</button>--}}
+                        {{--</td>--}}
+                        {{--<td>{{ $leaveType->name }} </td>--}}
+                        {{--<td>{{ $leaveType->description }} </td>--}}
+                        {{--<td>--}}
+                            {{--<!--                              <button type="button" class="btn {{ $leaveType->status === 1 ? "btn-danger" : "btn-primary" }} btn-xs"><i class="fa {{ $leaveType->status === 1 ? "fa-times" : "fa-check" }}"></i> {{ $leaveType->status === 1 ? "De-activate" : "Activate" }}</button>-->--}}
+                            {{--<!--   leave here  -->--}}
+                            {{--<button type="button" id="view_ribbons" class="btn {{ (!empty($leaveType->status) && $leaveType->status == 1) ? " btn-danger " : "btn-success " }}--}}
+							  {{--btn-xs" onclick="postData({{$leaveType->id}}, 'actdeac');"><i class="fa {{ (!empty($leaveType->status) && $leaveType->status == 1) ? --}}
+							  {{--" fa-times " : "fa-check " }}"></i> {{(!empty($leaveType->status) && $leaveType->status == 1) ? "De-Activate" : "Activate"}}</button>--}}
+                        {{--</td>--}}
+                    {{--</tr> @endforeach @else--}}
+                    {{--<tr id="modules-list">--}}
+                        {{--<td colspan="5">--}}
+                            {{--<div class="alert alert-danger alert-dismissable">--}}
+                                {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No leave types to display, please start by adding a new leave type. </div>--}}
+                        {{--</td>--}}
+                    {{--</tr> @endif--}}
                 </table>
             </div>
             <!-- /.box-body -->
@@ -74,29 +74,29 @@
                         <th>Employee Name</th>
                         <th>Annual Days</th>
                         <th style="width: 40px"></th>
-                    </tr> @if (count($leavecustoms) > 0) @foreach($leavecustoms as $leavecustom)
-                        <tr id="modules-list">
-                            <td nowrap>
-                                <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave-modal" data-id="{{ $leavecustom->id }}" data-hr_id="{{$leavecustom->userCustom->hr_id }}" data-number_of_days="{{ $leavecustom->number_of_days }}"> <i class="fa fa-pencil-square-o">
-                                </i> Edit</button>
-                            </td>
-                            <td>{{ $leavecustom->name }} </td>
-                            <td>{{ $leavecustom->description }} </td>
-                            <td>
-                            <!--                              <button type="button" class="btn {{ $leaveType->status === 1 ? "btn-danger" : "btn-primary" }} btn-xs"><i class="fa {{ $leaveType->status === 1 ? "fa-times" : "fa-check" }}"></i> {{ $leaveType->status === 1 ? "De-activate" : "Activate" }}</button>-->
-                                <!--   leave here  -->
-                                <button type="button" id="view_ribbons" class="btn {{ (!empty($leaveType->status) && $leaveType->status == 1) ? " btn-danger " : "btn-success " }}
-                                        btn-xs" onclick="postData({{$leaveType->id}}, 'actdeac');"><i class="fa {{ (!empty($leaveType->status) && $leaveType->status == 1) ?
-							  " fa-times " : "fa-check " }}"></i> {{(!empty($leaveType->status) && $leaveType->status == 1) ? "De-Activate" : "Activate"}}</button>
-                            </td>
-                        </tr> @endforeach @else
-                        <tr id="modules-list">
-                            <td colspan="5">
-                                <div class="alert alert-danger alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No Custom leave types to display, please start by adding a new Custom leave type. </div>
-                            </td>
-                        </tr>
-                    @endif
+                    {{--</tr> @if (count($leavecustoms) > 0) @foreach($leavecustoms as $leavecustom)--}}
+                        {{--<tr id="modules-list">--}}
+                            {{--<td nowrap>--}}
+                                {{--<button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave-modal" data-id="{{ $leavecustom->id }}" data-hr_id="{{$leavecustom->userCustom->hr_id }}" data-number_of_days="{{ $leavecustom->number_of_days }}"> <i class="fa fa-pencil-square-o">--}}
+                                {{--</i> Edit</button>--}}
+                            {{--</td>--}}
+                            {{--<td>{{ $leavecustom->name }} </td>--}}
+                            {{--<td>{{ $leavecustom->description }} </td>--}}
+                            {{--<td>--}}
+                            {{--<!--                              <button type="button" class="btn {{ $leaveType->status === 1 ? "btn-danger" : "btn-primary" }} btn-xs"><i class="fa {{ $leaveType->status === 1 ? "fa-times" : "fa-check" }}"></i> {{ $leaveType->status === 1 ? "De-activate" : "Activate" }}</button>-->--}}
+                                {{--<!--   leave here  -->--}}
+                                {{--<button type="button" id="view_ribbons" class="btn {{ (!empty($leaveType->status) && $leaveType->status == 1) ? " btn-danger " : "btn-success " }}--}}
+                                        {{--btn-xs" onclick="postData({{$leaveType->id}}, 'actdeac');"><i class="fa {{ (!empty($leaveType->status) && $leaveType->status == 1) ?--}}
+							  {{--" fa-times " : "fa-check " }}"></i> {{(!empty($leaveType->status) && $leaveType->status == 1) ? "De-Activate" : "Activate"}}</button>--}}
+                            {{--</td>--}}
+                        {{--</tr> @endforeach @else--}}
+                        {{--<tr id="modules-list">--}}
+                            {{--<td colspan="5">--}}
+                                {{--<div class="alert alert-danger alert-dismissable">--}}
+                                    {{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No Custom leave types to display, please start by adding a new Custom leave type. </div>--}}
+                            {{--</td>--}}
+                        {{--</tr>--}}
+                    {{--@endif--}}
                 </table>
             </div>
             {{--end custo leave--}}
