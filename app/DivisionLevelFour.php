@@ -36,6 +36,8 @@ class DivisionLevelFour extends Model
 
     //Function to a div level 3
     public function addChildDiv($divLvlThree) {
+        $divLvlID = DivisionLevel::where('level', 3)->get()->first()->id;
+        $divLvlThree->division_level_id = $divLvlID;
         return $this->childDiv()->save($divLvlThree);
     }
 }
