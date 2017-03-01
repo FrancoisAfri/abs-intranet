@@ -168,7 +168,7 @@
         $('#add_leave').on('click', function () {
             console.log('gettest');
             postModuleForm('POST', '/leave/type/add_leave', 'add_new_leavetype-form');
-        });
+    });
         $('#update-leave_type').on('click', function () {
             postModuleForm('PATCH', '/leave/leave_type_edit/' + leaveTypeId, 'edit_leavetype-form');
         });

@@ -1,4 +1,4 @@
-function loadDropdownOptions(ddID, ddLabel, postTo, selectedOption, parentDDID, parentDDLabel, loadAll) {
+function loadDivDDOptions(ddID, ddLabel, postTo, selectedOption, parentDDID, parentDDLabel, loadAll) {
     loadAll = loadAll || -1;
     $.post(postTo, { option: parentDDID, _token: $('input[name=_token]').val(), load_all: loadAll },
         function(data) {
