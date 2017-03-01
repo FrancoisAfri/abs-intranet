@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\DivisionLevel;
 
 class HrController extends Controller
 {
@@ -29,4 +30,26 @@ class HrController extends Controller
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('hr.setup')->with($data);
     }
-}
+
+    public function updateGroupLevel(Request $request, DivisionLevel $groupLevel) {
+        //validate name required if active
+        $this->validate($request, [
+            'name' => 'bail|required|min:2',
+            'plural_name' => 'bail|required|min:2',
+        ]);
+
+        //save the changes
+        $groupLevelData=$request->all();
+        $groupLevel->update($groupLevelData);
+        AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
+     }
+     public function activateGroupLevel(DivisionLevel $groupLevel) 
+    {
+        if ($groupLevel->active == 1) $stastus = 0;
+        else $stastus = 1;
+        
+        $groupLevel->active = $stastus;    
+        $groupLevel->update();
+        return back();
+    }
+ }

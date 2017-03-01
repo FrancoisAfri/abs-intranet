@@ -35,6 +35,7 @@
                                             <option value="Contacts">Contacts</option>
                                             <option value="Employee Records">Employee Records</option>
                                             <option value="Leave Management">Leave Management</option>
+                                            <option value="Performance Appraisal">Performance Appraisal</option>
                                             <option value="Security">Security</option>
                                     </select>
 								</div>

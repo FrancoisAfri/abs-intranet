@@ -1,38 +1,36 @@
-<div id="add-new-leave-modal" class="modal modal-default fade">
+<div id="edit-category-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add_new_leavetype-form">
+            <form class="form-horizontal" method="POST" name="edit-category-form">
                 {{ csrf_field() }}
+                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add New Leave Type</h4>
+                    <h4 class="modal-title">Edit Category</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="leave-invalid-input-alert"></div>
-                    <div id="leave-success-alert"></div>
+                    <div id="category-invalid-input-alert"></div>
+                    <div id="category-success-alert"></div>
                     <div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Name</label>
+                        <label for="category" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Leave Type Name" >
-                            </div>
+                            <input type="text" class="form-control" id="name" name="category" value="" placeholder="Enter Category Name" required>
                         </div>
-                    </div> 
+                    </div>
 					<div class="form-group">
-                        <label for="path" class="col-sm-3 control-label">Description</label>
+                        <label for="weight" class="col-sm-3 control-label">Weight</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Description"  >
+                                <input type="number" class="form-control" id="weight" name="weight" value="" placeholder="Enter Weight" >
                             </div>
                         </div>
                     </div>
-					
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_leave" class="btn btn-primary">Add Leave</button>
+                    <button type="button" id="update-category" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>
