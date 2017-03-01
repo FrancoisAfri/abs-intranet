@@ -1,4 +1,5 @@
-@extends('layouts.main_layout') @section('content')
+@extends('layouts.main_layout')
+@section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
@@ -21,7 +22,7 @@
                     <tr id="modules-list">
                         <td nowrap>
                             <!--                              <button type="button" id="view_ribbons" class="btn btn-primary  btn-xs" onclick="postData({{$leaveType->id}}, 'ribbons');"><i class="fa fa-eye"></i> Ribbons</button>-->
-                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-description="{{ $leaveType->description }}" <i class="fa fa-pencil-square-o">
+                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-description="{{ $leaveType->description }}"> <i class="fa fa-pencil-square-o">
                                 </i> Edit</button>
                         </td>
                         <td>{{ $leaveType->name }} </td>
@@ -39,23 +40,82 @@
                             <div class="alert alert-danger alert-dismissable">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No leave types to display, please start by adding a new leave type. </div>
                         </td>
-                    </tr> @endif </table>
+                    </tr> @endif
+                </table>
             </div>
             <!-- /.box-body -->
             <div class="modal-footer">
                 <button type="button" id="add-new-leave" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-leave-modal">Add Leave Type</button>
-            {{--hr leave approval--}}
-
                 </div >
         </div>
     </div>
     <!-- Include add new prime rate modal -->
 @include('leave.partials.add_new_leavetype')
 @include('leave.partials.edit_leavetype')
+</div>
+{{--custom leave section--}}
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Custom Leave Types</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                {{-- start custom leave--}}
 
-</div> @endsection
+                <table class="table table-bordered">
+                    <tr>
+                        <th style="width: 10px"></th>
+                        <th>Employee Name</th>
+                        <th>Annual Days</th>
+                        <th style="width: 40px"></th>
+                    </tr> @if (count($leavecustoms) > 0) @foreach($leavecustoms as $leavecustom)
+                        <tr id="modules-list">
+                            <td nowrap>
+                                <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave-modal" data-id="{{ $leavecustom->id }}" data-hr_id="{{$leavecustom->userCustom->hr_id }}" data-number_of_days="{{ $leavecustom->number_of_days }}"> <i class="fa fa-pencil-square-o">
+                                </i> Edit</button>
+                            </td>
+                            <td>{{ $leavecustom->name }} </td>
+                            <td>{{ $leavecustom->description }} </td>
+                            <td>
+                            <!--                              <button type="button" class="btn {{ $leaveType->status === 1 ? "btn-danger" : "btn-primary" }} btn-xs"><i class="fa {{ $leaveType->status === 1 ? "fa-times" : "fa-check" }}"></i> {{ $leaveType->status === 1 ? "De-activate" : "Activate" }}</button>-->
+                                <!--   leave here  -->
+                                <button type="button" id="view_ribbons" class="btn {{ (!empty($leaveType->status) && $leaveType->status == 1) ? " btn-danger " : "btn-success " }}
+                                        btn-xs" onclick="postData({{$leaveType->id}}, 'actdeac');"><i class="fa {{ (!empty($leaveType->status) && $leaveType->status == 1) ?
+							  " fa-times " : "fa-check " }}"></i> {{(!empty($leaveType->status) && $leaveType->status == 1) ? "De-Activate" : "Activate"}}</button>
+                            </td>
+                        </tr> @endforeach @else
+                        <tr id="modules-list">
+                            <td colspan="5">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No Custom leave types to display, please start by adding a new Custom leave type. </div>
+                            </td>
+                        </tr>
+                    @endif
+                </table>
+            </div>
+            {{--end custo leave--}}
+            <!-- /.box-body -->
+            <div class="modal-footer">
+                <button type="button" id="add_custom_leave" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-custom-leave-modal">Add Custom Leave</button>
+                {{--hr leave approval--}}
+            </div >
+        </div>
+    </div>
+    @include('leave.Partials.add_custom_leave')
+</div>
+@endsection
+
 <!--        edit ribbon-->
 <!-- Ajax form submit -->
+
+{{--end section--}}
+
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
 @section('page_script')
