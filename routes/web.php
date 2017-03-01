@@ -120,7 +120,12 @@ Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
 Route::get('/appraisal/template_active/{template}', 'AppraisalTemplatesController@templateAct');
-Route::get('appraisal/template/{template}', 'AppraisalTemplatesController@jobView');
+Route::get('appraisal/template/{template}', 'AppraisalTemplatesController@viewTemlate');
+Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
+Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
+Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
+Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
+Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');

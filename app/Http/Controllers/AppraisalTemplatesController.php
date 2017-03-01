@@ -87,15 +87,15 @@ class AppraisalTemplatesController extends Controller
         if ($template->status == 1) 
 		{
 			$template->load('catJobTitle');
-			$data['page_title'] = "Manage Job Titles";
-			$data['page_description'] = "Job Titles page";
+			$data['page_title'] = "Template Informations";
+			$data['page_description'] = "Template Informations";
 			$data['breadcrumb'] = [
-				['title' => 'Employee Records', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-				['title' => 'Job Titles', 'active' => 1, 'is_module' => 0]];
+				['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+				['title' => 'Templates', 'active' => 1, 'is_module' => 0]];
 			$data['jobTitles'] = $template;
-			$data['active_mod'] = 'Employee Records';
-			$data['active_rib'] = 'Job Titles';
-			AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+			$data['active_mod'] = 'Performance Appraisal';
+			$data['active_rib'] = 'Templates';
+			AuditReportsController::store('Performance Appraisal', 'Template Details Page Accessed', "Accessed by User", 0);
 			return view('hr.job_titles')->with($data);
 		}
 		else return back();
