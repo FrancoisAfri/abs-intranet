@@ -18,4 +18,9 @@ class DivisionLevel extends Model
     public function divisionLevelGroup() {
         return $this->hasMany(DivisionLevelGroup::class, 'division_level_id');
     }
+    
+    //Function to a DivisionLevelGroup
+    public function addDivisionLevelGroup(DivisionLevelGroup $divLvlGroup) {
+        return $this->divisionLevelGroup()->save($divLvlGroup);
+    }
 }
