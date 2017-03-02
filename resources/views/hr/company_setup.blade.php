@@ -45,14 +45,15 @@
          
                         <!-- /.box-body -->
                     <div class="box-footer">
-                     <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#">Add{{$highestLvl->name}}</button>  
+                     <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#add_level_modal">Add{{$highestLvl->name}}</button>  
                     </div>
                 </form>
         </div>
 
         <!-- Include add new prime rate modal -->
         @include('hr.partials.level_module')
-    
+        @include('hr.partials.add_level')
+  
     </div>
 @endsection
 
