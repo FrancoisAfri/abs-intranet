@@ -11,6 +11,16 @@ class DivisionLevel extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'name', 'active'
+        'name', 'plural_name', 'active'
     ];
+
+    //Relationship Division level and Division level group
+    public function divisionLevelGroup() {
+        return $this->hasMany(DivisionLevelGroup::class, 'division_level_id');
+    }
+    
+    //Function to a DivisionLevelGroup
+    public function addDivisionLevelGroup(DivisionLevelGroup $divLvlGroup) {
+        return $this->divisionLevelGroup()->save($divLvlGroup);
+    }
 }

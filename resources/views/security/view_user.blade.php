@@ -27,24 +27,21 @@
 
                     <div class="box-body">
                         @if (isset($view_by_admin) && $view_by_admin === 1)
-                            @foreach($division_levels as $division_level)@endforeach
-                            <div class="form-group">
-                                <label for="position" class="col-sm-2 control-label">Position</label>
+                            @foreach($division_levels as $division_level)
+                                <div class="form-group">
+                                    <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-black-tie"></i>
+                                            </div>
+                                            <select id="name={{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control">
+                                            </select>
                                         </div>
-                                        <select name="position" class="form-control">
-                                            <option value="">*** Select a Position ***</option>
-                                            @foreach($positions as $position)
-                                                <option value="{{ $position->id }}" {{ ($user->person->position == $position->id) ? ' selected' : '' }}>{{ $position->name }}</option>
-                                            @endforeach
-                                        </select>
                                     </div>
                                 </div>
-                            </div>
+                            @endforeach
                         @endif
                         <div class="form-group">
                             <label for="first_name" class="col-sm-2 control-label">First Name</label>
@@ -348,6 +345,12 @@
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>
     <!-- End Bootstrap File input -->
 
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
+
     <script>
         $(function () {
             //Cancel button click event
@@ -395,130 +398,34 @@
 
             //Post password form to server using ajax
             $('#my-password').on('click', function() {
-                $.ajax({
-                    method: 'POST',
-                    url: '{{ '/users/' . $user->id . '/pw' }}',
-                    data: {
-                        current_password: $('#current_password').val(),
-                        new_password: $('#new_password').val(),
-                        confirm_password: $('#confirm_password').val(),
-                        _token: $('input[name=_token]').val()
-                    },
-                    success: function(success) {
-                        //console.log(success);
-                        $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-                        $('form[name=password_form]').trigger('reset'); //Reset the form
-
-                        var successHTML = '<button type="button" id="close-invalid-input-alert" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> Changes saved!</h4>';
-                        successHTML += 'The password has been changed successfully.';
-                        $('#success-alert').addClass('alert alert-success alert-dismissible')
-                                .fadeIn()
-                                .html(successHTML);
-
-                        //auto hide modal after 7 seconds
-                        $("#myPasswordModal").alert();
-                        window.setTimeout(function() { $("#myPasswordModal").modal('hide'); }, 5000);
-
-                        //autoclose alert after 7 seconds
-                        $("#success-alert").alert();
-                        window.setTimeout(function() { $("#success-alert").fadeOut('slow'); }, 5000);
-                    },
-                    error: function(xhr) {
-                        //console.log(xhr);
-                        //if(xhr.status === 401) //redirect if not authenticated
-                        //$( location ).prop( 'pathname', 'auth/login' );
-                        if(xhr.status === 422) {
-                            var errors = xhr.responseJSON; //get the errors response data
-                            //console.log(errors);
-
-                            $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-
-                            var errorsHTML = '<button type="button" id="close-invalid-input-alert" class="close" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i> Invalid Input!</h4><ul>';
-                            $.each(errors, function (key, value) {
-                                errorsHTML += '<li>' + value[0] + '</li>'; //shows only the first error.
-                                $('#'+key).closest('.form-group')
-                                        .addClass('has-error'); //Add the has error class to form-groups with errors
-                            });
-                            errorsHTML += '</ul>';
-
-                            $('#invalid-input-alert').addClass('alert alert-danger alert-dismissible')
-                                    .fadeIn()
-                                    .html(errorsHTML);
-
-                            //autoclose alert after 7 seconds
-                            $("#invalid-input-alert").alert();
-                            window.setTimeout(function() { $("#invalid-input-alert").fadeOut('slow'); }, 7000);
-
-                            //Close btn click
-                            $('#close-invalid-input-alert').on('click', function () {
-                                $("#invalid-input-alert").fadeOut('slow');
-                            });
-                        }
-                    }
-                });
+                var strUrl = '{{ '/users/' . $user->id . '/pw' }}';
+                var objData = {
+                    current_password: $('#current_password').val(),
+                    new_password: $('#new_password').val(),
+                    confirm_password: $('#confirm_password').val(),
+                    _token: $('input[name=_token]').val()
+                };
+                var modalID = 'myPasswordModal';
+                var submitBtnID = 'my-password';
+                var redirectUrl = null;
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The password has been changed successfully.';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
             //Post user password form to server using ajax
             $('#user-password').on('click', function() {
-                $.ajax({
-                    method: 'POST',
-                    url: '{{ '/users/' . $user->id . '/upw' }}',
-                    data: {
-                        new_password: $('#new_password').val(),
-                        _token: $('input[name=_token]').val()
-                    },
-                    success: function(success) {
-                        //console.log(success);
-                        $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-                        $('form[name=password_form]').trigger('reset'); //Reset the form
-
-                        var successHTML = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> Changes saved!</h4>';
-                        successHTML += 'The password has been changed successfully.';
-                        $('#success-alert').addClass('alert alert-success alert-dismissible')
-                                .fadeIn()
-                                .html(successHTML);
-
-                        //auto hide modal after 7 seconds
-                        $("#myPasswordModal").alert();
-                        window.setTimeout(function() { $("#myPasswordModal").modal('hide'); }, 5000);
-
-                        //autoclose alert after 7 seconds
-                        $("#success-alert").alert();
-                        window.setTimeout(function() { $("#success-alert").fadeOut('slow'); }, 5000);
-                    },
-                    error: function(xhr) {
-                        //console.log(xhr);
-                        //if(xhr.status === 401) //redirect if not authenticated
-                        //$( location ).prop( 'pathname', 'auth/login' );
-                        if(xhr.status === 422) {
-                            var errors = xhr.responseJSON; //get the errors response data
-                            //console.log(errors);
-
-                            $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-
-                            var errorsHTML = '<button type="button" id="close-invalid-input-alert" class="close" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i> Invalid Input!</h4><ul>';
-                            $.each(errors, function (key, value) {
-                                errorsHTML += '<li>' + value[0] + '</li>'; //shows only the first error.
-                                $('#'+key).closest('.form-group')
-                                        .addClass('has-error'); //Add the has error class to form-groups with errors
-                            });
-                            errorsHTML += '</ul>';
-
-                            $('#invalid-input-alert').addClass('alert alert-danger alert-dismissible')
-                                    .fadeIn()
-                                    .html(errorsHTML);
-
-                            //autoclose alert after 7 seconds
-                            $("#invalid-input-alert").alert();
-                            window.setTimeout(function() { $("#invalid-input-alert").fadeOut('slow'); }, 7000);
-
-                            //Close btn click
-                            $('#close-invalid-input-alert').on('click', function () {
-                                $("#invalid-input-alert").fadeOut('slow');
-                            });
-                        }
-                    }
-                });
+                var strUrl = '{{ '/users/' . $user->id . '/upw' }}';
+                var objData = {
+                    new_password: $('#new_password').val(),
+                    _token: $('input[name=_token]').val()
+                };
+                var modalID = 'myPasswordModal';
+                var submitBtnID = 'user-password';
+                var redirectUrl = null;
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The password has been changed successfully.';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
         });
 		function postData(id, data)

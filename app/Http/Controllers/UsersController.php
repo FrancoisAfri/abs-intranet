@@ -254,7 +254,7 @@ class UsersController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->get();
-        $divisionLevels = DivisionLevel::where('status', 1)->orderBy('id', 'desc');
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update user details";
         $data['back'] = "/users";
@@ -271,7 +271,7 @@ class UsersController extends Controller
             ['title' => 'User details', 'active' => 1, 'is_module' => 0]
         ];
 		//return $user;
-		AuditReportsController::store('Security', 'User Informations Edited', "On Edit Mode", 0);
+		AuditReportsController::store('Security', 'User Information Edited', "On Edit Mode", 0);
         return view('security.view_user')->with($data);
     }
 

@@ -14,6 +14,7 @@ use App\LeaveType;
 use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
+use Illuminate\Support\Facades\Auth;
 
 class LeaveController extends Controller
 {
@@ -107,7 +108,7 @@ class LeaveController extends Controller
 
         $leaveData = $request->all();
         unset($leaveData['_token']);
-        $leave_customs = new leave_customs($leaveData);
+        $leave_customs = new leave_custom($leaveData);
         $leave_customs->status = 1;
         $leave_customs->save();
         AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
@@ -116,16 +117,17 @@ class LeaveController extends Controller
 //
     public function editcustomLeaveType(Request $request, leave_custom $lev)
     {
+        //$user = Auth::user()->load('person');
         $this->validate($request, [
-            'hr_id' => 'required',
-            'number_of_days'=> 'required',
+            //'hr_id' => 'required',
+            'number_of_days'=>  'numeric|required',
 
         ]);
-        $lev->hr_id = $request->input('hr_id');
+        //$lev->hr_id = $request->input('hr_id');
         $lev->number_of_days = $request->input('number_of_days');
         $lev->update();
-        return $lev;
-        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User: $lev->hr_id", 0);
+        //return $lev;
+        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
         return response()->json();
     }
     //

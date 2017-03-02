@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDivisionSetupTable extends Migration
+class CreateLeaveCustomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateDivisionSetupTable extends Migration
      */
     public function up()
     {
-        Schema::create('division_setup', function (Blueprint $table) {
+        Schema::create('leave_customs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('level')->nullable();
-            $table->string('name')->nullable();
-            $table->string('plural_name')->nullable();
-            $table->smallInteger('active')->nullable();
+            $table->integer('hr_id')->nullable();
+            $table->integer('number_of_days')->nullable();
+
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateDivisionSetupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('division_setup');
+        Schema::dropIfExists('leave_customs');
     }
 }
