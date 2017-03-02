@@ -132,6 +132,9 @@ Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@ed
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
 
+# Company setup Module
+Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
+
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
