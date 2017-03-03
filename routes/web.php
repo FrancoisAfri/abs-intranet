@@ -53,8 +53,8 @@ Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 #custom leave 
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
-Route::get('/leave/leave_active/{lev}', 'LeaveController@customleaveAct');
-Route::post('/leave/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
+Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
+Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
 
 
 //Contacts related requests

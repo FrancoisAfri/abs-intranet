@@ -14,17 +14,28 @@
                     <div id="leave-invalid-input-alert"></div>
                     <div id="leave-success-alert"></div>
 
+
                     <div class="form-group">
-                        <label for="path" class="col-sm-3 control-label">Employee Name</label>
+                        <label for="action" class="col-sm-3 control-label">Employee Name</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="hr_id" name="hr_id" value="" disabled>
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input type="text" class="form-control" id="hr_id" name="hr_id" placeholder="" disabled>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="path" class="col-sm-3 control-label">Number of Days</label>
+                        <label for="action" class="col-sm-3 control-label">Number of Days</label>
                         <div class="col-sm-4">
-                            <input type="text" class="form-control" id="number_of_days" name="number_of_days" value="" placeholder="Enter Annual Days" required >
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar-o"></i>
+                                </div>
+                                <input type="text" class="form-control" id="number_of_days" name="number_of_days" placeholder="Enter annual days..." required>
+                            </div>
                         </div>
                     </div>
 
