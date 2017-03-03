@@ -31,5 +31,7 @@ class CreateDivisionSetupTable extends Migration
     public function down()
     {
         Schema::dropIfExists('division_setup');
+        $table->dropColumn('manager_id');
+        $table->dropColumn('division_level_id');
     }
 }
