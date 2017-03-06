@@ -6,10 +6,17 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
+use App\HRPerson;
+
+use App\LeaveType;
+
 use App\Http\Requests;
 
 use App\TopLevel;
+
 use App\DivisionLevel;
+
+
 
 
 
@@ -22,8 +29,11 @@ class EmployeeCompanySetupController extends Controller
     {
         $this->middleware('auth');
     }
+
     public function viewLevel() {
         //get the highest active level
+        $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
+        $employees = HRPerson::where('status', 1)->get();
         $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first();
        
         if ($highestLvl->level == 5){
@@ -46,6 +56,8 @@ class EmployeeCompanySetupController extends Controller
              $types = DB::table('division_level_ones')->get();
 
         }
+        $data['division_types'] = $division_types;
+        $data['employees'] = $employees;
         $data['highestLvl'] = $highestLvl;
         $types = DB::table('division_level_fives')->get();
         $data['page_title'] = "Company Setup";
@@ -80,6 +92,8 @@ class EmployeeCompanySetupController extends Controller
             $firstLevel->update();
             return back();
             }
+
+      
  }
 
     

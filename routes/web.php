@@ -137,6 +137,9 @@ Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::patch('/hr/firstlevel/{firstLevel}', 'EmployeeCompanySetupController@UpdateLevel');
 Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
 
+
+
+
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration

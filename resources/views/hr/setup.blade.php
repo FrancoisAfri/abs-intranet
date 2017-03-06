@@ -28,9 +28,8 @@
                             @foreach ($division_types as $division_type)
                                 <tr>
                                     <td style="width: 5px; text-align: center;"><button type="button" id="edit_grouplevel" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-grouplevel-modal" data-id="{{ $division_type->id }}" data-name="{{ $division_type->name }}" data-plural_name="{{ $division_type->plural_name }}" data-level="{{ $division_type->level }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-                                    <td>{{ $division_type->name }}</td>
                                     <td>Employee Group Level {{ $division_type->level }}</td>
-                            
+                                    <td>{{ $division_type->name }}</td>
                                     <td>{{ $division_type->plural_name }}</td>
                                     <td style="width: 5px; text-align: center;">
                                         @if ($division_type->name!='')
