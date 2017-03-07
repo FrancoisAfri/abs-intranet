@@ -67,6 +67,24 @@
                                 </div>
                             </div>
                         </div>
+                            {{--add leave porfile--}}
+                            <div class="form-group">
+                                <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-tags"></i>
+                                        </div>
+                                        <select name="leave_profile" class="form-control">
+                                            <option value="">*** Select leave Profile ***</option>
+                                            <option value="1" {{ ($user->person->leave_profile === 1) ? ' selected' : '' }}>Employee with no leave</option>
+                                            <option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>5 Day Employee </option>
+                                            <option value="3"{{ ($user->person->leave_profile === 3) ? ' selected' : '' }}>6 Day Employee</option>
+                                            <option value="4"{{ ($user->person->leave_profile === 4) ? ' selected' : '' }}>Shift Worker</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         @if (isset($view_by_admin) && $view_by_admin === 1)
                             <div class="form-group">
                                 <label for="position" class="col-sm-2 control-label">Position</label>

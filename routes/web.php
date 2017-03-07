@@ -51,6 +51,11 @@ Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
+#custom leave 
+Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
+Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
+Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
+
 
 //Contacts related requests
 Route::get('contacts', 'ContactsController@index');
@@ -126,6 +131,14 @@ Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave')
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
+
+# Company setup Module
+Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
+Route::patch('/hr/firstlevel/{firstLevel}', 'EmployeeCompanySetupController@UpdateLevel');
+Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
+
+
+
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');

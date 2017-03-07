@@ -31,5 +31,6 @@ class CreateDivisionLevelFivesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('division_level_fives');
+        
     }
 }
