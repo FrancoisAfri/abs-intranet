@@ -5,29 +5,29 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Job Titles ({{$jobTitles->name}})</h3>
+                    <h3 class="box-title">Category ({{$categories->name}})</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px">#</th><th>Name</th><th>Description</th><th style="width: 40px"></th></tr>
-                    @if (count($jobTitles->catJobTitle) > 0)
-						@foreach($jobTitles->catJobTitle as $jobTitle)
-						 <tr id="jobtitles-list">
-						  <td><button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-job_title-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-						  <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td>
-						  <td>{{ (!empty( $jobTitle->description)) ?  $jobTitle->description : ''}} </td>
+					 <tr><th style="width: 10px">#</th><th>Name</th><th>Weight</th><th style="width: 40px"></th></tr>
+                    @if (count($categories->kpascategory) > 0)
+						@foreach($categories->kpascategory as $kpa)
+						 <tr id="categories-list">
+						  <td><button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-job_title-modal" data-id="{{ $kpa->id }}" data-name="{{ $kpa->name }}" data-weight="{{ $kpa->weight }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+						  <td>{{ (!empty($kpa->name)) ?  $kpa->name : ''}} </td>
+						  <td>{{ (!empty( $kpa->weight)) ?  $kpa->weight : ''}} </td>
 						  <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_job_title" class="btn {{ (!empty($kpa->status) && $kpa->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$kpa->id}}, 'actdeac');"><i class="fa {{ (!empty($kpa->status) && $kpa->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($kpa->status) && $kpa->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
 						</tr>
 						@endforeach
                     @else
-						<tr id="jobtitles-list">
+						<tr id="categories-list">
 						<td colspan="6">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No job titles to display, please start by adding a new job title.
+                            No kpas to display, please start by adding a new kpa.
                         </div>
 						</td>
 						</tr>
@@ -37,14 +37,14 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
 					<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                    <button type="button" id="add-new-job_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-job_title-modal">Add New job Title</button>
+                    <button type="button" id="add-new-job_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-kpa-modal">Add New Kpa</button>
                 </div>
             </div>
         </div>
 
         <!-- Include add new prime rate modal -->
-        @include('hr.partials.add_position')
-        @include('hr.partials.edit_position')
+        @include('appraisals.partials.add_kpa')
+        @include('appraisals.partials.edit_kpa')
     </div>
 @endsection
 
@@ -53,13 +53,13 @@
 		function postData(id, data)
 		{
 			if (data == 'actdeac')
-				location.href = "/hr/job_title_active/" + id;
+				location.href = "/appraisal/kpa_active/" + id;
 		}
         $(function () {
-            var jobId;
+            var kpaId;
 			
 			document.getElementById("back_button").onclick = function () {
-			location.href = "/hr/job_title";	};
+			location.href = "/appraisal/categories";	};
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -83,12 +83,12 @@
             //pass job_title data to the edit job_title modal
             $('#edit-job_title-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                jobId = btnEdit.data('id');
-                var jobName = btnEdit.data('name');
-                var jobDesc = btnEdit.data('description');
+                kpaId = btnEdit.data('id');
+                var Name = btnEdit.data('name');
+                var weight = btnEdit.data('weight');
                 var modal = $(this);
-                modal.find('#name').val(jobName);
-                modal.find('#description').val(jobDesc);
+                modal.find('#name').val(Name);
+                modal.find('#weight').val(weight);
             });
 
             //function to post job_title form with ajax
@@ -98,34 +98,34 @@
                     url: postUrl,
                     data: {
                         name: $('form[name=' + formName + ']').find('#name').val(),
-                        description: $('form[name=' + formName + ']').find('#description').val(),
+                        weight: $('form[name=' + formName + ']').find('#weight').val(),
                         _token: $('input[name=_token]').val()
                     },
                     success: function(success) {
-                        location.href = "/hr/jobtitles/" + {{$jobTitles->id}};
+                        location.href = "/appraisal/kpa/" + {{$categories->id}};
                         $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
                         $('form[name=' + formName + ']').trigger('reset'); //Reset the form
 
                         var successHTML = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> Job Title added!</h4>';
                         successHTML += 'The new job title has been added successfully.';
-                        $('#job_title-success-alert').addClass('alert alert-success alert-dismissible')
+                        $('#kpa-success-alert').addClass('alert alert-success alert-dismissible')
                                 .fadeIn()
                                 .html(successHTML);
 
                         //show the newly added on the setup list
                         $('#active-job_title').removeClass('active');
-                        var newModuleList = $('#jobtitles-list').html();
+                        var newModuleList = $('#categories-list').html();
                         newModuleList += '<li id="active-job_title" class="list-group-item active"><b>' + success['new_name'] + '</b> <font class="pull-right">' + success['new_path'] + ';</font></li>';
 
-                        $('#jobtitles-list').html(newModuleList);
+                        $('#categories-list').html(newModuleList);
 
                         //auto hide modal after 7 seconds
-                        $("#add-new-job_title-modal").alert();
-                        window.setTimeout(function() { $("#add-new-job_title-modal").modal('hide'); }, 5000);
+                        $("#add-new-kpa-modal").alert();
+                        window.setTimeout(function() { $("#add-new-kpa-modal").modal('hide'); }, 5000);
 
                         //autoclose alert after 7 seconds
-                        $("#job_title-success-alert").alert();
-                        window.setTimeout(function() { $("#job_title-success-alert").fadeOut('slow'); }, 5000);
+                        $("#kpa-success-alert").alert();
+                        window.setTimeout(function() { $("#kpa-success-alert").fadeOut('slow'); }, 5000);
                     },
                     error: function(xhr) {
                         //if(xhr.status === 401) //redirect if not authenticated
@@ -144,17 +144,17 @@
                             });
                             errorsHTML += '</ul>';
 
-                            $('#job_title-invalid-input-alert').addClass('alert alert-danger alert-dismissible')
+                            $('#kpa-invalid-input-alert').addClass('alert alert-danger alert-dismissible')
                                     .fadeIn()
                                     .html(errorsHTML);
 
                             //autoclose alert after 7 seconds
-                            $("#job_title-invalid-input-alert").alert();
-                            window.setTimeout(function() { $("#job_title-invalid-input-alert").fadeOut('slow'); }, 7000);
+                            $("#kpa-invalid-input-alert").alert();
+                            window.setTimeout(function() { $("#kpa-invalid-input-alert").fadeOut('slow'); }, 7000);
 
                             //Close btn click
                             $('#close-invalid-input-alert').on('click', function () {
-                                $("#job_title-invalid-input-alert").fadeOut('slow');
+                                $("#kpa-invalid-input-alert").fadeOut('slow');
                             });
                         }
                     }
@@ -162,13 +162,13 @@
             }
 
             //Post job_title form to server using ajax (ADD NEW)
-            $('#add-job_title').on('click', function() {
-                postRibbonForm('POST', '/hr/add_jobtitle/{{ $jobTitles->id }}', 'add-job_title-form');
+            $('#add-kpa').on('click', function() {
+                postRibbonForm('POST', '/appraisal/add_kpa/{{ $categories->id }}', 'add-kpa-form');
             });
 
             //Post job_title form to server using ajax (UPDATE)
-            $('#update-job_title').on('click', function() {
-                postRibbonForm('PATCH', '/job_title/' + jobId, 'edit-job_title-form');
+            $('#update-kpa').on('click', function() {
+                postRibbonForm('PATCH', '/appraisal/kpas/' + kpaId, 'edit-job_title-form');
             });
         });
     </script>
