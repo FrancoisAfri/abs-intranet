@@ -134,7 +134,8 @@ Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas'
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
 //General Use (API)
-Route::post('api/divisionsdropdown', 'DivisionLevelGroupController@divLevelGroupDD')->name('divisionsdropdown');
+Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
+Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
 
 //Email Test
 Route::get('testemail', function () {

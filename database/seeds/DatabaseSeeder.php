@@ -536,5 +536,6 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 */
+
     }
 }

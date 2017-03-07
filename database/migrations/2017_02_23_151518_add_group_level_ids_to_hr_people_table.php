@@ -14,11 +14,11 @@ class AddGroupLevelIdsToHrPeopleTable extends Migration
     public function up()
     {
         Schema::table('hr_people', function($table) {
-            $table->integer('group_level_one_id')->unsigned()->index()->nullable();
-            $table->integer('group_level_two_id')->unsigned()->index()->nullable();
-            $table->integer('group_level_three_id')->unsigned()->index()->nullable();
-            $table->integer('group_level_four_id')->unsigned()->index()->nullable();
-            $table->integer('group_level_five_id')->unsigned()->index()->nullable();
+            $table->integer('division_level_1')->unsigned()->index()->nullable();
+            $table->integer('division_level_2')->unsigned()->index()->nullable();
+            $table->integer('division_level_3')->unsigned()->index()->nullable();
+            $table->integer('division_level_4')->unsigned()->index()->nullable();
+            $table->integer('division_level_5')->unsigned()->index()->nullable();
         });
     }
 
@@ -30,11 +30,11 @@ class AddGroupLevelIdsToHrPeopleTable extends Migration
     public function down()
     {
         Schema::table('hr_people', function($table) {
-            $table->dropColumn('group_level_one_id');
-            $table->dropColumn('group_level_two_id');
-            $table->dropColumn('group_level_three_id');
-            $table->dropColumn('group_level_four_id');
-            $table->dropColumn('group_level_five_id');
+            $table->dropColumn('division_level_1');
+            $table->dropColumn('division_level_2');
+            $table->dropColumn('division_level_3');
+            $table->dropColumn('division_level_4');
+            $table->dropColumn('division_level_5');
         });
     }
 }

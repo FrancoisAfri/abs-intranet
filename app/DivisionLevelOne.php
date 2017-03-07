@@ -29,4 +29,17 @@ class DivisionLevelOne extends Model
         return $this->belongsTo(DivisionLevelTwo::class, 'parent_id');
     }
 
+    //function ro get lvl 1 divs that belong to a specific lvl 2 div
+    public static function divsFromParent($parentID, $incInactive) {
+        $divisions = DivisionLevelOne::where('parent_id', $parentID)
+            ->where(function ($query) use($incInactive) {
+                if ($incInactive == -1) {
+                    $query->where('active', 1);
+                }
+            })->get()
+            ->sortBy('name')
+            ->pluck('id', 'name');
+        return $divisions;
+    }
+
 }

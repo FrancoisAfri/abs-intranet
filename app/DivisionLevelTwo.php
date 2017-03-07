@@ -40,4 +40,17 @@ class DivisionLevelTwo extends Model
         $divLvlOne->division_level_id = $divLvlID;
         return $this->childDiv()->save($divLvlOne);
     }
+
+    //function ro get lvl 2 divs that belong to a specific lvl 3 div
+    public static function divsFromParent($parentID, $incInactive) {
+        $divisions = DivisionLevelTwo::where('parent_id', $parentID)
+            ->where(function ($query) use($incInactive) {
+                if ($incInactive == -1) {
+                    $query->where('active', 1);
+                }
+            })->get()
+            ->sortBy('name')
+            ->pluck('id', 'name');
+        return $divisions;
+    }
 }
