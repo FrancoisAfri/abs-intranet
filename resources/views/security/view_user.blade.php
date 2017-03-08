@@ -36,7 +36,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-black-tie"></i>
                                             </div>
-                                            <select id="name={{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control">
+                                            <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
                                             </select>
                                         </div>
                                     </div>
@@ -377,8 +377,8 @@
     <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
     <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
     <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-    <!-- optionally if you need translation for your language then include locale file as mentioned below -->
-    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>
+    <!-- optionally if you need translation for your language then include locale file as mentioned below
+    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
     <!-- End Bootstrap File input -->
 
     <!-- Ajax form submit -->
@@ -463,6 +463,29 @@
                 var successMsg = 'The password has been changed successfully.';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+            //Load divisions drop down
+            var parentDDID = '';
+            var loadAllDivs = 1;
+            @if (isset($view_by_admin) && $view_by_admin === 1)
+                @foreach($division_levels as $division_level)
+                    //Populate drop down on page load
+                    var ddID = '{{ 'division_level_' . $division_level->level }}';
+                    var postTo = '{!! route('divisionsdropdown') !!}';
+                    var selectedOption = '';
+                    var divLevel = parseInt('{{ $division_level->level }}');
+                    if (divLevel == 5) selectedOption = '{{ $user->person->group_level_five_id }}';
+                    else if(divLevel == 4) selectedOption = '{{ $user->person->group_level_four_id }}';
+                    else if(divLevel == 3) selectedOption = '{{ $user->person->group_level_three_id }}';
+                    else if(divLevel == 2) selectedOption = '{{ $user->person->group_level_two_id }}';
+                    else if(divLevel == 1) selectedOption = '{{ $user->person->group_level_one_id }}';
+                    var incInactive = -1;
+                    var loadAll = loadAllDivs;
+                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+                    parentDDID = ddID;
+                    loadAllDivs = -1;
+                @endforeach
+            @endif
         });
 		function postData(id, data)
 		{

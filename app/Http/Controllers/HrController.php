@@ -37,7 +37,6 @@ class HrController extends Controller
             'name' => 'bail|required|min:2',
             'plural_name' => 'bail|required|min:2',
         ]);
-
         //save the changes
         $groupLevelData=$request->all();
         $groupLevel->update($groupLevelData);

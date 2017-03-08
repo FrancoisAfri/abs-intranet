@@ -45,14 +45,13 @@
          
                         <!-- /.box-body -->
                     <div class="box-footer">
-                     <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#add_level_modal">Add{{$highestLvl->name}}</button>  
+                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#level-module-modal">Add {{$highestLvl->name}}</button>  
                     </div>
-                </form>
         </div>
 
         <!-- Include add new prime rate modal -->
         @include('hr.partials.level_module')
-        @include('hr.partials.add_level')
+  
   
     </div>
 @endsection
@@ -63,7 +62,7 @@
     <script>
 		function postData(id)
 		{
-			location.href = "/hr/firstlevel/activate/" + id;
+			location.href = "/hr/firstLevel/activate/" + id;
 		}
         $(function () {
 /*
@@ -88,34 +87,34 @@
                 $('.modal:visible').each(reposition);
             });
 
-            //pass module data to the edit module modal
-                var firstlevelID;
-            $('#level-module-modal').on('show.bs.modal', function (e) {
+          
+
+                var companyID;
+           $('#level-module-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                firstlevelID = btnEdit.data('id');
-                var firstlevelName = btnEdit.data('name');
-                var firstlevelEmployers = btnEdit.data('manager_id');
-                var firstlevelLevels = btnEdit.data('division_level_id');
+                companyID = btnEdit.data('id');
+                var companyIDName = btnEdit.data('name');
+                var companyIDEmployers = btnEdit.data('manager_id');
                 var level = btnEdit.data('level');
                 var modal = $(this);
                 modal.find('#group_level_title').html('Edit Employee Group Level '+ level);
-                modal.find('#name').val(firstlevelName);
-                modal.find('#manager_id').val(firstlevelEmployers);
-                modal.find('#division_level_id').val(firstlevelLevels);//
-                //if(primeRate != null && primeRate != '' && primeRate > 0) {
-                //    modal.find('#prime_rate').val(primeRate.toFixed(2));
-                //}
+                modal.find('#name').val(companyIDName);
+                modal.find('#manager_id').val(companyIDEmployers);
+                modal.find('#division_level_id').val(level);
+               /* if(primeRate != null && primeRate != '' && primeRate > 0) {
+                   modal.find('#prime_rate').val(primeRate.toFixed(2));
+                }*/
             });
 
+       
 
             //Post module form to server using ajax (ADD)
             $('#save_firstlevel').on('click', function() {
-                var strUrl = '/hr/firstlevel/';
+                var strUrl = '/hr/firstLevel';
                 var modalID = 'level-module-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
-                    manager_id: $('#'+modalID).find('#manager_id').val()
-                    division_level_id: $('#'+modalID).find('#division_level_id').val(),
+                    manager_id: $('#'+modalID).find('#manager_id').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'save_firstlevel';
@@ -125,11 +124,13 @@
                 var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
             });
-/*
-            $('#update-module').on('click', function() {
+
+
+          /*  $('#update-module').on('click', function() {
                 postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
             });
             */
-        });
+
+   });
     </script>
 @endsection

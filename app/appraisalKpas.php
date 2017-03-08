@@ -11,7 +11,7 @@ class appraisalKpas extends Model
 	
 	// Mass assignable fields
     protected $fillable = [
-        'name', 'status', 'weight'];
+        'name', 'status', 'weight', 'category_id'];
 		
 	//Relationship categories and Kpas
     public function kpascat() {

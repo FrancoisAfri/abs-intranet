@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\LeaveType;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Users;
 use App\leave_custom;
 use App\HRPerson;
-use Illuminate\Support\Facades\DB;
 use App\modules;
 use App\type_profile;
 use App\module_access;
