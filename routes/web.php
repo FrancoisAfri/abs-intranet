@@ -123,10 +123,10 @@ Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
 
-# Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
+# Performance Appraisals Module
 Route::get('/appraisal/template_active/{template}', 'AppraisalTemplatesController@templateAct');
 Route::get('appraisal/template/{template}', 'AppraisalTemplatesController@viewTemlate');
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
@@ -134,9 +134,21 @@ Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave')
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
+<<<<<<< HEAD
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+=======
+
+# Company setup Module
+Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
+Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
+Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
+Route::post('hr/firstlevel/save_firstlevel', 'EmployeeCompanySetupController@addLevel');
+Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@CompanyAct');
+Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@editCompany');
+
+>>>>>>> level_module modal save button functioning
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration

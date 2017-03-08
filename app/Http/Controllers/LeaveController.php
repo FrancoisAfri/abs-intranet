@@ -155,7 +155,6 @@ class LeaveController extends Controller
 		$leave->status = 1;
         $leave->save();
 		AuditReportsController::store('leave', 'leavetype Added', "leave type Name: $leave->name", 0);
-		return response()->json(['name' => $leave->name, 'description' => $leave->description], 200);
 	}
     public function leaveAct(LeaveType $lev) 
     {

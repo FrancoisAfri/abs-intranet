@@ -11,7 +11,7 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <form class="form-horizontal" method="POST" action="/hr/grouplevel">
+                <form class="form-horizontal" method="POST" action="/hr/firstlevel">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <!-- /.box-header -->
@@ -24,21 +24,19 @@
                                 <th>Level</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                 
-                            @foreach ($types as $type)
+            
+                            @foreach ($highestLvl->divisionLevelGroup as $type)
                                 <tr>
-                                     <td nowrap>
-                                     <button type="button" id="view_ribbons" class="btn btn-primary  btn-xs" onclick="postData({{$type->id}}, 'ribbons');><i class="fa fa-eye" data-id="{{ $type->id }}"></i> Ribbons</button>
-                                    <td style="width: 5px; text-align: center;"><button type="button" id="level-module-modal" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#level-module-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{ $type->manager_id }}" data-active="{{ $type->active }}" ><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+                                    <td style="width: 5px; text-align: center;"><button type="button" id="edit_company_modal" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}" data-active="{{ $type->active }}" ><i class="fa fa-pencil-square-o"></i> Edit</button></td>
                                     <td>{{ $type->name }}</td>
-                                    <td>{{ $type->manager_id }}</td>
+                                    <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
                                     <td>{{ $type->highestLvl }}</td>
                                     <td style="width: 5px; text-align: center;">
                                         @if ($type->name!='')
                                             <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}});"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
                                         @endif
                                     </td>
-                                </tr>
+                                </tr>    
                             @endforeach
                         </table>
                     </div>
@@ -51,6 +49,7 @@
 
         <!-- Include add new prime rate modal -->
         @include('hr.partials.level_module')
+        @include('hr.partials.edit_company_modal')
   
   
     </div>
@@ -62,7 +61,10 @@
     <script>
 		function postData(id)
 		{
-			location.href = "/hr/firstLevel/activate/" + id;
+			location.href = "/hr/firstlevel/activate/" + id;
+             if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
+      
+
 		}
         $(function () {
 /*
@@ -86,8 +88,7 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-
-          
+              
 
                 var companyID;
            $('#level-module-modal').on('show.bs.modal', function (e) {
@@ -106,24 +107,54 @@
                 }*/
             });
 
-       
+                var updatecompanyID;
+            $('#update_company-modal').on('show.bs.modal', function (e) {
+                    //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                updatecompanyID = btnEdit.data('id');
+                var name = btnEdit.data('name');
+                var manager_id = btnEdit.data('manager_id');
+                var modal = $(this);
+                modal.find('#name').val(name);
+                modal.find('#manager_id').val(manager_id);
+                
+             });
+
 
             //Post module form to server using ajax (ADD)
             $('#save_firstlevel').on('click', function() {
-                var strUrl = '/hr/firstLevel';
+                var strUrl = '/hr/firstleveldiv/add/'+ '{{ $highestLvl->id }}';
                 var modalID = 'level-module-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     manager_id: $('#'+modalID).find('#manager_id').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_firstlevel';
+                var submitBtnID = 'level_module';
                 var redirectUrl = '/hr/company_setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group level has been updated successfully.';
-                var formMethod = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
+                //var formMethod = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+           $('#update_company-modal').on('click', function () {
+            var strUrl = '/leave/custom/leave_type_edit/' + customleaveId;
+            var objData = {
+                name: $('#edit-company-modal').find('#name').val()
+                //manager_id: $('#edit-company-modal').find('#manager_id').val()
+                , _token: $('#edit-company-modal').find('input[name=_token]').val()
+            };
+            var modalID = 'edit_company_modal';
+            var submitBtnID = 'update_company-modal';
+            var redirectUrl = '/hr/company_setup';
+            var successMsgTitle = 'Changes Saved!';
+            var successMsg = 'Company modal has been updated successfully.';
+            var method = 'PATCH';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+    });
+
 
 
           /*  $('#update-module').on('click', function() {
@@ -131,6 +162,6 @@
             });
             */
 
-   });
+
     </script>
 @endsection
