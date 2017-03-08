@@ -120,7 +120,7 @@
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
 <script>
     function postData(id, data) {
-        //if (data == 'actdeac') location.href = "/leave/types/activate" + id;
+       // if (data == 'actdeac') location.href = "/leave/types/activate" + id;
         if (data == 'ribbons') location.href = "/leave/ribbons/" + id;
         else if (data == 'edit') location.href = "/leave/leave_edit/" + id;
         else if (data == 'actdeac') location.href = "/leave/leave_active/" + id; //leave_type_edit

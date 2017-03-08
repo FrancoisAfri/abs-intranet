@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\LeaveType;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -10,7 +11,7 @@ use App\leave_custom;
 use App\HRPerson;
 use Illuminate\Support\Facades\DB;
 use App\modules;
-use App\LeaveType;
+use App\type_profile;
 use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
@@ -53,10 +54,79 @@ class LeaveController extends Controller
        // return $leaveTypes;
         AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
         return view('leave.leave_types')->with($data);
-
-
-
     }
+    //#leave set up
+    public function showSetup() {
+        $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function($query) {
+            $query->orderBy('id', 'asc');
+
+        }]);
+        //return $leaveTypes->first()->leave_profle->where('id', 3);
+        $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
+        //$type_profile = App\LeaveType::find(1)->type_profile()->orderBy('name')->get();
+
+       //return $type_profile;
+        $employees = HRPerson::where('status', 1)->get();
+
+
+        $data['page_title'] = "leave type";
+        $data['page_description'] = "leave set up ";
+        $data['breadcrumb'] = [
+            ['title' => 'leave', 'path' => '/leave/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'setup';
+        $data['leaveTypes'] = $leaveTypes;
+       // $data['leave_profle']=$leave_profle;
+        $data['type_profile'] = $type_profile;
+       //return $type_profile;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        return view('leave.setup')->with($data);
+    }
+        
+    
+    public function editsetupType(Request $request, LeaveType $lev)
+    {
+        $this->validate($request, [
+            'day5min'=>'numeric|min:2',
+            'day5max'=>'numeric|min:2',
+            'day6min'=>'numeric|min:2',
+            'day6max'=>'numeric|min:2',
+            'shiftmin'=>'numeric|min:2',
+            'shiftmax'=>'numeric|min:2',
+        ]);
+        
+        $day5min = (trim($request->input('day5min')) != '') ? (int) $request->input('day5min') : null;
+        $day5max = (trim($request->input('day5max')) != '') ? (int) $request->input('day5max') : null;
+        
+        $day6min= (trim($request->input('day6min')) != '') ? (int) $request->input('day6min') : null;
+        $day6max = (trim($request->input('day6max')) != '') ? (int) $request->input('day6max') : null;
+        
+        $shiftmin = (trim($request->input('shiftmin')) != '') ? (int) $request->input('shiftmin') : null;
+        $shiftmax = (trim($request->input('shiftmax')) != '') ? (int) $request->input('shiftmax') : null;
+        
+        $lev->leave_profle()->sync([
+            2 => ['min' => $day5min, 'max' =>$day5max],
+            3 => ['min' => $day6min, 'max' => $day6max],
+            4 => ['min' => $shiftmin, 'max' => $shiftmax]
+        ]);
+//        $lev->day5min = $request->input('day5min');
+//        $lev->day5max = $request->input('day5max');
+//        $lev->day6min =$request->input('day6min');
+//        $lev->day6max =$request->input('day6max');
+//        $lev->shiftmin =$request->input('shiftmin');
+//        $lev->shiftmax =$request->input('shiftmax');
+        //$lev->font_awesome = $request->input('font_awesome');
+        //$lev->update();
+        //return $lev;
+        AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
+        return response()->json();
+    }
+    
+    //#leave types
 	public function editLeaveType(Request $request, LeaveType $lev)
 	{
         $this->validate($request, [
@@ -140,4 +210,6 @@ class LeaveController extends Controller
         $lev->update();
         return back();
     }
+//
+
 }
