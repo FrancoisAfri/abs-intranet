@@ -131,6 +131,9 @@ Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave')
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
+Route::get('appraisal/perks', 'AppraisalPerksController@index');
+Route::post('appraisal/perks/new', 'AppraisalPerksController@store');
+Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
 
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
