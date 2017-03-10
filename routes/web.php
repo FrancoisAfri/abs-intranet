@@ -134,11 +134,10 @@ Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave')
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
-<<<<<<< HEAD
+
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
-=======
 
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
@@ -148,7 +147,7 @@ Route::post('hr/firstlevel/save_firstlevel', 'EmployeeCompanySetupController@add
 Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@CompanyAct');
 Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@editCompany');
 
->>>>>>> level_module modal save button functioning
+
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
