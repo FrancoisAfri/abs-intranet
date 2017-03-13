@@ -126,6 +126,11 @@ Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
 Route::get('/appraisal/template_active/{template}', 'AppraisalTemplatesController@templateAct');
 Route::get('appraisal/template/{template}', 'AppraisalTemplatesController@viewTemlate');
+
+Route::post('appraisal/kpi', 'AppraisalTemplatesController@kpiSave');
+Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi');
+Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
+
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
@@ -147,6 +152,7 @@ Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupControll
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
+Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
 
 //Email Test
 Route::get('testemail', function () {

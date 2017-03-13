@@ -13,19 +13,33 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+				<div style="overflow-X:auto;">
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px"></th><th>Category</th><th>KPA</th><th>Indicator</th><th>Measurement</th><th>Source Of Ovidence</th><th>KPI Type</th><th style="width: 40px"></th></tr>
+					 <tr><th style="width: 10px"></th><th>Category</th><th>KPA</th><th>Indicator</th><th>Measurement</th><th>Source Of Evidence</th><th>Weight</th><th>KPI Type</th><th style="width: 40px"></th></tr>
                     @if (!empty($kpis) > 0)
 						@foreach($kpis as $kpi)
 						 <tr id="kpis-list">
-						  <td nowrap></td>
-						  <td></td>
-						  <td></td>
-						  <td></td>
-						  <td></td>
-						  <td></td>
-						  <td></td>
-						  <td></td>
+						  <td><button type="button" id="edit_kpi_title" class="btn btn-primary  btn-xs" 
+						  data-toggle="modal" 
+						  data-target="#edit-kpi-modal" 
+						  data-id="{{ $kpi->id }}" 
+						  data-measurement="{{ $kpi->measurement }}" 
+						  data-source_of_evidence="{{ $kpi->source_of_evidence }}" 
+						  data-indicator="{{ $kpi->indicator }}" 
+						  data-kpi_type="{{ $kpi->kpi_type }}" 
+						  data-kpa_id="{{ $kpi->kpa_id }}" 
+						  data-category_id="{{ $kpi->category_id }}" 
+						  data-weight="{{ $kpi->weight }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+						  <td>{{!empty($kpi->cat_name) ? $kpi->cat_name : ''}}</td>
+						  <td>{{!empty($kpi->kpa_name) ? $kpi->kpa_name : ''}}</td>
+						  <td>{{!empty($kpi->indicator) ? $kpi->indicator : ''}}</td>
+						  <td>{{!empty($kpi->measurement) ? $kpi->measurement : ''}}</td>
+						  <td>{{!empty($kpi->source_of_evidence) ? $kpi->source_of_evidence : ''}}</td>
+						  <td>{{!empty($kpi->weight) ? $kpi->weight : ''}}</td>
+						  <td><button type="button" id="view_kpi" class="btn btn-xs" onclick="postData({{$kpi->id}}, '{{$KpiTypeArray[$kpi->kpi_type]}}');">{{($kpi->kpi_type == 1) ? $KpiTypeArray[$kpi->kpi_type] : $KpiTypeArray[$kpi->kpi_type]}}</td>
+						  <td nowrap>
+                              <button type="button" id="view_kpi" class="btn {{ (!empty($kpi->status) && $kpi->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$kpi->id}}, 'actdeac');"><i class="fa {{ (!empty($kpi->status) && $kpi->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($kpi->status) && $kpi->status == 1) ? "De-Activate" : "Activate"}}</button>
+                          </td>
 						</tr>
 						@endforeach
                     @else
@@ -40,8 +54,10 @@
                     @endif
 				</table>
                 </div>
+                </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
+				<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                     <button type="button" id="add-new-kpi" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-kpi-modal">Add KPI</button>
                 </div>
             </div>
@@ -54,21 +70,24 @@
 @endsection
 
 @section('page_script')
+
+	<!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
+	
     <script>
 		function postData(id, data)
 		{
-			if (data == 'templ')
-				location.href = "/appraisal/template/" + id;
-			else if (data == 'edit')
-				location.href = "/appraisal/template_edit/" + id;
-			else if (data == 'actdeac')
-				location.href = "/appraisal/template_active/" + id;
+			if (data == 'actdeac')
+				location.href = "/appraisal/kpi_active/" + id;
 		}
         $(function () {
-            var templateId;
+            var kpiId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-
+			
+			document.getElementById("back_button").onclick = function () {
+			location.href = "/appraisal/templates";	};
+			
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -85,33 +104,48 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-
             //pass category data to the edit category modal
             $('#edit-kpi-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                templateId = btnEdit.data('id');
-                var templateName = btnEdit.data('kpi');
-                var jobTitleId = btnEdit.data('job_title_id');
+                kpiId = btnEdit.data('id');
+                var Measurement = btnEdit.data('measurement');
+                var Weight = btnEdit.data('weight');
+                var KpiType = btnEdit.data('kpi_type');
+                var SourceOfEvidence = btnEdit.data('source_of_evidence');
+                var Indicator = btnEdit.data('indicator');
+                var kpaId = btnEdit.data('kpa_id');
+                var CategoryId = btnEdit.data('category_id');
                 var modal = $(this);
-                modal.find('#kpi').val(templateName);
-                modal.find('#job_title_id').val(jobTitleId);
-				$('select#job_title_id').val(jobTitleId);
-				
+                modal.find('#measurement').val(Measurement);
+                modal.find('#weight').val(Weight);
+                modal.find('#kpi_type').val(KpiType);
+                modal.find('#source_of_evidence').val(SourceOfEvidence);
+                modal.find('#indicator').val(Indicator);
+                modal.find('#kpa_id').val(kpaId);
+                modal.find('#category_id').val(CategoryId);
+				$('select#category_id').val(CategoryId);
+				$('select#kpa_id').val(kpaId);
+				$('select#kpi_type').val(KpiType);
             });
 
             //function to post category form to server using ajax
             function postModuleForm(formMethod, postUrl, formName) {
-                //alert('do you get here');
                 $.ajax({
                     method: formMethod,
                     url: postUrl,
                     data: {
-                        kpi: $('form[name=' + formName + ']').find('#kpi').val(),
-                        job_title_id: $('form[name=' + formName + ']').find('#job_title_id').val(),
+                        measurement: $('form[name=' + formName + ']').find('#measurement').val(),
+                        weight: $('form[name=' + formName + ']').find('#weight').val(),
+                        source_of_evidence: $('form[name=' + formName + ']').find('#source_of_evidence').val(),
+                        indicator: $('form[name=' + formName + ']').find('#indicator').val(),
+                        kpi_type: $('form[name=' + formName + ']').find('#kpi_type').val(),
+                        kpa_id: $('form[name=' + formName + ']').find('#kpa_id').val(),
+                        category_id: $('form[name=' + formName + ']').find('#category_id').val(),
+                        template_id: {{$template->id}},
                          _token: $('input[name=_token]').val()
                     },
                     success: function(success) {
-                        location.href = "/appraisal/templates/";
+                        location.href = "/appraisal/template/" + {{$template->id}};
                         $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
                         $('form[name=' + formName + ']').trigger('reset'); //Reset the form
 
@@ -176,7 +210,7 @@
             });
 
             $('#update-kpi').on('click', function() {
-                postModuleForm('PATCH', '/appraisal/template_edit/' + templateId, 'edit-kpi-form');
+                postModuleForm('PATCH', '/appraisal/kpi_edit/' + kpiId, 'edit-kpi-form');
             });
         });
     </script>

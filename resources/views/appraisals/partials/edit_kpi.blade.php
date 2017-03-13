@@ -1,7 +1,7 @@
-<div id="edit-job_title-modal" class="modal modal-default fade">
+<div id="edit-kpi-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-job_title-form">
+            <form class="form-horizontal" method="POST" name="edit-kpi-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
                 <div class="modal-header">
@@ -10,15 +10,59 @@
                     <h4 class="modal-title">Edit Kpa</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="kpa-invalid-input-alert"></div>
-                    <div id="kpa-success-alert"></div>
-                    <div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter job Title Name" required>
-                        </div>
+                    <div id="kpi-invalid-input-alert"></div>
+                    <div id="kpi-success-alert"></div>
+					<div class="form-group">
+						<label for="category_id" class="col-sm-3 control-label">Category</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<select id="category_id" name="category_id" class="form-control" onchange="categoryOnChange(this)" required>
+                                    <option value="0">*** Select a Category ***</option>
+                                    @foreach($kpaCategories as $kpaCategory)
+                                        <option value="{{ $kpaCategory->id }}">{{ $kpaCategory->name }}</option>
+                                    @endforeach
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group">
+						<label for="kpa_id" class="col-sm-3 control-label">KPA</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<select id="kpa_id" name="kpa_id" class="form-control" required>
+								<option value="0">*** Select a KPA ***</option>
+								@foreach($kpas as $kpa)
+                                        <option value="{{ $kpa->id }}">{{ $kpa->name }}</option>
+                                @endforeach
+								</select>
+							</div>
+						</div>
                     </div>
                     <div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">Indicator</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+								<textarea class="form-control" rows="3" cols="70" id="indicator" name="indicator" placeholder="Enter Indicator" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">Measurement</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+								<textarea class="form-control" rows="3" cols="70" id="measurement" name="measurement" placeholder="Enter Measurement"></textarea>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label for="source_of_evidence" class="col-sm-3 control-label">Source Of Evidence</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+								<textarea class="form-control" rows="3" cols="70" id="source_of_evidence" name="source_of_evidence" placeholder="Enter Source Of Evidence"></textarea>
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group">
                         <label for="weight" class="col-sm-3 control-label">Weight</label>
                         <div class="col-sm-9">
                             <div class="input-group">
@@ -26,10 +70,26 @@
                             </div>
                         </div>
                     </div>
+					<div class="form-group">
+						<label for="kpi_type" class="col-sm-3 control-label">KPI Type</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-black-tie"></i>
+								</div>
+								<select id="kpi_type" name="kpi_type" class="form-control" required>
+								<option value="0">*** Select a Type ***</option>
+								<option value="1">Range</option>
+								<option value="2">Number</option>
+								<option value="3">From 1 To 10</option>
+								</select>
+							</div>
+						</div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="update-kpa" class="btn btn-primary">Update</button>
+                    <button type="button" id="update-kpi" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>

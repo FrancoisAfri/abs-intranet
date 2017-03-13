@@ -115,3 +115,44 @@ function loadHRPeopleOptions(ddID, selectedOption, parentDDID, incInactive, load
             });
         });
 }
+/* function to load kpa drop down options */
+function loadkpaOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo) {
+    loadAll = loadAll || -1;
+    incInactive = incInactive || -1;
+    postTo = postTo || '/api/kpadropdown';
+
+    var parentDDVal = $('#'+parentDDID).val();
+    var ddLabel = $('label[for="' + ddID + '"]').html();
+    var divLvl = parseInt(parentDDID.substr(parentDDID.lastIndexOf("_") + 1));
+    $.post(postTo, { div_level: divLvl, div_val: parentDDVal, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
+        function(data) {
+            var dropdown = $('#'+ddID);
+            var firstDDOption = "*** Select a " + ddLabel + " ***";
+            dropdown.empty();
+            dropdown
+                .append($("<option></option>")
+                    .attr("value",'')
+                    .text(firstDDOption));
+            $.each(data, function(key, value) {
+                var ddOption = $("<option></option>")
+                    .attr("value",value)
+                    .text(key);
+                if (selectedOption == value) ddOption.attr("selected", "selected")
+                dropdown
+                    .append(ddOption);
+            });
+        });
+}
+
+/* function to load child [Division] and employee (HR Person) drop down options */
+function categoryOnChange(dropDownObj, hrPeopleDDID) {
+    var postTo = ''; var selectedOption = '';
+    var ddID = dropDownObj.id;
+    var parentDDVal = dropDownObj.value;
+    var incInactive = -1; var loadAll = -1;
+    var childDDID = ''; var childDDLabel = '';
+    //console.log("function called by dd changed event: " + "ddID = " + ddID + ", parentDDVal = " + parentDDVal + ", parentDDLabel = " + parentDDLabel);
+	childDDID = 'kpa_id';
+    childDDLabel = $('label[for="' + childDDID + '"]').html();
+	loadkpaOptions(ddID,selectedOption, incInactive, loadAll, postTo);
+}
