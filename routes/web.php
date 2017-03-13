@@ -142,10 +142,13 @@ Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAc
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
-Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
+//Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
 Route::post('hr/firstlevel/save_firstlevel', 'EmployeeCompanySetupController@addLevel');
-Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@CompanyAct');
-Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@editCompany');
+//Route::get('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@CompanyAct');
+//Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@editCompany');
+Route::post('/hr/company_edit/{level}/{divLevel}', 'EmployeeCompanySetupController@editlevel');
+Route::get('/hr/firstlevel/activate/{level}/{divLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
+
 
 
 //Route::post('audits', 'AuditReportsController@getReport');

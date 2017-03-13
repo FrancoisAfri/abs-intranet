@@ -16,6 +16,7 @@ use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Support\Facades\Auth;
 
+
 class LeaveController extends Controller
 {
     //

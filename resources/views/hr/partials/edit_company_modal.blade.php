@@ -16,27 +16,25 @@
 
                      <div class="form-group">
                        <label for="action" class="col-sm-3 control-label">Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Name" required>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" name="name" value="" data-name="{{ $type->name }}" placeholder="Enter Name" required>
                         </div>
-                               </div>
-                                  </div>
-                            
-
-                    <div class="form-group">
-                        <label for="action" class="col-sm-3 control-label">Manager's Name</label>
-                        <div class="col-sm-9">
-                   <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" disabled="">
-                                <option selected="selected" value="0" required >*** Select a Manager ***</option>==$0
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label for="action" class="col-sm-3 control-label">Manager Name</label>
+                         <div class="col-sm-8">
+                             <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" required>
+                                <option selected="selected" value="0" >*** Select a Manager ***</option>
                                     @foreach($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
                         </select>
-                             </div>
-                             </div>
+                           </div>
+                    </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="update_company-modal" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                    <button type="button" id="update_company-modal" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Update</button>
                 </div>
             </form>
 
