@@ -158,23 +158,23 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
         ]);
 
          //return DivisionLevel;
-        if ($divLevel == 5){
+        if ($divLevel->level == 5){
              $childDiv =  DivisionLevelFive::find($high);
              $childDiv->update($request->all());
         }
-        elseif ($divLevel == 4){
+        elseif ($divLevel->level == 4){
             $childDiv =  DivisionLevelFour::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($divLevel == 3) {
+        elseif ($divLevel->level == 3) {
             $childDiv =  DivisionLevelThree::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($divLevel == 2) {
+        elseif ($divLevel->level == 2) {
             $childDiv =  DivisionLevelTwo::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($divLevel == 1) {
+        elseif ($divLevel->level == 1) {
             $childDiv =  DivisionLevelOne::find($high);
             $childDiv->update($request->all());
         }
