@@ -143,7 +143,7 @@
             });
 
            $('#update_company-modal').on('click', function () {
-            var strUrl = '/hr/divLevel/' + updatecompanyID;
+            var strUrl = '/hr/company_edit/' ;
             var modalID = 'edit-company-modal';
             var objData = {
                 name: $('#'+modalID).find('#name').val(),

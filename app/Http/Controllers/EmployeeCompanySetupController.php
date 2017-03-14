@@ -156,6 +156,7 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
             'manager_id'=>  'numeric|required',
 
         ]);
+
          //return DivisionLevel;
         if ($divLevel == 5){
              $childDiv =  DivisionLevelFive::find($high);
@@ -165,15 +166,15 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
             $childDiv =  DivisionLevelFour::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($divLeveldivLeveldivLeveldivLevel == 3) {
+        elseif ($divLevel == 3) {
             $childDiv =  DivisionLevelThree::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($divLeveldivLeveldivLevel == 2) {
+        elseif ($divLevel == 2) {
             $childDiv =  DivisionLevelTwo::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($divLeveldivLevel == 1) {
+        elseif ($divLevel == 1) {
             $childDiv =  DivisionLevelOne::find($high);
             $childDiv->update($request->all());
         }
