@@ -26,7 +26,7 @@
                                         <img src="{{ (!empty($perk->img)) ? Storage::disk('local')->url("perks/$perk->img") : 'http://placehold.it/50x50' }}" alt="Product Image">
                                     </div>
                                     <div class="product-info">
-                                        <a href="#" class="product-title" data-toggle="modal" data-target="#edit-perk-modal" data-id="{{ $perk->id }}" data-name="{{ $perk->name }}" data-description="{{ $perk->description }}" data-req_percent="{{ $perk->req_percent }}" data-img="{{ (!empty($perk->img)) ? Storage::disk('local')->url("perks/$perk->img") : '' }}">{{ $perk->name }}</a>
+                                        <a href="#" class="product-title" data-toggle="modal" data-target="#edit-perk-modal" data-id="{{ $perk->id }}" data-name="{{ $perk->name }}" data-description="{{ $perk->description }}" data-req_percent="{{ $perk->req_percent }}" data-img="{{ (!empty($perk->img)) ? Storage::disk('local')->url("perks/$perk->img") : 'http://placehold.it/235x235' }}">{{ $perk->name }}</a>
                                         <span class="label label-success pull-right"><i class="fa fa-line-chart"></i> {{ $perk->req_percent }}%</span>
                                         <span class="product-description">
                                             {{ $perk->description }}
@@ -138,10 +138,10 @@
                 modal.find('#description').val(desc);
                 modal.find('#req_percent').val(percent);
                 //show perk image if any
-                if (perkImg != ''){
-                    var htmlImg = $("<img>").attr('src', perkImg).attr('class', 'img-responsive img-thumbnail').attr('height', '200px');
-                    modal.find('#perk-img').attr('style', 'margin-bottom: 10px;').html(htmlImg);
-                }
+                var imgDiv = modal.find('#perk-img');
+                imgDiv.empty();
+                var htmlImg = $("<img>").attr('src', perkImg).attr('class', 'img-responsive img-thumbnail').attr('style', 'max-height: 235px;');
+                imgDiv.html(htmlImg);
             });
         });
     </script>
