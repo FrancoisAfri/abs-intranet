@@ -95,18 +95,67 @@ class AppraisalsCategoriesController extends Controller
 	{
         if ($category->status == 1) 
 		{
-			$category->load('appraisalKpas');
+			$category->load('kpascategory');
 			$data['page_title'] = "KPAs Informations";
 			$data['page_description'] = "KPAs Informations";
 			$data['breadcrumb'] = [
 				['title' => 'Performance Appraisal', 'path' => '/appraisal/categories', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
 				['title' => 'Categories', 'active' => 1, 'is_module' => 0]];
-			$data['jobTitles'] = $category;
+			$data['categories'] = $category;
 			$data['active_mod'] = 'Performance Appraisal';
 			$data['active_rib'] = 'Categories';
 			AuditReportsController::store('Performance Appraisal', 'KPas Details Page Accessed', "Accessed by User", 0);
 			return view('appraisals.kpas')->with($data);
 		}
 		else return back();
+    }
+	# Act/deac KPAs
+	public function kpasAct(appraisalKpas $kpa) 
+	{
+		if ($kpa->status == 1) $stastus = 0;
+		else $stastus = 1;
+		
+		$kpa->status = $stastus;	
+		$kpa->update();
+		return back();
+    }
+	
+	# Save KPAs 
+    public function kpasSave(Request $request, appraisalCategories $category)
+	{
+		$this->validate($request, [
+            'name' => 'required',       
+            'weight' => 'bail|required|integer|min:0',       
+        ]);
+		if (!empty($category->status))
+		{
+			$kpaData = $request->all();
+			unset($kpaData['_token']);
+			$kpa = new appraisalKpas($kpaData);
+			$kpa->status = 1;
+			$kpa->name = $kpaData['name'];
+			$kpa->weight = $kpaData['weight'];
+			$kpa->category_id = $category->id;
+			$kpa->save();
+			$newname = $kpaData['name'];
+			AuditReportsController::store('Performance Appraisal', 'KPA Added', "kpa Name: $kpaData[name]", 0);
+			return response()->json(['new_kpa' => $newname], 200);
+		}
+		return back();
+    }	
+	# Edit KPAs
+	public function editKpas(Request $request, appraisalKpas $kpa)
+	{
+        $this->validate($request, [
+            'name' => 'required',       
+            'weight' => 'bail|required|integer|min:0',       
+        ]);
+
+        $kpa->name = $request->input('name');
+        $kpa->weight = $request->input('weight');
+        $kpa->update();
+		$newtemplate = $request->input('name');
+        AuditReportsController::store('Performance Appraisal', 'KPA Informations Edited', "Edited by User", 0);
+        return response()->json(['new_category' => $newtemplate], 200);
     }
 }

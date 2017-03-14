@@ -51,10 +51,13 @@ Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
+Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveController@editsetupType');
+Route::get('/leave/setup', 'LeaveController@showSetup');
 #custom leave 
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
 Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
+
 
 
 //Contacts related requests
@@ -112,18 +115,16 @@ Route::get('/hr/category_active/{jobCategory}', 'EmployeeJobTitleController@cate
 Route::get('/hr/job_title_active/{jobTitle}', 'EmployeeJobTitleController@jobtitleAct');
 Route::post('hr/add_jobtitle/{jobCategory}', 'EmployeeJobTitleController@addJobTitle');
 Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
-Route::get('/hr/setup', 'HrController@showSetup');
-Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
-Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
+
 # Audit Module
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
 
-# Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
+# Performance Appraisals Module
 Route::get('/appraisal/template_active/{template}', 'AppraisalTemplatesController@templateAct');
 Route::get('appraisal/template/{template}', 'AppraisalTemplatesController@viewTemlate');
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
@@ -135,12 +136,16 @@ Route::get('appraisal/perks', 'AppraisalPerksController@index');
 Route::post('appraisal/perks/new', 'AppraisalPerksController@store');
 Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
 
+Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
+Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
+Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
-Route::patch('/hr/firstlevel/{firstLevel}', 'EmployeeCompanySetupController@UpdateLevel');
-Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
-
-
+Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
+Route::post('/hr/company_edit', 'EmployeeCompanySetupController@editCompany');
+Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
+Route::get('/hr/firstlevel/activate/{level}/{divLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
 
 
 //Route::post('audits', 'AuditReportsController@getReport');
@@ -148,7 +153,10 @@ Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupControll
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
-
+# Company setup Module
+Route::get('/hr/setup', 'HrController@showSetup');
+Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
+Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');

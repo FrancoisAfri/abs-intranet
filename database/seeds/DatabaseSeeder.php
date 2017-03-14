@@ -8,6 +8,7 @@ use App\Province;
 use App\modules;
 use App\module_ribbons;
 use App\DivisionLevel;
+use App\leave_profile;
 
 class DatabaseSeeder extends Seeder
 {
@@ -405,5 +406,28 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+
+	//#insert leave profilse
+
+        $profile = new leave_profile ();
+        $profile->name = 'Employee with no leave';
+        $profile->description = 'Employee with no leave' ;
+        $profile->save();
+
+        $profile = new leave_profile ();
+        $profile->name = '5 Day Employee';
+        $profile->description = '5 Day Employee leave' ;
+        $profile->save();
+
+        $profile = new leave_profile ();
+        $profile->name = '6 Day Employee';
+        $profile->description = '6 Day Employee leave' ;
+        $profile->save();
+
+        $profile = new leave_profile ();
+        $profile->name = 'Shift Worker';
+        $profile->description = 'Shift Worker Employee leave' ;
+        $profile->save();
+
     }
 }

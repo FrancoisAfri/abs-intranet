@@ -82,7 +82,7 @@
                     @foreach($leave_customs as $leavecustom)
                     <tr id="modules-list">
                         <td nowrap>
-                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-customleave-modal" data-id="{{ $leavecustom->id }}" data-employeename="{{($leavecustom->userCustom) ? $leavecustom->userCustom->first_name." ".$leavecustom->userCustom->surname : ''}}" data-number_of_days="{{ $leavecustom->number_of_days }}"> <i class="fa fa-pencil-square-o">
+                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-customleave-modal" data-id="{{ $leavecustom->id }}" data-employeename="{{($leavecustom->userCustom) ? $leavecustom->userCustom->first_name." ".$leavecustom->userCustom->surname : ''}}"      data-number_of_days="{{ $leavecustom->number_of_days }}"> <i class="fa fa-pencil-square-o">
                                 </i> Edit</button>
                         </td>
                         <td>{{ ($leavecustom->userCustom) ? $leavecustom->userCustom->first_name." ".$leavecustom->userCustom->surname : ''}} </td>
@@ -120,7 +120,7 @@
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
 <script>
     function postData(id, data) {
-        //if (data == 'actdeac') location.href = "/leave/types/activate" + id;
+       // if (data == 'actdeac') location.href = "/leave/types/activate" + id;
         if (data == 'ribbons') location.href = "/leave/ribbons/" + id;
         else if (data == 'edit') location.href = "/leave/leave_edit/" + id;
         else if (data == 'actdeac') location.href = "/leave/leave_active/" + id; //leave_type_edit

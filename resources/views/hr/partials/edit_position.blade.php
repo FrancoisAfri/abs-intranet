@@ -7,7 +7,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Ribbon</h4>
+                    <h4 class="modal-title">Edit Job Title</h4>
                 </div>
                 <div class="modal-body">
                     <div id="job_title-invalid-input-alert"></div>

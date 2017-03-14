@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLeaveProfileToHrPeopleTable extends Migration
+class AddCategoryIdToAppraisalKpasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddLeaveProfileToHrPeopleTable extends Migration
      */
     public function up()
     {
-        Schema::table('hr_people', function ($table) {
-            //
-            $table->integer('leave_profile')->unsigned()->index()->nullable();
+        Schema::table('appraisal_kpas', function($table) {
+            $table->integer('category_id')->unsigned()->index()->nullable();
         });
     }
 
@@ -26,9 +25,8 @@ class AddLeaveProfileToHrPeopleTable extends Migration
      */
     public function down()
     {
-        Schema::table('hr_people', function ($table) {
-            //
-            $table->dropColumn('leave_profile');
+        Schema::table('appraisal_kpas', function($table) {
+            $table->dropColumn('category_id');
         });
     }
 }
