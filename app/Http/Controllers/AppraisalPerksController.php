@@ -62,6 +62,18 @@ class AppraisalPerksController extends Controller
         $perk->status = 1;
         $perk->save();
 
+        //Upload the perk's image
+        if ($request->hasFile('img')) {
+            $fileExt = $request->file('img')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('img')->isValid()) {
+                $fileName = $perk->id . "_perk_img_" . '.' . $fileExt;
+                $request->file('img')->storeAs('perks', $fileName);
+                //Update file name in the appraisal_perks table
+                $perk->img = $fileName;
+                $perk->update();
+            }
+        }
+
         AuditReportsController::store('Performance Appraisal', 'New Perk Added By User', "Perk ID: $perk->id, Perk Name: $perk->name", 0);
         return response()->json(['perk_id' => $perk->id, 'perk_name' => $perk->name], 200);
     }
@@ -104,6 +116,18 @@ class AppraisalPerksController extends Controller
 
         $perkData = $request->all();
         $perk->update($perkData);
+
+        //Upload the perk's image
+        if ($request->hasFile('img')) {
+            $fileExt = $request->file('img')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('img')->isValid()) {
+                $fileName = $perk->id . "_perk_img_" . '.' . $fileExt;
+                $request->file('img')->storeAs('perks', $fileName);
+                //Update file name in the appraisal_perks table
+                $perk->img = $fileName;
+                $perk->update();
+            }
+        }
 
         AuditReportsController::store('Performance Appraisal', 'Perk Details Edited By User', "Perk ID: $perk->id, Perk Name: $perk->name", 0);
         return response()->json(['perk_id' => $perk->id, 'perk_name' => $perk->name], 200);

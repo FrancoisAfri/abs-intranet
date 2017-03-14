@@ -1,8 +1,9 @@
 <div id="edit-perk-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" name="edit-perk-form">
+            <form class="form-horizontal" name="edit-perk-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
+                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -34,10 +35,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="profile_pic" class="col-sm-2 control-label">Perk Image</label>
+                        <label for="img" class="col-sm-2 control-label">Perk Image</label>
 
                         <div class="col-sm-10">
-                            <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            <div id="perk-img"></div>
+                            <input type="file" id="img" name="img" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
                 </div>

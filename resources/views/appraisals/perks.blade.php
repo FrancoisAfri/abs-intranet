@@ -23,10 +23,10 @@
                             @foreach($perks as $perk)
                                 <li class="item">
                                     <div class="product-img">
-                                        <img src="http://placehold.it/50x50" alt="Product Image">
+                                        <img src="{{ (!empty($perk->img)) ? Storage::disk('local')->url("perks/$perk->img") : 'http://placehold.it/50x50' }}" alt="Product Image">
                                     </div>
                                     <div class="product-info">
-                                        <a href="javascript:void(0)" class="product-title" data-toggle="modal" data-target="#edit-perk-modal" data-id="{{ $perk->id }}" data-name="{{ $perk->name }}" data-description="{{ $perk->description }}" data-req_percent="{{ $perk->req_percent }}" data-img="{{ $perk->img }}">{{ $perk->name }}</a>
+                                        <a href="#" class="product-title" data-toggle="modal" data-target="#edit-perk-modal" data-id="{{ $perk->id }}" data-name="{{ $perk->name }}" data-description="{{ $perk->description }}" data-req_percent="{{ $perk->req_percent }}" data-img="{{ (!empty($perk->img)) ? Storage::disk('local')->url("perks/$perk->img") : '' }}">{{ $perk->name }}</a>
                                         <span class="label label-success pull-right"><i class="fa fa-line-chart"></i> {{ $perk->req_percent }}%</span>
                                         <span class="product-description">
                                             {{ $perk->description }}
@@ -99,40 +99,29 @@
                 $('.modal:visible').each(reposition);
             });
 
-            //Post perk form to server using ajax
+            //Post perk form to server using ajax (add)
             $('#add-perk').on('click', function() {
                 var strUrl = '/appraisal/perks/new';
+                var formName = 'add-new-perk-form';
                 var modalID = 'add-new-perk-modal';
-                var modal = $('#'+modalID);
-                var objData = {
-                    name: modal.find('#name').val(),
-                    description: modal.find('#description').val(),
-                    req_percent: modal.find('#req_percent').val(),
-                    _token: modal.find('input[name=_token]').val()
-                };
+                //var modal = $('#'+modalID);
                 var submitBtnID = 'add-perk';
                 var redirectUrl = '/appraisal/perks';
                 var successMsgTitle = 'Perk Added!';
                 var successMsg = 'The new perk has been added successfully!';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-            //Post perk form to server using ajax
+            //Post perk form to server using ajax (edit)
             $('#update-perk').on('click', function() {
                 var strUrl = '/appraisal/perks/' + perkID;
+                var formName = 'edit-perk-form';
                 var modalID = 'edit-perk-modal';
-                var modal = $('#'+modalID);
-                var objData = {
-                    name: modal.find('#name').val(),
-                    description: modal.find('#description').val(),
-                    req_percent: modal.find('#req_percent').val(),
-                    _token: modal.find('input[name=_token]').val()
-                };
                 var submitBtnID = 'update-perk';
                 var redirectUrl = '/appraisal/perks';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The perk details have been updated successfully!';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, 'PATCH');
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
             //pass perk data to the edit perk modal
@@ -143,11 +132,16 @@
                 var name = btnEdit.data('name');
                 var desc = btnEdit.data('description');
                 var percent = btnEdit.data('req_percent');
+                var perkImg = btnEdit.data('img');
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(desc);
                 modal.find('#req_percent').val(percent);
-                //$('select#job_title_id').val(jobTitleId);
+                //show perk image if any
+                if (perkImg != ''){
+                    var htmlImg = $("<img>").attr('src', perkImg).attr('class', 'img-responsive img-thumbnail').attr('height', '200px');
+                    modal.find('#perk-img').attr('style', 'margin-bottom: 10px;').html(htmlImg);
+                }
             });
         });
     </script>
