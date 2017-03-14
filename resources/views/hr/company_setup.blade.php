@@ -143,13 +143,14 @@
             });
 
            $('#update_company-modal').on('click', function () {
-            var strUrl = '/hr/company_edit/' + "{{$highestLvl->level}}/" + updatecompanyID;
-            var objData = {
-                name: $('#edit-company-modal').find('#name').val(),
-                manager_id: $('#edit-company-modal').find('#manager_id').val()
-                , _token: $('#edit-company-modal').find('input[name=_token]').val()
-            };
+            var strUrl = '/hr/divLevel/' + updatecompanyID;
             var modalID = 'edit-company-modal';
+            var objData = {
+                name: $('#'+modalID).find('#name').val(),
+                manager_id: $('#'+modalID).find('#manager_id').val(),
+                 _token: $('#'+modalID).find('input[name=_token]').val()
+            };
+           
             var submitBtnID = 'update_company-modal';
             var redirectUrl = '/hr/company_setup';
             var successMsgTitle = 'Changes Saved!';

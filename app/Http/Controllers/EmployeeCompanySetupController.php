@@ -62,7 +62,7 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
 
              //$lev->hr_id = $request->input('hr_id');
         $divLevel->name = $request->input('name');
-         $divLevel->manager_id = $request->input('manager_id');
+        $divLevel->manager_id = $request->input('manager_id');
         $divLevel->update();
         //return $lev;
         AuditReportsController::store('');
@@ -108,37 +108,37 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
         }
 
-        public function activateFirstLevel($level, $high) 
+        public function activateFirstLevel(DivisionLevel $active, $divLevel) 
            {
-                   if ($level == 5){
+                   if ($divLevel == 5){
              $childDiv =  DivisionLevelFive::find($high);
              if ($childDiv->active == 1) $stastus = 0;
             else $stastus = 1;  
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
-                if ($level == 4){
+                if ($divLevel == 4){
             $childDiv =  DivisionLevelFour::find($high);
             if ($childDiv->active == 1) $stastus = 0;
              else $stastus = 1;  
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
-        elseif ($level == 3) {
+        elseif ($divLevel == 3) {
             $childDiv =  DivisionLevelThree::find($high);
              if ($childDiv->active == 1) $stastus = 0;
             else $stastus = 1;  
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
-        elseif ($level == 2) {
+        elseif ($divLevel == 2) {
             $childDiv =  DivisionLevelTwo::find($high);
              if ($childDiv->active == 1) $stastus = 0;
           else $stastus = 1;  
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
-        elseif ($level == 1) {
+        elseif ($divLevel == 1) {
             $childDiv =  DivisionLevelOne::find($high);
              if ($childDiv->active == 1) $stastus = 0;
             else $stastus = 1;  
@@ -148,7 +148,7 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
                return back();
             }
 
-        public function editCompany(Request $request,  $level, $high)
+        public function editCompany(Request $request, DivisionLevel $divLevel)
         {
         //$user = Auth::user()->load('person');
         $this->validate($request, [
@@ -157,23 +157,23 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
 
         ]);
          //return DivisionLevel;
-        if ($level == 5){
+        if ($divLevel == 5){
              $childDiv =  DivisionLevelFive::find($high);
              $childDiv->update($request->all());
         }
-        elseif ($level == 4){
+        elseif ($divLevel == 4){
             $childDiv =  DivisionLevelFour::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($level == 3) {
+        elseif ($divLeveldivLeveldivLeveldivLevel == 3) {
             $childDiv =  DivisionLevelThree::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($level == 2) {
+        elseif ($divLeveldivLeveldivLevel == 2) {
             $childDiv =  DivisionLevelTwo::find($high);
             $childDiv->update($request->all());
         }
-        elseif ($level == 1) {
+        elseif ($divLeveldivLevel == 1) {
             $childDiv =  DivisionLevelOne::find($high);
             $childDiv->update($request->all());
         }
@@ -183,16 +183,7 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
         return response()->json();
         }
     //
-        // function to store status
-        public function CompanyAct(DivisionLevel $companyLevel)
-        {
-        if ($CompanyLevel->status == 1) $stastus = 0;
-        else $stastus = 1;
 
-        $CompanyLevel->status = $stastus;
-        $CompanyLevel->update();
-        return back();
-    }
       }
 
 
