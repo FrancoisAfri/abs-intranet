@@ -40,7 +40,7 @@
                         <div class="alert alert-danger alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             <h4><i class="icon fa fa-warning"></i> No Records Found!</h4>
-                            There is no perks to show. Please start by adding some perks by clicking on the 'Add New Perk' button below.
+                            There is no perks to show. Please add some perks by clicking on the 'Add New Perk' button below.
                         </div>
                     @endif
                 </div>

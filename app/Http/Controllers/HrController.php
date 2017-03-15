@@ -47,7 +47,7 @@ class HrController extends Controller
         if ($groupLevel->active == 1) $stastus = 0;
         else $stastus = 1;
         
-        $groupLevel->active = $stastus;    
+        $groupLevel->active = $stastus;   
         $groupLevel->update();
         return back();
     }
