@@ -154,11 +154,11 @@ Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas'
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
-<<<<<<< HEAD
+//<<<<<<< HEAD
 // =======
 
-=======
->>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
+//=======
+//>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
 Route::get('appraisal/perks', 'AppraisalPerksController@index');
 Route::post('appraisal/perks/new', 'AppraisalPerksController@store');
 Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
@@ -166,11 +166,11 @@ Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
-<<<<<<< HEAD
+//<<<<<<< HEAD
 //>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
 
-=======
->>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
+//=======
+//>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
@@ -178,16 +178,16 @@ Route::post('/hr/company_edit', 'EmployeeCompanySetupController@updateCompany');
 Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/firstlevel/activate/{level}/{divLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
 
 // >>>>>>> level_module modal save button functioning
 //=======
 //>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
-=======
+//=======
 // >>>>>>> level_module modal save button functioning
 
->>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
+//>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
