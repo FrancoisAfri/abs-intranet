@@ -145,6 +145,9 @@ Route::post('appraisal/kpi', 'AppraisalTemplatesController@kpiSave');
 Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi');
 Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
 
+#Kpi Types
+Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
+
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
@@ -179,7 +182,6 @@ Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editl
 Route::get('/hr/firstlevel/activate/{level}/{divLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
 
 //<<<<<<< HEAD
-
 
 // >>>>>>> level_module modal save button functioning
 //=======

@@ -1,26 +1,23 @@
-<div id="edit-kpi-modal" class="modal modal-default fade">
+<div id="add-new-range-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-kpi-form">
+            <form class="form-horizontal" method="POST" name="add-range-form">
                 {{ csrf_field() }}
-                {{ method_field('PATCH') }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Kpa</h4>
+                    <h4 class="modal-title">Add New KPI</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="kpi-invalid-input-alert"></div>
-                    <div id="kpi-success-alert"></div>
+                    <div id="range-invalid-input-alert"></div>
+                    <div id="range-success-alert"></div>
 					<div class="form-group">
 						<label for="category_id" class="col-sm-3 control-label">Category</label>
 						<div class="col-sm-9">
 							<div class="input-group">
 								<select id="category_id" name="category_id" class="form-control" required>
                                     <option value="0">*** Select a Category ***</option>
-                                    @foreach($kpaCategories as $kpaCategory)
-                                        <option value="{{ $kpaCategory->id }}">{{ $kpaCategory->name }}</option>
-                                    @endforeach
+                                    
 								</select>
 							</div>
 						</div>
@@ -31,9 +28,7 @@
 							<div class="input-group">
 								<select id="kpa_id" name="kpa_id" class="form-control" required>
 								<option value="0">*** Select a KPA ***</option>
-								@foreach($kpas as $kpa)
-                                        <option value="{{ $kpa->id }}">{{ $kpa->name }}</option>
-                                @endforeach
+								
 								</select>
 							</div>
 						</div>
@@ -78,16 +73,16 @@
 									<i class="fa fa-black-tie"></i>
 								</div>
 								<select id="kpi_type" name="kpi_type" class="form-control" required>
-								<option value="0">*** Select a Type ***</option>
-								<option value="1">Range</option>
-								<option value="2">Number</option>
-								<option value="3">From 1 To 10</option>
+									<option value="0">*** Select a Type ***</option>
+									<option value="1">Range</option>
+									<option value="2">Number</option>
+									<option value="3">From 1 To 10</option>
 								</select>
 							</div>
 						</div>
                     </div>
 					<div class="form-group">
-						<label for="is_upload" class="col-sm-3 control-label">Is Upload?</label>
+						<label for="is_upload" class="col-sm-3 control-label">Is Upload</label>
 						<div class="col-sm-9">
 							<div class="input-group">
 								<span class="input-group-addon">
@@ -103,7 +98,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="update-kpi" class="btn btn-primary">Update</button>
+                    <button type="button" id="add-range" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>

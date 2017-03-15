@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">KPIs ({{$template->template}})</h3>
+                    <h3 class="box-title">KPIs ({{$ranges->indicator}})</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -15,41 +15,30 @@
                 <div class="box-body">
 				<div style="overflow-X:auto;">
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px"></th><th>Category</th><th>KPA</th><th>Indicator</th><th>Measurement</th><th>Source Of Evidence</th><th>Weight</th><th>Upload</th><th>KPI Type</th><th style="width: 40px"></th></tr>
-                    @if (!empty($kpis) > 0)
-						@foreach($kpis as $kpi)
-						 <tr id="kpis-list">
+					 <tr><th style="width: 10px"></th><th>Range From</th><th>Range To</th><th>Percentage</th><th style="width: 40px"></th></tr>
+                    @if (!empty($ranges))
+						@foreach($ranges as $range)
+						 <tr id="ranges-list">
 						  <td><button type="button" id="edit_kpi_title" class="btn btn-primary  btn-xs" 
 						  data-toggle="modal" 
-						  data-target="#edit-kpi-modal" 
-						  data-id="{{ $kpi->id }}" 
-						  data-measurement="{{ $kpi->measurement }}" 
-						  data-source_of_evidence="{{ $kpi->source_of_evidence }}" 
-						  data-indicator="{{ $kpi->indicator }}" 
-						  data-kpi_type="{{ $kpi->kpi_type }}" 
-						  data-is_upload="{{ $kpi->is_upload }}" 
-						  data-kpa_id="{{ $kpi->kpa_id }}" 
-						  data-category_id="{{ $kpi->category_id }}" 
-						  data-weight="{{ $kpi->weight }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-						  <td>{{!empty($kpi->cat_name) ? $kpi->cat_name : ''}}</td>
-						  <td>{{!empty($kpi->kpa_name) ? $kpi->kpa_name : ''}}</td>
-						  <td>{{!empty($kpi->indicator) ? $kpi->indicator : ''}}</td>
-						  <td>{{!empty($kpi->measurement) ? $kpi->measurement : ''}}</td>
-						  <td>{{!empty($kpi->source_of_evidence) ? $kpi->source_of_evidence : ''}}</td>
-						  <td>{{!empty($kpi->weight) ? $kpi->weight : ''}}</td>
-						  <td>{{($kpi->is_upload == 1) ? 'Yes' : 'No'}}</td>
-						  <td><button type="button" id="view_kpi" class="btn btn-xs" onclick="postData({{$kpi->id}}, '{{$KpiTypeArray[$kpi->kpi_type]}}');">{{($kpi->kpi_type == 1) ? $KpiTypeArray[$kpi->kpi_type] : $KpiTypeArray[$kpi->kpi_type]}}</td>
+						  data-target="#edit-range-modal"
+						  data-category_id="{{ !empty($range->kpiranges->range_from) ? $range->kpiranges->range_from : '' }}" 
+						  data-category_id="{{ !empty($range->kpiranges->range_to) ? $range->kpiranges->range_to : '' }}" 
+						  data-category_id="{{ !empty($range->kpiranges->percentage) ? $range->kpiranges->percentage : '' }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+						  <td>{{!empty($range->kpiranges->range_from) ? $range->kpiranges->range_from : ''}}</td>
+						  <td>{{!empty($range->kpiranges->range_to) ?$range->kpiranges->range_to : ''}}</td>
+						  <td>{{!empty($range->kpiranges->percentage) ?$range->kpiranges->percentage : ''}}</td>
 						  <td nowrap>
-                              <button type="button" id="view_kpi" class="btn {{ (!empty($kpi->status) && $kpi->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$kpi->id}}, 'actdeac');"><i class="fa {{ (!empty($kpi->status) && $kpi->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($kpi->status) && $kpi->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_kpi" class="btn {{ (!empty($range->kpiranges->status) && $range->kpiranges->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$range->kpiranges->id}}, 'actdeac');"><i class="fa {{ (!empty($range->kpiranges->status) && $range->kpiranges->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($range->kpiranges->status) && $range->kpiranges->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
 						</tr>
 						@endforeach
                     @else
-						<tr id="kpis-list">
+						<tr id="ranges-list">
 						<td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No kpi to display, please start by adding a new kpi.
+                            No range to display, please start by adding a new range.
                         </div>
 						</td>
 						</tr>
@@ -60,14 +49,14 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
 				<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                    <button type="button" id="add-new-kpi" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-kpi-modal">Add KPI</button>
+                    <button type="button" id="add-new-range" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-range-modal">Add KPI</button>
                 </div>
             </div>
         </div>
 
         <!-- Include add new modal -->
-        @include('appraisals.partials.add_kpi')
-        @include('appraisals.partials.edit_kpi')
+        @include('appraisals.partials.add_range')
+        @include('appraisals.partials.edit_range')
     </div>
 @endsection
 
@@ -113,7 +102,7 @@
                 $('.modal:visible').each(reposition);
             });
             //pass category data to the edit category modal
-            $('#edit-kpi-modal').on('show.bs.modal', function (e) {
+            $('#edit-range-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
                 kpiId = btnEdit.data('id');
                 var Measurement = btnEdit.data('measurement');
@@ -153,34 +142,34 @@
                         is_upload: $('form[name=' + formName + ']').find('#is_upload').val(),
                         kpa_id: $('form[name=' + formName + ']').find('#kpa_id').val(),
                         category_id: $('form[name=' + formName + ']').find('#category_id').val(),
-                        template_id: {{$template->id}},
+                        template_id: {{$ranges->id}},
                          _token: $('input[name=_token]').val()
                     },
                     success: function(success) {
-                        location.href = "/appraisal/template/" + {{$template->id}};
+                        location.href = "/appraisal/template/" + {{$ranges->id}};
                         $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
                         $('form[name=' + formName + ']').trigger('reset'); //Reset the form
 
                         var successHTML = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> Category added!</h4>';
-                        successHTML += 'The new kpi has been added successfully.';
-                        $('#kpi-success-alert').addClass('alert alert-success alert-dismissible')
+                        successHTML += 'The new range has been added successfully.';
+                        $('#range-success-alert').addClass('alert alert-success alert-dismissible')
                                 .fadeIn()
                                 .html(successHTML);
 
                         //show the newly added on the setup list
-                        $('#active-kpi').removeClass('active');
-                        var newModuleList = $('#kpis-list').html();
-                        newModuleList += '<li id="active-kpi" class="list-group-item active"><b>' + success['new_template'] + '</b> <font class="pull-right">' + ' '+ ';</font></li>';
+                        $('#active-range').removeClass('active');
+                        var newModuleList = $('#ranges-list').html();
+                        newModuleList += '<li id="active-range" class="list-group-item active"><b>' + success['new_template'] + '</b> <font class="pull-right">' + ' '+ ';</font></li>';
 
-                        $('#kpis-list').html(newModuleList);
+                        $('#ranges-list').html(newModuleList);
 
                         //auto hide modal after 7 seconds
-                        $("#add-new-kpi-modal").alert();
-                        window.setTimeout(function() { $("#add-new-kpi-modal").modal('hide'); }, 5000);
+                        $("#add-new-range-modal").alert();
+                        window.setTimeout(function() { $("#add-new-range-modal").modal('hide'); }, 5000);
 
                         //autoclose alert after 7 seconds
-                        $("#kpi-success-alert").alert();
-                        window.setTimeout(function() { $("#kpi-success-alert").fadeOut('slow'); }, 5000);
+                        $("#range-success-alert").alert();
+                        window.setTimeout(function() { $("#range-success-alert").fadeOut('slow'); }, 5000);
                     },
                     error: function(xhr) {
                         //if(xhr.status === 401) //redirect if not authenticated
@@ -199,17 +188,17 @@
                             });
                             errorsHTML += '</ul>';
 
-                            $('#kpi-invalid-input-alert').addClass('alert alert-danger alert-dismissible')
+                            $('#range-invalid-input-alert').addClass('alert alert-danger alert-dismissible')
                                     .fadeIn()
                                     .html(errorsHTML);
 
                             //autoclose alert after 7 seconds
-                            $("#kpi-invalid-input-alert").alert();
-                            window.setTimeout(function() { $("#kpi-invalid-input-alert").fadeOut('slow'); }, 7000);
+                            $("#range-invalid-input-alert").alert();
+                            window.setTimeout(function() { $("#range-invalid-input-alert").fadeOut('slow'); }, 7000);
 
                             //Close btn click
                             $('#close-invalid-input-alert').on('click', function () {
-                                $("#kpi-invalid-input-alert").fadeOut('slow');
+                                $("#range-invalid-input-alert").fadeOut('slow');
                             });
                         }
                     }
@@ -217,12 +206,12 @@
             }
 
             //Post category form to server using ajax (ADD)
-            $('#add-kpi').on('click', function() {
-                postModuleForm('POST', '/appraisal/kpi', 'add-kpi-form');
+            $('#add-range').on('click', function() {
+                postModuleForm('POST', '/appraisal/range', 'add-range-form');
             });
 
-            $('#update-kpi').on('click', function() {
-                postModuleForm('PATCH', '/appraisal/kpi_edit/' + kpiId, 'edit-kpi-form');
+            $('#update-range').on('click', function() {
+                postModuleForm('PATCH', '/appraisal/kpi_edit/' + kpiId, 'edit-range-form');
             });
         });
     </script>
