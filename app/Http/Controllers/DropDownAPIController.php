@@ -8,6 +8,7 @@ use App\DivisionLevelOne;
 use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
 use App\HRPerson;
+use App\appraisalKpas;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -125,5 +126,24 @@ class DropDownAPIController extends Controller
         }
 
         return $hrPeople;
+    }
+	
+	//Load KPAs from specific category
+    public function kpaDD(Request $request) {
+        $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
+        $loadAll = $request->input('load_all');
+        $kpas = [];
+        if ($loadAll == -1) $kpas = appraisalKpas::kpaFronCat('category_id', $divValue, $incInactive);
+        elseif ($loadAll == 1) {
+            $kpas = appraisalKpas::where(function ($query) use($incInactive) {
+                    if ($incInactive == -1) {
+                        $query->where('status', 1);
+                    }
+                })->get()
+                ->sortBy('name')
+                ->pluck('id', 'name');
+        }
+
+        return $kpas;
     }
 }

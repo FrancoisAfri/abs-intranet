@@ -133,12 +133,18 @@ Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
 
+# Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
 # Performance Appraisals Module
 Route::get('/appraisal/template_active/{template}', 'AppraisalTemplatesController@templateAct');
 Route::get('appraisal/template/{template}', 'AppraisalTemplatesController@viewTemlate');
+
+Route::post('appraisal/kpi', 'AppraisalTemplatesController@kpiSave');
+Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi');
+Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
+
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
@@ -148,8 +154,11 @@ Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas'
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+<<<<<<< HEAD
 // =======
 
+=======
+>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
 Route::get('appraisal/perks', 'AppraisalPerksController@index');
 Route::post('appraisal/perks/new', 'AppraisalPerksController@store');
 Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
@@ -157,8 +166,11 @@ Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+<<<<<<< HEAD
 //>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
 
+=======
+>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
@@ -166,11 +178,16 @@ Route::post('/hr/company_edit', 'EmployeeCompanySetupController@updateCompany');
 Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/firstlevel/activate/{level}/{divLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
 
+<<<<<<< HEAD
 
 
 // >>>>>>> level_module modal save button functioning
 //=======
 //>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
+=======
+// >>>>>>> level_module modal save button functioning
+
+>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
@@ -183,6 +200,7 @@ Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLe
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
+Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
 
 //Email Test
 Route::get('testemail', function () {
