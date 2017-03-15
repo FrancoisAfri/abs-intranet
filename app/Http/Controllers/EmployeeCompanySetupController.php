@@ -33,13 +33,20 @@ class EmployeeCompanySetupController extends Controller
 
     public function viewLevel() {
         //get the highest active level
+        $childLevelname = null;
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $employees = HRPerson::where('status', 1)->get();
-        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
-        //return $highestLvl;
+        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager', 'divisionLevelGroup.childDiv.divisionLevel');
+        $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
+        if ($highestLvl->level>$lowestactiveLvl){
+            $childLevelname=DivisionLevel::where('level', $highestLvl->level - 1 )->get()->first()->plural_name;
+        }
+        //return $lowestactiveLvl;
         $data['division_types'] = $division_types;
         $data['employees'] = $employees;
         $data['highestLvl'] = $highestLvl;
+        $data['lowestactiveLvl'] = $lowestactiveLvl;
+        $data['childLevelname'] = $childLevelname;
         $data['page_title'] = "Company Setup";
         $data['page_description'] = "Company records";
         $data['breadcrumb'] = [
