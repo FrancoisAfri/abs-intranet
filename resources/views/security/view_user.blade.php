@@ -68,7 +68,7 @@
                             </div>
                         </div>
                             {{--add leave porfile--}}
-                            <div class="form-group">
+                           <!--  <div class="form-group">
                                 <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
@@ -81,6 +81,24 @@
                                             <option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>5 Day Employee </option>
                                             <option value="3"{{ ($user->person->leave_profile === 3) ? ' selected' : '' }}>6 Day Employee</option>
                                             <option value="4"{{ ($user->person->leave_profile === 4) ? ' selected' : '' }}>Shift Worker</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="position" class="col-sm-2 control-label">Leave Profile</label>
+
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select name="position" class="form-control">
+                                            <option value="">*** Select leave Profile ***</option>
+                                            @foreach($leave_profile as $leave_profiles)
+                                                <option value="{{ $leave_profiles->id }}" {{ ($user->person->leave_profiles == $leave_profiles->id) ?
+                                                ' selected' : '' }}>{{ $leave_profiles->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>

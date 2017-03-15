@@ -17,6 +17,7 @@ class CreateAppraisalPerksTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
+            $table->string('img')->nullable();
             $table->double('req_percent')->nullable();
             $table->smallInteger('status')->nullable();
             $table->timestamps();

@@ -17,4 +17,9 @@ class appraisalTemplates extends Model
     public function jobTitle() {
         return $this->belongsTo(JobTitle::class, 'job_title_id');
     }
+	
+		//Relationship template and Kpis
+    public function kpisTemplate() {
+        return $this->hasmany(appraisalsKpis::class, 'template_id');
+    }
 }

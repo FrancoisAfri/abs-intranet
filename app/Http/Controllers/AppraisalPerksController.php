@@ -9,6 +9,11 @@ use App\Http\Requests;
 
 class AppraisalPerksController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +21,7 @@ class AppraisalPerksController extends Controller
      */
     public function index()
     {
-        $perks = AppraisalPerk::where('status', 1)->get();
+        $perks = AppraisalPerk::where('status', 1)->orderBy('id', 'desc')->get();
         $data['page_title'] = "Perks";
         $data['page_description'] = "Manage Appraisal Perks";
         $data['breadcrumb'] = [
@@ -48,7 +53,29 @@ class AppraisalPerksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'bail|required|min:2',
+            'req_percent' => 'bail|required|numeric|min:1',
+        ]);
+
+        $perk = new AppraisalPerk($request->all());
+        $perk->status = 1;
+        $perk->save();
+
+        //Upload the perk's image
+        if ($request->hasFile('img')) {
+            $fileExt = $request->file('img')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('img')->isValid()) {
+                $fileName = $perk->id . "_perk_img_" . '.' . $fileExt;
+                $request->file('img')->storeAs('perks', $fileName);
+                //Update file name in the appraisal_perks table
+                $perk->img = $fileName;
+                $perk->update();
+            }
+        }
+
+        AuditReportsController::store('Performance Appraisal', 'New Perk Added By User', "Perk ID: $perk->id, Perk Name: $perk->name", 0);
+        return response()->json(['perk_id' => $perk->id, 'perk_name' => $perk->name], 200);
     }
 
     /**
@@ -77,12 +104,33 @@ class AppraisalPerksController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\AppraisalPerk $perk
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, AppraisalPerk $perk)
     {
-        //
+        $this->validate($request, [
+            'name' => 'bail|required|min:2',
+            'req_percent' => 'bail|required|numeric|min:1',
+        ]);
+
+        $perkData = $request->all();
+        $perk->update($perkData);
+
+        //Upload the perk's image
+        if ($request->hasFile('img')) {
+            $fileExt = $request->file('img')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('img')->isValid()) {
+                $fileName = $perk->id . "_perk_img_" . '.' . $fileExt;
+                $request->file('img')->storeAs('perks', $fileName);
+                //Update file name in the appraisal_perks table
+                $perk->img = $fileName;
+                $perk->update();
+            }
+        }
+
+        AuditReportsController::store('Performance Appraisal', 'Perk Details Edited By User', "Perk ID: $perk->id, Perk Name: $perk->name", 0);
+        return response()->json(['perk_id' => $perk->id, 'perk_name' => $perk->name], 200);
     }
 
     /**

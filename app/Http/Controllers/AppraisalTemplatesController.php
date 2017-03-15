@@ -86,19 +86,34 @@ class AppraisalTemplatesController extends Controller
 	{
         if ($template->status == 1) 
 		{
-			$template->load('catJobTitle');
-			$data['page_title'] = "Template Informations";
-			$data['page_description'] = "Template Informations";
+			$kpis = DB::table('appraisals_kpis')
+			->select('appraisals_kpis.*','appraisal_categories.name as cat_name', 'appraisal_kpas.name as kpa_name')
+			///->leftJoin('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+			->leftJoin('appraisal_categories', 'appraisals_kpis.category_id', '=', 'appraisal_categories.id')
+			->leftJoin('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+			->where('appraisals_kpis.template_id', $template->id)
+			->orderBy('appraisals_kpis.category_id')
+			->orderBy('appraisals_kpis.kpa_id')
+			->get();
+			$data['page_title'] = "KPIs Informations";
+			$data['page_description'] = "KPIs Informations";
 			$data['breadcrumb'] = [
 				['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
 				['title' => 'Templates', 'active' => 1, 'is_module' => 0]];
-			$data['jobTitles'] = $template;
+			$data['kpis'] = $kpis;
+			$data['template'] = $template; //
 			$data['active_mod'] = 'Performance Appraisal';
 			$data['active_rib'] = 'Templates';
-			AuditReportsController::store('Performance Appraisal', 'Template Details Page Accessed', "Accessed by User", 0);
-			return view('hr.job_titles')->with($data);
+			AuditReportsController::store('Performance Appraisal', 'KPIS Details Page Accessed', "Accessed by User", 0);
+			//return $data; 
+			//die('do you come here');
+			return view('appraisals.kpis')->with($data);
 		}
-		else return back();
+		else 
+		{
+			AuditReportsController::store('Performance Appraisal', 'KPIS Details Page Accessed', "Accessed by User", 0);
+			return back();
+		}
     }
 	
 	public function editTemplate(Request $request, appraisalTemplates $template)

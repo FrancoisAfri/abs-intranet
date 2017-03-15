@@ -1,16 +1,16 @@
-<div id="add-new-kpa-modal" class="modal modal-default fade">
+<div id="add-new-kpi-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-kpa-form">
+            <form class="form-horizontal" method="POST" name="add-kpi-form">
                 {{ csrf_field() }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add KPA</h4>
+                    <h4 class="modal-title">Add New KPI</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="kpa-invalid-input-alert"></div>
-                    <div id="kpa-success-alert"></div>
+                    <div id="kpi-invalid-input-alert"></div>
+                    <div id="kpi-success-alert"></div>
                     <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
@@ -30,7 +30,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-kpa" class="btn btn-primary">Save</button>
+                    <button type="button" id="add-kpi" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>

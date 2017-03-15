@@ -13,7 +13,7 @@ class AddStatusToLeaveCustomTable extends Migration
      */
     public function up()
     {
-        Schema::table('leave_customs', function (Blueprint $table) {
+        Schema::table('leave_customs', function ($table) {
             //
             $table->integer('status')->unsigned()->index()->nullable();
         });
@@ -26,7 +26,7 @@ class AddStatusToLeaveCustomTable extends Migration
      */
     public function down()
     {
-        Schema::table('leave_customs', function (Blueprint $table) {
+        Schema::table('leave_customs', function ($table) {
             //
             $table->dropColumn('status');
         });
