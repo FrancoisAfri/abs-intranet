@@ -21,7 +21,7 @@ class AppraisalPerksController extends Controller
      */
     public function index()
     {
-        $perks = AppraisalPerk::where('status', 1)->orderBy('id', 'desc')->get();
+        $perks = AppraisalPerk::orderBy('id', 'desc')->get(); //where('status', 1)->
         $data['page_title'] = "Perks";
         $data['page_description'] = "Manage Appraisal Perks";
         $data['breadcrumb'] = [
@@ -131,6 +131,20 @@ class AppraisalPerksController extends Controller
 
         AuditReportsController::store('Performance Appraisal', 'Perk Details Edited By User', "Perk ID: $perk->id, Perk Name: $perk->name", 0);
         return response()->json(['perk_id' => $perk->id, 'perk_name' => $perk->name], 200);
+    }
+
+    /**
+     * Change the specified resource's status.
+     *
+     * @param  AppraisalPerk  $perk
+     * @return \Illuminate\Http\Response
+     */
+    public function activate(AppraisalPerk $perk)
+    {
+        $status = ($perk->status === 1) ? 0 : 1;
+        $perk->status = $status;
+        $perk->update();
+        return back();
     }
 
     /**
