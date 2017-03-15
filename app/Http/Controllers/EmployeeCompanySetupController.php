@@ -53,25 +53,6 @@ class EmployeeCompanySetupController extends Controller
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('hr.company_setup')->with($data);
     }
-public function editlevel(Request $request, DivisionLevel $divLevel) 
-{
-            $this->validate($request, [
-            'name' => 'required',   
-            'manager_id' => 'required',
-        ]);
-
-             //$lev->hr_id = $request->input('hr_id');
-        $divLevel->name = $request->input('name');
-        $divLevel->manager_id = $request->input('manager_id');
-        $divLevel->update();
-        //return $lev;
-        AuditReportsController::store('');
-        return response()->json();
-
-}
-
-
-
 
         public function addLevel(Request $request, DivisionLevel $divLevel) {
 
@@ -108,47 +89,62 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
         }
 
+      
+
         public function activateFirstLevel(DivisionLevel $active, $divLevel) 
            {
-                   if ($divLevel == 5){
+              $high = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
+               $data['highestLvl'] = $high;
+
+             if ($divLevel == 5){
              $childDiv =  DivisionLevelFive::find($high);
+
              if ($childDiv->active == 1) $stastus = 0;
-            else $stastus = 1;  
-            $childDiv->active = $stastus;    
-            $childDiv->update();   
-        }
-                if ($divLevel == 4){
-            $childDiv =  DivisionLevelFour::find($high);
-            if ($childDiv->active == 1) $stastus = 0;
              else $stastus = 1;  
+
+             $childDiv->active = $stastus;    
+             $childDiv->update();   
+        }
+            elseif ($divLevel == 4){
+            $childDiv =  DivisionLevelFour::find($high);
+
+            if ($childDiv->active == 1) $stastus = 0;
+            else $stastus = 1;  
+
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
-        elseif ($divLevel == 3) {
+            elseif ($divLevel == 3) {
             $childDiv =  DivisionLevelThree::find($high);
-             if ($childDiv->active == 1) $stastus = 0;
-            else $stastus = 1;  
+
+            if ($childDiv->active == 1) $stastus = 0;
+            else $stastus = 1; 
+
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
-        elseif ($divLevel == 2) {
+            elseif ($divLevel == 2) {
             $childDiv =  DivisionLevelTwo::find($high);
-             if ($childDiv->active == 1) $stastus = 0;
-          else $stastus = 1;  
+
+            if ($childDiv->active == 1) $stastus = 0;
+            else $stastus = 1;
+
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
-        elseif ($divLevel == 1) {
+            elseif ($divLevel == 1) {
             $childDiv =  DivisionLevelOne::find($high);
-             if ($childDiv->active == 1) $stastus = 0;
+
+            if ($childDiv->active == 1) $stastus = 0;
             else $stastus = 1;  
+
             $childDiv->active = $stastus;    
             $childDiv->update();   
         }
                return back();
             }
 
-        public function editCompany(Request $request, DivisionLevel $divLevel)
+        public function editlevel(Request $request, DivisionLevel $divLevel)
         {
         //$user = Auth::user()->load('person');
         $this->validate($request, [
@@ -156,8 +152,7 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
             'manager_id'=>  'numeric|required',
 
         ]);
-
-         //return DivisionLevel;
+  
         if ($divLevel->level == 5){
              $childDiv =  DivisionLevelFive::find($high);
              $childDiv->update($request->all());
@@ -184,12 +179,28 @@ public function editlevel(Request $request, DivisionLevel $divLevel)
         return response()->json();
         }
     //
+ public function updateCompany(Request $request, DivisionLevel $divLevel) 
+        {
+               // $division_types = DB::table('division_level_fives')->get();
 
+                    $this->validate($request, [
+                    'name' => 'required',   
+                    'manager_id' => 'required',
+                ]);
+         
+                     //$lev->hr_id = $request->input('hr_id');
+                $divLevel->name = $request->input('name');
+                $divLevel->manager_id = $request->input('manager_id');
+                $divLevel->update();
+                 return response()->json();
+                //return $lev;
+              AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
+               
+
+        }
       }
 
 
-
-      
 
 
   

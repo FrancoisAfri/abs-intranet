@@ -110,20 +110,20 @@
                 }*/
             });
 
-                var updatecompanyID;
+            var updatecompanyID;
             $('#edit-company-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
                 updatecompanyID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var manager_id = btnEdit.data('manager_id');
+                var level = btnEdit.data('level');
                 //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#manager_id').val(manager_id);
                 
              });
-
 
             //Post module form to server using ajax (ADD)
             $('#save_firstlevel').on('click', function() {
@@ -142,24 +142,24 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-           $('#update_company-modal').on('click', function () {
-            var strUrl = '/hr/company_edit/' ;
-            var modalID = 'edit-company-modal';
-            var objData = {
-                name: $('#'+modalID).find('#name').val(),
-                manager_id: $('#'+modalID).find('#manager_id').val(),
-                 _token: $('#'+modalID).find('input[name=_token]').val()
-            };
-           
-            var submitBtnID = 'update_company-modal';
-            var redirectUrl = '/hr/company_setup';
-            var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'Company modal has been updated successfully.';
-            var method = 'PATCH';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
+               $('#update_company-modal').on('click', function () {
+                var strUrl = '/hr/company_edit/' ;
+                var modalID = 'edit-company-modal';
+                var objData = {
+                    name: $('#'+modalID).find('#name').val(),
+                    manager_id: $('#'+modalID).find('#manager_id').val(),
+                     _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'update_company-modal';
+                var redirectUrl = '/hr/company_setup';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'Company modal has been updated successfully.';
+                var Method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
 
     });
+  
 
 
 
