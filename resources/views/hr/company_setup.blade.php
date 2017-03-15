@@ -62,7 +62,8 @@
     <script>
 		function postData(id, data)
 		{
-             if (data == 'dactive') location.href = "/hr/firstlevel/activate/" + "{level}/" + id;
+             if (data == 'dactive') location.href = "/hr/company_edit/" + "{{ $highestLvl->id }}/" + id + '/activate';
+             
 			//location.href = "/hr/firstlevel/dactive/" + id;
              // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
 
@@ -92,7 +93,7 @@
                 $('.modal:visible').each(reposition);
             });
               
-
+/*
                 var companyID;
            $('#level-module-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
@@ -105,10 +106,10 @@
                 modal.find('#name').val(companyIDName);
                 modal.find('#manager_id').val(companyIDEmployers);
                 modal.find('#division_level_id').val(level);
-               /* if(primeRate != null && primeRate != '' && primeRate > 0) {
+                if(primeRate != null && primeRate != '' && primeRate > 0) {
                    modal.find('#prime_rate').val(primeRate.toFixed(2));
-                }*/
-            });
+                }
+            });*/
 
             var updatecompanyID;
             $('#edit-company-modal').on('show.bs.modal', function (e) {
@@ -143,7 +144,7 @@
             });
 
                $('#update_company-modal').on('click', function () {
-                var strUrl = '/hr/company_edit/' ;
+                var strUrl = '/hr/company_edit/{{ $highestLvl->id }}/' + updatecompanyID;
                 var modalID = 'edit-company-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -155,7 +156,7 @@
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Company modal has been updated successfully.';
                 var Method = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
     });
