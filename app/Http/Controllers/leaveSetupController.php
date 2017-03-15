@@ -2,44 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\LeaveType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 use App\Http\Requests;
+use App\LeaveType;
+//use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Users;
 use App\leave_custom;
 use App\leave_configuration;
 use App\HRPerson;
 use App\modules;
 use App\type_profile;
-use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
-
-class LeaveController extends Controller
+class LeaveSetupController extends Controller
 {
-    //
-   public function __construct(){
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     
+     */
+    public function __construct(){
 
         $this->middleware('auth');
     }
-
-    public function index(){
-
-        //$data['page_title'] = "Users";
-//        $data['page_description'] = "Search Users";
+    public function index()
+    {
+        //
     }
 
-    public function types(){
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function setuptypes()
+    {
+        //
         $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
 		if (!empty($leave_customs))
             $leave_customs = $leave_customs->load('userCustom');
-
-
-        //return $leave_customs;
+        
+         //return $leave_customs;
         $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->get();
         $data['page_title'] = "leave Types";
@@ -57,7 +66,7 @@ class LeaveController extends Controller
         AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
         return view('leave.leave_types')->with($data);
     }
-    //#leave set up
+    
     public function showSetup() {
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function($query) {
             $query->orderBy('id', 'asc');
@@ -65,7 +74,8 @@ class LeaveController extends Controller
         }]);
         //return $leaveTypes->first()->leave_profle->where('id', 3);
         $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
-        $leave_configuration = DB::table('leave_configuration')->get();
+        $leave_configuration = DB::table('leave_configuration')->get()->first();
+        
         //$type_profile = App\LeaveType::find(1)->type_profile()->orderBy('name')->get();
 
        //return $type_profile;
@@ -91,7 +101,6 @@ class LeaveController extends Controller
         return view('leave.setup')->with($data);
     }
         
-    
     public function editsetupType(Request $request, LeaveType $lev)
     {
         $this->validate($request, [
@@ -121,124 +130,71 @@ class LeaveController extends Controller
         //return $lev;
         AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json();
-    }
-    #validate leave config checboxes
-//        public function store(Request $request,leave_configuration $levg){
-//          
-////            $this-> validate($request,['allow_annualLeave_credit','allow_sickLeave_credit',
-////                                       'show_non_employees_in_leave_Module','require_managers_approval',
-////                                       'all_managers_to_approve','require_department_head_approval',
-////                                       'require_hr_approval','require_payroll_approval' => 'required']);
-////            $request::get('allow_annualLeave_credit');
-////           if(!Input::get)
-//            
-//                $levg->get($request->all());
-//                return back();
-//
-//        }
+    } 
+  //#validate checkboxes
+    public function store(Request $request,leave_configuration $levg){
+          
+         $this->validate($request, [
+          
+        ]);
+            $leavecredit = $request->all();
+    
+       
+        unset($leavecredit['_token']);
+        
+                $levg->update($leavecredit);
 
-        //#collect checkboxes from Leave CreditSettings
-
-        public function rules(Request $request)
-        {
-
-            // $rules[
-            //     'credit' => required
-            //   ];
-
-                
-            // $input = Input:only('Allow_AnnualLeave_Credit','Allow_SickLeave_Credit','Show_non_employees_in_Leave_Module');
-            // $leave = new Leave;
-            // $leave->Allow_AnnualLeave_Credit = $Input['Allow_AnnualLeave_Credit']
-            // $data = 
-
+       
+     //return $leavecredit;
+        
+        
+            return back();
         }
 
+ 
 
-
-    //#leave types
-	public function editLeaveType(Request $request, LeaveType $lev)
-	{
-        $this->validate($request, [
-            'name' => 'required',
-            //'description' => 'required',
-            //'font_awesome' => 'required',
-
-        ]);
-
-        $lev->name = $request->input('name');
-        $lev->description = $request->input('description');
-        //$lev->font_awesome = $request->input('font_awesome');
-        $lev->update();
-        return $lev;
-        AuditReportsController::store('Leave', 'leavetype Informations Edited', "Edited by User: $lev->name", 0);
-        return response()->json(['new_name' => $lev->name, 'description' => $lev->description], 200);
-    }
-	public function addleave(Request $request) {
-	       $this->validate($request, [
-            'name' => 'required',
-
-        ]);
-
-		$leaveData = $request->all();
-		unset($leaveData['_token']);
-		$leave = new LeaveType($leaveData);
-		$leave->status = 1;
-        $leave->save();
-		AuditReportsController::store('leave', 'leavetype Added', "leave type Name: $leave->name", 0);
-	}
-    public function leaveAct(LeaveType $lev) 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        if ($lev->status == 1) $stastus = 0;
-        else $stastus = 1;
-
-        $lev->status = $stastus;    
-        $lev->update();
-        return back();
+        //
     }
-    // custom leave
 
-    public function addcustom(Request $request) {
-        $this->validate($request, [
-            'hr_id' => 'required',
-            'number_of_days'=> 'required',
-
-        ]);
-
-        $leaveData = $request->all();
-        unset($leaveData['_token']);
-        $leave_customs = new leave_custom($leaveData);
-        $leave_customs->status = 1;
-        $leave_customs->save();
-        AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
-        return response()->json();
-    }
-//
-    public function editcustomLeaveType(Request $request, leave_custom $lev)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        //$user = Auth::user()->load('person');
-        $this->validate($request, [
-            //'hr_id' => 'required',
-            'number_of_days'=>  'numeric|required',
-
-        ]);
-        //$lev->hr_id = $request->input('hr_id');
-        $lev->number_of_days = $request->input('number_of_days');
-        $lev->update();
-        //return $lev;
-        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
-        return response()->json();
+        //
     }
-    //
-    public function customleaveAct(leave_custom $lev)
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
     {
-        if ($lev->status == 1) $stastus = 0;
-        else $stastus = 1;
-
-        $lev->status = $stastus;
-        $lev->update();
-        return back();
+        //
     }
-//
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 }

@@ -8,6 +8,9 @@ use App\HRPerson;
 use App\User;
 use App\JobTitle;
 use App\appraisalTemplates;
+use App\appraisalCategories;
+use App\appraisalKpas;
+use App\appraisalsKpis;
 use App\JobCategory;
 use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Mail;
@@ -81,41 +84,6 @@ class AppraisalTemplatesController extends Controller
 		return response()->json(['new_template' => $newtemplate], 200);
     }
 	
-	# View Template
-	public function viewTemlate(appraisalTemplates $template) 
-	{
-        if ($template->status == 1) 
-		{
-			$kpis = DB::table('appraisals_kpis')
-			->select('appraisals_kpis.*','appraisal_categories.name as cat_name', 'appraisal_kpas.name as kpa_name')
-			///->leftJoin('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
-			->leftJoin('appraisal_categories', 'appraisals_kpis.category_id', '=', 'appraisal_categories.id')
-			->leftJoin('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
-			->where('appraisals_kpis.template_id', $template->id)
-			->orderBy('appraisals_kpis.category_id')
-			->orderBy('appraisals_kpis.kpa_id')
-			->get();
-			$data['page_title'] = "KPIs Informations";
-			$data['page_description'] = "KPIs Informations";
-			$data['breadcrumb'] = [
-				['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-				['title' => 'Templates', 'active' => 1, 'is_module' => 0]];
-			$data['kpis'] = $kpis;
-			$data['template'] = $template; //
-			$data['active_mod'] = 'Performance Appraisal';
-			$data['active_rib'] = 'Templates';
-			AuditReportsController::store('Performance Appraisal', 'KPIS Details Page Accessed', "Accessed by User", 0);
-			//return $data; 
-			//die('do you come here');
-			return view('appraisals.kpis')->with($data);
-		}
-		else 
-		{
-			AuditReportsController::store('Performance Appraisal', 'KPIS Details Page Accessed', "Accessed by User", 0);
-			return back();
-		}
-    }
-	
 	public function editTemplate(Request $request, appraisalTemplates $template)
 	{
         $this->validate($request, [
@@ -129,5 +97,108 @@ class AppraisalTemplatesController extends Controller
 		$newtemplate = $request->input('template');
         AuditReportsController::store('Performance Appraisal', 'Template Informations Edited', "Edited by User", 0);
         return response()->json(['new_template' => $newtemplate], 200);
-    }	
+    }
+	# View Template/kpi
+	public function viewTemlate(appraisalTemplates $template) 
+	{
+        if ($template->status == 1) 
+		{
+			$KpiTypeArray = array(1 => 'Range', 2 => 'Number', 3 => 'From 1 To 10');
+			
+			$kpis = DB::table('appraisals_kpis')
+			->select('appraisals_kpis.*','appraisal_categories.name as cat_name', 'appraisal_kpas.name as kpa_name')
+			///->leftJoin('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+			->leftJoin('appraisal_categories', 'appraisals_kpis.category_id', '=', 'appraisal_categories.id')
+			->leftJoin('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+			->where('appraisals_kpis.template_id', $template->id)
+			->orderBy('appraisals_kpis.category_id')
+			->orderBy('appraisals_kpis.kpa_id')
+			->get();
+			$kpaCategories = appraisalCategories::where('status', 1)->orderBy('name', 'desc')->get();
+			$kpas = appraisalKpas::where('status', 1)->orderBy('name', 'desc')->get();
+			$data['page_title'] = "KPIs Informations";
+			$data['page_description'] = "KPIs Informations";
+			$data['breadcrumb'] = [
+				['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+				['title' => 'Templates', 'active' => 1, 'is_module' => 0]];
+			$data['kpis'] = $kpis;
+			$data['template'] = $template; //
+			$data['kpaCategories'] = $kpaCategories; //
+			$data['kpas'] = $kpas; //
+			$data['KpiTypeArray'] = $KpiTypeArray; //
+			$data['active_mod'] = 'Performance Appraisal';
+			$data['active_rib'] = 'Templates';
+			//return $data;
+			AuditReportsController::store('Performance Appraisal', 'KPIS Details Page Accessed', "Accessed by User", 0);
+	
+			return view('appraisals.kpis')->with($data);
+		}
+		else 
+		{
+			AuditReportsController::store('Performance Appraisal', 'KPIS Details Page Accessed', "Accessed by User", 0);
+			return back();
+		}
+    }
+	# Act/deac kpi
+	public function kpiAct(appraisalsKpis $kpi) 
+	{
+		if ($kpi->status == 1) $stastus = 0;
+		else $stastus = 1;
+		
+		$kpi->status = $stastus;	
+		$kpi->update();
+		return back();
+    }
+	
+	# Save kpi 
+    public function kpiSave(Request $request)
+	{
+		$this->validate($request, [       
+            'indicator' => 'required',       
+            'kpa_id' => 'bail|required|integer|min:0',       
+            'category_id' => 'bail|required|integer|min:0',       
+            'template_id' => 'bail|required|integer|min:0',       
+            'kpi_type' => 'bail|required|integer|min:0',       
+        ]);
+		$kpiData = $request->all();
+		unset($kpiData['_token']);
+		$kpi = new appraisalsKpis($kpiData);
+		$kpi->status = 1;
+		$kpi->measurement = $kpiData['measurement'];
+		$kpi->weight = $kpiData['weight'];
+		$kpi->source_of_evidence = $kpiData['source_of_evidence'];
+		$kpi->indicator = $kpiData['indicator'];
+		$kpi->category_id = $kpiData['category_id'];
+		$kpi->kpa_id = $kpiData['kpa_id'];
+		$kpi->kpi_type = $kpiData['kpi_type'];
+		$kpi->template_id = $kpiData['template_id'];
+		$newkpi = $kpiData['indicator'];
+        $kpi->save();
+		AuditReportsController::store('Performance Appraisal', 'KPI Added', "KPI Details: $kpiData[indicator]", 0);
+		return response()->json(['new_kp8' => $newkpi], 200);
+    }
+	# Edit kpi 
+	public function editKpi(Request $request, appraisalsKpis $kpi)
+	{
+        $this->validate($request, [       
+            'indicator' => 'required',       
+            'kpa_id' => 'bail|required|integer|min:0',       
+            'category_id' => 'bail|required|integer|min:0',       
+            'kpi_type' => 'bail|required|integer|min:0',       
+        ]);
+
+		$kpi->measurement = $request->input('measurement');
+		$kpi->weight = $request->input('weight');
+		$kpi->source_of_evidence = $request->input('source_of_evidence');
+		$kpi->indicator = $request->input('indicator');
+		$kpi->category_id = $request->input('category_id');
+		$kpi->kpa_id = $request->input('kpa_id');
+		$kpi->kpi_type = $request->input('kpi_type');
+		
+        $kpi->update();
+		$newtemplate = $request->input('indicator');
+        AuditReportsController::store('Performance Appraisal', 'KPI Informations Edited', "Edited by User", 0);
+        return response()->json(['new_template' => $newtemplate], 200);
+    }
+		
 }

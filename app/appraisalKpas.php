@@ -17,4 +17,13 @@ class appraisalKpas extends Model
     public function kpascat() {
 		return $this->belongsTo(appraisalCategories::class, 'category_id');
     }
+	
+	    //function ro get people from a specific div level
+    public static function kpaFronCat() {
+        $kpas = appraisalKpas::where('status', 1)
+            ->get()
+            ->sortBy('name')
+            ->pluck('id', 'name');
+        return $kpas;
+    }
 }

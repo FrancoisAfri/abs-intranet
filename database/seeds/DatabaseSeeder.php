@@ -9,6 +9,7 @@ use App\modules;
 use App\module_ribbons;
 use App\DivisionLevel;
 use App\leave_profile;
+use App\leave_configuration;
 
 class DatabaseSeeder extends Seeder
 {
@@ -408,6 +409,12 @@ class DatabaseSeeder extends Seeder
         $module->addRibbon($ribbon);
 
 	//#insert leave profilse
+
+
+        $leave_config = new leave_configuration();
+        $leave_config->save();
+
+
 
         $profile = new leave_profile ();
         $profile->name = 'Employee with no leave';

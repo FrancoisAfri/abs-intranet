@@ -406,7 +406,6 @@ class UsersController extends Controller
             ->orderBy('first_name')
             ->limit(100)
             ->get();
-
         $data['page_title'] = "Users";
         $data['page_description'] = "List of users found";
         $data['persons'] = $persons;
