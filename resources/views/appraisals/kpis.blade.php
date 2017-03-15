@@ -79,6 +79,12 @@
 		{
 			if (data == 'actdeac')
 				location.href = "/appraisal/kpi_active/" + id;
+			else if (data == 'Range')
+				location.href = "/appraisal/kpi_range/" + id;
+			else if (data == 'Number')
+				location.href = "/appraisal/kpi_number/" + id;
+			else if (data == 'From 1 To 10')
+				location.href = "/appraisal/kpi_from_to/" + id;
 		}
         $(function () {
             var kpiId;
