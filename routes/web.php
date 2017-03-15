@@ -127,9 +127,7 @@ Route::get('/hr/category_active/{jobCategory}', 'EmployeeJobTitleController@cate
 Route::get('/hr/job_title_active/{jobTitle}', 'EmployeeJobTitleController@jobtitleAct');
 Route::post('hr/add_jobtitle/{jobCategory}', 'EmployeeJobTitleController@addJobTitle');
 Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
-Route::get('/hr/setup', 'HrController@showSetup');
-Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
-Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
+
 # Audit Module
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
@@ -146,31 +144,43 @@ Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave')
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
+<<<<<<< HEAD
 // <<<<<<< HEAD
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
 // =======
+=======
+Route::get('appraisal/perks', 'AppraisalPerksController@index');
+Route::post('appraisal/perks/new', 'AppraisalPerksController@store');
+Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
+
+Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
+Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
+Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
 
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
-Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
-Route::post('hr/firstlevel/save_firstlevel', 'EmployeeCompanySetupController@addLevel');
-Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@CompanyAct');
-Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@editCompany');
+Route::post('/hr/company_edit', 'EmployeeCompanySetupController@editCompany');
+Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
+Route::get('/hr/firstlevel/activate/{level}/{divLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
 
+
+<<<<<<< HEAD
 // >>>>>>> level_module modal save button functioning
+=======
+>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 # Company setup Module
-Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
-Route::patch('/hr/firstlevel/{firstLevel}', 'EmployeeCompanySetupController@UpdateLevel');
-Route::get('/hr/firstlevel/activate/{firstLevel}', 'EmployeeCompanySetupController@activateFirstLevel');
-
+Route::get('/hr/setup', 'HrController@showSetup');
+Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
+Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');

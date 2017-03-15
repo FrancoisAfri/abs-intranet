@@ -21,20 +21,21 @@
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Name</th>
                                 <th>Manager's Name</th>
-                                <th>Level</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
             
                             @foreach ($highestLvl->divisionLevelGroup as $type)
                                 <tr>
-                                    <td style="width: 5px; text-align: center;"><button type="button" id="edit_company_modal" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}" data-active="{{ $type->active }}" ><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+                                    <td style="width: 5px; text-align: center;"><button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button></td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
-                                    <td>{{ $type->highestLvl }}</td>
-                                    <td style="width: 5px; text-align: center;">
-                                        @if ($type->name!='')
-                                            <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}});"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
-                                        @endif
+                                    <td>
+                                        
+                                          <!--   <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}}) , 'dactive';"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button> -->
+                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                                      
                                     </td>
                                 </tr>    
                             @endforeach
@@ -59,10 +60,12 @@
 <!-- Ajax form submit -->
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
-		function postData(id)
+		function postData(id, data)
 		{
-			location.href = "/hr/firstlevel/activate/" + id;
-             if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
+             if (data == 'dactive') location.href = "/hr/firstlevel/activate/" + "{level}/" + id;
+			//location.href = "/hr/firstlevel/dactive/" + id;
+             // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
+
       
 
 		}
@@ -108,12 +111,13 @@
             });
 
                 var updatecompanyID;
-            $('#update_company-modal').on('show.bs.modal', function (e) {
+            $('#edit-company-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
                 updatecompanyID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var manager_id = btnEdit.data('manager_id');
+                //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#manager_id').val(manager_id);
@@ -139,13 +143,14 @@
             });
 
            $('#update_company-modal').on('click', function () {
-            var strUrl = '/leave/custom/leave_type_edit/' + customleaveId;
+            var strUrl = '/hr/company_edit/' ;
+            var modalID = 'edit-company-modal';
             var objData = {
-                name: $('#edit-company-modal').find('#name').val()
-                //manager_id: $('#edit-company-modal').find('#manager_id').val()
-                , _token: $('#edit-company-modal').find('input[name=_token]').val()
+                name: $('#'+modalID).find('#name').val(),
+                manager_id: $('#'+modalID).find('#manager_id').val(),
+                 _token: $('#'+modalID).find('input[name=_token]').val()
             };
-            var modalID = 'edit_company_modal';
+           
             var submitBtnID = 'update_company-modal';
             var redirectUrl = '/hr/company_setup';
             var successMsgTitle = 'Changes Saved!';
@@ -153,6 +158,7 @@
             var method = 'PATCH';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
+
     });
 
 
