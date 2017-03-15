@@ -54,95 +54,95 @@ class EmployeeCompanySetupController extends Controller
         return view('hr.company_setup')->with($data);
     }
 
-        public function addLevel(Request $request, DivisionLevel $divLevel) {
+	public function addLevel(Request $request, DivisionLevel $divLevel) {
 
-         $this->validate($request, [
-            'manager_id' => 'required',
-        ]);
-        $firstLevelData=$request->all();
-        //$addDivisionLevelGroup = new TopLevel($firstLevelData);
-        //$firstLevel->new('DivisionLevelOne');
-        //$addDivisionLevelGroup->status = 1;
-        //$addDivisionLevelGroup->save();
-        //return $childDiv;
-        //return $divLevel;
+		$this->validate($request, [
+			'manager_id' => 'required',
+		]);
+		$firstLevelData=$request->all();
+		//$addDivisionLevelGroup = new TopLevel($firstLevelData);
+		//$firstLevel->new('DivisionLevelOne');
+		//$addDivisionLevelGroup->status = 1;
+		//$addDivisionLevelGroup->save();
+		//return $childDiv;
+		//return $divLevel;
 
-        if ($divLevel->level == 5){
-             $childDiv = new DivisionLevelFive($firstLevelData);
-        }
-        elseif ($divLevel->level == 4){
-            $childDiv = new DivisionLevelFour($firstLevelData);
-        }
-        elseif ($divLevel->level == 3) {
-            $childDiv = new DivisionLevelThree($firstLevelData);
-        }
-        elseif ($divLevel->level == 2) {
-            $childDiv = new DivisionLevelTwo($firstLevelData);
-        }
-        elseif ($divLevel->level == 1) {
-            $childDiv = new DivisionLevelOne($firstLevelData);
-        }
-        $divLevel->addDivisionLevelGroup($childDiv);
+		if ($divLevel->level == 5){
+			 $childDiv = new DivisionLevelFive($firstLevelData);
+		}
+		elseif ($divLevel->level == 4){
+			$childDiv = new DivisionLevelFour($firstLevelData);
+		}
+		elseif ($divLevel->level == 3) {
+			$childDiv = new DivisionLevelThree($firstLevelData);
+		}
+		elseif ($divLevel->level == 2) {
+			$childDiv = new DivisionLevelTwo($firstLevelData);
+		}
+		elseif ($divLevel->level == 1) {
+			$childDiv = new DivisionLevelOne($firstLevelData);
+		}
+		$divLevel->addDivisionLevelGroup($childDiv);
 
-       // return $divLevel;
+	   // return $divLevel;
 
-        AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
-        }
+		AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
+	}
 
       
 
-        public function activateFirstLevel(DivisionLevel $active, $divLevel) 
-           {
-              $high = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
-               $data['highestLvl'] = $high;
+	public function activateFirstLevel(DivisionLevel $active, $divLevel) 
+	{
+	  $high = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
+	  $data['highestLvl'] = $high;
 
-             if ($divLevel == 5){
-             $childDiv =  DivisionLevelFive::find($high);
+		if ($divLevel == 5){
+			 $childDiv =  DivisionLevelFive::find($high);
 
-             if ($childDiv->active == 1) $stastus = 0;
-             else $stastus = 1;  
+			 if ($childDiv->active == 1) $stastus = 0;
+			 else $stastus = 1;  
 
-             $childDiv->active = $stastus;    
-             $childDiv->update();   
-        }
-            elseif ($divLevel == 4){
-            $childDiv =  DivisionLevelFour::find($high);
+			 $childDiv->active = $stastus;    
+			 $childDiv->update();   
+		}
+		elseif ($divLevel == 4){
+			$childDiv =  DivisionLevelFour::find($high);
 
-            if ($childDiv->active == 1) $stastus = 0;
-            else $stastus = 1;  
+			if ($childDiv->active == 1) $stastus = 0;
+			else $stastus = 1;  
 
-            $childDiv->active = $stastus;    
-            $childDiv->update();   
-        }
-            elseif ($divLevel == 3) {
-            $childDiv =  DivisionLevelThree::find($high);
+			$childDiv->active = $stastus;    
+			$childDiv->update();   
+		}
+		elseif ($divLevel == 3) {
+			$childDiv =  DivisionLevelThree::find($high);
 
-            if ($childDiv->active == 1) $stastus = 0;
-            else $stastus = 1; 
+			if ($childDiv->active == 1) $stastus = 0;
+			else $stastus = 1; 
 
-            $childDiv->active = $stastus;    
-            $childDiv->update();   
-        }
-            elseif ($divLevel == 2) {
-            $childDiv =  DivisionLevelTwo::find($high);
+			$childDiv->active = $stastus;    
+			$childDiv->update();   
+		}
+		elseif ($divLevel == 2) {
+			$childDiv =  DivisionLevelTwo::find($high);
 
-            if ($childDiv->active == 1) $stastus = 0;
-            else $stastus = 1;
+			if ($childDiv->active == 1) $stastus = 0;
+			else $stastus = 1;
 
-            $childDiv->active = $stastus;    
-            $childDiv->update();   
-        }
-            elseif ($divLevel == 1) {
-            $childDiv =  DivisionLevelOne::find($high);
+			$childDiv->active = $stastus;    
+			$childDiv->update();   
+		}
+		elseif ($divLevel == 1) {
+			$childDiv =  DivisionLevelOne::find($high);
 
-            if ($childDiv->active == 1) $stastus = 0;
-            else $stastus = 1;  
+			if ($childDiv->active == 1) $stastus = 0;
+			else $stastus = 1;  
 
-            $childDiv->active = $stastus;    
-            $childDiv->update();   
-        }
-               return back();
-            }
+			$childDiv->active = $stastus;    
+			$childDiv->update();   
+		}
+		return back();
+	}
 
         public function editlevel(Request $request, DivisionLevel $divLevel)
         {
@@ -198,9 +198,4 @@ class EmployeeCompanySetupController extends Controller
                
 
         }
-      }
-
-
-
-
-  
+}
