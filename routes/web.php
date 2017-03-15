@@ -46,14 +46,26 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 
-#Leave Management
-Route::get('leave/types', 'LeaveController@types');
+//#Leave Management
+//Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
-Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveController@editsetupType');
-Route::get('/leave/setup', 'LeaveController@showSetup');
-#custom leave 
+// Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveController@editsetupType');
+//Route::get('/leave/setup', 'LeaveController@showSetup');
+// Route::get('leave/setup/leave_credit', 'LeaveController@store');
+
+// Route::post('/leave/setup', 'LeaveController@store');
+
+//# leavesetup Controller
+Route::get('leave/types', 'LeaveSetupController@setuptypes');
+Route::get('/leave/setup', 'LeaveSetupController@showSetup');
+Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
+Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
+Route::get('leave/setup/leave_credit', 'LeaveSetupController@store');
+
+
+//#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
 Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
@@ -134,11 +146,11 @@ Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave')
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
-<<<<<<< HEAD
+// <<<<<<< HEAD
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
-=======
+// =======
 
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
@@ -148,7 +160,7 @@ Route::post('hr/firstlevel/save_firstlevel', 'EmployeeCompanySetupController@add
 Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@CompanyAct');
 Route::post('/hr/company_edit/{companyLevel}', 'EmployeeCompanySetupController@editCompany');
 
->>>>>>> level_module modal save button functioning
+// >>>>>>> level_module modal save button functioning
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration

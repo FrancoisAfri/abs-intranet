@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Users;
 use App\leave_custom;
+use App\leave_configuration;
 use App\HRPerson;
 use App\modules;
 use App\type_profile;
@@ -15,6 +16,7 @@ use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 class LeaveController extends Controller
 {
@@ -62,6 +64,7 @@ class LeaveController extends Controller
         }]);
         //return $leaveTypes->first()->leave_profle->where('id', 3);
         $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
+        $leave_configuration = DB::table('leave_configuration')->get();
         //$type_profile = App\LeaveType::find(1)->type_profile()->orderBy('name')->get();
 
        //return $type_profile;
@@ -76,6 +79,7 @@ class LeaveController extends Controller
         ];
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'setup';
+        $data['leave_configuration'] = $leave_configuration;
         $data['leaveTypes'] = $leaveTypes;
        // $data['leave_profle']=$leave_profle;
         $data['type_profile'] = $type_profile;
@@ -112,19 +116,45 @@ class LeaveController extends Controller
             3 => ['min' => $day6min, 'max' => $day6max],
             4 => ['min' => $shiftmin, 'max' => $shiftmax]
         ]);
-//        $lev->day5min = $request->input('day5min');
-//        $lev->day5max = $request->input('day5max');
-//        $lev->day6min =$request->input('day6min');
-//        $lev->day6max =$request->input('day6max');
-//        $lev->shiftmin =$request->input('shiftmin');
-//        $lev->shiftmax =$request->input('shiftmax');
-        //$lev->font_awesome = $request->input('font_awesome');
-        //$lev->update();
+//      
         //return $lev;
         AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json();
     }
-    
+    #validate leave config checboxes
+//        public function store(Request $request,leave_configuration $levg){
+//          
+////            $this-> validate($request,['allow_annualLeave_credit','allow_sickLeave_credit',
+////                                       'show_non_employees_in_leave_Module','require_managers_approval',
+////                                       'all_managers_to_approve','require_department_head_approval',
+////                                       'require_hr_approval','require_payroll_approval' => 'required']);
+////            $request::get('allow_annualLeave_credit');
+////           if(!Input::get)
+//            
+//                $levg->get($request->all());
+//                return back();
+//
+//        }
+
+        //#collect checkboxes from Leave CreditSettings
+
+        public function rules(Request $request)
+        {
+
+            // $rules[
+            //     'credit' => required
+            //   ];
+
+                
+            // $input = Input:only('Allow_AnnualLeave_Credit','Allow_SickLeave_Credit','Show_non_employees_in_Leave_Module');
+            // $leave = new Leave;
+            // $leave->Allow_AnnualLeave_Credit = $Input['Allow_AnnualLeave_Credit']
+            // $data = 
+
+        }
+
+
+
     //#leave types
 	public function editLeaveType(Request $request, LeaveType $lev)
 	{
