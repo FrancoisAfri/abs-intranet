@@ -17,7 +17,7 @@
                      <div class="form-group">
                        <label for="action" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="name" name="name" value="" data-name="{{ $type->name }}" placeholder="Enter Name" required>
+                            <input type="text" class="form-control" id="name" name="name" value=""  placeholder="Enter Name" required>
                         </div>
                     </div>
                 </div>
