@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLeaveProfileToHrPeopleTable extends Migration
+class CreateLeaveProfileTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddLeaveProfileToHrPeopleTable extends Migration
      */
     public function up()
     {
-        Schema::table('hr_people', function ($table) {
-            //
-            $table->integer('leave_profile')->unsigned()->index()->nullable();
+        Schema::create('leave_profile', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->nullable();
+            $table->string('description')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,9 +28,6 @@ class AddLeaveProfileToHrPeopleTable extends Migration
      */
     public function down()
     {
-        Schema::table('hr_people', function ($table) {
-            //
-            $table->dropColumn('leave_profile');
-        });
+        Schema::dropIfExists('leave_profile');
     }
 }

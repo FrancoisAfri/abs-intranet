@@ -8,6 +8,8 @@ use App\Province;
 use App\modules;
 use App\module_ribbons;
 use App\DivisionLevel;
+use App\leave_profile;
+use App\leave_configuration;
 
 class DatabaseSeeder extends Seeder
 {
@@ -201,32 +203,6 @@ class DatabaseSeeder extends Seeder
         $groupLevel->active = 0;
         $groupLevel->save();
 
-        //insert some positions
-       /* DB::table('hr_positions')->insert([
-            'name' => 'General Manager',
-            'status' => 1,
-        ]);
-        DB::table('hr_positions')->insert([
-            'name' => 'Administrator',
-            'status' => 1,
-        ]);
-        DB::table('hr_positions')->insert([
-            'name' => 'Programme Manager',
-            'status' => 1,
-        ]);
-        DB::table('hr_positions')->insert([
-            'name' => 'Education and Learning Manager',
-            'status' => 1,
-        ]);
-        DB::table('hr_positions')->insert([
-            'name' => 'Project Manager',
-            'status' => 1,
-        ]);
-        DB::table('hr_positions')->insert([
-            'name' => 'Facilitator',
-            'status' => 1,
-        ]);
-*/
         //Insert navigation menus
         $module = new modules(); //Contacts
         $module->active = 1;
@@ -234,95 +210,7 @@ class DatabaseSeeder extends Seeder
         $module->path = 'contacts';
         $module->font_awesome = 'fa-users';
         $module->save();
-/*
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'AGM';
-        $ribbon->description = 'AGM';
-        $ribbon->ribbon_path = 'contacts/agm';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Educator Registration';
-        $ribbon->description = 'Add Educator';
-        $ribbon->ribbon_path = 'contacts/educator';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Public Registration';
-        $ribbon->description = 'Add Public';
-        $ribbon->ribbon_path = 'contacts/public';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Learner Registration';
-        $ribbon->description = 'Add Learner';
-        $ribbon->ribbon_path = 'contacts/learner';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 5;
-        $ribbon->ribbon_name = 'Add New NSW & STX';
-        $ribbon->description = 'NSW & STX';
-        $ribbon->ribbon_path = 'education/nsw';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $module = new modules();
-        $module->active = 1;
-        $module->name = 'Education Programmes';
-        $module->path = 'education';
-        $module->font_awesome = 'fa-graduation-cap';
-        $module->save();
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'Add New Programme';
-        $ribbon->description = 'Add Programme';
-        $ribbon->ribbon_path = 'education/programme/create';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Add New Project';
-        $ribbon->description = 'Add Project';
-        $ribbon->ribbon_path = 'education/project/create';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Add New Activity';
-        $ribbon->description = 'Add Activity';
-        $ribbon->ribbon_path = 'education/activity/create';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Search';
-        $ribbon->description = 'Search';
-        $ribbon->ribbon_path = 'education/search';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-*/
         $module = new modules();
         $module->active = 1;
         $module->name = 'Security';
@@ -463,7 +351,7 @@ class DatabaseSeeder extends Seeder
         $module->active = 1;
         $module->name = 'Performance Appraisal';
         $module->path = 'appraisal';
-        $module->font_awesome = 'fa-glass';
+        $module->font_awesome = 'fa-line-chart';
         $module->save();
 		
 		$ribbon = new module_ribbons();
@@ -492,10 +380,19 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/upload_appraisal';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Perks';
+        $ribbon->description = 'Appraisal Perks';
+        $ribbon->ribbon_path = 'appraisal/perks';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Reports';
         $ribbon->ribbon_path = 'appraisal/reports';
@@ -504,38 +401,40 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-/*
-        $module = new modules();
-        $module->active = 1;
-        $module->name = 'Partners';
-        $module->path = 'contacts';
-        $module->font_awesome = 'fa-group';
-        $module->save();
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'Add New School';
-        $ribbon->description = 'Add School';
-        $ribbon->ribbon_path = 'contacts/school/create';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
+	//#insert leave profilse
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Add New Provider';
-        $ribbon->description = 'Add Service Provider';
-        $ribbon->ribbon_path = 'contacts/provider/create';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-*/
+
+        $leave_config = new leave_configuration();
+        $leave_config->save();
+
+
+
+        $profile = new leave_profile ();
+        $profile->name = 'Employee with no leave';
+        $profile->description = 'Employee with no leave' ;
+        $profile->save();
+
+        $profile = new leave_profile ();
+        $profile->name = '5 Day Employee';
+        $profile->description = '5 Day Employee leave' ;
+        $profile->save();
+
+        $profile = new leave_profile ();
+        $profile->name = '6 Day Employee';
+        $profile->description = '6 Day Employee leave' ;
+        $profile->save();
+
+        $profile = new leave_profile ();
+        $profile->name = 'Shift Worker';
+        $profile->description = 'Shift Worker Employee leave' ;
+        $profile->save();
 
     }
 }

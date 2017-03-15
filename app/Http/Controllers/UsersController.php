@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\HRPerson;
 use App\User;
 use App\modules;
+use App\LeaveType;
 use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
@@ -251,9 +252,10 @@ class UsersController extends Controller
         $avatar = $user->person->profile_pic;
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
-        $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get()
-       // $leave_profile = DB::table('leave_profile')->where('status', 1)->orderBy('value', 'asc')->get()
-        ;
+        $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
+        $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
+
+
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
@@ -268,7 +270,7 @@ class UsersController extends Controller
         $data['positions'] = $positions;
         $data['division_levels'] = $divisionLevels;
         $data['marital_statuses'] = $marital_statuses;
-       // $data['leave_profile'] = $leave_profile;
+        $data['leave_profile'] = $leave_profile;
 
         $data['breadcrumb'] = [
             ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -286,6 +288,7 @@ class UsersController extends Controller
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
+        $leave_profile = DB::table('leave_profile')->where('name', 1)->orderBy('name', 'asc')->get();
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update your details";
         $data['back'] = "/";
@@ -295,6 +298,7 @@ class UsersController extends Controller
         $data['provinces'] = $provinces;
         $data['ethnicities'] = $ethnicities;
         $data['positions'] = $positions;
+        $data['leave_profile']=$leave_profile ;
         $data['marital_statuses'] = $marital_statuses;
         $data['breadcrumb'] = [
             ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLeaveProfileToHrPeopleTable extends Migration
+class AddLeaveProfileIdToTypeProfileTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddLeaveProfileToHrPeopleTable extends Migration
      */
     public function up()
     {
-        Schema::table('hr_people', function ($table) {
+        Schema::table('type_profile', function (Blueprint $table) {
             //
-            $table->integer('leave_profile')->unsigned()->index()->nullable();
+            $table->Integer('leave_profile_id')->nullable();
         });
     }
 
@@ -26,9 +26,9 @@ class AddLeaveProfileToHrPeopleTable extends Migration
      */
     public function down()
     {
-        Schema::table('hr_people', function ($table) {
+        Schema::table('type_profile', function (Blueprint $table) {
             //
-            $table->dropColumn('leave_profile');
+            $table->dropColumn('leave_profile_id');
         });
     }
 }

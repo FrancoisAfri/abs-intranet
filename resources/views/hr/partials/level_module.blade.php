@@ -23,7 +23,7 @@
                         <label for="path" class="col-sm-3 control-label">Manager</label>
                         <div class="col-sm-9">
                              <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" required>
-                                <option selected="selected" value="0" required >*** Select a Manager ***</option>
+                                <option selected="selected" value="0" required >*** Select a Manager ***</option>==$0
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
