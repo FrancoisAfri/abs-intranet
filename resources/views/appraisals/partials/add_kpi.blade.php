@@ -15,7 +15,7 @@
 						<label for="category_id" class="col-sm-3 control-label">Category</label>
 						<div class="col-sm-9">
 							<div class="input-group">
-								<select id="category_id" name="category_id" class="form-control" onchange="categoryOnChange(this)" required>
+								<select id="category_id" name="category_id" class="form-control" required>
                                     <option value="0">*** Select a Category ***</option>
                                     @foreach($kpaCategories as $kpaCategory)
                                         <option value="{{ $kpaCategory->id }}">{{ $kpaCategory->name }}</option>
@@ -77,10 +77,24 @@
 									<i class="fa fa-black-tie"></i>
 								</div>
 								<select id="kpi_type" name="kpi_type" class="form-control" required>
-								<option value="0">*** Select a Type ***</option>
-								<option value="1">Range</option>
-								<option value="2">Number</option>
-								<option value="3">From 1 To 10</option>
+									<option value="0">*** Select a Type ***</option>
+									<option value="1">Range</option>
+									<option value="2">Number</option>
+									<option value="3">From 1 To 10</option>
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group">
+						<label for="is_upload" class="col-sm-3 control-label">Is Upload</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">
+								  <i class="fa fa-black-tie"></i>
+								</span>
+								<select id="is_upload" name="is_upload" class="form-control" required>
+									<option value="1">Yes</option>
+									<option value="2">No</option>
 								</select>
 							</div>
 						</div>

@@ -148,6 +148,17 @@ Route::post('appraisal/kpi', 'AppraisalTemplatesController@kpiSave');
 Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi');
 Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
 
+#Kpi Types
+Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
+Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
+Route::patch('appraisal/range_edit/{range}', 'AppraisalKpiTypeController@kpiEditRange');
+Route::get('/appraisal/range_active/{range}', 'AppraisalKpiTypeController@rangeAct');
+
+Route::get('/appraisal/kpi_number/{kpi}', 'AppraisalKpiTypeController@kpiNumber');
+Route::post('appraisal/number', 'AppraisalKpiTypeController@kpiAddNumber');
+Route::patch('appraisal/number_edit/{number}', 'AppraisalKpiTypeController@kpiEditNumber');
+Route::get('/appraisal/number_active/{number}', 'AppraisalKpiTypeController@numberAct');
+
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
@@ -172,9 +183,6 @@ Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupContr
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
 Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupController@viewchildLevel');
 Route::post('/hr/firstchild/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
-
-
-//>>>>>>> new route created for the new page
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
