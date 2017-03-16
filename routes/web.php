@@ -170,20 +170,11 @@ Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@
 Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupController@updateLevel');
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
-
-=======
-Route::get('/hr/child_setup', 'EmployeeCompanySetupController@viewchildLevel');
-//<<<<<<< HEAD
+Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupController@viewchildLevel');
+Route::post('/hr/firstchild/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
 
 
-// >>>>>>> level_module modal save button functioning
-//=======
-//>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
-//=======
-// >>>>>>> level_module modal save button functioning
-
-//>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
->>>>>>> new route created for the new page
+//>>>>>>> new route created for the new page
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
