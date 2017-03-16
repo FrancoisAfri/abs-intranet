@@ -43,6 +43,7 @@
                                 </div>
                             @endforeach
                         @endif
+                        </div>
                         <div class="form-group">
                             <label for="first_name" class="col-sm-2 control-label">First Name</label>
 

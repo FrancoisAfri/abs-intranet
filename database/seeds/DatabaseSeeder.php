@@ -8,6 +8,7 @@ use App\Province;
 use App\modules;
 use App\module_ribbons;
 use App\DivisionLevel;
+use App\LeaveType;
 use App\leave_profile;
 use App\leave_configuration;
 
@@ -322,9 +323,18 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 		
-		$ribbon = new module_ribbons();
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Allocate Leave Types';
+        $ribbon->description = 'Allocate Leave Types';
+        $ribbon->ribbon_path = 'leave/Allocate_leave_types';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'leave/setup';
@@ -408,14 +418,62 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-	//#insert leave profilse
+	
 
 
         $leave_config = new leave_configuration();
         $leave_config->save();
+        
+//#leave_types
+        $type = new LeaveType ();
+        $type->name = 'Annual';
+        $type->status =1;
+        $type->description = 'Annual Leave Type' ;
+        $type->save();
 
+        $type = new LeaveType ();
+        $type->name = 'Family';
+        $type->status =1;
+        $type->description = 'Family Leave Type' ;
+        $type->save();
 
+        $type = new LeaveType ();
+        $type->name = 'Maternity';
+        $type->status =1;
+        $type->description = 'Maternity Leave Type' ;
+        $type->save();
 
+        $type = new LeaveType ();
+        $type->name = 'Other/Special';
+        $type->status ='1';
+        $type->description = 'Other/Special Leave Type' ;
+        $type->save();
+        
+        $type = new LeaveType ();
+        $type->name = 'Sick';
+        $type->status =1;
+        $type->description = 'Sick Leave Type' ;
+        $type->save();
+        
+        $type = new LeaveType ();
+        $type->name = 'Study';
+        $type->status =1;
+        $type->description = 'Study Leave Type' ;
+        $type->save();
+        
+        $type = new LeaveType ();
+        $type->name = 'Unpaid';
+        $type->status =1;
+        $type->description = 'Unpaid Leave Type' ;
+        $type->save();
+        
+        $type = new LeaveType ();
+        $type->name = 'Worked in';
+        $type->status =1;
+        $type->description = 'Worked in Leave Type' ;
+        $type->save();
+
+//#insert leave profilse
         $profile = new leave_profile ();
         $profile->name = 'Employee with no leave';
         $profile->description = 'Employee with no leave' ;

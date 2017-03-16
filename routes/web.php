@@ -64,6 +64,9 @@ Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
 Route::get('leave/setup/leave_credit', 'LeaveSetupController@store');
 
+#leave Allocation
+Route::get('leave/Allocate_leave_types', 'LeaveSetupController@allocateleave');
+
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
@@ -171,6 +174,19 @@ Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupContr
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
 
+=======
+Route::get('/hr/child_setup', 'EmployeeCompanySetupController@viewchildLevel');
+//<<<<<<< HEAD
+
+
+// >>>>>>> level_module modal save button functioning
+//=======
+//>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
+//=======
+// >>>>>>> level_module modal save button functioning
+
+//>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
+>>>>>>> new route created for the new page
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration

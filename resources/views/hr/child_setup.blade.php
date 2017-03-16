@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Company {{$highestLvl->plural_name}}</h3>
+                    <h3 class="box-title">{{$childLevelname}}: {{$highestLvl->name}}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -28,9 +28,9 @@
                                 <tr>
                                     <td style=" text-align: center;" nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                        @if($type->childDiv() && $highestLvl->level > $lowestactiveLvl)
-                                            <a href="/hr/child_setup" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
-                                        @endif
+                                      <!---  @if($type->childDiv() && $highestLvl->level > $lowestactiveLvl)
+                                            <a href="" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
+                                        @endif ---->
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
