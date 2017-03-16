@@ -62,6 +62,7 @@ class AppraisalTemplatesController extends Controller
 		
 		$template->status = $stastus;	
 		$template->update();
+		AuditReportsController::store('Performance Appraisal', "Template Status Changed: $stastus", "Edited by User", 0);
 		return back();
     }
 	
@@ -147,6 +148,7 @@ class AppraisalTemplatesController extends Controller
 		
 		$kpi->status = $stastus;	
 		$kpi->update();
+		AuditReportsController::store('Performance Appraisal', "KPI Status Changed: $stastus", "Edited by User", 0);
 		return back();
     }
 	

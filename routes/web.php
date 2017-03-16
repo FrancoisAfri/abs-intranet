@@ -150,6 +150,9 @@ Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct')
 
 #Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
+Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
+Route::patch('appraisal/range_edit/{range}', 'AppraisalKpiTypeController@kpiEditRange');
+Route::get('/appraisal/range_active/{range}', 'AppraisalKpiTypeController@rangeAct');
 
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
@@ -173,20 +176,7 @@ Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@
 Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupController@updateLevel');
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
-
-=======
 Route::get('/hr/child_setup', 'EmployeeCompanySetupController@viewchildLevel');
-//<<<<<<< HEAD
-
-
-// >>>>>>> level_module modal save button functioning
-//=======
-//>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
-//=======
-// >>>>>>> level_module modal save button functioning
-
-//>>>>>>> 8fa7dc46971b231600cfed41286a0139ccfc1581
->>>>>>> new route created for the new page
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
