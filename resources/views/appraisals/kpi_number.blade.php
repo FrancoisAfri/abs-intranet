@@ -15,31 +15,29 @@
                 <div class="box-body">
 				<div style="overflow-X:auto;">
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px"></th><th>Range From</th><th>Range To</th><th>Percentage</th><th style="width: 40px"></th></tr>
-                    @if (!empty($ranges))
-						@foreach($ranges as $range)
-						 <tr id="ranges-list">
+					 <tr><th style="width: 10px"></th><th>Min Number</th><th>Max Number</th><th style="width: 40px"></th></tr>
+                    @if (!empty($numbers))
+						@foreach($numbers as $number)
+						 <tr id="numbers-list">
 						  <td><button type="button" id="edit_kpi_title" class="btn btn-primary  btn-xs" 
 						  data-toggle="modal" 
-						  data-target="#edit-range-modal"
-						  data-id="{{ $range->id }}"
-						  data-range_from="{{ $range->range_from }}" 
-						  data-range_to="{{ $range->range_to }}" 
-						  data-percentage="{{ $range->percentage}}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-						  <td>{{!empty($range->range_from) ? $range->range_from : ''}}</td>
-						  <td>{{!empty($range->range_to) ?$range->range_to : ''}}</td>
-						  <td>{{!empty($range->percentage) ?$range->percentage : ''}}</td>
+						  data-target="#edit-number-modal"
+						  data-id="{{ $number->id }}"
+						  data-min_number="{{ $number->min_number }}" 
+						  data-max_number="{{ $number->max_number }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+						  <td>{{!empty($number->min_number) ? $number->min_number : ''}}</td>
+						  <td>{{!empty($number->max_number) ?$number->max_number : ''}}</td>
 						  <td nowrap>
-                              <button type="button" id="view_kpi" class="btn {{ (!empty($range->status) && $range->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$range->id}}, 'actdeac');"><i class="fa {{ (!empty($range->status) && $range->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($range->status) && $range->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_kpi" class="btn {{ (!empty($number->status) && $number->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$number->id}}, 'actdeac');"><i class="fa {{ (!empty($number->status) && $number->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($number->status) && $number->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
 						</tr>
 						@endforeach
                     @else
-						<tr id="ranges-list">
+						<tr id="numbers-list">
 						<td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No range to display, please start by adding a new range.
+                            No number to display, please start by adding a new number.
                         </div>
 						</td>
 						</tr>
@@ -50,14 +48,14 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
 				<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                    <button type="button" id="add-new-range" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-range-modal">Add Range</button>
+                    <button type="button" id="add-new-number" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-number-modal">Add Number</button>
                 </div>
             </div>
         </div>
 
         <!-- Include add new modal -->
-        @include('appraisals.partials.add_range')
-        @include('appraisals.partials.edit_range')
+        @include('appraisals.partials.add_number')
+        @include('appraisals.partials.edit_number')
     </div>
 @endsection
 
@@ -70,10 +68,10 @@
 		function postData(id, data)
 		{
 			if (data == 'actdeac')
-				location.href = "/appraisal/range_active/" + id;
+				location.href = "/appraisal/number_active/" + id;
 		}
         $(function () {
-            var rangeId;
+            var numberId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 			
@@ -97,16 +95,14 @@
                 $('.modal:visible').each(reposition);
             });
             //pass category data to the edit category modal
-            $('#edit-range-modal').on('show.bs.modal', function (e) {
+            $('#edit-number-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                rangeId = btnEdit.data('id');
-                var RangeFrom = btnEdit.data('range_from');
-                var RangeTo = btnEdit.data('range_to');
-                var Percentage = btnEdit.data('percentage');
+                numberId = btnEdit.data('id');
+                var MinNumber = btnEdit.data('min_number');
+                var MaxNumber = btnEdit.data('max_number');
                 var modal = $(this);
-                modal.find('#range_from').val(RangeFrom);
-                modal.find('#range_to').val(RangeTo);
-                modal.find('#percentage').val(Percentage);
+                modal.find('#min_number').val(MinNumber);
+                modal.find('#max_number').val(MaxNumber);
             });
 
             //function to post category form to server using ajax
@@ -115,37 +111,36 @@
                     method: formMethod,
                     url: postUrl,
                     data: {
-                        range_from: $('form[name=' + formName + ']').find('#range_from').val(),
-                        range_to: $('form[name=' + formName + ']').find('#range_to').val(),
-                        percentage: $('form[name=' + formName + ']').find('#percentage').val(),
+                        min_number: $('form[name=' + formName + ']').find('#min_number').val(),
+                        max_number: $('form[name=' + formName + ']').find('#max_number').val(),
                         kpi_id: {{$kpi->id}},
                          _token: $('input[name=_token]').val()
                     },
                     success: function(success) {
-						location.href = "/appraisal/kpi_range/" + {{$kpi->id}};
+						location.href = "/appraisal/kpi_number/" + {{$kpi->id}};
                         $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
                         $('form[name=' + formName + ']').trigger('reset'); //Reset the form
 
                         var successHTML = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> Category added!</h4>';
-                        successHTML += 'The new range has been added successfully.';
-                        $('#range-success-alert').addClass('alert alert-success alert-dismissible')
+                        successHTML += 'The new number has been added successfully.';
+                        $('#number-success-alert').addClass('alert alert-success alert-dismissible')
                                 .fadeIn()
                                 .html(successHTML);
 
                         //show the newly added on the setup list
-                        $('#active-range').removeClass('active');
-                        var newModuleList = $('#ranges-list').html();
-                        newModuleList += '<li id="active-range" class="list-group-item active"><b>' + success['new_template'] + '</b> <font class="pull-right">' + ' '+ ';</font></li>';
+                        $('#active-number').removeClass('active');
+                        var newModuleList = $('#numbers-list').html();
+                        newModuleList += '<li id="active-number" class="list-group-item active"><b>' + success['new_template'] + '</b> <font class="pull-right">' + ' '+ ';</font></li>';
 
-                        $('#ranges-list').html(newModuleList);
+                        $('#numbers-list').html(newModuleList);
 
                         //auto hide modal after 7 seconds
-                        $("#add-new-range-modal").alert();
-                        window.setTimeout(function() { $("#add-new-range-modal").modal('hide'); }, 5000);
+                        $("#add-new-number-modal").alert();
+                        window.setTimeout(function() { $("#add-new-number-modal").modal('hide'); }, 5000);
 
                         //autoclose alert after 7 seconds
-                        $("#range-success-alert").alert();
-                        window.setTimeout(function() { $("#range-success-alert").fadeOut('slow'); }, 5000);
+                        $("#number-success-alert").alert();
+                        window.setTimeout(function() { $("#number-success-alert").fadeOut('slow'); }, 5000);
                     },
                     error: function(xhr) {
                         //if(xhr.status === 401) //redirect if not authenticated
@@ -164,17 +159,17 @@
                             });
                             errorsHTML += '</ul>';
 
-                            $('#range-invalid-input-alert').addClass('alert alert-danger alert-dismissible')
+                            $('#number-invalid-input-alert').addClass('alert alert-danger alert-dismissible')
                                     .fadeIn()
                                     .html(errorsHTML);
 
                             //autoclose alert after 7 seconds
-                            $("#range-invalid-input-alert").alert();
-                            window.setTimeout(function() { $("#range-invalid-input-alert").fadeOut('slow'); }, 7000);
+                            $("#number-invalid-input-alert").alert();
+                            window.setTimeout(function() { $("#number-invalid-input-alert").fadeOut('slow'); }, 7000);
 
                             //Close btn click
                             $('#close-invalid-input-alert').on('click', function () {
-                                $("#range-invalid-input-alert").fadeOut('slow');
+                                $("#number-invalid-input-alert").fadeOut('slow');
                             });
                         }
                     }
@@ -182,12 +177,12 @@
             }
 
             //Post category form to server using ajax (ADD)
-            $('#add-range').on('click', function() {
-                postModuleForm('POST', '/appraisal/range', 'add-range-form');
+            $('#add-number').on('click', function() {
+                postModuleForm('POST', '/appraisal/number', 'add-number-form');
             });
 
-            $('#update-range').on('click', function() {
-                postModuleForm('PATCH', '/appraisal/range_edit/' + rangeId, 'edit-range-form');
+            $('#update-number').on('click', function() {
+                postModuleForm('PATCH', '/appraisal/number_edit/' + numberId, 'edit-number-form');
             });
         });
     </script>
