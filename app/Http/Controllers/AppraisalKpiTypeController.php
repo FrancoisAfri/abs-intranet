@@ -26,7 +26,6 @@ class AppraisalKpiTypeController extends Controller
     {
         if ($kpi->status == 1) 
 		{
-			$ranges = $kpi->load('kpiranges');
 			$ranges = DB::table('appraisals_kpi_ranges')
 			->select('appraisals_kpi_ranges.*')
 			->leftJoin('appraisals_kpis', 'appraisals_kpi_ranges.kpi_id', '=', 'appraisals_kpis.id')
@@ -43,7 +42,7 @@ class AppraisalKpiTypeController extends Controller
 			$data['active_mod'] = 'Performance Appraisal';
 			$data['active_rib'] = 'Templates';
 			AuditReportsController::store('Performance Appraisal', 'KPI Ranges Details Page Accessed', "Accessed by User", 0);
-			return $data;
+			//return $data;
 			return view('appraisals.kpi_range')->with($data);
 		}
 		else 
@@ -61,7 +60,23 @@ class AppraisalKpiTypeController extends Controller
      */
     public function kpiAddRange(Request $request)
     {
-        //
+        $this->validate($request, [      
+            'range_to' => 'bail|required|integer|min:0',       
+            'range_from' => 'bail|required|integer|min:0',       
+            'percentage' => 'bail|required|integer|min:0',       
+            'kpi_id' => 'bail|required|integer|min:0',       
+        ]);
+		$rangeData = $request->all();
+		unset($rangeData['_token']);
+		$category = new appraisalsKpiRange($rangeData);
+		$category->status = 1;
+		$category->range_to = $rangeData['range_to'];
+		$category->range_from = $rangeData['range_from'];
+		$category->percentage = $rangeData['percentage'];
+		$category->kpi_id = $rangeData['kpi_id'];
+        $category->save();
+		AuditReportsController::store('Performance Appraisal', 'Range Added', "By user", 0);
+		return response()->json();
     }
 
     /**
@@ -81,8 +96,30 @@ class AppraisalKpiTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function kpiEditRange($id)
+    public function kpiEditRange(Request $request, appraisalsKpiRange $range)
     {
-        //
+        $this->validate($request, [       
+           'range_to' => 'bail|required|integer|min:0',       
+            'range_from' => 'bail|required|integer|min:0',       
+            'percentage' => 'bail|required|integer|min:0',        
+        ]);
+		$range->range_to = $request->input('range_to');
+		$range->range_from = $request->input('range_from');
+		$range->percentage = $request->input('percentage');
+		
+        $range->update();
+        AuditReportsController::store('Performance Appraisal', 'KPI Range Informations Edited', "Edited by User", 0);
+        return response()->json();
+    }
+	
+	public function rangeAct(appraisalsKpiRange $range) 
+	{
+		if ($range->status == 1) $stastus = 0;
+		else $stastus = 1;
+		
+		$range->status = $stastus;	
+		$range->update();
+		AuditReportsController::store('Performance Appraisal', "KPI Range Status Changed: $stastus", "Edited by User", 0);
+		return back();
     }
 }

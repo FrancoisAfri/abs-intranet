@@ -7,94 +7,35 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Kpa</h4>
+                    <h4 class="modal-title">Edit Kpi Range</h4>
                 </div>
                 <div class="modal-body">
                     <div id="range-invalid-input-alert"></div>
                     <div id="range-success-alert"></div>
 					<div class="form-group">
-						<label for="category_id" class="col-sm-3 control-label">Category</label>
+						<label for="range_from" class="col-sm-3 control-label">Range From</label>
 						<div class="col-sm-9">
 							<div class="input-group">
-								<select id="category_id" name="category_id" class="form-control" required>
-                                    <option value="0">*** Select a Category ***</option>
-                                 
-								</select>
+								<input type="number" class="form-control" id="range_from" name="range_from" value="" placeholder="Enter Range From" required>
 							</div>
 						</div>
                     </div>
 					<div class="form-group">
-						<label for="kpa_id" class="col-sm-3 control-label">KPA</label>
-						<div class="col-sm-9">
-							<div class="input-group">
-								<select id="kpa_id" name="kpa_id" class="form-control" required>
-								<option value="0">*** Select a KPA ***</option>
-								
-								</select>
-							</div>
-						</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Indicator</label>
+                        <label for="range_to" class="col-sm-3 control-label">Range To</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-								<textarea class="form-control" rows="3" cols="70" id="indicator" name="indicator" placeholder="Enter Indicator" required></textarea>
+                                <input type="number" class="form-control" id="range_to" name="range_to" value="" placeholder="Enter Range To" required>
                             </div>
                         </div>
                     </div>
 					<div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Measurement</label>
+                        <label for="percentage" class="col-sm-3 control-label">Percentage</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-								<textarea class="form-control" rows="3" cols="70" id="measurement" name="measurement" placeholder="Enter Measurement"></textarea>
+                                <input type="number" class="form-control" id="percentage" name="percentage" value="" placeholder="Percentage" >
+                                <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
                         </div>
-                    </div>
-					<div class="form-group">
-                        <label for="source_of_evidence" class="col-sm-3 control-label">Source Of Evidence</label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-								<textarea class="form-control" rows="3" cols="70" id="source_of_evidence" name="source_of_evidence" placeholder="Enter Source Of Evidence"></textarea>
-                            </div>
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <label for="weight" class="col-sm-3 control-label">Weight</label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="weight" name="weight" value="" placeholder="Enter Weight" required>
-                            </div>
-                        </div>
-                    </div>
-					<div class="form-group">
-						<label for="kpi_type" class="col-sm-3 control-label">KPI Type</label>
-						<div class="col-sm-9">
-							<div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-black-tie"></i>
-								</div>
-								<select id="kpi_type" name="kpi_type" class="form-control" required>
-								<option value="0">*** Select a Type ***</option>
-								<option value="1">Range</option>
-								<option value="2">Number</option>
-								<option value="3">From 1 To 10</option>
-								</select>
-							</div>
-						</div>
-                    </div>
-					<div class="form-group">
-						<label for="is_upload" class="col-sm-3 control-label">Is Upload?</label>
-						<div class="col-sm-9">
-							<div class="input-group">
-								<span class="input-group-addon">
-								  <i class="fa fa-black-tie"></i>
-								</span>
-								<select id="is_upload" name="is_upload" class="form-control" required>
-									<option value="1">Yes</option>
-									<option value="2">No</option>
-								</select>
-							</div>
-						</div>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">KPIs ({{$ranges->indicator}})</h3>
+                    <h3 class="box-title">KPIs ({{$kpi->indicator}})</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -22,14 +22,15 @@
 						  <td><button type="button" id="edit_kpi_title" class="btn btn-primary  btn-xs" 
 						  data-toggle="modal" 
 						  data-target="#edit-range-modal"
-						  data-category_id="{{ !empty($range->kpiranges->range_from) ? $range->kpiranges->range_from : '' }}" 
-						  data-category_id="{{ !empty($range->kpiranges->range_to) ? $range->kpiranges->range_to : '' }}" 
-						  data-category_id="{{ !empty($range->kpiranges->percentage) ? $range->kpiranges->percentage : '' }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-						  <td>{{!empty($range->kpiranges->range_from) ? $range->kpiranges->range_from : ''}}</td>
-						  <td>{{!empty($range->kpiranges->range_to) ?$range->kpiranges->range_to : ''}}</td>
-						  <td>{{!empty($range->kpiranges->percentage) ?$range->kpiranges->percentage : ''}}</td>
+						  data-id="{{ $range->id }}"
+						  data-range_from="{{ $range->range_from }}" 
+						  data-range_to="{{ $range->range_to }}" 
+						  data-percentage="{{ $range->percentage}}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+						  <td>{{!empty($range->range_from) ? $range->range_from : ''}}</td>
+						  <td>{{!empty($range->range_to) ?$range->range_to : ''}}</td>
+						  <td>{{!empty($range->percentage) ?$range->percentage : ''}}</td>
 						  <td nowrap>
-                              <button type="button" id="view_kpi" class="btn {{ (!empty($range->kpiranges->status) && $range->kpiranges->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$range->kpiranges->id}}, 'actdeac');"><i class="fa {{ (!empty($range->kpiranges->status) && $range->kpiranges->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($range->kpiranges->status) && $range->kpiranges->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_kpi" class="btn {{ (!empty($range->status) && $range->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$range->id}}, 'actdeac');"><i class="fa {{ (!empty($range->status) && $range->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($range->status) && $range->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
 						</tr>
 						@endforeach
@@ -49,7 +50,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
 				<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                    <button type="button" id="add-new-range" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-range-modal">Add KPI</button>
+                    <button type="button" id="add-new-range" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-range-modal">Add Range</button>
                 </div>
             </div>
         </div>
@@ -69,21 +70,15 @@
 		function postData(id, data)
 		{
 			if (data == 'actdeac')
-				location.href = "/appraisal/kpi_active/" + id;
-			else if (data == 'Range')
-				location.href = "/appraisal/kpi_range/" + id;
-			else if (data == 'Number')
-				location.href = "/appraisal/kpi_number/" + id;
-			else if (data == 'From 1 To 10')
-				location.href = "/appraisal/kpi_from_to/" + id;
+				location.href = "/appraisal/range_active/" + id;
 		}
         $(function () {
-            var kpiId;
+            var rangeId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 			
 			document.getElementById("back_button").onclick = function () {
-			location.href = "/appraisal/templates";	};
+			location.href = "/appraisal/template/" + {{$kpi->template_id}} };
 			
             //Vertically center modals on page
             function reposition() {
@@ -101,31 +96,18 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
+			'', '','','kpi_id'
             //pass category data to the edit category modal
             $('#edit-range-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                kpiId = btnEdit.data('id');
-                var Measurement = btnEdit.data('measurement');
-                var Weight = btnEdit.data('weight');
-                var KpiType = btnEdit.data('kpi_type');
-                var IsUpload = btnEdit.data('is_upload');
-                var SourceOfEvidence = btnEdit.data('source_of_evidence');
-                var Indicator = btnEdit.data('indicator');
-                var kpaId = btnEdit.data('kpa_id');
-                var CategoryId = btnEdit.data('category_id');
+                rangeId = btnEdit.data('id');
+                var RangeFrom = btnEdit.data('range_from');
+                var RangeTo = btnEdit.data('range_to');
+                var Percentage = btnEdit.data('percentage');
                 var modal = $(this);
-                modal.find('#measurement').val(Measurement);
-                modal.find('#weight').val(Weight);
-                modal.find('#kpi_type').val(KpiType);
-                modal.find('#is_upload').val(IsUpload);
-                modal.find('#source_of_evidence').val(SourceOfEvidence);
-                modal.find('#indicator').val(Indicator);
-                modal.find('#kpa_id').val(kpaId);
-                modal.find('#category_id').val(CategoryId);
-				$('select#category_id').val(CategoryId);
-				$('select#kpa_id').val(kpaId);
-				$('select#kpi_type').val(KpiType);
-				$('select#is_upload').val(IsUpload);
+                modal.find('#range_from').val(RangeFrom);
+                modal.find('#range_to').val(RangeTo);
+                modal.find('#percentage').val(Percentage);
             });
 
             //function to post category form to server using ajax
@@ -134,19 +116,14 @@
                     method: formMethod,
                     url: postUrl,
                     data: {
-                        measurement: $('form[name=' + formName + ']').find('#measurement').val(),
-                        weight: $('form[name=' + formName + ']').find('#weight').val(),
-                        source_of_evidence: $('form[name=' + formName + ']').find('#source_of_evidence').val(),
-                        indicator: $('form[name=' + formName + ']').find('#indicator').val(),
-                        kpi_type: $('form[name=' + formName + ']').find('#kpi_type').val(),
-                        is_upload: $('form[name=' + formName + ']').find('#is_upload').val(),
-                        kpa_id: $('form[name=' + formName + ']').find('#kpa_id').val(),
-                        category_id: $('form[name=' + formName + ']').find('#category_id').val(),
-                        template_id: {{$ranges->id}},
+                        range_from: $('form[name=' + formName + ']').find('#range_from').val(),
+                        range_to: $('form[name=' + formName + ']').find('#range_to').val(),
+                        percentage: $('form[name=' + formName + ']').find('#percentage').val(),
+                        kpi_id: {{$kpi->id}},
                          _token: $('input[name=_token]').val()
                     },
                     success: function(success) {
-                        location.href = "/appraisal/template/" + {{$ranges->id}};
+						location.href = "/appraisal/kpi_range/" + {{$kpi->id}};
                         $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
                         $('form[name=' + formName + ']').trigger('reset'); //Reset the form
 
@@ -211,7 +188,7 @@
             });
 
             $('#update-range').on('click', function() {
-                postModuleForm('PATCH', '/appraisal/kpi_edit/' + kpiId, 'edit-range-form');
+                postModuleForm('PATCH', '/appraisal/range_edit/' + rangeId, 'edit-range-form');
             });
         });
     </script>
