@@ -67,6 +67,36 @@ class LeaveSetupController extends Controller
         return view('leave.leave_types')->with($data);
     }
     
+    
+    //#leave allocation
+    public function allocateleave()
+    {
+        $employees = HRPerson::where('status', 1)->get();
+        $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
+        $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
+//        $user->load('person');
+        
+        
+        $data['page_title'] = "Allocate Leave Types";
+        $data['page_description'] = "Allocate_leave_types ";
+        $data['breadcrumb'] = [
+            ['title' => 'leave', 'path' => '/leave/Allocate_leave_types', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+         $data['active_mod'] = 'Leave Management';
+         $data['active_rib'] = 'Allocate Leave Types';
+         $data['leaveTypes'] = $leaveTypes;
+         $data['employees'] = $employees;
+         $data['leave_profile'] = $leave_profile;
+//         $data['user'] = $user;
+        
+        if (isset($person['leave_profile'])) {
+            $person['leave_profile'] = (int) $person['leave_profile'];
+        }
+        
+       return view('leave.leave_allocation')->with($data); 
+    }
+    
     public function showSetup() {
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function($query) {
             $query->orderBy('id', 'asc');

@@ -64,6 +64,9 @@ Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
 Route::get('leave/setup/leave_credit', 'LeaveSetupController@store');
 
+#leave Allocation
+Route::get('leave/Allocate_leave_types', 'LeaveSetupController@allocateleave');
+
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
@@ -150,10 +153,13 @@ Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave')
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
+//<<<<<<< HEAD
+// <<<<<<< HEAD
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
-Route::get('appraisal/perks', 'AppraisalPerksController@index');
+// =======
+//Route::get('appraisal/perks', 'AppraisalPerksController@index');
 Route::post('appraisal/perks/new', 'AppraisalPerksController@store');
 Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
 Route::get('appraisal/perks/{perk}/activate', 'AppraisalPerksController@activate');
@@ -161,6 +167,8 @@ Route::get('appraisal/perks/{perk}/activate', 'AppraisalPerksController@activate
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+//>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
+
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
@@ -168,6 +176,9 @@ Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupContr
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
 
+
+//<<<<<<< HEAD
+// >>>>>>> level_module modal save button functioning
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
