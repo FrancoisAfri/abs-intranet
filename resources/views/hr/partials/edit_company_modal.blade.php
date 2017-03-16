@@ -11,27 +11,28 @@
                     <h4 class="modal-title">Edit {{$highestLvl->name}}</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="module-invalid-input-alert"></div>
-                    <div id="module-success-alert"></div>
+                    <div id="invalid-input-alert"></div>
+                    <div id="success-alert"></div>
 
                      <div class="form-group">
-                       <label for="action" class="col-sm-3 control-label">Name</label>
-                        <div class="col-sm-8">
+                       <label for="action" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="name" name="name" value=""  placeholder="Enter Name" required>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                        <label for="action" class="col-sm-3 control-label">Manager Name</label>
-                         <div class="col-sm-8">
-                             <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" required>
-                                <option selected="selected" value="0" >*** Select a Manager ***</option>
+                    <div class="form-group">
+                        <label for="action" class="col-sm-2 control-label">Manager Name</label>
+                         <div class="col-sm-10">
+                             <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Manager ***</option>
                                     @foreach($employees as $employee)
                                     <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
                         </select>
                            </div>
                     </div>
+                </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <button type="button" id="update_company-modal" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Update</button>

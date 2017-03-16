@@ -11,8 +11,8 @@
                     <h4 class="modal-title">Add New {{$highestLvl->name}} </h4>
                 </div>
                 <div class="modal-body">
-                    <div id="module-invalid-input-alert"></div>
-                    <div id="module-success-alert"></div>
+                    <div id="invalid-input-alert"></div>
+                    <div id="success-alert"></div>
                      <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
@@ -23,7 +23,7 @@
                         <label for="path" class="col-sm-3 control-label">Manager</label>
                         <div class="col-sm-9">
                              <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" required>
-                                <option selected="selected" value="0" required >*** Select a Manager ***</option>==$0
+                                <option selected="selected" value="" required >*** Select a Manager ***</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach

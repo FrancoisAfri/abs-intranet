@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <!-- /.box-header -->
-                <div class="box-body">
+                <div class="box-body"><!-- style="max-height: 200px; overflow-y: scroll;" -->
                     @if(count($perks) > 0)
                         <ul class="products-list product-list-in-box">
                             @foreach($perks as $perk)
@@ -27,7 +27,10 @@
                                     </div>
                                     <div class="product-info">
                                         <a href="#" class="product-title" data-toggle="modal" data-target="#edit-perk-modal" data-id="{{ $perk->id }}" data-name="{{ $perk->name }}" data-description="{{ $perk->description }}" data-req_percent="{{ $perk->req_percent }}" data-img="{{ (!empty($perk->img)) ? Storage::disk('local')->url("perks/$perk->img") : 'http://placehold.it/235x235' }}">{{ $perk->name }}</a>
-                                        <span class="label label-success pull-right"><i class="fa fa-line-chart"></i> {{ $perk->req_percent }}%</span>
+                                        <span class="pull-right" style="margin-left: 15px;">
+                                            <button type="button" id="view_ribbons" class="btn {{ (!empty($perk->status) && $perk->status == 1) ? "btn-danger" : "btn-success" }} btn-xs btn-flat" onclick="activatePerk({{ $perk->id }});"><i class="fa {{ (!empty($perk->status) && $perk->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($perk->status) && $perk->status == 1) ? "De-Activate" : "Activate"}}</button>
+                                        </span>
+                                        <span class="label label-success pull-right"><i class="fa fa-star"></i> {{ $perk->req_percent }}%</span>
                                         <span class="product-description">
                                             {{ $perk->description }}
                                         </span>
@@ -78,6 +81,9 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
     <script>
+        function activatePerk(perkID) {
+            location.href= "/appraisal/perks/" + perkID + "/activate";
+        }
         $(function () {
             //Tooltip
             //$('[data-toggle="tooltip"]').tooltip();

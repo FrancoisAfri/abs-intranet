@@ -26,7 +26,12 @@
             
                             @foreach ($highestLvl->divisionLevelGroup as $type)
                                 <tr>
-                                    <td style="width: 5px; text-align: center;"><button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+                                    <td style=" text-align: center;" nowrap>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        @if($type->childDiv() && $highestLvl->level > $lowestactiveLvl)
+                                            <a href="" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
+                                        @endif
+                                    </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
                                     <td>
@@ -62,7 +67,8 @@
     <script>
 		function postData(id, data)
 		{
-             if (data == 'dactive') location.href = "/hr/firstlevel/activate/" + "{level}/" + id;
+             if (data == 'dactive') location.href = "/hr/company_edit/" + "{{ $highestLvl->id }}/" + id + '/activate';
+             
 			//location.href = "/hr/firstlevel/dactive/" + id;
              // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
 
@@ -92,7 +98,7 @@
                 $('.modal:visible').each(reposition);
             });
               
-
+/*
                 var companyID;
            $('#level-module-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
@@ -105,10 +111,10 @@
                 modal.find('#name').val(companyIDName);
                 modal.find('#manager_id').val(companyIDEmployers);
                 modal.find('#division_level_id').val(level);
-               /* if(primeRate != null && primeRate != '' && primeRate > 0) {
+                if(primeRate != null && primeRate != '' && primeRate > 0) {
                    modal.find('#prime_rate').val(primeRate.toFixed(2));
-                }*/
-            });
+                }
+            });*/
 
             var updatecompanyID;
             $('#edit-company-modal').on('show.bs.modal', function (e) {
@@ -143,7 +149,7 @@
             });
 
                $('#update_company-modal').on('click', function () {
-                var strUrl = '/hr/company_edit/' ;
+                var strUrl = '/hr/company_edit/{{ $highestLvl->id }}/' + updatecompanyID;
                 var modalID = 'edit-company-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -155,7 +161,7 @@
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Company modal has been updated successfully.';
                 var Method = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
     });
