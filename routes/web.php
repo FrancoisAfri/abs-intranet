@@ -64,6 +64,9 @@ Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
 Route::get('leave/setup/leave_credit', 'LeaveSetupController@store');
 
+#leave Allocation
+Route::get('leave/Allocate_leave_types', 'LeaveSetupController@allocateleave');
+
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
@@ -167,7 +170,6 @@ Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@
 Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupController@updateLevel');
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
-<<<<<<< HEAD
 
 =======
 Route::get('/hr/child_setup', 'EmployeeCompanySetupController@viewchildLevel');
