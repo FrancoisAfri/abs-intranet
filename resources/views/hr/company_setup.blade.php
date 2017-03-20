@@ -147,7 +147,7 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-               $('#update_company-modal').on('click', function () {
+       $('#update_company-modal').on('click', function () {
                 var strUrl = '/hr/company_edit/{{ $highestLvl->id }}/' + updatecompanyID;
                 var modalID = 'edit-company-modal';
                 var objData = {
@@ -162,7 +162,6 @@
                 var Method = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-
     });
 
  
