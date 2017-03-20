@@ -33,10 +33,11 @@ class EmployeeCompanySetupController extends Controller
 
     public function viewLevel() {
         //get the highest active level
+        //return '';
         $childLevelname = null;
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $employees = HRPerson::where('status', 1)->get();
-        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager', 'divisionLevelGroup.childDiv.divisionLevel');
+        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
         $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
         if ($highestLvl->level>$lowestactiveLvl){
             $childLevelname=DivisionLevel::where('level', $highestLvl->level - 1 )->get()->first()->plural_name;
@@ -58,6 +59,7 @@ class EmployeeCompanySetupController extends Controller
             //return $highestLvl;
 
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        //return $highestLvl->level . ' > '. $lowestactiveLvl;
         return view('hr.company_setup')->with($data);
     }
 
@@ -165,19 +167,44 @@ class EmployeeCompanySetupController extends Controller
         return response()->json();
         }
 
-       public function viewchildLevel() {
+       public function viewchildLevel($parentLevel, $parent_id) {
     //   $childLevelname = null;
-            $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
+             if ($parentLevel == 5){
+                 $parentDiv =  DivisionLevelFive::find($parent_id);
+                 $childDiv = $parentDiv->childDiv;
+               
+            }
+            elseif ($parentLevel == 4){
+                $parentDiv =  DivisionLevelFour::find($parent_id);
+                 $childDiv = $parentDiv->childDiv;
+               
+            }
+            elseif ($parentLevel == 3) {
+                $parentDiv =  DivisionLevelThree::find($parent_id);
+                $childDiv = $parentDiv->childDiv;
+               
+            }
+            elseif ($parentLevel == 2) {
+                $parentDiv =  DivisionLevelTwo::find($parent_id);
+                 $childDiv = $parentDiv->childDiv;
+               
+            }
+            elseif ($parentLevel == 1) {
+                $parentDiv =  DivisionLevelOne::find($parent_id);
+                 $childDiv = null;
+               
+            }
+            //$division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
             $employees = HRPerson::where('status', 1)->get();
-            $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager', 'divisionLevelGroup.childDiv.divisionLevel');
+            //$highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager', 'divisionLevelGroup.childDiv.divisionLevel');
             $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
-            if ($highestLvl->level>$lowestactiveLvl){
-                $childLevelname=DivisionLevel::where('level', $highestLvl->level - 1 )->get()->first()->plural_name;
+            if ($parentLevel>$lowestactiveLvl){
+                $childLevelname=DivisionLevel::where('level', $parentLevel - 1 )->get()->first()->plural_name;
             }
             //return $lowestactiveLvl;
-            $data['division_types'] = $division_types;
+            $data['childDiv'] = $childDiv;
             $data['employees'] = $employees;
-            $data['highestLvl'] = $highestLvl;
+            $data['parentDiv'] = $parentDiv;
             $data['lowestactiveLvl'] = $lowestactiveLvl;
             $data['childLevelname'] = $childLevelname;
             $data['page_title'] = "Company Setup";
@@ -191,7 +218,47 @@ class EmployeeCompanySetupController extends Controller
             AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
             return view('hr.child_setup')->with($data);
       }
+
+
+        public function addChild(Request $request, $parentLevel, $parent_id) {
+
+         $this->validate($request, [
+            'manager_id' => 'required',
+            'name'=> 'required',
+        ]);
+        $childData=$request->all();
+        
+
+        if ($parentLevel == 5){
+             $parentDiv =  DivisionLevelFive::find($parent_id);
+             $childDiv = new DivisionLevelFour($childData);
+        }
+        elseif ($parentLevel == 4){
+            $parentDiv =  DivisionLevelFive::find($parent_id);
+            $childDiv = new DivisionLevelThree($childData);
+        }
+        elseif ($parentLevel == 3) {
+            $parentDiv =  DivisionLevelFive::find($parent_id);
+            $childDiv = new DivisionLevelTwo($childData);
+        }
+        elseif ($parentLevel == 2) {
+            $parentDiv =  DivisionLevelFive::find($parent_id);
+            $childDiv = new DivisionLevelOne($childData);
+        }
+        elseif ($parentLevel == 1) {
+            $parentDiv =  DivisionLevelFive::find($parent_id);
+            $childDiv = new null($childData);
+        }
+        $childDiv->active=1;
+        $parentDiv->addChildDiv($childDiv);
+
+       // return $divLevel;
+
+        AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
+        }
+
   }
+
 
 
 

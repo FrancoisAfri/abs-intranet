@@ -29,6 +29,15 @@ class appraisalsKpis extends Model
     }
 		//Relationship kpi and range
     public function kpiranges() {
-		return $this->hasmany(appraisalsKpiRange::class, 'kpi_id');
+		return $this->hasMany(appraisalsKpiRange::class, 'kpi_id');
+    }
+    //Relationship kpi and range
+    public function kpiIntScore() {
+        return $this->hasMany(AppraisalKPIIntRange::class, 'kpi_id');
+    }
+
+    //Function to add a new kpi integer range
+    public function addKPIIntRange(AppraisalKPIIntRange $kpiIntRange) {
+        return $this->kpiIntScore()->save($kpiIntRange);
     }
 }

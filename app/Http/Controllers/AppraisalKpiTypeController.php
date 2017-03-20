@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AppraisalKPIIntRange;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\HRPerson;
@@ -67,10 +68,6 @@ class AppraisalKpiTypeController extends Controller
 		unset($rangeData['_token']);
 		$range = new appraisalsKpiRange($rangeData);
 		$range->status = 1;
-		$range->range_to = $rangeData['range_to'];
-		$range->range_from = $rangeData['range_from'];
-		$range->percentage = $rangeData['percentage'];
-		$range->kpi_id = $rangeData['kpi_id'];
         $range->save();
 		AuditReportsController::store('Performance Appraisal', 'Range Added', "By user", 0);
 		return response()->json();
@@ -145,9 +142,6 @@ class AppraisalKpiTypeController extends Controller
 		unset($numberData['_token']);
 		$number = new appraisalsKpiNumber($numberData);
 		$number->status = 1;
-		$number->min_number = $numberData['min_number'];
-		$number->max_number = $numberData['max_number'];
-		$number->kpi_id = $numberData['kpi_id'];
         $number->save();
 		AuditReportsController::store('Performance Appraisal', 'Number Added', "By user", 0);
 		return response()->json();
@@ -176,5 +170,65 @@ class AppraisalKpiTypeController extends Controller
 		$number->update();
 		AuditReportsController::store('Performance Appraisal', "KPI Number Status Changed: $stastus", "Edited by User", 0);
 		return back();
+    }
+    // View Integer Score Range
+    public function kpiIntegerRange(appraisalsKpis $kpi)
+    {
+        if ($kpi->status == 1)
+        {
+            $kpi->load('kpiIntScore');
+            $data['page_title'] = "KPI Integer Score";
+            $data['page_description'] = "KPI Integer Range Score";
+            $data['breadcrumb'] = [
+                ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Templates', 'active' => 1, 'is_module' => 0]
+            ];
+            $data['kpi'] = $kpi;
+            $data['active_mod'] = 'Performance Appraisal';
+            $data['active_rib'] = 'Templates';
+            AuditReportsController::store('Performance Appraisal', 'KPI Integer Score Range Details Page Accessed', "Accessed by User", 0);
+            return view('appraisals.kpi_int_range')->with($data);
+        }
+        else
+        {
+            AuditReportsController::store('Performance Appraisal', 'KPI Integer Score Range Details Page Accessed', "Accessed by User", 0);
+            return back();
+        }
+    }
+    //Save Integer Score Range
+    public function kpiAddIntegerScoreRange(Request $request, appraisalsKpis $kpi)
+    {
+        $this->validate($request, [
+            'score' => 'bail|required|integer|min:0',
+            'percentage' => 'bail|required|numeric|min:0',
+        ]);
+        $scoreData = $request->all();
+        $score = new AppraisalKPIIntRange($scoreData);
+        $score->status = 1;
+        $kpi->addKPIIntRange($score);
+        AuditReportsController::store('Performance Appraisal', 'KPI Integer Score Added', "By user", 0);
+        return response()->json(['scoreID' => $score->id]);
+    }
+    //update integer score range
+    public function kpiEditIntegerScoreRange(Request $request, AppraisalKPIIntRange $score)
+    {
+        $this->validate($request, [
+            'score' => 'bail|required|integer|min:0',
+            'percentage' => 'bail|required|numeric|min:0',
+        ]);
+        $scoreData = $request->all();
+        $score->update($scoreData);
+        AuditReportsController::store('Performance Appraisal', 'KPI Integer Score Information Edited', "Edited by User", 0);
+        return response()->json();
+    }
+    //Integer Score Act/deactivate
+    public function actIntegerScoreRange(AppraisalKPIIntRange $score)
+    {
+        $status = ($score->status === 1) ? 0 : 1;
+
+        $score->status = $status;
+        $score->update();
+        AuditReportsController::store('Performance Appraisal', "KPI Integer Score Status Changed: $status", "Edited by User", 0);
+        return back();
     }
 }

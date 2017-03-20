@@ -153,11 +153,17 @@ Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
 Route::patch('appraisal/range_edit/{range}', 'AppraisalKpiTypeController@kpiEditRange');
 Route::get('/appraisal/range_active/{range}', 'AppraisalKpiTypeController@rangeAct');
+
 Route::get('/appraisal/kpi_number/{kpi}', 'AppraisalKpiTypeController@kpiNumber');
 Route::post('appraisal/number', 'AppraisalKpiTypeController@kpiAddNumber');
 Route::patch('appraisal/number_edit/{number}', 'AppraisalKpiTypeController@kpiEditNumber');
 Route::get('/appraisal/number_active/{number}', 'AppraisalKpiTypeController@numberAct');
-# Appraisal Categories
+
+Route::get('appraisal/kpi_from_to/{kpi}', 'AppraisalKpiTypeController@kpiIntegerRange');
+Route::post('appraisal/kpi_from_to/{kpi}/add_int_score', 'AppraisalKpiTypeController@kpiAddIntegerScoreRange');
+Route::patch('appraisal/kpi_from_to/{score}', 'AppraisalKpiTypeController@kpiEditIntegerScoreRange');
+Route::get('appraisal/kpi_from_to/{score}/activate', 'AppraisalKpiTypeController@actIntegerScoreRange');
+
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
@@ -180,7 +186,8 @@ Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@
 Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupController@updateLevel');
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
-Route::get('/hr/child_setup', 'EmployeeCompanySetupController@viewchildLevel');
+Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupController@viewchildLevel');
+Route::post('/hr/firstchild/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
