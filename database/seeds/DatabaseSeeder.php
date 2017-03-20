@@ -385,8 +385,8 @@ class DatabaseSeeder extends Seeder
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Upload Appraisal';
-        $ribbon->description = 'Upload Appraisal';
+        $ribbon->ribbon_name = 'Appraisals';
+        $ribbon->description = 'Appraisals';
         $ribbon->ribbon_path = 'appraisal/upload_appraisal';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
@@ -417,10 +417,6 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-
-	
-
-
         $leave_config = new leave_configuration();
         $leave_config->save();
         
