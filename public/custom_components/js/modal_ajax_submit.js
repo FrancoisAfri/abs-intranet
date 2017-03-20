@@ -34,7 +34,7 @@ function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, succ
                 if (redirectUrl !== -1) {
                     window.location.href = redirectUrl;
                 }
-            })
+            });
         },
         error: function(xhr) {
             if(xhr.status === 422) {
@@ -45,7 +45,7 @@ function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, succ
                 var errorsHTML = '<button type="button" id="close-invalid-input-alert" class="close" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i> Invalid Input(s)!</h4><ul>';
                 $.each(errors, function (key, value) {
                     errorsHTML += '<li>' + value[0] + '</li>'; //shows only the first error.
-                    $('#'+key).closest('.form-group')
+                    myModal.find('#'+key).closest('.form-group')
                         .addClass('has-error'); //Add the has error class to form-groups with errors
                 });
                 errorsHTML += '</ul>';
@@ -117,7 +117,7 @@ function modalFormDataSubmit(strUrl, formName, modalID,submitBtnID, redirectUrl,
                 if (redirectUrl !== -1) {
                     window.location.href = redirectUrl;
                 }
-            })
+            });
         },
         error: function(xhr) {
             if(xhr.status === 422) {
