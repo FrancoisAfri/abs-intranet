@@ -159,6 +159,11 @@ Route::post('appraisal/number', 'AppraisalKpiTypeController@kpiAddNumber');
 Route::patch('appraisal/number_edit/{number}', 'AppraisalKpiTypeController@kpiEditNumber');
 Route::get('/appraisal/number_active/{number}', 'AppraisalKpiTypeController@numberAct');
 
+Route::get('appraisal/kpi_from_to/{kpi}', 'AppraisalKpiTypeController@kpiIntegerRange');
+Route::post('appraisal/kpi_from_to/{kpi}/add_int_score', 'AppraisalKpiTypeController@kpiAddIntegerScoreRange');
+Route::patch('appraisal/kpi_from_to/{score}', 'AppraisalKpiTypeController@kpiEditIntegerScoreRange');
+Route::get('appraisal/kpi_from_to/{score}/activate', 'AppraisalKpiTypeController@actIntegerScoreRange');
+
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
