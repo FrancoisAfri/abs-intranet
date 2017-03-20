@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{$childLevelname}}: {{$highestLvl->name}}</h3>
+                    <h3 class="box-title">{{$childLevelname}}: {{$parentDiv->name}}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -24,11 +24,11 @@
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
             
-                            @foreach ($highestLvl->divisionLevelGroup as $type)
+                            @foreach ($childDiv as $type)
                                 <tr>
                                     <td style=" text-align: center;" nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                      <!---  @if($type->childDiv() && $highestLvl->level > $lowestactiveLvl)
+                                      <!---  @if($type->childDiv() && $parentDiv->level > $lowestactiveLvl)
                                             <a href="" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
                                         @endif ---->
                                     </td>
@@ -49,14 +49,18 @@
          
                         <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#level-module-modal">Add {{$highestLvl->name}}</button>  
+                     <button type="button" id="child_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-child-modal">Add {{$parentDiv->name}}</button>
+
+                      <a type="button" href="/hr/company_setup" id="" class="btn btn-default pull-left">Back</a> 
                     </div>
         </div>
 
-        <!-- Include add new prime rate modal -->
-        @include('hr.partials.level_module')
-        @include('hr.partials.edit_company_modal')
-  
+
+      @include('hr.partials.add_child_level')
+        <!-- Include add new prime rate modal 
+        include('hr.partials.level_module')
+        include('hr.partials.edit_company_modal')
+  -->
   
     </div>
 @endsection
@@ -67,7 +71,7 @@
     <script>
 		function postData(id, data)
 		{
-             if (data == 'dactive') location.href = "/hr/company_edit/" + "{{ $highestLvl->id }}/" + id + '/activate';
+             if (data == 'dactive') location.href = "/hr/company_edit/" + "{{ $parentDiv->id }}/" + id + '/activate';
              
 			//location.href = "/hr/firstlevel/dactive/" + id;
              // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
@@ -132,8 +136,8 @@
              });
 
             //Post module form to server using ajax (ADD)
-            $('#save_firstlevel').on('click', function() {
-                var strUrl = '/hr/firstleveldiv/add/'+ '{{ $highestLvl->id }}';
+           /* $('#save_firstlevel').on('click', function() {
+                var strUrl = '/hr/firstleveldiv/add/'+ '{{ $parentDiv->id }}';
                 var modalID = 'level-module-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -146,10 +150,10 @@
                 var successMsg = 'The group level has been updated successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
+            }); */
 
                $('#update_company-modal').on('click', function () {
-                var strUrl = '/hr/company_edit/{{ $highestLvl->id }}/' + updatecompanyID;
+                var strUrl = '/hr/company_edit/{{ $parentDiv->id }}/' + updatecompanyID;
                 var modalID = 'edit-company-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -164,10 +168,23 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
+                $('#save_childlevel').on('click', function() {
+                var strUrl = '/hr/firstchild/'+ '{{ $parentDiv->id }}' + '{{$parentDiv->parent_id}}';
+                var modalID = 'add-child-modal';
+                var objData = {
+                    name: $('#'+modalID).find('#name').val(),
+                    manager_id: $('#'+modalID).find('#manager_id').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'child_module';
+                var redirectUrl = '/hr/child_setup/{level}/{parent_id}';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The group level has been updated successfully.';
+                //var formMethod = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
     });
-  
-
-
 
           /*  $('#update-module').on('click', function() {
                 postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
