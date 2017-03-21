@@ -385,9 +385,9 @@ class DatabaseSeeder extends Seeder
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Upload Appraisal';
-        $ribbon->description = 'Upload Appraisal';
-        $ribbon->ribbon_path = 'appraisal/upload_appraisal';
+        $ribbon->ribbon_name = 'Appraisals';
+        $ribbon->description = 'Appraisals';
+        $ribbon->ribbon_path = 'appraisal/load_appraisals';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
@@ -424,72 +424,72 @@ class DatabaseSeeder extends Seeder
         $leave_config = new leave_configuration();
         $leave_config->save();
         
-//#leave_types
-        $type = new LeaveType ();
+        //#leave_types
+        $type = new LeaveType();
         $type->name = 'Annual';
         $type->status =1;
         $type->description = 'Annual Leave Type' ;
         $type->save();
 
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Family';
         $type->status =1;
         $type->description = 'Family Leave Type' ;
         $type->save();
 
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Maternity';
         $type->status =1;
         $type->description = 'Maternity Leave Type' ;
         $type->save();
 
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Other/Special';
         $type->status ='1';
         $type->description = 'Other/Special Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Sick';
         $type->status =1;
         $type->description = 'Sick Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Study';
         $type->status =1;
         $type->description = 'Study Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Unpaid';
         $type->status =1;
         $type->description = 'Unpaid Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Worked in';
         $type->status =1;
         $type->description = 'Worked in Leave Type' ;
         $type->save();
 
-//#insert leave profilse
-        $profile = new leave_profile ();
+        //#insert leave profilse
+        $profile = new leave_profile();
         $profile->name = 'Employee with no leave';
         $profile->description = 'Employee with no leave' ;
         $profile->save();
 
-        $profile = new leave_profile ();
+        $profile = new leave_profile();
         $profile->name = '5 Day Employee';
         $profile->description = '5 Day Employee leave' ;
         $profile->save();
 
-        $profile = new leave_profile ();
+        $profile = new leave_profile();
         $profile->name = '6 Day Employee';
         $profile->description = '6 Day Employee leave' ;
         $profile->save();
 
-        $profile = new leave_profile ();
+        $profile = new leave_profile();
         $profile->name = 'Shift Worker';
         $profile->description = 'Shift Worker Employee leave' ;
         $profile->save();
