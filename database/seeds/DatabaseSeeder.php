@@ -417,10 +417,6 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-
-	
-
-
         $leave_config = new leave_configuration();
         $leave_config->save();
         
