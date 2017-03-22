@@ -204,6 +204,7 @@ class EmployeeCompanySetupController extends Controller
             //return $lowestactiveLvl;
             $data['childDiv'] = $childDiv;
             $data['employees'] = $employees;
+            $data['parentLevel'] = $parentLevel;
             $data['parentDiv'] = $parentDiv;
             $data['lowestactiveLvl'] = $lowestactiveLvl;
             $data['childLevelname'] = $childLevelname;
@@ -232,22 +233,23 @@ class EmployeeCompanySetupController extends Controller
         if ($parentLevel == 5){
              $parentDiv =  DivisionLevelFive::find($parent_id);
              $childDiv = new DivisionLevelFour($childData);
+          
         }
         elseif ($parentLevel == 4){
-            $parentDiv =  DivisionLevelFive::find($parent_id);
+            $parentDiv =  DivisionLevelFour::find($parent_id);
             $childDiv = new DivisionLevelThree($childData);
         }
         elseif ($parentLevel == 3) {
-            $parentDiv =  DivisionLevelFive::find($parent_id);
+            $parentDiv =  DivisionLevelThree::find($parent_id);
             $childDiv = new DivisionLevelTwo($childData);
         }
         elseif ($parentLevel == 2) {
-            $parentDiv =  DivisionLevelFive::find($parent_id);
+            $parentDiv =  DivisionLevelTwo::find($parent_id);
             $childDiv = new DivisionLevelOne($childData);
         }
         elseif ($parentLevel == 1) {
-            $parentDiv =  DivisionLevelFive::find($parent_id);
-            $childDiv = new null($childData);
+            $parentDiv =  DivisionLevelOne::find($parent_id);
+            $childDiv = null;
         }
         $childDiv->active=1;
         $parentDiv->addChildDiv($childDiv);
@@ -255,6 +257,74 @@ class EmployeeCompanySetupController extends Controller
        // return $divLevel;
 
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
+        }
+
+          public function updateChild(Request $request, $childLevel, $childID) {
+
+         $this->validate($request, [
+            'manager_id' => 'required',
+            'name'=> 'required',
+        ]);
+       
+        $childData=$request->all();
+        
+
+        if ($childLevel == 5){
+             $childDiv =  DivisionLevelFive::find($childID);
+               $childDiv->update($request->all());
+        }   
+        elseif ($childLevel == 4){
+            $childDiv =  DivisionLevelFour::find($childID);
+              $childDiv->update($request->all());
+        }
+        elseif ($childLevel == 3) {
+            $childDiv =  DivisionLevelThree::find($childID);
+              $childDiv->update($request->all());
+        }
+        elseif ($childLevel == 2) {
+            $childDiv =  DivisionLevelTwo::find($childID);
+              $childDiv->update($request->all());
+        }
+        elseif ($childLevel == 1) {
+            $childDiv =  DivisionLevelOne::find($childID);
+              $childDiv->update($request->all());
+        }
+     
+        $childDiv->manager_id = $request->input('manager_id');
+        $childDiv->name = $request->input('name');
+       
+     
+        AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
+        return response()->json();
+     
+        }
+ 
+
+        
+          public function activateChild($parentLevel, $childID) 
+        {
+            if ($parentLevel == 5){
+                 $childDiv =  DivisionLevelFive::find($childID);
+                 
+            }
+            elseif ($parentLevel == 4){
+                $childDiv =  DivisionLevelFour::find($childID);   
+            }
+            elseif ($parentLevel == 3) {
+                $childDiv =  DivisionLevelThree::find($childID);    
+            }
+            elseif ($parentLevel== 2) {
+                $childDiv =  DivisionLevelTwo::find($childID);   
+            }
+            elseif ($parentLevel == 1) {
+                $childDiv =  DivisionLevelOne::find($childID);   
+            }
+            if ($childDiv->active == 1) $stastus = 0;
+            else $stastus = 1;
+            $childDiv->active=$stastus;
+            $childDiv->update();
+            AuditReportsController::store('Employee records', 'division level active satus changed', "Edited by User", 0);
+            return back();
         }
 
   }

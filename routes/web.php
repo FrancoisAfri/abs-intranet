@@ -180,6 +180,9 @@ Route::get('appraisal/perks/{perk}/activate', 'AppraisalPerksController@activate
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+
+Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
+
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
@@ -187,7 +190,10 @@ Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupContr
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
 Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupController@viewchildLevel');
-Route::post('/hr/firstchild/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
+Route::patch('/hr/firstchild/{parentLevel}/{childID}', 'EmployeeCompanySetupController@updateChild');
+Route::post('/hr/firstchild/add/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
+Route::get('/hr/firstchild/{parentLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateChild');
+
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
