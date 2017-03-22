@@ -21,7 +21,7 @@
                 <!-- /.box-header -->
 
                 <!-- Form Start -->
-                <form class="form-horizontal" method="POST" action="" enctype="multipart/form-data">
+                <form name="load-kpi-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -67,7 +67,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
-                                        <select id="hr_person_id" name="hr_person_id" class="form-control">
+                                        <select id="hr_person_id" name="hr_person_id" class="form-control select2" style="width: 100%;">
                                             <option value="">*** Select an Employee ***</option>
                                             @foreach($employees as $employee)
                                                 <option value="{{ $employee->id }}">{{ $employee->full_name }}</option>
@@ -152,10 +152,12 @@
             if (appraisalType == 1) { //File upload
                 $('.file-upload-field').show();
                 $('.manual-field').hide();
+                $('form[name="load-kpi-form"]').attr('action', '');
             }
             else if (appraisalType == 2) { //Manual
                 $('.manual-field').show();
                 $('.file-upload-field').hide();
+                $('form[name="load-kpi-form"]').attr('action', '/appraisal/load_emp_appraisals');
             }
             return appraisalType;
         }

@@ -97,19 +97,19 @@ class DropDownAPIController extends Controller
         $hrPeople = [];
         switch ($divLevel) {
             case 5:
-                $whereField = 'group_level_five_id';
+                $whereField = 'division_level_5';
                 break;
             case 4:
-                $whereField = 'group_level_four_id';
+                $whereField = 'division_level_4';
                 break;
             case 3:
-                $whereField = 'group_level_three_id';
+                $whereField = 'division_level_3';
                 break;
             case 2:
-                $whereField = 'group_level_two_id';
+                $whereField = 'division_level_2';
                 break;
             case 1:
-                $whereField = 'group_level_one_id';
+                $whereField = 'division_level_1';
                 break;
             default:
                 $whereField = '';

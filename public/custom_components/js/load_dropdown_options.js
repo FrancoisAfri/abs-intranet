@@ -33,7 +33,7 @@ function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll
                 var ddOption = $("<option></option>")
                     .attr("value",value)
                     .text(key);
-                if (selectedOption == value) ddOption.attr("selected", "selected")
+                if (selectedOption == value) ddOption.attr("selected", "selected");
                 dropdown
                     .append(ddOption);
             });
@@ -85,6 +85,8 @@ function divDDOnChange(dropDownObj, hrPeopleDDID) {
             return null;
             break;
     }
+    loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+    loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
 }
 
 /* function to load HR People drop down options */
