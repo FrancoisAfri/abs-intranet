@@ -11,7 +11,7 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <form class="form-horizontal" method="POST" action="/hr/firstlevel">
+                <form class="form-horizontal" method="POST" action="/hr/firstchild">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <!-- /.box-header -->
@@ -34,7 +34,7 @@
                                     <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
                                     <td>
                                         
-                                         <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}}) , 'dactiv';"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button> 
+                                         <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}}, 'dactiv');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button> 
                                      <!--   <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$type->id}}, 'dactiv');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>-->
@@ -70,13 +70,13 @@
     <script>
 		function postData(id, data)
 		{
-             if (data == 'dactiv') location.href = "/hr/firstchild/" + '{{ $parentLevel }}/' + id + '/activate';
+
+             if (data == 'dactiv')location.href = "/hr/firstchild/" + "{{ $parentLevel - 1 }}/" + id + '/activate';
              
 			//location.href = "/hr/firstlevel/dactive/" + id;
              // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
 
-      
-
+  
 		}
         $(function () {
 /*
@@ -139,7 +139,7 @@
 
 
                $('#update_child-modal').on('click', function () {
-                var strUrl = '/hr/firstchild/' +  '{{ $parentLevel }}/' +  '{{$parentLevel - 1}}';
+                var strUrl = '/hr/firstchild/{{ $parentLevel - 1 }}/' +  updatechildID;
                 var modalID = 'edit-child-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -155,6 +155,7 @@
             });
 
                  });
+        
            
 
                
