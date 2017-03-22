@@ -21,7 +21,7 @@
                 <!-- /.box-header -->
 
                 <!-- Form Start -->
-                <form class="form-horizontal" method="POST" action="" enctype="multipart/form-data">
+                <form class="form-horizontal" id="upload_form" method="POST" action="" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -76,11 +76,28 @@
                                     </div>
                                 </div>
                             </div>
+							<div class="form-group file-upload-field {{ $errors->has('upload_type') ? ' has-error' : '' }}">
+                                <label for="upload_type" class="col-sm-2 control-label">Upload Types</label>
+
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                        <select id="upload_type" name="upload_type" class="form-control">
+                                            <option value="">*** Select Upload Type ***</option>
+                                                <option value="1">General</option>
+                                                <option value="2">Clock In</option>
+                                                <option value="3">Query Report </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <button type="button" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Load KPIs</button>
+                        <button type="submit" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Load KPIs</button>
                     </div>
                 </form>
             </div>
@@ -152,10 +169,12 @@
             if (appraisalType == 1) { //File upload
                 $('.file-upload-field').show();
                 $('.manual-field').hide();
+				$('#upload_form').attr('action', '/appraisal/upload');
             }
             else if (appraisalType == 2) { //Manual
                 $('.manual-field').show();
                 $('.file-upload-field').hide();
+				$('#upload_form').attr('action', '/appraisal/manual');
             }
             return appraisalType;
         }
