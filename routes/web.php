@@ -180,6 +180,10 @@ Route::get('appraisal/perks/{perk}/activate', 'AppraisalPerksController@activate
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
+
+Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
+Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
+
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
