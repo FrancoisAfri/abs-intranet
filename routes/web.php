@@ -62,13 +62,17 @@ Route::get('leave/types', 'LeaveSetupController@setuptypes');
 Route::get('/leave/setup', 'LeaveSetupController@showSetup');
 Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
-Route::get('leave/setup/leave_credit', 'LeaveSetupController@store');
+Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
 
 #leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
 // Route::get('leave/Allocate_leave', 'LeaveSetupController@leavecredit');
 Route::post('leave/Allocate_leave', 'LeaveSetupController@leavecredit');
 Route::post('leave/resert', 'LeaveSetupController@resert');
+
+#leave Application
+Route::get('leave/application', 'LeaveSetupController@apply');
+// <form class="form-horizontal" method="POST" action="/leave/application" nctype="multipart/form-data">
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');

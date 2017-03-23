@@ -18,9 +18,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="resert" action="/leave/resert" method="POST" ></form>
-                <form class="form-horizontal" id="allocate" action="/leave/Allocate_leave" method="POST" >
-
+                <form class="form-horizontal" method="POST" action="/leave/Allocate_leave" nctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -37,7 +35,7 @@
                             </div>
                         @endif
 -->
-                            <div  class="form-group{{ $errors->has('registration_type') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('registration_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
 
                                 <div class="col-sm-9">
@@ -65,11 +63,9 @@
                                 </div>
                             </div>                 
                                 <div class="form-group ">
-
                                     @foreach($division_levels as $division_level)
                                         <div class="form-group">
                                             <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
@@ -84,7 +80,7 @@
                                     {{--@endif--}}
                                 </div>
                         
-    <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                                     <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -109,25 +105,23 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar-plus-o"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="leave_balance" name="leave_balance" value="{{ old('leave_balance') }}" placeholder="Enter number of days" required>
+
+                                    <input type="text" class="form-control" id="adjust_days" name="adjust_days" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>
                                 </div>
                             </div>
                         </div>
-
-    
-                        <div form ="resert"  class="form-group resert-field">
-                            <label for="days" class="col-sm-2 control-label">Resert Number of Days</label>
-                            <div class="col-sm-5">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar-plus-o"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="resert_days" name="resert_days" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>
-                                </div>
-                            </div>
-                        </div>
-
-
+                        
+                        {{--<div class="form-group resert-field">--}}
+                            {{--<label for="days" class="col-sm-2 control-label">Resert Number of Days</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                                {{--<div class="input-group">--}}
+                                    {{--<div class="input-group-addon">--}}
+                                        {{--<i class="fa fa-calendar-plus-o"></i>--}}
+                                    {{--</div>--}}
+                                    {{--<input type="text" class="form-control" id="resert_days" name="resert_days" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         
                          {{--<div class="form-group allocaion-field">--}}
                             {{--<label for="days" class="col-sm-2 control-label">Allocate Number of Days</label>--}}
@@ -140,7 +134,7 @@
                                 {{--</div>--}}
                             {{--</div>--}}
                         {{--</div>--}}
-
+                      
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -149,8 +143,6 @@
                     </div>
                     <!-- /.box-footer -->
                 </form>
-
-
             </div>
             <!-- /.box -->
         </div>
@@ -230,22 +222,22 @@
                 hideSemesterRow();
             });
 
-            {{--//Add more modules--}}
-            {{--var max_fields      = 10; //maximum input boxes allowed--}}
-            {{--var wrapper         = $(".input-fields-wrap"); //Fields wrapper--}}
-            {{--var add_button      = $("#add_module"); //Add button ID--}}
-            {{--var x = 1; //initial text box count--}}
-            {{--$(add_button).click(function(e){ //on add input button click--}}
-                {{--e.preventDefault();--}}
-                {{--if(x < max_fields){ //max input box allowed--}}
-                    {{--x++; //text box increment--}}
-                    {{--$(wrapper).append('<div class="row educator-field"><div class="col-xs-6"><div class="form-group{{ $errors->has('module_name[]') ? ' has-error' : '' }}"><label for="module_name" class="col-sm-4 control-label">Module</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon"><i class="fa fa-book"></i></div><input type="text" class="form-control" id="module_name" name="module_name[]" placeholder="Module" value="{{ old('module_name[]') }}"></div></div></div></div><div class="col-xs-6"><div class="form-group{{ $errors->has('module_fee[]') ? ' has-error' : '' }}"><label for="module_fee" class="col-sm-3 control-label">Module Fee</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon">R</div><input type="number" class="form-control" id="module_fee" name="module_fee[]" placeholder="Module Fee" value="{{ old('module_fee[]') }}"></div></div><div class="col-sm-1"><a href="#" class="remove_field"><i class="fa fa-times"></i></a></div></div></div></div>'); //add input box--}}
-                {{--}--}}
-            {{--});--}}
+            //Add more modules
+            var max_fields      = 10; //maximum input boxes allowed
+            var wrapper         = $(".input-fields-wrap"); //Fields wrapper
+            var add_button      = $("#add_module"); //Add button ID
+            var x = 1; //initial text box count
+            $(add_button).click(function(e){ //on add input button click
+                e.preventDefault();
+                if(x < max_fields){ //max input box allowed
+                    x++; //text box increment
+                    $(wrapper).append('<div class="row educator-field"><div class="col-xs-6"><div class="form-group{{ $errors->has('module_name[]') ? ' has-error' : '' }}"><label for="module_name" class="col-sm-4 control-label">Module</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon"><i class="fa fa-book"></i></div><input type="text" class="form-control" id="module_name" name="module_name[]" placeholder="Module" value="{{ old('module_name[]') }}"></div></div></div></div><div class="col-xs-6"><div class="form-group{{ $errors->has('module_fee[]') ? ' has-error' : '' }}"><label for="module_fee" class="col-sm-3 control-label">Module Fee</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon">R</div><input type="number" class="form-control" id="module_fee" name="module_fee[]" placeholder="Module Fee" value="{{ old('module_fee[]') }}"></div></div><div class="col-sm-1"><a href="#" class="remove_field"><i class="fa fa-times"></i></a></div></div></div></div>'); //add input box
+                }
+            });
 
-            {{--$(wrapper).on("click",".remove_field", function(e){ //user click on remove text--}}
-                {{--e.preventDefault(); $(this).parent('div').parent('div').parent('div').parent('div').remove(); x--;--}}
-            {{--});--}}
+            $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+                e.preventDefault(); $(this).parent('div').parent('div').parent('div').parent('div').remove(); x--;
+            });
 
             //call hide/show fields functions
             hideFields();

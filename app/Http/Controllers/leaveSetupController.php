@@ -72,6 +72,31 @@ class LeaveSetupController extends Controller
         return view('leave.leave_types')->with($data);
     }
     
+    public function apply()
+    {
+        
+        $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
+		if (!empty($leave_customs))
+            $leave_customs = $leave_customs->load('userCustom');
+        
+         //return $leave_customs;
+        $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
+        $employees = HRPerson::where('status', 1)->get();
+        $data['page_title'] = "leave Types";
+        $data['page_description'] = "Leave Application";
+        $data['breadcrumb'] = [
+            ['title' => 'Security', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => '', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Leave Types';
+        $data['leaveTypes'] = $leaveTypes;
+        $data['employees'] = $employees;
+        $data['leave_customs']=$leave_customs;
+
+        AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
+        return view('leave.application')->with($data);  
+    }
     
     //#leave allocation
     public  function show()
@@ -112,24 +137,45 @@ class LeaveSetupController extends Controller
        return view('leave.leave_allocation')->with($data); 
     }
 
-    public function leavecredit(Request $request,leave_credit $leaveCreadit) {
+    public function leavecredit(Request $request,leave_credit $leaveCreadit, LeaveType $lev, DivisionLevel $divlev, HRPerson $people ) {
                 //validation
-             $validator = Validator::make($request->all(), [
-            'registration_type' => 'required',
-            'programme_id' => 'required',
-            'learner_id' => 'required_if:registration_type,1',
-            'educator_id' => 'required_if:registration_type,2',
-            'gen_public_id' => 'required_if:registration_type,3',
-            'registration_year' => 'required',
-            'registration_semester' => 'required_if:course_type,2',
-            'gen_pub_reg_fee' => 'bail|required_if:registration_type,3|numeric|min:0.1',
-            'subject_id.*' => 'required_if:registration_type,1',
-            'module_name.*' => 'required_if:registration_type,2',
-            'module_fee.*' => 'bail|required_if:registration_type,2|numeric|min:0.1',
-            'area_id.*' => 'required_if:registration_type,3',
+             $this->validate($request, [
+            'allocation_type' => 'required',
+            'leave_type'=> 'required',
+            'division_level_2'=>'required',
+            'division_level_1'=> 'required',
+            'adjust_days' => 'required',
+            'hr_person_id' => 'required'     
+            
         ]);
-        $leave= $request->all();
-        unset($leave['_token']);
+           
+        $leavData= $request->all();
+        unset($leavData['_token']);
+       // return $leavData;
+//        $lev->number_of_days = $request->input('number_of_days');
+//        
+//         $alloType = $request->input('allocation_type');
+         $lev->leave_types_id = $request->input('leave_type');
+//         $divlev -> division_level_2 = $request->input('division_level_2');
+//         $divlev->division_level_1 = request->input('division_level_1');
+//         $leaveCreadit->leave_balance = request->input('adjust_days');
+//         $people-> hr_person_id  = request->input('hr_person_id');
+
+        
+        
+//         $employees = $leavData['hr_person_id'];
+//            $persons = 0;
+//        foreach($employees as $empID) {
+//        $emp = HRPerson::find((int)$leavData[$empID])->$persons : 0;
+//
+//        $emp->hr_person()->sync([
+//            empID => ['adjust_days' => $leaveCreadit]
+//
+//        ]);
+//        }
+ 
+        
+        
 
         return $leave;
 
@@ -139,10 +185,7 @@ class LeaveSetupController extends Controller
 //$lev->update();
 //        $leave_credit = $request->all();
         //$persons = $leave_credit->leave_balance ;
-//        $lev->name = $request->input('name');
-//        $lev->description = $request->input('description');
-        //$lev->font_awesome = $request->input('font_awesome');
-//        $lev->update();
+
 
 //        AuditReportsController::store('Leave', 'leavetype Informations Edited', "Edited by User: $leave_credit->name", 0);
       // return $leaveCreadit;
@@ -152,15 +195,7 @@ class LeaveSetupController extends Controller
         //$leaveCreadit = (int)($leave['adjust_days'] + ($leaveCreadit->leave_balance));
 //        $leaveCreadit->leave_balance = $request->input('leave_balance');
 
- $employees = $leave['hr_person_id'];
-        foreach($employees as $empID) {
-        $emp = HRPerson::find((int)$leave['empID']);
 
-        $emp->hr_person()->sync([
-            empID => ['adjust_days' => $leaveCreadit]
-
-        ]);
-        }
 
 //        DB::table('leave_credit')
 //            ->where('hr_id',(int)$leave['hr_person_id'])
@@ -199,7 +234,7 @@ public function  resert(Request $request)
         $employees = HRPerson::where('status', 1)->get();
 
 
-        $adjust_days =
+//        $adjust_days =
 
         $data['page_title'] = "leave type";
         $data['page_description'] = "leave set up ";
