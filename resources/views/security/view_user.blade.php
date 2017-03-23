@@ -45,7 +45,7 @@
                         @endif
                         </div>
                         <div class="form-group">
-                            <label for="first_name" class="col-sm-2 control-label">First Name</label>
+                            <label for="first_name" class="col-sm-2 control-label">First Name </label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">

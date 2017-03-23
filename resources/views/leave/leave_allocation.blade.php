@@ -3,7 +3,7 @@
 <!-- bootstrap datepicker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- iCheck -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
 @section('content')
     <div class="row">
@@ -18,7 +18,9 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="/leave/Allocate_leave_types">
+                <form class="form-horizontal" id="resert" action="/leave/resert" method="POST" ></form>
+                <form class="form-horizontal" id="allocate" action="/leave/Allocate_leave" method="POST" >
+
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -35,54 +37,61 @@
                             </div>
                         @endif
 -->
-                            <div class="form-group{{ $errors->has('registration_type') ? ' has-error' : '' }}">
+                            <div  class="form-group{{ $errors->has('registration_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
 
                                 <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_adjust" name="registration_type" value="1" checked> Adjust Leave</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_resert" name="registration_type" value="2"> Resert Leave</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_gen_allocate" name="registration_type" value="3"> Allocate Leave</label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_adjust" name="allocation_type" value="1" checked> Adjust Leave</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_resert" name="allocation_type" value="2"> Resert Leave</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_allocate" name="allocation_type" value="3"> Allocate Leave</label>
                                 </div>
                             </div>
-                        
-                        <div class="form-group">
-                                <label for="position" class="col-sm-2 control-label">Leave Types</label>
 
+<!--                        <div class="form-group ">-->
+                           <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-black-tie"></i>
                                         </div>
-                                        <select name="position" class="form-control">
+                                        <select name="leave_type" class="form-control">
                                             <option value="">*** Select leave Type ***</option> 
-                                            
                                                 @foreach($leaveTypes as $leaveType)
                                                     <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
                                                 @endforeach
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                        
-<!--
-                         <div class="form-group learner-field educator-field{{ $errors->has('course_type') ? ' has-error' : '' }}">
-                                <label for="course_type" class="col-sm-2 control-label">leave Type</label>
+                            </div>                 
+                                <div class="form-group ">
 
-                                <div class="col-sm-10">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_year_course" name="course_type" value="1" checked> Maternity Leave</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_sem_course" name="course_type" value="2"> Family Leave</label>
+                                    @foreach($division_levels as $division_level)
+                                        <div class="form-group">
+                                            <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-black-tie"></i>
+                                                    </div>
+                                                    <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                    {{--@endif--}}
                                 </div>
-                            </div>
--->
                         
-                        <div class="form-group{{ $errors->has('programme_id') ? ' has-error' : '' }}">
-                            <label for="programme_id" class="col-sm-2 control-label">Employees</label>
+    <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                            <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="programme_id" name="programme_id">
+                                    <select class="form-control select2" multiple="multiple"style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -91,68 +100,57 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="form-group{{ $errors->has('project_id') ? ' has-error' : '' }}">
-                                <label for="project_id" class="col-sm-2 control-label">Division</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        
-                                        
-                                        
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select class="form-control select2" style="width: 100%;" id="project_id" name="project_id">
-                                            <option value="">*** Select a Divion First ***</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group learner-field{{ $errors->has('learner_id') ? ' has-error' : '' }}">
-                                <label for="learner_id" class="col-sm-2 control-label">Department</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select class="form-control select2" style="width: 100%;" id="learner_id" name="learner_id">
-                                            <option value="">*** Select a Department ***</option>
 
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                         
-                         <div class="form-group">
-                            <label for="surname" class="col-sm-2 control-label">Enter Number of Days</label>
-                            <div class="col-sm-10">
+                         <div class="form-group adjust-field">
+                            <label for="days" class="col-sm-2 control-label">Adjust Number of Days</label>
+                            <div class="col-sm-5">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar-plus-o"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ old('surname') }}" placeholder="Enter number of days" required>
+                                    <input type="text" class="form-control" id="leave_balance" name="leave_balance" value="{{ old('leave_balance') }}" placeholder="Enter number of days" required>
                                 </div>
                             </div>
                         </div>
-                            
-<!--
-                            <div class="form-group learner-field{{ $errors->has('subject_id') ? ' has-error' : '' }}">
-                                <label for="subject_id[]" class="col-sm-2 control-label">Enter Number of Days</label>
-                                <div class="col-sm-3">
-                                    <select class="form-control select2" multiple="multiple" data-placeholder="Select a Subject" style="width: 100%;" id="subject_id" name="subject_id[]">
 
-                                    </select>
+    
+                        <div form ="resert"  class="form-group resert-field">
+                            <label for="days" class="col-sm-2 control-label">Resert Number of Days</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar-plus-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="resert_days" name="resert_days" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>
                                 </div>
                             </div>
--->
-                      
+                        </div>
+
+
+                        
+                         {{--<div class="form-group allocaion-field">--}}
+                            {{--<label for="days" class="col-sm-2 control-label">Allocate Number of Days</label>--}}
+                            {{--<div class="col-sm-5">--}}
+                                {{--<div class="input-group">--}}
+                                    {{--<div class="input-group-addon">--}}
+                                        {{--<i class="fa fa-calendar-plus-o"></i>--}}
+                                    {{--</div>--}}
+                                    {{--<input type="text" class="form-control" id="updated_at" name="updated_at" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-database"></i> Register</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-database"></i> Submit</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
+
+
             </div>
             <!-- /.box -->
         </div>
@@ -167,10 +165,39 @@
     @section('page_script')
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- bootstrap datepicker -->
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+    <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+    <!-- Start Bootstrap File input -->
+    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+    <!-- optionally if you need translation for your language then include locale file as mentioned below
+    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
+    <!-- End Bootstrap File input -->
 
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
+
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
@@ -181,44 +208,44 @@
             });
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
-                checkboxClass: 'icheckbox_square-green',
-                radioClass: 'iradio_square-green',
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
             //Date picker
-            $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
+//            $('.datepicker').datepicker({
+//                format: 'dd/mm/yyyy',
+//                autoclose: true,
+//                todayHighlight: true
+//            });
             //show/hide fields on radio button toggles (depending on registration type)
-            $('#rdo_learner, #rdo_educator, #rdo_gen_pub').on('ifChecked', function(){
-                var regType = hideFields();
-                if (regType == 1) $('#box-subtitle').html('Enrol a learner and his/her subjects');
-                else if (regType == 2) $('#box-subtitle').html('Enrol an educator and his/her modules');
-                else if (regType == 3) $('#box-subtitle').html('Enrol a member of the general public');
+            $('#rdo_adjust, #rdo_resert, #rdo_allocate').on('ifChecked', function(){
+                var allType = hideFields();
+                if (allType == 1) $('#box-subtitle').html('Adjust leave allocation');
+                else if (allType == 2) $('#box-subtitle').html('Resert leave allocation');
+                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
             //show/hide semester row
             $('#rdo_year_course, #rdo_sem_course').on('ifChecked', function(){
                 hideSemesterRow();
             });
 
-            //Add more modules
-            var max_fields      = 10; //maximum input boxes allowed
-            var wrapper         = $(".input-fields-wrap"); //Fields wrapper
-            var add_button      = $("#add_module"); //Add button ID
-            var x = 1; //initial text box count
-            $(add_button).click(function(e){ //on add input button click
-                e.preventDefault();
-                if(x < max_fields){ //max input box allowed
-                    x++; //text box increment
-                    $(wrapper).append('<div class="row educator-field"><div class="col-xs-6"><div class="form-group{{ $errors->has('module_name[]') ? ' has-error' : '' }}"><label for="module_name" class="col-sm-4 control-label">Module</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon"><i class="fa fa-book"></i></div><input type="text" class="form-control" id="module_name" name="module_name[]" placeholder="Module" value="{{ old('module_name[]') }}"></div></div></div></div><div class="col-xs-6"><div class="form-group{{ $errors->has('module_fee[]') ? ' has-error' : '' }}"><label for="module_fee" class="col-sm-3 control-label">Module Fee</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon">R</div><input type="number" class="form-control" id="module_fee" name="module_fee[]" placeholder="Module Fee" value="{{ old('module_fee[]') }}"></div></div><div class="col-sm-1"><a href="#" class="remove_field"><i class="fa fa-times"></i></a></div></div></div></div>'); //add input box
-                }
-            });
+            {{--//Add more modules--}}
+            {{--var max_fields      = 10; //maximum input boxes allowed--}}
+            {{--var wrapper         = $(".input-fields-wrap"); //Fields wrapper--}}
+            {{--var add_button      = $("#add_module"); //Add button ID--}}
+            {{--var x = 1; //initial text box count--}}
+            {{--$(add_button).click(function(e){ //on add input button click--}}
+                {{--e.preventDefault();--}}
+                {{--if(x < max_fields){ //max input box allowed--}}
+                    {{--x++; //text box increment--}}
+                    {{--$(wrapper).append('<div class="row educator-field"><div class="col-xs-6"><div class="form-group{{ $errors->has('module_name[]') ? ' has-error' : '' }}"><label for="module_name" class="col-sm-4 control-label">Module</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon"><i class="fa fa-book"></i></div><input type="text" class="form-control" id="module_name" name="module_name[]" placeholder="Module" value="{{ old('module_name[]') }}"></div></div></div></div><div class="col-xs-6"><div class="form-group{{ $errors->has('module_fee[]') ? ' has-error' : '' }}"><label for="module_fee" class="col-sm-3 control-label">Module Fee</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon">R</div><input type="number" class="form-control" id="module_fee" name="module_fee[]" placeholder="Module Fee" value="{{ old('module_fee[]') }}"></div></div><div class="col-sm-1"><a href="#" class="remove_field"><i class="fa fa-times"></i></a></div></div></div></div>'); //add input box--}}
+                {{--}--}}
+            {{--});--}}
 
-            $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-                e.preventDefault(); $(this).parent('div').parent('div').parent('div').parent('div').remove(); x--;
-            });
+            {{--$(wrapper).on("click",".remove_field", function(e){ //user click on remove text--}}
+                {{--e.preventDefault(); $(this).parent('div').parent('div').parent('div').parent('div').remove(); x--;--}}
+            {{--});--}}
 
             //call hide/show fields functions
             hideFields();
@@ -251,28 +278,29 @@
             //Show success action modal
             $('#success-action-modal').modal('show');
         });
-        //function to hide/show fields depending on the registration type
+        //function to hide/show fields depending on the allocation  type
         function hideFields() {
-            var regType = $("input[name='registration_type']:checked").val();
-            if (regType == 1) { //Learner
-                $('select#educator_id, select#gen_public_id').val('');
-                $('.educator-field, .gen-pub-field').hide();
-                $('.learner-field').show();
+            var allType = $("input[name='allocation_type']:checked").val();
+            
+            if (allType == 1) { //adjsut leave
+                $().val('');
+                $('.resert-field, .allocaion-field').hide();
+                $('.adjust-field').show();
             }
-            else if (regType == 2) { //Educator
-                $('select#learner_id, select#gen_public_id').val('');
-                $('.learner-field, .gen-pub-field').hide();
-                $('.educator-field').show();
+            else if (allType == 2) { //resert leave
+//                $('select#learner_id, select#gen_public_id').val('');
+                $('.adjust-field, .allocate-field').hide();
+                $('.resert-field').show();
             }
-            else if (regType == 3) { //General Public
-                $('select#learner_id, select#educator_id, select#registration_semester').val('');
+            else if (allType == 3) { //allocate leave
+//                $('select#learner_id, select#educator_id, select#registration_semester').val('');
                 //$("input[name='course_type']:checked").val(1);
-                $("#rdo_year_course").iCheck('check');
-                $('.learner-field, .educator-field').hide();
-                $('.gen-pub-field').show();
+//                $("#rdo_year_course").iCheck('check');
+                $('.resert-field, .adjust-field').hide();
+                $('.allocaion-field').show();
             }
-            return regType;
-            hideSemesterRow();
+            return allType;
+            //hideSemesterRow();
         }
         //function to hide/show semester
         function hideSemesterRow() {
@@ -286,7 +314,23 @@
             }
             //return courseType;
         }
-        //function to populate the projects drop down
+
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+            //Populate drop down on page load
+            var ddID = '{{ 'division_level_' . $division_level->level }}';
+            var postTo = '{!! route('divisionsdropdown') !!}';
+            var selectedOption = '';
+            var divLevel = parseInt('{{ $division_level->level }}');
+            var incInactive = -1;
+            var loadAll = loadAllDivs;
+            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+            parentDDID = ddID;
+            loadAllDivs = -1;
+        @endforeach
+//        });
        
         //function to populate the year drop down
         

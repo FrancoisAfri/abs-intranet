@@ -289,6 +289,7 @@ class UsersController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->where('name', 1)->orderBy('name', 'asc')->get();
+        
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update your details";
         $data['back'] = "/";

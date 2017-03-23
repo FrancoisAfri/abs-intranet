@@ -10,7 +10,7 @@ class leave_credit extends Model
     protected $fillable = ['hr_id','leave_balance','leave_type_id'];
 
     // #types of leave profiles belonging to leave types
-     public function leavecredit() {
-        return $this->hasMany(HRPerson::class, 'hr_id');
-    }
+//     public function hr_person() {
+//        return $this->belongTo(HRPerson::class, 'hr_id');
+//    }
 }

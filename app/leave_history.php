@@ -14,5 +14,15 @@ class leave_history extends Model
      public function leavehistory() {
         return $this->hasMany(HRPerson::class, 'hr_id');
     }
+    public $description_action = [
+        1 => 'Leave Adjusted By Admin',
+        2 => 'Leave Adjusted By System ',
+        3 => 'Adjusted By Manager',
 
+    ];
+
+     public function geDescriptionActionStrValAttribute($intVal){
+         return $this->description_action[$intVal];
+     }
+     //->description_action_str_val
 }
