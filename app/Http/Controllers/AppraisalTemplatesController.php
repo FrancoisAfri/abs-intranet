@@ -62,6 +62,7 @@ class AppraisalTemplatesController extends Controller
 		
 		$template->status = $stastus;	
 		$template->update();
+		AuditReportsController::store('Performance Appraisal', "Template Status Changed: $stastus", "Edited by User", 0);
 		return back();
     }
 	
@@ -147,6 +148,7 @@ class AppraisalTemplatesController extends Controller
 		
 		$kpi->status = $stastus;	
 		$kpi->update();
+		AuditReportsController::store('Performance Appraisal', "KPI Status Changed: $stastus", "Edited by User", 0);
 		return back();
     }
 	
@@ -159,6 +161,7 @@ class AppraisalTemplatesController extends Controller
             'category_id' => 'bail|required|integer|min:0',       
             'template_id' => 'bail|required|integer|min:0',       
             'kpi_type' => 'bail|required|integer|min:0',       
+            'is_upload' => 'bail|required|integer|min:0',       
         ]);
 		$kpiData = $request->all();
 		unset($kpiData['_token']);
@@ -171,6 +174,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->category_id = $kpiData['category_id'];
 		$kpi->kpa_id = $kpiData['kpa_id'];
 		$kpi->kpi_type = $kpiData['kpi_type'];
+		$kpi->is_upload = $kpiData['is_upload'];
 		$kpi->template_id = $kpiData['template_id'];
 		$newkpi = $kpiData['indicator'];
         $kpi->save();
@@ -184,9 +188,9 @@ class AppraisalTemplatesController extends Controller
             'indicator' => 'required',       
             'kpa_id' => 'bail|required|integer|min:0',       
             'category_id' => 'bail|required|integer|min:0',       
-            'kpi_type' => 'bail|required|integer|min:0',       
+            'kpi_type' => 'bail|required|integer|min:0',        
+            'is_upload' => 'bail|required|integer|min:0',        
         ]);
-
 		$kpi->measurement = $request->input('measurement');
 		$kpi->weight = $request->input('weight');
 		$kpi->source_of_evidence = $request->input('source_of_evidence');
@@ -194,6 +198,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->category_id = $request->input('category_id');
 		$kpi->kpa_id = $request->input('kpa_id');
 		$kpi->kpi_type = $request->input('kpi_type');
+		$kpi->is_upload = $request->input('is_upload');
 		
         $kpi->update();
 		$newtemplate = $request->input('indicator');

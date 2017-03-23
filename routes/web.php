@@ -152,18 +152,31 @@ Route::post('appraisal/kpi', 'AppraisalTemplatesController@kpiSave');
 Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi');
 Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
 
+#Kpi Types
+Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
+Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
+Route::patch('appraisal/range_edit/{range}', 'AppraisalKpiTypeController@kpiEditRange');
+Route::get('/appraisal/range_active/{range}', 'AppraisalKpiTypeController@rangeAct');
+
+Route::get('/appraisal/kpi_number/{kpi}', 'AppraisalKpiTypeController@kpiNumber');
+Route::post('appraisal/number', 'AppraisalKpiTypeController@kpiAddNumber');
+Route::patch('appraisal/number_edit/{number}', 'AppraisalKpiTypeController@kpiEditNumber');
+Route::get('/appraisal/number_active/{number}', 'AppraisalKpiTypeController@numberAct');
+
+Route::get('appraisal/kpi_from_to/{kpi}', 'AppraisalKpiTypeController@kpiIntegerRange');
+Route::post('appraisal/kpi_from_to/{kpi}/add_int_score', 'AppraisalKpiTypeController@kpiAddIntegerScoreRange');
+Route::patch('appraisal/kpi_from_to/{score}', 'AppraisalKpiTypeController@kpiEditIntegerScoreRange');
+Route::get('appraisal/kpi_from_to/{score}/activate', 'AppraisalKpiTypeController@actIntegerScoreRange');
+
 Route::get('appraisal/categories', 'AppraisalsCategoriesController@viewCategories');
 Route::post('appraisal/category', 'AppraisalsCategoriesController@categorySave');
 Route::patch('appraisal/cat_edit/{category}', 'AppraisalsCategoriesController@editCategory');
 Route::get('/appraisal/cat_active/{category}', 'AppraisalsCategoriesController@categoryAct');
 Route::get('appraisal/kpa/{category}', 'AppraisalsCategoriesController@viewKpas');
-//<<<<<<< HEAD
-// <<<<<<< HEAD
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
-// =======
-//Route::get('appraisal/perks', 'AppraisalPerksController@index');
+Route::get('appraisal/perks', 'AppraisalPerksController@index');
 Route::post('appraisal/perks/new', 'AppraisalPerksController@store');
 Route::patch('appraisal/perks/{perk}', 'AppraisalPerksController@update');
 Route::get('appraisal/perks/{perk}/activate', 'AppraisalPerksController@activate');
@@ -171,7 +184,9 @@ Route::get('appraisal/perks/{perk}/activate', 'AppraisalPerksController@activate
 Route::post('appraisal/add_kpa/{category}', 'AppraisalsCategoriesController@kpasSave');
 Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
-//>>>>>>> 6a1428df7647ca8837e6204304823cd0bd640106
+
+Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
+Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
 
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
@@ -179,10 +194,11 @@ Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@
 Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupController@updateLevel');
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
+Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupController@viewchildLevel');
+Route::patch('/hr/firstchild/{parentLevel}/{childID}', 'EmployeeCompanySetupController@updateChild');
+Route::post('/hr/firstchild/add/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
+Route::get('/hr/firstchild/{parentLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateChild');
 
-
-//<<<<<<< HEAD
-// >>>>>>> level_module modal save button functioning
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration

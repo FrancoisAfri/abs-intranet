@@ -173,6 +173,78 @@ class DatabaseSeeder extends Seeder
             'value' => 'Indian',
             'status' => 1,
         ]);
+		//insert public Holidays
+        DB::table('public_holidays')->insert([
+            'day' => 1482789600,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Public Holiday',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1293228000,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Christmas Day',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1285279200,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Heritage Day',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1293314400,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Day of Goodwill',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1269122400,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Human Rights Day',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1272319200,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Freedom Day',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1272664800,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Workers Day',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1276639200,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Youth Day',
+        ]);DB::table('public_holidays')->insert([
+            'day' => 1281304800,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => "National Women's Day",
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1292450400,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => 'Day of Reconciliation',
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1262296800,
+            'country_id' => 197,
+            'year' => 0,
+            'name' => "New Year's Day",
+        ]);
+		DB::table('public_holidays')->insert([
+            'day' => 1399413600,
+            'country_id' => 197,
+            'year' => 2014,
+            'name' => 'Voting Day',
+        ]);
 
         //insert the employees group levels (division departments)
         $groupLevel = new DivisionLevel();
@@ -385,9 +457,9 @@ class DatabaseSeeder extends Seeder
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Upload Appraisal';
-        $ribbon->description = 'Upload Appraisal';
-        $ribbon->ribbon_path = 'appraisal/upload_appraisal';
+        $ribbon->ribbon_name = 'Appraisals';
+        $ribbon->description = 'Appraisals';
+        $ribbon->ribbon_path = 'appraisal/load_appraisals';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
@@ -417,79 +489,75 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-
-	
-
-
         $leave_config = new leave_configuration();
         $leave_config->save();
         
-//#leave_types
-        $type = new LeaveType ();
+        //#leave_types
+        $type = new LeaveType();
         $type->name = 'Annual';
         $type->status =1;
         $type->description = 'Annual Leave Type' ;
         $type->save();
 
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Family';
         $type->status =1;
         $type->description = 'Family Leave Type' ;
         $type->save();
 
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Maternity';
         $type->status =1;
         $type->description = 'Maternity Leave Type' ;
         $type->save();
 
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Other/Special';
         $type->status ='1';
         $type->description = 'Other/Special Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Sick';
         $type->status =1;
         $type->description = 'Sick Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Study';
         $type->status =1;
         $type->description = 'Study Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Unpaid';
         $type->status =1;
         $type->description = 'Unpaid Leave Type' ;
         $type->save();
         
-        $type = new LeaveType ();
+        $type = new LeaveType();
         $type->name = 'Worked in';
         $type->status =1;
         $type->description = 'Worked in Leave Type' ;
         $type->save();
 
-//#insert leave profilse
-        $profile = new leave_profile ();
+        //#insert leave profilse
+        $profile = new leave_profile();
         $profile->name = 'Employee with no leave';
         $profile->description = 'Employee with no leave' ;
         $profile->save();
 
-        $profile = new leave_profile ();
+        $profile = new leave_profile();
         $profile->name = '5 Day Employee';
         $profile->description = '5 Day Employee leave' ;
         $profile->save();
 
-        $profile = new leave_profile ();
+        $profile = new leave_profile();
         $profile->name = '6 Day Employee';
         $profile->description = '6 Day Employee leave' ;
         $profile->save();
 
-        $profile = new leave_profile ();
+        $profile = new leave_profile();
         $profile->name = 'Shift Worker';
         $profile->description = 'Shift Worker Employee leave' ;
         $profile->save();
