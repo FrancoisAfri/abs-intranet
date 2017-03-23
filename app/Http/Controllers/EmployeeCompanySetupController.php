@@ -259,7 +259,7 @@ class EmployeeCompanySetupController extends Controller
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
         }
 
-          public function updateChild(Request $request, $childLevel, $childID) {
+          public function updateChild(Request $request, $parentLevel, $childID) {
 
          $this->validate($request, [
             'manager_id' => 'required',
@@ -269,30 +269,26 @@ class EmployeeCompanySetupController extends Controller
         $childData=$request->all();
         
 
-        if ($childLevel == 5){
+        if ($parentLevel == 5){
              $childDiv =  DivisionLevelFive::find($childID);
-               $childDiv->update($request->all());
+             $childDiv->update($request->all());
         }   
-        elseif ($childLevel == 4){
+        elseif ($parentLevel == 4){
             $childDiv =  DivisionLevelFour::find($childID);
-              $childDiv->update($request->all());
+            $childDiv->update($request->all());
         }
-        elseif ($childLevel == 3) {
+        elseif ($parentLevel == 3) {
             $childDiv =  DivisionLevelThree::find($childID);
-              $childDiv->update($request->all());
+            $childDiv->update($request->all());
         }
-        elseif ($childLevel == 2) {
+        elseif ($parentLevel == 2) {
             $childDiv =  DivisionLevelTwo::find($childID);
-              $childDiv->update($request->all());
+            $childDiv->update($request->all());
         }
-        elseif ($childLevel == 1) {
+        elseif ($parentLevel == 1) {
             $childDiv =  DivisionLevelOne::find($childID);
-              $childDiv->update($request->all());
+            $childDiv->update($request->all());
         }
-     
-        $childDiv->manager_id = $request->input('manager_id');
-        $childDiv->name = $request->input('name');
-       
      
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
         return response()->json();
@@ -319,6 +315,7 @@ class EmployeeCompanySetupController extends Controller
             elseif ($parentLevel == 1) {
                 $childDiv =  DivisionLevelOne::find($childID);   
             }
+
             if ($childDiv->active == 1) $stastus = 0;
             else $stastus = 1;
             $childDiv->active=$stastus;
