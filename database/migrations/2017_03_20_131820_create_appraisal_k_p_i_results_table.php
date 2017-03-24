@@ -32,6 +32,6 @@ class CreateAppraisalKPIResultsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('appraisal_k_p_i_resluts');
+        Schema::dropIfExists('appraisal_k_p_i_results');
     }
 }

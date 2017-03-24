@@ -23,7 +23,7 @@ class CreateHrPeopleTable extends Migration
             $table->string('maiden_name')->nullable();
             $table->string('aka')->nullable();
             $table->string('initial')->nullable();
-            $table->integer('position')->nullable();
+            $table->integer('position')->unsigned()->index()->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('cell_number')->nullable();
             $table->string('phone_number')->nullable();

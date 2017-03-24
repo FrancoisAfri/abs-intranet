@@ -40,8 +40,8 @@
                             <label for="appraisal_type" class="col-sm-2 control-label">Appraisal Type</label>
 
                             <div class="col-sm-10">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_upload" name="appraisal_type" value="1" checked> File Upload</label>
-                                <label class="radio-inline"><input type="radio" id="rdo_manual" name="appraisal_type" value="2"> Manual</label>
+                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_upload" name="appraisal_type" value="1"{{ old('appraisal_type') != 2 ? ' checked' : '' }}> File Upload</label>
+                                <label class="radio-inline"><input type="radio" id="rdo_manual" name="appraisal_type" value="2" {{ old('appraisal_type') == 2 ? ' checked' : '' }}> Manual</label>
                             </div>
                         </div>
                             @foreach($division_levels as $division_level)
@@ -53,7 +53,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-black-tie"></i>
                                             </div>
-                                            <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+                                            <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%;">
                                             </select>
                                         </div>
                                     </div>
@@ -76,11 +76,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group manual-field{{ $errors->has('date_uploaded') ? ' has-error' : '' }}">
+                                <label for="hr_person_id" class="col-sm-2 control-label">Appraisal Month</label>
+
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" class="form-control datepicker" name="date_uploaded" placeholder="Click To Select A Month" value="">
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <button type="button" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Load KPIs</button>
+                        <button type="submit" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Load KPIs</button>
                     </div>
                 </form>
             </div>
@@ -117,8 +129,10 @@
             });
             //Date picker
             $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy',
+                format: 'MM yyyy',
                 autoclose: true,
+                startView: "months",
+                minViewMode: "months",
                 todayHighlight: true
             });
 

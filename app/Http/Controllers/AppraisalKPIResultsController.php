@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\DivisionLevel;
 use App\HRPerson;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Storage;
 
 class AppraisalKPIResultsController extends Controller
 {
@@ -17,7 +19,7 @@ class AppraisalKPIResultsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index()
     {
@@ -28,13 +30,47 @@ class AppraisalKPIResultsController extends Controller
         $data['page_title'] = "Employee Appraisals";
         $data['page_description'] = "Load an Employee's Appraisals";
         $data['breadcrumb'] = [
-            ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
         AuditReportsController::store('Performance Appraisal', 'KPI Integer Score Range Details Page Accessed', "Accessed by User", 0);
         return view('appraisals.load_appraisal')->with($data);
+    }
+
+    public function loadEmpAppraisals(Request $request){
+        $this->validate($request, [
+            'appraisal_type' => 'required',
+            'hr_person_id' => 'required',
+        ]);
+        $hrID = $request->input('hr_person_id');
+        $emp = HRPerson::where('id', $hrID)
+            ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($hrID) {
+                $query->where('hr_id', $hrID);
+            }])
+            ->with('jobTitle.kpiTemplate.kpi.kpiskpas')
+            ->with('jobTitle.kpiTemplate.kpi.kpiranges')
+            ->with('jobTitle.kpiTemplate.kpi.kpiNumber')
+            ->with('jobTitle.kpiTemplate.kpi.kpiIntScore')
+            ->get()
+            ->first();
+        //return $emp;
+
+        $data['emp'] = $emp;
+        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        $data['page_title'] = "Employee Appraisals";
+        $data['page_description'] = "Load an Employee's Appraisals";
+        $data['breadcrumb'] = [
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 0],
+            ['title' => 'List', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_rib'] = 'Appraisals';
+        AuditReportsController::store('Performance Appraisal', 'Employee Appraisal List Page Accessed', "Accessed by User", 0);
+        return view('appraisals.view_emp_appraisals')->with($data);
     }
 
     /**
