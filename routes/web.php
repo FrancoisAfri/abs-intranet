@@ -137,6 +137,11 @@ Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
 
 # Performance Appraisals Module
+Route::get('appraisal/setup', 'AppraisalSetupController@show');
+Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
+Route::patch('/appraisal/latecomers/{Latecomers}', 'AppraisalSetupController@updateAppraisal');
+
+# Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
@@ -184,6 +189,10 @@ Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAc
 Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@loadEmpAppraisals');
 
+Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
+Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
+Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
+// run this for excel composer require maatwebsite/excel
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');

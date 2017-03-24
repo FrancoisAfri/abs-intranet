@@ -35,7 +35,15 @@ class appraisalsKpis extends Model
     public function kpiNumber() {
         return $this->hasMany(appraisalsKpiNumber::class, 'kpi_id');
     }
-    //Relationship kpi and integer score range
+    //Relationship kpi and query report
+    public function kpiQueryResults() {
+        return $this->hasMany(AppraisalQuery_report::class, 'kpi_id');
+    }
+	//Relationship kpi and clock in
+    public function kpiIntAttendanceResults() {
+        return $this->hasMany(AppraisalClockinResults::class, 'kpi_id');
+    }
+	//Relationship kpi and integer score range
     public function kpiIntScore() {
         return $this->hasMany(AppraisalKPIIntRange::class, 'kpi_id');
     }

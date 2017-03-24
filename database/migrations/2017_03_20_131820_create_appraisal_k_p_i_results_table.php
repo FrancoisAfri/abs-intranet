@@ -19,7 +19,7 @@ class CreateAppraisalKPIResultsTable extends Migration
             $table->integer('kip_id')->index()->unsigned()->nullable();
             $table->integer('template_id')->index()->unsigned()->nullable();
             $table->double('result')->nullable();
-            $table->integer('date_uploaded')->nullable();
+            $table->bigInteger('date_uploaded')->nullable();
             $table->string('comment')->nullable();
             $table->timestamps();
         });

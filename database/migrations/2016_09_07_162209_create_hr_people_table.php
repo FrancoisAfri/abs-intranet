@@ -19,6 +19,7 @@ class CreateHrPeopleTable extends Migration
             $table->string('title')->nullable();
             $table->string('first_name')->nullable();
             $table->string('surname')->nullable();
+            $table->string('employee_number')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('maiden_name')->nullable();
             $table->string('aka')->nullable();

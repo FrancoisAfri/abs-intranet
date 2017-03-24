@@ -21,7 +21,7 @@
                 <!-- /.box-header -->
 
                 <!-- Form Start -->
-                <form name="load-kpi-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="/appraisal/kpi_upload" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -36,46 +36,6 @@
                                 </ul>
                             </div>
                         @endif
-                        <div class="form-group{{ $errors->has('appraisal_type') ? ' has-error' : '' }}">
-                            <label for="appraisal_type" class="col-sm-2 control-label">Appraisal Type</label>
-
-                            <div class="col-sm-10">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_upload" name="appraisal_type" value="1"{{ old('appraisal_type') != 2 ? ' checked' : '' }}> File Upload</label>
-                                <label class="radio-inline"><input type="radio" id="rdo_manual" name="appraisal_type" value="2" {{ old('appraisal_type') == 2 ? ' checked' : '' }}> Manual</label>
-                            </div>
-                        </div>
-						@foreach($division_levels as $division_level)
-							<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-								<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
-								<div class="col-sm-10">
-									<div class="input-group">
-										<div class="input-group-addon">
-											<i class="fa fa-black-tie"></i>
-										</div>
-										<select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
-										</select>
-									</div>
-								</div>
-							</div>
-						@endforeach
-						<div class="form-group manual-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-							<label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
-
-							<div class="col-sm-10">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<select id="hr_person_id" name="hr_person_id" class="form-control select2" style="width: 100%;">
-										<option value="">*** Select an Employee ***</option>
-										@foreach($employees as $employee)
-											<option value="{{ $employee->id }}">{{ $employee->full_name }}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-						</div>
 						<div class="form-group file-upload-field {{ $errors->has('upload_type') ? ' has-error' : '' }}">
 							<label for="upload_type" class="col-sm-2 control-label">Upload Types</label>
 
@@ -84,16 +44,16 @@
 									<div class="input-group-addon">
 										<i class="fa fa-user"></i>
 									</div>
-									<select id="upload_type" name="upload_type" class="form-control">
+									<select id="upload_type" name="upload_type" class="form-control" disabled>
 										<option value="">*** Select Upload Type ***</option>
-											<option value="1">General</option>
-											<option value="2">Clock In</option>
-											<option value="3">Query Report </option>
+											<option value="1"{{ ($upload_type == 1) ? ' selected="selected"' : '' }}>General</option>
+											<option value="2"{{ ($upload_type == 2) ? ' selected="selected"' : '' }}>Clock In</option>
+											<option value="3"{{ ($upload_type == 3) ? ' selected="selected"' : '' }}>Query Report </option>
 									</select>
 								</div>
 							</div>
 						</div>
-						<div class="form-group file-upload-field{{ $errors->has('kpi_id') ? ' has-error' : '' }}">
+						<div class="form-group manual-field{{ $errors->has('kpi_id') ? ' has-error' : '' }}">
                             <label for="kpi_id" class="col-sm-2 control-label">KPI</label>
 
 							<div class="col-sm-10">
@@ -110,7 +70,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group file-upload-field {{ $errors->has('date_uploaded') ? ' has-error' : '' }}">
+						<div class="form-group {{ $errors->has('date_uploaded') ? ' has-error' : '' }}">
                             <label for="date_uploaded" class="col-sm-2 control-label">Date Uploaded</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -121,14 +81,15 @@
                                 </div>
                             </div>
                         </div>
-						<div class="form-group file-upload-field {{ $errors->has('file_input') ? ' has-error' : '' }}">
+						<div class="form-group {{ $errors->has('file_input') ? ' has-error' : '' }}">
                             <label for="file_input" class="col-sm-2 control-label">File input</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								  <input type="file" class="form-control " id="file_input" name="input_file">
+								  <input type="file" class="form-control " id="file_input" name="{{$uploadName}}">
+								  <input type="hidden" name="type" value="{{$uploadName}}">
 								</div>
                             </div>
                         </div>
@@ -136,7 +97,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <input type="submit" id="load-kpis" name="load-kpis" class="btn btn-primary pull-right" value="Load KPIs">
+                        <button type="submit" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Upload KPIs</button>
                     </div>
                 </form>
             </div>
@@ -180,27 +141,6 @@
 
             //call hide/show fields functions on doc ready
             hideFields();
-
-            //show/hide file upload or manual fields on radio checked
-            $('#rdo_upload, #rdo_manual').on('ifChecked', function(){
-                hideFields();
-            });
-
-            //Load divisions drop down
-            var parentDDID = '';
-            var loadAllDivs = 1;
-            @foreach($division_levels as $division_level)
-                //Populate drop down on page load
-                var ddID = '{{ 'division_level_' . $division_level->level }}';
-                var postTo = '{!! route('divisionsdropdown') !!}';
-                var selectedOption = '';
-                var divLevel = parseInt('{{ $division_level->level }}');
-                var incInactive = -1;
-                var loadAll = loadAllDivs;
-                loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                parentDDID = ddID;
-                loadAllDivs = -1;
-            @endforeach
         });
         //function to hide/show manual or file upload fields
         function hideFields() {
@@ -208,14 +148,12 @@
             if (appraisalType == 1) { //File upload
                 $('.file-upload-field').show();
                 $('.manual-field').hide();
-                $('form[name="load-kpi-form"]').attr('action', '/appraisal/upload_appraisals');
-				$('#load-kpis').val("Upload KPIs");
+              
             }
             else if (appraisalType == 2) { //Manual
                 $('.manual-field').show();
                 $('.file-upload-field').hide();
-                $('form[name="load-kpi-form"]').attr('action', '/appraisal/load_emp_appraisals');
-				$('#load-kpis').val("Load KPIs");
+                
             }
             return appraisalType;
         }

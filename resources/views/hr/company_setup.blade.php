@@ -97,23 +97,6 @@
                 $('.modal:visible').each(reposition);
             });
               
-/*
-                var companyID;
-           $('#level-module-modal').on('show.bs.modal', function (e) {
-                var btnEdit = $(e.relatedTarget);
-                companyID = btnEdit.data('id');
-                var companyIDName = btnEdit.data('name');
-                var companyIDEmployers = btnEdit.data('manager_id');
-                var level = btnEdit.data('level');
-                var modal = $(this);
-                modal.find('#group_level_title').html('Edit Employee Group Level '+ level);
-                modal.find('#name').val(companyIDName);
-                modal.find('#manager_id').val(companyIDEmployers);
-                modal.find('#division_level_id').val(level);
-                if(primeRate != null && primeRate != '' && primeRate > 0) {
-                   modal.find('#prime_rate').val(primeRate.toFixed(2));
-                }
-            });*/
 
             var updatecompanyID;
             $('#edit-company-modal').on('show.bs.modal', function (e) {
@@ -132,6 +115,7 @@
 
             //Post module form to server using ajax (ADD)
             $('#save_firstlevel').on('click', function() {
+                //console.log('strUrl');
                 var strUrl = '/hr/firstleveldiv/add/'+ '{{ $highestLvl->id }}';
                 var modalID = 'level-module-modal';
                 var objData = {
