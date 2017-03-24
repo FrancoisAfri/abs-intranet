@@ -27,10 +27,8 @@
                             @foreach ($appraisal_setup as $type)
                                 <tr>
                                     <td style=" text-align: center;" nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-latecomer-modal" data-id="{{ $type->id }}" data-name="{{ $type->number_of_times }}" data-manager_id="{{$type->percentage}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                       <!--- @if($highestLvl->level > $lowestactiveLvl && $type->childDiv())
-                                            <a href="/hr/child_setup/{{$highestLvl->level}}/{{$type->id}}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
-                                        @endif---->
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-latecomer-modal" data-id="{{ $type->id }}" data-number_of_times="{{ $type->number_of_times }}" data-percentage="{{$type->percentage}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                     
                                     </td>
                                     <td>{{ $type->number_of_times }}</td>
                                     <td>{{ $type->percentage }}</td>
@@ -123,8 +121,8 @@
                     percentage: $('#'+modalID).find('#percentage').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'late_modal';
-                var redirectUrl = 'appraisal/setup';
+                var submitBtnID = 'save_latecomer';
+                var redirectUrl = '/appraisal/setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group level has been updated successfully.';
                 //var formMethod = 'PATCH';
@@ -140,7 +138,7 @@
                      _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'update_latecomer';
-                var redirectUrl = 'appraisal/setup';
+                var redirectUrl = '/appraisal/setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Company modal has been updated successfully.';
                 var Method = 'PATCH';
