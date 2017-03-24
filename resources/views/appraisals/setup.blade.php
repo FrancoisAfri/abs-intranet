@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Appraisal Latecomer Leave Deduction</h3>
+                    <h3 class="box-title">Latecomer Leave Deduction</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -27,7 +27,7 @@
                             @foreach ($appraisal_setup as $type)
                                 <tr>
                                     <td style=" text-align: center;" nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->number_of_times }}" data-manager_id="{{$type->percentage}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-latecomer-modal" data-id="{{ $type->id }}" data-name="{{ $type->number_of_times }}" data-manager_id="{{$type->percentage}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                        <!--- @if($highestLvl->level > $lowestactiveLvl && $type->childDiv())
                                             <a href="/hr/child_setup/{{$highestLvl->level}}/{{$type->id}}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
                                         @endif---->
@@ -49,12 +49,14 @@
          
                         <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#level-module-modal">Add </button>  
+                     <button type="button" id="late_modal" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-latecomer-modal">Add </button>  
                     </div>
         </div>
 
-        <!-- Include add new prime rate modal 
-
+        <!-- Include add new prime rate modal ---->
+        @include('appraisals.partials.add_latecomer_modal')
+        @include('appraisals.partials.edit_latecomer_modal')
+  
   
   
     </div>
@@ -74,13 +76,13 @@
       
         }
         $(function () {
-/*
+
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-*/
+
             //Vertically center modals on page
- /*           function reposition() {
+          function reposition() {
                 var modal = $(this),
                         dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
@@ -97,65 +99,48 @@
             });
               
 
-                var companyID;
-           $('#level-module-modal').on('show.bs.modal', function (e) {
+             var latecomerID;
+           $('#edit-latecomer-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                companyID = btnEdit.data('id');
-                var companyIDName = btnEdit.data('name');
-                var companyIDEmployers = btnEdit.data('manager_id');
-                var level = btnEdit.data('level');
+                latecomerID = btnEdit.data('id');
+                var number_of_times = btnEdit.data('number_of_times');
+                var percentage = btnEdit.data('percentage');
+                //var level = btnEdit.data('level');
                 var modal = $(this);
-                modal.find('#group_level_title').html('Edit Employee Group Level '+ level);
-                modal.find('#name').val(companyIDName);
-                modal.find('#manager_id').val(companyIDEmployers);
-                modal.find('#division_level_id').val(level);
-                if(primeRate != null && primeRate != '' && primeRate > 0) {
-                   modal.find('#prime_rate').val(primeRate.toFixed(2));
-                }
-            });*/
+               // modal.find('#group_level_title').html('Edit Employee Group Level '+ level);
+                modal.find('#number_of_times').val(number_of_times);
+                modal.find('#percentage').val(percentage);
+            });
 
-   /*          var updatecompanyID;
-            $('#edit-company-modal').on('show.bs.modal', function (e) {
-                    //console.log('kjhsjs');
-                var btnEdit = $(e.relatedTarget);
-                updatecompanyID = btnEdit.data('id');
-                var name = btnEdit.data('name');
-                var manager_id = btnEdit.data('manager_id');
-                var level = btnEdit.data('level');
-                //var employeeName = btnEdit.data('employeename');
-                var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#manager_id').val(manager_id);
-                
-             });
 
+        
             //Post module form to server using ajax (ADD)
-            $('#save_firstlevel').on('click', function() {
-           
-                var modalID = 'level-module-modal';
+            $('#save_latecomer').on('click', function() {
+                var strUrl = '/appraisal/add';
+                var modalID = 'add-latecomer-modal';
                 var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    manager_id: $('#'+modalID).find('#manager_id').val(),
+                    number_of_times: $('#'+modalID).find('#number_of_times').val(),
+                    percentage: $('#'+modalID).find('#percentage').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'level_module';
-                var redirectUrl = '/hr/company_setup';
+                var submitBtnID = 'late_modal';
+                var redirectUrl = 'appraisal/setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group level has been updated successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-       $('#update_company-modal').on('click', function () {
-      
-                var modalID = 'edit-company-modal';
+       $('#update_latecomer').on('click', function () {
+                var strUrl = '/appraisal/latecomers/'+ latecomerID;
+                var modalID = 'edit-latecomer-modal';
                 var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    manager_id: $('#'+modalID).find('#manager_id').val(),
+                    number_of_times: $('#'+modalID).find('#number_of_times').val(),
+                    percentage: $('#'+modalID).find('#percentage').val(),
                      _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'update_company-modal';
-                var redirectUrl = '/hr/company_setup';
+                var submitBtnID = 'update_latecomer';
+                var redirectUrl = 'appraisal/setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Company modal has been updated successfully.';
                 var Method = 'PATCH';
@@ -164,12 +149,7 @@
     });
 
  
-
-
-           $('#update-module').on('click', function() {
-                postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
-            });
-            */
+           
 
 
     </script>

@@ -138,6 +138,8 @@ Route::post('audits/print', 'AuditReportsController@printreport');
 
 # Performance Appraisals Module
 Route::get('appraisal/setup', 'AppraisalSetupController@show');
+Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
+Route::patch('/appraisal/latecomers/{Latecomers}', 'AppraisalSetupController@updateAppraisal');
 
 # Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
