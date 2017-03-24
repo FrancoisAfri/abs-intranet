@@ -34,7 +34,7 @@
                              </div><br>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="update_latecomer" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                    <button type="button" id="save_latecomer" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
             </form>
 
