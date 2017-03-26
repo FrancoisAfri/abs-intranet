@@ -141,7 +141,12 @@
                 </form>
             </div>
         </div>
-
+		@if (session('success'))
+        @include('appraisals.partials.success_action', ['modal_title' => 'Appraisal Successfully Uploaded!', 'modal_content' => session('success')])
+        @endif
+		@if (session('error'))
+        @include('appraisals.partials.success_action', ['modal_title' => 'An Error Occurred!', 'modal_content' => session('error')])
+        @endif
         <!-- Include add new modal -->
     </div>
 @endsection
