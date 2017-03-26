@@ -72,21 +72,14 @@ class AppraisalSetupController extends Controller
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
      }
      //check hr contoller company_setup blade for this
- public function activateGroupLevel( $groupLevel) 
+ public function activateAppraisal(appraisalSetup $appraisal_setup) 
     {
-        if ($groupLevel->active == 1) $stastus = 0;
+        if ($appraisal_setup->active == 1) $stastus = 0;
         else $stastus = 1;
         
-        $groupLevel->active = $stastus;   
-        $groupLevel->update();
+        $appraisal_setup->active = $stastus;   
+        $appraisal_setup->update();
         return back();
     }
  }
-  /*  $lev->name = $request->input('name');
-        $lev->description = $request->input('description');
-        //$lev->font_awesome = $request->input('font_awesome');
-        $lev->update();
-        return $lev;
-        AuditReportsController::store('Leave', 'leavetype Informations Edited', "Edited by User: $lev->name", 0);
-        return response()->json(['new_name' => $lev->name, 'description' => $lev->description], 200);
-    }
+ 
