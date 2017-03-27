@@ -184,12 +184,15 @@ class LeaveSetupController extends Controller
 //        return $employees
      foreach($employees as $empID) {
             $emp = HRPerson::find($empID);
+//            $types = $emp->leave_types();
+//          $curentBalance = $types->where($empID)->first() ? $lev->pivot->leave_balance : '' ;
+//         $profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '';
           // return $emp;
         }
         $emp;
-//      $HRpeople = HRPerson::find(1);
+      $HRpeople = HRPerson::find(1);
         
-        // loop through the pivot table using the empID 
+         //loop through the pivot table using the empID s
         foreach ($emp->leave_types as $types) { 
             $val = $types->pivot->leave_balance; 
             $currentBalance =  $val + $days  ;
