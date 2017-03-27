@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\AppraisalKPIResult;
+use App\appraisalsKpis;
 use App\DivisionLevel;
 use App\HRPerson;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use App\AppraisalQuery_report;
-use App\AppraisalKPIResult;
 use App\AppraisalClockinResults;
-use App\appraisalsKpis;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AuditReportsController;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Excel;
 class AppraisalKPIResultsController extends Controller
 {
@@ -61,10 +57,15 @@ class AppraisalKPIResultsController extends Controller
             'appraisal_type' => 'required',
             'hr_person_id' => 'required',
         ]);
+        $appraisalMonth = trim($request->input('appraisal_month')) != '' ? trim($request->input('appraisal_month')) : Carbon::now()->format('M Y');
+        $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
+        $monthEnd = new Carbon("last day of $appraisalMonth");
+        $monthEnd = strtotime($monthEnd->endOfDay());
         $hrID = $request->input('hr_person_id');
         $emp = HRPerson::where('id', $hrID)
-            ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($hrID) {
+            ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($hrID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $hrID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
             }])
             ->with('jobTitle.kpiTemplate.kpi.kpiskpas')
             ->with('jobTitle.kpiTemplate.kpi.kpiranges')
@@ -75,6 +76,7 @@ class AppraisalKPIResultsController extends Controller
         //return $emp;
 
         $data['emp'] = $emp;
+        $data['appraisalMonth'] = $appraisalMonth;
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
         $data['page_title'] = "Employee Appraisals";
@@ -90,6 +92,59 @@ class AppraisalKPIResultsController extends Controller
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
+    public function storeEmpAppraisals(Request $request) {
+        $this->validate($request, [
+            'score.*' => 'numeric|min:0',
+        ]);
+
+        $appraisalMonth = $request->input('appraisal_month');
+        $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
+        $monthEnd = new Carbon("last day of $appraisalMonth");
+        $monthEnd = strtotime($monthEnd->endOfDay());
+        $hrID = $request->input('hr_person_id');
+        $kpiIDs = $request->input('kpi_id');
+        $scores = $request->input('score');
+
+        foreach ($kpiIDs as $kpiID) {
+            $kpiResult = AppraisalKPIResult::where('kpi_id', $kpiID)->where('hr_id', $hrID)->whereBetween('date_uploaded', [$monthStart, $monthEnd])->get();
+            if (count($kpiResult) > 0) { //update result
+                $kpiResult = $kpiResult->first();
+                $kpiResult->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
+                $kpiResult->update();
+            }
+            else { //insert new result
+                $kpi = appraisalsKpis::find($kpiID);
+                $result = new AppraisalKPIResult();
+                $result->kpi_id = $kpiID;
+                $result->hr_id = $hrID;
+                $result->date_uploaded = strtotime(Carbon::today()->day . ' ' . $appraisalMonth);
+                $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
+                $result->save();
+            }
+        }
+        return back()->with('success_edit', "The employee's appraisal have been saved successfully.");
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
 	# Redicte to upload type
 	public function uploadAppraisal(Request $request)
     {
@@ -178,9 +233,13 @@ class AppraisalKPIResultsController extends Controller
 								$query->save();	
 								return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");								
 							}
+							elseif ($uploadType == 3)
+								$insert[] = ['title' => $v['title'], 'description' => $v['description']];
 						}
 					}
 				}
+
+				return $templateData;
 				if(!empty($insert))
 				{
 					if ($uploadType == 1)
@@ -189,6 +248,7 @@ class AppraisalKPIResultsController extends Controller
 						AppraisalClockinResults::insert($insert);
 					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");
 				}
+
 			}
 			else return back()->with('error','Please Check your file, Something is wrong there.');
 		}
