@@ -229,7 +229,7 @@
                               </tr>
                             </div>
                                  
-                              <div class="form-group">
+                            <div class="form-group">
                                 <tr>
                                 <td>Number of Days Until Escalation</td>
                                     <td>
@@ -237,7 +237,7 @@
                                 <input type="text" class="form-control" id="Escalation" name="mumber_of_days_until_escalation" placeholder="Enter  days" required >
                                     </td>
                               </tr> 
-                                 </div>
+                            </div>
                                 
                             <div class="form-group">
                               <tr>

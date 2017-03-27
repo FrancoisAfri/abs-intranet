@@ -142,20 +142,20 @@ Route::get('/hr/job_title_active/{jobTitle}', 'EmployeeJobTitleController@jobtit
 Route::post('hr/add_jobtitle/{jobCategory}', 'EmployeeJobTitleController@addJobTitle');
 Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
 
-# Audit Module
+//# Audit Module
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
 
-# Performance Appraisals Module
-<<<<<<< HEAD
-=======
+//# Performance Appraisals Module
+//<<<<<<< HEAD
+//=======
 Route::get('/appraisal/setup', 'AppraisalSetupController@show');
 Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
 Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
 Route::get('/appraisals/latecomers/activate', 'AppraisalSetupController@activateAppraisal');
 # Performance Appraisals Module
->>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
+//>>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
@@ -204,16 +204,16 @@ Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@loadEmpAppraisals');
 
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
-=======
+//=======
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
 // Appraisal search
 Route::get('appraisal/search', 'AppraisalSearchController@index');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
->>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
+//>>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
