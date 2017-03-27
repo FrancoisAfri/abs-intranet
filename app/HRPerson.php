@@ -29,6 +29,11 @@ class HRPerson extends Model
         return $this->hasOne(DivisionLevelGroup::class, 'manager_id');
     }
 
+    //Relationship hr person and job title
+    public function jobTitle() {
+        return $this->belongsTo(JobTitle::class, 'position');
+    }
+
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;
