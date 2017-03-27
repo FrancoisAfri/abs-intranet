@@ -38,7 +38,7 @@ class AppraisalSetupController extends Controller
         $data['appraisal_setup'] = $appraisal_setup;
         //$data['appraisalSet'] = $appraisalSet;
       
-		//return $data;
+		//return $appraisal_setup;
 		AuditReportsController::store('Performance Appraisal', 'Templates Page Accessed', "Actioned By User", 0);
         return view('appraisals.setup')->with($data);
     }
@@ -76,7 +76,7 @@ class AppraisalSetupController extends Controller
     {
         if ($appraisal_setup->active == 1) $stastus = 0;
         else $stastus = 1;
-        
+        //return $appraisal_setup;
         $appraisal_setup->active = $stastus;   
         $appraisal_setup->update();
         return back();

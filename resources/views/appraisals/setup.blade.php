@@ -66,7 +66,7 @@
     <script>
         function postData(id, data)
         {
-          if (data == 'dactive') location.href = "/appraisals/latecomers"  + '/activate';
+          if (data == 'dactive') location.href = "/appraisals/latecomers/"  + id + '/activate';
              
             //location.href = "/hr/firstlevel/dactive/" + id;
              // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
