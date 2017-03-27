@@ -43,7 +43,6 @@
                                 </div>
                             @endforeach
                         @endif
-                        </div>
                         <div class="form-group">
                             <label for="first_name" class="col-sm-2 control-label">First Name</label>
 
@@ -487,11 +486,11 @@
                     var postTo = '{!! route('divisionsdropdown') !!}';
                     var selectedOption = '';
                     var divLevel = parseInt('{{ $division_level->level }}');
-                    if (divLevel == 5) selectedOption = '{{ $user->person->group_level_five_id }}';
-                    else if(divLevel == 4) selectedOption = '{{ $user->person->group_level_four_id }}';
-                    else if(divLevel == 3) selectedOption = '{{ $user->person->group_level_three_id }}';
-                    else if(divLevel == 2) selectedOption = '{{ $user->person->group_level_two_id }}';
-                    else if(divLevel == 1) selectedOption = '{{ $user->person->group_level_one_id }}';
+                    if (divLevel == 5) selectedOption = '{{ $user->person->division_level_5 }}';
+                    else if(divLevel == 4) selectedOption = '{{ $user->person->division_level_4 }}';
+                    else if(divLevel == 3) selectedOption = '{{ $user->person->division_level_3 }}';
+                    else if(divLevel == 2) selectedOption = '{{ $user->person->division_level_2 }}';
+                    else if(divLevel == 1) selectedOption = '{{ $user->person->division_level_1 }}';
                     var incInactive = -1;
                     var loadAll = loadAllDivs;
                     loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);

@@ -6,6 +6,7 @@ function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll
     postTo = postTo || '/api/divisionsdropdown';
 
     var parentDDVal = $('#'+parentDDID).val();
+    //console.log('parentDDVal = ' + parentDDVal);
     var parentDDLabel = $('label[for="' + parentDDID + '"]').html();
     var ddLabel = $('label[for="' + ddID + '"]').html();
     //console.log('calls the function with: ' + ddID + ', ' + ddLabel + ', ' + postTo + ', ' + selectedOption + ', ' + parentDDVal + ', ' + parentDDLabel + ', ' + incInactive + ', ' + loadAll + ', ');
@@ -85,8 +86,6 @@ function divDDOnChange(dropDownObj, hrPeopleDDID) {
             return null;
             break;
     }
-    loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
-    loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
 }
 
 /* function to load HR People drop down options */
@@ -101,7 +100,7 @@ function loadHRPeopleOptions(ddID, selectedOption, parentDDID, incInactive, load
     $.post(postTo, { div_level: divLvl, div_val: parentDDVal, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
         function(data) {
             var dropdown = $('#'+ddID);
-            var firstDDOption = "*** Select a " + ddLabel + " ***";
+            var firstDDOption = "*** Select an " + ddLabel + " ***";
             dropdown.empty();
             dropdown
                 .append($("<option></option>")

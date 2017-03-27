@@ -137,7 +137,9 @@ Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
 
 # Performance Appraisals Module
-Route::get('appraisal/employee_setup', 'AppraisalSetupController@show');
+Route::get('/appraisal/setup', 'AppraisalSetupController@show');
+Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
+Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
 
 # Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
@@ -185,6 +187,8 @@ Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
 
 Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
+Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@loadEmpAppraisals');
+
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');

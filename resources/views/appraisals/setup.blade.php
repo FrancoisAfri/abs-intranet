@@ -5,85 +5,82 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Modules</h3>
+                    <h3 class="box-title">Latecomer Leave Deduction</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-				<table class="table table-bordered"> 
-                <thead> <th>Level</th>
-                     <th>Name</th>
-                     <th style="width: 5px; text-align: center;">Active</th> 
-                  </thead>
-                     <tbody>
-                       <tr>
-                        <td>Level 1</td>
-                        <td><input class="form-control" type="text" id="text" /></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 2</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 3</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 4</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"</td><input type="checkbox" id="textedit"/>
-                          </td>
-                           <tr>
-                        <td>Level 5</td>
-                        <td><input class="form-control" type="text" id="text"/></td>
-                        <td style="text-align: center;"><input type="checkbox" id="textedit"/>
-                          </td>              
-                        </tr>  
-                     </tbody>
-				</table>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <button type="button" id="add-new-module"  class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-module-modal"><i class="fa fa-floppy-o"></i> Save</button>
-                </div>
-            </div>
+                <form class="form-horizontal" method="POST" action="/hr/firstlevel">
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table table-bordered"> 
+                            <tr>
+                                <th style="width: 10px; text-align: center;"></th>
+                                <th>Number of Times</th>
+                                <th>Percentage (%)</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                            </tr>
+            
+                            @foreach ($appraisal_setup as $type)
+                                <tr>
+                                    <td style=" text-align: center;" nowrap>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-latecomer-modal" data-id="{{ $type->id }}" data-number_of_times="{{ $type->number_of_times }}" data-percentage="{{$type->percentage}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                     
+                                    </td>
+                                    <td>{{ $type->number_of_times }}</td>
+                                    <td>{{ $type->percentage }}</td>
+                                    <td>
+                                        
+                                          <!--   <button type="button" id="view_ribbons" class="btn 11111111111111111111111{{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}}) , 'dactive';"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button> -->
+                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                                      
+                                    </td>
+                                </tr>    
+                            @endforeach
+                        </table>
+                    </div>
+         
+                        <!-- /.box-body -->
+                    <div class="box-footer">
+                     <button type="button" id="late_modal" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-latecomer-modal">Add </button>  
+                    </div>
         </div>
 
-        <!-- Include add new prime rate modal -->
-        @include('security.partials.add_new_module')
-        @include('security.partials.edit_module')
+        <!-- Include add new prime rate modal ---->
+        @include('appraisals.partials.add_latecomer_modal')
+        @include('appraisals.partials.edit_latecomer_modal')
+  
+  
+  
     </div>
 @endsection
-<?php 
 
+@section('page_script')
+<!-- Ajax form submit -->
+<script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <script>
+        function postData(id, data)
+        {
+         
+             
+            //location.href = "/hr/firstlevel/dactive/" + id;
+             // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
 
- ?>
-<!--@section('page_script')
-  <!--  <script>
-		/*function postData(id, data)
-		{
-			if (data == 'ribbons')
-				location.href = "/users/ribbons/" + id;
-			else if (data == 'edit')
-				location.href = "/users/module_edit/" + id;
-			else if (data == 'actdeac')
-				location.href = "/users/module_active/" + id;
-			else if (data == 'access')
-				location.href = "/users/module_access/" + id;
-		}*/
+      
+        }
         $(function () {
+
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
             //Vertically center modals on page
-          /*  function reposition() {
+          function reposition() {
                 var modal = $(this),
                         dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
@@ -97,104 +94,61 @@
             // Reposition when the window is resized
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
-            });*/
+            });
+              
 
-            //pass module data to the edit module modal
-          /*  $('#edit-module-modal').on('show.bs.modal', function (e) {
+             var latecomerID;
+           $('#edit-latecomer-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                moduleId = btnEdit.data('id');
-                var moduleName = btnEdit.data('name');
-                var modulePath = btnEdit.data('path');
-                var moduleFontAwesome = btnEdit.data('font_awesome');
+                latecomerID = btnEdit.data('id');
+                var number_of_times = btnEdit.data('number_of_times');
+                var percentage = btnEdit.data('percentage');
+                //var level = btnEdit.data('level');
                 var modal = $(this);
-                modal.find('#module_name').val(moduleName);
-                modal.find('#module_path').val(modulePath);
-                modal.find('#font_awesome').val(moduleFontAwesome);//
-                //if(primeRate != null && primeRate != '' && primeRate > 0) {
-                //    modal.find('#prime_rate').val(primeRate.toFixed(2));
-                //}
+               // modal.find('#group_level_title').html('Edit Employee Group Level '+ level);
+                modal.find('#number_of_times').val(number_of_times);
+                modal.find('#percentage').val(percentage);
             });
 
-            //function to post module form to server using ajax
-            function postModuleForm(formMethod, postUrl, formName) {
-                //alert('do you get here');
-                $.ajax({
-                    method: formMethod,
-                    url: postUrl,
-                    data: {
-                        module_name: $('form[name=' + formName + ']').find('#module_name').val(),
-                        module_path: $('form[name=' + formName + ']').find('#module_path').val(),
-                        font_awesome: $('form[name=' + formName + ']').find('#font_awesome').val(),
-                        _token: $('input[name=_token]').val()
-                    },
-                    success: function(success) {
-                        location.href = "/users/setup/";
-                        $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-                        $('form[name=' + formName + ']').trigger('reset'); //Reset the form
 
-                        var successHTML = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> Module added!</h4>';
-                        successHTML += 'The new module has been added successfully.';
-                        $('#module-success-alert').addClass('alert alert-success alert-dismissible')
-                                .fadeIn()
-                                .html(successHTML);
-
-                        //show the newly added on the setup list
-                        $('#active-module').removeClass('active');
-                        var newModuleList = $('#modules-list').html();
-                        newModuleList += '<li id="active-module" class="list-group-item active"><b>' + success['new_name'] + '</b> <font class="pull-right">' + success['new_path'] + ';</font></li>';
-
-                        $('#modules-list').html(newModuleList);
-
-                        //auto hide modal after 7 seconds
-                        $("#add-new-module-modal").alert();
-                        window.setTimeout(function() { $("#add-new-module-modal").modal('hide'); }, 5000);
-
-                        //autoclose alert after 7 seconds
-                        $("#module-success-alert").alert();
-                        window.setTimeout(function() { $("#module-success-alert").fadeOut('slow'); }, 5000);
-                    },
-                    error: function(xhr) {
-                        //if(xhr.status === 401) //redirect if not authenticated
-                        //$( location ).prop( 'pathname', 'auth/login' );
-                        if(xhr.status === 422) {
-                            console.log(xhr);
-                            var errors = xhr.responseJSON; //get the errors response data
-
-                            $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-
-                            var errorsHTML = '<button type="button" id="close-invalid-input-alert" class="close" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i> Invalid Input!</h4><ul>';
-                            $.each(errors, function (key, value) {
-                                errorsHTML += '<li>' + value[0] + '</li>'; //shows only the first error.
-                                $('#'+key).closest('.form-group')
-                                        .addClass('has-error'); //Add the has error class to form-groups with errors
-                            });
-                            errorsHTML += '</ul>';
-
-                            $('#module-invalid-input-alert').addClass('alert alert-danger alert-dismissible')
-                                    .fadeIn()
-                                    .html(errorsHTML);
-
-                            //autoclose alert after 7 seconds
-                            $("#module-invalid-input-alert").alert();
-                            window.setTimeout(function() { $("#module-invalid-input-alert").fadeOut('slow'); }, 7000);
-
-                            //Close btn click
-                            $('#close-invalid-input-alert').on('click', function () {
-                                $("#module-invalid-input-alert").fadeOut('slow');
-                            });
-                        }
-                    }
-                });
-            }
-
+        
             //Post module form to server using ajax (ADD)
-            $('#add-module').on('click', function() {
-                postModuleForm('POST', '/users/setup/modules', 'add-module-form');
+            $('#save_latecomer').on('click', function() {
+                var strUrl = '/appraisal/add';
+                var modalID = 'add-latecomer-modal';
+                var objData = {
+                    number_of_times: $('#'+modalID).find('#number_of_times').val(),
+                    percentage: $('#'+modalID).find('#percentage').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'save_latecomer';
+                var redirectUrl = '/appraisal/setup';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The group level has been updated successfully.';
+                //var formMethod = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-            $('#update-module').on('click', function() {
-                postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
+       $('#update_latecomer').on('click', function () {
+                var strUrl = '/appraisal/latecomers/'+ latecomerID;
+                var modalID = 'edit-latecomer-modal';
+                var objData = {
+                    number_of_times: $('#'+modalID).find('#number_of_times').val(),
+                    percentage: $('#'+modalID).find('#percentage').val(),
+                     _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'update_latecomer';
+                var redirectUrl = '/appraisal/setup';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'Company modal has been updated successfully.';
+                var Method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-        });
+    });
+
+ 
+           
+
+
     </script>
 @endsection

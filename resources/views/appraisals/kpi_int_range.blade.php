@@ -78,6 +78,9 @@
             location.href = "/appraisal/kpi_from_to/" + id + '/activate';
         }
         $(function () {
+            $('#back_button').click(function () {
+                location.href = '/appraisal/template/' + '{{ $kpi->kpiTemplate->id }}';
+            });
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),

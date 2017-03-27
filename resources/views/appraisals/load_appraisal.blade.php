@@ -40,8 +40,8 @@
                             <label for="appraisal_type" class="col-sm-2 control-label">Appraisal Type</label>
 
                             <div class="col-sm-10">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_upload" name="appraisal_type" value="1" checked> File Upload</label>
-                                <label class="radio-inline"><input type="radio" id="rdo_manual" name="appraisal_type" value="2"> Manual</label>
+                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_upload" name="appraisal_type" value="1"{{ old('appraisal_type') != 2 ? ' checked' : '' }}> File Upload</label>
+                                <label class="radio-inline"><input type="radio" id="rdo_manual" name="appraisal_type" value="2" {{ old('appraisal_type') == 2 ? ' checked' : '' }}> Manual</label>
                             </div>
                         </div>
 						@foreach($division_levels as $division_level)
