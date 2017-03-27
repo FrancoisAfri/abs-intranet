@@ -140,7 +140,7 @@ Route::post('audits/print', 'AuditReportsController@printreport');
 Route::get('/appraisal/setup', 'AppraisalSetupController@show');
 Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
 Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
-Route::get('/appraisals/latecomers/activate', 'AppraisalSetupController@activateAppraisal');
+Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
 # Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
