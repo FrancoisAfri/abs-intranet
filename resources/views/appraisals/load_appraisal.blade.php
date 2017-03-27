@@ -48,15 +48,15 @@
 							<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 								<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
-								<div class="col-sm-10">
-									<div class="input-group">
-										<div class="input-group-addon">
-											<i class="fa fa-black-tie"></i>
-										</div>
-										<select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
-										</select>
-									</div>
-								</div>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%;">
+                                        </select>
+                                    </div>
+                                </div>
 							</div>
 						@endforeach
 						<div class="form-group manual-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
@@ -110,6 +110,18 @@
 								</div>
 							</div>
 						</div>
+                        <div class="form-group manual-field{{ $errors->has('appraisal_month') ? ' has-error' : '' }}">
+                            <label for="appraisal_month" class="col-sm-2 control-label">Appraisal Month</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control" name="appraisal_month" id="appraisal_month" placeholder="Click To Select A Month" value="">
+                                </div>
+                            </div>
+                        </div>
 						<div class="form-group file-upload-field {{ $errors->has('date_uploaded') ? ' has-error' : '' }}">
                             <label for="date_uploaded" class="col-sm-2 control-label">Date Uploaded</label>
                             <div class="col-sm-10">
@@ -136,7 +148,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <input type="submit" id="load-kpis" name="load-kpis" class="btn btn-primary pull-right" value="Load KPIs">
+                        <button type="submit" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Load KPIs</button>
                     </div>
                 </form>
             </div>
@@ -175,6 +187,13 @@
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
                 autoclose: true,
+                todayHighlight: true
+            });
+            $('#appraisal_month').datepicker({
+                format: 'MM yyyy',
+                autoclose: true,
+                startView: "months",
+                minViewMode: "months",
                 todayHighlight: true
             });
 

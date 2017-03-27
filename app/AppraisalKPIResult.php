@@ -10,10 +10,10 @@ class AppraisalKPIResult extends Model
     public $table = 'appraisal_k_p_i_results';
 
     // Mass assignable fields
-    protected $fillable = ['result', 'date_uploaded', 'comment', 'hr_id', 'template_id'];
+    protected $fillable = ['score', 'percent', 'date_uploaded', 'comment', 'hr_id', 'template_id'];
 
     //Relationship result and kpi
     public function kpi() {
-        return $this->belongsTo(appraisalsKpis::class, 'kip_id');
+        return $this->belongsTo(appraisalsKpis::class, 'kpi_id');
     }
 }

@@ -53,7 +53,7 @@ class appraisalsKpis extends Model
     }*/
     //Relationship kpi and result
     public function results() {
-        return $this->hasMany(AppraisalKPIResult::class, 'kip_id');
+        return $this->hasMany(AppraisalKPIResult::class, 'kpi_id');
     }
 
     //Function to add a new kpi integer range
