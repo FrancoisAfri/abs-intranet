@@ -475,6 +475,15 @@ class DatabaseSeeder extends Seeder
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
+        $ribbon->ribbon_path = 'appraisal/search';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Reports';
         $ribbon->ribbon_path = 'appraisal/reports';
@@ -483,7 +492,7 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 6;
+        $ribbon->sort_order = 7;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'appraisal/setup';

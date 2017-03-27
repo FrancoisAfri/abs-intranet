@@ -189,6 +189,9 @@ Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@inde
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
+// Appraisal search
+Route::get('appraisal/search', 'AppraisalSearchController@index');
+Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
