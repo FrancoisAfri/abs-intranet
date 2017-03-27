@@ -18,11 +18,11 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="/leave/Allocate_leave" nctype="multipart/form-data">
+
+                    <form name="leave-alloccation-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
-<!--
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -34,8 +34,7 @@
                                 </ul>
                             </div>
                         @endif
--->
-                            <div class="form-group{{ $errors->has('registration_type') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('allocation_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
 
                                 <div class="col-sm-9">
@@ -62,25 +61,22 @@
                                     </div>
                                 </div>
                             </div>                 
-                                <div class="form-group ">
-                                    @foreach($division_levels as $division_level)
-                                        <div class="form-group">
-                                            <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-                                            <div class="col-sm-10">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon">
-                                                        <i class="fa fa-black-tie"></i>
-                                                    </div>
-                                                    <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                    {{--@endif--}}
-                                </div>
-                        
-                                     <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                                @foreach($division_levels as $division_level)
+							<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+								<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-black-tie"></i>
+										</div>
+										<select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+										</select>
+									</div>
+								</div>
+							</div>
+						      @endforeach
+                            <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -98,48 +94,35 @@
                         </div>
 
                         
-                         <div class="form-group adjust-field">
+                         <div class="form-group adjust-field{{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Adjust Number of Days</label>
-                            <div class="col-sm-5">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar-plus-o"></i>
                                     </div>
 
-                                    <input type="text" class="form-control" id="adjust_days" name="adjust_days" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>
+                                    <input type="text" class="form-control" id="adjust_days" name="adjust_days" value="{{ old('adjust_days') }}" placeholder="Enter number of days" >
                                 </div>
                             </div>
                         </div>
                         
-                        {{--<div class="form-group resert-field">--}}
-                            {{--<label for="days" class="col-sm-2 control-label">Resert Number of Days</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="input-group">--}}
-                                    {{--<div class="input-group-addon">--}}
-                                        {{--<i class="fa fa-calendar-plus-o"></i>--}}
-                                    {{--</div>--}}
-                                    {{--<input type="text" class="form-control" id="resert_days" name="resert_days" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        
-                         {{--<div class="form-group allocaion-field">--}}
-                            {{--<label for="days" class="col-sm-2 control-label">Allocate Number of Days</label>--}}
-                            {{--<div class="col-sm-5">--}}
-                                {{--<div class="input-group">--}}
-                                    {{--<div class="input-group-addon">--}}
-                                        {{--<i class="fa fa-calendar-plus-o"></i>--}}
-                                    {{--</div>--}}
-                                    {{--<input type="text" class="form-control" id="updated_at" name="updated_at" value="{{ old('updated_at') }}" placeholder="Enter number of days" required>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                      
+                        <div class="form-group resert-field {{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Resert Number of Days</label>
+                            <div class="col-sm-10">
+                               <div class="input-group">
+                                    <div class="input-group-addon">
+                                       <i class="fa fa-calendar-plus-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="resert_days" name="resert_days" value="{{ old('resert_days') }}" placeholder="Enter number of days" >
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-database"></i> Submit</button>
+                        <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -196,7 +179,7 @@
             $(".select2").select2();
             //Cancel button click event
             $('#cancel').click(function () {
-                location.href = '/';
+                location.href = '/leave/Allocate_leave_types';
             });
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
@@ -204,12 +187,7 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-            //Date picker
-//            $('.datepicker').datepicker({
-//                format: 'dd/mm/yyyy',
-//                autoclose: true,
-//                todayHighlight: true
-//            });
+        hideFields();
             //show/hide fields on radio button toggles (depending on registration type)
             $('#rdo_adjust, #rdo_resert, #rdo_allocate').on('ifChecked', function(){
                 var allType = hideFields();
@@ -217,38 +195,13 @@
                 else if (allType == 2) $('#box-subtitle').html('Resert leave allocation');
                 else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
-            //show/hide semester row
-            $('#rdo_year_course, #rdo_sem_course').on('ifChecked', function(){
-                hideSemesterRow();
-            });
-
-            //Add more modules
-            var max_fields      = 10; //maximum input boxes allowed
-            var wrapper         = $(".input-fields-wrap"); //Fields wrapper
-            var add_button      = $("#add_module"); //Add button ID
-            var x = 1; //initial text box count
-            $(add_button).click(function(e){ //on add input button click
-                e.preventDefault();
-                if(x < max_fields){ //max input box allowed
-                    x++; //text box increment
-                    $(wrapper).append('<div class="row educator-field"><div class="col-xs-6"><div class="form-group{{ $errors->has('module_name[]') ? ' has-error' : '' }}"><label for="module_name" class="col-sm-4 control-label">Module</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon"><i class="fa fa-book"></i></div><input type="text" class="form-control" id="module_name" name="module_name[]" placeholder="Module" value="{{ old('module_name[]') }}"></div></div></div></div><div class="col-xs-6"><div class="form-group{{ $errors->has('module_fee[]') ? ' has-error' : '' }}"><label for="module_fee" class="col-sm-3 control-label">Module Fee</label><div class="col-sm-8"><div class="input-group"><div class="input-group-addon">R</div><input type="number" class="form-control" id="module_fee" name="module_fee[]" placeholder="Module Fee" value="{{ old('module_fee[]') }}"></div></div><div class="col-sm-1"><a href="#" class="remove_field"><i class="fa fa-times"></i></a></div></div></div></div>'); //add input box
-                }
-            });
-
-            $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-                e.preventDefault(); $(this).parent('div').parent('div').parent('div').parent('div').remove(); x--;
-            });
-
-            //call hide/show fields functions
-            hideFields();
-            hideSemesterRow();
-
-            //repopulate projects, year dropdowns when a programme has been changed
-            $('#programme_id').change(function(){
-                var programmeID = $(this).val();
-                populateProjectDD(programmeID);
-                populateYearDD(programmeID);
-            });
+            
+//            //repopulate projects, year dropdowns when a programme has been changed
+//            $('#programme_id').change(function(){
+//                var programmeID = $(this).val();
+//                populateProjectDD(programmeID);
+//                populateYearDD(programmeID);
+//            });
 
             //Vertically center modals on page
             function reposition() {
@@ -273,23 +226,25 @@
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='allocation_type']:checked").val();
-            
             if (allType == 1) { //adjsut leave
-                $().val('');
                 $('.resert-field, .allocaion-field').hide();
                 $('.adjust-field').show();
+                $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave');
+                $('#load-allocation').val("Submit");       
             }
             else if (allType == 2) { //resert leave
-//                $('select#learner_id, select#gen_public_id').val('');
+//                
                 $('.adjust-field, .allocate-field').hide();
                 $('.resert-field').show();
+                $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave/resert');
+                $('#load-allocation').val("Submit");
             }
             else if (allType == 3) { //allocate leave
-//                $('select#learner_id, select#educator_id, select#registration_semester').val('');
-                //$("input[name='course_type']:checked").val(1);
-//                $("#rdo_year_course").iCheck('check');
+//            
                 $('.resert-field, .adjust-field').hide();
                 $('.allocaion-field').show();
+                $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave/add');
+                $('#load-allocation').val("Submit");
             }
             return allType;
             //hideSemesterRow();
