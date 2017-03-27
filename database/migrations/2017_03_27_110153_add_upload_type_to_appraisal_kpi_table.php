@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUploadToAppraisalsKpisTable extends Migration
+class AddUploadTypeToAppraisalKpiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddUploadToAppraisalsKpisTable extends Migration
      */
     public function up()
     {
-        Schema::table('appraisals_kpis', function ($table) {
-            //
-            $table->integer('is_upload')->unsigned()->index()->nullable();
+        Schema::table('appraisals_kpis', function($table) {
+            $table->integer('upload_type')->unsigned()->index()->nullable();
         });
     }
 
@@ -26,9 +25,8 @@ class AddUploadToAppraisalsKpisTable extends Migration
      */
     public function down()
     {
-        Schema::table('appraisals_kpis', function ($table) {
-            //
-            $table->dropColumn('is_upload');
+         Schema::table('appraisals_kpis', function($table) {
+            $table->dropColumn('upload_type');
         });
     }
 }
