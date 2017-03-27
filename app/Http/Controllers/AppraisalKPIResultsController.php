@@ -52,19 +52,14 @@ class AppraisalKPIResultsController extends Controller
         return view('appraisals.load_appraisal')->with($data);
     }
 
-    public function loadEmpAppraisals(Request $request){
-        $this->validate($request, [
-            'appraisal_type' => 'required',
-            'hr_person_id' => 'required',
-        ]);
-        $appraisalMonth = trim($request->input('appraisal_month')) != '' ? trim($request->input('appraisal_month')) : Carbon::now()->format('M Y');
+    public function loadEmpAppraisals($empID, $appraisalMonth){
+        $appraisalMonth = trim($appraisalMonth);
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
         $monthEnd = strtotime($monthEnd->endOfDay());
-        $hrID = $request->input('hr_person_id');
-        $emp = HRPerson::where('id', $hrID)
-            ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($hrID, $monthStart, $monthEnd) {
-                $query->where('hr_id', $hrID);
+        $emp = HRPerson::where('id', $empID)
+            ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
             }])
             ->with('jobTitle.kpiTemplate.kpi.kpiskpas')
@@ -93,6 +88,7 @@ class AppraisalKPIResultsController extends Controller
     }
 
     public function storeEmpAppraisals(Request $request) {
+        //return "gets here";
         $this->validate($request, [
             'score.*' => 'numeric|min:0',
         ]);
@@ -122,7 +118,7 @@ class AppraisalKPIResultsController extends Controller
                 $result->save();
             }
         }
-        return back()->with('success_edit', "The employee's appraisal have been saved successfully.");
+        return redirect("appraisal/load/result/$hrID/$appraisalMonth")->with('success_edit', "The employee's appraisals have been saved successfully.");
     }
 
     /**
