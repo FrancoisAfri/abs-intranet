@@ -224,6 +224,26 @@
             $('#update-kpi').on('click', function() {
                 postModuleForm('PATCH', '/appraisal/kpi_edit/' + kpiId, 'edit-kpi-form');
             });
+			
+			//call hide/show fields functions on doc ready
+           // $('#upload_type_div').hide();
         });
+		//function to hide/show manual or file upload fields
+        function hideFields() 
+		{
+            var uploadID = $("#is_upload").val();
+            if (uploadID == 1)
+			{
+				$('#upload_type_div').show();
+				$("#upload_type").prop('disabled', false);
+				$("upload_type").prop('required',true);
+			}
+            else if (uploadID == 2)
+			{
+				$('#upload_type_div').hide();
+				$("#upload_type").prop('disabled', true);
+				$("upload_type").prop('required',false);
+			}
+        }
     </script>
 @endsection
