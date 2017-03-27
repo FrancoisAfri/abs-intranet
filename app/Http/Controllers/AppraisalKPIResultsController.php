@@ -8,11 +8,11 @@ use Illuminate\Contracts\View\View;
 use App\AppraisalQuery_report;
 use App\AppraisalKPIResult;
 use App\AppraisalClockinResults;
+use App\appraisalsKpis;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +52,7 @@ class AppraisalKPIResultsController extends Controller
         ];
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', 'KPI Integer Score Range Details Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Performance Appraisal', 'Upload page accessed', "Accessed by User", 0);
         return view('appraisals.load_appraisal')->with($data);
     }
 
@@ -90,38 +90,27 @@ class AppraisalKPIResultsController extends Controller
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 	# Redicte to upload type
 	public function uploadAppraisal(Request $request)
     {
 		$this->validate($request, [     
            'upload_type' => 'bail|required|integer|min:0',         
+           'kpi_id' => 'bail|required|integer|min:0',         
+           'date_uploaded' => 'bail|required|integer|min:0',         
         ]);
+		$uploadTypes = [1 => "General", 2 => 'Clock In', 3 => 'Query Report '];
 		$templateData = $request->all();
 		unset($templateData['_token']);
 		$uploadType = $request->input('upload_type');
+		//convert dates to unix time stamp
+        if (isset($templateData['date_uploaded'])) {
+            $templateData['date_uploaded'] = str_replace('/', '-', $templateData['date_uploaded']);
+            $templateData['date_uploaded'] = strtotime($templateData['date_uploaded']);
+        }
+        $kipID = $templateData['kpi_id'];
 		if($request->hasFile('input_file'))
 		{
-			return $templateData;
+			//return $templateData;
 			$path = $request->file('input_file')->getRealPath();
 			$data = Excel::load($path, function($reader) {})->get();
 			if(!empty($data) && $data->count())
@@ -130,37 +119,78 @@ class AppraisalKPIResultsController extends Controller
 				{
 					if(!empty($value))
 					{
-						foreach ($value as $v) 
+						foreach ($value as $val) 
 						{
+							//$employeeCode = $val['pin_code'];
+							$employees = HRPerson::where('employee_number', 12)->first();
+							$template = appraisalsKpis::where('id', $kipID)->first(); //template_id
 							if ($uploadType == 1)
-							{
-								$insert[] = ['employee_no' => $v['employee_no'], 'result' => $v['result'], 'date_uploaded' => $v['result'], 'result' => $v['result']];
-							}
+								$insert[] = ['kip_id' => $kipID,'template_id' => $template->template_id,
+								'result' => $val['result'], 
+								'date_uploaded' => $templateData['date_uploaded'],
+								'hr_id' => $employees->id];
 							elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
-							{
-								$insert[] = ['title' => $v['title'], 'description' => $v['description']];
+							{// 1 for late, 2 for not late
+								$attendance = 2;
+								if (!empty($val['entry']))
+								{
+									$entryDate =  explode(" ", $val['entry']);
+									$normalTimeDate = explode(" ", $val['normal_time']);
+									$entry = explode(":", $entryDate[1]);
+									$normalTime = explode(":", $normalTimeDate[1]);
+									if ($entry[0] > $normalTime[0]) $attendance = 1;
+									else 
+									{
+										if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
+										else $attendance = 2;
+									}
+									$insert[] = ['kip_id' => $kipID, 'attendance' => $attendance, 
+									'date_uploaded' => $templateData['date_uploaded'], 
+									'hr_id' => $employees->id];
+								}
 							}
 							elseif ($uploadType == 3)
-								$insert[] = ['title' => $v['title'], 'description' => $v['description']];
+							{
+								$value['query_date'] = !empty($value['query_date']) ? strtotime($value['query_date']) : 0;
+								$value['departure_date'] = !empty($value['departure_date']) ? strtotime($value['departure_date']) : 0;
+								$value['invoice_date'] = !empty($value['invoice_date']) ? strtotime($value['invoice_date']) : 0;
+								
+								$query = new AppraisalQuery_report();
+								$query->kip_id = $kipID;
+								$query->query_code = $value['query_code'];
+								$query->voucher_verification_code = $value['voucher_verification_code'];
+								$query->query_type = $value['query_type'];
+								$query->query_date = $value['query_date'];
+								$query->hr_id = $employees->id;
+								$query->account_no = $value['account_no'];
+								$query->account_name = $value['account_name'];
+								$query->traveller_name = $value['traveller_name'];
+								$query->departure_date = $value['departure_date'];
+								$query->supplier_name = $value['supplier_name'];
+								$query->supplier_invoice_number = $value['supplier_invoice_number'];
+								$query->created_by = $value['created_by'];
+								$query->voucher_number = $value['voucher_number'];
+								$query->invoice_date = $value['invoice_date'];
+								$query->order_umber = $value['order_number'];
+								$query->invoice_amount = $value['invoice_amount'];
+								$query->comment = $value['query_comments'];
+								$query->date_uploaded = $templateData['date_uploaded'];
+								$query->save();	
+								return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");								
+							}
 						}
 					}
 				}
-
-				return $templateData;
 				if(!empty($insert))
 				{
-					if ($file == 'general_upload')
-						Item::insert($insert);
-					elseif ($file == 'clockin_upload')
-						Item::insert($insert);
-					elseif ($file == 'query_upload')
-						Item::insert($insert);
-						
-					return back()->with('success','Insert Record successfully.');
+					if ($uploadType == 1)
+						AppraisalKPIResult::insert($insert);
+					elseif ($uploadType == 2)
+						AppraisalClockinResults::insert($insert);
+					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");
 				}
-
 			}
-
+			else return back()->with('error','Please Check your file, Something is wrong there.');
 		}
 		
         $data['page_title'] = "Employee Appraisals";
@@ -171,98 +201,7 @@ class AppraisalKPIResultsController extends Controller
         ];
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
-        //AuditReportsController::store('Performance Appraisal', 'Upload type accessed', "Accessed by User", 0);
-		//return view('appraisals.upload_appraisal')->with($data);
-    }
-	
-	/*public function uploadAppraisal(Request $request)
-    {
-		$this->validate($request, [     
-           'upload_type' => 'bail|required|integer|min:0',         
-        ]);
-		# Get kpi from
-		$kpis = DB::table('appraisals_kpis')
-			->select('appraisals_kpis.measurement','appraisals_kpis.id')
-			->where('appraisals_kpis.is_upload', 1)
-			->orderBy('appraisals_kpis.measurement')
-			->get();
-		if ($request->input('upload_type') == 1) $uploadName = "general_upload";
-		elseif ($request->input('upload_type') == 2) $uploadName = "clockin_upload";
-		elseif ($request->input('upload_type') == 3) $uploadName = "query_upload";
-		
-        $data['kpis'] = $kpis;
-        $data['uploadName'] = $uploadName;
-        $data['upload_type'] = $request->input('upload_type');
-        $data['page_title'] = "Employee Appraisals";
-        $data['page_description'] = "Load Appraisals KPI's";
-        $data['breadcrumb'] = [
-            ['title' => 'Performance Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', 'Upload type accessed', "Accessed by User", 0);
-		return view('appraisals.upload_appraisal')->with($data);
-    }*/
-	
-	public function uploadkpi(Request $request)
-    {
-		$this->validate($request, [     
-           'upload_type' => 'bail|required|integer|min:0',         
-           'date_uploaded' => '',         
-           'kpi_id' => 'bail|required|integer|min:0',         
-        ]);
-		$file = $request->input('type');
-		if($request->hasFile($file))
-		{
-			$path = $request->file($file)->getRealPath();
-
-			$data = Excel::load($path, function($reader) {})->get();
-
-			if(!empty($data) && $data->count()){
-
-				foreach ($data->toArray() as $key => $value) {
-					if(!empty($value)){
-						foreach ($value as $v) {
-							if ($file == 'general_upload')
-								Item::insert($insert);
-							elseif ($file == 'clockin_upload')
-								Item::insert($insert);
-							elseif ($file == 'query_upload')
-								Item::insert($insert);
-							$insert[] = ['title' => $v['title'], 'description' => $v['description']];
-						}
-					}
-				}
-
-				
-				if(!empty($insert))
-				{
-					if ($file == 'general_upload')
-						Item::insert($insert);
-					elseif ($file == 'clockin_upload')
-						Item::insert($insert);
-					elseif ($file == 'query_upload')
-						Item::insert($insert);
-						
-					return back()->with('success','Insert Record successfully.');
-				}
-
-			}
-
-		}
-		return $request;
-        $data['page_title'] = "Employee Appraisals";
-        $data['page_description'] = "Load Appraisals KPI's";
-        $data['breadcrumb'] = [
-            ['title' => 'Performance Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', 'Upload type accessed', "Accessed by User", 0);
-		return back()->with('error','Please Check your file, Something is wrong there.');
-		return view('appraisals.upload_appraisal')->with($data);
+        AuditReportsController::store('Performance Appraisal', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
     }
 
     /**

@@ -21,7 +21,7 @@
                 <!-- /.box-header -->
 
                 <!-- Form Start -->
-                <form name="load-kpi-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">
+                <form name="load-kpi-form" class="form-horizontal" method="POST" action="/appraisal/search_results" >
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -36,14 +36,6 @@
                                 </ul>
                             </div>
                         @endif
-                        <div class="form-group{{ $errors->has('appraisal_type') ? ' has-error' : '' }}">
-                            <label for="appraisal_type" class="col-sm-2 control-label">Appraisal Type</label>
-
-                            <div class="col-sm-10">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_upload" name="appraisal_type" value="1"{{ old('appraisal_type') != 2 ? ' checked' : '' }}> File Upload</label>
-                                <label class="radio-inline"><input type="radio" id="rdo_manual" name="appraisal_type" value="2" {{ old('appraisal_type') == 2 ? ' checked' : '' }}> Manual</label>
-                            </div>
-                        </div>
 						@foreach($division_levels as $division_level)
 							<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 								<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -76,40 +68,6 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group file-upload-field {{ $errors->has('upload_type') ? ' has-error' : '' }}">
-							<label for="upload_type" class="col-sm-2 control-label">Upload Types</label>
-
-							<div class="col-sm-10">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<select id="upload_type" name="upload_type" class="form-control">
-										<option value="">*** Select Upload Type ***</option>
-											<option value="1">General</option>
-											<option value="2">Clock In</option>
-											<option value="3">Query Report </option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="form-group file-upload-field{{ $errors->has('kpi_id') ? ' has-error' : '' }}">
-                            <label for="kpi_id" class="col-sm-2 control-label">KPI</label>
-
-							<div class="col-sm-10">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<select id="kpi_id" name="kpi_id" class="form-control select2" style="width: 100%;">
-										<option value="">*** Select a KPI ***</option>
-										@foreach($kpis as $kpi)
-											<option value="{{ $kpi->id }}">{{ $kpi->measurement }}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-						</div>
 						<div class="form-group file-upload-field {{ $errors->has('date_uploaded') ? ' has-error' : '' }}">
                             <label for="date_uploaded" class="col-sm-2 control-label">Date Uploaded</label>
                             <div class="col-sm-10">
@@ -121,32 +79,15 @@
                                 </div>
                             </div>
                         </div>
-						<div class="form-group file-upload-field {{ $errors->has('file_input') ? ' has-error' : '' }}">
-                            <label for="file_input" class="col-sm-2 control-label">File input</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-user"></i>
-								</div>
-								  <input type="file" class="form-control " id="file_input" name="input_file">
-								</div>
-                            </div>
-                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <input type="submit" id="load-kpis" name="load-kpis" class="btn btn-primary pull-right" value="Load KPIs">
+                        <input type="submit" id="load-kpis" name="load-kpis" class="btn btn-primary pull-right" value="Get Template">
                     </div>
                 </form>
             </div>
         </div>
-		@if (session('success'))
-        @include('appraisals.partials.success_action', ['modal_title' => 'Appraisal Successfully Uploaded!', 'modal_content' => session('success')])
-        @endif
-		@if (session('error'))
-        @include('appraisals.partials.success_action', ['modal_title' => 'An Error Occurred!', 'modal_content' => session('error')])
-        @endif
         <!-- Include add new modal -->
     </div>
 @endsection
@@ -170,27 +111,13 @@
             $('#back_button').click(function () {
                 location.href = '/appraisal/load_appraisals';
             });
-            //Initialize iCheck/iRadio Elements
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
             //Date picker
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
                 autoclose: true,
                 todayHighlight: true
             });
-
-            //call hide/show fields functions on doc ready
-            hideFields();
-
-            //show/hide file upload or manual fields on radio checked
-            $('#rdo_upload, #rdo_manual').on('ifChecked', function(){
-                hideFields();
-            });
-
+			
             //Load divisions drop down
             var parentDDID = '';
             var loadAllDivs = 1;
@@ -207,22 +134,5 @@
                 loadAllDivs = -1;
             @endforeach
         });
-        //function to hide/show manual or file upload fields
-        function hideFields() {
-            var appraisalType = $("input[name='appraisal_type']:checked").val();
-            if (appraisalType == 1) { //File upload
-                $('.file-upload-field').show();
-                $('.manual-field').hide();
-                $('form[name="load-kpi-form"]').attr('action', '/appraisal/upload_appraisals');
-				$('#load-kpis').val("Upload KPIs");
-            }
-            else if (appraisalType == 2) { //Manual
-                $('.manual-field').show();
-                $('.file-upload-field').hide();
-                $('form[name="load-kpi-form"]').attr('action', '/appraisal/load_emp_appraisals');
-				$('#load-kpis').val("Load KPIs");
-            }
-            return appraisalType;
-        }
     </script>
 @endsection
