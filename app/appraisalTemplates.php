@@ -11,15 +11,16 @@ class appraisalTemplates extends Model
 	
 	// Mass assignable fields
     protected $fillable = [
-        'template', 'status', 'job_title_id'];
+        'template', 'status',
+    ];
 		
-		//Relationship educator and user
+    //Relationship appraisal template and job title
     public function jobTitle() {
         return $this->belongsTo(JobTitle::class, 'job_title_id');
     }
 	
-		//Relationship template and Kpis
-    public function kpisTemplate() {
-        return $this->hasmany(appraisalsKpis::class, 'template_id');
+    //Relationship template and Kpis
+    public function kpi() {
+        return $this->hasMany(appraisalsKpis::class, 'template_id');
     }
 }

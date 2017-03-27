@@ -176,7 +176,7 @@ class AppraisalKpiTypeController extends Controller
     {
         if ($kpi->status == 1)
         {
-            $kpi->load('kpiIntScore');
+            $kpi->load('kpiIntScore', 'kpiTemplate');
             $data['page_title'] = "KPI Integer Score";
             $data['page_description'] = "KPI Integer Range Score";
             $data['breadcrumb'] = [

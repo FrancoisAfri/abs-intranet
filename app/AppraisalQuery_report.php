@@ -14,7 +14,7 @@ class AppraisalQuery_report extends Model
 						, 'query_type', 'hr_id', 'account_no', 'Account_name'
 						, 'traveller_name', 'departure_date', 'supplier_name', 'supplier_invoice_number'
 						, 'created_by', 'voucher_number', 'invoice_date', 'order_umber'
-						, 'invoice_amount', 'date_uploaded', 'comment'];
+						, 'invoice_amount', 'date_uploaded', 'comment', 'query_date'];
 	
             
     //Relationship kpi and IntegerRange

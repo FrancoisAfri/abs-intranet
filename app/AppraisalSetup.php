@@ -13,8 +13,6 @@ class appraisalSetup extends Model
     protected $fillable = [
         'number_of_times', 'percentage', 'active'];
 		
-	//Relationship categories and Kpas
-   // public function kpascategory() {
-        //return $this->hasmany(appraisalKpas::class, 'category_id');
-    }
+
+    
 }

@@ -16,7 +16,7 @@ class appraisalsKpis extends Model
 		'category_id','is_upload'];
 		
 	//Relationship template and Kpis
-    public function kpistemplate() {
+    public function kpiTemplate() {
 		return $this->belongsTo(appraisalTemplates::class, 'template_id');
     }
 	//Relationship categories and Kpis
@@ -31,21 +31,38 @@ class appraisalsKpis extends Model
     public function kpiranges() {
 		return $this->hasMany(appraisalsKpiRange::class, 'kpi_id');
     }
-    //Relationship kpi and range
+    //Relationship kpi and number
+    public function kpiNumber() {
+        return $this->hasMany(appraisalsKpiNumber::class, 'kpi_id');
+    }
+    //Relationship kpi and query report
     public function kpiQueryResults() {
         return $this->hasMany(AppraisalQuery_report::class, 'kpi_id');
     }
-	//Relationship kpi and range
+	//Relationship kpi and clock in
     public function kpiIntAttendanceResults() {
         return $this->hasMany(AppraisalClockinResults::class, 'kpi_id');
     }
-	//Relationship kpi and range
+	//Relationship kpi and integer score range
     public function kpiIntScore() {
         return $this->hasMany(AppraisalKPIIntRange::class, 'kpi_id');
+    }
+    /*//Relationship kpi and score type. dynamically returns the correct score type based on the kpi type
+    public function kpiScoreType() {
+        if ($this->kpi_type) return $this->kpiIntScore();
+    }*/
+    //Relationship kpi and result
+    public function results() {
+        return $this->hasMany(AppraisalKPIResult::class, 'kip_id');
     }
 
     //Function to add a new kpi integer range
     public function addKPIIntRange(AppraisalKPIIntRange $kpiIntRange) {
         return $this->kpiIntScore()->save($kpiIntRange);
+    }
+
+    //Function to add a new kpi result
+    public function addResult(AppraisalKPIResult $result) {
+        return $this->kpiIntScore()->save($result);
     }
 }
