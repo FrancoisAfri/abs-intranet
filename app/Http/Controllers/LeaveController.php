@@ -38,7 +38,6 @@ class LeaveController extends Controller
 		if (!empty($leave_customs))
             $leave_customs = $leave_customs->load('userCustom');
 
-
         //return $leave_customs;
         $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->get();
@@ -63,13 +62,19 @@ class LeaveController extends Controller
             $query->orderBy('id', 'asc');
 
         }]);
-        //return $leaveTypes->first()->leave_profle->where('id', 3);
+
+//                $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['HRPerson' => function($query) {
+//            $query->orderBy('status', 1);
+//
+//        }]);
+
+        // $leaveTypes->first()->leave_profle->where('id', 3);
         $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
         $leave_configuration = DB::table('leave_configuration')->get();
         //$type_profile = App\LeaveType::find(1)->type_profile()->orderBy('name')->get();
 
        //return $type_profile;
-        $employees = HRPerson::where('status', 1)->get();
+        //$employees = HRPerson::where('status', 1)->get();
 
 
         $data['page_title'] = "leave type";
@@ -85,8 +90,8 @@ class LeaveController extends Controller
        // $data['leave_profle']=$leave_profle;
         $data['type_profile'] = $type_profile;
        //return $type_profile;
-        $data['employees'] = $employees;
-
+       // $data['employees'] = $employees;
+        return $leaveTypes;
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('leave.setup')->with($data);
     }
@@ -97,6 +102,7 @@ class LeaveController extends Controller
         $this->validate($request, [
             'day5min'=>'numeric|min:2',
             'day5max'=>'numeric|min:2',
+            'day5min'<='numeric|max:day5max',
             'day6min'=>'numeric|min:2',
             'day6max'=>'numeric|min:2',
             'shiftmin'=>'numeric|min:2',
@@ -111,7 +117,7 @@ class LeaveController extends Controller
         
         $shiftmin = (trim($request->input('shiftmin')) != '') ? (int) $request->input('shiftmin') : null;
         $shiftmax = (trim($request->input('shiftmax')) != '') ? (int) $request->input('shiftmax') : null;
-        
+
         $lev->leave_profle()->sync([
             2 => ['min' => $day5min, 'max' =>$day5max],
             3 => ['min' => $day6min, 'max' => $day6max],
@@ -122,22 +128,7 @@ class LeaveController extends Controller
         AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json();
     }
-    #validate leave config checboxes
-//        public function store(Request $request,leave_configuration $levg){
-//          
-////            $this-> validate($request,['allow_annualLeave_credit','allow_sickLeave_credit',
-////                                       'show_non_employees_in_leave_Module','require_managers_approval',
-////                                       'all_managers_to_approve','require_department_head_approval',
-////                                       'require_hr_approval','require_payroll_approval' => 'required']);
-////            $request::get('allow_annualLeave_credit');
-////           if(!Input::get)
-//            
-//                $levg->get($request->all());
-//                return back();
-//
-//        }
-
-        //#collect checkboxes from Leave CreditSettings
+ 
 
         public function rules(Request $request)
         {
@@ -232,6 +223,7 @@ class LeaveController extends Controller
     //
     public function customleaveAct(leave_custom $lev)
     {
+//        return $lev;
         if ($lev->status == 1) $stastus = 0;
         else $stastus = 1;
 

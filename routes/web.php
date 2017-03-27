@@ -62,16 +62,27 @@ Route::get('leave/types', 'LeaveSetupController@setuptypes');
 Route::get('/leave/setup', 'LeaveSetupController@showSetup');
 Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
-Route::get('leave/setup/leave_credit', 'LeaveSetupController@store');
+Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
 
 #leave Allocation
-Route::get('leave/Allocate_leave_types', 'LeaveSetupController@allocateleave');
+Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
+Route::post('leave/Allocate_leave', 'LeaveSetupController@leavecredit');
+Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resert'); 
+Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
+
+#leave Application
+Route::get('leave/application', 'LeaveSetupController@apply');
+Route::get('leave/application/hours', 'LeaveSetupController@hours');
+
+
 
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
 Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
+
+
 
 
 
@@ -140,7 +151,7 @@ Route::post('audits/print', 'AuditReportsController@printreport');
 Route::get('/appraisal/setup', 'AppraisalSetupController@show');
 Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
 Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
-
+Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
 # Performance Appraisals Module
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
@@ -194,6 +205,9 @@ Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@load
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
+// Appraisal search
+Route::get('appraisal/search', 'AppraisalSearchController@index');
+Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');

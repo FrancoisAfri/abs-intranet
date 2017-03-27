@@ -10,7 +10,7 @@ class AppraisalClockinResults extends Model
     public $table = 'appraisal_clockin_results';
 
     // Mass assignable fields
-    protected $fillable = ['attendance', 'date_uploaded', 'hr_id'];
+    protected $fillable = ['attendance', 'date_uploaded', 'hr_id', 'kip_id'];
 	
             
     //Relationship kpi and IntegerRange
