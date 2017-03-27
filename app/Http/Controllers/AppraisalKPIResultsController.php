@@ -9,19 +9,11 @@ use App\HRPerson;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use App\AppraisalQuery_report;
-use App\AppraisalKPIResult;
 use App\AppraisalClockinResults;
-use App\appraisalsKpis;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AuditReportsController;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests;
 use Excel;
 class AppraisalKPIResultsController extends Controller
 {
