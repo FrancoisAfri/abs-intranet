@@ -148,14 +148,13 @@ Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
 
 # Performance Appraisals Module
-//<<<<<<< HEAD
-//=======
+
 Route::get('/appraisal/setup', 'AppraisalSetupController@show');
 Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
 Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
 Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
 # Performance Appraisals Module
-//>>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
+
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
 Route::post('appraisal/template', 'AppraisalTemplatesController@temlateSave');
 Route::patch('appraisal/template_edit/{template}', 'AppraisalTemplatesController@editTemplate');
@@ -201,7 +200,9 @@ Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
 
 Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
-Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@loadEmpAppraisals');
+//Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@loadEmpAppraisals');
+Route::get('appraisal/load/result/{emp}/{month}', 'AppraisalKPIResultsController@loadEmpAppraisals');
+Route::post('appraisal/emp/appraisal/save', 'AppraisalKPIResultsController@storeEmpAppraisals');
 
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
 //<<<<<<< HEAD

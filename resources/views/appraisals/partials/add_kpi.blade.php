@@ -92,9 +92,24 @@
 								<span class="input-group-addon">
 								  <i class="fa fa-black-tie"></i>
 								</span>
-								<select id="is_upload" name="is_upload" class="form-control" required>
+								<select id="is_upload" name="is_upload" class="form-control" onchange="hideFields();" required>
 									<option value="1">Yes</option>
 									<option value="2">No</option>
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group" id="upload_type_div">
+						<label for="is_upload" class="col-sm-3 control-label">Upload Type</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<span class="input-group-addon">
+								  <i class="fa fa-black-tie"></i>
+								</span>
+								<select id="upload_type" name="upload_type" class="form-control">
+									<option value="1">General</option>
+									<option value="2">Clock In</option>
+									<option value="3">Query Report </option>
 								</select>
 							</div>
 						</div>

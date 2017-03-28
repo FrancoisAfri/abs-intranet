@@ -16,9 +16,10 @@ class CreateAppraisalKPIResultsTable extends Migration
         Schema::create('appraisal_k_p_i_results', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('hr_id')->index()->unsigned()->nullable();
-            $table->integer('kip_id')->index()->unsigned()->nullable();
+            $table->integer('kpi_id')->index()->unsigned()->nullable();
             $table->integer('template_id')->index()->unsigned()->nullable();
-            $table->double('result')->nullable();
+            $table->double('score')->nullable();
+            $table->double('percent')->nullable();
             $table->bigInteger('date_uploaded')->nullable();
             $table->string('comment')->nullable();
             $table->timestamps();
