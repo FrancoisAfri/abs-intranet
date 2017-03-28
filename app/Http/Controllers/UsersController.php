@@ -11,6 +11,7 @@ use App\HRPerson;
 use App\User;
 use App\modules;
 use App\LeaveType;
+use App\leave_custom;
 use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
@@ -70,6 +71,7 @@ class UsersController extends Controller
 	{
 		$userID = $user->id;
 		//die;
+     
         $modules = DB::table('security_modules')->select('security_modules.id as mod_id', 'security_modules.name as mod_name', 'security_modules_access.access_level')
 		 ->leftjoin("security_modules_access",function($join) use ($userID) {
                 $join->on("security_modules.id","=","security_modules_access.module_id")
@@ -254,6 +256,7 @@ class UsersController extends Controller
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
+             $employees = HRPerson::where('status', 1)->get();
 
 
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
@@ -271,7 +274,7 @@ class UsersController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['marital_statuses'] = $marital_statuses;
         $data['leave_profile'] = $leave_profile;
-
+        $data['employees'] = $employees;
         $data['breadcrumb'] = [
             ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'User details', 'active' => 1, 'is_module' => 0]
@@ -289,6 +292,7 @@ class UsersController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->where('name', 1)->orderBy('name', 'asc')->get();
+      
         
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update your details";
@@ -466,4 +470,37 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'User Password Updated', "By User", 0);
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
+
+    public function addAnnual(Request $request) {
+    
+        $this->validate($request, [
+            'number_of_days' => 'required',
+            
+        ]);
+           $lateData = $request->all();
+        unset($lateData['_token']);
+        $leave_custom = new leave_custom($lateData);
+        $leave_custom->active = 1;
+        $leave_custom->save();
+        AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned By User", 0);
+        return response()->json();
+
+    }
+
+     public function updateAnnual(Request $request, leave_custom $lev)
+    {
+        //$user = Auth::user()->load('person');
+        $this->validate($request, [
+            //'hr_id' => 'required',
+            'number_of_days'=>  'numeric|required',
+
+        ]);
+        //$lev->hr_id = $request->input('hr_id');
+        $lev->number_of_days = $request->input('number_of_days');
+        $lev->update();
+        //return $lev;
+        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
+        return response()->json();
+    }
+    //
 }

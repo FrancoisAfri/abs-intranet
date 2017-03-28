@@ -71,7 +71,7 @@ class AppraisalTemplatesController extends Controller
 	{
 		$this->validate($request, [
             'template' => 'required',       
-            'job_title_id' => 'bail|required|integer|min:0',       
+            'job_title_id' => 'unique:appraisal_templates,job_title_id',       
         ]);
 		$templateData = $request->all();
 		unset($templateData['_token']);
@@ -160,7 +160,7 @@ class AppraisalTemplatesController extends Controller
             'kpa_id' => 'bail|required|integer|min:0',       
             'category_id' => 'bail|required|integer|min:0',       
             'template_id' => 'bail|required|integer|min:0',       
-            'kpi_type' => 'bail|required|integer|min:0',       
+            'kpi_type' => 'bail|required|integer|min:1',       
             'is_upload' => 'bail|required|integer|min:0',       
         ]);
 		$kpiData = $request->all();

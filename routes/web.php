@@ -63,6 +63,8 @@ Route::get('/leave/setup', 'LeaveSetupController@showSetup');
 Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
 Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
+Route::post('/leave/setup/add', 'LeaveSetupController@addAnnual');
+//Route::patch('/leave/setup', 'LeaveSetupController@updateAnnual');
 
 #leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
@@ -204,13 +206,17 @@ Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
 Route::get('appraisal/load/result/{emp}/{month}', 'AppraisalKPIResultsController@loadEmpAppraisals');
 Route::post('appraisal/emp/appraisal/save', 'AppraisalKPIResultsController@storeEmpAppraisals');
 
-//Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
+Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
+//<<<<<<< HEAD
+
+//=======
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
 // Appraisal search
 Route::get('appraisal/search', 'AppraisalSearchController@index');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
+//>>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');

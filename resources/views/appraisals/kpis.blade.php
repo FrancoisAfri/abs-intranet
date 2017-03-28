@@ -16,7 +16,7 @@
 				<div style="overflow-X:auto;">
 				<table class="table table-bordered">
 					 <tr><th style="width: 10px"></th><th>Category</th><th>KPA</th><th>Indicator</th><th>Measurement</th><th>Source Of Evidence</th><th>Weight</th><th>Upload</th><th>KPI Type</th><th style="width: 40px"></th></tr>
-                    @if (!empty($kpis) > 0)
+                    @if (!empty($kpis))
 						@foreach($kpis as $kpi)
 						 <tr id="kpis-list">
 						  <td><button type="button" id="edit_kpi_title" class="btn btn-primary  btn-xs" 

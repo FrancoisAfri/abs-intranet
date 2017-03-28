@@ -545,9 +545,9 @@ class DatabaseSeeder extends Seeder
         $type->save();
         
         $type = new LeaveType();
-        $type->name = 'Worked in';
+        $type->name = 'Special Leave 2';
         $type->status =1;
-        $type->description = 'Worked in Leave Type' ;
+        $type->description = 'Special Leave Type' ;
         $type->save();
 
         //#insert leave profilse
