@@ -78,15 +78,27 @@ class AppraisalKPIResultsController extends Controller
                 $query->where('hr_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
             }])
-            //->with('kpiskpas')
             ->with('kpiranges')
             ->with('kpiNumber')
             ->with('kpiIntScore')
-            ->select('appraisals_kpis.id as kpi_id', 'appraisals_kpis.measurement', 'appraisals_kpis.indicator',
-                'appraisals_kpis.kpi_type', 'appraisals_kpis.source_of_evidence', 'appraisals_kpis.weight', 
-                'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+            ->select('appraisals_kpis.*', 'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
             ->orderBy('appraisal_kpas.name')
             ->get();
+        /*$kpis = appraisalsKpis::with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+            }])
+            ->with('kpiranges')
+            ->with('kpiNumber')
+            ->with('kpiIntScore')
+            ->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+            ->join('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+            ->join('hr_positions', 'appraisal_templates.job_title_id', '=', 'hr_positions.id')
+            ->join('hr_people', 'hr_positions.id', '=', 'hr_people.position')
+            ->select('appraisals_kpis.*',
+                'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+            ->orderBy('appraisal_kpas.name')
+            ->get();*/
         //return $kpis;
 
         $data['emp'] = $emp;

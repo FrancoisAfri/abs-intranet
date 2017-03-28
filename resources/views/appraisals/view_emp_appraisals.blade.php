@@ -19,15 +19,6 @@
                     </div>
                 </div>
                 <!-- /.box-header -->
-
-                <!-- Form Start
-                <form action="/appraisal/emp/appraisal/save" class="form-horizontal" method="POST">
-                    {{ csrf_field() }}
-
-                    <input type="hidden" name="hr_person_id" value="{{ $emp->id }}">
-                    <input type="hidden" name="appraisal_month" value="{{ $appraisalMonth }}">
-                    <button type="submit">Test</button>
-                </form> -->
                 <form action="/appraisal/emp/appraisal/save" id="kpi-result-form" name="kpi-result-form" class="form-horizontal" method="POST">
                     {{ csrf_field() }}
 
@@ -63,7 +54,7 @@
                                         <th>Result</th>
                                     </tr>
                                     @foreach ($kpis as $kpi)
-                                        <input type="hidden" name="kpi_id[]" value="{{ $kpi->kpi_id }}">
+                                        <input type="hidden" name="kpi_id[]" value="{{ $kpi->id }}">
                                         @if($loop->first || (isset($prevKPA) && $prevKPA != $kpi->kpa_id))
                                             <?php $prevKPA = 0; ?>
                                             <tr>
@@ -79,11 +70,11 @@
                                             <td style="text-align: center; vertical-align: middle;">{{ $kpi->weight . '%' }}</td>
                                             <td style="vertical-align: middle;">
                                                 @if($kpi->kpi_type === 1)
-                                                    <input type="number" class="form-control input-sm" id="range_score" name="score[{{ $kpi->kpi_id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
+                                                    <input type="number" class="form-control input-sm" id="range_score" name="score[{{ $kpi->id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
                                                 @elseif($kpi->kpi_type === 2)
-                                                    <input type="number" class="form-control input-sm" id="number_score" name="score[{{ $kpi->kpi_id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
+                                                    <input type="number" class="form-control input-sm" id="number_score" name="score[{{ $kpi->id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
                                                 @elseif($kpi->kpi_type === 3)
-                                                    <select id="one_to_score" name="score[{{ $kpi->kpi_id }}]" class="form-control select2" style="width: 100%;">
+                                                    <select id="one_to_score" name="score[{{ $kpi->id }}]" class="form-control select2" style="width: 100%;">
                                                         <option value="">Select a Score</option>
                                                         @foreach($kpi->kpiIntScore->sortBy('score') as $score)
                                                             <option value="{{ $score->score }}"{{ (count($kpi->results) > 0 && $kpi->results->first()->score == $score->score) ? ' selected' : '' }}>{{ $score->score }}</option>
