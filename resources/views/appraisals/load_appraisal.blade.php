@@ -123,13 +123,13 @@
                             </div>
                         </div>
                         <div class="form-group file-upload-field {{ $errors->has('date_uploaded') ? ' has-error' : '' }}">
-                            <label for="date_uploaded" class="col-sm-2 control-label">Date Uploaded</label>
+                            <label for="date_uploaded" class="col-sm-2 control-label">Appraisal Month</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" id="date_uploaded" name="date_uploaded" value="" placeholder="Select Date Uploaded...">
+									<input type="text" class="form-control" name="date_uploaded" id="date_uploaded" placeholder="Click To Select A Month" value="">
                                 </div>
                             </div>
                         </div>
@@ -195,6 +195,13 @@
                 todayHighlight: true
             });
             $('#appraisal_month').datepicker({
+                format: 'MM yyyy',
+                autoclose: true,
+                startView: "months",
+                minViewMode: "months",
+                todayHighlight: true
+            });
+			$('#date_uploaded').datepicker({
                 format: 'MM yyyy',
                 autoclose: true,
                 startView: "months",

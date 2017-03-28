@@ -121,47 +121,26 @@ class AppraisalKPIResultsController extends Controller
         return redirect("appraisal/load/result/$hrID/$appraisalMonth")->with('success_edit', "The employee's appraisals have been saved successfully.");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 	# Redicte to upload type
 	public function uploadAppraisal(Request $request)
     {
 		$this->validate($request, [     
            'upload_type' => 'bail|required|integer|min:0',         
-           'kpi_id' => 'bail|required|integer|min:0',         
-           'date_uploaded' => 'bail|required|integer|min:0',         
+           'kpi_id' => 'bail|required|integer|min:0',  
+		    'date_uploaded' => 'required',
         ]);
 		$uploadTypes = [1 => "General", 2 => 'Clock In', 3 => 'Query Report '];
 		$templateData = $request->all();
+
 		unset($templateData['_token']);
+		$appraisalMonth = trim($templateData['date_uploaded']);
 		$uploadType = $request->input('upload_type');
 		//convert dates to unix time stamp
-        if (isset($templateData['date_uploaded'])) {
-            $templateData['date_uploaded'] = str_replace('/', '-', $templateData['date_uploaded']);
-            $templateData['date_uploaded'] = strtotime($templateData['date_uploaded']);
-        }
+        if (isset($templateData['date_uploaded']))
+            $templateData['date_uploaded'] = strtotime(Carbon::today()->day . ' ' . $appraisalMonth);
         $kipID = $templateData['kpi_id'];
 		if($request->hasFile('input_file'))
 		{
-			//return $templateData;
 			$path = $request->file('input_file')->getRealPath();
 			$data = Excel::load($path, function($reader) {})->get();
 			if(!empty($data) && $data->count())
@@ -176,8 +155,8 @@ class AppraisalKPIResultsController extends Controller
 							$employees = HRPerson::where('employee_number', 12)->first();
 							$template = appraisalsKpis::where('id', $kipID)->first(); //template_id
 							if ($uploadType == 1)
-								$insert[] = ['kip_id' => $kipID,'template_id' => $template->template_id,
-								'result' => $val['result'], 
+								$insert[] = ['kpi_id' => $kipID,'template_id' => $template->template_id,
+								'score' => $val['result'], 
 								'date_uploaded' => $templateData['date_uploaded'],
 								'hr_id' => $employees->id];
 							elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
@@ -195,7 +174,7 @@ class AppraisalKPIResultsController extends Controller
 										if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
 										else $attendance = 2;
 									}
-									$insert[] = ['kip_id' => $kipID, 'attendance' => $attendance, 
+									$insert[] = ['kpi_id' => $kipID, 'attendance' => $attendance, 
 									'date_uploaded' => $templateData['date_uploaded'], 
 									'hr_id' => $employees->id];
 								}
@@ -207,7 +186,7 @@ class AppraisalKPIResultsController extends Controller
 								$value['invoice_date'] = !empty($value['invoice_date']) ? strtotime($value['invoice_date']) : 0;
 								
 								$query = new AppraisalQuery_report();
-								$query->kip_id = $kipID;
+								$query->kpi_id = $kipID;
 								$query->query_code = $value['query_code'];
 								$query->voucher_verification_code = $value['voucher_verification_code'];
 								$query->query_type = $value['query_type'];
@@ -234,8 +213,6 @@ class AppraisalKPIResultsController extends Controller
 						}
 					}
 				}
-
-				return $templateData;
 				if(!empty($insert))
 				{
 					if ($uploadType == 1)
@@ -258,50 +235,5 @@ class AppraisalKPIResultsController extends Controller
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
         AuditReportsController::store('Performance Appraisal', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
