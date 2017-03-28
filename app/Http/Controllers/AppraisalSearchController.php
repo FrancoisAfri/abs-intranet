@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use Excel;
+
 class AppraisalSearchController extends Controller
 {
 	public function __construct()
