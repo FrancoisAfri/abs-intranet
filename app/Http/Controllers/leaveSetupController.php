@@ -72,33 +72,7 @@ class LeaveSetupController extends Controller
         AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
         return view('leave.leave_types')->with($data);
     }
-    
-    public function apply()
-    {
-        
-        $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
-		if (!empty($leave_customs))
-            $leave_customs = $leave_customs->load('userCustom');
-        
-         //return $leave_customs;
-        $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
-        $employees = HRPerson::where('status', 1)->get();
-        $data['page_title'] = "leave Types";
-        $data['page_description'] = "Leave Application";
-        $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => '', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Leave Types';
-        $data['leaveTypes'] = $leaveTypes;
-        $data['employees'] = $employees;
-        $data['leave_customs']=$leave_customs;
 
-        AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
-        return view('leave.application')->with($data);  
-    }
-    
     //#leave allocation
     public  function show()
     {   

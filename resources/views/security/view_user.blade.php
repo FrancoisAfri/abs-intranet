@@ -75,7 +75,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="employee_number" name="employee_number" value="{{ $user->person->employee_number }}" placeholder="Employee Number" required>
+                                    <input type="text" class="form-control" id="employee_number" name="employee_number" value="{{ $user->person->employee_number }}" placeholder="Employee Number">
                                 </div>
                             </div>
                         </div>
@@ -98,17 +98,17 @@
                                 </div>
                             </div> -->
                             <div class="form-group">
-                                <label for="position" class="col-sm-2 control-label">Leave Profile</label>
+                                <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
 
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-black-tie"></i>
                                         </div>
-                                        <select name="position" class="form-control">
+                                        <select name="leave_profile" class="form-control">
                                             <option value="">*** Select leave Profile ***</option>
                                             @foreach($leave_profile as $leave_profiles)
-                                                <option value="{{ $leave_profiles->id }}" {{ ($user->person->leave_profiles == $leave_profiles->id) ?
+                                                <option value="{{ $leave_profiles->id }}" {{ ($user->person->leave_profile == $leave_profiles->id) ?
                                                 ' selected' : '' }}>{{ $leave_profiles->name }}</option>
                                             @endforeach
                                         </select>
@@ -134,6 +134,25 @@
                                 </div>
                             </div>
                         @endif
+
+                       
+
+                         <div class="form-group">
+                        <label for="action" class="col-sm-2 control-label">Reports to</label>
+                         <div class="col-sm-10">
+                           <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                             <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Manager ***</option>
+                                    @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    @endforeach
+                        </select>
+                           </div>
+                    </div>
+                    </div>
 
                         <div class="form-group">
                             <label for="cell_number" class="col-sm-2 control-label">Cell Number</label>
