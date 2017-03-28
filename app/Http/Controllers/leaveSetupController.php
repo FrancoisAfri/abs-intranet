@@ -127,7 +127,6 @@ class LeaveSetupController extends Controller
         $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
         $leave_configuration = DB::table('leave_configuration')->get()->first();
         $employees = HRPerson::where('status', 1)->get();
-        $employees = HRPerson::where('status', 1)->get();
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'setup';
         $data['leave_configuration'] = $leave_configuration;
@@ -162,24 +161,26 @@ class LeaveSetupController extends Controller
         $days = $allData['adjust_days'];
         $HRpeople = HRPerson::find($employees);
 //        return $HRpeople;
-     foreach($HRpeople->leave_types as $types) {
+        foreach($employees as $empID) {
+            $emp = HRPerson::find($empID);
+            $pro = $emp->leave_types;
+            $profile =$pro->where('id', $empID)->first() ;
+            $val = $profile->pivot->leave_balance;
            
-             $val = $types->pivot->leave_balance;
-             return $val;
-//            $types = $emp->leave_types();
-//          $curentBalance = $types->where($empID)->first() ? $lev->pivot->leave_balance : '' ;
-//         $profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '';
-          // return $emp;
+            // calculations
+            $currentBalance =  $val + $days;
+            $emp->leave_types()->sync([$empID => ['leave_balance' => $currentBalance ]]);
+//         return $val;
+             
         }
 //        $emp;
 //      $HRpeople = HRPerson::find(1);
         
          //loop through the pivot table using the empID s
 //        foreach ($emp->leave_types as $types) { 
-//            $val = $types->pivot->leave_balance; 
+//            $val = $types->pivot->leave_balance;
 //            $currentBalance =  $val + $days  ;
-////            return $currentBalance;
-//            $emp->leave_types()->sync([$empID => ['leave_balance' => $currentBalance ]
+//          $emp->leave_types()->sync([$empID => ['leave_balance' => $currentBalance ]
 //
 //        ]);
 //        }
@@ -206,7 +207,7 @@ public function  resert(Request $request)
     
         foreach($employees as $empID) {
             $emp = HRPerson::find($empID);
-           //return $emp;
+//           return $emp;
         $emp->leave_types()->sync([
         $empID => ['leave_balance' => $resertData['resert_days']]
 
@@ -234,27 +235,27 @@ public function  resert(Request $request)
         
            
          $employees = $resertData['hr_person_id'];
-         $custom_leave;
-         $leave_type = 2;
-   
-        foreach($employees as $empID) {
-            $emp = leave_custom::find($empID);
-            
-//             $val = $types->pivot->leave_balance; 
-            
-            $hrID = $emp->hr_id;
-            
-            $curentDays = $emp->number_of_days;
-            
-//      if ($emp->hr_id === $employees ){
-//          $curentDays = $emp->number_of_days; 
-//          $custom_leave =$curentDays;
-//          
-//      }else if
-//          (empty(emp->hr_id))
-////       
+         foreach($employees as $empID) {
+            $emp = HRPerson::find($empID);
+            $custType = leave_custom::find($empID);
+            $leaType = LeaveType::find($empID);
+//             return ;
         }
-         
+        // loop through the pivot table to get leaveType id
+     foreach ($emp->leave_types as $types) { 
+            $val = $types->pivot->leave_type_id;
+//         return $val;
+        }
+        
+         $profile = $leaType->leave_profle->where('id', 2)->first() ? $profile->pivot->max : '';
+        
+            return $profile;
+
+//        foreach ($leaType->leave_profile as $profile) { 
+//            $prof = $profile->pivot->leave_type_id;
+//            return $prof;
+//        }
+        
        
 
        return view('leave.leave_types'); 
