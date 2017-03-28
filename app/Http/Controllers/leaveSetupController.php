@@ -118,6 +118,10 @@ class LeaveSetupController extends Controller
             $query->orderBy('name', 'asc');
         }]);
         
+         $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
+		if (!empty($leave_customs))
+            $leave_customs = $leave_customs->load('userCustom');
+        
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         //return $divisionLevels;
         $data['active_mod'] = 'Leave Management';
@@ -166,7 +170,7 @@ class LeaveSetupController extends Controller
         return view('leave.setup')->with($data);
     }
 
-    public function  leavecredit(Request $request, HRPerson $person , LeaveType $lev){
+    public function  leavecredit(Request $request, HRPerson $person ){
     $validator = Validator::make($request->all(), [      
             'leave_type' => 'bail|required',       
             'division_level_2' => 'bail|required',       
@@ -206,7 +210,7 @@ class LeaveSetupController extends Controller
 }
         //leavecredit
 
-public function  resert(Request $request, HRPerson $person)
+public function  resert(Request $request)
 {
     $validator = Validator::make($request->all(), [      
             'leave_type' => 'bail|required',       
@@ -224,7 +228,7 @@ public function  resert(Request $request, HRPerson $person)
     
         foreach($employees as $empID) {
             $emp = HRPerson::find($empID);
-          // return $emp;
+           //return $emp;
         $emp->leave_types()->sync([
         $empID => ['leave_balance' => $resertData['resert_days']]
 
@@ -238,29 +242,32 @@ public function  resert(Request $request, HRPerson $person)
     public function allocate(Request $request)
     {
         $this->validate($request, [      
-            'leave_type' => 'bail|required|integer|min:0',       
-            'division_level_2' => 'bail|required|integer|min:0',       
-            'division_level_1' => 'bail|required|integer|min:0',       
-            'hr_person_id' => 'bail|required', 
+//           'leave_type' => 'bail|required',       
+////            'division_level_2' => 'bail|required',       
+////            'division_level_1' => 'bail|required',       
+//            'hr_person_id' => 'bail|required',
                  
         ]);
 
         
         
-         $resertData= $request->all();
+        $resertData= $request->all();
         unset($resertData['_token']);
         
-           $employees = $resertData['hr_person_id'];
-    
-        foreach($employees as $empID) {
-            $emp = HRPerson::find($empID);
-          // return $emp;
-        }
-        $emp;
+            $empl = $resertData['hr_person_id'];
+         $employees = $resertData['hr_person_id'];
         
-//        if ($employees == )
+        foreach($employees as $empID) {
+            $emp = leave_custom::find($empID);
+            $hrID = $emp->hr_id;
+            //return $hrID;
+            $curentDays = $emp->number_of_days;
+      
+       
+        }
+         
+       
 
-    return $resertData;
        return view('leave.leave_types'); 
     }
     
