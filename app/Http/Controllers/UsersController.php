@@ -70,6 +70,7 @@ class UsersController extends Controller
 	{
 		$userID = $user->id;
 		//die;
+     
         $modules = DB::table('security_modules')->select('security_modules.id as mod_id', 'security_modules.name as mod_name', 'security_modules_access.access_level')
 		 ->leftjoin("security_modules_access",function($join) use ($userID) {
                 $join->on("security_modules.id","=","security_modules_access.module_id")
@@ -254,6 +255,7 @@ class UsersController extends Controller
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
+             $employees = HRPerson::where('status', 1)->get();
 
 
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
@@ -271,7 +273,7 @@ class UsersController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['marital_statuses'] = $marital_statuses;
         $data['leave_profile'] = $leave_profile;
-
+        $data['employees'] = $employees;
         $data['breadcrumb'] = [
             ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'User details', 'active' => 1, 'is_module' => 0]
@@ -289,6 +291,7 @@ class UsersController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->where('name', 1)->orderBy('name', 'asc')->get();
+      
         
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update your details";

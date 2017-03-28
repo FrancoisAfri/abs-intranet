@@ -29,71 +29,7 @@ class LeaveController extends Controller
 
     public function index(){
 
-        //$data['page_title'] = "Users";
-//        $data['page_description'] = "Search Users";
-    }
 
-    public function types(){
-        $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
-		if (!empty($leave_customs))
-            $leave_customs = $leave_customs->load('userCustom');
-
-        //return $leave_customs;
-        $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
-        $employees = HRPerson::where('status', 1)->get();
-        $data['page_title'] = "leave Types";
-        $data['page_description'] = "Admin page for leave related settings";
-        $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/leave/types', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => '', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Leave Types';
-        $data['leaveTypes'] = $leaveTypes;
-        $data['employees'] = $employees;
-        $data['leave_customs']=$leave_customs;
-       // return $leaveTypes;
-        AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
-        return view('leave.leave_types')->with($data);
-    }
-    //#leave set up
-    public function showSetup() {
-        $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function($query) {
-            $query->orderBy('id', 'asc');
-
-        }]);
-
-//                $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['HRPerson' => function($query) {
-//            $query->orderBy('status', 1);
-//
-//        }]);
-
-        // $leaveTypes->first()->leave_profle->where('id', 3);
-        $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
-        $leave_configuration = DB::table('leave_configuration')->get();
-        //$type_profile = App\LeaveType::find(1)->type_profile()->orderBy('name')->get();
-
-       //return $type_profile;
-        //$employees = HRPerson::where('status', 1)->get();
-
-
-        $data['page_title'] = "leave type";
-        $data['page_description'] = "leave set up ";
-        $data['breadcrumb'] = [
-            ['title' => 'leave', 'path' => '/leave/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'setup';
-        $data['leave_configuration'] = $leave_configuration;
-        $data['leaveTypes'] = $leaveTypes;
-       // $data['leave_profle']=$leave_profle;
-        $data['type_profile'] = $type_profile;
-       //return $type_profile;
-       // $data['employees'] = $employees;
-        return $leaveTypes;
-        AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        return view('leave.setup')->with($data);
     }
         
     
