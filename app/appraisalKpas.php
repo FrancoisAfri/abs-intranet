@@ -17,6 +17,11 @@ class appraisalKpas extends Model
     public function kpascat() {
 		return $this->belongsTo(appraisalCategories::class, 'category_id');
     }
+
+    //Relationship categories and Kpas
+    public function kpi() {
+        return $this->hasMany(appraisalsKpis::class, 'kpa_id');
+    }
 	
 	    //function ro get people from a specific div level
     public static function kpaFronCat() {

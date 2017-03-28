@@ -57,7 +57,7 @@ class AppraisalKPIResultsController extends Controller
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
         $monthEnd = strtotime($monthEnd->endOfDay());
-        $emp = HRPerson::where('id', $empID)
+        /*$emp = HRPerson::where('id', $empID)
             ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
@@ -67,10 +67,30 @@ class AppraisalKPIResultsController extends Controller
             ->with('jobTitle.kpiTemplate.kpi.kpiNumber')
             ->with('jobTitle.kpiTemplate.kpi.kpiIntScore')
             ->get()
-            ->first();
-        //return $emp;
+            ->first();*/
+
+        $emp = HRPerson::find($empID);
+        $kpis = appraisalsKpis::join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+            ->join('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+            ->join('hr_positions', 'appraisal_templates.job_title_id', '=', 'hr_positions.id')
+            ->join('hr_people', 'hr_positions.id', '=', 'hr_people.position')
+            ->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+            }])
+            //->with('kpiskpas')
+            ->with('kpiranges')
+            ->with('kpiNumber')
+            ->with('kpiIntScore')
+            ->select('appraisals_kpis.id as kpi_id', 'appraisals_kpis.measurement', 'appraisals_kpis.indicator',
+                'appraisals_kpis.kpi_type', 'appraisals_kpis.source_of_evidence', 'appraisals_kpis.weight', 
+                'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+            ->orderBy('appraisal_kpas.name')
+            ->get();
+        //return $kpis;
 
         $data['emp'] = $emp;
+        $data['kpis'] = $kpis;
         $data['appraisalMonth'] = $appraisalMonth;
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');

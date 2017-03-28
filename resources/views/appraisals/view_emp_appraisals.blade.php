@@ -59,26 +59,31 @@
                                         <th>Measurement</th>
                                         <th>Indicator</th>
                                         <th>Source of Evidence</th>
-                                        <th>KPA (Weight)</th>
                                         <th style="text-align: center;">KPI Weight</th>
                                         <th>Result</th>
                                     </tr>
-                                    @foreach ($emp->jobTitle->kpiTemplate->kpi as $kpi)
-                                        <input type="hidden" name="kpi_id[]" value="{{ $kpi->id }}">
+                                    @foreach ($kpis as $kpi)
+                                        <input type="hidden" name="kpi_id[]" value="{{ $kpi->kpi_id }}">
+                                        @if($loop->first || (isset($prevKPA) && $prevKPA != $kpi->kpa_id))
+                                            <?php $prevKPA = 0; ?>
+                                            <tr>
+                                                <th class="success"><i class="fa fa-caret-right"></i></th>
+                                                <th class="success" colspan="5"><i>KPA: {{ $kpi->kpa_name }}<span class="pull-right">KPA Weight: {{ $kpi->kpa_weight . '%' }}</span></i></th>
+                                            </tr>
+                                        @endif
                                         <tr>
-                                            <td style="vertical-align: middle;"></td>
+                                            <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
                                             <td style="vertical-align: middle;">{{ $kpi->measurement }}</td>
                                             <td style="vertical-align: middle;">{{ $kpi->indicator }}</td>
                                             <td style="vertical-align: middle;">{{ $kpi->source_of_evidence }}</td>
-                                            <td style="vertical-align: middle;">{{ $kpi->kpiskpas->name . ' (' . $kpi->kpiskpas->weight . '%)' }}</td>
                                             <td style="text-align: center; vertical-align: middle;">{{ $kpi->weight . '%' }}</td>
                                             <td style="vertical-align: middle;">
                                                 @if($kpi->kpi_type === 1)
-                                                    <input type="number" class="form-control input-sm" id="range_score" name="score[{{ $kpi->id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
+                                                    <input type="number" class="form-control input-sm" id="range_score" name="score[{{ $kpi->kpi_id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
                                                 @elseif($kpi->kpi_type === 2)
-                                                    <input type="number" class="form-control input-sm" id="number_score" name="score[{{ $kpi->id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
+                                                    <input type="number" class="form-control input-sm" id="number_score" name="score[{{ $kpi->kpi_id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
                                                 @elseif($kpi->kpi_type === 3)
-                                                    <select id="one_to_score" name="score[{{ $kpi->id }}]" class="form-control select2" style="width: 100%;">
+                                                    <select id="one_to_score" name="score[{{ $kpi->kpi_id }}]" class="form-control select2" style="width: 100%;">
                                                         <option value="">Select a Score</option>
                                                         @foreach($kpi->kpiIntScore->sortBy('score') as $score)
                                                             <option value="{{ $score->score }}"{{ (count($kpi->results) > 0 && $kpi->results->first()->score == $score->score) ? ' selected' : '' }}>{{ $score->score }}</option>
@@ -87,6 +92,7 @@
                                                 @endif
                                             </td>
                                         </tr>
+                                        <?php $prevKPA = $kpi->kpa_id; ?>
                                     @endforeach
                                 </table>
                             </div>
