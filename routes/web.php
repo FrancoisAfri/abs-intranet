@@ -71,7 +71,7 @@ Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resert');
 Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
 #leave Application
-Route::get('leave/application', 'LeaveSetupController@apply');
+Route::get('leave/application', 'LeaveApplicationController@index');
 Route::get('leave/application/hours', 'LeaveSetupController@hours');
 
 
