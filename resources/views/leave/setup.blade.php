@@ -109,6 +109,26 @@
                                                 </tr>
                                             </div>
 
+                                             <div class="form-group">
+                                                <tr>
+                                                    <td>Allow Annual Negative Days</td>
+                                                    <td style="text-align: center; vertical-align: middle;">
+                                                        <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
+                                                        <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
+                                                    </td>
+                                                </tr>
+                                            </div>
+
+                                             <div class="form-group">
+                                                <tr>
+                                                    <td>Allow Sick Negative Days</td>
+                                                    <td style="text-align: center; vertical-align: middle;">
+                                                        <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
+                                                        <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
+                                                    </td>
+                                                </tr>
+                                            </div>
+
                         </table>
                     
                     <!-- /.box-body -->
