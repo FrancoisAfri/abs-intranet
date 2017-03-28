@@ -349,7 +349,6 @@ class UsersController extends Controller
         if (isset($person['leave_profile'])) {
             $person['leave_profile'] = (int) $person['leave_profile'];
         }
-
         //convert date of birth to unix time stamp
         if (isset($person['date_of_birth'])) {
             $person['date_of_birth'] = str_replace('/', '-', $person['date_of_birth']);
