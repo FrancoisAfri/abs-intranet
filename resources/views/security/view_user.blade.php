@@ -135,6 +135,25 @@
                             </div>
                         @endif
 
+                       
+
+                         <div class="form-group">
+                        <label for="action" class="col-sm-2 control-label">Reports to</label>
+                         <div class="col-sm-10">
+                           <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                             <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Manager ***</option>
+                                    @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    @endforeach
+                        </select>
+                           </div>
+                    </div>
+                    </div>
+
                         <div class="form-group">
                             <label for="cell_number" class="col-sm-2 control-label">Cell Number</label>
 

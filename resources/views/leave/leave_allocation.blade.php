@@ -39,7 +39,7 @@
 
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_adjust" name="allocation_type" value="1" checked> Adjust Leave</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_resert" name="allocation_type" value="2"> Resert Leave</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_resert" name="allocation_type" value="2"> Reset Leave</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_allocate" name="allocation_type" value="3"> Allocate Leave</label>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@
                         </div>
                         
                         <div class="form-group resert-field {{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Resert Number of Days</label>
+                            <label for="days" class="col-sm-2 control-label">Reset Number of Days</label>
                             <div class="col-sm-10">
                                <div class="input-group">
                                     <div class="input-group-addon">
