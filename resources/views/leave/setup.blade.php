@@ -56,7 +56,7 @@
         </div>
     </div>
     <!-- Include add new prime rate modal -->
-    @include('leave.Partials.edit_leave_type_days')
+    @include('leave.partials.edit_leave_type_days')
     @include('leave.partials.edit_leavetype') 
     </div>
 

@@ -109,8 +109,8 @@
                 <button type="button" id="add_custom_leave" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-custom-leave-modal">Add Custom Leave</button> {{--hr leave approval--}} </div>
         </div>
     </div>
-    @include('leave.Partials.add_custom_leave')
-    @include('leave.Partials.edit_customleave')
+    @include('leave.partials.add_custom_leave')
+    @include('leave.partials.edit_customleave')
 </div>
 @endsection
 <!--        edit ribbon-->
