@@ -200,8 +200,9 @@ Route::patch('appraisal/kpas/{kpa}', 'AppraisalsCategoriesController@editKpas');
 Route::get('/appraisal/kpa_active/{kpa}', 'AppraisalsCategoriesController@kpasAct');
 
 Route::get('appraisal/load_appraisals', 'AppraisalKPIResultsController@index');
-Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@loadEmpAppraisals');
-//Route::patch('appraisal/save_emp_appraisals', 'AppraisalKPIResultsController@storeEmpAppraisals');
+//Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@loadEmpAppraisals');
+Route::get('appraisal/load/result/{emp}/{month}', 'AppraisalKPIResultsController@loadEmpAppraisals');
+Route::post('appraisal/emp/appraisal/save', 'AppraisalKPIResultsController@storeEmpAppraisals');
 
 //Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');

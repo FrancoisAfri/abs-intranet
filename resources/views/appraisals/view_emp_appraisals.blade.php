@@ -20,8 +20,15 @@
                 </div>
                 <!-- /.box-header -->
 
-                <!-- Form Start -->
-                <form name="kpi-result-form" class="form-horizontal" method="POST" action="/appraisal/save_emp_appraisals" enctype="multipart/form-data">
+                <!-- Form Start
+                <form action="/appraisal/emp/appraisal/save" class="form-horizontal" method="POST">
+                    {{ csrf_field() }}
+
+                    <input type="hidden" name="hr_person_id" value="{{ $emp->id }}">
+                    <input type="hidden" name="appraisal_month" value="{{ $appraisalMonth }}">
+                    <button type="submit">Test</button>
+                </form> -->
+                <form action="/appraisal/emp/appraisal/save" id="kpi-result-form" name="kpi-result-form" class="form-horizontal" method="POST">
                     {{ csrf_field() }}
 
                     <input type="hidden" name="hr_person_id" value="{{ $emp->id }}">
@@ -31,42 +38,6 @@
                         @if($emp->jobTitle && $emp->jobTitle->kpiTemplate && $emp->jobTitle->kpiTemplate->kpi)
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <!--
-                                <ul class="products-list product-list-in-box text-muted well well-sm no-shadow">
-                                    <li class="item">
-                                        <div class="product-img">
-                                            <img src="{{ (!empty($emp->profile_pic)) ?
-                                                Storage::disk('local')->url("avatars/$emp->profile_pic") :
-                                                (($emp->gender === 0) ? $f_silhouette : $m_silhouette) }}" alt="Profile Picture">
-                                        </div>
-                                        <div class="product-info">
-                                            <!--<a href="{{ '/users/' . $emp->user_id . '/edit' }}" class="product-title">--
-                                            <strong>{{ $emp->first_name . ' ' . $emp->surname }}</strong>
-                                            <!--</a>--
-                                            <span class="label label-primary pull-right">Appraisal Month: </span>
-                                                <span class="product-description">
-                                                    @if(!empty($emp->email))
-                                            <i class="fa fa-envelope-o"></i> {{ $emp->email }}
-                                    @endif
-                                    @if(!empty($emp->position) && count($emp) > 0)
-                                            &nbsp; {{ ' | ' }} &nbsp; <i class="fa fa-user-circle"></i> {{ $emp->jobTitle->name }}
-                                    @endif
-                                            </span>
-                                    </div>
-                                </li>
-                            </ul>
-                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                <img src="{{ (!empty($emp->profile_pic)) ?
-                                                Storage::disk('local')->url("avatars/$emp->profile_pic") :
-                                                (($emp->gender === 0) ? $f_silhouette : $m_silhouette) }}" alt="Profile Picture"
-                                         style="max-height: 50px;" class="img-responsive img-thumbnail pull-left">
-                                    <strong class="lead">Financed Asset Description</strong><br>
-                                    <strong>Asset Type:</strong> <em>Lorem ipsum</em> &nbsp; &nbsp;
-                                    @if(1 == 1)
-                                            | &nbsp; &nbsp; <strong>Make:</strong> <em>Lorem ipsum</em> &nbsp; &nbsp;
-                                    @endif
-                                            </p>
-                                            -->
                                     <p class="lead">Appraisal Month: {{ $appraisalMonth }}</p>
                                 </div>
                             </div>
@@ -110,7 +81,7 @@
                                                     <select id="one_to_score" name="score[{{ $kpi->id }}]" class="form-control select2" style="width: 100%;">
                                                         <option value="">Select a Score</option>
                                                         @foreach($kpi->kpiIntScore->sortBy('score') as $score)
-                                                            <option value="{{ $score->score }}"{{ (count($kpi->results) > 0 && $kpi->results->first()->score === $score->score) ? ' selected' : '' }}>{{ $score->score }}</option>
+                                                            <option value="{{ $score->score }}"{{ (count($kpi->results) > 0 && $kpi->results->first()->score == $score->score) ? ' selected' : '' }}>{{ $score->score }}</option>
                                                         @endforeach
                                                     </select>
                                                 @endif
@@ -130,7 +101,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <button type="submit" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Result</button>
+                        <button type="submit" id="save_result" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Result</button>
                     </div>
                 </form>
             </div>
@@ -194,7 +165,9 @@
             });
 
             //Show success action modal
-            $('#success-action-modal').modal('show');
+            @if(Session('success_edit'))
+                $('#success-action-modal').modal('show');
+            @endif
         });
     </script>
 @endsection
