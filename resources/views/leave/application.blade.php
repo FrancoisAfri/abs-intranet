@@ -119,6 +119,7 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
                         <br>
                          <div class="row" >
                              <div class="form-group hours-field{{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">

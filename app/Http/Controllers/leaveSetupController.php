@@ -113,13 +113,13 @@ class LeaveSetupController extends Controller
        return view('leave.leave_allocation')->with($data); 
     }
    public function showSetup(Request $request) {
-       $data['page_title'] = "leave type";
+        $data['page_title'] = "leave type";
         $data['page_description'] = "leave set up ";
         $data['breadcrumb'] = [
             ['title' => 'leave', 'path' => '/leave/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
-                $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function($query) {
+            $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function($query) {
             $query->orderBy('id', 'asc');
 
         }]);
@@ -188,6 +188,42 @@ class LeaveSetupController extends Controller
     return back();
 }
         //leavecredit
+
+
+    public function addAnnual(Request $request) {
+
+        $this->validate($request, [
+            'number_of_days' => 'required|numeric',
+            
+        ]);
+           $lateData = $request->all();
+        unset($lateData['_token']);
+        $leave_configuration = new leave_configuration($lateData);
+        $leave_configuration->active = 1;
+        $leave_configuration->save();
+        DB::table('leave_configuration') ->where('id', 1) ->update(['annual_negative_days' => 1]);
+        
+        AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned By User", 0);
+        return response()->json();
+
+    }
+     public function addSick(Request $request) {
+
+        $this->validate($request, [
+            'number_of_days' => 'required|numeric',
+            
+        ]);
+           $lateData = $request->all();
+        unset($lateData['_token']);
+        $leave_configuration = new leave_configuration($lateData);
+        $leave_configuration->active = 1;
+        $leave_configuration->save();
+        DB::table('leave_configuration') ->where('id', 1) ->update(['sick_negative_days' => 1]);
+
+        AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned By User", 0);
+        return response()->json();
+
+    }
 
 public function  resert(Request $request)
 {
