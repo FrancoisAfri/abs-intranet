@@ -72,6 +72,8 @@ class AppraisalSearchController extends Controller
 		$division2 = !empty($results['division_level_2']) ? $results['division_level_2'] : 0;
 		$division1 = !empty($results['division_level_1']) ? $results['division_level_1'] : 0;
 		$hrPersonID = !empty($results['hr_person_id']) ? $results['hr_person_id'] : 0;
+		$dateUploaded = !empty($results['date_uploaded']) ? $results['date_uploaded'] : 0;
+		
 		$employees = HRPerson::where('status', 1)
 		->where(function ($query) use ($division5) {
 			if (!empty($division5)) {
@@ -107,14 +109,33 @@ class AppraisalSearchController extends Controller
 		->orderBy('surname')
 		->get();
 		
-        //return $employees;
 		$scoresArray = array();
 		foreach ($employees as $employee)
 		{
-			$scoresArray['names'] = $employee->full_name;
-			$scoresArray['names']['scores'] = AppraisalKPIResult::empAppraisal($employee->id);
+			/*array(
+    'Home' => '/mult/index.php',
+    'Map' => array(
+        '/mult/kar.php',
+        array(
+            'MapA' => '/mult/kara.php',
+            'MapB' => '/mult/karb.php'
+        )
+     ),
+     'Contact' => '/mult/sni.php',
+     ...
+);*/
+				$scoresArray[] = $employee->full_name;
+			if (!empty($dateUploaded)) 
+				$scoresArray[$employee->full_name][] = AppraisalKPIResult::empAppraisal($employee->id, $dateUploaded);
+			else 
+				$scoresArray[$employee->full_name][] = AppraisalKPIResult::empAppraisal($employee->id);
+				
+				//$scoresArray['names']['scores'] = AppraisalKPIResult::empAppraisal($employee->id);
+				//$scoresArray[][] = AppraisalKPIResult::empAppraisal($employee->id);
+				//$scoresArray = AppraisalKPIResult::empAppraisal($employee->id);
 			
 		}
+		return $scoresArray;
 		/*$scoresArray = array();
 		foreach ($$scoresArray as $employee)
 		{
@@ -129,6 +150,7 @@ class AppraisalSearchController extends Controller
             ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
         ];
 		
+        $data['scoresArray'] = $scoresArray;
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Search';
         AuditReportsController::store('Performance Appraisal', 'Search page accessed', "Accessed by User", 0);
