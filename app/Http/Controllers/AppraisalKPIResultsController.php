@@ -53,6 +53,9 @@ class AppraisalKPIResultsController extends Controller
     }
 
     public function loadEmpAppraisals($empID, $appraisalMonth){
+		//test
+		//return AppraisalKPIResult::empAppraisal(2);
+		//end test
         $appraisalMonth = trim($appraisalMonth);
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
@@ -115,7 +118,7 @@ class AppraisalKPIResultsController extends Controller
         ];
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', 'Employee Appraisal List Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Performance Appraisal', "Employee Appraisal $appraisalMonth Result Page Accessed", "Accessed by User", 0);
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
@@ -132,7 +135,8 @@ class AppraisalKPIResultsController extends Controller
         $hrID = $request->input('hr_person_id');
         $kpiIDs = $request->input('kpi_id');
         $scores = $request->input('score');
-
+		//return "Appraisal month: $appraisalMonth, HR id: $hrID, month start: $monthStart, month enf: $monthEnd";
+		//return Carbon::today()->day . ' ' . $appraisalMonth;
         foreach ($kpiIDs as $kpiID) {
             $kpiResult = AppraisalKPIResult::where('kpi_id', $kpiID)->where('hr_id', $hrID)->whereBetween('date_uploaded', [$monthStart, $monthEnd])->get();
             if (count($kpiResult) > 0) { //update result
@@ -145,11 +149,12 @@ class AppraisalKPIResultsController extends Controller
                 $result = new AppraisalKPIResult();
                 $result->kpi_id = $kpiID;
                 $result->hr_id = $hrID;
-                $result->date_uploaded = strtotime(Carbon::today()->day . ' ' . $appraisalMonth);
+                $result->date_uploaded = strtotime('15 ' . $appraisalMonth);
                 $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
                 $result->save();
             }
         }
+		AuditReportsController::store('Performance Appraisal', 'Appraisal result entered for ' . $appraisalMonth, "Actioned by User", 0);
         return redirect("appraisal/load/result/$hrID/$appraisalMonth")->with('success_edit', "The employee's appraisals have been saved successfully.");
     }
 
