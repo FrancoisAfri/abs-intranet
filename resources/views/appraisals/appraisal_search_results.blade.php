@@ -40,9 +40,12 @@
 					</tr>
 					</thead>
 					<tbody>
-					@if (!empty($programmes))
-						@foreach($programmes as $programme)
+					@if (!empty($scoresArray))
+						@foreach($scoresArray as $key => $scoreArray)
 						<tr>
+						<th>{{$key}}</td>
+							
+							
 						</tr>
 						@endforeach
 					@endif
