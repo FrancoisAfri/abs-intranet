@@ -15,7 +15,7 @@
                 <div class="box-body">
 				<div style="overflow-X:auto;">
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px"></th><th>Category</th><th>KPA</th><th>Indicator</th><th>Measurement</th><th>Source Of Evidence</th><th>Weight</th><th>Upload</th><th>KPI Type</th><th style="width: 40px"></th></tr>
+					 <tr><th style="width: 10px"></th><th>Category</th><th>KPA</th><th>Indicator</th><th>Measurement</th><th>Source Of Evidence</th><th>Weight</th><th>Upload</th><th>Upload Type</th><th>KPI Type</th><th style="width: 40px"></th></tr>
                     @if (!empty($kpis))
 						@foreach($kpis as $kpi)
 						 <tr id="kpis-list">
@@ -30,6 +30,7 @@
 						  data-is_upload="{{ $kpi->is_upload }}" 
 						  data-kpa_id="{{ $kpi->kpa_id }}" 
 						  data-category_id="{{ $kpi->category_id }}" 
+						  data-upload_type="{{ $kpi->upload_type }}" 
 						  data-weight="{{ $kpi->weight }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
 						  <td>{{!empty($kpi->cat_name) ? $kpi->cat_name : ''}}</td>
 						  <td>{{!empty($kpi->kpa_name) ? $kpi->kpa_name : ''}}</td>
@@ -38,6 +39,7 @@
 						  <td>{{!empty($kpi->source_of_evidence) ? $kpi->source_of_evidence : ''}}</td>
 						  <td>{{!empty($kpi->weight) ? $kpi->weight : ''}}</td>
 						  <td>{{($kpi->is_upload == 1) ? 'Yes' : 'No'}}</td>
+						  <td>{{(!empty($kpi->upload_type)) ? $KpiUploadTypeArray[$kpi->upload_type] : ''}}</td>
 						  <td><button type="button" id="view_kpi" class="btn btn-xs" onclick="postData({{$kpi->id}}, '{{$KpiTypeArray[$kpi->kpi_type]}}');">{{($kpi->kpi_type == 1) ? $KpiTypeArray[$kpi->kpi_type] : $KpiTypeArray[$kpi->kpi_type]}}</td>
 						  <td nowrap>
                               <button type="button" id="view_kpi" class="btn {{ (!empty($kpi->status) && $kpi->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$kpi->id}}, 'actdeac');"><i class="fa {{ (!empty($kpi->status) && $kpi->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($kpi->status) && $kpi->status == 1) ? "De-Activate" : "Activate"}}</button>
@@ -120,6 +122,7 @@
                 var Weight = btnEdit.data('weight');
                 var KpiType = btnEdit.data('kpi_type');
                 var IsUpload = btnEdit.data('is_upload');
+                var UploadType = btnEdit.data('upload_type');
                 var SourceOfEvidence = btnEdit.data('source_of_evidence');
                 var Indicator = btnEdit.data('indicator');
                 var kpaId = btnEdit.data('kpa_id');
@@ -129,6 +132,7 @@
                 modal.find('#weight').val(Weight);
                 modal.find('#kpi_type').val(KpiType);
                 modal.find('#is_upload').val(IsUpload);
+                modal.find('#upload_type').val(UploadType);
                 modal.find('#source_of_evidence').val(SourceOfEvidence);
                 modal.find('#indicator').val(Indicator);
                 modal.find('#kpa_id').val(kpaId);
@@ -137,6 +141,7 @@
 				$('select#kpa_id').val(kpaId);
 				$('select#kpi_type').val(KpiType);
 				$('select#is_upload').val(IsUpload);
+				$('select#upload_type').val(UploadType);
             });
 
             //function to post category form to server using ajax
@@ -151,6 +156,7 @@
                         indicator: $('form[name=' + formName + ']').find('#indicator').val(),
                         kpi_type: $('form[name=' + formName + ']').find('#kpi_type').val(),
                         is_upload: $('form[name=' + formName + ']').find('#is_upload').val(),
+                        upload_type: $('form[name=' + formName + ']').find('#upload_type').val(),
                         kpa_id: $('form[name=' + formName + ']').find('#kpa_id').val(),
                         category_id: $('form[name=' + formName + ']').find('#category_id').val(),
                         template_id: {{$template->id}},

@@ -105,6 +105,7 @@ class AppraisalTemplatesController extends Controller
         if ($template->status == 1) 
 		{
 			$KpiTypeArray = array(1 => 'Range', 2 => 'Number', 3 => 'From 1 To 10');
+			$KpiUploadTypeArray = array(1 => 'General', 2 => 'Clock In', 3 => 'Query Report ');
 			
 			$kpis = DB::table('appraisals_kpis')
 			->select('appraisals_kpis.*','appraisal_categories.name as cat_name', 'appraisal_kpas.name as kpa_name')
@@ -127,6 +128,7 @@ class AppraisalTemplatesController extends Controller
 			$data['kpaCategories'] = $kpaCategories; //
 			$data['kpas'] = $kpas; //
 			$data['KpiTypeArray'] = $KpiTypeArray; //
+			$data['KpiUploadTypeArray'] = $KpiUploadTypeArray; //
 			$data['active_mod'] = 'Performance Appraisal';
 			$data['active_rib'] = 'Templates';
 			//return $data;
@@ -165,7 +167,7 @@ class AppraisalTemplatesController extends Controller
         ]);
 		$kpiData = $request->all();
 		unset($kpiData['_token']);
-		$kpi = new appraisalsKpis($kpiData);
+		$kpi = new appraisalsKpis();
 		$kpi->status = 1;
 		$kpi->measurement = $kpiData['measurement'];
 		$kpi->weight = $kpiData['weight'];
@@ -176,6 +178,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpi_type = $kpiData['kpi_type'];
 		$kpi->is_upload = $kpiData['is_upload'];
 		$kpi->template_id = $kpiData['template_id'];
+		$kpi->upload_type = $kpiData['upload_type'];
 		$newkpi = $kpiData['indicator'];
         $kpi->save();
 		AuditReportsController::store('Performance Appraisal', 'KPI Added', "KPI Details: $kpiData[indicator]", 0);
@@ -199,6 +202,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpa_id = $request->input('kpa_id');
 		$kpi->kpi_type = $request->input('kpi_type');
 		$kpi->is_upload = $request->input('is_upload');
+		$kpi->upload_type = $request->input('upload_type');
 		
         $kpi->update();
 		$newtemplate = $request->input('indicator');
