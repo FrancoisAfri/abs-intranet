@@ -112,30 +112,17 @@ class AppraisalSearchController extends Controller
 		$scoresArray = array();
 		foreach ($employees as $employee)
 		{
-			/*array(
-    'Home' => '/mult/index.php',
-    'Map' => array(
-        '/mult/kar.php',
-        array(
-            'MapA' => '/mult/kara.php',
-            'MapB' => '/mult/karb.php'
-        )
-     ),
-     'Contact' => '/mult/sni.php',
-     ...
-);*/
-				$scoresArray[] = $employee->full_name;
-			if (!empty($dateUploaded)) 
+			//$scoresArray[] = $employee->full_name;
+			$scoresArray[] = AppraisalKPIResult::empAppraisal($employee->id);
+			/*$scoresArray[] = $employee->full_name;
+			if (!empty($dateUploaded))
 				$scoresArray[$employee->full_name][] = AppraisalKPIResult::empAppraisal($employee->id, $dateUploaded);
 			else 
 				$scoresArray[$employee->full_name][] = AppraisalKPIResult::empAppraisal($employee->id);
-				
-				//$scoresArray['names']['scores'] = AppraisalKPIResult::empAppraisal($employee->id);
-				//$scoresArray[][] = AppraisalKPIResult::empAppraisal($employee->id);
-				//$scoresArray = AppraisalKPIResult::empAppraisal($employee->id);
-			
+
+			*/
 		}
-		return $scoresArray;
+		//return $scoresArray;
 		/*$scoresArray = array();
 		foreach ($$scoresArray as $employee)
 		{
