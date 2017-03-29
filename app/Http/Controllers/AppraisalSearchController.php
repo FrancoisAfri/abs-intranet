@@ -112,7 +112,8 @@ class AppraisalSearchController extends Controller
 		$scoresArray = array();
 		foreach ($employees as $employee)
 		{
-			//$scoresArray[] = $employee->full_name;
+			if (empty($employee->position)) continue;
+			//
 			$scoresArray[] = AppraisalKPIResult::empAppraisal($employee->id);
 			/*$scoresArray[] = $employee->full_name;
 			if (!empty($dateUploaded))
@@ -122,13 +123,6 @@ class AppraisalSearchController extends Controller
 
 			*/
 		}
-		//return $scoresArray;
-		/*$scoresArray = array();
-		foreach ($$scoresArray as $employee)
-		{
-			$scoresArray['names'] = $employee->full_name;
-			$scoresArray['names']['scores'] = getScore($employee->id);
-		}*/
 		
 		$data['page_title'] = "Appraisals Search Results";
         $data['page_description'] = "Appraisals Search Results";

@@ -39,7 +39,7 @@
 						  <td>{{!empty($kpi->source_of_evidence) ? $kpi->source_of_evidence : ''}}</td>
 						  <td>{{!empty($kpi->weight) ? $kpi->weight : ''}}</td>
 						  <td>{{($kpi->is_upload == 1) ? 'Yes' : 'No'}}</td>
-						  <td>{{(!empty($kpi->upload_type)) ? $KpiUploadTypeArray[$kpi->upload_type] : ''}}</td>
+						  <td>{{(!empty($kpi->upload_type)) ? $KpiUploadTypeArray[$kpi->upload_type] : 'N/A'}}</td>
 						  <td><button type="button" id="view_kpi" class="btn btn-xs" onclick="postData({{$kpi->id}}, '{{$KpiTypeArray[$kpi->kpi_type]}}');">{{($kpi->kpi_type == 1) ? $KpiTypeArray[$kpi->kpi_type] : $KpiTypeArray[$kpi->kpi_type]}}</td>
 						  <td nowrap>
                               <button type="button" id="view_kpi" class="btn {{ (!empty($kpi->status) && $kpi->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$kpi->id}}, 'actdeac');"><i class="fa {{ (!empty($kpi->status) && $kpi->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($kpi->status) && $kpi->status == 1) ? "De-Activate" : "Activate"}}</button>

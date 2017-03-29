@@ -358,7 +358,8 @@ class UsersController extends Controller
             $person['date_of_birth'] = str_replace('/', '-', $person['date_of_birth']);
             $person['date_of_birth'] = strtotime($person['date_of_birth']);
         }
-
+		if (empty($person['position'])) $person['position'] = 0;
+		
         //Update users and hr table
         $user->update($person);
         $user->person()->update($person);

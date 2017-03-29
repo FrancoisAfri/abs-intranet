@@ -107,6 +107,7 @@
 								  <i class="fa fa-black-tie"></i>
 								</span>
 								<select id="upload_type" name="upload_type" class="form-control">
+									<option value="0">*** Select Upload Type ***</option>
 									<option value="1">General</option>
 									<option value="2">Clock In</option>
 									<option value="3">Query Report </option>
