@@ -111,6 +111,13 @@
 
                                              <div class="form-group">
                                                 <tr>
+                                                 <td nowrap>
+        <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Allow Annual Negative Days</button>
+                       
+                        </td>
+                    
+        
+
                                                     <td>Allow Annual Negative Days</td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
@@ -121,6 +128,10 @@
 
                                              <div class="form-group">
                                                 <tr>
+                                                 <td nowrap>
+        <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Allow Sick Negative Days</button>
+                       
+                        </td>
                                                     <td>Allow Sick Negative Days</td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
@@ -128,6 +139,9 @@
                                                     </td>
                                                 </tr>
                                             </div>
+                                            
+
+                          
 
                         </table>
                     
@@ -137,6 +151,8 @@
                         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save leave credit settings</button> 
                     </div>
                 </div>
+                @include('leave.partials.edit_annual_days')
+                @include('leave.partials.edit_sick_days') 
             </div>
 <!--     </div>-->
 </form>
@@ -472,8 +488,39 @@
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
+                //UPDATE
 
+ /* var updateNegativeID;
+        $('#edit-annual-modal').on('show.bs.modal', function (e) {
+            //console.log('kjhsjs');
+            var btnEdit = $(e.relatedTarget);
+            updateNegativeID = btnEdit.data('id');
+            console.log('leavesetupID: ' + leavesetupId);
+            var number_of_days = btnEdit.data('number_of_days');
 
+             var modal = $(this);
+             modal.find('#number_of_days').val(number_of_days);
+
+        });*/
+
+                //SAVE
+
+                 $('#update-annual').on('click', function () {
+            var strUrl = '/leave/setup';
+            var objData = {
+                  number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
+                , _token: $('#edit-annual-modal').find('input[name=_token]').val()
+            };
+            var modalID = 'edit-annual-modal';
+            var submitBtnID = 'edit_annual';
+            var redirectUrl = '/leave/setup/add';
+            var successMsgTitle = 'Changes Saved!';
+            var successMsg = 'Leave has been successfully added.';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+
+         
+       
 
 </script>
 

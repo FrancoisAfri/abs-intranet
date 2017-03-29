@@ -220,11 +220,6 @@
             //set the location of the load kpis button
             $('#hr_person_id').change(function() {
                 var selectedEmp = $(this).val();
-                var appraisalMonth = $.trim($('#appraisal_month').val());
-                if (appraisalMonth == '') appraisalMonth = 'March 2017';
-                $('#load-kpis').click(function () {
-                    location.href = '/appraisal/load/result/' + selectedEmp + '/' + appraisalMonth;
-                });
                 empSelection(selectedEmp);
             });
 
@@ -252,11 +247,13 @@
                 $('.manual-field').hide();
                 $('#load-kpi-form').attr('action', '/appraisal/upload_appraisals');
                 $('#load-kpis').attr('type', 'submit').html("<i class='fa fa-cloud-download'></i> Upload KPIs").show();
+                $('#load-kpis').attr('onclick', '');
             }
             else if (appraisalType == 2) { //Manual
                 $('.manual-field').show();
                 $('.file-upload-field').hide();
                 $('#load-kpis').attr('type', 'button').html("<i class='fa fa-cloud-download'></i> Load KPIs");
+                $('#load-kpis').attr('onclick', 'loadKPIsOnClick()');
                 var hrID = $('#hr_person_id').val();
                 empSelection(hrID);
             }
@@ -270,6 +267,15 @@
                 $('#load-kpis').hide();
             }
             else $('#load-kpis').show();
+        }
+        //function to set the url of the lod kpi btn
+        function loadKPIsOnClick() {
+            var selectedEmp = $('#hr_person_id').val();
+            var appraisalMonth = $.trim($('#appraisal_month').val());
+            if (appraisalMonth == '') appraisalMonth = 'March 2017';
+            //$('#load-kpis').click(function () {
+            location.href = '/appraisal/load/result/' + selectedEmp + '/' + appraisalMonth;
+            //});
         }
     </script>
 @endsection

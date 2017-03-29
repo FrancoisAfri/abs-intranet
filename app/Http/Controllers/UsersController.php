@@ -11,6 +11,7 @@ use App\HRPerson;
 use App\User;
 use App\modules;
 use App\LeaveType;
+use App\leave_custom;
 use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
@@ -469,4 +470,37 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'User Password Updated', "By User", 0);
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
+
+    public function addAnnual(Request $request) {
+    
+        $this->validate($request, [
+            'number_of_days' => 'required',
+            
+        ]);
+           $lateData = $request->all();
+        unset($lateData['_token']);
+        $leave_custom = new leave_custom($lateData);
+        $leave_custom->active = 1;
+        $leave_custom->save();
+        AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned By User", 0);
+        return response()->json();
+
+    }
+
+     public function updateAnnual(Request $request, leave_custom $lev)
+    {
+        //$user = Auth::user()->load('person');
+        $this->validate($request, [
+            //'hr_id' => 'required',
+            'number_of_days'=>  'numeric|required',
+
+        ]);
+        //$lev->hr_id = $request->input('hr_id');
+        $lev->number_of_days = $request->input('number_of_days');
+        $lev->update();
+        //return $lev;
+        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
+        return response()->json();
+    }
+    //
 }

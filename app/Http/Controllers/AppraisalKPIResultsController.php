@@ -53,11 +53,14 @@ class AppraisalKPIResultsController extends Controller
     }
 
     public function loadEmpAppraisals($empID, $appraisalMonth){
+		//test
+		//return AppraisalKPIResult::empAppraisal(2);
+		//end test
         $appraisalMonth = trim($appraisalMonth);
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
         $monthEnd = strtotime($monthEnd->endOfDay());
-        $emp = HRPerson::where('id', $empID)
+        /*$emp = HRPerson::where('id', $empID)
             ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
@@ -67,10 +70,42 @@ class AppraisalKPIResultsController extends Controller
             ->with('jobTitle.kpiTemplate.kpi.kpiNumber')
             ->with('jobTitle.kpiTemplate.kpi.kpiIntScore')
             ->get()
-            ->first();
-        //return $emp;
+            ->first();*/
+
+        $emp = HRPerson::find($empID);
+        $kpis = appraisalsKpis::join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+            ->join('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+            ->join('hr_positions', 'appraisal_templates.job_title_id', '=', 'hr_positions.id')
+            ->join('hr_people', 'hr_positions.id', '=', 'hr_people.position')
+            ->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+            }])
+            ->with('kpiranges')
+            ->with('kpiNumber')
+            ->with('kpiIntScore')
+            ->select('appraisals_kpis.*', 'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+            ->orderBy('appraisal_kpas.name')
+            ->get();
+        /*$kpis = appraisalsKpis::with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+            }])
+            ->with('kpiranges')
+            ->with('kpiNumber')
+            ->with('kpiIntScore')
+            ->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+            ->join('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+            ->join('hr_positions', 'appraisal_templates.job_title_id', '=', 'hr_positions.id')
+            ->join('hr_people', 'hr_positions.id', '=', 'hr_people.position')
+            ->select('appraisals_kpis.*',
+                'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+            ->orderBy('appraisal_kpas.name')
+            ->get();*/
+        //return $kpis;
 
         $data['emp'] = $emp;
+        $data['kpis'] = $kpis;
         $data['appraisalMonth'] = $appraisalMonth;
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
@@ -83,7 +118,7 @@ class AppraisalKPIResultsController extends Controller
         ];
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', 'Employee Appraisal List Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Performance Appraisal', "Employee Appraisal $appraisalMonth Result Page Accessed", "Accessed by User", 0);
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
@@ -100,7 +135,8 @@ class AppraisalKPIResultsController extends Controller
         $hrID = $request->input('hr_person_id');
         $kpiIDs = $request->input('kpi_id');
         $scores = $request->input('score');
-
+		//return "Appraisal month: $appraisalMonth, HR id: $hrID, month start: $monthStart, month enf: $monthEnd";
+		//return Carbon::today()->day . ' ' . $appraisalMonth;
         foreach ($kpiIDs as $kpiID) {
             $kpiResult = AppraisalKPIResult::where('kpi_id', $kpiID)->where('hr_id', $hrID)->whereBetween('date_uploaded', [$monthStart, $monthEnd])->get();
             if (count($kpiResult) > 0) { //update result
@@ -113,11 +149,12 @@ class AppraisalKPIResultsController extends Controller
                 $result = new AppraisalKPIResult();
                 $result->kpi_id = $kpiID;
                 $result->hr_id = $hrID;
-                $result->date_uploaded = strtotime(Carbon::today()->day . ' ' . $appraisalMonth);
+                $result->date_uploaded = strtotime('15 ' . $appraisalMonth);
                 $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
                 $result->save();
             }
         }
+		AuditReportsController::store('Performance Appraisal', 'Appraisal result entered for ' . $appraisalMonth, "Actioned by User", 0);
         return redirect("appraisal/load/result/$hrID/$appraisalMonth")->with('success_edit', "The employee's appraisals have been saved successfully.");
     }
 
