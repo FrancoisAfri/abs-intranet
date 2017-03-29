@@ -25,8 +25,8 @@
 						  data-id="{{ $number->id }}"
 						  data-min_number="{{ $number->min_number }}" 
 						  data-max_number="{{ $number->max_number }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-						  <td>{{!empty($number->min_number) ? $number->min_number : ''}}</td>
-						  <td>{{!empty($number->max_number) ?$number->max_number : ''}}</td>
+						  <td>{{$number->min_number}}</td>
+						  <td>{{$number->max_number}}</td>
 						  <td nowrap>
                               <button type="button" id="view_kpi" class="btn {{ (!empty($number->status) && $number->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$number->id}}, 'actdeac');"><i class="fa {{ (!empty($number->status) && $number->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($number->status) && $number->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>

@@ -53,11 +53,14 @@ class AppraisalKPIResultsController extends Controller
     }
 
     public function loadEmpAppraisals($empID, $appraisalMonth){
+		//test
+		//return AppraisalKPIResult::empAppraisal(2);
+		//end test
         $appraisalMonth = trim($appraisalMonth);
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
         $monthEnd = strtotime($monthEnd->endOfDay());
-        $emp = HRPerson::where('id', $empID)
+        /*$emp = HRPerson::where('id', $empID)
             ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
@@ -67,10 +70,46 @@ class AppraisalKPIResultsController extends Controller
             ->with('jobTitle.kpiTemplate.kpi.kpiNumber')
             ->with('jobTitle.kpiTemplate.kpi.kpiIntScore')
             ->get()
-            ->first();
-        //return $emp;
+            ->first();*/
+
+        $emp = HRPerson::find($empID);
+        $kpis = appraisalsKpis::where('upload_type', null)
+			->orWhere(function($query) {
+				$query->whereNotIn('upload_type', [2, 3]);
+			})
+			->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+            ->join('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+            ->join('hr_positions', 'appraisal_templates.job_title_id', '=', 'hr_positions.id')
+            ->join('hr_people', 'hr_positions.id', '=', 'hr_people.position')
+            ->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+            }])
+            ->with('kpiranges')
+            ->with('kpiNumber')
+            ->with('kpiIntScore')
+            ->select('appraisals_kpis.*', 'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+			->orderBy('appraisal_kpas.name')
+            ->get();
+        /*$kpis = appraisalsKpis::with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+            }])
+            ->with('kpiranges')
+            ->with('kpiNumber')
+            ->with('kpiIntScore')
+            ->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+            ->join('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
+            ->join('hr_positions', 'appraisal_templates.job_title_id', '=', 'hr_positions.id')
+            ->join('hr_people', 'hr_positions.id', '=', 'hr_people.position')
+            ->select('appraisals_kpis.*',
+                'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+            ->orderBy('appraisal_kpas.name')
+            ->get();*/
+        //return $kpis;
 
         $data['emp'] = $emp;
+        $data['kpis'] = $kpis;
         $data['appraisalMonth'] = $appraisalMonth;
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
@@ -83,7 +122,7 @@ class AppraisalKPIResultsController extends Controller
         ];
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', 'Employee Appraisal List Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Performance Appraisal', "Employee Appraisal $appraisalMonth Result Page Accessed", "Accessed by User", 0);
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
@@ -100,7 +139,8 @@ class AppraisalKPIResultsController extends Controller
         $hrID = $request->input('hr_person_id');
         $kpiIDs = $request->input('kpi_id');
         $scores = $request->input('score');
-
+		//return "Appraisal month: $appraisalMonth, HR id: $hrID, month start: $monthStart, month enf: $monthEnd";
+		//return Carbon::today()->day . ' ' . $appraisalMonth;
         foreach ($kpiIDs as $kpiID) {
             $kpiResult = AppraisalKPIResult::where('kpi_id', $kpiID)->where('hr_id', $hrID)->whereBetween('date_uploaded', [$monthStart, $monthEnd])->get();
             if (count($kpiResult) > 0) { //update result
@@ -113,55 +153,35 @@ class AppraisalKPIResultsController extends Controller
                 $result = new AppraisalKPIResult();
                 $result->kpi_id = $kpiID;
                 $result->hr_id = $hrID;
-                $result->date_uploaded = strtotime(Carbon::today()->day . ' ' . $appraisalMonth);
+                $result->date_uploaded = strtotime('15 ' . $appraisalMonth);
                 $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
                 $result->save();
             }
         }
+		AuditReportsController::store('Performance Appraisal', 'Appraisal result entered for ' . $appraisalMonth, "Actioned by User", 0);
         return redirect("appraisal/load/result/$hrID/$appraisalMonth")->with('success_edit', "The employee's appraisals have been saved successfully.");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 	# Redicte to upload type
 	public function uploadAppraisal(Request $request)
     {
 		$this->validate($request, [     
            'upload_type' => 'bail|required|integer|min:0',         
-           'kpi_id' => 'bail|required|integer|min:0',         
-           'date_uploaded' => 'bail|required|integer|min:0',         
+           'kpi_id' => 'bail|required|integer|min:0',  
+		    'date_uploaded' => 'required',
         ]);
 		$uploadTypes = [1 => "General", 2 => 'Clock In', 3 => 'Query Report '];
 		$templateData = $request->all();
+
 		unset($templateData['_token']);
+		$appraisalMonth = trim($templateData['date_uploaded']);
 		$uploadType = $request->input('upload_type');
 		//convert dates to unix time stamp
-        if (isset($templateData['date_uploaded'])) {
-            $templateData['date_uploaded'] = str_replace('/', '-', $templateData['date_uploaded']);
-            $templateData['date_uploaded'] = strtotime($templateData['date_uploaded']);
-        }
+        if (isset($templateData['date_uploaded']))
+            $templateData['date_uploaded'] = strtotime(Carbon::today()->day . ' ' . $appraisalMonth);
         $kipID = $templateData['kpi_id'];
 		if($request->hasFile('input_file'))
 		{
-			//return $templateData;
 			$path = $request->file('input_file')->getRealPath();
 			$data = Excel::load($path, function($reader) {})->get();
 			if(!empty($data) && $data->count())
@@ -176,8 +196,8 @@ class AppraisalKPIResultsController extends Controller
 							$employees = HRPerson::where('employee_number', 12)->first();
 							$template = appraisalsKpis::where('id', $kipID)->first(); //template_id
 							if ($uploadType == 1)
-								$insert[] = ['kip_id' => $kipID,'template_id' => $template->template_id,
-								'result' => $val['result'], 
+								$insert[] = ['kpi_id' => $kipID,'template_id' => $template->template_id,
+								'score' => $val['result'], 
 								'date_uploaded' => $templateData['date_uploaded'],
 								'hr_id' => $employees->id];
 							elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
@@ -195,7 +215,7 @@ class AppraisalKPIResultsController extends Controller
 										if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
 										else $attendance = 2;
 									}
-									$insert[] = ['kip_id' => $kipID, 'attendance' => $attendance, 
+									$insert[] = ['kpi_id' => $kipID, 'attendance' => $attendance, 
 									'date_uploaded' => $templateData['date_uploaded'], 
 									'hr_id' => $employees->id];
 								}
@@ -207,7 +227,7 @@ class AppraisalKPIResultsController extends Controller
 								$value['invoice_date'] = !empty($value['invoice_date']) ? strtotime($value['invoice_date']) : 0;
 								
 								$query = new AppraisalQuery_report();
-								$query->kip_id = $kipID;
+								$query->kpi_id = $kipID;
 								$query->query_code = $value['query_code'];
 								$query->voucher_verification_code = $value['voucher_verification_code'];
 								$query->query_type = $value['query_type'];
@@ -234,8 +254,6 @@ class AppraisalKPIResultsController extends Controller
 						}
 					}
 				}
-
-				return $templateData;
 				if(!empty($insert))
 				{
 					if ($uploadType == 1)
@@ -258,50 +276,5 @@ class AppraisalKPIResultsController extends Controller
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
         AuditReportsController::store('Performance Appraisal', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
