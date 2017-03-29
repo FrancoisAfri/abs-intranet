@@ -29,6 +29,7 @@
 					  <th>January</th>
 					  <th>February</th>
 					  <th>March</th>
+					  <th>April</th>
 					  <th>May</th>
 					  <th>June</th>
 					  <th>July</th>
@@ -41,11 +42,12 @@
 					</thead>
 					<tbody>
 					@if (!empty($scoresArray))
-						@foreach($scoresArray as $key => $scoreArray)
+						@foreach($scoresArray as $emp)
 						<tr>
-						<th>{{$key}}</td>
-							
-							
+							<td>{{ $emp->first_name . ' ' . $emp->surname }}</td>
+							@foreach($emp->year_appraisal as $appraisal)
+								<td>{{ $appraisal }}</td>
+							@endforeach
 						</tr>
 						@endforeach
 					@endif
@@ -56,6 +58,7 @@
 					  <th>January</th>
 					  <th>February</th>
 					  <th>March</th>
+					  <th>April</th>
 					  <th>May</th>
 					  <th>June</th>
 					  <th>July</th>
