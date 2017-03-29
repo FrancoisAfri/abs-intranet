@@ -62,6 +62,17 @@ class AppraisalKPIResult extends Model
                 $percentage = $kpi->kpiIntScore->where('status', 1)->where('score', $this->score)->first()->percentage;
             }
         }
+        /*elseif ($kpi->is_upload === 1 && $kpi->upload_type === 2) { //uploaded attendance
+            $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
+            $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
+            $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+
+            if ($this->score < $lowestRange) $percentage = 0;
+            elseif ($this->score > $highestRange) $percentage = $highestDeduction;
+            else {
+                $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score)->first()->percentage;
+            }
+        }*/
 
         if ($weighted) $percentage = ($percentage * $kpi->weight) / 100;
 

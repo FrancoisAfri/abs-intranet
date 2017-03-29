@@ -51,6 +51,7 @@
                                         <th>Indicator</th>
                                         <th>Source of Evidence</th>
                                         <th style="text-align: center;">KPI Weight</th>
+                                        <!--<th style="text-align: center;">Score Range</th>-->
                                         <th>Result</th>
                                     </tr>
                                     @foreach ($kpis as $kpi)
@@ -59,7 +60,7 @@
                                             <?php $prevKPA = 0; ?>
                                             <tr>
                                                 <th class="success"><i class="fa fa-caret-right"></i></th>
-                                                <th class="success" colspan="5"><i>KPA: {{ $kpi->kpa_name }}<span class="pull-right">KPA Weight: {{ $kpi->kpa_weight . '%' }}</span></i></th>
+                                                <th class="success" colspan="6"><i>KPA: {{ $kpi->kpa_name }}<span class="pull-right">KPA Weight: {{ $kpi->kpa_weight . '%' }}</span></i></th>
                                             </tr>
                                         @endif
                                         <tr>
@@ -68,6 +69,7 @@
                                             <td style="vertical-align: middle;">{{ $kpi->indicator }}</td>
                                             <td style="vertical-align: middle;">{{ $kpi->source_of_evidence }}</td>
                                             <td style="text-align: center; vertical-align: middle;">{{ $kpi->weight . '%' }}</td>
+                                            <!--<td style="text-align: center;"></td>-->
                                             <td style="vertical-align: middle;">
                                                 @if($kpi->kpi_type === 1)
                                                     <input type="number" class="form-control input-sm" id="range_score" name="score[{{ $kpi->id }}]" placeholder="Enter Result" value="{{ count($kpi->results) > 0 ? $kpi->results->first()->score : '' }}">
