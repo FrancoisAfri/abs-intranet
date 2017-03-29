@@ -99,7 +99,7 @@ class AppraisalKPIResult extends Model
      * @return HRPerson $emp (with ->year_appraisal or ->month_appraisal)
      */
     public static function empAppraisal($empID, $appraisalMonth = null) {
-        //$emp = HRPerson::find($empID);
+        $emp = HRPerson::find($empID);
 
         if ($appraisalMonth != null) {
             $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
@@ -163,8 +163,8 @@ class AppraisalKPIResult extends Model
                 $kpaResults[$kpaID] = $kpaResult;
                 $kpaResult = 0;
             }
-
-            return array_sum($kpaResults);
+            $emp->month_appraisal = array_sum($kpaResults);
+            return $emp; //array_sum($kpaResults);
 //---
         }
         else {
@@ -239,7 +239,8 @@ class AppraisalKPIResult extends Model
                 $yearResult[$appraisalMonth->format('M')] = array_sum($kpaResults);
                 $appraisalMonth->addMonth();
             }
-            return $yearResult;
+            $emp->year_appraisal = $yearResult;
+            return $emp; //$yearResult;
         }
     }
 }
