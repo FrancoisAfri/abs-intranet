@@ -106,19 +106,21 @@ class AppraisalSearchController extends Controller
 		->orderBy('first_name')
 		->orderBy('surname')
 		->get();
+		
         //return $employees;
-		/*$scoresArray = array();
+		$scoresArray = array();
 		foreach ($employees as $employee)
 		{
 			$scoresArray['names'] = $employee->full_name;
-			$scoresArray['names']['scores'] = getScore($employee->id);
-		}*/
-		$scoresArray = array();
+			$scoresArray['names']['scores'] = AppraisalKPIResult::empAppraisal($employee->id);
+			
+		}
+		/*$scoresArray = array();
 		foreach ($$scoresArray as $employee)
 		{
 			$scoresArray['names'] = $employee->full_name;
 			$scoresArray['names']['scores'] = getScore($employee->id);
-		}
+		}*/
 		
 		$data['page_title'] = "Appraisals Search Results";
         $data['page_description'] = "Appraisals Search Results";
