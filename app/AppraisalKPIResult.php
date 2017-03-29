@@ -105,6 +105,7 @@ class AppraisalKPIResult extends Model
             $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
             $monthEnd = new Carbon("last day of $appraisalMonth");
             $monthEnd = strtotime($monthEnd->endOfDay());
+            $yearResult = ["Jan"=>0,"Feb"=>0,"Mar"=>0,"Apr"=>0,"May"=>0,"Jun"=>0,"Jul"=>0,"Aug"=>0,"Sep"=>0,"Oct"=>0,"Nov"=>0,"Dec"=>0];
 
 //---
             $emp = HRPerson::where('id', $empID)
@@ -163,7 +164,9 @@ class AppraisalKPIResult extends Model
                 $kpaResults[$kpaID] = $kpaResult;
                 $kpaResult = 0;
             }
-            $emp->month_appraisal = array_sum($kpaResults);
+            //$emp->month_appraisal = array_sum($kpaResults);
+            $yearResult[substr($appraisalMonth, 0, 3)] = array_sum($kpaResults);
+            $emp->year_appraisal = $yearResult;
             return $emp; //array_sum($kpaResults);
 //---
         }
