@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class AppraisalKPIResult extends Model
 {
@@ -63,6 +64,8 @@ class AppraisalKPIResult extends Model
             }
         }
         /*elseif ($kpi->is_upload === 1 && $kpi->upload_type === 2) { //uploaded attendance
+
+            $score = AppraisalClockinResults::where('hr_id', )
             $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
             $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
             $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
@@ -119,7 +122,42 @@ class AppraisalKPIResult extends Model
             foreach ($empKPIs as $kpaGroups) {
                 foreach ($kpaGroups as $kpi) {
                     $kpaID = $kpi->kpa_id;
-                    $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
+                    if ($kpi->is_upload === 1 && $kpi->upload_type === 2) { //uploaded attendance
+                        //$percentage = 0;
+                        $score = AppraisalClockinResults::where('hr_id', $empID)
+                            ->where('kip_id', $kpi->id)
+                            ->where('attendance', 1)
+                            ->whereBetween('date_uploaded', [$monthStart, $monthEnd])
+                            ->count();
+                        $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
+                        $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
+                        $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+
+                        if ($score < $lowestRange) $percentage = 0;
+                        elseif ($score > $highestRange) $percentage = $highestDeduction;
+                        else {
+                            $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
+                        }
+                        $kpaResult += $percentage;
+                    }
+                    elseif ($kpi->is_upload === 1 && $kpi->upload_type === 3) { //uploaded query reports
+                        //$percentage = 0;
+                        $score = AppraisalQuery_report::where('hr_id', $empID)
+                            ->where('kip_id', $kpi->id)
+                            ->whereBetween('date_uploaded', [$monthStart, $monthEnd])
+                            ->count();
+                        $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
+                        $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
+                        $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+
+                        if ($score < $lowestRange) $percentage = 0;
+                        elseif ($score > $highestRange) $percentage = $highestDeduction;
+                        else {
+                            $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
+                        }
+                        $kpaResult += $percentage;
+                    }
+                    else $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
                 }
                 $kpaResult = ($kpaResult * $kpi->weight) / 100;
                 $kpaResults[$kpaID] = $kpaResult;
@@ -154,7 +192,42 @@ class AppraisalKPIResult extends Model
                 foreach ($empKPIs as $kpaGroups) {
                     foreach ($kpaGroups as $kpi) {
                         $kpaID = $kpi->kpa_id;
-                        $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
+                        if ($kpi->is_upload === 1 && $kpi->upload_type === 2) { //uploaded attendance
+                            //$percentage = 0;
+                            $score = AppraisalClockinResults::where('hr_id', $empID)
+                                ->where('kip_id', $kpi->id)
+                                ->where('attendance', 1)
+                                ->whereBetween('date_uploaded', [$monthStart, $monthEnd])
+                                ->count();
+                            $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
+                            $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
+                            $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+
+                            if ($score < $lowestRange) $percentage = 0;
+                            elseif ($score > $highestRange) $percentage = $highestDeduction;
+                            else {
+                                $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
+                            }
+                            $kpaResult += $percentage;
+                        }
+                        elseif ($kpi->is_upload === 1 && $kpi->upload_type === 3) { //uploaded query reports
+                            //$percentage = 0;
+                            $score = AppraisalQuery_report::where('hr_id', $empID)
+                                ->where('kip_id', $kpi->id)
+                                ->whereBetween('date_uploaded', [$monthStart, $monthEnd])
+                                ->count();
+                            $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
+                            $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
+                            $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+
+                            if ($score < $lowestRange) $percentage = 0;
+                            elseif ($score > $highestRange) $percentage = $highestDeduction;
+                            else {
+                                $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
+                            }
+                            $kpaResult += $percentage;
+                        }
+                        else $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
                     }
                     $kpaResult = ($kpaResult * $kpi->weight) / 100;
                     $kpaResults[$kpaID] = $kpaResult;
