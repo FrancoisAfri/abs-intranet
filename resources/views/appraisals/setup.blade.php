@@ -20,7 +20,7 @@
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Number of Times</th>
-                                <th>Percentage (%)</th>
+                                <th>Percentage</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
             
@@ -31,11 +31,9 @@
                                      
                                     </td>
                                     <td>{{ $type->number_of_times }}</td>
-                                    <td>{{ $type->percentage }}</td>
+                                    <td>{{ $type->percentage . '%' }}</td>
                                     <td>
-                                        
-                                          <!--   <button type="button" id="view_ribbons" class="btn 11111111111111111111111{{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}}) , 'dactive';"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button> -->
-                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
+                                        <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
                                       
