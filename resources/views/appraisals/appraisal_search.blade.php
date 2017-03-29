@@ -69,13 +69,13 @@
 							</div>
 						</div>
 						<div class="form-group file-upload-field {{ $errors->has('date_uploaded') ? ' has-error' : '' }}">
-                            <label for="date_uploaded" class="col-sm-2 control-label">Date Uploaded</label>
+                            <label for="date_uploaded" class="col-sm-2 control-label">Appraisal Month</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control datepicker" id="date_uploaded" name="date_uploaded" value="" placeholder="Select Date Uploaded...">
+								<input type="text" class="form-control" id="date_uploaded" name="date_uploaded" value="" placeholder="Select Month...">
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
             $(".select2").select2();
             //Cancel button click event
             $('#back_button').click(function () {
-                location.href = '/appraisal/load_appraisals';
+                location.href = '/appraisal/search';
             });
             //Date picker
             $('.datepicker').datepicker({
@@ -117,7 +117,13 @@
                 autoclose: true,
                 todayHighlight: true
             });
-			
+			$('#date_uploaded').datepicker({
+                format: 'MM yyyy',
+                autoclose: true,
+                startView: "months",
+                minViewMode: "months",
+                todayHighlight: true
+            });
             //Load divisions drop down
             var parentDDID = '';
             var loadAllDivs = 1;

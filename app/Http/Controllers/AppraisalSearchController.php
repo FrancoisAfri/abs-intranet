@@ -48,11 +48,11 @@ class AppraisalSearchController extends Controller
         $data['page_title'] = "Employee Appraisals";
         $data['page_description'] = "Load an Employee's Appraisals";
         $data['breadcrumb'] = [
-            ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
+        $data['active_rib'] = 'Search';
         AuditReportsController::store('Performance Appraisal', 'Search page accessed', "Accessed by User", 0);
         return view('appraisals.appraisal_search')->with($data);
     }
@@ -60,51 +60,76 @@ class AppraisalSearchController extends Controller
     // Search Results
     public function searchResults(Request $request)
     {
-        //
-    }
+		/*$this->validate($request, [   
+		    'date_uploaded' => 'required',
+        ]);*/
+		$results = $request->all();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+		unset($results['_token']);
+		$division5 = !empty($results['division_level_5']) ? $results['division_level_5'] : 0;
+		$division4 = !empty($results['division_level_4']) ? $results['division_level_4'] : 0;
+		$division3 = !empty($results['division_level_3']) ? $results['division_level_3'] : 0;
+		$division2 = !empty($results['division_level_2']) ? $results['division_level_2'] : 0;
+		$division1 = !empty($results['division_level_1']) ? $results['division_level_1'] : 0;
+		$hrPersonID = !empty($results['hr_person_id']) ? $results['hr_person_id'] : 0;
+		$employees = HRPerson::where('status', 1)
+		->where(function ($query) use ($division5) {
+			if (!empty($division5)) {
+				$query->where('division_level_5', $division5);
+			}
+		})
+		->where(function ($query) use ($division4) {
+			if (!empty($division4)) {
+				$query->where('division_level_4', $division4);
+			}
+		})
+		->where(function ($query) use ($division3) {
+			if (!empty($division3)) {
+				$query->where('division_level_3', $division3);
+			}
+		})
+		->where(function ($query) use ($division2) {
+			if (!empty($division2)) {
+				$query->where('division_level_2', $division2);
+			}
+		})
+		->where(function ($query) use ($division1) {
+			if (!empty($division1)) {
+				$query->where('division_level_1', $division1);
+			}
+		})
+		->where(function ($query) use ($hrPersonID) {
+			if (!empty($hrPersonID)) {
+				$query->where('id', $hrPersonID);
+			}
+		})
+		->orderBy('first_name')
+		->orderBy('surname')
+		->get();
+        //return $employees;
+		/*$scoresArray = array();
+		foreach ($employees as $employee)
+		{
+			$scoresArray['names'] = $employee->full_name;
+			$scoresArray['names']['scores'] = getScore($employee->id);
+		}*/
+		$scoresArray = array();
+		foreach ($$scoresArray as $employee)
+		{
+			$scoresArray['names'] = $employee->full_name;
+			$scoresArray['names']['scores'] = getScore($employee->id);
+		}
+		
+		$data['page_title'] = "Appraisals Search Results";
+        $data['page_description'] = "Appraisals Search Results";
+        $data['breadcrumb'] = [
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_rib'] = 'Search';
+        AuditReportsController::store('Performance Appraisal', 'Search page accessed', "Accessed by User", 0);
+        return view('appraisals.appraisal_search_results')->with($data);
     }
 }

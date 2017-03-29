@@ -61,7 +61,7 @@ class AppraisalKpiTypeController extends Controller
         $this->validate($request, [      
             'range_to' => 'bail|required|integer|min:0',       
             'range_from' => 'bail|required|integer|min:0',       
-            'percentage' => 'bail|required|integer|min:0',       
+            'percentage' => 'bail|required|integer|min:-50',       
             'kpi_id' => 'bail|required|integer|min:0',       
         ]);
 		$rangeData = $request->all();
