@@ -16,6 +16,7 @@ use App\modules;
 use App\leave_credit;
 use App\leave_history;
 use App\type_profile;
+use App\leave_profile;
 use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Support\Facades\Auth;
@@ -35,11 +36,6 @@ class LeaveSetupController extends Controller
     public function __construct(){
 
         $this->middleware('auth');
-    }
-    public function index()
-    {
-        //
-
     }
 
     /**
@@ -91,6 +87,12 @@ class LeaveSetupController extends Controller
         $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
             $query->orderBy('name', 'asc');
         }]);
+        
+        $leveType = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
+          $query->orderBy('name', 'asc');  
+        }]);
+        
+//        return $leveType;
         
          $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
 		if (!empty($leave_customs))
@@ -163,27 +165,15 @@ class LeaveSetupController extends Controller
 //        return $HRpeople;
         foreach($employees as $empID) {
             $emp = HRPerson::find($empID);
-            $pro = $emp->leave_types;
-            $profile =$pro->where('id', $empID)->first() ;
+//            $pro = $emp->leave_types;
+            $profile =$emp->leave_types->where('id', $empID)->first() ;
             $val = $profile->pivot->leave_balance;
            
             // calculations
             $currentBalance =  $val + $days;
             $emp->leave_types()->sync([$empID => ['leave_balance' => $currentBalance ]]);
-//         return $val;
-             
+//         return $val;    
         }
-//        $emp;
-//      $HRpeople = HRPerson::find(1);
-        
-         //loop through the pivot table using the empID s
-//        foreach ($emp->leave_types as $types) { 
-//            $val = $types->pivot->leave_balance;
-//            $currentBalance =  $val + $days  ;
-//          $emp->leave_types()->sync([$empID => ['leave_balance' => $currentBalance ]
-//
-//        ]);
-//        }
 
     return back();
 }
@@ -208,57 +198,78 @@ public function  resert(Request $request)
         foreach($employees as $empID) {
             $emp = HRPerson::find($empID);
 //           return $emp;
-        $emp->leave_types()->sync([
-        $empID => ['leave_balance' => $resertData['resert_days']]
-
-        ]);
+        $emp->leave_types()->sync([$empID => ['leave_balance' => $resertData['resert_days']]]);
         }
     
 
     return back();
 }
     
-    public function allocate(Request $request)
+    public function allocate(Request $request , LeaveType $lev)
     {
         $this->validate($request, [      
-//           'leave_type' => 'bail|required',       
-////            'division_level_2' => 'bail|required',       
-////            'division_level_1' => 'bail|required',       
-//            'hr_person_id' => 'bail|required',
+           'leave_type' => 'required',       
+           'division_level_2' => 'required',       
+            'division_level_1' => 'required',       
+            'hr_person_id' => 'required',
                  
         ]);
+        $allData= $request->all();
+        unset($allData['_token']);
+       // return $allData;
+        
+        $empl = $allData['hr_person_id'];
+        $LevID = $allData['leave_type'];
+       $days = $allData['adjust_days'];
 
+        foreach($empl as $typID) {
+            //return person records based on employee id
+                $emp = HRPerson::find($typID);
+             
+//            return $emp;
+                // return leave types records based on leave type id
+                $leaveTyps = LeaveType::find($LevID);
+               
+                    // return leave profile from te hr person table based on employee id 
+                $levPro = HRPerson::find($typID)->leave_profile;
+                    
+            // getting the hr_id from custom leave
+                $levcust = leave_custom::find($typID)->hr_id;
+                
+            //return $custDays;
+            $custDays = leave_custom::find($typID)->number_of_days;
+             $custstaus = leave_custom::find($typID)->status;
+            
+            $levcustom = $custDays/12;
+             
+                // return leave profile id based on an user id;
+               // $levProfile = leave_profile::find($levPro)->id;
+                //return $levProfile;
+         
+                  //$credit = $minimum->hr_person->where('id', 1)->first();
+//            return $levCreditv;    
+            // get min value from pivot
+             $minimum =$leaveTyps->leave_profle->where('id', $levPro)->first(); 
+             $min = $minimum->pivot->min;
+            
+//            return $min;
+            
+            
+            if ($typID = $levcust && $custstaus = 0  )
+            {
+                $emp->leave_types()->sync([$typID => ['leave_balance' => $levcustom ]]);   
+            }
+            else if($typID != $levcust )
+            {
+                $emp->leave_types()->sync([$typID => ['leave_balance' => $min ]]);
+            }
         
-        
-        $resertData= $request->all();
-        unset($resertData['_token']);
-        
-           
-         $employees = $resertData['hr_person_id'];
-         foreach($employees as $empID) {
-            $emp = HRPerson::find($empID);
-            $custType = leave_custom::find($empID);
-            $leaType = LeaveType::find($empID);
-//             return ;
-        }
-        // loop through the pivot table to get leaveType id
-     foreach ($emp->leave_types as $types) { 
-            $val = $types->pivot->leave_type_id;
-//         return $val;
-        }
-        
-         $profile = $leaType->leave_profle->where('id', 2)->first() ? $profile->pivot->max : '';
-        
-            return $profile;
-
-//        foreach ($leaType->leave_profile as $profile) { 
-//            $prof = $profile->pivot->leave_type_id;
-//            return $prof;
-//        }
-        
+        // $emp = HRPerson::find($empID)->load('leave_types.leave_profle');
+                
+        } 
        
-
-       return view('leave.leave_types'); 
+            
+       return back(); 
     }
     
         
