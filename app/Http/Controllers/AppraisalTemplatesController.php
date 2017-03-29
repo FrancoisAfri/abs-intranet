@@ -105,7 +105,7 @@ class AppraisalTemplatesController extends Controller
         if ($template->status == 1) 
 		{
 			$KpiTypeArray = array(1 => 'Range', 2 => 'Number', 3 => 'From 1 To 10');
-			$KpiTypeArray = array(1 => 'General', 2 => 'Clock In', 3 => 'Query Report ');
+			$KpiUploadTypeArray = array(1 => 'General', 2 => 'Clock In', 3 => 'Query Report ');
 			
 			$kpis = DB::table('appraisals_kpis')
 			->select('appraisals_kpis.*','appraisal_categories.name as cat_name', 'appraisal_kpas.name as kpa_name')
@@ -128,6 +128,7 @@ class AppraisalTemplatesController extends Controller
 			$data['kpaCategories'] = $kpaCategories; //
 			$data['kpas'] = $kpas; //
 			$data['KpiTypeArray'] = $KpiTypeArray; //
+			$data['KpiUploadTypeArray'] = $KpiUploadTypeArray; //
 			$data['active_mod'] = 'Performance Appraisal';
 			$data['active_rib'] = 'Templates';
 			//return $data;
