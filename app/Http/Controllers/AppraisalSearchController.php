@@ -113,15 +113,10 @@ class AppraisalSearchController extends Controller
 		foreach ($employees as $employee)
 		{
 			if (empty($employee->position)) continue;
-			//
-			$scoresArray[] = AppraisalKPIResult::empAppraisal($employee->id);
-			/*$scoresArray[] = $employee->full_name;
 			if (!empty($dateUploaded))
-				$scoresArray[$employee->full_name][] = AppraisalKPIResult::empAppraisal($employee->id, $dateUploaded);
+				$scoresArray[] = AppraisalKPIResult::empAppraisal($employee->id, $dateUploaded);
 			else 
-				$scoresArray[$employee->full_name][] = AppraisalKPIResult::empAppraisal($employee->id);
-
-			*/
+				$scoresArray[] = AppraisalKPIResult::empAppraisal($employee->id);
 		}
 		
 		$data['page_title'] = "Appraisals Search Results";
