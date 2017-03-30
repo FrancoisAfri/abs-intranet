@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<!--date picker-->
+<link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
 @endsection
 @section('content')
     <div class="row">
@@ -82,6 +86,7 @@
                                 </div>
                             </div>                 
                               
+                        
                            
 
                         
@@ -99,6 +104,41 @@
                                 </div>
                             </div>
                         </div>
+                        
+                      <div class="form-group ">
+                            <label for="days" class="col-sm-2 control-label">Day</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
+                                    <input type="text" class="form-control pull-right" name="daterange" value="01/01/2015 - 01/31/2015" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                         <div class="form-group ">
+                            <label for="days" class="col-sm-2 control-label">Hours</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                        <input type="text" class="form-control pull-right" name="daterange" value="01/01/2015 1:30 PM - 01/01/2015 2:00 PM" />
+
+                                </div>
+                            </div>
+                        </div>
+                       
+<!--
+                        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                            <span></span> <b class="caret"></b>
+                        </div>
+-->
+                        
+<!--
                         <div class="row" >
                                  <div class="form-group day-field{{ $errors->has('start_date_id') ? ' has-error' : '' }}">
                                 <label for="path" class="col-sm-2 control-label">Date Range</label>
@@ -141,7 +181,7 @@
                             </div>
                         </div>
                     </div>
-                        <br>
+-->
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
@@ -216,9 +256,15 @@
 
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
+            <!-- Date picker -->
+    <script src="/cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+        
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
+        
+<!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+        
     <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
@@ -237,7 +283,9 @@
                 autoclose: true,
                 todayHighlight: true
             });
-
+            
+             $('input[name="daterange"]').daterangepicker();
+            
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -259,7 +307,38 @@
 //                populateProjectDD(programmeID);
 //                populateYearDD(programmeID);
 //            });
-
+            
+            $( function() {
+    var dateFormat = "mm/dd/yy",
+      from = $( "#from" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 3
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#to" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 3
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+  } );
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
