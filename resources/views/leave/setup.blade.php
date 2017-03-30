@@ -58,13 +58,12 @@
     <!-- Include add new prime rate modal -->
     @include('leave.partials.edit_leave_type_days')
     @include('leave.partials.edit_leavetype') 
-    </div>
+</div>
 
-    </div>
 
         <!-- <!-- Leave CreditSettings -->
- <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">       
-     <div class="row">
+ <div class="row">
+    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
             {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -81,8 +80,8 @@
                              
                                             <div class="form-group">
                                                 <tr>
+                                                  <td style="width: 10px"></td>
                                                     <td >Allow Annual Leave Credit </td>
-                                                    <td></td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="allow_annualLeave_credit" value="0">
                                                         <input type="checkbox" name="allow_annualLeave_credit" value="1" {{ $leave_configuration->allow_annualLeave_credit === 1 ?  'checked ="checked"' : 0 }}>
@@ -92,8 +91,8 @@
                            
                                             <div class="form-group">
                                                 <tr>
+                                                   <td style="width: 10px"></td>
                                                     <td>Allow Sick Leave Credit</td>
-                                                    <td></td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="allow_sickLeave_credit" value="0">
                                                         <input   type="checkbox" name="allow_sickLeave_credit" value="1" {{ $leave_configuration->allow_sickLeave_credit === 1 ? 'checked ="checked"' : 0 }}>
@@ -103,8 +102,9 @@
 
                                             <div class="form-group">
                                                 <tr>
+                                                <td style="width: 10px"></td>
                                                     <td>Show non-employees in Leave Module</td>
-                                                    <td></td>
+                                                    
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
                                                         <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
@@ -114,16 +114,12 @@
 
                                              <div class="form-group">
                                                 <tr>
+                                                <td nowrap>
+                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                                    </td>
                                                   <td>Allocate Negative Days (Annual leave)</td>
-                                                 <td nowrap>
-        <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Annual Negative Days</button>
-                       
-                        </td>
-                    
-        
-
-                                                    
-                                                    <td style="text-align: center; vertical-align: middle;">
+                                                 
+                                                  <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="annual_negative_days" value="0">
                                                         <input   type="checkbox" name="annual_negative_days" value="1" {{ $leave_configuration->annual_negative_days === 1 ? 'checked ="checked"' : 0 }}>
                                                     </td>
@@ -132,11 +128,11 @@
 
                                              <div class="form-group">
                                                 <tr>
-                                                 <td>Allocate Negative Days (Sick leave)</td>
                                                  <td nowrap>
-        <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Sick Negative Days</button>
-                       
-                        </td>
+                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                                    </td>
+                                                 <td>Allocate Negative Days (Sick leave)</td>
+                                                
                                                     
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="sick_negative_days" value="0">
@@ -242,9 +238,12 @@
         </div>
     </div>
 </form>
-</form>
+
+</div>
     {{--Notification Settings--}}
+<div class="row">
  <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
+  
     {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -305,11 +304,11 @@
             </div>
         </div>
     </div>
-     
+    
 </form>
 <!-- General Settings -->
      <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
-      <div class="row">
+  
          {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -364,17 +363,21 @@
                                                         <input type="hidden" name="document_compulsory_when_two_sick_leave_8_weeks" value="0">
                                                         <input   type="checkbox" name="document_compulsory_when_two_sick_leave_8_weeks" value="1" {{ $leave_configuration->document_compulsory_when_two_sick_leave_8_weeks === 1 ? 'checked ="checked"' : 0 }}>
                                                     </td>
-                                                </tr>
-                                            </div>
+                                                        </tr>
+                                                    </div>
 
-                             </div>
-                        </table>
+                                     </div>
+                                </table>
 
-                 <div class="modal-footer">
-         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
+                         <div class="modal-footer">
+                 <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
+                    </div>
             </div>
-    </div>
+        </div>
+    </form>
 </div>
+
+
 
 
      @endsection

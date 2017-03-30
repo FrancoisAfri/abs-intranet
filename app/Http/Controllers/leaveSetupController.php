@@ -152,6 +152,7 @@ class LeaveSetupController extends Controller
             'division_level_1' => 'bail|required',       
             'hr_person_id' => 'bail|required',
             'adjust_days' => 'bail|required', 
+            'number_of_days' => 'bail|numeric|required',
                  
         ]);
 
