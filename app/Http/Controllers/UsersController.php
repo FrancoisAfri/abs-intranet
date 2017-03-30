@@ -256,8 +256,7 @@ class UsersController extends Controller
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
-             $employees = HRPerson::where('status', 1)->get();
-
+        $employees = HRPerson::where('status', 1)->get();
 
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->get();
@@ -292,7 +291,7 @@ class UsersController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->where('name', 1)->orderBy('name', 'asc')->get();
-      
+		$employees = HRPerson::where('status', 1)->get();
         
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update your details";
@@ -305,6 +304,7 @@ class UsersController extends Controller
         $data['positions'] = $positions;
         $data['leave_profile']=$leave_profile ;
         $data['marital_statuses'] = $marital_statuses;
+		$data['employees'] = $employees;
         $data['breadcrumb'] = [
             ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'My profile', 'active' => 1, 'is_module' => 0]
@@ -358,7 +358,8 @@ class UsersController extends Controller
             $person['date_of_birth'] = str_replace('/', '-', $person['date_of_birth']);
             $person['date_of_birth'] = strtotime($person['date_of_birth']);
         }
-
+		if (empty($person['position'])) $person['position'] = 0;
+		
         //Update users and hr table
         $user->update($person);
         $user->person()->update($person);

@@ -43,10 +43,10 @@ class AppraisalSetupController extends Controller
         return view('appraisals.setup')->with($data);
     }
 
- public function addAppraisal(Request $request, appraisalSetup $appraisal_setup) {
+ public function addAppraisal(Request $request) {
         $this->validate($request, [
-            'number_of_times' => 'required|numeric',
-            'percentage'=> 'required|numeric|min:2',
+            'number_of_times' => 'required|integer|min:0',
+            'percentage'=> 'required|numeric',
 
         ]);
 
@@ -63,8 +63,8 @@ class AppraisalSetupController extends Controller
  public function updateAppraisal(Request $request, appraisalSetup $appraisal_setup) {
         //validate name required if active
         $this->validate($request, [
-            'number_of_times' => 'bail|required|numeric',
-            'percentage' => 'bail|required|numeric|min:2',
+            'number_of_times' => 'required|integer|min:0',
+            'percentage'=> 'required|numeric',
         ]);
         //save the changes
         $appraisalData=$request->all();
