@@ -29,7 +29,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="update-annual" class="btn btn-primary">Update</button>
+                    <button type="button" id="annual_negative_days" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>

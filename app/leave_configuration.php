@@ -23,5 +23,7 @@ class leave_configuration extends Model
 'document_compulsory_when_two_sick_leave_8_weeks',
 'notify_hr_with_application',
 'preferred_communication_method',
-'notify_employee_about_applications_submitted_on_their_behalf' ];
+'notify_employee_about_applications_submitted_on_their_behalf',
+'annual_negative_days',
+'sick_negative_days' ];
 }
