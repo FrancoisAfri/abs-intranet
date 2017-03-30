@@ -72,15 +72,17 @@ class AppraisalKPIResultsController extends Controller
             ->get()
             ->first();*/
 
-        $emp = HRPerson::find($empID);
-        $kpis = appraisalsKpis::where('upload_type', null)
-			->orWhere(function($query) {
-				$query->whereNotIn('upload_type', [2, 3]);
-			})
+		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate');
+		
+        $kpis = appraisalsKpis::where(function ($query) {
+			$query->where('upload_type', null);
+			$query->orWhereNotIn('upload_type', [2, 3]);
+		})
+			->where('template_id', $emp->jobTitle->kpiTemplate->id)
+			->where('appraisals_kpis.status', 1)
+			->where('appraisal_kpas.status', 1)
 			->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
-            ->join('appraisal_templates', 'appraisals_kpis.template_id', '=', 'appraisal_templates.id')
-            ->join('hr_positions', 'appraisal_templates.job_title_id', '=', 'hr_positions.id')
-            ->join('hr_people', 'hr_positions.id', '=', 'hr_people.position')
+           
             ->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
@@ -91,6 +93,7 @@ class AppraisalKPIResultsController extends Controller
             ->select('appraisals_kpis.*', 'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
 			->orderBy('appraisal_kpas.name')
             ->get();
+			
         /*$kpis = appraisalsKpis::with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);

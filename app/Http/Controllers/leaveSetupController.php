@@ -259,23 +259,24 @@ public function  resert(Request $request)
         $LevID = $allData['leave_type'];
        $days = $allData['adjust_days'];
 
-        foreach($empl as $typID) {
+        foreach($empl as $empID) {
             //return person records based on employee id
-                $emp = HRPerson::find($typID);
+                $emp = HRPerson::find($empID);
              
 //            return $emp;
                 // return leave types records based on leave type id
                 $leaveTyps = LeaveType::find($LevID);
-               
-                    // return leave profile from te hr person table based on employee id 
-                $levPro = HRPerson::find($typID)->leave_profile;
-                    
+            
+                $annul = LeaveType::find(1)->id;
+                    // return leave profile from the hr person table based on employee id 
+                $levPro = HRPerson::find($empID)->leave_profile;
+//                   return $levPro;
             // getting the hr_id from custom leave
-                $levcust = leave_custom::find($typID)->hr_id;
+                $levcust = leave_custom::find($empID)->hr_id;
                 
-            //return $custDays;
-            $custDays = leave_custom::find($typID)->number_of_days;
-             $custstaus = leave_custom::find($typID)->status;
+            //return $custom days and custom status 
+            $custDays = leave_custom::find($empID)->number_of_days;
+             $custstaus = leave_custom::find($empID)->status;
             
             $levcustom = $custDays/12;
              
@@ -286,19 +287,21 @@ public function  resert(Request $request)
                   //$credit = $minimum->hr_person->where('id', 1)->first();
 //            return $levCreditv;    
             // get min value from pivot
-             $minimum =$leaveTyps->leave_profle->where('id', $levPro)->first(); 
+             $minimum =$leaveTyps->leave_profle->where('id', 3)->first(); 
+//                return $minimum;
              $min = $minimum->pivot->min;
+//              return $min;
             
 //            return $min;
+            //$typID = $levcust && $custstaus = 0
             
-            
-            if ($typID = $levcust && $custstaus = 0  )
+            if ($LevID = $annul && $custstaus = 0 )
             {
-                $emp->leave_types()->sync([$typID => ['leave_balance' => $levcustom ]]);   
+                $emp->leave_types()->sync([$empID => ['leave_balance' => $levcustom ]]);   
             }
-            else if($typID != $levcust )
+            else if($LevID != $annul )
             {
-                $emp->leave_types()->sync([$typID => ['leave_balance' => $min ]]);
+                $emp->leave_types()->sync([$empID => ['leave_balance' => $min ]]);
             }
         
         // $emp = HRPerson::find($empID)->load('leave_types.leave_profle');
