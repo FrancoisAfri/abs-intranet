@@ -472,21 +472,6 @@ class UsersController extends Controller
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
 
-    public function addAnnual(Request $request) {
-    
-        $this->validate($request, [
-            'number_of_days' => 'required',
-            
-        ]);
-           $lateData = $request->all();
-        unset($lateData['_token']);
-        $leave_custom = new leave_custom($lateData);
-        $leave_custom->active = 1;
-        $leave_custom->save();
-        AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned By User", 0);
-        return response()->json();
-
-    }
 
      public function updateAnnual(Request $request, leave_custom $lev)
     {
