@@ -81,7 +81,8 @@
                              
                                             <div class="form-group">
                                                 <tr>
-                                                    <td>Allow Annual Leave Credit</td>
+                                                    <td >Allow Annual Leave Credit </td>
+                                                    <td></td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="allow_annualLeave_credit" value="0">
                                                         <input type="checkbox" name="allow_annualLeave_credit" value="1" {{ $leave_configuration->allow_annualLeave_credit === 1 ?  'checked ="checked"' : 0 }}>
@@ -92,6 +93,7 @@
                                             <div class="form-group">
                                                 <tr>
                                                     <td>Allow Sick Leave Credit</td>
+                                                    <td></td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="allow_sickLeave_credit" value="0">
                                                         <input   type="checkbox" name="allow_sickLeave_credit" value="1" {{ $leave_configuration->allow_sickLeave_credit === 1 ? 'checked ="checked"' : 0 }}>
@@ -102,6 +104,7 @@
                                             <div class="form-group">
                                                 <tr>
                                                     <td>Show non-employees in Leave Module</td>
+                                                    <td></td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
                                                         <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
@@ -111,34 +114,37 @@
 
                                              <div class="form-group">
                                                 <tr>
+                                                  <td>Allocate Negative Days (Annual leave)</td>
                                                  <td nowrap>
-        <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Allow Annual Negative Days</button>
+        <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Annual Negative Days</button>
                        
                         </td>
                     
         
 
-                                                    <td>Allow Annual Negative Days</td>
+                                                    
                                                     <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
-                                                        <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
+                                                        <input type="hidden" name="annual_negative_days" value="0">
+                                                        <input   type="checkbox" name="annual_negative_days" value="1" {{ $leave_configuration->annual_negative_days === 1 ? 'checked ="checked"' : 0 }}>
                                                     </td>
                                                 </tr>
                                             </div>
 
                                              <div class="form-group">
                                                 <tr>
+                                                 <td>Allocate Negative Days (Sick leave)</td>
                                                  <td nowrap>
-        <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Allow Sick Negative Days</button>
+        <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Sick Negative Days</button>
                        
                         </td>
-                                                    <td>Allow Sick Negative Days</td>
+                                                    
                                                     <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
-                                                        <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
+                                                        <input type="hidden" name="sick_negative_days" value="0">
+                                                        <input   type="checkbox" name="sick_negative_days" value="1" {{ $leave_configuration->sick_negative_days === 1 ? 'checked ="checked"' : 0 }}>
                                                     </td>
                                                 </tr>
                                             </div>
+
                                             
 
                           
@@ -154,6 +160,7 @@
                 @include('leave.partials.edit_annual_days')
                 @include('leave.partials.edit_sick_days') 
             </div>
+
 <!--     </div>-->
 </form>
 
@@ -235,9 +242,74 @@
         </div>
     </div>
 </form>
+</form>
+    {{--Notification Settings--}}
+ <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
+    {{ csrf_field() }}
+            <div class="col-sm-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Notification Settings</h3>
 
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    
+
+                         <table class="table table-bordered">
+                             <div class="form-group">
+                            <tr>
+                                <td>Notify HR with Application</td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <input type="hidden" name="notify_hr_with_application" value="0">
+                                    <input  type="checkbox" name="notify_hr_with_application" value="1" {{ $leave_configuration->notify_hr_with_application === 1 ? 'checked ="checked"' : 0 }}>
+                                </td>
+                              </tr>
+                             </div>
+                             
+                             <div class="form-group">
+                              <tr>
+                                <td>Preferred Communication Method</td>
+                                <td>
+                                         <div class="radio">
+                                            <label><input type="radio" name="preferred_communication_method" id="Email" value="1" checked>Email</label>
+                                            <br>
+                                            <label><input type="radio" name="preferred_communication_method" id="SMS" value="2" checked>SMS</label>
+                                            <br>
+                                            <label><input type="radio" name="preferred_communication_method" id="3" value="3" checked>Based on Employee</label>
+                                            </div>
+                                        </td>
+                             </tr>
+                             </div>
+                             
+                            <div class="form-group">
+                             <tr>
+                                <td>Notify employee about applications submitted on their behalf</td>
+                                 <td style="text-align: center; vertical-align: middle;">
+                                      <input type="hidden" name="notify_employee_about_applications_submitted_on_their_behalf" value="0">
+                                     <input  type="checkbox" name="notify_employee_about_applications_submitted_on_their_behalf" value="1" {{ $leave_configuration->notify_employee_about_applications_submitted_on_their_behalf === 1 ? 'checked ="checked"' : 0 }}>
+                                 </td>
+                              </tr>
+                             </div>
+                             
+                             
+                           
+                        </table>
+          
+            <!-- Include add expenditure and add income modals -->
+            <div class="modal-footer">
+         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
+            </div>
+        </div>
+    </div>
+     
+</form>
 <!-- General Settings -->
      <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
+      <div class="row">
          {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -303,71 +375,7 @@
             </div>
     </div>
 </div>
-</form>
-    {{--Notification Settings--}}
- <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
-    {{ csrf_field() }}
-            <div class="col-sm-6">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Notification Settings</h3>
 
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    
-
-                         <table class="table table-bordered">
-                             <div class="form-group">
-                            <tr>
-                                <td>Notify HR with Application</td>
-                                <td style="text-align: center; vertical-align: middle;">
-                                    <input type="hidden" name="notify_hr_with_application" value="0">
-                                    <input  type="checkbox" name="notify_hr_with_application" value="1" {{ $leave_configuration->notify_hr_with_application === 1 ? 'checked ="checked"' : 0 }}>
-                                </td>
-                              </tr>
-                             </div>
-                             
-                             <div class="form-group">
-                              <tr>
-                                <td>Preferred Communication Method</td>
-                                <td>
-                                         <div class="radio">
-                                            <label><input type="radio" name="preferred_communication_method" id="Email" value="1" checked>Email</label>
-                                            <br>
-                                            <label><input type="radio" name="preferred_communication_method" id="SMS" value="2" checked>SMS</label>
-                                            <br>
-                                            <label><input type="radio" name="preferred_communication_method" id="3" value="3" checked>Based on Employee</label>
-                                            </div>
-                                        </td>
-                             </tr>
-                             </div>
-                             
-                            <div class="form-group">
-                             <tr>
-                                <td>Notify employee about applications submitted on their behalf</td>
-                                 <td style="text-align: center; vertical-align: middle;">
-                                      <input type="hidden" name="notify_employee_about_applications_submitted_on_their_behalf" value="0">
-                                     <input  type="checkbox" name="notify_employee_about_applications_submitted_on_their_behalf" value="1" {{ $leave_configuration->notify_employee_about_applications_submitted_on_their_behalf === 1 ? 'checked ="checked"' : 0 }}>
-                                 </td>
-                              </tr>
-                             </div>
-                             
-                             
-                           
-                        </table>
-          
-            <!-- Include add expenditure and add income modals -->
-            <div class="modal-footer">
-         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
-            </div>
-        </div>
-    </div>
-     </div>
-</form>
 
      @endsection
 <!-- Ajax form submit -->
@@ -490,7 +498,7 @@
 
                 //UPDATE
 
-        var updateNegativeID;
+      var updateNegativeID;
         $('#edit-annual-modal').on('show.bs.modal', function (e) {
             var btnEdit = $(e.relatedTarget);
             updateNegativeID = btnEdit.data('id');
@@ -517,7 +525,7 @@
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
-           $('#update-sick').on('click', function () {
+          $('#update-sick').on('click', function () {
             var strUrl = '/leave/setup/add';
             var objData = {
                   number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
