@@ -49,7 +49,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" multiple="multiple"style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -131,58 +131,7 @@
                             </div>
                         </div>
                        
-<!--
-                        <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                            <span></span> <b class="caret"></b>
-                        </div>
--->
-                        
-<!--
-                        <div class="row" >
-                                 <div class="form-group day-field{{ $errors->has('start_date_id') ? ' has-error' : '' }}">
-                                <label for="path" class="col-sm-2 control-label">Date Range</label>
-                             <div class="col-sm-5">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-calendar-plus-o"> From</i>
-                                    </div>
-                                    <input type="text" class="form-control datepicker" id="start_date" name="start_date" value="{{ old('start_date') }}" placeholder="Select Start Date...">
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-calendar-plus-o"> To</i>
-                                    </div>
-                                    <input type="text" class="form-control datepicker" id="start_date" name="start_date" value="{{ old('start_date') }}" placeholder="Select End Date...">
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <br>
-                         <div class="row" >
-                             <div class="form-group hours-field{{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">
-                                <label for="path" class="col-sm-2 control-label">Day</label>
-                             <div class="col-sm-5">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-calendar-plus-o"> From</i>
-                                    </div>
-                                   <input type="text" class="form-control datepicker" id="start_date" name="start_date" value="{{ old('start_date') }}" placeholder="Select  Day...">
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-clock-o"> To</i>
-                                    </div>
-                                    <input type="text" class="form-control" id="resert_days" name="resert_days" value="{{ old('resert_days') }}" placeholder="Enter number of Hours" >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
--->
+
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
@@ -212,6 +161,7 @@
                         <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
                     </div>
                     <!-- /.box-footer -->
+                 </div>
                 </form>
             </div>
             <!-- /.box -->
@@ -285,7 +235,7 @@
                 todayHighlight: true
             });
             
-             $('input[name="daterange"]').daterangepicker();
+
             
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
@@ -301,6 +251,8 @@
                 else if (allType == 2) $('#box-subtitle').html('Hours');
 //                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
+            
+                    $('input[name="daterange"]').daterangepicker();
             
 //            //repopulate projects, year dropdowns when a programme has been changed
 //            $('#programme_id').change(function(){
