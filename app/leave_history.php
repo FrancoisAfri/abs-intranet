@@ -25,4 +25,7 @@ class leave_history extends Model
          return $this->description_action[$intVal];
      }
      //->description_action_str_val
+     public function hrPerson() {
+        return $this->hasMany(HRPerson::class, 'position');
+    }
 }

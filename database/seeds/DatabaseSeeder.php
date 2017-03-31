@@ -404,6 +404,15 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Leave History Audit';
+        $ribbon->description = 'Leave History Audit';
+        $ribbon->ribbon_path = 'leave/Leave_History_Audit';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
