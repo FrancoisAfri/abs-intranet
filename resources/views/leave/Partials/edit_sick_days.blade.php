@@ -21,7 +21,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar-o"></i>
                                 </div>
-                                <input type="text" class="form-control" id="number_of_days" name="number_of_days" placeholder="Enter sick days..." required>
+                                <input type="text" class="form-control" id="number_of_days_sick" name="number_of_days_sick" placeholder="Enter sick days..." required>
                             </div>
                         </div>
                     </div>

@@ -24,14 +24,16 @@ class CreateLeaveConfigurationTable extends Migration
             $table->smallInteger('require_hr_approval')->nullable();
             $table->smallInteger('require_payroll_approval')->nullable();
             $table->smallInteger('limit_administration_to_assigned_divisions')->nullable();
-            $table->Integer('mumber_of_days_until_escalation')->nullable();
+            $table->integer('mumber_of_days_until_escalation')->nullable();
             $table->smallInteger('document_compulsory_on_Study_leave_application')->nullable();
             $table->smallInteger('document_compulsory_when_two_sick_leave_8_weeks')->nullable();
             $table->smallInteger('notify_hr_with_application')->nullable();
             $table->smallInteger('preferred_communication_method')->nullable();
             $table->smallInteger('notify_employee_about_applications_submitted_on_their_behalf')->nullable();
-            $table->Integer('annual_negative_days')->nullable();
-            $table->Integer('sick_negative_days')->nullable();
+            $table->integer('annual_negative_days')->nullable();
+            $table->integer('sick_negative_days')->nullable();
+            $table->integer('number_of_days_sick')->nullable();
+            $table->integer('number_of_days_annual')->nullable();
             $table->timestamps();
         });
     }

@@ -63,7 +63,7 @@
 
         <!-- <!-- Leave CreditSettings -->
  <div class="row">
-    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
+    <form class="form-horizontal" method="post" action="/leave/setup">
             {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -140,11 +140,6 @@
                                                     </td>
                                                 </tr>
                                             </div>
-
-                                            
-
-                          
-
                         </table>
                     
                     <!-- /.box-body -->
@@ -161,7 +156,7 @@
 </form>
 
 {{--Approval Settings--}}
-<form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
+<form class="form-horizontal" method="post" action="/leave/setup"> 
  {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -242,7 +237,7 @@
 </div>
     {{--Notification Settings--}}
 <div class="row">
- <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
+ <form class="form-horizontal" method="post" action="/leave/setup">
   
     {{ csrf_field() }}
             <div class="col-sm-6">
@@ -307,7 +302,7 @@
     
 </form>
 <!-- General Settings -->
-     <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
+     <form class="form-horizontal" method="post" action="/leave/setup"> 
   
          {{ csrf_field() }}
             <div class="col-sm-6">
@@ -413,25 +408,7 @@
         $(window).on('resize', function () {
             $('.modal:visible').each(reposition);
         });
-        //pass module data to the leave type -edit module modal
-        
-        // $('#edit-leave_days-modal').on('show.bs.modal', function (e) {
-        //     //console.log('kjhsjs');
-        //     var btnEdit = $(e.relatedTarget);
-        //     leavesetupId = btnEdit.data('id');
-        //     var hr_id = btnEdit.data('hr_id');
-        //     var number_of_days = btnEdit.data('number_of_days');
-        //     var employeeName = btnEdit.data('employeename');
-        //     // var moduleFontAwesome = btnEdit.data('font_awesome');
-        //     var modal = $(this);
-        //     //modal.find('#hr_id').val(hr_id);
-        //     modal.find('#number_of_days').val(number_of_days);
-        //     modal.find('#hr_id').val(employeeName);
-        //     // modal.find('#font_awesome').val(moduleFontAwesome);
-        //     //if(primeRate != null && primeRate != '' && primeRate > 0) {
-        //     //    modal.find('#prime_rate').val(primeRate.toFixed(2));
-        //     //}
-        // });
+     
         var leavesetupId;
         $('#edit-leave_days-modal').on('show.bs.modal', function (e) {
             //console.log('kjhsjs');
@@ -505,19 +482,19 @@
         $('#edit-annual-modal').on('show.bs.modal', function (e) {
             var btnEdit = $(e.relatedTarget);
             updateNegativeID = btnEdit.data('id');
-            var number_of_days = btnEdit.data('number_of_days');
+            var number_of_days_annual = btnEdit.data('number_of_days_annual');
 
              var modal = $(this);
-             modal.find('#number_of_days').val(number_of_days);
+             modal.find('#number_of_days_annual').val(number_of_days_annual);
 
         });
   
             //SAVE
 
-                 $('#annual_negative_days').on('click', function () {
-            var strUrl = '/leave/setup/'+ updateNegativeID;
+                 $('#update_annual').on('click', function () {
+            var strUrl = '/leave/setup/' + '1';
             var objData = {
-                  number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
+                  number_of_days_annual: $('#edit-annual-modal').find('#number_of_days_annual').val()
                 , _token: $('#edit-annual-modal').find('input[name=_token]').val()
             };
             var modalID = 'edit-annual-modal';
@@ -525,21 +502,23 @@
             var redirectUrl = '/leave/setup/add';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave has been successfully added.';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            var formMethod = 'PATCH';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
         });
 
           $('#update-sick').on('click', function () {
             var strUrl = '/leave/setup/add';
             var objData = {
-                  number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
-                , _token: $('#edit-annual-modal').find('input[name=_token]').val()
+                  number_of_days_sick: $('#edit-sick-modal').find('#number_of_days_sick').val()
+                , _token: $('#edit-sick-modal').find('input[name=_token]').val()
             };
-            var modalID = 'edit-annual-modal';
-            var submitBtnID = 'edit_annual';
+            var modalID = 'edit-sick-modal';
+            var submitBtnID = 'edit_sick';
             var redirectUrl = '/leave/setup/add';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave has been successfully added.';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            var formMethod = 'PATCH';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
         });
 
          

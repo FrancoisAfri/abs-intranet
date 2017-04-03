@@ -181,19 +181,23 @@ class LeaveSetupController extends Controller
         //leavecredit
 
 
-    public function addAnnual(Request $request) {
+    public function addAnnual(Request $request, $id) {
 
         $this->validate($request, [
-            'number_of_days' => 'required|numeric',
+            'number_of_days_annual' => 'required|numeric',
             
         ]);
            $lateData = $request->all();
         unset($lateData['_token']);
+
+        $row = leave_configuration::count();
+        if ($row>0) {
+        DB::table('leave_configuration') ->where('id', $id) ->update($lateData);
+    }
+        else {
         $leave_configuration = new leave_configuration($lateData);
-        $leave_configuration->active = 1;
         $leave_configuration->save();
-        DB::table('leave_configuration') ->where('id', 1) ->update(['annual_negative_days' => 1]);
-        
+    }
         AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned By User", 0);
         return response()->json();
 
@@ -201,16 +205,20 @@ class LeaveSetupController extends Controller
      public function addSick(Request $request) {
 
         $this->validate($request, [
-            'number_of_days' => 'required|numeric',
+            'number_of_days_sick' => 'required|numeric',
             
         ]);
-           $lateData = $request->all();
+         $lateData = $request->all();
         unset($lateData['_token']);
-        $leave_configuration = new leave_configuration($lateData);
-        $leave_configuration->active = 1;
-        $leave_configuration->save();
-        DB::table('leave_configuration') ->where('id', 1) ->update(['sick_negative_days' => 1]);
 
+        $row = leave_configuration::count();
+        if ($row>0) {
+        DB::table('leave_configuration') ->where('id', $id) ->update($lateData);
+    }
+        else {
+        $leave_configuration = new leave_configuration($lateData);
+        $leave_configuration->save();
+    }
         AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned By User", 0);
         return response()->json();
 
