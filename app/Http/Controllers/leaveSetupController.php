@@ -298,18 +298,20 @@ public function  resert(Request $request)
              $minimum =$leaveTyps->leave_profle->where('id', 3)->first(); 
 //                return $minimum;
              $min = $minimum->pivot->min;
-//              return $min;
+            
+            $mini=$min / 12;
+        //      return $mini;
             
 //            return $min;
             //$typID = $levcust && $custstaus = 0
             
-            if ($LevID = $annul && $custstaus = 0 )
+                if ($LevID = $annul && $custstaus = 0 )
             {
                 $emp->leave_types()->sync([$empID => ['leave_balance' => $levcustom ]]);   
             }
             else if($LevID != $annul )
             {
-                $emp->leave_types()->sync([$empID => ['leave_balance' => $min ]]);
+                $emp->leave_types()->sync([$empID => ['leave_balance' => $mini ]]);
             }
         
         // $emp = HRPerson::find($empID)->load('leave_types.leave_profle');
