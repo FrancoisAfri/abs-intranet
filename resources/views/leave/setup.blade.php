@@ -58,13 +58,12 @@
     <!-- Include add new prime rate modal -->
     @include('leave.partials.edit_leave_type_days')
     @include('leave.partials.edit_leavetype') 
-    </div>
+</div>
 
-    </div>
 
         <!-- <!-- Leave CreditSettings -->
- <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">       
-     <div class="row">
+ <div class="row">
+    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
             {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -81,7 +80,8 @@
                              
                                             <div class="form-group">
                                                 <tr>
-                                                    <td>Allow Annual Leave Credit</td>
+                                                  <td style="width: 10px"></td>
+                                                    <td >Allow Annual Leave Credit </td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="allow_annualLeave_credit" value="0">
                                                         <input type="checkbox" name="allow_annualLeave_credit" value="1" {{ $leave_configuration->allow_annualLeave_credit === 1 ?  'checked ="checked"' : 0 }}>
@@ -91,6 +91,7 @@
                            
                                             <div class="form-group">
                                                 <tr>
+                                                   <td style="width: 10px"></td>
                                                     <td>Allow Sick Leave Credit</td>
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="allow_sickLeave_credit" value="0">
@@ -101,7 +102,9 @@
 
                                             <div class="form-group">
                                                 <tr>
+                                                <td style="width: 10px"></td>
                                                     <td>Show non-employees in Leave Module</td>
+                                                    
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
                                                         <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
@@ -111,17 +114,14 @@
 
                                              <div class="form-group">
                                                 <tr>
-                                                 <td nowrap>
-        <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Allow Annual Negative Days</button>
-                       
-                        </td>
-                    
-        
-
-                                                    <td>Allow Annual Negative Days</td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
-                                                        <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
+                                                <td nowrap>
+                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                                    </td>
+                                                  <td>Allocate Negative Days (Annual leave)</td>
+                                                 
+                                                  <td style="text-align: center; vertical-align: middle;">
+                                                        <input type="hidden" name="annual_negative_days" value="0">
+                                                        <input   type="checkbox" name="annual_negative_days" value="1" {{ $leave_configuration->annual_negative_days === 1 ? 'checked ="checked"' : 0 }}>
                                                     </td>
                                                 </tr>
                                             </div>
@@ -129,16 +129,18 @@
                                              <div class="form-group">
                                                 <tr>
                                                  <td nowrap>
-        <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Allow Sick Negative Days</button>
-                       
-                        </td>
-                                                    <td>Allow Sick Negative Days</td>
+                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                                    </td>
+                                                 <td>Allocate Negative Days (Sick leave)</td>
+                                                
+                                                    
                                                     <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
-                                                        <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
+                                                        <input type="hidden" name="sick_negative_days" value="0">
+                                                        <input   type="checkbox" name="sick_negative_days" value="1" {{ $leave_configuration->sick_negative_days === 1 ? 'checked ="checked"' : 0 }}>
                                                     </td>
                                                 </tr>
                                             </div>
+
                                             
 
                           
@@ -154,6 +156,7 @@
                 @include('leave.partials.edit_annual_days')
                 @include('leave.partials.edit_sick_days') 
             </div>
+
 <!--     </div>-->
 </form>
 
@@ -236,76 +239,11 @@
     </div>
 </form>
 
-<!-- General Settings -->
-     <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
-         {{ csrf_field() }}
-            <div class="col-sm-6">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">General Settings</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                   
-                        
-                         <table class="table table-bordered">
-                             <div class="checkbox">
-                                
-                               <div class="form-group">
-                              <tr>
-                                <td>Limit administration to assigned divisions</td>
-                                  <td style="text-align: center; vertical-align: middle;">
-                                      <input type="hidden" name="limit_administration_to_assigned_divisions" value="0">
-                                      <input  type="checkbox" name="limit_administration_to_assigned_divisions" value="1" {{ $leave_configuration->limit_administration_to_assigned_divisions === 1 ? 'checked ="checked"' : 0 }}>
-                                  </td>
-                              </tr>
-                            </div>
-                                 
-                            <div class="form-group">
-                                <tr>
-                                <td>Number of Days Until Escalation</td>
-                                    <td>
-                                        <label for="path" class="control-label"></label>
-                                <input type="text" class="form-control" id="Escalation" name="mumber_of_days_until_escalation" placeholder="Enter  days" required >
-                                    </td>
-                              </tr> 
-                            </div>
-                                
-                            <div class="form-group">
-                              <tr>
-                                <td>Document compulsory on Study leave application</td>
-                                  <td style="text-align: center; vertical-align: middle;">
-                                      <input type="hidden" name="document_compulsory_on_Study_leave_application" value="0">
-                                      <input  type="checkbox" name="document_compulsory_on_Study_leave_application" value="1" {{ $leave_configuration->document_compulsory_on_Study_leave_application === 1 ? 'checked ="checked"' : 0 }}>
-                                  </td>
-                              </tr>
-                            </div>
-                                
-                                             <div class="form-group">
-                                                <tr>
-                                                   <td>Document compulsory when two sick leave within 8_weeks</td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="document_compulsory_when_two_sick_leave_8_weeks" value="0">
-                                                        <input   type="checkbox" name="document_compulsory_when_two_sick_leave_8_weeks" value="1" {{ $leave_configuration->document_compulsory_when_two_sick_leave_8_weeks === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
-
-                             </div>
-                        </table>
-
-                 <div class="modal-footer">
-         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
-            </div>
-    </div>
 </div>
-</form>
     {{--Notification Settings--}}
+<div class="row">
  <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
+  
     {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -366,8 +304,81 @@
             </div>
         </div>
     </div>
-     </div>
+    
 </form>
+<!-- General Settings -->
+     <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
+  
+         {{ csrf_field() }}
+            <div class="col-sm-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">General Settings</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                   
+                        
+                         <table class="table table-bordered">
+                             <div class="checkbox">
+                                
+                               <div class="form-group">
+                              <tr>
+                                <td>Limit administration to assigned divisions</td>
+                                  <td style="text-align: center; vertical-align: middle;">
+                                      <input type="hidden" name="limit_administration_to_assigned_divisions" value="0">
+                                      <input  type="checkbox" name="limit_administration_to_assigned_divisions" value="1" {{ $leave_configuration->limit_administration_to_assigned_divisions === 1 ? 'checked ="checked"' : 0 }}>
+                                  </td>
+                              </tr>
+                            </div>
+                                 
+                            <div class="form-group">
+                                <tr>
+                                <td>Number of Days Until Escalation</td>
+                                    <td>
+                                        <label for="path" class="control-label"></label>
+                                <input type="text" class="form-control" id="Escalation" name="mumber_of_days_until_escalation" placeholder="Enter  days" required >
+                                    </td>
+                              </tr> 
+                            </div>
+                                
+                            <div class="form-group">
+                              <tr>
+                                <td>Document compulsory on Study leave application</td>
+                                  <td style="text-align: center; vertical-align: middle;">
+                                      <input type="hidden" name="document_compulsory_on_Study_leave_application" value="0">
+                                      <input  type="checkbox" name="document_compulsory_on_Study_leave_application" value="1" {{ $leave_configuration->document_compulsory_on_Study_leave_application === 1 ? 'checked ="checked"' : 0 }}>
+                                  </td>
+                              </tr>
+                            </div>
+                                
+                                             <div class="form-group">
+                                                <tr>
+                                                   <td>Document compulsory when two sick leave within 8_weeks</td>
+                                                    <td style="text-align: center; vertical-align: middle;">
+                                                        <input type="hidden" name="document_compulsory_when_two_sick_leave_8_weeks" value="0">
+                                                        <input   type="checkbox" name="document_compulsory_when_two_sick_leave_8_weeks" value="1" {{ $leave_configuration->document_compulsory_when_two_sick_leave_8_weeks === 1 ? 'checked ="checked"' : 0 }}>
+                                                    </td>
+                                                        </tr>
+                                                    </div>
+
+                                     </div>
+                                </table>
+
+                         <div class="modal-footer">
+                 <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
+                    </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
 
      @endsection
 <!-- Ajax form submit -->
@@ -490,23 +501,35 @@
 
                 //UPDATE
 
- /* var updateNegativeID;
+      var updateNegativeID;
         $('#edit-annual-modal').on('show.bs.modal', function (e) {
-            //console.log('kjhsjs');
             var btnEdit = $(e.relatedTarget);
             updateNegativeID = btnEdit.data('id');
-            console.log('leavesetupID: ' + leavesetupId);
             var number_of_days = btnEdit.data('number_of_days');
 
              var modal = $(this);
              modal.find('#number_of_days').val(number_of_days);
 
-        });*/
+        });
+  
+            //SAVE
 
-                //SAVE
+                 $('#annual_negative_days').on('click', function () {
+            var strUrl = '/leave/setup/'+ updateNegativeID;
+            var objData = {
+                  number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
+                , _token: $('#edit-annual-modal').find('input[name=_token]').val()
+            };
+            var modalID = 'edit-annual-modal';
+            var submitBtnID = 'edit_annual';
+            var redirectUrl = '/leave/setup/add';
+            var successMsgTitle = 'Changes Saved!';
+            var successMsg = 'Leave has been successfully added.';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
 
-                 $('#update-annual').on('click', function () {
-            var strUrl = '/leave/setup';
+          $('#update-sick').on('click', function () {
+            var strUrl = '/leave/setup/add';
             var objData = {
                   number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
                 , _token: $('#edit-annual-modal').find('input[name=_token]').val()

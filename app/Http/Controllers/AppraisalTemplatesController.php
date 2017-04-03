@@ -178,7 +178,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpi_type = $kpiData['kpi_type'];
 		$kpi->is_upload = $kpiData['is_upload'];
 		$kpi->template_id = $kpiData['template_id'];
-		$kpi->upload_type = !empty($kpiData['upload_type']) ? $kpiData['upload_type'] : 0;
+		$kpi->upload_type = (!empty($kpiData['upload_type']) && $kpiData['is_upload'] == 1) ? $kpiData['upload_type'] : null;
 		$newkpi = $kpiData['indicator'];
         $kpi->save();
 		AuditReportsController::store('Performance Appraisal', 'KPI Added', "KPI Details: $kpiData[indicator]", 0);
@@ -202,7 +202,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpa_id = $request->input('kpa_id');
 		$kpi->kpi_type = $request->input('kpi_type');
 		$kpi->is_upload = $request->input('is_upload');
-		$kpi->upload_type = $request->input('upload_type');
+		$kpi->upload_type = ($request->input('is_upload') == 1) ? $request->input('upload_type') : null;
 		
         $kpi->update();
 		$newtemplate = $request->input('indicator');

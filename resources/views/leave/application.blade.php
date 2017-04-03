@@ -7,6 +7,21 @@
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet"/>
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+<!-- Include Required Prerequisites -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+ 
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+<!-- -->
 @endsection
 @section('content')
     <div class="row">
@@ -45,7 +60,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" multiple="multiple"style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -81,11 +96,8 @@
                                     </div>
                                 </div>
                             </div>                 
-                              
-                           
-
-                        
-                        <div class="form-group ">
+                      
+                        <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }} ">
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -99,49 +111,35 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" >
-                                 <div class="form-group day-field{{ $errors->has('start_date_id') ? ' has-error' : '' }}">
-                                <label for="path" class="col-sm-2 control-label">Date Range</label>
-                             <div class="col-sm-5">
-                               <div class="input-group">
+                        
+                      <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Day</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
                                     <div class="input-group-addon">
-                                       <i class="fa fa-calendar-plus-o"> From</i>
+                                        <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" id="start_date" name="start_date" value="{{ old('start_date') }}" placeholder="Select Start Date...">
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-calendar-plus-o"> To</i>
-                                    </div>
-                                    <input type="text" class="form-control datepicker" id="start_date" name="start_date" value="{{ old('start_date') }}" placeholder="Select End Date...">
+<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
+                                    <input type="text" class="form-control pull-left" name="daterange" value=" " />
+                                    
                                 </div>
                             </div>
                         </div>
-                        <br>
-                         <div class="row" >
-                             <div class="form-group hours-field{{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">
-                                <label for="path" class="col-sm-2 control-label">Day</label>
-                             <div class="col-sm-5">
-                               <div class="input-group">
+                        
+                         <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Hours</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
                                     <div class="input-group-addon">
-                                       <i class="fa fa-calendar-plus-o"> From</i>
+                                        <i class="fa fa-calendar"></i>
                                     </div>
-                                   <input type="text" class="form-control datepicker" id="start_date" name="start_date" value="{{ old('start_date') }}" placeholder="Select  Day...">
-                                </div>
-                            </div>
-                            <div class="col-sm-5">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-clock-o"> To</i>
-                                    </div>
-                                    <input type="text" class="form-control" id="resert_days" name="resert_days" value="{{ old('resert_days') }}" placeholder="Enter number of Hours" >
+                                   
+<!--                                    <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
+                                    <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
                                 </div>
                             </div>
                         </div>
-                    </div>
-                        <br>
+                        
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
@@ -163,7 +161,7 @@
                                     </div>
                                     <input type="file" id="supporting_doc" name="supporting_doc" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
                                 </div>
-                 </div>
+                            </div>
                         </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -171,6 +169,7 @@
                         <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
                     </div>
                     <!-- /.box-footer -->
+                 </div>
                 </form>
             </div>
             <!-- /.box -->
@@ -216,9 +215,17 @@
 
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
+            <!-- Date picker -->
+    <script src="/cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
 
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
+        
+<!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+        
     <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
@@ -237,7 +244,9 @@
                 autoclose: true,
                 todayHighlight: true
             });
+            
 
+            
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -253,13 +262,44 @@
 //                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
             
+//                    $('input[name="daterange"]').daterangepicker();
+            $('input[name="daterange"]').daterangepicker(
+                    {
+                        locale: {
+                          format: 'YYYY-MM-DD'
+                        },
+                        startDate: moment(),
+                        endDate: moment()
+                    }, 
+                    function(start, end, label) {
+                        alert("A new leave date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                    });
+                
+                     $('input[name="birthdate"]').daterangepicker(
+                         {
+                            singleDatePicker: true,
+                            showDropdowns: true
+                        });
+
 //            //repopulate projects, year dropdowns when a programme has been changed
 //            $('#programme_id').change(function(){
 //                var programmeID = $(this).val();
 //                populateProjectDD(programmeID);
 //                populateYearDD(programmeID);
 //            });
-
+//                locales('es');
+                $('input[name="birthdate"]').daterangepicker({
+                        singleDatePicker: true,
+                        timePicker: true,
+                    
+                        //locale:true,
+                        showDropdowns: false
+                    }, 
+                    function(start, end, label) {
+                        var years = moment().diff(start, 'years');
+                        alert("You are " + years + " years old.");
+                    });
+  
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
