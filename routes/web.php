@@ -64,7 +64,7 @@ Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
 Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
 Route::patch('/leave/setup/{id}', 'LeaveSetupController@addAnnual');
-Route::patch('/leave/setup/add', 'LeaveSetupController@addSick');
+Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
 
 #leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');

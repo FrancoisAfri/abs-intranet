@@ -30,10 +30,6 @@ class CreateLeaveConfigurationTable extends Migration
             $table->smallInteger('notify_hr_with_application')->nullable();
             $table->smallInteger('preferred_communication_method')->nullable();
             $table->smallInteger('notify_employee_about_applications_submitted_on_their_behalf')->nullable();
-            $table->integer('annual_negative_days')->nullable();
-            $table->integer('sick_negative_days')->nullable();
-            $table->integer('number_of_days_sick')->nullable();
-            $table->integer('number_of_days_annual')->nullable();
             $table->timestamps();
         });
     }

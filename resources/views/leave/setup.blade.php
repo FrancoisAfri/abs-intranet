@@ -115,7 +115,7 @@
                                              <div class="form-group">
                                                 <tr>
                                                 <td nowrap>
-                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-number_of_days_annual="{{ $leave_configuration->number_of_days_annual }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
                                                                     </td>
                                                   <td>Allocate Negative Days (Annual leave)</td>
                                                  
@@ -129,7 +129,7 @@
                                              <div class="form-group">
                                                 <tr>
                                                  <td nowrap>
-                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-number_of_days_sick="{{ $leave_configuration->number_of_days_sick }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
                                                                     </td>
                                                  <td>Allocate Negative Days (Sick leave)</td>
                                                 
@@ -481,11 +481,24 @@
       var updateNegativeID;
         $('#edit-annual-modal').on('show.bs.modal', function (e) {
             var btnEdit = $(e.relatedTarget);
+
             updateNegativeID = btnEdit.data('id');
             var number_of_days_annual = btnEdit.data('number_of_days_annual');
-
+            //console.log(number_of_days_annual);
              var modal = $(this);
              modal.find('#number_of_days_annual').val(number_of_days_annual);
+
+        });
+
+         var updateSickID;
+        $('#edit-sick-modal').on('show.bs.modal', function (e) {
+            var btnEdit = $(e.relatedTarget);
+
+            updateSickID = btnEdit.data('id');
+            var number_of_days_sick = btnEdit.data('number_of_days_sick');
+           // console.log(number_of_days_sick);
+             var modal = $(this);
+             modal.find('#number_of_days_sick').val(number_of_days_sick);
 
         });
   
@@ -499,7 +512,7 @@
             };
             var modalID = 'edit-annual-modal';
             var submitBtnID = 'edit_annual';
-            var redirectUrl = '/leave/setup/add';
+            var redirectUrl = '/leave/setup';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave has been successfully added.';
             var formMethod = 'PATCH';
@@ -507,14 +520,14 @@
         });
 
           $('#update-sick').on('click', function () {
-            var strUrl = '/leave/setup/add';
+            var strUrl = '/leave/setup/' + '1/' + 'sick';
             var objData = {
                   number_of_days_sick: $('#edit-sick-modal').find('#number_of_days_sick').val()
                 , _token: $('#edit-sick-modal').find('input[name=_token]').val()
             };
             var modalID = 'edit-sick-modal';
             var submitBtnID = 'edit_sick';
-            var redirectUrl = '/leave/setup/add';
+            var redirectUrl = '/leave/setup';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave has been successfully added.';
             var formMethod = 'PATCH';

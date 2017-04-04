@@ -127,7 +127,7 @@ class LeaveSetupController extends Controller
         }]);
 
         $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
-        $leave_configuration = DB::table('leave_configuration')->get()->first();
+        $leave_configuration = DB::table('leave_configuration')->where("id", 1)->get()->first();
         $employees = HRPerson::where('status', 1)->get();
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'setup';
@@ -202,7 +202,7 @@ class LeaveSetupController extends Controller
         return response()->json();
 
     }
-     public function addSick(Request $request) {
+     public function addSick(Request $request, $id) {
 
         $this->validate($request, [
             'number_of_days_sick' => 'required|numeric',
