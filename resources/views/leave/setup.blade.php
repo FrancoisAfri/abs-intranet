@@ -115,13 +115,13 @@
                                              <div class="form-group">
                                                 <tr>
                                                 <td nowrap>
-                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}"> <i class="fa fa-pencil-square-o"></i> Show Days</button>
                                                                     </td>
                                                   <td>Allocate Negative Days (Annual leave)</td>
                                                  
                                                   <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="annual_negative_days" value="0">
-                                                        <input   type="checkbox" name="annual_negative_days" value="1" {{ $leave_configuration->annual_negative_days === 1 ? 'checked ="checked"' : 0 }}>
+                                                        <input   type="checkbox" name="annual_negative_days" value="1">
                                                     </td>
                                                 </tr>
                                             </div>
@@ -129,14 +129,14 @@
                                              <div class="form-group">
                                                 <tr>
                                                  <td nowrap>
-                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
                                                                     </td>
                                                  <td>Allocate Negative Days (Sick leave)</td>
                                                 
                                                     
                                                     <td style="text-align: center; vertical-align: middle;">
                                                         <input type="hidden" name="sick_negative_days" value="0">
-                                                        <input   type="checkbox" name="sick_negative_days" value="1" {{ $leave_configuration->sick_negative_days === 1 ? 'checked ="checked"' : 0 }}>
+                                                        <input   type="checkbox" name="sick_negative_days" value="1">
                                                     </td>
                                                 </tr>
                                             </div>
@@ -484,7 +484,7 @@
     });
 
 //#leave cresdit settings 
- $('#save_leave_credit').on('click', function () {
+ /*$('#save_leave_credit').on('click', function () {
             var strUrl = '/leave/custom/add_leave';
             var objData = {
                   hr_id: $('#add-custom-leave-modal').find('#hr_id').val()
@@ -497,7 +497,7 @@
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave has been successfully added.';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
+        });*/
 
                 //UPDATE
 

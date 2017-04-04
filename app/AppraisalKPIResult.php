@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class AppraisalKPIResult extends Model
@@ -84,9 +85,10 @@ class AppraisalKPIResult extends Model
      * @param  int  $empID
      * @param  string  $appraisalMonth (e.g. January 2017)
      * @param  boolean  $groupByKPA
+     * @param  int  $kpaID
      * @return array $kpaResults or double sum($kpaResults)
      */
-    public static function getEmpMonthAppraisal($empID, $appraisalMonth, $groupByKPA = false) {
+    public static function getEmpMonthAppraisal($empID, $appraisalMonth, $groupByKPA = false, $kpaID = null) {
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
         $monthEnd = strtotime($monthEnd->endOfDay());
@@ -103,9 +105,9 @@ class AppraisalKPIResult extends Model
 
         $kpaResults = [];
         $kpaResult = 0;
-        foreach ($empKPIs as $kpaGroups) {
-            foreach ($kpaGroups as $kpi) {
-                $kpaID = $kpi->kpa_id;
+        foreach ($empKPIs as $groupKey => $kpaGroup) {
+            $kpiResults = [];
+            foreach ($kpaGroup as $kpi) {
                 if ($kpi->is_upload === 1 && $kpi->upload_type === 2) { //uploaded attendance
                     //$percentage = 0;
                     $score = AppraisalClockinResults::where('hr_id', $empID)
@@ -122,6 +124,7 @@ class AppraisalKPIResult extends Model
                     else {
                         $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
                     }
+                    $kpiResults[$kpi->id] = $percentage;
                     $kpaResult += $percentage;
                 }
                 elseif ($kpi->is_upload === 1 && $kpi->upload_type === 3) { //uploaded query reports
@@ -139,12 +142,18 @@ class AppraisalKPIResult extends Model
                     else {
                         $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
                     }
+                    $kpiResults[$kpi->id] = $percentage;
                     $kpaResult += $percentage;
                 }
-                else $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
+                else {
+                    $kpiResults[$kpi->id] = (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
+                    $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
+                }
             }
-            $kpaResult = ($kpaResult * $kpi->weight) / 100;
-            $kpaResults[$kpaID] = $kpaResult;
+            if ($kpaID != null && $groupKey === $kpaID) return $kpiResults;
+            $kpaWeight = appraisalKpas::find($groupKey)->weight; //get the KPA's weight from the database
+            $kpaResult = ($kpaResult * $kpaWeight) / 100; //weighted KPA result
+            $kpaResults[$groupKey] = $kpaResult;
             $kpaResult = 0;
         }
         if ($groupByKPA) return $kpaResults;
@@ -198,6 +207,32 @@ class AppraisalKPIResult extends Model
             $kpas[] = $kpa;
         }
         $emp->kpa_appraisal = $kpas;
+        return $emp;
+    }
+
+    /**
+     * Helper function to return an employee's kpi appraisal result from a specific KPA.
+     *
+     * @param  int  $empID
+     * @param  string  $appraisalMonth
+     * @param  int  $kpaID
+     * @return HRPerson $emp (with ->kpa_appraisal->kpi_appraisal)
+     */
+    public static function empAppraisalForKPA($empID, $appraisalMonth, $kpaID) {
+        $emp = HRPerson::find($empID);
+
+        $kpaResult = AppraisalKPIResult::getEmpMonthAppraisal($empID, $appraisalMonth, false, $kpaID);
+        $kpis = [];
+        foreach ($kpaResult as $kpiID => $result){
+            $kpi = appraisalsKpis::find($kpiID);
+            $kpi->appraisal_result = $result;
+            $kpis[] = $kpi;
+        }
+        $kpa = appraisalKpas::find($kpaID);
+        //$kpis = Collection::make($kpis);
+        //$kpis->sortBy('id');
+        $kpa->kpi_appraisal = $kpis;
+        $emp->kpa_appraisal = $kpa;
         return $emp;
     }
 }

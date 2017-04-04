@@ -54,7 +54,9 @@ class AppraisalKPIResultsController extends Controller
 
     public function loadEmpAppraisals($empID, $appraisalMonth){
 		//test
+		//return AppraisalKPIResult::empAppraisal(2);
 		//return AppraisalKPIResult::empAppraisalByKPA(2, 'March 2017');
+		//return AppraisalKPIResult::empAppraisalForKPA(2, 'March 2017', 1);
 		//end test
         $appraisalMonth = trim($appraisalMonth);
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
