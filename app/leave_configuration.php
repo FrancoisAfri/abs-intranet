@@ -25,5 +25,7 @@ class leave_configuration extends Model
 'preferred_communication_method',
 'notify_employee_about_applications_submitted_on_their_behalf',
 'annual_negative_days',
-'sick_negative_days' ];
+'sick_negative_days',
+'number_of_days_annual',
+'number_of_days_sick' ];
 }
