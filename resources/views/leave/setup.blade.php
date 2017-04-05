@@ -63,7 +63,7 @@
 
         <!-- <!-- Leave CreditSettings -->
  <div class="row">
-    <form class="form-horizontal" method="post" action="/leave/setup">
+    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
             {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <!-- /.box-header -->
-                   
+                    <div class="box-body">
                        <table class="table table-bordered">
                              
                                             <div class="form-group">
@@ -141,22 +141,22 @@
                                                 </tr>
                                             </div>
                         </table>
-                    
+                    </div>
                     <!-- /.box-body -->
                     <div class="modal-footer">
                        
                         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save leave credit settings</button> 
                     </div>
                 </div>
-                @include('leave.partials.edit_annual_days')
-                @include('leave.partials.edit_sick_days') 
+                
             </div>
 
 <!--     </div>-->
 </form>
-
+@include('leave.partials.edit_annual_days')
+@include('leave.partials.edit_sick_days') 
 {{--Approval Settings--}}
-<form class="form-horizontal" method="post" action="/leave/setup"> 
+<form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
  {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
@@ -169,7 +169,7 @@
                 </div>
             </div>
             <!-- /.box-header -->
-            
+             <div class="box-body">
                 <table class="table table-bordered">
                            
                                             <div class="form-group">
@@ -223,7 +223,7 @@
                                             </tr>
                                             </div>
                 </table>
-            
+            </div>
             <!-- /.box-body -->
             <div class="modal-footer">
 
@@ -237,7 +237,7 @@
 </div>
     {{--Notification Settings--}}
 <div class="row">
- <form class="form-horizontal" method="post" action="/leave/setup">
+ <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
   
     {{ csrf_field() }}
             <div class="col-sm-6">
@@ -252,7 +252,7 @@
                     </div>
                     <!-- /.box-header -->
                     
-
+                    <div class="box-body">
                          <table class="table table-bordered">
                              <div class="form-group">
                             <tr>
@@ -292,7 +292,7 @@
                              
                            
                         </table>
-          
+                    </div>
             <!-- Include add expenditure and add income modals -->
             <div class="modal-footer">
          <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
@@ -302,7 +302,7 @@
     
 </form>
 <!-- General Settings -->
-     <form class="form-horizontal" method="post" action="/leave/setup"> 
+     <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
   
          {{ csrf_field() }}
             <div class="col-sm-6">
@@ -317,7 +317,7 @@
                     </div>
                     <!-- /.box-header -->
                    
-                        
+                         <div class="box-body">
                          <table class="table table-bordered">
                              <div class="checkbox">
                                 
@@ -363,7 +363,7 @@
 
                                      </div>
                                 </table>
-
+                                </div>
                          <div class="modal-footer">
                  <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
                     </div>
