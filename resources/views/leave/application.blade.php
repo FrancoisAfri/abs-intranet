@@ -125,10 +125,26 @@
                                 </div>
                             </div>
                         </div>
+                        <form>
+
+                         <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                          <div class="row">
+                            <label for="days" class="col-sm-2 control-label">Hours</label>
+                           
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                   
+<!--                                    <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
+                                    <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
+                                </div>
+                            </div>
                         
                          <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
@@ -139,7 +155,8 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        </div>
+                        </form>
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
