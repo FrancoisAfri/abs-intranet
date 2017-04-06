@@ -84,9 +84,7 @@ class LeaveSetupController extends Controller
         $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
         $leave_credit = DB::table('leave_credit')->orderBy('id', 'asc')->get();
 
-        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
-            $query->orderBy('name', 'asc');
-        }]);
+       $employees = HRPerson::where('status', 1)->get();
         
         $leveType = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
           $query->orderBy('name', 'asc');  

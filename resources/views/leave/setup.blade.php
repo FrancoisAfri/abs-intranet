@@ -63,18 +63,19 @@
 
         <!-- <!-- Leave CreditSettings -->
  <div class="row">
-    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
-            {{ csrf_field() }}
+    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
+ {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Leave Credit</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
+                <h3 class="box-title">Approval Settings</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                </div>
+            </div>
+            <!-- /.box-header -->
                    
                        <table class="table table-bordered">
                              
@@ -111,7 +112,7 @@
                                                     </td>
                                                 </tr>
                                             </div>
-
+<!--
                                              <div class="form-group">
                                                 <tr>
                                                 <td nowrap>
@@ -140,10 +141,7 @@
                                                     </td>
                                                 </tr>
                                             </div>
-
-                                            
-
-                          
+-->           
 
                         </table>
                     
