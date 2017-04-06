@@ -63,20 +63,19 @@
 
         <!-- <!-- Leave CreditSettings -->
  <div class="row">
-    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
- {{ csrf_field() }}
+    <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
+            {{ csrf_field() }}
             <div class="col-sm-6">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                <h3 class="box-title">Approval Settings</h3>
-
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                </div>
-            </div>
-            <!-- /.box-header -->
-                   
+                        <h3 class="box-title">Leave Credit</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
                        <table class="table table-bordered">
                              
                                             <div class="form-group">
@@ -112,11 +111,11 @@
                                                     </td>
                                                 </tr>
                                             </div>
-<!--
+
                                              <div class="form-group">
                                                 <tr>
                                                 <td nowrap>
-                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->annual_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-number_of_days_annual="{{ $leave_configuration->number_of_days_annual }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
                                                                     </td>
                                                   <td>Allocate Negative Days (Annual leave)</td>
                                                  
@@ -130,7 +129,7 @@
                                              <div class="form-group">
                                                 <tr>
                                                  <td nowrap>
-                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-name="{{ $leave_configuration->sick_negative_days }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
+                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-number_of_days_sick="{{ $leave_configuration->number_of_days_sick }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
                                                                     </td>
                                                  <td>Allocate Negative Days (Sick leave)</td>
                                                 
@@ -141,10 +140,13 @@
                                                     </td>
                                                 </tr>
                                             </div>
--->           
+
+                                            
+
+                          
 
                         </table>
-                    
+                    </div>
                     <!-- /.box-body -->
                     <div class="modal-footer">
                        
@@ -157,7 +159,8 @@
 
 <!--     </div>-->
 </form>
-
+@include('leave.partials.edit_annual_days')
+@include('leave.partials.edit_sick_days') 
 {{--Approval Settings--}}
 <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
  {{ csrf_field() }}
@@ -172,7 +175,7 @@
                 </div>
             </div>
             <!-- /.box-header -->
-            
+             <div class="box-body">
                 <table class="table table-bordered">
                            
                                             <div class="form-group">
@@ -226,7 +229,7 @@
                                             </tr>
                                             </div>
                 </table>
-            
+            </div>
             <!-- /.box-body -->
             <div class="modal-footer">
 
@@ -255,7 +258,7 @@
                     </div>
                     <!-- /.box-header -->
                     
-
+                    <div class="box-body">
                          <table class="table table-bordered">
                              <div class="form-group">
                             <tr>
@@ -295,7 +298,7 @@
                              
                            
                         </table>
-          
+                    </div>
             <!-- Include add expenditure and add income modals -->
             <div class="modal-footer">
          <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
@@ -320,7 +323,7 @@
                     </div>
                     <!-- /.box-header -->
                    
-                        
+                         <div class="box-body">
                          <table class="table table-bordered">
                              <div class="checkbox">
                                 
@@ -366,7 +369,7 @@
 
                                      </div>
                                 </table>
-
+                                </div>
                          <div class="modal-footer">
                  <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
                     </div>
@@ -411,25 +414,7 @@
         $(window).on('resize', function () {
             $('.modal:visible').each(reposition);
         });
-        //pass module data to the leave type -edit module modal
-        
-        // $('#edit-leave_days-modal').on('show.bs.modal', function (e) {
-        //     //console.log('kjhsjs');
-        //     var btnEdit = $(e.relatedTarget);
-        //     leavesetupId = btnEdit.data('id');
-        //     var hr_id = btnEdit.data('hr_id');
-        //     var number_of_days = btnEdit.data('number_of_days');
-        //     var employeeName = btnEdit.data('employeename');
-        //     // var moduleFontAwesome = btnEdit.data('font_awesome');
-        //     var modal = $(this);
-        //     //modal.find('#hr_id').val(hr_id);
-        //     modal.find('#number_of_days').val(number_of_days);
-        //     modal.find('#hr_id').val(employeeName);
-        //     // modal.find('#font_awesome').val(moduleFontAwesome);
-        //     //if(primeRate != null && primeRate != '' && primeRate > 0) {
-        //     //    modal.find('#prime_rate').val(primeRate.toFixed(2));
-        //     //}
-        // });
+     
         var leavesetupId;
         $('#edit-leave_days-modal').on('show.bs.modal', function (e) {
             //console.log('kjhsjs');
@@ -502,42 +487,57 @@
       var updateNegativeID;
         $('#edit-annual-modal').on('show.bs.modal', function (e) {
             var btnEdit = $(e.relatedTarget);
-            updateNegativeID = btnEdit.data('id');
-            var number_of_days = btnEdit.data('number_of_days');
 
+            updateNegativeID = btnEdit.data('id');
+            var number_of_days_annual = btnEdit.data('number_of_days_annual');
+            //console.log(number_of_days_annual);
              var modal = $(this);
-             modal.find('#number_of_days').val(number_of_days);
+             modal.find('#number_of_days_annual').val(number_of_days_annual);
+
+        });
+
+         var updateSickID;
+        $('#edit-sick-modal').on('show.bs.modal', function (e) {
+            var btnEdit = $(e.relatedTarget);
+
+            updateSickID = btnEdit.data('id');
+            var number_of_days_sick = btnEdit.data('number_of_days_sick');
+           // console.log(number_of_days_sick);
+             var modal = $(this);
+             modal.find('#number_of_days_sick').val(number_of_days_sick);
 
         });
   
             //SAVE
 
-                 $('#annual_negative_days').on('click', function () {
-            var strUrl = '/leave/setup/'+ updateNegativeID;
+                 $('#update_annual').on('click', function () {
+            var strUrl = '/leave/setup/' + '1';
             var objData = {
-                  number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
+                  number_of_days_annual: $('#edit-annual-modal').find('#number_of_days_annual').val()
                 , _token: $('#edit-annual-modal').find('input[name=_token]').val()
             };
             var modalID = 'edit-annual-modal';
             var submitBtnID = 'edit_annual';
-            var redirectUrl = '/leave/setup/add';
+            var redirectUrl = '/leave/setup';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave has been successfully added.';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            var formMethod = 'PATCH';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
         });
 
           $('#update-sick').on('click', function () {
-            var strUrl = '/leave/setup/add';
+            var strUrl = '/leave/setup/' + '1/' + 'sick';
             var objData = {
-                  number_of_days: $('#edit-annual-modal').find('#number_of_days').val()
-                , _token: $('#edit-annual-modal').find('input[name=_token]').val()
+                  number_of_days_sick: $('#edit-sick-modal').find('#number_of_days_sick').val()
+                , _token: $('#edit-sick-modal').find('input[name=_token]').val()
             };
-            var modalID = 'edit-annual-modal';
-            var submitBtnID = 'edit_annual';
-            var redirectUrl = '/leave/setup/add';
+            var modalID = 'edit-sick-modal';
+            var submitBtnID = 'edit_sick';
+            var redirectUrl = '/leave/setup';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave has been successfully added.';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            var formMethod = 'PATCH';
+            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
         });
 
          

@@ -91,6 +91,11 @@
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
+<!--
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar-plus-o"></i>
+                                    </div>
+-->
 
                                     @if (count($employees) > 0)
                                         @foreach($employees as $employee)
@@ -242,6 +247,10 @@
 
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
+            <!-- Date picker -->
+    <script src="/cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
 
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
