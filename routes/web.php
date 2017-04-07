@@ -216,7 +216,10 @@ Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // Appraisal search
 Route::get('appraisal/search', 'AppraisalSearchController@index');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
-//>>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
+
+#Document setup module
+Route::get('/hr/document', 'DocumentTypeController@viewCategory');
+Route::post('/hr/document/add', 'DocumentTypeController@addList');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
