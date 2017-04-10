@@ -55,6 +55,8 @@ class AppraisalKPIResultsController extends Controller
     public function loadEmpAppraisals($empID, $appraisalMonth){
 		//test
 		//return AppraisalKPIResult::empAppraisal(2);
+		//return AppraisalKPIResult::empAppraisalByKPA(2, 'March 2017');
+		//return AppraisalKPIResult::empAppraisalForKPA(2, 'March 2017', 1);
 		//end test
         $appraisalMonth = trim($appraisalMonth);
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
@@ -73,26 +75,28 @@ class AppraisalKPIResultsController extends Controller
             ->first();*/
 
 		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate');
-		
-        $kpis = appraisalsKpis::where(function ($query) {
-			$query->where('upload_type', null);
-			$query->orWhereNotIn('upload_type', [2, 3]);
-		})
-			->where('template_id', $emp->jobTitle->kpiTemplate->id)
-			->where('appraisals_kpis.status', 1)
-			->where('appraisal_kpas.status', 1)
-			->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
-           
-            ->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
-                $query->where('hr_id', $empID);
-                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
-            }])
-            ->with('kpiranges')
-            ->with('kpiNumber')
-            ->with('kpiIntScore')
-            ->select('appraisals_kpis.*', 'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
-			->orderBy('appraisal_kpas.name')
-            ->get();
+		if ($emp->jobTitle && $emp->jobTitle->kpiTemplate) {
+			$kpis = appraisalsKpis::where(function ($query) {
+				$query->where('upload_type', null);
+				$query->orWhereNotIn('upload_type', [2, 3]);
+			})
+				->where('template_id', $emp->jobTitle->kpiTemplate->id)
+				->where('appraisals_kpis.status', 1)
+				->where('appraisal_kpas.status', 1)
+				->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
+
+				->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
+					$query->where('hr_id', $empID);
+					$query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+				}])
+				->with('kpiranges')
+				->with('kpiNumber')
+				->with('kpiIntScore')
+				->select('appraisals_kpis.*', 'appraisal_kpas.id as kpa_id', 'appraisal_kpas.name as kpa_name', 'appraisal_kpas.weight as kpa_weight')
+				->orderBy('appraisal_kpas.name')
+				->get();
+		}
+		else $kpis = [];
 			
         /*$kpis = appraisalsKpis::with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);

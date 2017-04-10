@@ -63,8 +63,8 @@ Route::get('/leave/setup', 'LeaveSetupController@showSetup');
 Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
 Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
 Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
-Route::post('/leave/setup/{leave_configuration}', 'LeaveSetupController@addAnnual');
-Route::post('/leave/setup/add', 'LeaveSetupController@addSick');
+Route::patch('/leave/setup/{id}', 'LeaveSetupController@addAnnual');
+Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
 
 #leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
@@ -74,8 +74,8 @@ Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
 #leave Application
 Route::get('leave/application', 'LeaveApplicationController@index');
-Route::get('leave/application/hours', 'LeaveSetupController@hours');
-
+Route::post('leave/application/hours', 'LeaveApplicationController@hours');
+Route::post('leave/application/day', 'LeaveApplicationController@day');
 
 
 
@@ -241,6 +241,7 @@ Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLe
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
 Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
+Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@empMonthlyPerformance')->name('empperformance');
 
 //Email Test
 Route::get('testemail', function () {
