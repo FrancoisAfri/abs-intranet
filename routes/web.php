@@ -207,16 +207,16 @@ Route::get('appraisal/load/result/{emp}/{month}', 'AppraisalKPIResultsController
 Route::post('appraisal/emp/appraisal/save', 'AppraisalKPIResultsController@storeEmpAppraisals');
 
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
-//<<<<<<< HEAD
-
-//=======
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
 // Appraisal search
+///appraisal/' . $emp->id . '/' . $key. '/' .  $year. '/kpas
 Route::get('appraisal/search', 'AppraisalSearchController@index');
+Route::get('appraisal/{empID}/viewappraisal', 'AppraisalSearchController@viewAppraisals');
+Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasView');
+Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
-//>>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
