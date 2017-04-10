@@ -101,7 +101,8 @@ class AppraisalKPIResult extends Model
             ->with('jobTitle.kpiTemplate.kpi.kpiskpas')
             ->first();
 
-        $empKPIs = $emp->jobTitle->kpiTemplate->kpi->sortBy('kpa_id')->groupBy('kpa_id');
+        if ($emp->jobTitle && $emp->jobTitle->kpiTemplate && $emp->jobTitle->kpiTemplate->kpi) $empKPIs = $emp->jobTitle->kpiTemplate->kpi->sortBy('kpa_id')->groupBy('kpa_id');
+        else return 0;
 
         $kpaResults = [];
         $kpaResult = 0;
