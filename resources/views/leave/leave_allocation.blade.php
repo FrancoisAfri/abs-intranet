@@ -195,6 +195,10 @@
                 else if (allType == 2) $('#box-subtitle').html('Resert leave allocation');
                 else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
+     
+    
+
+
             
 //            //repopulate projects, year dropdowns when a programme has been changed
 //            $('#programme_id').change(function(){

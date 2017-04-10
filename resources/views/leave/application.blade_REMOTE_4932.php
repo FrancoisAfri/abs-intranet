@@ -126,21 +126,12 @@
                                 </div>
                             </div>
                         </div>
-<<<<<<< HEAD
-                        <form>
-                         <div class="row">
-                         <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Hours</label>
-                            <div class="col-sm-4">
-                                <div class="input-group">
-=======
                         
 <!--
                          <div class="row">
                                     <label for="firstname" class="col-md-2 control-label" >day</label>
                                     <div class=" col-sm-4">
                                      <div class="input-group">
->>>>>>> 85712384b346378cf3e216011c3f9e193af4c166
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>    
@@ -154,16 +145,6 @@
                                            title="Enter first name"
                                            placeholder="First name"/>
                                     </div>
-<<<<<<< HEAD
-<!--                                    <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
-                                    <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
-                                </div>
-                            </div>
-                        
-                         <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-1 control-label">Minutes</label>
-                            <div class="col-sm-4">
-=======
                         </div>
                         <br>
 -->
@@ -173,21 +154,10 @@
                             <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
                             <div class="col-sm-10">
->>>>>>> 85712384b346378cf3e216011c3f9e193af4c166
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-<<<<<<< HEAD
-<!--                                    <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
-                                    <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        </div>
-                        </form>
-=======
                                     
                                     <input type="text" class="form-control pull-left" name="date&time" value=" " />
                                     
@@ -199,7 +169,6 @@
  
                         
                         
->>>>>>> 85712384b346378cf3e216011c3f9e193af4c166
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">

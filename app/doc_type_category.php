@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class doctype_category extends Model
+class doc_type_category extends Model
 {
     //
     //

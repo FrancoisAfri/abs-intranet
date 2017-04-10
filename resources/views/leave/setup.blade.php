@@ -140,6 +140,11 @@
                                                     </td>
                                                 </tr>
                                             </div>
+
+                                            
+
+                          
+
                         </table>
                     </div>
                     <!-- /.box-body -->
@@ -148,7 +153,8 @@
                         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save leave credit settings</button> 
                     </div>
                 </div>
-                
+                @include('leave.partials.edit_annual_days')
+                @include('leave.partials.edit_sick_days') 
             </div>
 
 <!--     </div>-->

@@ -12,7 +12,7 @@ class doc_type extends Model
     protected $fillable = ['name','description','active' ];
 
     public function docType() {
-        return $this->belongsTo(doctype_category::class, 'category_id');
+        return $this->belongsTo(doc_type_category::class, 'category_id');
     }
 }
   

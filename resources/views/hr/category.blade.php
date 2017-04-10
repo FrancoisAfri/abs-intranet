@@ -5,13 +5,13 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">List </h3>
+                    <h3 class="box-title">List of Document types </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <form class="form-horizontal" method="POST" action="/hr/document">
+                <form class="form-horizontal" method="POST" action="/hr/category">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <!-- /.box-header -->
@@ -23,11 +23,11 @@
                                 <th>Description</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                              @foreach ($doc_type as $type)
+                              @foreach ($doc_type_category as $type)
                                <tr>
                                     <td style=" text-align: center;" nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                            <a href="/hr/category" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-eye"></i> Category</a>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-document-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                           
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }}</td>
@@ -42,13 +42,15 @@
                         </div>
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add </button>  
+                     <button type="button" id="doc_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-document-modal">Add </button>  
+
+                       <a type="button" href="/hr/document" id="" class="btn btn-default pull-left">Back</a> 
                     </div>
         </div>
             </div>
    <!-- Include add new prime rate modal -->
-        @include('hr.partials.add_category_modal')
-        @include('hr.partials.edit_category_modal')
+        @include('hr.partials.add_document_modal')
+        @include('hr.partials.edit_document_modal')
      
   
               </div>
@@ -60,7 +62,7 @@
     <script>
         function postData(id, data)
         {
-             if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
+             if (data == 'dactive') location.href = "/hr/category/" + id + '/activate';
              
             //location.href = "/hr/firstlevel/dactive/" + id;
              // if (data == 'ribbons') location.href = "/hr/ribbons/" + id;
@@ -91,26 +93,13 @@
             });
               
 
-        /*    var updatecategoryID;
-            $('#add-category-modal').on('show.bs.modal', function (e) {
-                    //console.log('kjhsjs');
-                var btnEdit = $(e.relatedTarget);
-                updatecategoryID = btnEdit.data('id');
-                var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
-                //var employeeName = btnEdit.data('employeename');
-                var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#description').val(description);
-                
-             });*/
 
             // 
-             var doc_typeID;
-            $('#edit-category-modal').on('show.bs.modal', function (e) {
+             var doc_type_categoryID;
+            $('#edit-document-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                doc_typeID = btnEdit.data('id');
+                doc_type_categoryID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
                 //var employeeName = btnEdit.data('employeename');
@@ -123,41 +112,40 @@
             // 
 
             //Post module form to server using ajax (ADD)
-            $('#save_category').on('click', function() {
+            $('#save_doc').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/hr/document/add/' +  doc_typeID ;
-                var modalID = 'add-category-modal';
+                var strUrl = '/hr/category/add/' + doc_type_categoryID;
+                var modalID = 'add-document-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
-                var redirectUrl = '/hr/document';
+                var submitBtnID = 'doc_module';
+                var redirectUrl = '/hr/category';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group has been updated successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-    /**/   $('#edit_category').on('click', function () {
-                var strUrl = '/hr/document/' + doc_typeID;
-                var modalID = 'edit-category-modal';
+    /**/
+    });   $('#edit_doc').on('click', function () {
+                var strUrl = '/hr/category/update';
+                var modalID = 'edit-document-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'edit_category';
-                var redirectUrl = '/hr/document';
+                var submitBtnID = 'edit_doc';
+                var redirectUrl = '/hr/category';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'Category modal has been updated successfully.';
+                var successMsg = 'Company modal has been updated successfully.';
                 var Method = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-    });
 
- 
 
 
           /*  $('#update-module').on('click', function() {

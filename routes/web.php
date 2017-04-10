@@ -74,8 +74,8 @@ Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
 #leave Application
 Route::get('leave/application', 'LeaveApplicationController@index');
-Route::get('leave/application/hours', 'LeaveSetupController@hours');
-
+Route::post('leave/application/hours', 'LeaveApplicationController@hours');
+Route::post('leave/application/day', 'LeaveApplicationController@day');
 
 
 
@@ -218,8 +218,14 @@ Route::get('appraisal/search', 'AppraisalSearchController@index');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
 
 #Document setup module
-Route::get('/hr/document', 'DocumentTypeController@viewCategory');
-Route::post('/hr/document/add', 'DocumentTypeController@addList');
+Route::get('/hr/document', 'DocumentTypeController@viewDoc');
+Route::post('/hr/document/add/{doc_type}', 'DocumentTypeController@addList');
+Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
+Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');
+Route::get('/hr/category', 'DocumentTypeController@viewCategory');
+Route::post('/hr/category/add/{doc_type_categoryID}', 'DocumentTypeController@addDoc');
+Route::get('/hr/category/{listLevel}/activate', 'DocumentTypeController@activateDoc');
+Route::patch('/hr/category/update', 'DocumentTypeController@updateDoc');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
