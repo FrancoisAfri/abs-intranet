@@ -74,8 +74,8 @@ Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
 #leave Application
 Route::get('leave/application', 'LeaveApplicationController@index');
-Route::get('leave/application/hours', 'LeaveSetupController@hours');
-
+Route::post('leave/application/hours', 'LeaveApplicationController@hours');
+Route::post('leave/application/day', 'LeaveApplicationController@day');
 
 
 
@@ -241,6 +241,7 @@ Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLe
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
 Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
+Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@empMonthlyPerformance')->name('empperformance');
 
 //Email Test
 Route::get('testemail', function () {
