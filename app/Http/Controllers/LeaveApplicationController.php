@@ -206,18 +206,16 @@ class LeaveApplicationController extends Controller
          $levApp->status = 1;
          //$levApp->update();
             //return $levApp;
-    
-            
-        
-        
+       
         $levApp->save();
-            
-
+      
+//        return back();
         
-        return back();
+        AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
+        return view('leave.application')->with($data);  
     }
     
-    public function hours(Request $request)
+    public function hours(Request $request, leave_application $levApp )
     {
         $validator = Validator::make($request->all(), [      
                   
@@ -231,7 +229,7 @@ class LeaveApplicationController extends Controller
         ]);
         $leaveApp = $request->all();
         unset($leaveApp['_token']);
-    // return $leaveApp;
+     
         
          // explode left side
         $day = $leaveApp['datetime'];
@@ -239,7 +237,7 @@ class LeaveApplicationController extends Controller
         $start_date = str_replace('/', '-', $dates[0]);
         $start_date = strtotime($start_date);//date
         $start_time = date('H:i:s',strtotime($dates[1] . ' ' . $dates[2]));// time
-        //return $date2;
+        $start_time = strtotime($start_time);
         
                 // explode right side
           $var = $leaveApp['datetime'];
@@ -247,15 +245,49 @@ class LeaveApplicationController extends Controller
          $end_date = str_replace('/', '-', $days[0]);
 //        $end_date = date('d-m-Y',strtotime($days[0])); //date
         $end_time = date('H:i:s',strtotime($days[1])); // time
+        $end_time = strtotime($end_time);
+//         return $end_time;
+       // return $end_time;
+         $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
+            $query->orderBy('name', 'asc');
+        }]);
         
-        return $start_time;
+       //Query the Holiday table and return the days
+        $public_holiday = DB::table('public_holidays')->pluck('day');
         
-       
+        // receive values from the dropbox
+        $levApp->hr_id = $request->input('hr_person_id');
+        $levApp->leave_type_id = $request->input('leave_type');
         
+        //$HRpeople = HRPerson::find($employees);
+       $diffrenceDays = ($end_date - $start_date) / 86400 + 1;
+    //#calculate 
+        // #save the start and end date
+        $levApp->start_date = $start_date;
+        $levApp->start_time = $start_date;
+        $levApp->end_time = $end_time;
         
-
-       
+             //Upload supporting Documents
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $levApp->id . "_supporting_docs." . $fileExt;
+                $request->file('supporting_docs')->storeAs('levApp', $fileName);
+                //Update file name in hr table
+                $levApp->supporting_docs = $fileName;
+                $levApp->updates();
+                
+//                return $levApp;
+            }
+        }
+        
+              $levApp->notes = $request->input('description');
+              $levApp->status = 1;
+              $levApp->save();
+                 //$levApp->update();
+                    //return $levApp;
     
+            
         
         
         

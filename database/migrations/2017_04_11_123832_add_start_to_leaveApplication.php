@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStartDateToLeaveApplication extends Migration
+class AddStartToLeaveApplication extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,18 @@ class AddStartDateToLeaveApplication extends Migration
      */
     public function up()
     {
-       Schema::table('leave_application', function($table) {
+        //
+        Schema::table('leave_application', function($table) {
             $table->bigInteger('start_date')->nullable();
             $table->bigInteger('end_date')->nullable();
-//            $table->bigInteger('start_time')->nullable();
-//            $table->bigInteger('end_time')->nullable();
+            $table->bigInteger('start_time')->nullable();
+            $table->bigInteger('end_time')->nullable();
             $table->integer('status')->unsigned()->index()->nullable();
             $table->integer('hr_id')->nullable();
             $table->integer('leave_type_id')->nullable();
-//            $table->integer('manager_id')->nullable();
+            $table->integer('manager_id')->nullable();
         });
     }
-    
 
     /**
      * Reverse the migrations.
@@ -33,15 +33,16 @@ class AddStartDateToLeaveApplication extends Migration
      */
     public function down()
     {
-      Schema::table('leave_application', function($table) {
+        //
+        Schema::table('leave_application', function($table) {
             $table->dropColumn('start_date');
             $table->dropColumn('end_date');
             $table->dropColumn('status');
             $table->dropColumn('hr_id');
             $table->dropColumn('leave_type_id');
-//             $table->dropColumn('start_time');
-//              $table->dropColumn('end_time');
-//               $table->dropColumn('manager_id');
+            $table->dropColumn('start_time');
+            $table->dropColumn('end_time');
+            $table->dropColumn('manager_id');
         });
     }
 }
