@@ -75,7 +75,11 @@ class LeaveApplicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-
+    
+    /**
+    
+    */
+    
     public function day(Request $request, leave_application $levApp )
     {
         $validator = Validator::make($request->all(), [      
@@ -83,11 +87,10 @@ class LeaveApplicationController extends Controller
            "hr_person_id" ,
            "leave_type",
             "day",
-           "date&time",
+           "datetime",
            "description",
-           "supporting_doc",     
-//            
-//            {"hr_person_id":["4"],"application_type":"1","leave_type":"5","day":" ","date&time":" ","description":"","supporting_doc":"","load-allocation":"Submit"}
+           //"supporting_doc",     
+
         ]);
       
         $leaveApp = $request->all();
@@ -99,18 +102,23 @@ class LeaveApplicationController extends Controller
                 unset($leaveApp[$key]);
             }
         }
-
+//return $leaveApp;
         $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
             $query->orderBy('name', 'asc');
         }]);
         
-        // separate day range
-        $day = $leaveApp['day'];
-        $dates = explode(' - ',$day);
-        $start_date = date('Y-m-d',strtotime($dates[0]));
-        $end_date = date('Y-m-d',strtotime($dates[1]));
-            
-        // Get employeeId from dropbbox
+//        return $levDays;
+        
+        //Query leave holiday Tables
+        
+        //$public_holiday = DB::table('public_holidays')->orderBy('id', 'asc')->get();
+        
+        $public_holiday = DB::table('public_holidays')->pluck('day');    
+        
+        $levApp->hr_id = $request->input('hr_person_id');
+        $levApp->leave_type_id = $request->input('leave_type');
+        
+          // Get employeeId from dropbbox
         $employees = $leaveApp['hr_person_id'];
         
         // Get leavetype Id from dropbbox
@@ -119,49 +127,92 @@ class LeaveApplicationController extends Controller
         //query the hr table based on employeeId
         $HRpeople = HRPerson::find($employees);
         
-            
-                // save notes Description
-         $levApp->notes = $request->input('description');
-         $levApp->update();
-            //return $levApp;
+        
+         // separate day range
+        $day = $leaveApp['day'];
+        $dates = explode(' - ',$day);
+        $start_date = str_replace('/', '-', $dates[0]);
+        $start_date = strtotime($start_date);
+        $end_date = str_replace('/', '-', $dates[1]);
+        $end_date = strtotime($end_date);
+//        return $end_date;
+       
+        //The total number of days between the two dates. We compute the no. of seconds and divide it to 60*60*24
+    //We add one to inlude both dates in the interval.
+    $diffrenceDays = ($end_date - $start_date) / 86400 + 1;
+        
+       // save dates
+                    // calculate public holidays and weekends
+        $iNonweek = 0;
+           $aPublicHolidays = array();
+       $aPublicHolidays = $public_holiday;
+        
+         # Add Easter Weekend to list of public holidays
 
+               $iEasterSunday =  easter_date(date("Y",strtotime($end_date)));
+
+               $aPublicHolidays[] = $iEasterSunday - (2*3600*24);
+
+               $aPublicHolidays[] = $iEasterSunday + (3600*24);
         
-        //convert dates to unix time stamp
-        if (isset($leaveApp['$date1'])) {
-           $leaveApp['$date1'] = str_replace('/', '-', $leaveApp['$date1']);
-           $leaveApp['$date1'] = strtotime($leaveApp['$date1']);
+//        return $aPublicHolidays;
+        
+        for ($i = $start_date; $i <= $end_date; $i = $i+86400){
+         $aPublic = array(); 
+            
+            foreach($aPublicHolidays as $iKey =>$sValue)
+            {
+                    $sDay = date("Y",$i)."-".date("m",$sValue)."-".date("d",$sValue);
+                
+                    $iDay = strtotime($sDay);
+                    $aPublic[$iDay] = 0;
+            }
+             if (((date("w",$i) == 6) || (date("w",$i) == 0))) $iNonweek++;
+                if (array_key_exists($i,$aPublic) && ((date("w",$i) != 6) && (date("w",$i) != 0))) $iNonweek++;
+            
+            //
+            if (array_key_exists($i-86400,$aPublic) && (date("w",$i) == 1))
+                        if (array_key_exists($i,$aPublic)) {}
+                        else $iNonweek++;  
         }
-        if (isset($leaveApp['$date2'])) {
-            $projectData['$date2'] = str_replace('/', '-', $projectData['$date2']);
-            $projectData['$date2'] = strtotime($projectData['$date2']);
-        }
+          //$iDiff = strtotime($start_date) - strtotime();
+          $iDiff = $end_date - $start_date;
         
-//        //Upload supporting Documents
+          $iDays = ($iDiff / 86400) - $iNonweek + 1;
         
-        if ($request->hasFile('supporting_doc')) {
-            $fileExt = $request->file('supporting_doc')->extension();
-            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_doc')->isValid()) {
-                $fileName = $levApp->id . "_supporting." . $fileExt;
-                $request->file('supporting_doc')->storeAs('notes', $fileName);
+        //return $iDays;
+   // #save the start and end date
+        $levApp->start_date = $start_date;
+        $levApp->end_date = $end_date;
+        
+       // return $levApp->id;
+        //        //Upload supporting Documents
+        
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $levApp->id . "_supporting_docs." . $fileExt;
+                $request->file('supporting_docs')->storeAs('levApp', $fileName);
                 //Update file name in hr table
-                $levApp->supporting_doc = $fileName;
-                $levApp->update();
+                $levApp->supporting_docs = $fileName;
+                $levApp->updates();
                 
 //                return $levApp;
             }
         }
         
-////        return $HRpeople;
-//        foreach($employees as $empID) {
-//            $emp = HRPerson::find($empID);
-//            //return $empID;
-//           $types = LeaveType::find($tyop);
-////            $pro = $emp->leave_types;
-//            $profile =$emp->leave_types->where('id', $empID)->first() ;
-//         
-//           // $val = $profile->pivot->leave_balance;
-////           return $val;
-//        }
+        // save notes Description
+         $levApp->notes = $request->input('description');
+         $levApp->status = 1;
+         //$levApp->update();
+            //return $levApp;
+    
+            
+        
+        
+        $levApp->save();
+            
+
         
         return back();
     }
@@ -171,32 +222,33 @@ class LeaveApplicationController extends Controller
         $validator = Validator::make($request->all(), [      
                   
            "hr_person_id",
-//           "application_type",
            "leave_type",
             "day",
-           "date&time",
+           "datetime",
            "description",
            "supporting_doc",     
 
         ]);
         $leaveApp = $request->all();
         unset($leaveApp['_token']);
-//     return $leaveApp;
+    // return $leaveApp;
         
          // explode left side
-        $day = $leaveApp['date&time'];
+        $day = $leaveApp['datetime'];
         $dates = explode(" ",$day);
-        $start_date = date('d-m-Y',strtotime($dates[0]));//date
-        $start_time = date('H:i:s',strtotime($dates[1]));// time
-        //return $date2; 
+        $start_date = str_replace('/', '-', $dates[0]);
+        $start_date = strtotime($start_date);//date
+        $start_time = date('H:i:s',strtotime($dates[1] . ' ' . $dates[2]));// time
+        //return $date2;
         
                 // explode right side
-          $var = $leaveApp['date&time'];
-        $days = explode(' - ',$var);
-        $end_date = date('d-m-Y',strtotime($days[0])); //date
+          $var = $leaveApp['datetime'];
+         $days = explode(' - ',$var);
+         $end_date = str_replace('/', '-', $days[0]);
+//        $end_date = date('d-m-Y',strtotime($days[0])); //date
         $end_time = date('H:i:s',strtotime($days[1])); // time
         
-//        return $end_time;
+        return $start_time;
         
        
         
