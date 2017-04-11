@@ -50,7 +50,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -126,21 +126,12 @@
                                 </div>
                             </div>
                         </div>
-
-                        <form>
-                         <div class="row">
-                         <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Hours</label>
-                            <div class="col-sm-4">
-                                <div class="input-group">
-
                         
 <!--
                          <div class="row">
                                     <label for="firstname" class="col-md-2 control-label" >day</label>
                                     <div class=" col-sm-4">
                                      <div class="input-group">
->>>>>>> 85712384b346378cf3e216011c3f9e193af4c166
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>    
@@ -154,41 +145,21 @@
                                            title="Enter first name"
                                            placeholder="First name"/>
                                     </div>
-                                  <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
-                                    <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
-                                </div>
-                            </div>
-                        
-                         <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-1 control-label">Minutes</label>
-                            <div class="col-sm-4">
-
                         </div>
                         <br>
-
+-->
                         
                     
                              
                             <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
                             <div class="col-sm-10">
-
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-
-<!--                                    <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
-                                    <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        </div>
-                        </form>
-
                                     
-                                    <input type="text" class="form-control pull-left" name="datetime" value=" " />
+                                    <input type="text" class="form-control pull-left" name="date&time" value=" " />
                                     
                                 </div>
                             </div>
@@ -198,7 +169,6 @@
  
                         
                         
-
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
@@ -211,14 +181,14 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Supporting Document</label>
                             <div class="col-sm-10">
                                <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-upload"></i>
                                     </div>
-                                    <input type="file" id="supporting_docs" name="supporting_docs" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
+                                    <input type="file" id="supporting_doc" name="supporting_doc" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
                                 </div>
                             </div>
                         </div>
@@ -309,13 +279,12 @@
                     format: 'DD/MM/YYYY'
                 },
                 "dateLimit": {
-                    "days": 4
+                    "days": 2
                 },
             });
-            $('input[name="datetime"]').daterangepicker({
+            $('input[name="date&time"]').daterangepicker({
                 timePicker: true    ,
-                linkedCalendars:true,
-//                timePickerIncrement: 30,
+                timePickerIncrement: 30,
                 locale: {
                     format: 'DD/MM/YYYY h:mm A'
                 },"dateLimit": {
@@ -360,7 +329,7 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-        });ss
+        });
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();

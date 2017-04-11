@@ -1,17 +1,27 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
-<!-- Include Date Range Picker -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
 <!-- bootstrap datepicker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 <!-- bootstrap file input -->
-<link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
-<!--Time Charger-->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet"/>
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+<!-- Include Required Prerequisites -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+ 
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment-with-locales.min.js"></script>
 
-
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+<!-- -->
 @endsection
 @section('content')
     <div class="row">
@@ -28,7 +38,7 @@
                 <!-- form start -->
 
 <!--                    <form name="leave-alloccation-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">-->
-                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " nctype="multipart/form-data">
+                         <form name="leave-application-form" class="form-horizontal" method="POST" action="/leave/application" nctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -50,7 +60,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -87,7 +97,7 @@
                                 </div>
                             </div>                 
                       
-                        <div class="form-group  ">
+                        <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }} ">
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -97,21 +107,10 @@
                                     </div>
 -->
 
-                                    @if (count($employees) > 0)
-                                        @foreach($employees as $employee)
-                                        <tr id="modules-list">
-                                          <td align="center"> {{ ($balance = $employee ->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: ''}} </td>
-                                             </tr> 
-                                        @endforeach
-                                    @else   
-                                    @endif
- 
+<!--                                    <input type="text" class="form-control" id="adjust_days" name="adjust_days" value="{{ old('updated_at') }}" placeholder="Enter number of days" >-->
                                 </div>
                             </div>
                         </div>
-                        
-
-                                    <!--                                                        -->
                         
                       <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Day</label>
@@ -121,84 +120,43 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
 <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control pull-left" name="day" value=" " />
+                                    <input type="text" class="form-control pull-left" name="daterange" value=" " />
                                     
                                 </div>
                             </div>
                         </div>
-
                         <form>
-                         <div class="row">
+
                          <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                          <div class="row">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
+                           
                             <div class="col-sm-4">
                                 <div class="input-group">
-
-                        
-<!--
-                         <div class="row">
-                                    <label for="firstname" class="col-md-2 control-label" >day</label>
-                                    <div class=" col-sm-4">
-                                     <div class="input-group">
->>>>>>> 85712384b346378cf3e216011c3f9e193af4c166
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
-                                    </div>    
-                                   <input type="text" class="form-control pull-left" name="day" value=" " />
-                              </div>
-                         </div>
-                             
-                                    <label for="firstname" class="col-md-2 control-label" >time</label>
-                                      <div class=" col-sm-4">
-                                    <input id="firstname" class="col-sx-2 form-control input-group-lg reg_name" type="text" name="firstname"
-                                           title="Enter first name"
-                                           placeholder="First name"/>
                                     </div>
-                                  <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
+                                   
+<!--                                    <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
                                     <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
                                 </div>
                             </div>
                         
                          <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-1 control-label">Minutes</label>
-                            <div class="col-sm-4">
-
-                        </div>
-                        <br>
-
-                        
-                    
-                             
-                            <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
-                            <div class="col-sm-10">
-
+                            <div class="col-sm-4">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-
+                                   
 <!--                                    <input type="text" class="form-control pull-right" name="daterange&time" value="01/01/2015  " />-->
                                     <input type="text" class="form-control pull-left" name="birthdate" value="10/24/2017" />
                                 </div>
                             </div>
                         </div>
                         </div>
-                        </div>
                         </form>
-
-                                    
-                                    <input type="text" class="form-control pull-left" name="datetime" value=" " />
-                                    
-                                </div>
-                            </div>
-                        </div>
-                             
-                                        <!--    / collumn -->
- 
-                        
-                        
-
                         <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
@@ -211,14 +169,14 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Supporting Document</label>
                             <div class="col-sm-10">
                                <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-upload"></i>
                                     </div>
-                                    <input type="file" id="supporting_docs" name="supporting_docs" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
+                                    <input type="file" id="supporting_doc" name="supporting_doc" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
                                 </div>
                             </div>
                         </div>
@@ -268,10 +226,7 @@
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
     <!-- End Bootstrap File input -->
 
-    <!-- Date rane picker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
-
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
@@ -300,29 +255,14 @@
              //Phone mask
             $("[data-mask]").inputmask();
 
-            //Initialise date range picker elements
-            $('input[name="day"]').daterangepicker({
-                timePicker: false,
-                //timePickerIncrement: 30,
-                locale: {
-                    //format: 'MM/DD/YYYY h:mm A'
-                    format: 'DD/MM/YYYY'
-                },
-                "dateLimit": {
-                    "days": 4
-                },
+            //Date picker
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
             });
-            $('input[name="datetime"]').daterangepicker({
-                timePicker: true    ,
-                linkedCalendars:true,
-//                timePickerIncrement: 30,
-                locale: {
-                    format: 'DD/MM/YYYY h:mm A'
-                },"dateLimit": {
-                    "days": 1
-                },
+            
 
-            });
             
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
@@ -339,8 +279,44 @@
 //                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
             
-            var balance = document.getElementById("$leaveType->id");
-           
+//                    $('input[name="daterange"]').daterangepicker();
+            $('input[name="daterange"]').daterangepicker(
+                    {
+                        locale: {
+                          format: 'YYYY-MM-DD'
+                        },
+                        startDate: moment(),
+                        endDate: moment()
+                    }, 
+                    function(start, end, label) {
+                        alert("A new leave date range was chosen: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                    });
+                
+                     $('input[name="birthdate"]').daterangepicker(
+                         {
+                            singleDatePicker: true,
+                            showDropdowns: true
+                        });
+
+//            //repopulate projects, year dropdowns when a programme has been changed
+//            $('#programme_id').change(function(){
+//                var programmeID = $(this).val();
+//                populateProjectDD(programmeID);
+//                populateYearDD(programmeID);
+//            });
+//                locales('es');
+                $('input[name="birthdate"]').daterangepicker({
+                        singleDatePicker: true,
+                        timePicker: true,
+                    
+                        //locale:true,
+                        showDropdowns: false
+                    }, 
+                    function(start, end, label) {
+                        var years = moment().diff(start, 'years');
+                        alert("You are " + years + " years old.");
+                    });
+  
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -360,29 +336,40 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-        });ss
+        });
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();
-            if (allType == 1) { //day leave
+            if (allType == 1) { //adjsut leave
                 $('.hours-field').hide();
                 $('.day-field').show();
-                $('form[name="leave-application-form"]').attr('action', '/leave/application/day');
-               
+                //$('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave');
                 $('#load-allocation').val("Submit");       
             }
-            else if (allType == 2) { //hours leave
+            else if (allType == 2) { //resert leave
 //                
                 $('.day-field').hide();
                 $('.hours-field').show();
-                $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
+               // $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave/resert');
                 $('#load-allocation').val("Submit");
             }
-
+//            else if (allType == 3) { //allocate leave
+////            
+//                $('.resert-field, .adjust-field').hide();
+//                $('.allocaion-field').show();
+//                $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave/add');
+//                $('#load-allocation').val("Submit");
+//            }
             return allType;
-           
+            //hideSemesterRow();
         }
-  
+        //function to hide/show semester
+      
+
+        //Load divisions drop down
+      
+       
+        //function to populate the year drop down
         
     </script>
 @endsection
