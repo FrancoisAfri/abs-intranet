@@ -129,6 +129,71 @@ class AppraisalSearchController extends Controller
         $data['scoresArray'] = $scoresArray;
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Search';
+        $data['year'] = date('Y');
+		//return $data;
+        AuditReportsController::store('Performance Appraisal', 'Search page accessed', "Accessed by User", 0);
+        return view('appraisals.appraisal_search_results')->with($data);
+    }
+	public function kpasView($empID, $monthYear)
+    {
+		$kpasArray = array(); 
+		
+		$kpasArray = AppraisalKPIResult::empAppraisalByKPA($empID, $monthYear);
+		//return $kpasArray;
+		$data['page_title'] = "Appraisals KPAs Results";
+        $data['page_description'] = "Appraisals KPAs Results";
+        $data['breadcrumb'] = [
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['kpasArray'] = $kpasArray;
+        $data['monthyear'] = $monthYear;
+        $data['emp_id'] = $empID;
+        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_rib'] = 'Search';
+        AuditReportsController::store('Performance Appraisal', 'KPAs Scored Viewed', "Accessed by User", 0);
+        return view('appraisals.kpas_scores')->with($data);
+    }
+	
+	public function kpisView($empID, $kpaID, $dateUploaded)
+    {
+		$kpisArray = array(); 
+		
+		$kpisArray = AppraisalKPIResult::empAppraisalForKPA($empID, $dateUploaded, $kpaID);
+		//return $kpisArray;
+		$data['page_title'] = "Appraisals KPIs Results";
+        $data['page_description'] = "Appraisals KPIs Results";
+        $data['breadcrumb'] = [
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['kpisArray'] = $kpisArray;
+        $data['monthyear'] = $dateUploaded;
+        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_rib'] = 'Search';
+        AuditReportsController::store('Performance Appraisal', 'KPIs Scored Viewed', "Accessed by User", 0);
+        return view('appraisals.kpis_scores')->with($data);
+    }
+	// individual appraisal
+	 public function viewAppraisals($empID)
+    {
+		
+		$scoresArray = array();
+		$scoresArray[] = AppraisalKPIResult::empAppraisal($empID);
+		$data['page_title'] = "Appraisals Search Results";
+        $data['page_description'] = "Appraisals Search Results";
+        $data['breadcrumb'] = [
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['scoresArray'] = $scoresArray;
+        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_rib'] = 'Search';
+        $data['year'] = date('Y');
+		//return $data;
         AuditReportsController::store('Performance Appraisal', 'Search page accessed', "Accessed by User", 0);
         return view('appraisals.appraisal_search_results')->with($data);
     }

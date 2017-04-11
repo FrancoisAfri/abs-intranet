@@ -101,7 +101,8 @@ class AppraisalKPIResult extends Model
             ->with('jobTitle.kpiTemplate.kpi.kpiskpas')
             ->first();
 
-        $empKPIs = $emp->jobTitle->kpiTemplate->kpi->sortBy('kpa_id')->groupBy('kpa_id');
+        if ($emp->jobTitle && $emp->jobTitle->kpiTemplate && $emp->jobTitle->kpiTemplate->kpi) $empKPIs = $emp->jobTitle->kpiTemplate->kpi->sortBy('kpa_id')->groupBy('kpa_id');
+        else return 0;
 
         $kpaResults = [];
         $kpaResult = 0;
@@ -150,7 +151,7 @@ class AppraisalKPIResult extends Model
                     $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
                 }
             }
-            if ($kpaID != null && $groupKey === $kpaID) return $kpiResults;
+            if ($kpaID != null && $groupKey == $kpaID) return $kpiResults;
             $kpaWeight = appraisalKpas::find($groupKey)->weight; //get the KPA's weight from the database
             $kpaResult = ($kpaResult * $kpaWeight) / 100; //weighted KPA result
             $kpaResults[$groupKey] = $kpaResult;

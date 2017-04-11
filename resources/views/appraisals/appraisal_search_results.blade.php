@@ -8,7 +8,6 @@
         <!-- New User Form -->
         <div class="col-md-12 col-md-12">
             <!-- Horizontal Form -->
-			<form class="form-horizontal" method="get" action="/education/search">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
@@ -16,72 +15,69 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-
-                <div class="box-body">
-				<div class="box">
             <!-- /.box-header -->
-            <div class="box-body">
-				<div style="overflow-X:auto;">
-				  <table id="example2" class="table table-bordered table-hover">
-					<thead>
-					<tr>
-					  <th>Employee Name</th>
-					  <th>January</th>
-					  <th>February</th>
-					  <th>March</th>
-					  <th>April</th>
-					  <th>May</th>
-					  <th>June</th>
-					  <th>July</th>
-					  <th>August</th>
-					  <th>September</th>
-					  <th>October</th>
-					  <th>November</th>
-					  <th>December</th>
-					</tr>
-					</thead>
-					<tbody>
-					@if (!empty($scoresArray))
-						@foreach($scoresArray as $emp)
-						<tr>
-							<td>{{ $emp->first_name . ' ' . $emp->surname }}</td>
-							@foreach($emp->year_appraisal as $appraisal)
-								<td>{{ $appraisal }}</td>
-							@endforeach
-						</tr>
-						@endforeach
-					@endif
-					</tbody>
-					<tfoot>
-					<tr>
-					  <th>Employee Name</th>
-					  <th>January</th>
-					  <th>February</th>
-					  <th>March</th>
-					  <th>April</th>
-					  <th>May</th>
-					  <th>June</th>
-					  <th>July</th>
-					  <th>August</th>
-					  <th>September</th>
-					  <th>October</th>
-					  <th>November</th>
-					  <th>December</th>
-					</tr>
-					</tfoot>
-				  </table>
-				</div>
+					<div class="box-body">
+						<div style="overflow-X:auto;">
+						  <table id="example2" class="table table-bordered table-hover">
+							<thead>
+							<tr>
+							  <th>Employee Name</th>
+							  <th>January</th>
+							  <th>February</th>
+							  <th>March</th>
+							  <th>April</th>
+							  <th>May</th>
+							  <th>June</th>
+							  <th>July</th>
+							  <th>August</th>
+							  <th>September</th>
+							  <th>October</th>
+							  <th>November</th>
+							  <th>December</th>
+							</tr>
+							</thead>
+							<tbody>
+							@if (!empty($scoresArray))
+								@foreach($scoresArray as $emp)
+								<tr>
+									<td>{{ $emp->first_name . ' ' . $emp->surname }}</td>
+									@foreach($emp->year_appraisal as $key => $appraisal)
+										@if (!empty($appraisal))
+											<td><a href="{{ '/appraisal/' . $emp->id . '/' . $key. ' ' .  $year. '/kpas' }}" class="product-title">{{ $appraisal }} % </a></td>
+										@else
+											<td></td>
+										@endif
+									@endforeach
+								</tr>
+								@endforeach
+							@endif
+							</tbody>
+							<tfoot>
+							<tr>
+							  <th>Employee Name</th>
+							  <th>January</th>
+							  <th>February</th>
+							  <th>March</th>
+							  <th>April</th>
+							  <th>May</th>
+							  <th>June</th>
+							  <th>July</th>
+							  <th>August</th>
+							  <th>September</th>
+							  <th>October</th>
+							  <th>November</th>
+							  <th>December</th>
+							</tr>
+							</tfoot>
+						  </table>
+						</div>
+					</div>
+            <!-- /.box-body --> 
+                
             </div>
-            <!-- /.box-body -->
-          </div>
-                     </div>   
-                    <!-- 
-                    <div class="box-footer">
-					  <button id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
-                    </div>
-                     -->
-            </div>
-			</form>
+			<div class="box-footer">
+                    <button id="back_to_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to Search</button>
+                </div>
             <!-- /.box -->
         </div>
         <!-- End new User Form-->
@@ -95,7 +91,11 @@
     <!-- End Bootstrap File input -->
 
     <script type="text/javascript">
-        
+        //Cancel button click event
+	document.getElementById("back_to_search").onclick = function () {
+		location.href = "/appraisal/search ";
+	};
+	
 	 $(function () {
 		 $('#example2').DataTable({
 		  "paging": true,
@@ -105,11 +105,6 @@
 		  "info": true,
 		  "autoWidth": true
 			});
-			
-			//Cancel button click event
-            $('#back_button').click(function () {
-                location.href = '/appraisal/search/';
-            });
         });
 		
     </script>
