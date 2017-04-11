@@ -50,7 +50,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -159,7 +159,7 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     
-                                    <input type="text" class="form-control pull-left" name="date&time" value=" " />
+                                    <input type="text" class="form-control pull-left" name="datetime" value=" " />
                                     
                                 </div>
                             </div>
@@ -181,14 +181,14 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Supporting Document</label>
                             <div class="col-sm-10">
                                <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-upload"></i>
                                     </div>
-                                    <input type="file" id="supporting_doc" name="supporting_doc" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
+                                    <input type="file" id="supporting_docs" name="supporting_docs" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
                                 </div>
                             </div>
                         </div>
@@ -279,12 +279,13 @@
                     format: 'DD/MM/YYYY'
                 },
                 "dateLimit": {
-                    "days": 2
+                    "days": 4
                 },
             });
-            $('input[name="date&time"]').daterangepicker({
+            $('input[name="datetime"]').daterangepicker({
                 timePicker: true    ,
-                timePickerIncrement: 30,
+                linkedCalendars:true,
+//                timePickerIncrement: 30,
                 locale: {
                     format: 'DD/MM/YYYY h:mm A'
                 },"dateLimit": {
@@ -329,7 +330,7 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-        });
+        });ss
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();
