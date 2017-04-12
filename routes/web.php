@@ -227,9 +227,9 @@ Route::post('/hr/document/add/{doc_type}', 'DocumentTypeController@addList');
 Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
 Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');
 Route::get('/hr/category', 'DocumentTypeController@viewCategory');
-Route::post('/hr/category/add/{doc_type_categoryID}', 'DocumentTypeController@addDoc');
+Route::post('/hr/category/add/{category_id}', 'DocumentTypeController@addDoc');
 Route::get('/hr/category/{listLevel}/activate', 'DocumentTypeController@activateDoc');
-Route::patch('/hr/category/update', 'DocumentTypeController@updateDoc');
+Route::patch('/hr/category/{category_id}', 'DocumentTypeController@updateDoc');
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');

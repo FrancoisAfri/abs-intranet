@@ -53,27 +53,135 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-sm-3 control-label">Licence Expiry</label>
+                         <div class="form-group">
+                            <label for="phone_number" class="col-sm-3 control-label">Phone Number</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Phone Number" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_number" class="col-sm-3 control-label">ID Number</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="id_number" name="id_number" value="{{ old('id_number') }}"  placeholder="ID Number" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label for="date_of_birth" class="col-sm-3 control-label">Date of birth</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}"  placeholder="Date of birth" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="passport_number" class="col-sm-3 control-label">Passport Number</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ old('passport_number') }}"  placeholder="Passport Number" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label for="drivers_licence_number" class="col-sm-3 control-label">Drivers Licence Number</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="drivers_licence_number" name="drivers_licence_number" value="{{ old('drivers_licence_number') }}"  placeholder="Drivers Licence Number" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="drivers_licence_code" class="col-sm-3 control-label">Drivers Licence Code</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="drivers_licence_code" name="drivers_licence_code" value="{{ old('drivers_licence_code') }}"  placeholder="Drivers Licence Code" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label for="proof_drive_permit" class="col-sm-3 control-label">Proof Drive Permit</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="proof_drive_permit" name="proof_drive_permit" value="{{ old('proof_drive_permit') }}"  placeholder="Proof Drive Permit" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="proof_drive_permit_exp_date" class="col-sm-3 control-label">Drive Permit Expiry</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="proof_drive_permit_exp_date" name="proof_drive_permit_exp_date" value="{{ old('proof_drive_permit_exp_date') }}"  placeholder="Proof Drive Permit Expiry Date" data-mask>
+                                </div>
+                            </div>
+                        </div>
+                           <div class="form-group">
+                            <label for="drivers_licence_exp_date" class="col-sm-3 control-label">Licence Expiry</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-envelope"></i>
                                     </div>
-                                    <input type="email" class="form-control" id="expiry" name="expiry" value="" placeholder="Email" required>
+                                    <input type="text" class="form-control" id="drivers_licence_exp_date" name="drivers_licence_exp_date" value="" placeholder="Licence Expiry" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="password" class="col-sm-3 control-label">Password</label>
+                         <div class="form-group">
+                            <label for="gender" class="col-sm-3 control-label">Gender</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-lock"></i>
+                                        <i class="fa fa-envelope"></i>
                                     </div>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                    <input type="text" class="form-control" id="gender" name="gender" value="" placeholder="Gender" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ethnicity" class="col-sm-3 control-label">Ethnicity</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-envelope"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="ethnicity" name="ethnicity" value="" placeholder="Ethnicity" required>
                                 </div>
                             </div>
                         </div>
