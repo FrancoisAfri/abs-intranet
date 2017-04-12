@@ -94,7 +94,7 @@ class LeaveApplicationController extends Controller
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
         $data['leaveApplication'] = $leaveApplication;
-       return $leaveApplication;
+      // return $leaveApplication;
        
 //        $data['leave_customs']=$leave_customs;
 
@@ -115,7 +115,7 @@ class LeaveApplicationController extends Controller
         ]);
       
         $leaveApp = $request->all();
-        
+        return $leaveApp;
         //Exclude empty fields from query
         foreach ($leaveApp as $key => $value)
         {
@@ -247,7 +247,7 @@ class LeaveApplicationController extends Controller
 //            "day",
            'datetime' =>'required',
            'description' => 'required',
-           'supporting_doc' => 'required',     
+                
 
         ]);
         $leaveApp = $request->all();
@@ -290,6 +290,10 @@ class LeaveApplicationController extends Controller
         $levApp->start_time = $start_date;
         $levApp->end_time = $end_time;
         
+        $levApp->notes = $request->input('description');
+              $levApp->status = 1;
+              $levApp->save();
+
              //Upload supporting Documents
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
@@ -304,9 +308,7 @@ class LeaveApplicationController extends Controller
             }
         }
         
-              $levApp->notes = $request->input('description');
-              $levApp->status = 1;
-              $levApp->save();
+              
                  //$levApp->update();
                     //return $levApp;
     
