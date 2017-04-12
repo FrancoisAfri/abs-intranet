@@ -13,18 +13,26 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <table class="table table-bordered">
-                    <tr>
-                        <th style="width: 10px"></th>
-                        <th>Type</th>
-                        <th>5-Day Employees</th>
-                        <th>5-Day Employee Max</th>
-                        <th>6-Day Employees</th>
-                        <th>6-Day Employee Max</th>
-                        <th>Shift Employees</th>
-                        <th>Shift Employee Max</th>
-                        <th style="width: 40px"></th>
-                    </tr> 
+                    <!-- Collapsible section containing the amortization schedule -->
+                    <div class="box-group" id="accordion">
+                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                        <div class="panel box box-primary">
+                            <div class="box-body">
+								<table class="table table-striped">
+									<tr>
+                                        <th style="width: 10px"></th>
+                                        <th>Type</th>
+                                        <th>5-Day Employees</th>
+                                        <th>5-Day Employee Max</th>
+                                        <th>6-Day Employees</th>
+                                        <th>6-Day Employee Max</th>
+                                        <th>Shift Employees</th>
+                                        <th>Shift Employee Max</th>
+                                        <th style="width: 40px"></th>
+                                    </tr> 
+                                    </div>
+                        </div>
+                    </div>
                     @if (count($leaveTypes) > 0)
                     @foreach($leaveTypes as $leaveType)
                     <tr id="modules-list">
@@ -112,34 +120,7 @@
                                                 </tr>
                                             </div>
 
-                                             <div class="form-group">
-                                                <tr>
-                                                <td nowrap>
-                                                    <button type="button" id="edit_annual" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-annual-modal" data-id="{{ $leave_configuration->id }}" data-number_of_days_annual="{{ $leave_configuration->number_of_days_annual }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
-                                                                    </td>
-                                                  <td>Allocate Negative Days (Annual leave)</td>
-                                                 
-                                                  <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="annual_negative_days" value="0">
-                                                        <input   type="checkbox" name="annual_negative_days" value="1" {{ $leave_configuration->annual_negative_days === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
 
-                                             <div class="form-group">
-                                                <tr>
-                                                 <td nowrap>
-                                                    <button type="button" id="edit_sick" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-sick-modal" data-id="{{ $leave_configuration->id }}" data-number_of_days_sick="{{ $leave_configuration->number_of_days_sick }}" > <i class="fa fa-pencil-square-o"></i> Show Days</button>
-                                                                    </td>
-                                                 <td>Allocate Negative Days (Sick leave)</td>
-                                                
-                                                    
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="sick_negative_days" value="0">
-                                                        <input   type="checkbox" name="sick_negative_days" value="1" {{ $leave_configuration->sick_negative_days === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
 
                                             
 
