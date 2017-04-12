@@ -13,7 +13,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="hr/emp_document">
+                <form class="form-horizontal" method="POST" action="/hr/emp_document">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -71,7 +71,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-book"></i>
                                     </div>
                                     <input type="text" class="form-control" id="id_number" name="id_number" value="{{ old('id_number') }}"  placeholder="ID Number" data-mask>
                                 </div>
@@ -83,7 +83,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-calendar"></i>
                                     </div>
                                     <input type="text" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}"  placeholder="Date of birth" data-mask>
                                 </div>
@@ -95,55 +95,55 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-book"></i>
                                     </div>
                                     <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ old('passport_number') }}"  placeholder="Passport Number" data-mask>
                                 </div>
                             </div>
                         </div>
                          <div class="form-group">
-                            <label for="drivers_licence_number" class="col-sm-3 control-label">Drivers Licence Number</label>
+                            <label for="drivers_licence_number" class="col-sm-3 control-label">Licence Number</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-id-card"></i>
                                     </div>
                                     <input type="text" class="form-control" id="drivers_licence_number" name="drivers_licence_number" value="{{ old('drivers_licence_number') }}"  placeholder="Drivers Licence Number" data-mask>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="drivers_licence_code" class="col-sm-3 control-label">Drivers Licence Code</label>
+                            <label for="drivers_licence_code" class="col-sm-3 control-label">Licence Code</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-barcode"></i>
                                     </div>
                                     <input type="text" class="form-control" id="drivers_licence_code" name="drivers_licence_code" value="{{ old('drivers_licence_code') }}"  placeholder="Drivers Licence Code" data-mask>
                                 </div>
                             </div>
                         </div>
                          <div class="form-group">
-                            <label for="proof_drive_permit" class="col-sm-3 control-label">Proof Drive Permit</label>
+                            <label for="proof_drive_permit" class="col-sm-3 control-label">Drive Permit</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-id-card"></i>
                                     </div>
                                     <input type="text" class="form-control" id="proof_drive_permit" name="proof_drive_permit" value="{{ old('proof_drive_permit') }}"  placeholder="Proof Drive Permit" data-mask>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="proof_drive_permit_exp_date" class="col-sm-3 control-label">Drive Permit Expiry</label>
+                            <label for="proof_drive_permit_exp_date" class="col-sm-3 control-label">Permit Expiry</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-calendar"></i>
                                     </div>
                                     <input type="text" class="form-control" id="proof_drive_permit_exp_date" name="proof_drive_permit_exp_date" value="{{ old('proof_drive_permit_exp_date') }}"  placeholder="Proof Drive Permit Expiry Date" data-mask>
                                 </div>
@@ -155,7 +155,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-envelope"></i>
+                                        <i class="fa fa-calendar"></i>
                                     </div>
                                     <input type="text" class="form-control" id="drivers_licence_exp_date" name="drivers_licence_exp_date" value="" placeholder="Licence Expiry" required>
                                 </div>
@@ -167,7 +167,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-envelope"></i>
+                                        <i class="fa fa-user"></i>
                                     </div>
                                     <input type="text" class="form-control" id="gender" name="gender" value="" placeholder="Gender" required>
                                 </div>
@@ -179,9 +179,22 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-envelope"></i>
+                                        <i class="fa fa-user"></i>
                                     </div>
                                     <input type="text" class="form-control" id="ethnicity" name="ethnicity" value="" placeholder="Ethnicity" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                               <div class="form-group">
+                        <label for="profile_pic" class="col-sm-3 control-label">Profile Pic</label>
+
+                            <div class="col-sm-9">
+                               <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-upload"></i>
+                                    </div>
+                                    <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                                 </div>
                             </div>
                         </div>
