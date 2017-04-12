@@ -77,6 +77,7 @@ Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
 
+Route::get('leave/approval', 'LeaveApplicationController@show');
 
 
 //#custom leave

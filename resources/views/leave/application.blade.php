@@ -28,7 +28,7 @@
                 <!-- form start -->
 
 <!--                    <form name="leave-alloccation-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">-->
-                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " nctype="multipart/form-data">
+                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">

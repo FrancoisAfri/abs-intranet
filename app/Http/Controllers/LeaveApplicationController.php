@@ -68,27 +68,48 @@ class LeaveApplicationController extends Controller
         return view('leave.application')->with($data);  
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    
-    
-    /**
-    
-    */
+   public function show()
+   {
+   
+        $data['page_title'] = "leave Management";
+        $data['page_description'] = "Leave Approvals";
+        $data['breadcrumb'] = [
+            ['title' => 'Security', 'path' => 'leave/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => '', 'active' => 1, 'is_module' => 0]
+        ];
+       
+       $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
+            $query->orderBy('name', 'asc');
+        }]);
+        
+        $leaveTypes = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
+          $query->orderBy('name', 'asc');  
+        }]);
+       
+        $leaveApplication = DB::table('leave_application')->orderBy('id', 'asc')->get();
+       
+
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Approve';
+        $data['leaveTypes'] = $leaveTypes;
+        $data['employees'] = $employees;
+        $data['leaveApplication'] = $leaveApplication;
+       return $leaveApplication;
+       
+//        $data['leave_customs']=$leave_customs;
+
+        AuditReportsController::store('Leave', 'Leave Approval Page Accessed', "Accessed By User", 0);
+        return view('leave.leave_approval')->with($data);   
+       
+   }
     
     public function day(Request $request, leave_application $levApp )
     {
-        $validator = Validator::make($request->all(), [      
-                  
-           "hr_person_id" ,
-           "leave_type",
-            "day",
-           "datetime",
-           "description",
+        $this->validate($request, [           
+           'hr_person_id'=>'bail|required' ,
+           "leave_type"=>'required',
+            'day' =>'required',
+           'description' =>'required',
            //"supporting_doc",     
 
         ]);
@@ -188,19 +209,6 @@ class LeaveApplicationController extends Controller
        // return $levApp->id;
         //        //Upload supporting Documents
         
-        if ($request->hasFile('supporting_docs')) {
-            $fileExt = $request->file('supporting_docs')->extension();
-            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $levApp->id . "_supporting_docs." . $fileExt;
-                $request->file('supporting_docs')->storeAs('levApp', $fileName);
-                //Update file name in hr table
-                $levApp->supporting_docs = $fileName;
-                $levApp->updates();
-                
-//                return $levApp;
-            }
-        }
-        
         // save notes Description
          $levApp->notes = $request->input('description');
          $levApp->status = 1;
@@ -208,23 +216,38 @@ class LeaveApplicationController extends Controller
             //return $levApp;
        
         $levApp->save();
-      
-//        return back();
         
-        AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
-        return view('leave.application')->with($data);  
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $levApp->id . "_supporting_docs." . $fileExt;
+                $request->file('supporting_docs')->storeAs('levApp', $fileName);
+                //Update file name in hr table
+                $levApp->supporting_docs = $fileName;
+                $levApp->update();
+                
+//                return $levApp;
+            }
+        }
+        
+        
+      
+        return back();
+        
+//        AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
+//        return view('leave.application')->with($data);  
     }
     
     public function hours(Request $request, leave_application $levApp )
     {
-        $validator = Validator::make($request->all(), [      
-                  
-           "hr_person_id",
-           "leave_type",
-            "day",
-           "datetime",
-           "description",
-           "supporting_doc",     
+      $this->validate($request, [
+          
+           'hr_person_id'=>'required',
+           'leave_type' => 'required',
+//            "day",
+           'datetime' =>'required',
+           'description' => 'required',
+           'supporting_doc' => 'required',     
 
         ]);
         $leaveApp = $request->all();
@@ -302,11 +325,7 @@ class LeaveApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
-
+   
     /**
      * Show the form for editing the specified resource.
      *
