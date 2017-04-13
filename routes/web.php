@@ -77,6 +77,7 @@ Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
 
+Route::get('leave/approval', 'LeaveApplicationController@show');
 
 
 //#custom leave
@@ -207,6 +208,9 @@ Route::get('appraisal/load/result/{emp}/{month}', 'AppraisalKPIResultsController
 Route::post('appraisal/emp/appraisal/save', 'AppraisalKPIResultsController@storeEmpAppraisals');
 
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
+//<<<<<<< HEAD
+
+//=======
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
@@ -217,6 +221,23 @@ Route::get('appraisal/{empID}/viewappraisal', 'AppraisalSearchController@viewApp
 Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasView');
 Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
+
+#Document setup module
+Route::get('/hr/document', 'DocumentTypeController@viewDoc');
+Route::post('/hr/document/add/{doc_type}', 'DocumentTypeController@addList');
+Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
+Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');
+Route::get('/hr/category', 'DocumentTypeController@viewCategory');
+Route::post('/hr/category/add/{category_id}', 'DocumentTypeController@addDoc');
+Route::get('/hr/category/{listLevel}/activate', 'DocumentTypeController@activateDoc');
+Route::patch('/hr/category/{category_id}', 'DocumentTypeController@updateDoc');
+
+#Employees Documents Module
+Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
+
+#Employees Qualifications Module
+Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
+
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
