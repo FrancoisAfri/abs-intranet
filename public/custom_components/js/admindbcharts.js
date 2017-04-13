@@ -8,9 +8,9 @@ var empPerfChartCanvas = $("#empMonthlyPerformanceChart").get(0).getContext("2d"
 var empPerfChart = new Chart(empPerfChartCanvas);
 
 //function to return the chart data
-function perfChartData(monthlyResult, months) {
+function perfChartData(graphData, labels) {
     var chartData = {
-        labels: months,
+        labels: labels,
         datasets: [
             {
                 label: "Performance",
@@ -20,7 +20,7 @@ function perfChartData(monthlyResult, months) {
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: monthlyResult
+                data: graphData
             }
         ]
     };

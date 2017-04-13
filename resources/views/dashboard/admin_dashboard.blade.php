@@ -3,6 +3,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-md-12">
+			<!-- Employee Monthly performance -->
 			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">Monthly Appraisal</h3>
@@ -18,12 +19,47 @@
 					<div class="row">
 						<div class="col-md-12">
 							<p class="text-center">
-								<strong>My performance for: {{ date('Y') }}</strong>
+								<strong>My Performance For {{ date('Y') }}</strong>
 							</p>
 
 							<div class="chart">
 								<!-- Sales Chart Canvas-->
 								<canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>
+							</div>
+							<!-- /.chart-responsive -->
+						</div>
+					</div>
+					<!-- /.row -->
+				</div>
+			</div>
+			<!-- /.box -->
+		</div>
+		<!-- /.col -->
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<!-- company performance -->
+			<div class="box collapsed-box">
+				<div class="box-header with-border">
+					<h3 class="box-title">Company Appraisal</h3>
+
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+						</button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-12">
+							<p class="text-center">
+								<strong>{{ $topGroupLvl->plural_name }} Performance For {{ date('Y') }}</strong>
+							</p>
+
+							<div class="chart">
+								<!-- Sales Chart Canvas-->
+								<canvas id="divisionsPerformanceChart" style="height: 220px;"></canvas>
 							</div>
 							<!-- /.chart-responsive -->
 						</div>
