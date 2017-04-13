@@ -71,6 +71,8 @@ class AppraisalPerksController extends Controller
                 //Update file name in the appraisal_perks table
                 $perk->img = $fileName;
                 $perk->update();
+                
+                
             }
         }
 
