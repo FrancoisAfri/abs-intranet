@@ -263,6 +263,7 @@ Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->n
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
 Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
 Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@empMonthlyPerformance')->name('empperformance');
+Route::get('api/divlevel/{divLvl}/group-performance', 'AppraisalGraphsController@divisionsPerformance')->name('groupperformance');
 
 //Email Test
 Route::get('testemail', function () {

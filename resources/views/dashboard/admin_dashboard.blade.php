@@ -6,7 +6,7 @@
 			<!-- Employee Monthly performance -->
 			<div class="box">
 				<div class="box-header with-border">
-					<h3 class="box-title">Monthly Appraisal</h3>
+					<h3 class="box-title">Employee Monthly Appraisal</h3>
 
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -39,12 +39,12 @@
 	<div class="row">
 		<div class="col-md-12">
 			<!-- company performance -->
-			<div class="box collapsed-box">
+			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">Company Appraisal</h3>
 
 					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 						</button>
 						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 					</div>
@@ -88,8 +88,21 @@
 					function(data) {
 						var chartData = perfChartData(data, monthLabels);
 
-						//Create the line chart
+						//Create the bar chart
 						empPerfChart.Bar(chartData, chartOptions);
+					});
+
+			//Draw divisions performance graph
+			var divLvl = parseInt('{{ $topGroupLvl->id }}');
+			$.get("/api/divlevel/" + divLvl + "/group-performance",
+					function(data) {
+						//var lavels = ['test1', 'test2'];
+						//var results = [60, 85];
+						//var chartData = perfChartData(lavels, results);
+						var chartData = perfChartData(data['results'], data['labels']);
+
+						//Create the bar chart
+						divPerfChart.Bar(chartData, chartOptions);
 					});
 		});
 	</script>

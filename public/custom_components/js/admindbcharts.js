@@ -89,3 +89,15 @@ var chartOptions = {
 //------------------------------------------
 //- END MONTHLY EMPLOYEE PERFORMANCE CHART -
 //------------------------------------------
+
+
+//-------------------------------
+//- DIVISIONS PERFORMANCE CHART -
+//-------------------------------
+// Get context with jQuery - using jQuery's .get() method.
+var divPerfChartCanvas = $("#divisionsPerformanceChart").get(0).getContext("2d");
+// This will get the first returned node in the jQuery collection.
+var divPerfChart = new Chart(divPerfChartCanvas);
+//-----------------------------------
+//- END DIVISIONS PERFORMANCE CHART -
+//-----------------------------------

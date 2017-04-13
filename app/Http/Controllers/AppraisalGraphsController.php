@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AppraisalKPIResult;
+use App\DivisionLevel;
 use App\HRPerson;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,7 +23,8 @@ class AppraisalGraphsController extends Controller
         $appraisalMonth = Carbon::now()->day(15)->month(1);
         $currentMonth = date('m');
         for ($i = 1; $i <= $currentMonth; $i++){
-            $yearResult[] = AppraisalKPIResult::getEmpMonthAppraisal($empID, $appraisalMonth->format('M Y'));
+            $empMonthResult = AppraisalKPIResult::getEmpMonthAppraisal($empID, $appraisalMonth->format('M Y'));
+            $yearResult[] = number_format($empMonthResult, 2);
             $appraisalMonth->addMonth();
         }
         return $yearResult;
@@ -51,5 +53,20 @@ class AppraisalGraphsController extends Controller
         }
         $divAvg = array_sum($empAvgs) / count($empAvgs);
         return number_format($divAvg, 2);
+    }
+
+    public function divisionsPerformance(DivisionLevel $divLvl) {
+        $divisions = $divLvl->divisionLevelGroup->sortBy('name');
+        $divNames = [];
+        $divResult = [];
+        $divAverages = [];
+        foreach ($divisions as $division){
+            $divNames[] = $division->name;
+            $divResult[] = AppraisalGraphsController::divisionPerformance($division->id, $division->level);
+        }
+        $divAverages['labels'] = $divNames;
+        $divAverages['results'] = $divResult;
+
+        return $divAverages;
     }
 }
