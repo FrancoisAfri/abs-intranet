@@ -33,8 +33,33 @@
                                          <th>Accept</th>
                                          <th>Decline</th>
 									</tr>
-								
+								    
+                                        <!-- loop through the leave application info   -->
+                                    	@if(count($leaveApplication) > 0)
+										@foreach($leaveApplication as $approval)
+				<tr>
+                    <td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
+                    <td>{{ !empty($approval->supporting_docs) ? $approval->supporting_docs : '' }}</td>
+                                            <!--   -->
+                    <td>{{ !empty($approval->supporting_docs) ? $approval->supporting_docs : '' }}</td>
+                    <td>{{ !empty($approval->supporting_docs) ? $approval->supporting_docs : '' }}</td>
+                    <td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
+                    <td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
+                    <td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
+                    <td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
+                    <td>{{ !empty($approval->supporting_docs) ? $approval->supporting_docs : '' }}</td>
+
+                    <td>
+                    <button type="button" id="edit_leave" class="btn btn-success pull-right btn-xs"><i class="fa fa-check-circle" data-toggle="modal" data-target=" "></i>Accept</button></td>
+                    <td>
+                    <button type="button" id="edit_leave" class="btn btn-danger pull-right btn-xs"><i class="fa fa-check-circle" data-toggle="modal" data-target=" "></i>decline</button></td>	
+                </tr>
+										@endforeach
+									@endif
+                                    
+                                    
 								</table>
+                     
 								<div class="row no-print">
 <!--
 									<div class="col-xs-12">

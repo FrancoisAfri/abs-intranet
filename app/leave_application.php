@@ -15,6 +15,19 @@ class leave_application extends Model
     
     
 
-    // #types of leave profiles belonging to leave types
     
+    //Relationship leave_application and leave_type
+    public function leavetpe(){
+       return $this->belongsTo(LeaveType::class, 'leave_type_id'); 
+    }
+    
+    //Relationship leave_application and hr people
+    public function manager() {
+        return $this->hasMany(HRPerson::class, 'manager_id');
+    }
+    
+    //Relationship leave_application and hr people
+    public function person() {
+        return $this->hasMany(HRPerson::class, 'hr_id');
+    }
 }

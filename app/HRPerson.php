@@ -28,7 +28,17 @@ class HRPerson extends Model
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+        
+  //Relationship leave_application and hr people
+    public function leaveAppmanId() {
+        return $this->hasMany(leave_application::class, 'manager_id');
+    }
+    
+    //Relationship leave_application and hr people
+    public function leaveApphr() {
+        return $this->hasMany(leave_application::class, 'hr_id');
+    }
+    
     //Relationship hr_person and user
     public function programme() {
         return $this->hasMany(programme::class, 'manager_id');

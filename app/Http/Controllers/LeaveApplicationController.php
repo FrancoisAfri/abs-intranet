@@ -78,23 +78,26 @@ class LeaveApplicationController extends Controller
             ['title' => '', 'active' => 1, 'is_module' => 0]
         ];
        
-       $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
-            $query->orderBy('name', 'asc');
-        }]);
+       
         
         $leaveTypes = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
           $query->orderBy('name', 'asc');  
         }]);
        
-        $leaveApplication = DB::table('leave_application')->orderBy('id', 'asc')->get();
+       // query leave application and hr table
+//        $leaveApplication = HRPerson::where('status', 1)->get()->load(['leaveApphr' => function($query) {
+//            $query->orderBy('id', 'asc');
+//        }]);
        
+        $leaveApplication = DB::table('leave_application')->orderBy('id', 'asc')->get();
+      
 
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Approve';
         $data['leaveTypes'] = $leaveTypes;
-        $data['employees'] = $employees;
+        //$data['employees'] = $employees;
         $data['leaveApplication'] = $leaveApplication;
-       return $leaveApplication;
+    // return $leaveApplication;
        
 //        $data['leave_customs']=$leave_customs;
 
@@ -247,7 +250,7 @@ class LeaveApplicationController extends Controller
 //            "day",
            'datetime' =>'required',
            'description' => 'required',
-           'supporting_doc' => 'required',     
+//           'supporting_doc' => 'required',     
 
         ]);
         $leaveApp = $request->all();

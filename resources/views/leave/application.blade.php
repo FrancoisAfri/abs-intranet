@@ -127,30 +127,7 @@
                             </div>
                         </div>
                         
-<!--
-                         <div class="row">
-                                    <label for="firstname" class="col-md-2 control-label" >day</label>
-                                    <div class=" col-sm-4">
-                                     <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>    
-                                   <input type="text" class="form-control pull-left" name="day" value=" " />
-                              </div>
-                         </div>
-                             
-                                    <label for="firstname" class="col-md-2 control-label" >time</label>
-                                      <div class=" col-sm-4">
-                                    <input id="firstname" class="col-sx-2 form-control input-group-lg reg_name" type="text" name="firstname"
-                                           title="Enter first name"
-                                           placeholder="First name"/>
-                                    </div>
-                        </div>
-                        <br>
--->
-                        
-                    
-                             
+                       
                             <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
                             <div class="col-sm-10">
