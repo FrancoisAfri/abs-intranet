@@ -14,9 +14,9 @@ class AddStartDateToLeaveApplication extends Migration
     public function up()
     {
        Schema::table('leave_application', function($table) {
-            $table->bigInteger('start_date')->nullable();
-            $table->bigInteger('end_date')->nullable();
-            $table->integer('status')->unsigned()->index()->nullable();
+            //$table->bigInteger('start_date')->nullable();
+            //$table->bigInteger('end_date')->nullable();
+            //$table->integer('status')->unsigned()->index()->nullable();
             $table->integer('hr_id')->nullable();
             $table->integer('leave_type_id')->nullable();
         });
@@ -31,9 +31,9 @@ class AddStartDateToLeaveApplication extends Migration
     public function down()
     {
       Schema::table('leave_application', function($table) {
-            $table->dropColumn('start_date');
-            $table->dropColumn('end_date');
-            $table->dropColumn('status');
+            //$table->dropColumn('start_date');
+            //$table->dropColumn('end_date');
+            //$table->dropColumn('status');
             $table->dropColumn('hr_id');
             $table->dropColumn('leave_type_id');
           
