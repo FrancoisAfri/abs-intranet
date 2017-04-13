@@ -12,6 +12,31 @@
                     <div id="kpi-invalid-input-alert"></div>
                     <div id="kpi-success-alert"></div>
 					<div class="form-group">
+						<label for="existing" class="col-sm-3 control-label">Add From Existing KPI</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<select id="existing" name="existing" class="form-control" onchange="hideexisting();">
+                                    <option value="1">No</option>
+                                    <option value="2">Yes</option>
+                                    
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group" id="old_kpi">
+						<label for="existing_kpi_id" class="col-sm-3 control-label">Existing KPI</label>
+						<div class="col-sm-9">
+							<div class="input-group">
+								<select id="existing_kpi_id" name="existing_kpi_id" class="form-control" required>
+                                    <option value="0">*** Select a KPI ***</option>
+                                    @foreach($existingKpis as $existingKpi)
+                                        <option value="{{ $existingKpi->id }}">{{ $existingKpi->indicator }}</option>
+                                    @endforeach
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group existing_one">
 						<label for="category_id" class="col-sm-3 control-label">Category</label>
 						<div class="col-sm-9">
 							<div class="input-group">
@@ -24,7 +49,7 @@
 							</div>
 						</div>
                     </div>
-					<div class="form-group">
+					<div class="form-group existing_one">
 						<label for="kpa_id" class="col-sm-3 control-label">KPA</label>
 						<div class="col-sm-9">
 							<div class="input-group">
@@ -37,7 +62,7 @@
 							</div>
 						</div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group existing_one">
                         <label for="name" class="col-sm-3 control-label">Indicator</label>
                         <div class="col-sm-9">
                             <div class="input-group">
@@ -45,7 +70,7 @@
                             </div>
                         </div>
                     </div>
-					<div class="form-group">
+					<div class="form-group existing_one">
                         <label for="name" class="col-sm-3 control-label">Measurement</label>
                         <div class="col-sm-9">
                             <div class="input-group">
@@ -53,7 +78,7 @@
                             </div>
                         </div>
                     </div>
-					<div class="form-group">
+					<div class="form-group existing_one">
                         <label for="source_of_evidence" class="col-sm-3 control-label">Source Of Evidence</label>
                         <div class="col-sm-9">
                             <div class="input-group">
@@ -61,7 +86,7 @@
                             </div>
                         </div>
                     </div>
-					<div class="form-group">
+					<div class="form-group existing_one">
                         <label for="weight" class="col-sm-3 control-label">Weight</label>
                         <div class="col-sm-9">
                             <div class="input-group">
@@ -69,7 +94,7 @@
                             </div>
                         </div>
                     </div>
-					<div class="form-group">
+					<div class="form-group existing_one">
 						<label for="kpi_type" class="col-sm-3 control-label">KPI Type</label>
 						<div class="col-sm-9">
 							<div class="input-group">
@@ -85,7 +110,7 @@
 							</div>
 						</div>
                     </div>
-					<div class="form-group">
+					<div class="form-group existing_one">
 						<label for="is_upload" class="col-sm-3 control-label">Is Upload</label>
 						<div class="col-sm-9">
 							<div class="input-group">
@@ -99,7 +124,7 @@
 							</div>
 						</div>
                     </div>
-					<div class="form-group" id="upload_type_div">
+					<div class="form-group existing_one" id="upload_type_div">
 						<label for="is_upload" class="col-sm-3 control-label">Upload Type</label>
 						<div class="col-sm-9">
 							<div class="input-group">

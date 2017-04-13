@@ -13,7 +13,7 @@ class appraisalsKpis extends Model
     protected $fillable = [
         'measurement', 'status', 'weight', 'source_of_evidence',
 		'indicator', 'kpi_type', 'template_id', 'kpa_id',
-		'category_id','is_upload','upload_type'];
+		'category_id','is_upload','upload_type','existing_kpi_id'];
 		
 	//Relationship template and Kpis
     public function kpiTemplate() {
