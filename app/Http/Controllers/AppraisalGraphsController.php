@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AppraisalKPIResult;
+use App\AppraisalPerk;
 use App\DivisionLevel;
 use App\HRPerson;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ class AppraisalGraphsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    //returns an employee's monthly appraisal
     public function empMonthlyPerformance($empID)
     {
         $yearResult = [];
@@ -31,6 +33,7 @@ class AppraisalGraphsController extends Controller
         return $yearResult;
     }
 
+    //returns a division's avg performance from jan to last month or a list of emp from that division and their avg performances
     public static function divisionPerformance($divID, $divLvl, $returnEmpList = false) {
         $employees = HRPerson::where(function ($query) use($divID, $divLvl) {
             if ($divLvl == 5) $query->where('division_level_5', $divID);
@@ -73,6 +76,7 @@ class AppraisalGraphsController extends Controller
         }
     }
 
+    //returns a list of divisions and their avg performances
     public function divisionsPerformance(DivisionLevel $divLvl, $parentDivisionID = 0) {
         //$divisions = $divLvl->divisionLevelGroup->sortBy('name');
         $divLvl->load(['divisionLevelGroup' => function ($query) use($parentDivisionID) {
@@ -103,7 +107,21 @@ class AppraisalGraphsController extends Controller
         return $divAverages;
     }
 
+    //returns a list of emp and their avg performances
     public function empListPerformance($divLvl, $divID) {
         return AppraisalGraphsController::divisionPerformance($divID, $divLvl, true);
+    }
+
+    //returns 8 available perks
+    public function getAvailablePerks() {
+        $formattedPerks = [];
+        $perks = AppraisalPerk::where('status', 1)->orderBy('req_percent', 'asc')->limit(8)->get();
+        foreach ($perks as $perk) {
+            $formattedPerk = $perk;
+            $formattedPerk->req_percent = number_format($perk->req_percent, 2);
+            $formattedPerk->img_url = $perk->img_url;
+            $formattedPerks[] = $formattedPerk;
+        }
+        return $formattedPerks;
     }
 }

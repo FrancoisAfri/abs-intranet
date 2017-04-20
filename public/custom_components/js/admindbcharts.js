@@ -283,3 +283,45 @@ function empPerOnShow(objTrigger, modalWin) {
 //---------------------------------------
 //- END EMPLOYEE LIST PERFORMANCE CHART -
 //---------------------------------------
+
+
+//--------------------------
+//- AVAILABLE PERKS WIDGET -
+//--------------------------
+function loadAvailablePerks(perksWidgetList) {
+    $.get("/api/availableperks",
+        function(data) {
+            console.log(JSON.stringify(data));
+            //Load ranking
+            //perksWidgetList.empty();
+            $.each(data, function(key, value) {
+                var perkID = value['id'],
+                    perkName = value['name'],
+                    perkDesc = value['description'],
+                    perkReqPercent = value['req_percent'],
+                    perkImgURL = value['img_url'];
+                var perkImage = $('<img>')
+                    .attr('src', perkImgURL)
+                    .attr('alt', 'Perk Image')
+                    .addClass('img-responsive')
+                    .css('max-height', '128px').css('max-width', '128px').css('height', '128px');
+                var perkNameLink = $('<a class="users-list-name"></a>')
+                    .attr('data-id', perkID)
+                    .attr('data-name', perkName)
+                    .attr('data-description', perkDesc)
+                    .attr('data-req_percent', perkReqPercent)
+                    .attr('data-img_url', perkImgURL)
+                    .attr('href', '#')
+                    .html(perkName);
+                var reqPercentSpan = $('<span class="users-list-date"></span>').html(perkReqPercent + '%');
+                var perkList = $('<li></li>')
+                    .append(perkImage)
+                    .append(perkNameLink)
+                    .append(reqPercentSpan);
+                perksWidgetList.append(perkList);
+            });
+        });
+}
+//------------------------------
+//- END AVAILABLE PERKS WIDGET -
+//------------------------------

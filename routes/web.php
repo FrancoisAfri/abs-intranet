@@ -267,6 +267,7 @@ Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@emp
 Route::get('api/divlevel/{divLvl}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
 Route::get('api/divlevel/{divLvl}/parentdiv/{parentDivisionID}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
 Route::get('api/divlevel/{divLvl}/div/{divID}/emps-performance', 'AppraisalGraphsController@empListPerformance');
+Route::get('api/availableperks', 'AppraisalGraphsController@getAvailablePerks')->name('availableperks');
 
 //Email Test
 Route::get('testemail', function () {

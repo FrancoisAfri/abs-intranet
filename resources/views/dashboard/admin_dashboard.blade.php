@@ -3,7 +3,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-md-12">
-			<!-- Employee Monthly performance -->
+			<!-- Employee Monthly performance Widget-->
 			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">Employee Monthly Appraisal</h3>
@@ -32,13 +32,13 @@
 					<!-- /.row -->
 				</div>
 			</div>
-			<!-- /.box -->
+			<!-- /.box Employee Monthly performance Widget -->
 		</div>
 		<!-- /.col -->
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<!-- company performance -->
+			<!-- company performance Widget -->
 			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">Company Appraisal</h3>
@@ -71,18 +71,6 @@
 							</p>
 							<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
 								<ul class="nav nav-pills nav-stacked" id="ranking-list">
-									<!--<li>
-										<a href="#">
-											<div class="progress-group">
-												<span class="progress-text">Complete Purchase</span>
-												<span class="progress-number text-red"><i class="fa fa-angle-down"></i> 49%</span>
-
-												<div class="progress xs">
-													<div class="progress-bar progress-bar-red" style="width: 49%"></div>
-												</div>
-											</div>
-										</a>
-									</li>-->
 								</ul>
 							</div>
 						</div>
@@ -90,19 +78,49 @@
 					<!-- /.row -->
 				</div>
 			</div>
-			<!-- /.box -->
+			<!-- /.box company performance Widget -->
+			<!-- Include division performance modal -->
+			@include('dashboard.partials.division_4_performance_modal')
+			@include('dashboard.partials.division_3_performance_modal')
+			@include('dashboard.partials.division_2_performance_modal')
+			@include('dashboard.partials.division_1_performance_modal')
+			<!-- Include emp list performance modal -->
+			@include('dashboard.partials.emp_list_performance_modal')
+			<!-- Include emp list performance modal -->
+			@include('dashboard.partials.emp_year_performance_modal')
 		</div>
 		<!-- /.col -->
 	</div>
-	<!-- Include division performance modal -->
-	@include('dashboard.partials.division_4_performance_modal')
-	@include('dashboard.partials.division_3_performance_modal')
-	@include('dashboard.partials.division_2_performance_modal')
-	@include('dashboard.partials.division_1_performance_modal')
-	<!-- Include emp list performance modal -->
-	@include('dashboard.partials.emp_list_performance_modal')
-	<!-- Include emp list performance modal -->
-	@include('dashboard.partials.emp_year_performance_modal')
+	<div class="row">
+		<div class="col-sm-6">
+			<!-- Available Perks Widgets -->
+			<div class="box box-danger">
+				<div class="box-header with-border">
+					<h3 class="box-title">Available Perks</h3>
+
+					<div class="box-tools pull-right">
+						<!-- <span class="label label-danger">8 New Members</span> -->
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body no-padding">
+					<ul class="users-list clearfix" id="perks-widget-list">
+					</ul>
+					<!-- /.users-list -->
+				</div>
+				<!-- /.box-body -->
+				<!--<div class="box-footer text-center">
+					<a href="#" class="uppercase">View All Perks</a>
+				</div>-->
+				<!-- /.box-footer -->
+			</div>
+			<!-- /.Available Perks Widgets -->
+		</div>
+	</div>
 @endsection
 
 @section('page_script')
@@ -140,6 +158,10 @@
 			var rankingList = $('#ranking-list');
 			var divChartCanvas = $('#divisionsPerformanceChart');
 			loadDivPerformance(divChartCanvas, rankingList, divLevel);
+
+			//Load show available perks on the perks widget
+			var perksWidgetList = $('#perks-widget-list');
+			loadAvailablePerks(perksWidgetList);
 
 			//show performance of sub division levels on modals
 			var i = 1;
