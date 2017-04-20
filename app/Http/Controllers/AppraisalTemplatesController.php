@@ -164,16 +164,15 @@ class AppraisalTemplatesController extends Controller
             //'indicator' => 'required',       
             'kpa_id' => 'bail|required|integer|min:0',       
             'category_id' => 'bail|required|integer|min:0',       
-            'template_id' => 'bail|required|integer|min:0',       
+            'template_id' => 'bail|required|integer|min:1',       
             //'kpi_type' => 'bail|required|integer|min:1',       
             'is_upload' => 'bail|required|integer|min:0',       
         ]);
 		$kpiData = $request->all();
 		unset($kpiData['_token']);
 		if(!empty($kpiData['existing_kpi_id']))
-		{
 			$kpis = appraisalsKpis::where('id', $kpiData['existing_kpi_id'])->first();
-		}
+		
 		$kpi = new appraisalsKpis();
 		$kpi->status = 1;
 		$kpi->measurement = !empty($kpiData['existing_kpi_id']) ? $kpis->measurement : $kpiData['measurement'];
@@ -185,7 +184,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpa_id = !empty($kpiData['existing_kpi_id']) ? $kpis['kpa_id'] : $kpiData['kpa_id'];
 		$kpi->kpi_type = !empty($kpiData['existing_kpi_id']) ? $kpis['kpi_type'] : $kpiData['kpi_type'];
 		$kpi->is_upload = !empty($kpiData['existing_kpi_id']) ? $kpis['is_upload'] : $kpiData['is_upload'];
-		$kpi->template_id = !empty($kpiData['existing_kpi_id']) ? $kpis['template_id'] : $kpiData['template_id'];
+		$kpi->template_id = $kpiData['template_id'];
 		$kpi->upload_type = !empty($kpiData['existing_kpi_id']) ? $kpis['upload_type'] : $kpiData['upload_type'];
 
 		$newkpi = !empty($kpiData['existing_kpi_id']) ? $kpis['indicator'] : $kpiData['indicator'];
