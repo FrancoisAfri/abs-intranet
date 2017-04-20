@@ -221,6 +221,7 @@ Route::get('appraisal/{empID}/viewappraisal', 'AppraisalSearchController@viewApp
 Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasView');
 Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
+Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
 
 #Document setup module
 Route::get('/hr/document', 'DocumentTypeController@viewDoc');
