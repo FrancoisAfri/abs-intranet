@@ -94,13 +94,15 @@
 		</div>
 		<!-- /.col -->
 	</div>
-	<!-- Include performance modal -->
+	<!-- Include division performance modal -->
 	@include('dashboard.partials.division_4_performance_modal')
 	@include('dashboard.partials.division_3_performance_modal')
 	@include('dashboard.partials.division_2_performance_modal')
 	@include('dashboard.partials.division_1_performance_modal')
-	<!-- Include performance modal -->
+	<!-- Include emp list performance modal -->
 	@include('dashboard.partials.emp_list_performance_modal')
+	<!-- Include emp list performance modal -->
+	@include('dashboard.partials.emp_year_performance_modal')
 @endsection
 
 @section('page_script')
@@ -154,6 +156,17 @@
 				var linkDiv = $(e.relatedTarget);
 				var modalWin = $(this);
 				empPerOnShow(linkDiv, modalWin);
+			});
+
+			//show employee monthly performance on modal
+			$('#emp-year-performance-modal').on('show.bs.modal', function (e) {
+				var linkDiv = $(e.relatedTarget);
+				var empID = parseInt(linkDiv.data('emp_id'));
+				var empName = linkDiv.data('emp_name');
+				var empChartCanvas = $('#empMonthlyPerformanceModalChart');
+				var modalWin = $(this);
+				modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
+				loadEmpMonthlyPerformance(empChartCanvas, empID);
 			});
 		});
 	</script>

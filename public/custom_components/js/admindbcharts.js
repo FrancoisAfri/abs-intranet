@@ -259,8 +259,9 @@ function loadEmpListPerformance(rankingList, divLevel, divID) {
                     .append(progBarDiv);
                 var listLink = $("<a href='#'></a>")
                     .attr('data-toggle', 'modal')
-                    .attr('data-target', '#')
+                    .attr('data-target', '#emp-year-performance-modal')
                     .attr('data-emp_id', empID)
+                    .attr('data-emp_name', empFullName)
                     .append(productImgDiv)
                     .append(productInfoDiv)
                     .append(progressGroup);
