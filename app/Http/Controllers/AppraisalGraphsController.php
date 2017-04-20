@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\AppraisalKPIResult;
+use App\DivisionLevel;
 use App\HRPerson;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Storage;
 
 class AppraisalGraphsController extends Controller
 {
@@ -22,9 +24,86 @@ class AppraisalGraphsController extends Controller
         $appraisalMonth = Carbon::now()->day(15)->month(1);
         $currentMonth = date('m');
         for ($i = 1; $i <= $currentMonth; $i++){
-            $yearResult[] = AppraisalKPIResult::getEmpMonthAppraisal($empID, $appraisalMonth->format('M Y'));
+            $empMonthResult = AppraisalKPIResult::getEmpMonthAppraisal($empID, $appraisalMonth->format('M Y'));
+            $yearResult[] = number_format($empMonthResult, 2);
             $appraisalMonth->addMonth();
         }
         return $yearResult;
+    }
+
+    public static function divisionPerformance($divID, $divLvl, $returnEmpList = false) {
+        $employees = HRPerson::where(function ($query) use($divID, $divLvl) {
+            if ($divLvl == 5) $query->where('division_level_5', $divID);
+            elseif ($divLvl == 4) $query->where('division_level_4', $divID);
+            elseif ($divLvl == 3) $query->where('division_level_3', $divID);
+            elseif ($divLvl == 2) $query->where('division_level_2', $divID);
+            elseif ($divLvl == 1) $query->where('division_level_1', $divID);
+        })->get()->load('jobTitle');
+
+        //$employees = HRPerson::get()->load('jobTitle');
+
+        $empAvgs = [];
+        foreach ($employees as $employee) {
+            $empYearResult = [];
+            $appraisalMonth = Carbon::now()->day(15)->month(1);
+            $currentMonth = Carbon::now()->day(15);
+            while ($appraisalMonth->month != $currentMonth->month) {
+                $empYearResult[] = AppraisalKPIResult::getEmpMonthAppraisal($employee->id, $appraisalMonth->format('M Y'));
+                $appraisalMonth->addMonth();
+            }
+            $empAvg = array_sum($empYearResult) / count($empYearResult);
+            if ($returnEmpList) {
+                $objEmp = (object) [];
+                $objEmp->emp_id = $employee->id;
+                $objEmp->emp_full_name = $employee->full_name;
+                $objEmp->emp_email = $employee->email;
+                $objEmp->emp_job_title = ($employee->jobTitle) ? $employee->jobTitle->name : '';
+                $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+                $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+                $objEmp->emp_profile_pic = (!empty($employee->profile_pic)) ? Storage::disk('local')->url("avatars/$employee->profile_pic") : (($employee->gender === 0) ? $f_silhouette : $m_silhouette);
+                $objEmp->emp_result = $empAvg;
+                $empAvgs[] = $objEmp;
+            }
+            else $empAvgs[$employee->id] = $empAvg;
+        }
+        if ($returnEmpList) return $empAvgs;
+        else {
+            $divAvg = array_sum($empAvgs) / count($empAvgs);
+            return number_format($divAvg, 2);
+        }
+    }
+
+    public function divisionsPerformance(DivisionLevel $divLvl, $parentDivisionID = 0) {
+        //$divisions = $divLvl->divisionLevelGroup->sortBy('name');
+        $divLvl->load(['divisionLevelGroup' => function ($query) use($parentDivisionID) {
+            if ($parentDivisionID > 0) $query->where('parent_id', $parentDivisionID);
+            $query->orderBy('name', 'asc');
+        }]);
+        $divisions = $divLvl->divisionLevelGroup;
+        $divAverages = [];
+        $parenLevel = $divLvl->level;
+        $childLevel = $parenLevel - 1;
+        $childLevelDetails = DivisionLevel::where('level', $childLevel)->get();
+        $isChildLevelActive = ($childLevel > 0) ? (boolean) $childLevelDetails->first()->active : false;
+        $childLevelName = ($childLevel > 0) ? $childLevelDetails->first()->name : '';
+        $childLevelPluralName = ($childLevel > 0) ? $childLevelDetails->first()->plural_name : '';
+        foreach ($divisions as $division){
+            $objResult = (object) [];
+            $objResult->div_id = $division->id;
+            $objResult->div_name = $division->name;
+            $objResult->div_result = AppraisalGraphsController::divisionPerformance($division->id, $division->level);
+            $objResult->div_level = $parenLevel;
+            $objResult->is_child_level_active = $isChildLevelActive;
+            $objResult->child_level = $childLevel;
+            $objResult->child_level_name = $childLevelName;
+            $objResult->child_level_plural_name = $childLevelPluralName;
+            $divAverages[] = $objResult;
+        }
+
+        return $divAverages;
+    }
+
+    public function empListPerformance($divLvl, $divID) {
+        return AppraisalGraphsController::divisionPerformance($divID, $divLvl, true);
     }
 }

@@ -17,12 +17,6 @@ use App\DivisionLevelFive;
 use App\TopLevel;
 use App\DivisionLevel;
 
-
-
-
-
-
-
 class EmployeeCompanySetupController extends Controller
 {
     //
@@ -33,7 +27,6 @@ class EmployeeCompanySetupController extends Controller
 
     public function viewLevel() {
         //get the highest active level
-        //return '';
         $childLevelname = null;
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $employees = HRPerson::where('status', 1)->get();
@@ -69,38 +62,33 @@ class EmployeeCompanySetupController extends Controller
             'manager_id' => 'required',
             'name'=> 'required',
         ]);
-        $firstLevelData=$request->all();
-        //$addDivisionLevelGroup = new TopLevel($firstLevelData);
-        //$firstLevel->new('DivisionLevelOne');
-        //$addDivisionLevelGroup->status = 1;
-        //$addDivisionLevelGroup->save();
-        //return $childDiv;
-        //return $divLevel;
+        $firstLevelData = $request->all();
 
         if ($divLevel->level == 5){
              $childDiv = new DivisionLevelFive($firstLevelData);
+             $childDiv->division_level_id = 5;
         }
         elseif ($divLevel->level == 4){
             $childDiv = new DivisionLevelFour($firstLevelData);
+            $childDiv->division_level_id = 4;
         }
         elseif ($divLevel->level == 3) {
             $childDiv = new DivisionLevelThree($firstLevelData);
+            $childDiv->division_level_id = 3;
         }
         elseif ($divLevel->level == 2) {
             $childDiv = new DivisionLevelTwo($firstLevelData);
+            $childDiv->division_level_id = 2;
         }
         elseif ($divLevel->level == 1) {
             $childDiv = new DivisionLevelOne($firstLevelData);
+            $childDiv->division_level_id = 1;
         }
         $childDiv->active=1;
         $divLevel->addDivisionLevelGroup($childDiv);
 
-       // return $divLevel;
-
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
         }
-
-      
 
         public function activateLevel(DivisionLevel $divLevel, $childID) 
         {
@@ -128,7 +116,7 @@ class EmployeeCompanySetupController extends Controller
             else $stastus = 1;
             $childDiv->active=$stastus;
             $childDiv->update();
-            AuditReportsController::store('Employee records', 'division level active satus changed', "Edited by User", 0);
+            AuditReportsController::store('Employee records', 'division level active status changed', "Edited by User", 0);
             return back();
         }
 
@@ -233,19 +221,23 @@ class EmployeeCompanySetupController extends Controller
         if ($parentLevel == 5){
              $parentDiv =  DivisionLevelFive::find($parent_id);
              $childDiv = new DivisionLevelFour($childData);
+            $childDiv->division_level_id = 4;
           
         }
         elseif ($parentLevel == 4){
             $parentDiv =  DivisionLevelFour::find($parent_id);
             $childDiv = new DivisionLevelThree($childData);
+            $childDiv->division_level_id = 3;
         }
         elseif ($parentLevel == 3) {
             $parentDiv =  DivisionLevelThree::find($parent_id);
             $childDiv = new DivisionLevelTwo($childData);
+            $childDiv->division_level_id = 2;
         }
         elseif ($parentLevel == 2) {
             $parentDiv =  DivisionLevelTwo::find($parent_id);
             $childDiv = new DivisionLevelOne($childData);
+            $childDiv->division_level_id = 1;
         }
         elseif ($parentLevel == 1) {
             $parentDiv =  DivisionLevelOne::find($parent_id);
