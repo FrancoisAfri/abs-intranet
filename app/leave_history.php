@@ -18,6 +18,7 @@ class leave_history extends Model
         1 => 'Leave Adjusted By Admin',
         2 => 'Leave Adjusted By System ',
         3 => 'Adjusted By Manager',
+        4 => 'Pending'
 
     ];
 

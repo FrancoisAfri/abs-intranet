@@ -15,7 +15,8 @@ class HRPerson extends Model
         'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code',
         'proof_drive_permit', 'proof_drive_permit_exp_date', 'drivers_licence_exp_date', 'gender', 'own_transport', 'marital_status',
         'ethnicity', 'profile_pic', 'status','division_level_1', 'division_level_2', 'division_level_3',
-        'division_level_4', 'division_level_5', 'leave_profile', 'manager_id'
+        'division_level_4', 'division_level_5', 'leave_profile', 'manager_id',
+        
     ];
 
     
@@ -28,7 +29,17 @@ class HRPerson extends Model
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+        
+  //Relationship leave_application and hr people
+    public function leaveAppmanId() {
+        return $this->hasMany(leave_application::class, 'manager_id');
+    }
+    
+    //Relationship leave_application and hr people
+    public function leaveApphr() {
+        return $this->hasMany(leave_application::class, 'hr_id');
+    }
+    
     //Relationship hr_person and user
     public function programme() {
         return $this->hasMany(programme::class, 'manager_id');
@@ -43,6 +54,7 @@ class HRPerson extends Model
     public function divisionLevelGroup() {
         return $this->hasOne(DivisionLevelGroup::class, 'manager_id');
     }
+
 
     //Relationship hr person and job title
     public function jobTitle() {
