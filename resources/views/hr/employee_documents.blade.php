@@ -108,31 +108,30 @@
                         
                   
                         <div class="form-group">
-                            <label for="date_of_birth" class="col-sm-3 control-label">Expiry Date</label>
+                            <label for="expiry_date" class="col-sm-3 control-label">Expiry Date</label>
 
                             <div class="col-sm-9">
-                                <div class="input-group">
+                                <div class="input-group date">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
+ 
                                     <input type="text" class="form-control" id="expiry_date" name="expiry_date" value="{{ old('expiry_date') }}"  placeholder="Expiry Date" data-mask>
                                 </div>
                             </div>
                         </div>
-                        
-                    
-                         
-                       
-                        
+
+
+
                                <div class="form-group">
-                        <label for="profile_pic" class="col-sm-3 control-label">Document</label>
+                        <label for="doc" class="col-sm-3 control-label">Document</label>
 
                             <div class="col-sm-9">
                                <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-upload"></i>
                                     </div>
-                                    <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["doc", "docx", "pdf"]' data-show-upload="false">
+                                    <input type="file" id="doc" name="doc" class="file file-loading" data-allowed-file-extensions='["doc", "docx", "pdf"]' data-show-upload="false">
                                 </div>
                             </div>
                         </div>

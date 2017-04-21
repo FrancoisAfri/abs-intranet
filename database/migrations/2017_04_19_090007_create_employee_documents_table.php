@@ -13,13 +13,13 @@ class CreateEmployeeDocumentsTable extends Migration
      */
     public function up()
     {
-        //
-          Schema::create('EmployeeDocuments', function (Blueprint $table) {
+        Schema::create('EmployeeDocuments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('doc_description')->nullable();
             $table->date('expiry_date')->nullable();
-         
-           
+            $table->string('category_id')->nullable();
+            $table->string('doc')->nullable();
+            $table->string('manager_id')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +31,8 @@ class CreateEmployeeDocumentsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('EmployeeDocuments');
     }
 }
+
+
