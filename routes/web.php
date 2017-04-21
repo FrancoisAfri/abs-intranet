@@ -76,8 +76,12 @@ Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
+Route::post('leave/application/leavDetails', 'LeaveApplicationController@leavDetails');
 
-
+#leave Approval
+Route::get('leave/approval', 'LeaveApplicationController@show');
+//Route::post('leave/type/add_leave', 'LeaveController@addleave');
+Route::post('leave/approval/reject', 'LeaveApplicationController@reject');
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
@@ -214,9 +218,35 @@ Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@upload
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
 // Appraisal search
+///appraisal/' . $emp->id . '/' . $key. '/' .  $year. '/kpas
 Route::get('appraisal/search', 'AppraisalSearchController@index');
+Route::get('appraisal/{empID}/viewappraisal', 'AppraisalSearchController@viewAppraisals');
+Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasView');
+Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
-//>>>>>>> c3fd48b11f7b60afd53bf5a18fe7570e233215b7
+Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
+
+#Document setup module
+Route::get('/hr/document', 'DocumentTypeController@viewDoc');
+Route::post('/hr/document/add/doc_type', 'DocumentTypeController@addList');
+Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
+Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');
+Route::get('/hr/category', 'DocumentTypeController@viewCategory');
+Route::post('/hr/category/add/doc_type_category', 'DocumentTypeController@addDoc');
+Route::get('/hr/category/{listLevel}/activate', 'DocumentTypeController@activateDoc');
+Route::patch('/hr/category/{doc_type_category}', 'DocumentTypeController@updateDoc');
+
+#Employees Documents Module
+Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
+
+#Employees Qualifications Module
+Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
+
+#Employees upload
+Route::get('/employee_upload', 'EmployeeUploadController@index');
+Route::post('/employees_upload', 'EmployeeUploadController@store');
+
+
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
@@ -241,7 +271,13 @@ Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLe
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
 Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
-Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@empMonthlyPerformance')->name('empperformance');
+Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@empMonthlyPerformance');
+Route::get('api/divlevel/{divLvl}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
+Route::get('api/divlevel/{divLvl}/parentdiv/{parentDivisionID}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
+Route::get('api/divlevel/{divLvl}/div/{divID}/emps-performance', 'AppraisalGraphsController@empListPerformance');
+Route::get('api/availableperks', 'AppraisalGraphsController@getAvailablePerks')->name('availableperks');
+Route::get('api/appraisal/emp/topten', 'AppraisalGraphsController@getTopTenEmployees')->name('toptenemp');
+Route::get('api/appraisal/emp/bottomten', 'AppraisalGraphsController@getBottomTenEmployees')->name('bottomtenemp');
 
 //Email Test
 Route::get('testemail', function () {

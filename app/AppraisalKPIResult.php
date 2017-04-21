@@ -107,6 +107,7 @@ class AppraisalKPIResult extends Model
         $kpaResults = [];
         $kpaResult = 0;
         foreach ($empKPIs as $groupKey => $kpaGroup) {
+            if ($kpaID != null && $groupKey != $kpaID) continue;
             $kpiResults = [];
             foreach ($kpaGroup as $kpi) {
                 if ($kpi->is_upload === 1 && $kpi->upload_type === 2) { //uploaded attendance
@@ -151,7 +152,7 @@ class AppraisalKPIResult extends Model
                     $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
                 }
             }
-            if ($kpaID != null && $groupKey === $kpaID) return $kpiResults;
+            if ($kpaID != null && $groupKey == $kpaID) return $kpiResults;
             $kpaWeight = appraisalKpas::find($groupKey)->weight; //get the KPA's weight from the database
             $kpaResult = ($kpaResult * $kpaWeight) / 100; //weighted KPA result
             $kpaResults[$groupKey] = $kpaResult;

@@ -15,18 +15,11 @@ class CreateLeaveApplicationTable extends Migration
     {
         Schema::create('leave_application', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('application')->nullable();
+             $table->integer('application')->nullable();
             $table->string('notes')->nullable();
             $table->string('supporting_docs')->nullable();
-            $table->bigInteger('start_date')->nullable();
-            $table->bigInteger('end_date')->nullable();
-            $table->smallInteger('status')->nullable();
-//            $table->bigInteger('date_attended')->nullable();
-//            $table->bigInteger('date_attended')->nullable();
-            
-            
             $table->timestamps();
-            });
+        });
     }
 
     /**
@@ -36,6 +29,6 @@ class CreateLeaveApplicationTable extends Migration
      */
     public function down()
     {
-         Schema::dropIfExists('leave_application');
+        Schema::dropIfExists('leave_application');
     }
 }

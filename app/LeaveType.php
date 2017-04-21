@@ -24,4 +24,7 @@ class LeaveType extends Model
         return $this->belongsToMany('App\HRPerson', 'leave_credit' ,'leave_type_id','hr_id')->withPivot('leave_balance');
             
     }
+    public function leaveApp() {
+        return $this->hasmany(leave_application::class, 'leave_type_id');
+    }
 }

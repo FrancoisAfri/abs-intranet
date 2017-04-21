@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DivisionLevel;
+use App\HRPerson;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -27,7 +29,11 @@ class DashboardController extends Controller
         $user = Auth::user()->load('person');
 		
         if ($user->type === 1 || $user->type === 3) {
+            $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
+            $totNumEmp = HRPerson::count();
             $data['user'] = $user;
+            $data['totNumEmp'] = $totNumEmp;
+            $data['topGroupLvl'] = $topGroupLvl;
             $data['page_title'] = "Dashboard";
 			$data['page_description'] = "This is your main Dashboard";
 

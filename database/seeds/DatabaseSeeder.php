@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         //insert default user
         $user = new User;
         $user->email = 'nkosana@afrixcel.co.za';
-        $user->password = Hash::make('123456');
+        $user->password = Hash::make('theone');
         $user->type = 3;
         $user->status = 1;
         $user->save();
@@ -346,10 +346,64 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Document Type';
+        $ribbon->description = 'Document Type';
+        $ribbon->ribbon_path = 'hr/document';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Employees Documents';
+        $ribbon->description = 'Employees Documents';
+        $ribbon->ribbon_path = 'hr/emp_document';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Employee Qualifications';
+        $ribbon->description = 'Employee Qualifications';
+        $ribbon->ribbon_path = 'hr/emp_qualification';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
+        $ribbon->ribbon_name = 'Talent Pool';
+        $ribbon->description = 'Talent Pool';
+        $ribbon->ribbon_path = 'hr/talent_pool';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Employee Search';
+        $ribbon->description = 'Employee Search';
+        $ribbon->ribbon_path = 'hr/emp_search';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 8;
+        $ribbon->ribbon_name = 'Upload';
+        $ribbon->description = 'Upload';
+        $ribbon->ribbon_path = 'hr/upload';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 9;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'hr/setup';
-        $ribbon->access_level = 5;
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 		
 		$module = new modules(); //Leave Management
