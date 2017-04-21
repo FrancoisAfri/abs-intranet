@@ -17,37 +17,46 @@
                     {{ csrf_field() }}
 
                     <div class="box-body">
-                      
-                                 <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                            <label for="hr_person_id" class="col-sm-3 control-label">Employees</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user-circle"></i>
-                                    </div>
-                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
-                                        <option value="">*** Select an Employee ***</option>
-                                        @foreach($employees as $employee)
-                                            <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="id_number" class="col-sm-3 control-label">View Documents</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-book"></i>
-                                    </div>
-                                    <input type="number" class="form-control" id="id_number" name="id_number" value="{{ old('id_number') }}" placeholder="Search by ID number...">
-                                </div>
-                            </div>
-                        </div>
-                        
+                     <div class="box-body">
+                        <table class="table table-bordered"> 
+                            <tr>
+                                <th style="width: 5px; text-align: center;"></th>
+                                <th>Institution</th>
+                                <th>Qualification</th>
+                                <th>Year Obtained</th>
+                                <th>Qualification Type</th>
+                                <th>Certificate</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                            </tr>
+            
+                            @foreach ($highestLvl->divisionLevelGroup as $type)
+                                <tr>
+                                    <td style=" text-align: center;" nowrap>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        @if($highestLvl->level > $lowestactiveLvl && $type->childDiv())
+                                            <a href="/hr/child_setup/{{$highestLvl->level}}/{{$type->id}}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
+                                        @endif
+                                    </td>
+                                    <td>{{ $type->name }}</td>
+                                    <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
+                                    <td>
+                                        
+                                          <!--   <button type="button" id="view_ribbons" class="btn 11111111111111111111111{{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}}) , 'dactive';"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button> -->
+                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                                      
+                                    </td>
+                                </tr>    
+                            @endforeach
+                        </table>
                     </div>
+         
+                        <!-- /.box-body -->
+                    <div class="box-footer">
+                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#level-module-modal">Add {{$highestLvl->name}}</button>  
+                    </div>
+        </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-search"></i> Search</button>
