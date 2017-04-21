@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use Excel;
+use Carbon\Carbon;
 
 class AppraisalSearchController extends Controller
 {
@@ -171,10 +172,39 @@ class AppraisalSearchController extends Controller
 		
         $data['kpisArray'] = $kpisArray;
         $data['monthyear'] = $dateUploaded;
+		$data['emp_id'] = $empID;
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Search';
         AuditReportsController::store('Performance Appraisal', 'KPIs Scored Viewed', "Accessed by User", 0);
         return view('appraisals.kpis_scores')->with($data);
+    }
+	public function queryReport($empID, $monthYear, $kpi)
+    {
+		$kpis = appraisalsKpis::where('id', $kpi)->first(); 
+		$monthStart = strtotime(new Carbon("first day of $monthYear"));
+        $monthEnd = new Carbon("last day of $monthYear");
+        $monthEnd = strtotime($monthEnd->endOfDay());
+		$querReports = AppraisalQuery_report::where('kip_id', $kpi)
+											->where('hr_id', $empID)
+											->whereBetween('date_uploaded', [$monthStart, $monthEnd])
+											->orderBy('query_code')
+											->get();
+		//return $querReports;
+		$data['page_title'] = "Appraisals Query Report Results";
+        $data['page_description'] = "Appraisals KPIs Results";
+        $data['breadcrumb'] = [
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['querReports'] = $querReports;
+        $data['monthyear'] = $monthYear;
+		$data['emp_id'] = $empID;
+		$data['kpis'] = $kpis;
+        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_rib'] = 'Search';
+        AuditReportsController::store('Performance Appraisal', 'Query report Viewed', "Accessed by User", 0);
+        return view('appraisals.query_report')->with($data);
     }
 	// individual appraisal
 	 public function viewAppraisals($empID)

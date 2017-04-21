@@ -10,18 +10,18 @@ use Illuminate\Support\Facades\DB;
 
 use App\HRPerson;
 
-use App\hr_people;
+use App\hr_person;
 
-class EmployeeDocumentsController extends Controller
+
+class EmployeeQualificationsController extends Controller
 {
     //
-      public function __construct()
+     public function __construct()
     {
         $this->middleware('auth');
     }
     public function viewDoc() {
-    	$hr_people = DB::table('hr_people')->orderBy('first_name', 'surname')->get();
-    	//$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
+    	$employees = HRPerson::where('status', 1)->get();
         $data['page_title'] = "Employee Documents";
         $data['page_description'] = "Employee records";
         $data['breadcrumb'] = [
@@ -30,10 +30,9 @@ class EmployeeDocumentsController extends Controller
         ];
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'employees documents';
-       // $data['HRPerson'] = $HRPerson;
-        $data['hr_people'] = $hr_people;
+        $data['employees'] = $employees;
+        //$data['hr_people'] = $hr_people;
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        return view('hr.employee_documents')->with($data);
+        return view('hr.emp_qualifications')->with($data);
     }
 }
-//

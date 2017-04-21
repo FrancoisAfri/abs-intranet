@@ -104,7 +104,7 @@
                                     <select id="kpi_id" name="kpi_id" class="form-control select2" style="width: 100%;">
                                         <option value="">*** Select a KPI ***</option>
                                         @foreach($kpis as $kpi)
-                                            <option value="{{ $kpi->id }}">{{ $kpi->measurement }}</option>
+                                            <option value="{{ $kpi->id }}">{{ $kpi->indicator }}</option>
                                         @endforeach
                                     </select>
                                 </div>

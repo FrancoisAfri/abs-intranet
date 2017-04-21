@@ -95,11 +95,11 @@
 
 
             // 
-             var doc_type_categoryID;
+             var category_id;
             $('#edit-document-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                doc_type_categoryID = btnEdit.data('id');
+                category_id = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
                 //var employeeName = btnEdit.data('employeename');
@@ -114,7 +114,7 @@
             //Post module form to server using ajax (ADD)
             $('#save_doc').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/hr/category/add/' + doc_type_categoryID;
+                var strUrl = '/hr/category/add/' + category_id;
                 var modalID = 'add-document-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -131,7 +131,7 @@
 
     /**/
     });   $('#edit_doc').on('click', function () {
-                var strUrl = '/hr/category/update';
+                var strUrl = '/hr/category/' + category_id;
                 var modalID = 'edit-document-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),

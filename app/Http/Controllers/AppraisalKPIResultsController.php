@@ -33,11 +33,12 @@ class AppraisalKPIResultsController extends Controller
         $data['division_levels'] = $divisionLevels;
 		# Get kpi from
 		$kpis = DB::table('appraisals_kpis')
-			->select('appraisals_kpis.measurement','appraisals_kpis.id')
+			->select('appraisals_kpis.indicator','appraisals_kpis.id')
 			->where('appraisals_kpis.is_upload', 1)
-			->orderBy('appraisals_kpis.measurement')
+			->whereNull('existing_kpi_id')
+			->orWhere('existing_kpi_id', '<', 1)
+			->orderBy('appraisals_kpis.indicator')
 			->get();
-
         $data['kpis'] = $kpis;
         $data['employees'] = $employees;
         $data['page_title'] = "Employee Appraisals";
@@ -187,6 +188,8 @@ class AppraisalKPIResultsController extends Controller
         if (isset($templateData['date_uploaded']))
             $templateData['date_uploaded'] = strtotime(Carbon::today()->day . ' ' . $appraisalMonth);
         $kipID = $templateData['kpi_id'];
+		$kpis = appraisalsKpis::where('id', $kipID)->orWhere('existing_kpi_id', $kipID)->get(); //template_id
+		//return $kpis;
 		if($request->hasFile('input_file'))
 		{
 			$path = $request->file('input_file')->getRealPath();
@@ -201,73 +204,79 @@ class AppraisalKPIResultsController extends Controller
 						{
 							//$employeeCode = $val['pin_code'];
 							$employees = HRPerson::where('employee_number', 12)->first();
-							$template = appraisalsKpis::where('id', $kipID)->first(); //template_id
-							if ($uploadType == 1)
-								$insert[] = ['kpi_id' => $kipID,'template_id' => $template->template_id,
-								'score' => $val['result'], 
-								'date_uploaded' => $templateData['date_uploaded'],
-								'hr_id' => $employees->id];
-							elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
-							{// 1 for late, 2 for not late
-								$attendance = 2;
-								if (!empty($val['entry']))
+							$emp = HRPerson::find($employees->id)->load('jobTitle.kpiTemplate');
+							// do this for loop inside each if statement
+							foreach ($kpis as $kip)
+							{
+								if ($emp->jobTitle->kpiTemplate->id == $kip->template_id)
 								{
-									$entryDate =  explode(" ", $val['entry']);
-									$normalTimeDate = explode(" ", $val['normal_time']);
-									$entry = explode(":", $entryDate[1]);
-									$normalTime = explode(":", $normalTimeDate[1]);
-									if ($entry[0] > $normalTime[0]) $attendance = 1;
-									else 
-									{
-										if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
-										else $attendance = 2;
+									if ($uploadType == 1)
+										$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
+										'score' => $val['result'], 
+										'date_uploaded' => $templateData['date_uploaded'],
+										'hr_id' => $employees->id];
+									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
+									{// 1 for late, 2 for not late
+										$attendance = 2;
+										if (!empty($val['entry']))
+										{
+											$entryDate =  explode(" ", $val['entry']);
+											$normalTimeDate = explode(" ", $val['normal_time']);
+											$entry = explode(":", $entryDate[1]);
+											$normalTime = explode(":", $normalTimeDate[1]);
+											if ($entry[0] > $normalTime[0]) $attendance = 1;
+											else 
+											{
+												if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
+												else $attendance = 2;
+											}
+											$insert[] = ['kpi_id' => $kip->id, 'attendance' => $attendance, 
+											'date_uploaded' => $templateData['date_uploaded'], 
+											'hr_id' => $employees->id];
+										}
 									}
-									$insert[] = ['kpi_id' => $kipID, 'attendance' => $attendance, 
-									'date_uploaded' => $templateData['date_uploaded'], 
-									'hr_id' => $employees->id];
+									elseif ($uploadType == 3)
+									{
+										$value['query_date'] = !empty($value['query_date']) ? strtotime($value['query_date']) : 0;
+										$value['departure_date'] = !empty($value['departure_date']) ? strtotime($value['departure_date']) : 0;
+										$value['invoice_date'] = !empty($value['invoice_date']) ? strtotime($value['invoice_date']) : 0;
+										
+										$query = new AppraisalQuery_report();
+										$query->kip_id = $kip->id;
+										$query->query_code = $value['query_code'];
+										$query->voucher_verification_code = $value['voucher_verification_code'];
+										$query->query_type = $value['query_type'];
+										$query->query_date = $value['query_date'];
+										$query->hr_id = $employees->id;
+										$query->account_no = $value['account_no'];
+										$query->account_name = $value['account_name'];
+										$query->traveller_name = $value['traveller_name'];
+										$query->departure_date = $value['departure_date'];
+										$query->supplier_name = $value['supplier_name'];
+										$query->supplier_invoice_number = $value['supplier_invoice_number'];
+										$query->created_by = $value['created_by'];
+										$query->voucher_number = $value['voucher_number'];
+										$query->invoice_date = $value['invoice_date'];
+										$query->order_umber = $value['order_number'];
+										$query->invoice_amount = $value['invoice_amount'];
+										$query->comment = $value['query_comments'];
+										$query->date_uploaded = $templateData['date_uploaded'];
+										$query->save();	
+										$insert = 1;									
+									}
 								}
 							}
-							elseif ($uploadType == 3)
-							{
-								$value['query_date'] = !empty($value['query_date']) ? strtotime($value['query_date']) : 0;
-								$value['departure_date'] = !empty($value['departure_date']) ? strtotime($value['departure_date']) : 0;
-								$value['invoice_date'] = !empty($value['invoice_date']) ? strtotime($value['invoice_date']) : 0;
-								
-								$query = new AppraisalQuery_report();
-								$query->kpi_id = $kipID;
-								$query->query_code = $value['query_code'];
-								$query->voucher_verification_code = $value['voucher_verification_code'];
-								$query->query_type = $value['query_type'];
-								$query->query_date = $value['query_date'];
-								$query->hr_id = $employees->id;
-								$query->account_no = $value['account_no'];
-								$query->account_name = $value['account_name'];
-								$query->traveller_name = $value['traveller_name'];
-								$query->departure_date = $value['departure_date'];
-								$query->supplier_name = $value['supplier_name'];
-								$query->supplier_invoice_number = $value['supplier_invoice_number'];
-								$query->created_by = $value['created_by'];
-								$query->voucher_number = $value['voucher_number'];
-								$query->invoice_date = $value['invoice_date'];
-								$query->order_umber = $value['order_number'];
-								$query->invoice_amount = $value['invoice_amount'];
-								$query->comment = $value['query_comments'];
-								$query->date_uploaded = $templateData['date_uploaded'];
-								$query->save();	
-								return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");								
-							}
-							elseif ($uploadType == 3)
-								$insert[] = ['title' => $v['title'], 'description' => $v['description']];
 						}
 					}
 				}
 				if(!empty($insert))
 				{
 					if ($uploadType == 1)
+						
 						AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2)
 						AppraisalClockinResults::insert($insert);
-					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");
+					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");	
 				}
 
 			}

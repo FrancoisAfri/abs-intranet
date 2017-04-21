@@ -101,7 +101,7 @@ class LeaveApplicationController extends Controller
        //$dept = DB::('civ2')::were('id', $hrDetails->div2)->first();
 
          $Dept = DivisionLevelTwo::where('id' , 1 ) -> get();
-         return $Dept;
+         // return $Dept;
       
 
         $data['active_mod'] = 'Leave Management';
@@ -110,11 +110,15 @@ class LeaveApplicationController extends Controller
         //$data['employees'] = $employees;
         $data['leaveApplication'] = $leaveApplication;
 
+
         
        
 
        
     // return $leaveApplication;
+
+      // return $leaveApplication;
+
        
 //        $data['leave_customs']=$leave_customs;
 
@@ -213,6 +217,8 @@ class LeaveApplicationController extends Controller
         ]);
            
         $leaveApp = $request->all();
+
+        return $leaveApp;
 
         //Exclude empty fields from query
         foreach ($leaveApp as $key => $value)
@@ -340,8 +346,13 @@ class LeaveApplicationController extends Controller
            'leave_type' => 'required',
 //            "day",
            'datetime' =>'required',
+
 //           'description' => 'required',
 //           'supporting_doc' => 'required',     
+
+           'description' => 'required',
+                
+
 
         ]);
         $leaveApp = $request->all();
@@ -388,6 +399,10 @@ class LeaveApplicationController extends Controller
         $levApp->end_time = $end_time;
         $levApp->save();
         
+        $levApp->notes = $request->input('description');
+              $levApp->status = 1;
+              $levApp->save();
+
              //Upload supporting Documents
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
@@ -402,9 +417,7 @@ class LeaveApplicationController extends Controller
             }
         }
         
-              $levApp->notes = $request->input('description');
-              $levApp->status = 1;
-              $levApp->save();
+              
                  //$levApp->update();
                     //return $levApp;
     
