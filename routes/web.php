@@ -76,9 +76,12 @@ Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
+Route::post('leave/application/leavDetails', 'LeaveApplicationController@leavDetails');
 
+#leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
-
+//Route::post('leave/type/add_leave', 'LeaveController@addleave');
+Route::post('leave/approval/reject', 'LeaveApplicationController@reject');
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
