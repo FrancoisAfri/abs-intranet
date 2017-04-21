@@ -114,6 +114,9 @@
 </div>
 @endsection
 <!--        edit ribbon-->
+            (Session('success_edit'))
+            @include('leave.partials.success_action', ['modal_title' => 'Contact Details Updated!', 'modal_content' => session('success_edit')])
+    </div>
 <!-- Ajax form submit -->
 
 @section('page_script')
@@ -184,6 +187,7 @@
             //    modal.find('#prime_rate').val(primeRate.toFixed(2));
             //}
         });
+        ///leave/type/add_leave
         //****leave type post
         $('#add_leave').on('click', function () {
             var strUrl = '/leave/type/add_leave';
@@ -244,8 +248,8 @@
             var redirectUrl = '/leave/types';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Anual dayshas been changed successfully.';
-            var method = 'PATCH';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            // var method = 'PATCH';
+           modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
     });
 </script>

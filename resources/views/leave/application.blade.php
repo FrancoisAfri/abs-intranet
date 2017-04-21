@@ -43,7 +43,7 @@
                                 </ul>
                             </div>
                         @endif
-                         <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                          <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -77,8 +77,8 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-black-tie"></i>
                                         </div>
-                                        <select name="leave_type" class="form-control">
-                                            <option value="">*** Select leave Type ***</option> 
+                                        <select id="leave_type" name="leave_type" onChange= "changetextbox();" class="form-control">
+                                            <option value="leavetyes">*** Select leave Type ***</option> 
                                                 @foreach($leaveTypes as $leaveType)
                                                     <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
                                                 @endforeach
@@ -86,30 +86,20 @@
                                     </div>
                                 </div>
                             </div>                 
-                      
+                            <!-- This is the dropbox which must receive a value from the leave dropbox via jquery -->
                         <div class="form-group  ">
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-<!--
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar-plus-o"></i>
-                                    </div>
--->
-
-                                    @if (count($employees) > 0)
-                                        @foreach($employees as $employee)
-                                        <tr id="modules-list">
-                                          <td align="center"> {{ ($balance = $employee ->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: ''}} </td>
-                                             </tr> 
-                                        @endforeach
-                                    @else   
-                                    @endif
- 
+                                    @foreach($employees as $employee)
+                        {{ ($balance = $employee ->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: ''}} 
+                                    @endforeach
+                       
+                                   
                                 </div>
                             </div>
                         </div>
-                        
+
 
                                     <!--                                                        -->
                         
@@ -127,30 +117,7 @@
                             </div>
                         </div>
                         
-<!--
-                         <div class="row">
-                                    <label for="firstname" class="col-md-2 control-label" >day</label>
-                                    <div class=" col-sm-4">
-                                     <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>    
-                                   <input type="text" class="form-control pull-left" name="day" value=" " />
-                              </div>
-                         </div>
-                             
-                                    <label for="firstname" class="col-md-2 control-label" >time</label>
-                                      <div class=" col-sm-4">
-                                    <input id="firstname" class="col-sx-2 form-control input-group-lg reg_name" type="text" name="firstname"
-                                           title="Enter first name"
-                                           placeholder="First name"/>
-                                    </div>
-                        </div>
-                        <br>
--->
-                        
-                    
-                             
+                       
                             <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
                             <div class="col-sm-10">
@@ -169,7 +136,7 @@
  
                         
                         
-                        <div class="form-group{{ $errors->has('description') ? ' has-error' : '' }}">
+                        <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
                                <div class="input-group">
@@ -181,7 +148,7 @@
                             </div>
                         </div>
                         
-                        <div class="form-group{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
+                        <div class="form-group supDoc-field{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Supporting Document</label>
                             <div class="col-sm-10">
                                <div class="input-group">
@@ -258,7 +225,7 @@
 <!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
 <!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
         
-    <script type="text/javascript">
+   <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
@@ -291,8 +258,9 @@
                 },"dateLimit": {
                     "days": 1
                 },
-
             });
+            
+
             
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
@@ -309,8 +277,11 @@
 //                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
             
-            var balance = document.getElementById("$leaveType->id");
+//                    $('input[name="daterange"]').daterangepicker();
            
+
+//            
+              
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -330,29 +301,51 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-        });ss
+        });
+       
+//      hide notes field if leave type is maternity
+            function changetextbox(){
+                var levID = document.getElementById("leave_type").value;
+                //return levID;
+                if ( levID == 3) { 
+                 $('.notes-field').hide();
+                }
+          
+              // alert(levID);
+            }
+//             function changetextbox(){
+//                var levID = document.getElementById("leave_type").value;
+//                var EmpID = document.getElementById("employee").value;
+//
+//                //return levID;
+//               return EmpID;
+//        
+//            }
+      
+
+    
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();
-            if (allType == 1) { //day leave
+            if (allType == 1) { //adjsut leave
                 $('.hours-field').hide();
                 $('.day-field').show();
-                $('form[name="leave-application-form"]').attr('action', '/leave/application/day');
-               
-                $('#load-allocation').val("Submit");       
+                 $('form[name="leave-application-form"]').attr('action', '/leave/application/day');
+                $('#load-allocation').val("Submit");        
             }
-            else if (allType == 2) { //hours leave
+            else if (allType == 2) { //resert leave
 //                
                 $('.day-field').hide();
                 $('.hours-field').show();
                 $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
                 $('#load-allocation').val("Submit");
-            }
-
+            }else
+                $('form[name="leave-application-form"]').attr('action', '/leave/application/leavDetails');
+//          
             return allType;
            
         }
-  
+      
         
     </script>
 @endsection

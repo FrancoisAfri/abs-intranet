@@ -17,184 +17,122 @@
                     {{ csrf_field() }}
 
                     <div class="box-body">
+                     <div class="form-group">
+                        <label for="action" class="col-sm-3 control-label">Category</label>
+
+                         <div class="col-sm-9">
+                           <div class="input-group">
+                                <div class="input-group-addon">
+                                   <i class="fa fa-user"></i>
+                                    </div>
+                             <select id="category_id" name="category_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Category ***</option>
+                                    @foreach($category as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                            </select>
+                                </div>
+                             </div>
+                         </div>
+                     <div class="form-group">
+                        <label for="action" class="col-sm-3 control-label">Document Type</label>
+
+                         <div class="col-sm-9">
+                           <div class="input-group">
+                                <div class="input-group-addon">
+                                   <i class="fa fa-user"></i>
+                                    </div>
+                             <select id="category_id" name="category_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Document Type ***</option>
+                                    @foreach($document as $document)
+                                    <option value="{{ $document->id }}">{{ $document->name }}</option>
+                                    @endforeach
+                            </select>
+                                </div>
+                             </div>
+                         </div>  
+                                <div class="form-group">
+                            <label for="doc_description" class="col-sm-3 control-label">Document Description</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-black-tie"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="doc_description" name="doc_description" value="{{ old('doc_description') }}"  placeholder="Driver's licence, ID, etc..." data-mask>
+                                </div>
+                            </div>
+                        </div>
+                     
+                           @foreach($division_levels as $division_level)
+                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-3 control-label">{{ $division_level->name }}</label>
+
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                         <select id="division_level_id" name="division_level_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a {{ $division_level->name }} ***</option>
+                                    @foreach($division as $division)
+                                    <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                    @endforeach
+                            </select>
+                                    </div>
+                                </div>
+                            </div>
+                              @endforeach
+
+                             <div class="form-group">
+                        <label for="action" class="col-sm-3 control-label">Employee Name</label>
+
+                         <div class="col-sm-9">
+                           <div class="input-group">
+                                <div class="input-group-addon">
+                                   <i class="fa fa-user"></i>
+                                    </div>
+                             <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Employee ***</option>
+                                    @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    @endforeach
+                            </select>
+                                </div>
+                             </div>
+                         </div>
+
+                 
+
+                       
+                        
+                  
                         <div class="form-group">
-                            <label for="first_name" class="col-sm-3 control-label">First Name</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="First Name" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="surname" class="col-sm-3 control-label">Surname</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ old('surname') }}" placeholder="Surname" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="cell_number" class="col-sm-3 control-label">Cell Number</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="cell_number" name="cell_number" value="{{ old('cell_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="form-group">
-                            <label for="phone_number" class="col-sm-3 control-label">Phone Number</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Phone Number" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="id_number" class="col-sm-3 control-label">ID Number</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-book"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="id_number" name="id_number" value="{{ old('id_number') }}"  placeholder="ID Number" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="form-group">
-                            <label for="date_of_birth" class="col-sm-3 control-label">Date of birth</label>
+                            <label for="date_of_birth" class="col-sm-3 control-label">Expiry Date</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}"  placeholder="Date of birth" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="passport_number" class="col-sm-3 control-label">Passport Number</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-book"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ old('passport_number') }}"  placeholder="Passport Number" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="form-group">
-                            <label for="drivers_licence_number" class="col-sm-3 control-label">Licence Number</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-id-card"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="drivers_licence_number" name="drivers_licence_number" value="{{ old('drivers_licence_number') }}"  placeholder="Drivers Licence Number" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="drivers_licence_code" class="col-sm-3 control-label">Licence Code</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-barcode"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="drivers_licence_code" name="drivers_licence_code" value="{{ old('drivers_licence_code') }}"  placeholder="Drivers Licence Code" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="form-group">
-                            <label for="proof_drive_permit" class="col-sm-3 control-label">Drive Permit</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-id-card"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="proof_drive_permit" name="proof_drive_permit" value="{{ old('proof_drive_permit') }}"  placeholder="Proof Drive Permit" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="proof_drive_permit_exp_date" class="col-sm-3 control-label">Permit Expiry</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="proof_drive_permit_exp_date" name="proof_drive_permit_exp_date" value="{{ old('proof_drive_permit_exp_date') }}"  placeholder="Proof Drive Permit Expiry Date" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                           <div class="form-group">
-                            <label for="drivers_licence_exp_date" class="col-sm-3 control-label">Licence Expiry</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="drivers_licence_exp_date" name="drivers_licence_exp_date" value="" placeholder="Licence Expiry" required>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="form-group">
-                            <label for="gender" class="col-sm-3 control-label">Gender</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="gender" name="gender" value="" placeholder="Gender" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="ethnicity" class="col-sm-3 control-label">Ethnicity</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="ethnicity" name="ethnicity" value="" placeholder="Ethnicity" required>
+                                    <input type="text" class="form-control" id="expiry_date" name="expiry_date" value="{{ old('expiry_date') }}"  placeholder="Expiry Date" data-mask>
                                 </div>
                             </div>
                         </div>
                         
+                    
+                         
+                       
+                        
                                <div class="form-group">
-                        <label for="profile_pic" class="col-sm-3 control-label">Profile Pic</label>
+                        <label for="profile_pic" class="col-sm-3 control-label">Document</label>
 
                             <div class="col-sm-9">
                                <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-upload"></i>
                                     </div>
-                                    <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                                    <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["doc", "docx", "pdf"]' data-show-upload="false">
                                 </div>
                             </div>
                         </div>
@@ -214,18 +152,49 @@
 @endsection
 
 @section('page_script')
+
     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="./bower_components/jquery-calendar/dist/js/jquery-calendar.min.js"></script>
+<script>
+$(function() {
+  $("#calendar").calendar();
+});
+</script> 
 
     <script type="text/javascript">
         //Cancel button click event
         document.getElementById("cancel").onclick = function () {
             location.href = "/users";
+
         };
 
         //Phone mask
         $("[data-mask]").inputmask();
+    </script>
+ <script type="text/javascript">
+
+
+        ///Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+            //Populate drop down on page load
+            var ddID = '{{ 'division_level_' . $division_level->level }}';
+            var postTo = '{!! route('divisionsdropdown') !!}';
+            var selectedOption = '';
+            var divLevel = parseInt('{{ $division_level->level }}');
+            var incInactive = -1;
+            var loadAll = loadAllDivs;
+            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+            parentDDID = ddID;
+            loadAllDivs = -1;
+        @endforeach
+//        });
+       
+        //function to populate the year drop down
+        
     </script>
 @endsection

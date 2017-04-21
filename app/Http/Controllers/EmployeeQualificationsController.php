@@ -29,7 +29,7 @@ class EmployeeQualificationsController extends Controller
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Employee records';
-        $data['active_rib'] = 'employees documents';
+        $data['active_rib'] = 'employee qualifications';
         $data['employees'] = $employees;
         //$data['hr_people'] = $hr_people;
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
