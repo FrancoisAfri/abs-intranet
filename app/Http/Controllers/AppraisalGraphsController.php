@@ -91,10 +91,11 @@ class AppraisalGraphsController extends Controller
     }
 
     //returns a list of divisions and their avg performances
-    public function divisionsPerformance(DivisionLevel $divLvl, $parentDivisionID = 0) {
+    public function divisionsPerformance(DivisionLevel $divLvl, $parentDivisionID = 0, $managerID = 0) {
         //$divisions = $divLvl->divisionLevelGroup->sortBy('name');
-        $divLvl->load(['divisionLevelGroup' => function ($query) use($parentDivisionID) {
+        $divLvl->load(['divisionLevelGroup' => function ($query) use($parentDivisionID, $managerID) {
             if ($parentDivisionID > 0) $query->where('parent_id', $parentDivisionID);
+            if ($managerID > 0) $query->where('manager_id', $managerID);
             $query->orderBy('name', 'asc');
         }]);
         $divisions = $divLvl->divisionLevelGroup;
@@ -147,5 +148,11 @@ class AppraisalGraphsController extends Controller
     //returns the bottom ten employees
     public function getBottomTenEmployees() {
         return AppraisalGraphsController::empGroupPerformance(0, 0, true, false, true);
+    }
+
+    //returns all employees under someone
+    public function getSubordinates($managerID) {
+        $employees = HRPerson::where('manager_id', $managerID)->get()->load('jobTitle');
+        return AppraisalGraphsController::empGroupPerformance(0, 0, true, false, false, $employees);
     }
 }
