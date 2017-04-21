@@ -33,15 +33,19 @@ class AppraisalGraphsController extends Controller
         return $yearResult;
     }
 
-    //returns a division's avg performance from jan to last month or a list of emp from that division and their avg performances
-    public static function divisionPerformance($divID, $divLvl, $returnEmpList = false) {
-        $employees = HRPerson::where(function ($query) use($divID, $divLvl) {
-            if ($divLvl == 5) $query->where('division_level_5', $divID);
-            elseif ($divLvl == 4) $query->where('division_level_4', $divID);
-            elseif ($divLvl == 3) $query->where('division_level_3', $divID);
-            elseif ($divLvl == 2) $query->where('division_level_2', $divID);
-            elseif ($divLvl == 1) $query->where('division_level_1', $divID);
-        })->get()->load('jobTitle');
+    //returns a group's avg performance from jan to last month or a list of emp from that group and their avg performances
+    public static function empGroupPerformance($divID, $divLvl, $returnEmpList = false, $topTen = false, $bottomTen = false, $empGroup = []) {
+        if ($returnEmpList && ($topTen || $bottomTen)) $employees = HRPerson::get()->load('jobTitle');
+        elseif (count($empGroup) > 0) $employees = $empGroup;
+        else {
+            $employees = HRPerson::where(function ($query) use($divID, $divLvl) {
+                if ($divLvl == 5) $query->where('division_level_5', $divID);
+                elseif ($divLvl == 4) $query->where('division_level_4', $divID);
+                elseif ($divLvl == 3) $query->where('division_level_3', $divID);
+                elseif ($divLvl == 2) $query->where('division_level_2', $divID);
+                elseif ($divLvl == 1) $query->where('division_level_1', $divID);
+            })->get()->load('jobTitle');
+        }
 
         //$employees = HRPerson::get()->load('jobTitle');
 
@@ -69,7 +73,17 @@ class AppraisalGraphsController extends Controller
             }
             else $empAvgs[$employee->id] = $empAvg;
         }
-        if ($returnEmpList) return $empAvgs;
+        if ($returnEmpList) {
+            if ($topTen) {
+                usort($empAvgs, function($a, $b){return $a->emp_result - $b->emp_result;});
+                $empAvgs = array_slice($empAvgs, 0, 10);
+            }
+            elseif ($bottomTen) {
+                usort($empAvgs, function($a, $b){return $b->emp_result - $a->emp_result;});
+                $empAvgs = array_slice($empAvgs, 0, 10);
+            }
+            return $empAvgs;
+        }
         else {
             $divAvg = array_sum($empAvgs) / count($empAvgs);
             return number_format($divAvg, 2);
@@ -95,7 +109,7 @@ class AppraisalGraphsController extends Controller
             $objResult = (object) [];
             $objResult->div_id = $division->id;
             $objResult->div_name = $division->name;
-            $objResult->div_result = AppraisalGraphsController::divisionPerformance($division->id, $division->level);
+            $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
             $objResult->div_level = $parenLevel;
             $objResult->is_child_level_active = $isChildLevelActive;
             $objResult->child_level = $childLevel;
@@ -109,7 +123,7 @@ class AppraisalGraphsController extends Controller
 
     //returns a list of emp and their avg performances
     public function empListPerformance($divLvl, $divID) {
-        return AppraisalGraphsController::divisionPerformance($divID, $divLvl, true);
+        return AppraisalGraphsController::empGroupPerformance($divID, $divLvl, true);
     }
 
     //returns 8 available perks
@@ -123,5 +137,15 @@ class AppraisalGraphsController extends Controller
             $formattedPerks[] = $formattedPerk;
         }
         return $formattedPerks;
+    }
+
+    //returns the top ten employees
+    public function getTopTenEmployees() {
+        return AppraisalGraphsController::empGroupPerformance(0, 0, true, true);
+    }
+
+    //returns the bottom ten employees
+    public function getBottomTenEmployees() {
+        return AppraisalGraphsController::empGroupPerformance(0, 0, true, false, true);
     }
 }

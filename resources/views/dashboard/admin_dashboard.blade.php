@@ -4,7 +4,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<!-- Employee Monthly performance Widget-->
-			<div class="box">
+			<div class="box box-primary">
 				<div class="box-header with-border">
 					<h3 class="box-title">Employee Monthly Appraisal</h3>
 
@@ -39,7 +39,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<!-- company performance Widget -->
-			<div class="box">
+			<div class="box box-primary">
 				<div class="box-header with-border">
 					<h3 class="box-title">Company Appraisal</h3>
 
@@ -77,29 +77,29 @@
 					</div>
 					<!-- /.row -->
 				</div>
+				<!-- Include division performance modal -->
+				@include('dashboard.partials.division_4_performance_modal')
+				@include('dashboard.partials.division_3_performance_modal')
+				@include('dashboard.partials.division_2_performance_modal')
+				@include('dashboard.partials.division_1_performance_modal')
+				<!-- Include emp list performance modal -->
+				@include('dashboard.partials.emp_list_performance_modal')
+				<!-- Include emp list performance modal -->
+				@include('dashboard.partials.emp_year_performance_modal')
 			</div>
 			<!-- /.box company performance Widget -->
-			<!-- Include division performance modal -->
-			@include('dashboard.partials.division_4_performance_modal')
-			@include('dashboard.partials.division_3_performance_modal')
-			@include('dashboard.partials.division_2_performance_modal')
-			@include('dashboard.partials.division_1_performance_modal')
-			<!-- Include emp list performance modal -->
-			@include('dashboard.partials.emp_list_performance_modal')
-			<!-- Include emp list performance modal -->
-			@include('dashboard.partials.emp_year_performance_modal')
 		</div>
 		<!-- /.col -->
 	</div>
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-md-4">
 			<!-- Available Perks Widgets -->
-			<div class="box box-danger">
+			<div class="box box-warning same-height-widget">
 				<div class="box-header with-border">
 					<h3 class="box-title">Available Perks</h3>
 
 					<div class="box-tools pull-right">
-						<!-- <span class="label label-danger">8 New Members</span> -->
+						<!-- <span class="label label-warning">8 New Members</span> -->
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 						</button>
 						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
@@ -113,12 +113,61 @@
 					<!-- /.users-list -->
 				</div>
 				<!-- /.box-body -->
-				<!--<div class="box-footer text-center">
-					<a href="#" class="uppercase">View All Perks</a>
-				</div>-->
-				<!-- /.box-footer -->
+				<!-- include perk details modal -->
+				@include('appraisals.partials.edit_perk', ['isReaOnly' => true])
 			</div>
 			<!-- /.Available Perks Widgets -->
+		</div>
+		<div class="col-md-4">
+			<!-- Top Ten Employees Performance Ranking Widget -->
+			<div class="box box-success same-height-widget">
+				<div class="box-header with-border">
+					<h3 class="box-title">Employees Ranking</h3>
+
+					<div class="box-tools pull-right">
+						<span class="label label-success"><i class="fa fa-level-up"></i> Top 10 Employees</span>
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body no-padding">
+					<div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
+						<ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-top-ten-list">
+						</ul>
+					</div>
+				</div>
+				<!-- /.box-body -->
+			</div>
+			<!-- /.Top Ten Employees Performance Ranking Widgets -->
+		</div>
+		<div class="col-md-4">
+			<!-- Bottom Ten Employees Performance Ranking Widgets -->
+			<div class="box box-danger same-height-widget">
+				<div class="box-header with-border">
+					<h3 class="box-title">Employees Ranking</h3>
+
+					<div class="box-tools pull-right">
+						<span class="label label-danger"><i class="fa fa-level-down"></i> Bottom 10 Employees</span>
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body no-padding">
+					<div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
+						<ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-bottom-ten-list">
+						</ul>
+					</div>
+					<!-- /.users-list -->
+				</div>
+				<!-- /.box-body -->
+			</div>
+			<!-- /.Bottom Ten Employees Performance Ranking Widgets -->
 		</div>
 	</div>
 @endsection
@@ -128,9 +177,14 @@
 	<script src="/bower_components/AdminLTE/plugins/chartjs/Chart.min.js"></script>
 	<!-- Admin dashboard charts ChartsJS -->
 	<script src="/custom_components/js/admindbcharts.js"></script>
+	<!-- matchHeight.js
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>-->
 
 	<script>
 		$(function () {
+			//initialise matchHeight on widgets
+			//$('.same-height-widget').matchHeight();
+
 			//Vertically center modals on page
 			function reposition() {
 				var modal = $(this),
@@ -159,11 +213,20 @@
 			var divChartCanvas = $('#divisionsPerformanceChart');
 			loadDivPerformance(divChartCanvas, rankingList, divLevel);
 
-			//Load show available perks on the perks widget
+			//Show available perks on the perks widget
 			var perksWidgetList = $('#perks-widget-list');
 			loadAvailablePerks(perksWidgetList);
 
-			//show performance of sub division levels on modals
+			//Load top ten performing employees (widget)
+			var topTenList = $('#emp-top-ten-list');
+			loadEmpListPerformance(topTenList, 0, 0, true);
+
+			//Load Bottom ten performing employees (widget)
+			var bottomTenList = $('#emp-bottom-ten-list');
+			var totnumEmp = parseInt('{{ $totNumEmp }}');
+			loadEmpListPerformance(bottomTenList, 0, 0, false, true, totnumEmp);
+
+			//show performance of sub division levels on modals (modal show)
 			var i = 1;
 			for (i; i <= 4; i++) {
 				$('#sub-division-performance-modal-'+i).on('show.bs.modal', function (e) {
@@ -189,6 +252,25 @@
 				var modalWin = $(this);
 				modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
 				loadEmpMonthlyPerformance(empChartCanvas, empID);
+			});
+
+			//Show perk details
+			$('#edit-perk-modal').on('show.bs.modal', function (e) {
+				var perkLink = $(e.relatedTarget);
+				//perkID = btnEdit.data('id');
+				var name = perkLink.data('name');
+				var desc = perkLink.data('description');
+				var percent = perkLink.data('req_percent');
+				var perkImg = perkLink.data('img_url');
+				var modal = $(this);
+				modal.find('#name').val(name);
+				modal.find('#description').val(desc);
+				modal.find('#req_percent').val(percent);
+				//show perk image if any
+				var imgDiv = modal.find('#perk-img');
+				imgDiv.empty();
+				var htmlImg = $("<img>").attr('src', perkImg).attr('class', 'img-responsive img-thumbnail').attr('style', 'max-height: 235px;');
+				imgDiv.html(htmlImg);
 			});
 		});
 	</script>

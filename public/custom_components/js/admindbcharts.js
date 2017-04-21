@@ -215,9 +215,14 @@ function subDivOnShow(objTrigger, modalWin) {
 //- EMPLOYEE LIST PERFORMANCE -
 //-----------------------------
 //function to show employees performance ranking
-function loadEmpListPerformance(rankingList, divLevel, divID) {
+function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen, totEmp) {
+    topTen = topTen || false;
+    bottomTen = bottomTen || false;
+    totEmp = totEmp || 0;
     //Get employees performance data using ajax
     var getURL = "/api/divlevel/" + divLevel + "/div/" + divID + "/emps-performance"; //all employees from a specific divisionspecific parent div
+    if (topTen) getURL = "/api/appraisal/emp/topten";
+    else if(bottomTen) getURL = "/api/appraisal/emp/bottomten";
     $.get(getURL,
         function(data) {
             //console.log(JSON.stringify(data));
@@ -226,6 +231,8 @@ function loadEmpListPerformance(rankingList, divLevel, divID) {
 
             //Load ranking
             rankingList.empty();
+            var cnt = 1;
+            if (totEmp > 10) cnt = totEmp - 9;
             $.each(sortedData, function(key, value) {
                 var empID = value['emp_id'],
                     empFullName = value['emp_full_name'],
@@ -242,12 +249,14 @@ function loadEmpListPerformance(rankingList, divLevel, divID) {
                     .attr('alt', 'Profile Picture');
                 var productImgDiv = $("<div class='product-img'></div>").append(profilePicImg);
                 var prodTitleSpan = $("<span class='product-title text-blue'></span>").html(empFullName);
+                var prodLabelSpan = $('<span class="label label-default pull-right"></span>').html('<i class="fa fa-hashtag"></i> ' + cnt);
                 var prodDescHTML = '';
                 if (empEmail != '') prodDescHTML += '<i class="fa fa-envelope-o"></i> ' + empEmail;
                 if (empJobTitle != '') prodDescHTML += ' &nbsp; | &nbsp; <i class="fa fa-user-circle"></i> ' + empJobTitle;
                 var productDescSpan = $("<span class='product-description'></span>").html(prodDescHTML);
                 var productInfoDiv = $("<div class='product-info'></div>")
                     .append(prodTitleSpan)
+                    .append(prodLabelSpan)
                     .append(productDescSpan);
                 var divNameSpan = $("<span class='progress-text'></span>").html('&nbsp;');
                 var divResultSpan = $("<span class='progress-number'></span>").html(empResult + "%").addClass("text-" + resultColor); //<i class='fa fa-angle-down'></i>
@@ -268,6 +277,7 @@ function loadEmpListPerformance(rankingList, divLevel, divID) {
                 var listItem = $("<li class=item'></li>")
                     .append(listLink);
                 rankingList.append(listItem);
+                cnt++;
             });
         });
 }
@@ -291,7 +301,7 @@ function empPerOnShow(objTrigger, modalWin) {
 function loadAvailablePerks(perksWidgetList) {
     $.get("/api/availableperks",
         function(data) {
-            console.log(JSON.stringify(data));
+            //console.log(JSON.stringify(data));
             //Load ranking
             //perksWidgetList.empty();
             $.each(data, function(key, value) {
@@ -302,10 +312,12 @@ function loadAvailablePerks(perksWidgetList) {
                     perkImgURL = value['img_url'];
                 var perkImage = $('<img>')
                     .attr('src', perkImgURL)
-                    .attr('alt', 'Perk Image')
-                    .addClass('img-responsive')
-                    .css('max-height', '128px').css('max-width', '128px').css('height', '128px');
+                    .attr('alt', 'Perk Image');
+                    //.addClass('img-responsive')
+                    //.css('max-height', '80px').css('max-width', '80px').css('height', '80px');
                 var perkNameLink = $('<a class="users-list-name"></a>')
+                    .attr('data-toggle', 'modal')
+                    .attr('data-target', '#edit-perk-modal')
                     .attr('data-id', perkID)
                     .attr('data-name', perkName)
                     .attr('data-description', perkDesc)
