@@ -18,6 +18,7 @@
 				  <table id="example2" class="table table-bordered table-hover">
 					<thead>
 					<tr>
+					  <th></th>
 					  <th>Measurement</th>
 					  <th>Source Of Evidence</th>
 					  <th>Indicator</th>
@@ -30,6 +31,11 @@
 						
 						@foreach($kpisArray->kpa_appraisal->kpi_appraisal as $kpis)
 							<tr>
+								@if (!empty($kpis->upload_type) && ($kpis->upload_type == 3))
+									<td><button type="button" id="view_more" onclick="postData({{$kpis->id}}, 'view_more');" class="btn btn-xs">View Details</button></td>
+								@else
+									<td></td>
+								@endif
 								<td>{{  $kpis->measurement }}</td>
 								<td>{{  $kpis->source_of_evidence }}</td>
 								<td>{{  $kpis->indicator }}</td>
@@ -41,6 +47,7 @@
 					</tbody>
 					<tfoot>
 					<tr>
+					  <th></th>
 					  <th>Measurement</th>
 					  <th>Source Of Evidence</th>
 					  <th>Indicator</th>
@@ -73,6 +80,11 @@
 	document.getElementById("back_to_kpa").onclick = function () {
 		location.href = "/appraisal/{{$kpisArray->id}}/{{$monthyear}}/kpas ";
 	};
+	function postData(id, data)
+	{
+		if (data == 'view_more')
+	location.href = "/appraisal/kpi_view_more/{{$emp_id}}/{{$monthyear}}/" + id;
+	}
 	$(function () {
 		 $('#example2').DataTable({
 		  "paging": true,
