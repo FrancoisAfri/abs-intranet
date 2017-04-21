@@ -43,6 +43,7 @@ class EmployeeCompanySetupController extends Controller
             $childLevelname=DivisionLevel::where('level', $highestLvl->level - 1 )->get()->first()->plural_name;
         }
         //return $lowestactiveLvl;
+        
         $data['division_types'] = $division_types;
         $data['employees'] = $employees;
         $data['highestLvl'] = $highestLvl;

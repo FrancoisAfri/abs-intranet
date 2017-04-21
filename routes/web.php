@@ -224,13 +224,13 @@ Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults
 
 #Document setup module
 Route::get('/hr/document', 'DocumentTypeController@viewDoc');
-Route::post('/hr/document/add/{doc_type}', 'DocumentTypeController@addList');
+Route::post('/hr/document/add/doc_type', 'DocumentTypeController@addList');
 Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
 Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');
 Route::get('/hr/category', 'DocumentTypeController@viewCategory');
-Route::post('/hr/category/add/{category_id}', 'DocumentTypeController@addDoc');
+Route::post('/hr/category/add/doc_type_category', 'DocumentTypeController@addDoc');
 Route::get('/hr/category/{listLevel}/activate', 'DocumentTypeController@activateDoc');
-Route::patch('/hr/category/{category_id}', 'DocumentTypeController@updateDoc');
+Route::patch('/hr/category/{doc_type_category}', 'DocumentTypeController@updateDoc');
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
