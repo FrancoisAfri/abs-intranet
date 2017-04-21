@@ -12,7 +12,6 @@ class DivisionLevelOne extends Model
     // Mass assignable fields
     protected $fillable = [
         'name', 'active', 'manager_id',
-           
     ];
 
     //Relationship Division level 1 and hr_person (manager)
