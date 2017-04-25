@@ -34,7 +34,8 @@ Route::post('users/search', 'UsersController@getSearch');
 Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
-Route::get('users/setup', 'UsersController@setup');
+Route::get('users/modules', 'UsersController@modules');
+Route::get('users/ ', 'UsersController@setup');
 Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
@@ -276,10 +277,12 @@ Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown
 Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@empMonthlyPerformance');
 Route::get('api/divlevel/{divLvl}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
 Route::get('api/divlevel/{divLvl}/parentdiv/{parentDivisionID}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
+Route::get('api/divlevel/{divLvl}/parentdiv/{parentDivisionID}/manager/{managerID}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
 Route::get('api/divlevel/{divLvl}/div/{divID}/emps-performance', 'AppraisalGraphsController@empListPerformance');
 Route::get('api/availableperks', 'AppraisalGraphsController@getAvailablePerks')->name('availableperks');
 Route::get('api/appraisal/emp/topten', 'AppraisalGraphsController@getTopTenEmployees')->name('toptenemp');
 Route::get('api/appraisal/emp/bottomten', 'AppraisalGraphsController@getBottomTenEmployees')->name('bottomtenemp');
+Route::get('api/appraisal/staffunder/{managerID}', 'AppraisalGraphsController@getSubordinates')->name('staffperform');
 
 //Email Test
 Route::get('testemail', function () {

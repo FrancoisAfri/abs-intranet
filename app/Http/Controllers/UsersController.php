@@ -52,7 +52,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Create User Page Accessed', "Accessed By User", 0);
         return view('security.add_user')->with($data);
     }
-	public function setup() 
+	public function modules() 
 	{
         $modules = DB::table('security_modules')->orderBy('name', 'asc')->get();
 		$data['page_title'] = "Security Setup";

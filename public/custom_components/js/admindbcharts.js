@@ -124,8 +124,10 @@ var divChartOptions = {
 };
 
 //function to draw the chart on the canvas and show rankings
-function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID) {
+function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, managerID) {
     parentDivID = parentDivID || 0;
+    managerID = managerID || 0;
+    //console.log(chartCanvas, rankingList, divLevel, parentDivID, managerID);
     // Get context with jQuery - using jQuery's .get() method.
     var divPerfChartCanvas = chartCanvas.get(0).getContext("2d");
     // This will get the first returned node in the jQuery collection.
@@ -133,9 +135,11 @@ function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID) {
     
     //Get chart data using ajax
     var getURL = "/api/divlevel/" + divLevel + "/group-performance"; //all divs of a level
-    if (parentDivID > 0) getURL = 'api/divlevel/' + divLevel + '/parentdiv/' + parentDivID + '/group-performance'; //child divs of a specific parent div
+    if (parentDivID > 0) getURL = '/api/divlevel/' + divLevel + '/parentdiv/' + parentDivID + '/group-performance'; //child divs of a specific parent div
+    else if (managerID > 0) getURL = '/api/divlevel/' + divLevel + '/parentdiv/' + parentDivID + '/manager/' + managerID + '/group-performance'; //all divs of a level where manager id is...
     $.get(getURL,
         function(data) {
+            //console.log(data);
             var divResults = [], divLabels = [];
             $.each(data, function(key, value) {
                 divResults.push(value['div_result']);
@@ -189,6 +193,7 @@ function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID) {
                     .append(listLink);
                 rankingList.append(listItem);
             });
+            $(window).trigger('resize');
         });
 }
 //function to draw chart on modal canvas (modal show)
@@ -215,14 +220,16 @@ function subDivOnShow(objTrigger, modalWin) {
 //- EMPLOYEE LIST PERFORMANCE -
 //-----------------------------
 //function to show employees performance ranking
-function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen, totEmp) {
+function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen, totEmp, managerID) {
     topTen = topTen || false;
     bottomTen = bottomTen || false;
     totEmp = totEmp || 0;
+    managerID = managerID || 0;
     //Get employees performance data using ajax
     var getURL = "/api/divlevel/" + divLevel + "/div/" + divID + "/emps-performance"; //all employees from a specific divisionspecific parent div
     if (topTen) getURL = "/api/appraisal/emp/topten";
     else if(bottomTen) getURL = "/api/appraisal/emp/bottomten";
+    if (managerID > 0) getURL = "/api/appraisal/staffunder/" + managerID;
     $.get(getURL,
         function(data) {
             //console.log(JSON.stringify(data));
@@ -279,6 +286,7 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
                 rankingList.append(listItem);
                 cnt++;
             });
+            $(window).trigger('resize');
         });
 }
 //function to load employees performance on modal canvas (modal show)
@@ -333,6 +341,22 @@ function loadAvailablePerks(perksWidgetList) {
                 perksWidgetList.append(perkList);
             });
         });
+}
+
+//function to load perk details on modal (modal show)
+function perkDetailsOnShow(objTrigger, modalWin) {
+    var name = objTrigger.data('name');
+    var desc = objTrigger.data('description');
+    var percent = objTrigger.data('req_percent');
+    var perkImg = objTrigger.data('img_url');
+    modalWin.find('#name').val(name);
+    modalWin.find('#description').val(desc);
+    modalWin.find('#req_percent').val(percent);
+    //show perk image if any
+    var imgDiv = modalWin.find('#perk-img');
+    imgDiv.empty();
+    var htmlImg = $("<img>").attr('src', perkImg).attr('class', 'img-responsive img-thumbnail').attr('style', 'max-height: 235px;');
+    imgDiv.html(htmlImg);
 }
 //------------------------------
 //- END AVAILABLE PERKS WIDGET -
