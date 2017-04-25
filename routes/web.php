@@ -244,9 +244,11 @@ Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
 
 #Employees upload
 Route::get('/employee_upload', 'EmployeeUploadController@index');
-Route::post('/employees_upload', 'EmployeeUploadController@store');
+Route::get('/employees_upload', 'EmployeeUploadController@store');
 
-
+#Employee Search
+Route::get('/hr/emp_search', 'EmployeeSearchController@index');
+Route::post('/hr/search', 'EmployeeSearchController@getSearch');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');

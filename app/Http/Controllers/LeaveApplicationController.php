@@ -88,15 +88,34 @@ class LeaveApplicationController extends Controller
        // left join between leaveApplication & HRPerson & LeaveType
        $loggedInEmplID = Auth::user()->person->id;
       //return $loggedInEmplID;
+
        $leaveApplication = DB::table('leave_application')
-		->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager')
-	->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
-        ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id')	
+		      ->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager')
+	       ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
+         ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id')	
         
-          ->where('hr_people.manager_id', $loggedInEmplID)
+         ->where('hr_people.manager_id', $loggedInEmplID)
   //       // ->where('leave_application.status', '<', )
-		->orderBy('leave_application.hr_id')
-		->get();
+		     ->orderBy('leave_application.hr_id')
+		     ->get();
+
+
+        
+
+
+
+         //return $people;
+
+        //   $persons = HRPerson::whereHas('user', function ($query) {
+        //     $query->whereIn('type', [1, 3]);
+        // })
+        //     ->where(function ($query) use ($personName) {
+        //         if (!empty($personName)) {
+        //             $query->where('first_name', 'ILIKE', "%$personName%");
+        //         }
+        //     })
+
+         return $leaveApplication;
       
        //$dept = DB::('civ2')::were('id', $hrDetails->div2)->first();
 
@@ -218,7 +237,7 @@ class LeaveApplicationController extends Controller
            
         $leaveApp = $request->all();
 
-        return $leaveApp;
+        //return $leaveApp;
 
         //Exclude empty fields from query
         foreach ($leaveApp as $key => $value)
@@ -240,6 +259,7 @@ class LeaveApplicationController extends Controller
         
         //$levApp->array(hr_id = $request->input('hr_person_id'));
         $levApp->leave_type_id = $request->input('leave_type');
+        $levApp->hr_id = $request->input('hr_person_id');
         
           // Get employeeId from dropbbox
         $employees = $leaveApp['hr_person_id'];
