@@ -64,7 +64,7 @@
                             </div>
                         </div>
                      
-                           @foreach($division_levels as $division_level)
+                          @foreach($division_levels as $division_level)
                             <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-3 control-label">{{ $division_level->name }}</label>
 
@@ -82,7 +82,7 @@
                                     </div>
                                 </div>
                             </div>
-                              @endforeach
+                              @endforeach 
 
                              <div class="form-group">
                         <label for="action" class="col-sm-3 control-label">Employee Name</label>
@@ -176,24 +176,7 @@ $(function() {
  <script type="text/javascript">
 
 
-        ///Load divisions drop down
-        var parentDDID = '';
-        var loadAllDivs = 1;
-        @foreach($division_levels as $division_level)
-            //Populate drop down on page load
-            var ddID = '{{ 'division_level_' . $division_level->level }}';
-            var postTo = '{!! route('divisionsdropdown') !!}';
-            var selectedOption = '';
-            var divLevel = parseInt('{{ $division_level->level }}');
-            var incInactive = -1;
-            var loadAll = loadAllDivs;
-            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-            parentDDID = ddID;
-            loadAllDivs = -1;
-        @endforeach
-//        });
-       
-        //function to populate the year drop down
+      
         
     </script>
 @endsection

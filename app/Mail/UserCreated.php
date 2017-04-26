@@ -28,7 +28,7 @@ class UserCreated extends Mailable
      */
     public function build()
     {
-        $address = 'smalto@afrixcel.co.za';
+        $address = 'support@afrixcel.co.za';
         $name = 'Afrixcel Support';
         $subject = 'Afrixcel Test Email';
 

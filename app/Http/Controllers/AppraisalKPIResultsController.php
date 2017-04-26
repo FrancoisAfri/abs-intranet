@@ -180,7 +180,7 @@ class AppraisalKPIResultsController extends Controller
         ]);
 		$uploadTypes = [1 => "General", 2 => 'Clock In', 3 => 'Query Report '];
 		$templateData = $request->all();
-
+		$queryCodeNew = 0;
 		unset($templateData['_token']);
 		$appraisalMonth = trim($templateData['date_uploaded']);
 		$uploadType = $request->input('upload_type');
@@ -198,6 +198,7 @@ class AppraisalKPIResultsController extends Controller
 			{
 				foreach ($data->toArray() as $key => $value) 
 				{
+					//return $value;
 					if(!empty($value))
 					{
 						foreach ($value as $val) 
@@ -237,10 +238,11 @@ class AppraisalKPIResultsController extends Controller
 									}
 									elseif ($uploadType == 3)
 									{
+										
+										if ($queryCodeNew == $value['query_code']) continue;
 										$value['query_date'] = !empty($value['query_date']) ? strtotime($value['query_date']) : 0;
 										$value['departure_date'] = !empty($value['departure_date']) ? strtotime($value['departure_date']) : 0;
 										$value['invoice_date'] = !empty($value['invoice_date']) ? strtotime($value['invoice_date']) : 0;
-										
 										$query = new AppraisalQuery_report();
 										$query->kip_id = $kip->id;
 										$query->query_code = $value['query_code'];
@@ -262,7 +264,8 @@ class AppraisalKPIResultsController extends Controller
 										$query->comment = $value['query_comments'];
 										$query->date_uploaded = $templateData['date_uploaded'];
 										$query->save();	
-										$insert = 1;									
+										$insert = 1;	
+										$queryCodeNew = $value['query_code'];										
 									}
 								}
 							}

@@ -34,7 +34,8 @@ Route::post('users/search', 'UsersController@getSearch');
 Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
-Route::get('users/setup', 'UsersController@setup');
+Route::get('users/modules', 'UsersController@modules');
+Route::get('users/ ', 'UsersController@setup');
 Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
@@ -211,9 +212,7 @@ Route::get('appraisal/load/result/{emp}/{month}', 'AppraisalKPIResultsController
 Route::post('appraisal/emp/appraisal/save', 'AppraisalKPIResultsController@storeEmpAppraisals');
 
 Route::post('appraisal/load_emp_appraisals', 'AppraisalKPIResultsController@index');
-//<<<<<<< HEAD
 
-//=======
 Route::post('appraisal/upload_appraisals', 'AppraisalKPIResultsController@uploadAppraisal');
 Route::post('appraisal/kpi_upload', 'AppraisalKPIResultsController@uploadkpi');
 // run this for excel composer require maatwebsite/excel
@@ -225,6 +224,10 @@ Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasVi
 Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
 Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
+
+//Appraisal reports
+Route::get('appraisal/reports', 'AppraisalReportsController@index');
+Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 
 #Document setup module
 Route::get('/hr/document', 'DocumentTypeController@viewDoc');
@@ -244,9 +247,11 @@ Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
 
 #Employees upload
 Route::get('/employee_upload', 'EmployeeUploadController@index');
-Route::post('/employees_upload', 'EmployeeUploadController@store');
+Route::get('/employees_upload', 'EmployeeUploadController@store');
 
-
+#Employee Search
+Route::get('/hr/emp_search', 'EmployeeSearchController@index');
+Route::post('/hr/search', 'EmployeeSearchController@getSearch');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');

@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Storage;
 
 class AppraisalGraphsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,9 +38,9 @@ class AppraisalGraphsController extends Controller
     }
 
     //returns a group's avg performance from jan to last month or a list of emp from that group and their avg performances
-    public static function empGroupPerformance($divID, $divLvl, $returnEmpList = false, $topTen = false, $bottomTen = false, $empGroup = []) {
-        if ($returnEmpList && ($topTen || $bottomTen)) $employees = HRPerson::get()->load('jobTitle');
-        elseif (count($empGroup) > 0) $employees = $empGroup;
+    public static function empGroupPerformance($divID, $divLvl, $returnEmpList = false, $topTen = false, $bottomTen = false, $empGroup = [], $rankLimit = 10) {
+        //if ($returnEmpList && ($topTen || $bottomTen)) $employees = HRPerson::get()->load('jobTitle');
+        if (count($empGroup) > 0) $employees = $empGroup;
         else {
             $employees = HRPerson::where(function ($query) use($divID, $divLvl) {
                 if ($divLvl == 5) $query->where('division_level_5', $divID);
@@ -76,11 +80,11 @@ class AppraisalGraphsController extends Controller
         if ($returnEmpList) {
             if ($topTen) {
                 usort($empAvgs, function($a, $b){return $a->emp_result - $b->emp_result;});
-                $empAvgs = array_slice($empAvgs, 0, 10);
+                $empAvgs = array_slice($empAvgs, 0, $rankLimit);
             }
             elseif ($bottomTen) {
                 usort($empAvgs, function($a, $b){return $b->emp_result - $a->emp_result;});
-                $empAvgs = array_slice($empAvgs, 0, 10);
+                $empAvgs = array_slice($empAvgs, 0, $rankLimit);
             }
             return $empAvgs;
         }

@@ -52,7 +52,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Create User Page Accessed', "Accessed By User", 0);
         return view('security.add_user')->with($data);
     }
-	public function setup() 
+	public function modules() 
 	{
         $modules = DB::table('security_modules')->orderBy('name', 'asc')->get();
 		$data['page_title'] = "Security Setup";
@@ -411,6 +411,8 @@ class UsersController extends Controller
             ->orderBy('first_name')
             ->limit(100)
             ->get();
+
+            
         $data['page_title'] = "Users";
         $data['page_description'] = "List of users found";
         $data['persons'] = $persons;
