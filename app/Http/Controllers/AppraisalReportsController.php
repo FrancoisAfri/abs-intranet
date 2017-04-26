@@ -147,21 +147,30 @@ class AppraisalReportsController extends Controller
             return view('appraisals.appraisal_report_top_bottom')->with($data);
         }
         elseif ($reportType == 3) { //return divisions report
-            if ($request->input('division_level_1') && $request->input('division_level_1') > 0) {
-
-            }
-            elseif ($request->input('division_level_2') && $request->input('division_level_2') > 0) {
-
+            $parentDivLvl = 5;
+            $parentDivisionID = 0;
+            //if ($request->input('division_level_1') && $request->input('division_level_1') > 0) {
+            //}
+            if ($request->input('division_level_2') && $request->input('division_level_2') > 0) {
+                $parentDivLvl = 2;
+                $parentDivisionID = $request->input('division_level_2');
             }
             elseif ($request->input('division_level_3') && $request->input('division_level_3') > 0) {
-
+                $parentDivLvl = 3;
+                $parentDivisionID = $request->input('division_level_3');
             }
             elseif ($request->input('division_level_4') && $request->input('division_level_4') > 0) {
-
+                $parentDivLvl = 4;
+                $parentDivisionID = $request->input('division_level_4');
             }
             elseif ($request->input('division_level_5') && $request->input('division_level_5') > 0) {
-
+                $parentDivLvl = 5;
+                $parentDivisionID = $request->input('division_level_5');
             }
+            $parentDivLvl = DivisionLevel::find($parentDivLvl);
+            $parentDivLvl = DivisionLevel::find(2);
+            //return 'lvl: ' . $parentDivLvl . ' id: ' . $parentDivisionID;
+            return AppraisalGraphsController::parentDivisionPerformance($parentDivLvl, $parentDivisionID);
         }
         //return $request;
     }
