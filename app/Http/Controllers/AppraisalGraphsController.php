@@ -126,6 +126,39 @@ class AppraisalGraphsController extends Controller
         return $divAverages;
     }
 
+    //returns a list of divisions and their avg performances (static function)
+    public static function parentDivisionPerformance(DivisionLevel $divLvl, $parentDivisionID = 0, $managerID = 0) {
+        //$divisions = $divLvl->divisionLevelGroup->sortBy('name');
+        $divLvl->load(['divisionLevelGroup' => function ($query) use($parentDivisionID, $managerID) {
+            if ($parentDivisionID > 0) $query->where('parent_id', $parentDivisionID);
+            if ($managerID > 0) $query->where('manager_id', $managerID);
+            $query->orderBy('name', 'asc');
+        }]);
+        $divisions = $divLvl->divisionLevelGroup;
+        $divAverages = [];
+        return $divisions;
+        $parenLevel = $divLvl->level;
+        $childLevel = $parenLevel - 1;
+        $childLevelDetails = DivisionLevel::where('level', $childLevel)->get();
+        $isChildLevelActive = ($childLevel > 0) ? (boolean) $childLevelDetails->first()->active : false;
+        $childLevelName = ($childLevel > 0) ? $childLevelDetails->first()->name : '';
+        $childLevelPluralName = ($childLevel > 0) ? $childLevelDetails->first()->plural_name : '';
+        foreach ($divisions as $division){
+            $objResult = (object) [];
+            $objResult->div_id = $division->id;
+            $objResult->div_name = $division->name;
+            $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
+            $objResult->div_level = $parenLevel;
+            $objResult->is_child_level_active = $isChildLevelActive;
+            $objResult->child_level = $childLevel;
+            $objResult->child_level_name = $childLevelName;
+            $objResult->child_level_plural_name = $childLevelPluralName;
+            $divAverages[] = $objResult;
+        }
+
+        return $divAverages;
+    }
+
     //returns a list of emp and their avg performances
     public function empListPerformance($divLvl, $divID) {
         return AppraisalGraphsController::empGroupPerformance($divID, $divLvl, true);

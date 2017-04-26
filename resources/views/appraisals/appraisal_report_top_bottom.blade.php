@@ -33,17 +33,15 @@
                                             </tr>
                                         @endforeach
                                     </table>
-                                    <div class="row no-print">
-                                        <div class="col-xs-12">
-                                            <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i>Back</button>
-                                            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
-                                        </div>
-                                    </div>
-                                    <!-- End amortization /table -->
+
                                 </div>
                             </div>
                         </div>
                         <!-- /. End Collapsible section containing the amortization schedule -->
+                    </div>
+                    <div class="box-footer no-print">
+                        <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
                     </div>
                 </form>
             </div>
