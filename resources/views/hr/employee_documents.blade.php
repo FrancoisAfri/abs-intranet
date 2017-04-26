@@ -13,67 +13,125 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="hr/emp_document">
+                <form class="form-horizontal" method="POST" action="/hr/emp_document">
                     {{ csrf_field() }}
 
                     <div class="box-body">
-                        <div class="form-group">
-                            <label for="first_name" class="col-sm-3 control-label">First Name</label>
+                     <div class="form-group">
+                        <label for="action" class="col-sm-3 control-label">Category</label>
+
+                         <div class="col-sm-9">
+                           <div class="input-group">
+                                <div class="input-group-addon">
+                                   <i class="fa fa-user"></i>
+                                    </div>
+                             <select id="category_id" name="category_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Category ***</option>
+                                    @foreach($category as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                            </select>
+                                </div>
+                             </div>
+                         </div>
+                     <div class="form-group">
+                        <label for="action" class="col-sm-3 control-label">Document Type</label>
+
+                         <div class="col-sm-9">
+                           <div class="input-group">
+                                <div class="input-group-addon">
+                                   <i class="fa fa-user"></i>
+                                    </div>
+                             <select id="category_id" name="category_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Document Type ***</option>
+                                    @foreach($document as $document)
+                                    <option value="{{ $document->id }}">{{ $document->name }}</option>
+                                    @endforeach
+                            </select>
+                                </div>
+                             </div>
+                         </div>  
+                                <div class="form-group">
+                            <label for="doc_description" class="col-sm-3 control-label">Document Description</label>
 
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                                        <i class="fa fa-black-tie"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="First Name" required>
+                                    <input type="text" class="form-control" id="doc_description" name="doc_description" value="{{ old('doc_description') }}"  placeholder="Driver's licence, ID, etc..." data-mask>
                                 </div>
                             </div>
                         </div>
+                     
+                          @foreach($division_levels as $division_level)
+                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-3 control-label">{{ $division_level->name }}</label>
+
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                         <select id="division_level_id" name="division_level_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a {{ $division_level->name }} ***</option>
+                                    @foreach($division as $division)
+                                    <option value="{{ $division->id }}">{{ $division->name }}</option>
+                                    @endforeach
+                            </select>
+                                    </div>
+                                </div>
+                            </div>
+                              @endforeach 
+
+                             <div class="form-group">
+                        <label for="action" class="col-sm-3 control-label">Employee Name</label>
+
+                         <div class="col-sm-9">
+                           <div class="input-group">
+                                <div class="input-group-addon">
+                                   <i class="fa fa-user"></i>
+                                    </div>
+                             <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;" >
+                                <option selected="selected" value="" >*** Select a Employee ***</option>
+                                    @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    @endforeach
+                            </select>
+                                </div>
+                             </div>
+                         </div>
+
+                 
+
+                       
+                        
+                  
                         <div class="form-group">
-                            <label for="surname" class="col-sm-3 control-label">Surname</label>
+                            <label for="expiry_date" class="col-sm-3 control-label">Expiry Date</label>
 
                             <div class="col-sm-9">
-                                <div class="input-group">
+                                <div class="input-group date">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                                        <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ old('surname') }}" placeholder="Surname" required>
+ 
+                                    <input type="text" class="form-control" id="expiry_date" name="expiry_date" value="{{ old('expiry_date') }}"  placeholder="Expiry Date" data-mask>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="cell_number" class="col-sm-3 control-label">Cell Number</label>
+
+
+
+                               <div class="form-group">
+                        <label for="doc" class="col-sm-3 control-label">Document</label>
 
                             <div class="col-sm-9">
-                                <div class="input-group">
+                               <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-phone"></i>
+                                        <i class="fa fa-upload"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="cell_number" name="cell_number" value="{{ old('cell_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-sm-3 control-label">Licence Expiry</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-envelope"></i>
-                                    </div>
-                                    <input type="email" class="form-control" id="expiry" name="expiry" value="" placeholder="Email" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-sm-3 control-label">Password</label>
-
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-lock"></i>
-                                    </div>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                    <input type="file" id="doc" name="doc" class="file file-loading" data-allowed-file-extensions='["doc", "docx", "pdf"]' data-show-upload="false">
                                 </div>
                             </div>
                         </div>
@@ -93,18 +151,32 @@
 @endsection
 
 @section('page_script')
+
     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <script src="./bower_components/jquery-calendar/dist/js/jquery-calendar.min.js"></script>
+<script>
+$(function() {
+  $("#calendar").calendar();
+});
+</script> 
 
     <script type="text/javascript">
         //Cancel button click event
         document.getElementById("cancel").onclick = function () {
             location.href = "/users";
+
         };
 
         //Phone mask
         $("[data-mask]").inputmask();
+    </script>
+ <script type="text/javascript">
+
+
+      
+        
     </script>
 @endsection

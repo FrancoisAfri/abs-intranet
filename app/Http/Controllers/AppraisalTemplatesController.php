@@ -118,6 +118,9 @@ class AppraisalTemplatesController extends Controller
 			->get();
 			$kpaCategories = appraisalCategories::where('status', 1)->orderBy('name', 'desc')->get();
 			$kpas = appraisalKpas::where('status', 1)->orderBy('name', 'desc')->get();
+			$existingKpis = appraisalsKpis::whereNull('existing_kpi_id')->orWhere('existing_kpi_id', '<', 1)->orderBy('indicator')->get();
+			//return $existingKpis;
+			
 			$data['page_title'] = "KPIs Informations";
 			$data['page_description'] = "KPIs Informations";
 			$data['breadcrumb'] = [
@@ -129,6 +132,7 @@ class AppraisalTemplatesController extends Controller
 			$data['kpas'] = $kpas; //
 			$data['KpiTypeArray'] = $KpiTypeArray; //
 			$data['KpiUploadTypeArray'] = $KpiUploadTypeArray; //
+			$data['existingKpis'] = $existingKpis; //
 			$data['active_mod'] = 'Performance Appraisal';
 			$data['active_rib'] = 'Templates';
 			//return $data;
@@ -147,7 +151,6 @@ class AppraisalTemplatesController extends Controller
 	{
 		if ($kpi->status == 1) $stastus = 0;
 		else $stastus = 1;
-		
 		$kpi->status = $stastus;	
 		$kpi->update();
 		AuditReportsController::store('Performance Appraisal', "KPI Status Changed: $stastus", "Edited by User", 0);
@@ -158,28 +161,33 @@ class AppraisalTemplatesController extends Controller
     public function kpiSave(Request $request)
 	{
 		$this->validate($request, [       
-            'indicator' => 'required',       
+            //'indicator' => 'required',       
             'kpa_id' => 'bail|required|integer|min:0',       
             'category_id' => 'bail|required|integer|min:0',       
-            'template_id' => 'bail|required|integer|min:0',       
-            'kpi_type' => 'bail|required|integer|min:1',       
+            'template_id' => 'bail|required|integer|min:1',       
+            //'kpi_type' => 'bail|required|integer|min:1',       
             'is_upload' => 'bail|required|integer|min:0',       
         ]);
 		$kpiData = $request->all();
 		unset($kpiData['_token']);
+		if(!empty($kpiData['existing_kpi_id']))
+			$kpis = appraisalsKpis::where('id', $kpiData['existing_kpi_id'])->first();
+		
 		$kpi = new appraisalsKpis();
 		$kpi->status = 1;
-		$kpi->measurement = $kpiData['measurement'];
-		$kpi->weight = $kpiData['weight'];
-		$kpi->source_of_evidence = $kpiData['source_of_evidence'];
-		$kpi->indicator = $kpiData['indicator'];
-		$kpi->category_id = $kpiData['category_id'];
-		$kpi->kpa_id = $kpiData['kpa_id'];
-		$kpi->kpi_type = $kpiData['kpi_type'];
-		$kpi->is_upload = $kpiData['is_upload'];
+		$kpi->measurement = !empty($kpiData['existing_kpi_id']) ? $kpis->measurement : $kpiData['measurement'];
+		$kpi->weight = !empty($kpiData['existing_kpi_id']) ? $kpis->weight : $kpiData['weight'];
+		$kpi->existing_kpi_id = !empty($kpiData['existing_kpi_id']) ? $kpiData['existing_kpi_id'] : 0;
+		$kpi->source_of_evidence = !empty($kpiData['existing_kpi_id']) ? $kpis['source_of_evidence'] : $kpiData['source_of_evidence'] ;
+		$kpi->indicator = !empty($kpiData['existing_kpi_id']) ? $kpis['indicator'] : $kpiData['indicator'] ;
+		$kpi->category_id = !empty($kpiData['existing_kpi_id']) ? $kpis['category_id'] : $kpiData['category_id'];
+		$kpi->kpa_id = !empty($kpiData['existing_kpi_id']) ? $kpis['kpa_id'] : $kpiData['kpa_id'];
+		$kpi->kpi_type = !empty($kpiData['existing_kpi_id']) ? $kpis['kpi_type'] : $kpiData['kpi_type'];
+		$kpi->is_upload = !empty($kpiData['existing_kpi_id']) ? $kpis['is_upload'] : $kpiData['is_upload'];
 		$kpi->template_id = $kpiData['template_id'];
-		$kpi->upload_type = (!empty($kpiData['upload_type']) && $kpiData['is_upload'] == 1) ? $kpiData['upload_type'] : null;
-		$newkpi = $kpiData['indicator'];
+		$kpi->upload_type = !empty($kpiData['existing_kpi_id']) ? $kpis['upload_type'] : $kpiData['upload_type'];
+
+		$newkpi = !empty($kpiData['existing_kpi_id']) ? $kpis['indicator'] : $kpiData['indicator'];
         $kpi->save();
 		AuditReportsController::store('Performance Appraisal', 'KPI Added', "KPI Details: $kpiData[indicator]", 0);
 		return response()->json(['new_kp8' => $newkpi], 200);

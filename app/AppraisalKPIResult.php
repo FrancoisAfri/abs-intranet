@@ -107,6 +107,7 @@ class AppraisalKPIResult extends Model
         $kpaResults = [];
         $kpaResult = 0;
         foreach ($empKPIs as $groupKey => $kpaGroup) {
+            if ($kpaID != null && $groupKey != $kpaID) continue;
             $kpiResults = [];
             foreach ($kpaGroup as $kpi) {
                 if ($kpi->is_upload === 1 && $kpi->upload_type === 2) { //uploaded attendance

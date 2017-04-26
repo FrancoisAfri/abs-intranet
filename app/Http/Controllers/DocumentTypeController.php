@@ -12,6 +12,8 @@ use App\doc_type_category;
 
 use App\doc_type;
 
+use App\job_categories;
+
 class DocumentTypeController extends Controller
 {
       //
@@ -21,6 +23,7 @@ class DocumentTypeController extends Controller
     }
     public function viewDoc() {
     	$doc_type = DB::table('doc_type')->orderBy('name', 'description')->get();
+        //$docs = doc_type::where('status', 1)->get();
     	$doc_type_category = DB::table('doc_type_category')->orderBy('name', 'description')->get();
         $data['page_title'] = "List Categories";
         $data['page_description'] = "Employee records";
@@ -28,6 +31,7 @@ class DocumentTypeController extends Controller
             ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
+       
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'document type';
         $data['doc_type'] = $doc_type;
@@ -49,7 +53,7 @@ class DocumentTypeController extends Controller
         $doc_type = new doc_type($docData);
       	$doc_type->name = $request->input('name');
         $doc_type->description = $request->input('description');
-        $doc_type->update();
+        $doc_type->save();
         AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
         return response()->json();
 
@@ -86,6 +90,7 @@ class DocumentTypeController extends Controller
             ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
+        
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'document type';
         $data['doc_type'] = $doc_type;
@@ -107,7 +112,7 @@ class DocumentTypeController extends Controller
 		        $doc_type_category = new doc_type_category($docData);
 		      	$doc_type_category->name = $request->input('name');
 		        $doc_type_category->description = $request->input('description');
-		        $doc_type_category->update();
+		        $doc_type_category->save();
 		        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
 		        return response()->json();
 
@@ -130,8 +135,8 @@ class DocumentTypeController extends Controller
 		            'description' => 'bail|required|min:2',
 		        ]);
 		        //save the changes
-		        $docData=$request->all();
-		        $doc_type_category->update($docData);
+		        $catData=$request->all();
+		        $doc_type_category->update($catData);
 		        AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
 		     }
 

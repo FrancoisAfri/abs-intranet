@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\DivisionLevel;
+use App\DivisionLevelFive;
+use App\DivisionLevelFour;
+use App\DivisionLevelOne;
+use App\DivisionLevelThree;
+use App\DivisionLevelTwo;
+use App\HRPerson;
+use App\module_access;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -27,10 +35,64 @@ class DashboardController extends Controller
         $user = Auth::user()->load('person');
 		
         if ($user->type === 1 || $user->type === 3) {
+            $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
+            $totNumEmp = HRPerson::count();
+            
+            //check if user can view the company performance widget (must be superuser or div head or have people reporting to him/her)
+            $appraisalModAccess = module_access::where('module_id', 6)->where('user_id', $user->id)->get()->first()->access_level;
+            $numManagedDivs5 = DivisionLevelFive::where('manager_id', $user->person->id)->count();
+            $numManagedDivs4 = DivisionLevelFour::where('manager_id', $user->person->id)->count();
+            $numManagedDivs3 = DivisionLevelThree::where('manager_id', $user->person->id)->count();
+            $numManagedDivs2 = DivisionLevelTwo::where('manager_id', $user->person->id)->count();
+            $numManagedDivs1 = DivisionLevelOne::where('manager_id', $user->person->id)->count();
+            $numSupervisedEmp = HRPerson::where('manager_id', $user->person->id)->count();
+            $isSuperuser = ($appraisalModAccess == 5) ? true : false;
+            //$managedDivsIDs = [];
+            if ($numManagedDivs5 > 0) {
+                $isDivHead = true;
+                //foreach ($managedDivs5 as $divLevel) $managedDivsIDs[] = $divLevel->id;
+                $managedDivsLevel = DivisionLevel::where('level', 5)->orderBy('level', 'desc')->limit(1)->first();
+            }
+            elseif ($numManagedDivs4 > 0) {
+                $isDivHead = true;
+                //foreach ($managedDivs4 as $divLevel) $managedDivsIDs[] = $divLevel->id;
+                $managedDivsLevel = DivisionLevel::where('level', 4)->orderBy('level', 'desc')->limit(1)->first();
+            }
+            elseif ($numManagedDivs3 > 0) {
+                $isDivHead = true;
+                //foreach ($managedDivs3 as $divLevel) $managedDivsIDs[] = $divLevel->id;
+                $managedDivsLevel = DivisionLevel::where('level', 3)->orderBy('level', 'desc')->limit(1)->first();
+            }
+            elseif ($numManagedDivs2 > 0) {
+                $isDivHead = true;
+                //foreach ($managedDivs2 as $divLevel) $managedDivsIDs[] = $divLevel->id;
+                $managedDivsLevel = DivisionLevel::where('level', 2)->orderBy('level', 'desc')->limit(1)->first();
+            }
+            elseif ($numManagedDivs1 > 0) {
+                $isDivHead = true;
+                //foreach ($managedDivs1 as $divLevel) $managedDivsIDs[] = $divLevel->id;
+                $managedDivsLevel = DivisionLevel::where('level', 1)->orderBy('level', 'desc')->limit(1)->first();
+            }
+            else {
+                $isDivHead = false;
+                $managedDivsLevel = (object) [];
+                $managedDivsLevel->level = 0;
+            }
+            $isSupervisor = ($numSupervisedEmp > 0) ? true : false;
+            $canViewCPWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
+
             $data['user'] = $user;
+            $data['totNumEmp'] = $totNumEmp;
+            $data['topGroupLvl'] = $topGroupLvl;
+            $data['isSuperuser'] = $isSuperuser;
+            $data['isDivHead'] = $isDivHead;
+            //$data['managedDivsIDs'] = json_encode($managedDivsIDs);
+            $data['managedDivsLevel'] = $managedDivsLevel;
+            $data['isSupervisor'] = $isSupervisor;
+            $data['canViewCPWidget'] = $canViewCPWidget;
             $data['page_title'] = "Dashboard";
 			$data['page_description'] = "This is your main Dashboard";
-
+            //return $data;
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         }
         else {

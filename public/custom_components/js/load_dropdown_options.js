@@ -110,7 +110,7 @@ function loadHRPeopleOptions(ddID, selectedOption, parentDDID, incInactive, load
                 var ddOption = $("<option></option>")
                     .attr("value",value)
                     .text(key);
-                if (selectedOption == value) ddOption.attr("selected", "selected")
+                if (selectedOption == value) ddOption.attr("selected", "selected");
                 dropdown
                     .append(ddOption);
             });
@@ -138,7 +138,7 @@ function loadkpaOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, 
                 var ddOption = $("<option></option>")
                     .attr("value",value)
                     .text(key);
-                if (selectedOption == value) ddOption.attr("selected", "selected")
+                if (selectedOption == value) ddOption.attr("selected", "selected");
                 dropdown
                     .append(ddOption);
             });

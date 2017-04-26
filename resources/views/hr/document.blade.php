@@ -27,7 +27,7 @@
                                <tr>
                                     <td style=" text-align: center;" nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                            <a href="/hr/category" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-eye"></i> Category</a>
+                                            <a href="/hr/category" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-eye"></i> Document Type</a>
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }}</td>
@@ -125,7 +125,7 @@
             //Post module form to server using ajax (ADD)
             $('#save_category').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/hr/document/add/' +  doc_typeID ;
+                var strUrl = '/hr/document/add/' +  'doc_type'; 
                 var modalID = 'add-category-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),

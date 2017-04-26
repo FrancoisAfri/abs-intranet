@@ -1,16 +1,7 @@
-//--------------------------------------
-//- MONTHLY EMPLOYEE PERFORMANCE CHART -
-//--------------------------------------
-
-// Get context with jQuery - using jQuery's .get() method.
-var empPerfChartCanvas = $("#empMonthlyPerformanceChart").get(0).getContext("2d");
-// This will get the first returned node in the jQuery collection.
-var empPerfChart = new Chart(empPerfChartCanvas);
-
 //function to return the chart data
-function perfChartData(monthlyResult, months) {
+function perfChartData(graphData, labels) {
     var chartData = {
-        labels: months,
+        labels: labels,
         datasets: [
             {
                 label: "Performance",
@@ -20,13 +11,16 @@ function perfChartData(monthlyResult, months) {
                 pointStrokeColor: "rgba(60,141,188,1)",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(60,141,188,1)",
-                data: monthlyResult
+                data: graphData
             }
         ]
     };
     return chartData;
 }
-
+//--------------------------------------
+//- MONTHLY EMPLOYEE PERFORMANCE CHART -
+//--------------------------------------
+//chart options
 var chartOptions = {
     //Boolean - If we should show the scale at all
     showScale: true,
@@ -74,18 +68,296 @@ var chartOptions = {
     //multiTooltipTemplate: function(value){return  'R ' + value.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");}
     multiTooltipTemplate: function(value){return value.value.toString() + '%';}
 };
+//function to draw the chart on the canvas
+function loadEmpMonthlyPerformance(chartCanvas, empID) {
+    // Get context with jQuery - using jQuery's .get() method.
+    var empPerfChartCanvas = chartCanvas.get(0).getContext("2d");
+    // This will get the first returned node in the jQuery collection.
+    var empPerfChart = new Chart(empPerfChartCanvas);
+    //char labels (months)
+    var monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    //get chart data with ajax
+    $.get("/api/emp/" + empID + "/monthly-performance",
+        function(data) {
+            var chartData = perfChartData(data, monthLabels);
 
-//Get data with ajax
-/*$.get("/api/emp-monthly-perf-graph-data",
-    function(data) {
-        var chartData = perfChartData([80, 45, 65, 0],
-            [50, 60, 70, 80],
-            ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
-
-        //Create the line chart
-        empPerfChart.Line(chartData, chartOptions);
-    });*/
+            //Create the bar chart
+            empPerfChart.Bar(chartData, chartOptions);
+        });
+}
 
 //------------------------------------------
 //- END MONTHLY EMPLOYEE PERFORMANCE CHART -
 //------------------------------------------
+
+
+//-------------------------------
+//- DIVISIONS PERFORMANCE CHART -
+//-------------------------------
+//Chart options
+var divChartOptions = {
+    showScale: true,
+    scaleShowGridLines: false,
+    scaleGridLineColor: "rgba(0,0,0,.05)",
+    scaleGridLineWidth: 1,
+    scaleShowHorizontalLines: true,
+    scaleShowVerticalLines: true,
+    bezierCurve: true,
+    bezierCurveTension: 0.3,
+    pointDot: true,
+    pointDotRadius: 4,
+    pointDotStrokeWidth: 1,
+    pointHitDetectionRadius: 20,
+    datasetStroke: true,
+    datasetStrokeWidth: 2,
+    datasetFill: true,
+    //String - A legend template
+    legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%=datasets[i].label%></li><%}%></ul>",
+    maintainAspectRatio: true,
+    responsive: true,
+    //Format labels on Y axis
+    scaleLabel: function(label){return  label.value.toString() + '%';},
+    // String - Template string for single tooltips
+    //tooltipTemplate: "<%if (label){%><%=label %>: <%}%><%= value + ' %' %>",
+    // String - Template string for multiple tooltips
+    multiTooltipTemplate: function(value){return value.value.toString() + '%';}
+};
+
+//function to draw the chart on the canvas and show rankings
+function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, managerID) {
+    parentDivID = parentDivID || 0;
+    managerID = managerID || 0;
+    //console.log(chartCanvas, rankingList, divLevel, parentDivID, managerID);
+    // Get context with jQuery - using jQuery's .get() method.
+    var divPerfChartCanvas = chartCanvas.get(0).getContext("2d");
+    // This will get the first returned node in the jQuery collection.
+    var divPerfChart = new Chart(divPerfChartCanvas);
+    
+    //Get chart data using ajax
+    var getURL = "/api/divlevel/" + divLevel + "/group-performance"; //all divs of a level
+    if (parentDivID > 0) getURL = '/api/divlevel/' + divLevel + '/parentdiv/' + parentDivID + '/group-performance'; //child divs of a specific parent div
+    else if (managerID > 0) getURL = '/api/divlevel/' + divLevel + '/parentdiv/' + parentDivID + '/manager/' + managerID + '/group-performance'; //all divs of a level where manager id is...
+    $.get(getURL,
+        function(data) {
+            //console.log(data);
+            var divResults = [], divLabels = [];
+            $.each(data, function(key, value) {
+                divResults.push(value['div_result']);
+                divLabels.push(value['div_name']);
+            });
+            var chartData = perfChartData(divResults, divLabels);
+
+            //Create the bar chart
+            divPerfChart.Bar(chartData, divChartOptions);
+
+            //sort the data by performance
+            var sortedData = data.sort(function(a, b){return a['div_result']-b['div_result']});
+
+            //Load ranking
+            rankingList.empty();
+            $.each(sortedData, function(key, value) {
+                var divID = value['div_id'],
+                    divName = value['div_name'],
+                    divResult = value['div_result'],
+                    divLevel = value['div_level'],
+                    isChildLevelActive = value['is_child_level_active'],
+                    childLevel = value['child_level'],
+                    childName = value['child_level_name'],
+                    childPluralName = value['child_level_plural_name'],
+                    resultColor = '';
+                if (divResult < 50) resultColor = 'red';
+                else if (divResult >= 50 && divResult < 60) resultColor = 'yellow';
+                else if (divResult > 60) resultColor = 'blue';
+                var divNameSpan = $("<span class='progress-text'></span>").html(divName);
+                var divResultSpan = $("<span class='progress-number'></span>").html(divResult + "%").addClass("text-" + resultColor); //<i class='fa fa-angle-down'></i>
+                var progBar = $("<div class='progress-bar'></div>").attr("style", "width: " + divResult + "%").addClass("progress-bar-" + resultColor);
+                var progBarDiv  = $("<div class='progress xs'></div>").css("margin-bottom", "5px").append(progBar);
+                var progressGroup  = $("<div class='progress-group'></div>")
+                    .append(divNameSpan)
+                    .append(divResultSpan)
+                    .append(progBarDiv);
+                var childModalID = 'emp-list-performance-modal';
+                if (isChildLevelActive) childModalID = 'sub-division-performance-modal-' + childLevel;
+                var listLink = $("<a href='#'></a>")
+                    .attr('data-toggle', 'modal')
+                    .attr('data-target', '#' + childModalID)
+                    .attr('data-division_id', divID)
+                    .attr('data-division_name', divName)
+                    .attr('data-division_level', divLevel)
+                    .attr('data-is_child_level_active', isChildLevelActive)
+                    .attr('data-child_level', childLevel)
+                    //.attr('data-child_level_name', childName)
+                    .attr('data-child_level_plural_name', childPluralName)
+                    .append(progressGroup);
+                var listItem = $("<li></li>")
+                    .append(listLink);
+                rankingList.append(listItem);
+            });
+            $(window).trigger('resize');
+        });
+}
+//function to draw chart on modal canvas (modal show)
+function subDivOnShow(objTrigger, modalWin) {
+    var divID = objTrigger.data('division_id');
+    var divName = objTrigger.data('division_name');
+    var isChildLevelActive = objTrigger.data('is_child_level_active');
+    var childLevel = objTrigger.data('child_level');
+    var childLevelPluralName = objTrigger.data('child_level_plural_name');
+    modalWin.find('#sud-division-modal-title-' + childLevel).html(divName + ' Performance');
+    if (isChildLevelActive) {
+        var rankingList = modalWin.find('#sub-div-ranking-list-' + childLevel);
+        var divChartCanvas = modalWin.find('#subDivisionsPerformanceChart' + childLevel);
+        modalWin.find('#sub-division-chart-title-' + childLevel).html(childLevelPluralName + ' Performance For ' + new Date().getFullYear());
+        loadDivPerformance(divChartCanvas, rankingList, childLevel, divID);
+    }
+}
+//-----------------------------------
+//- END DIVISIONS PERFORMANCE CHART -
+//-----------------------------------
+
+
+//-----------------------------
+//- EMPLOYEE LIST PERFORMANCE -
+//-----------------------------
+//function to show employees performance ranking
+function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen, totEmp, managerID) {
+    topTen = topTen || false;
+    bottomTen = bottomTen || false;
+    totEmp = totEmp || 0;
+    managerID = managerID || 0;
+    //Get employees performance data using ajax
+    var getURL = "/api/divlevel/" + divLevel + "/div/" + divID + "/emps-performance"; //all employees from a specific divisionspecific parent div
+    if (topTen) getURL = "/api/appraisal/emp/topten";
+    else if(bottomTen) getURL = "/api/appraisal/emp/bottomten";
+    if (managerID > 0) getURL = "/api/appraisal/staffunder/" + managerID;
+    $.get(getURL,
+        function(data) {
+            //console.log(JSON.stringify(data));
+            //sort the data by performance
+            var sortedData = data.sort(function(a, b){return a['emp_result']-b['emp_result']});
+
+            //Load ranking
+            rankingList.empty();
+            var cnt = 1;
+            if (totEmp > 10) cnt = totEmp - 9;
+            $.each(sortedData, function(key, value) {
+                var empID = value['emp_id'],
+                    empFullName = value['emp_full_name'],
+                    empEmail = value['emp_email'],
+                    empJobTitle = value['emp_job_title'],
+                    empProfilePic = value['emp_profile_pic'],
+                    empResult = value['emp_result'],
+                    resultColor = '';
+                if (empResult < 50) resultColor = 'red';
+                else if (empResult >= 50 && empResult < 60) resultColor = 'yellow';
+                else if (empResult > 60) resultColor = 'blue';
+                var profilePicImg = $("<img>")
+                    .attr('src', empProfilePic)
+                    .attr('alt', 'Profile Picture');
+                var productImgDiv = $("<div class='product-img'></div>").append(profilePicImg);
+                var prodTitleSpan = $("<span class='product-title text-blue'></span>").html(empFullName);
+                var prodLabelSpan = $('<span class="label label-default pull-right"></span>').html('<i class="fa fa-hashtag"></i> ' + cnt);
+                var prodDescHTML = '';
+                if (empEmail != '') prodDescHTML += '<i class="fa fa-envelope-o"></i> ' + empEmail;
+                if (empJobTitle != '') prodDescHTML += ' &nbsp; | &nbsp; <i class="fa fa-user-circle"></i> ' + empJobTitle;
+                var productDescSpan = $("<span class='product-description'></span>").html(prodDescHTML);
+                var productInfoDiv = $("<div class='product-info'></div>")
+                    .append(prodTitleSpan)
+                    .append(prodLabelSpan)
+                    .append(productDescSpan);
+                var divNameSpan = $("<span class='progress-text'></span>").html('&nbsp;');
+                var divResultSpan = $("<span class='progress-number'></span>").html(empResult + "%").addClass("text-" + resultColor); //<i class='fa fa-angle-down'></i>
+                var progBar = $("<div class='progress-bar'></div>").attr("style", "width: " + empResult + "%").addClass("progress-bar-" + resultColor);
+                var progBarDiv  = $("<div class='progress xs'></div>").css("margin-bottom", "5px").append(progBar);
+                var progressGroup  = $("<div class='progress-group'></div>")
+                    .append(divNameSpan)
+                    .append(divResultSpan)
+                    .append(progBarDiv);
+                var listLink = $("<a href='#'></a>")
+                    .attr('data-toggle', 'modal')
+                    .attr('data-target', '#emp-year-performance-modal')
+                    .attr('data-emp_id', empID)
+                    .attr('data-emp_name', empFullName)
+                    .append(productImgDiv)
+                    .append(productInfoDiv)
+                    .append(progressGroup);
+                var listItem = $("<li class=item'></li>")
+                    .append(listLink);
+                rankingList.append(listItem);
+                cnt++;
+            });
+            $(window).trigger('resize');
+        });
+}
+//function to load employees performance on modal canvas (modal show)
+function empPerOnShow(objTrigger, modalWin) {
+    var divID = objTrigger.data('division_id');
+    var divLevel = objTrigger.data('division_level');
+    var divName = objTrigger.data('division_name');
+    modalWin.find('#emp-list-modal-title').html(divName + ' Performance');
+    var rankingList = modalWin.find('#emp-ranking-list');
+    loadEmpListPerformance(rankingList, divLevel, divID);
+}
+//---------------------------------------
+//- END EMPLOYEE LIST PERFORMANCE CHART -
+//---------------------------------------
+
+
+//--------------------------
+//- AVAILABLE PERKS WIDGET -
+//--------------------------
+function loadAvailablePerks(perksWidgetList) {
+    $.get("/api/availableperks",
+        function(data) {
+            //console.log(JSON.stringify(data));
+            //Load ranking
+            //perksWidgetList.empty();
+            $.each(data, function(key, value) {
+                var perkID = value['id'],
+                    perkName = value['name'],
+                    perkDesc = value['description'],
+                    perkReqPercent = value['req_percent'],
+                    perkImgURL = value['img_url'];
+                var perkImage = $('<img>')
+                    .attr('src', perkImgURL)
+                    .attr('alt', 'Perk Image');
+                    //.addClass('img-responsive')
+                    //.css('max-height', '80px').css('max-width', '80px').css('height', '80px');
+                var perkNameLink = $('<a class="users-list-name"></a>')
+                    .attr('data-toggle', 'modal')
+                    .attr('data-target', '#edit-perk-modal')
+                    .attr('data-id', perkID)
+                    .attr('data-name', perkName)
+                    .attr('data-description', perkDesc)
+                    .attr('data-req_percent', perkReqPercent)
+                    .attr('data-img_url', perkImgURL)
+                    .attr('href', '#')
+                    .html(perkName);
+                var reqPercentSpan = $('<span class="users-list-date"></span>').html(perkReqPercent + '%');
+                var perkList = $('<li></li>')
+                    .append(perkImage)
+                    .append(perkNameLink)
+                    .append(reqPercentSpan);
+                perksWidgetList.append(perkList);
+            });
+        });
+}
+
+//function to load perk details on modal (modal show)
+function perkDetailsOnShow(objTrigger, modalWin) {
+    var name = objTrigger.data('name');
+    var desc = objTrigger.data('description');
+    var percent = objTrigger.data('req_percent');
+    var perkImg = objTrigger.data('img_url');
+    modalWin.find('#name').val(name);
+    modalWin.find('#description').val(desc);
+    modalWin.find('#req_percent').val(percent);
+    //show perk image if any
+    var imgDiv = modalWin.find('#perk-img');
+    imgDiv.empty();
+    var htmlImg = $("<img>").attr('src', perkImg).attr('class', 'img-responsive img-thumbnail').attr('style', 'max-height: 235px;');
+    imgDiv.html(htmlImg);
+}
+//------------------------------
+//- END AVAILABLE PERKS WIDGET -
+//------------------------------

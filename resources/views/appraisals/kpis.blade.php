@@ -159,6 +159,7 @@
                         upload_type: $('form[name=' + formName + ']').find('#upload_type').val(),
                         kpa_id: $('form[name=' + formName + ']').find('#kpa_id').val(),
                         category_id: $('form[name=' + formName + ']').find('#category_id').val(),
+                        existing_kpi_id: $('form[name=' + formName + ']').find('#existing_kpi_id').val(),
                         template_id: {{$template->id}},
                          _token: $('input[name=_token]').val()
                     },
@@ -230,7 +231,7 @@
             $('#update-kpi').on('click', function() {
                 postModuleForm('PATCH', '/appraisal/kpi_edit/' + kpiId, 'edit-kpi-form');
             });
-			
+			$('#old_kpi').hide();
 			//call hide/show fields functions on doc ready
            // $('#upload_type_div').hide();
         });
@@ -249,6 +250,56 @@
 				$('#upload_type_div').hide();
 				$("#upload_type").prop('disabled', true);
 				$("upload_type").prop('required',false);
+			}
+        }
+		function hideexisting() 
+		{
+            var kpi = $("#existing").val();
+            if (kpi == 1)
+			{
+				$('.existing_one').show();
+				$('#old_kpi').hide();
+				$("#existing_kpi_id").prop('disabled', true);
+				$("existing_kpi_id").prop('required',false)
+				
+				$("#upload_type").prop('disabled', false);
+				$("#is_upload").prop('disabled', false);
+				$("#kpi_type").prop('disabled', false);
+				$("#weight").prop('disabled', false);
+				$("#measurement").prop('disabled', false);
+				$("#source_of_evidence").prop('disabled', false);
+				$("#indicator").prop('disabled', false);
+				$("#kpa_id").prop('disabled', false);
+				$("#category_id").prop('disabled', false);
+				$("is_upload").prop('required',true)
+				$("kpi_type").prop('required',true)
+				$("weight").prop('required',true)
+				$("indicator").prop('required',true)
+				$("kpa_id").prop('required',true)
+				$("category_id").prop('required',true)
+			}
+            else if (kpi == 2)
+			{
+				$('.existing_one').hide();
+				$('#old_kpi').show();
+				$("#existing_kpi_id").prop('disabled', false);
+				$("existing_kpi_id").prop('required',true)
+				
+				$("#upload_type").prop('disabled', true);
+				$("#is_upload").prop('disabled', true);
+				$("#kpi_type").prop('disabled', true);
+				$("#weight").prop('disabled', true);
+				$("#measurement").prop('disabled', true);
+				$("#source_of_evidence").prop('disabled', true);
+				$("#indicator").prop('disabled', true);
+				$("#kpa_id").prop('disabled', true);
+				$("#category_id").prop('disabled', true);
+				$("is_upload").prop('required',false)
+				$("kpi_type").prop('required',false)
+				$("weight").prop('required',false)
+				$("indicator").prop('required',false)
+				$("kpa_id").prop('required',false)
+				$("category_id").prop('required',false)
 			}
         }
     </script>

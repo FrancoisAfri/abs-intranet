@@ -12,8 +12,8 @@ class doc_type_category extends Model
 
     protected $fillable = ['name','description','active' ];
 
-  public function doctypeCategory() {
-        return $this->hasmany(doc_type::class, 'category_id');
-    } 
 
+ public function doctypeCategory() {
+        return $this->belongsTo(doc_type::class, 'category_id');
+    }
 }

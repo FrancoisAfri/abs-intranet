@@ -94,6 +94,7 @@ class LeaveApplicationController extends Controller
        // left join between leaveApplication & HRPerson & LeaveType
        $loggedInEmplID = Auth::user()->person->id;
       //return $loggedInEmplID;
+
        $leaveApplication = DB::table('leave_application')
 		->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager')
         ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
@@ -102,6 +103,8 @@ class LeaveApplicationController extends Controller
         // ->where('leave_application.status', '<',4)
         ->orderBy('leave_application.hr_id')
 		->get();
+      
+       
 
      // return  $leaveApplication;
 
@@ -111,11 +114,14 @@ class LeaveApplicationController extends Controller
         //$data['employees'] = $employees;
         $data['leaveApplication'] = $leaveApplication;
 
+
         
        
 
        
     // return $leaveApplication;
+
+
        
 //        $data['leave_customs']=$leave_customs;
 
@@ -164,6 +170,18 @@ class LeaveApplicationController extends Controller
                     $details = array('status' => 3,'first_name' => $mamgerDetails->firstname,'surname' => $mamgerDetails->surname,'email' => $mamgerDetails->email);
                     return $details;
                 }
+                // elseif ($approvals->require_department_head_approval == 1 &&  $status <= 3) {
+                //     # code...  division_level_twos
+                //     $dept = DB::('civ2')::were('id', $hrDetails->div2)->first();
+                //     // query the hrperon  model and bring back the values of the manager
+                //     $msamgerDetails = HRPerson::where('id', $dept->manager_id)->where('status', 1)
+                //     -> select('first_name' , 'surname', 'email' )
+                //     ->first();
+
+                //             // array to store manager details
+                //      $details ('tatus' => 3, 'firstname' => $mamgerDetails->firstname,'surname' => $mamgerDetails->surname,'email' => $mamgerDetails->email);
+                //     return $details;
+                // }
                 // elseif ($approvals->require_hr_approval == 1 &&  $status < 4) {
                 //     # code...
                 //      $div = DB::('civ1')::were('id', $hrDetails->div1)->first();
@@ -191,6 +209,22 @@ class LeaveApplicationController extends Controller
 
 
 
+ //    public function reject(Request $request, leave_application $levApp) {
+	//        $this->validate($request, [
+ //            'reason' => 'required',
+
+ //        ]);
+
+	// 	$leaveData = $request->all();
+	// 	unset($leaveData['_token']);
+		
+	// 	$levApp->status = 1;
+ //        $levApp->save();
+	// 	AuditReportsController::store('leave', 'leavetype Added', "leave type Name: $levApp->name", 0);
+	// }
+
+
+
     public function day(Request $request, leave_application $levApp )
     {
         $this->validate($request, [           
@@ -211,10 +245,31 @@ class LeaveApplicationController extends Controller
                 unset($leaveApp[$key]);
             }
         }
+//return $leaveApp;
+        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
+            $query->orderBy('name', 'asc');
+        }]);
+
         
         //Query leave holiday Tables
         $public_holiday = DB::table('public_holidays')->pluck('day');
 
+        
+        $public_holiday = DB::table('public_holidays')->pluck('day');    
+        
+        //$levApp->array(hr_id = $request->input('hr_person_id'));
+        $levApp->leave_type_id = $request->input('leave_type');
+        
+          // Get employeeId from dropbbox
+        $employees = $leaveApp['hr_person_id'];
+        
+        // Get leavetype Id from dropbbox
+        $tyop = $leaveApp['leave_type'];
+        
+        //query the hr table based on employeeId
+        $HRpeople = HRPerson::find($employees);
+        
+        
          // separate day range
         $day = $leaveApp['day'];
         $dates = explode(' - ',$day);
@@ -222,6 +277,7 @@ class LeaveApplicationController extends Controller
         $start_date = strtotime($start_date);
         $end_date = str_replace('/', '-', $dates[1]);
         $end_date = strtotime($end_date);
+        //return $start_date;
        
         //The total number of days between the two dates. We compute the no. of seconds and divide it to 60*60*24
         //We add one to inlude both dates in the interval.
@@ -259,7 +315,9 @@ class LeaveApplicationController extends Controller
                         if (array_key_exists($i,$aPublic)) {}
                         else $iNonweek++;  
         }
+          //$iDiff = strtotime($start_date) - strtotime();
           $iDiff = $end_date - $start_date;
+        
           $iDays = ($iDiff / 86400) - $iNonweek + 1;
 
         // call the function
@@ -280,6 +338,7 @@ class LeaveApplicationController extends Controller
             if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
                 $fileName = $levApp->id . "_supporting_docs." . $fileExt;
                 $request->file('supporting_docs')->storeAs('levApp', $fileName);
+                //Update file name in hr table
                 $levApp->supporting_docs = $fileName;
                 $levApp->update();
                 
@@ -311,6 +370,7 @@ class LeaveApplicationController extends Controller
            'leave_type' => 'required',
 //            "day",
            'datetime' =>'required',
+
 //           'description' => 'required',
 //           'supporting_doc' => 'required',     
 
@@ -341,6 +401,8 @@ class LeaveApplicationController extends Controller
         $public_holiday = DB::table('public_holidays')->pluck('day');
         
        $diffrenceDays = ($end_date - $start_date) / 86400 + 1;
+    //#calculate 
+        // #save the start and end date
         
         //Upload supporting Documents
         if ($request->hasFile('supporting_docs')) {
@@ -351,8 +413,13 @@ class LeaveApplicationController extends Controller
                 //Update file name in hr table
                 $levApp->supporting_docs = $fileName;
                 $levApp->update();
+                
+//               
             }
         }
+        
+              
+    
 
         $approveDetails =  LeaveApplicationController::ApprovalsDetails(0, $request->input('hr_person_id'));
         $levApp->leave_type_id = $request->input('leave_type');
@@ -378,6 +445,7 @@ class LeaveApplicationController extends Controller
         return back();
     }
 
+//    {"hr_person_id":["2"],"application_type":"2","leave_type":"2","day":" ","date&time":"06\/04\/2017 12:00 AM - 06\/04\/2017 11:00 PM","description":"sss","supporting_doc":"","load-allocation":"Submit"}
 
     /**
      * Display the specified resource.
