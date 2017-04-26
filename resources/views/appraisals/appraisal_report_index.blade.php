@@ -52,7 +52,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-black-tie"></i>
                                         </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)">
+                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%">
                                         </select>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <select id="hr_person_id" name="hr_person_id[]" class="form-control select2" multiple data-placeholder="Select at Least One Employee">
+                                    <select id="hr_person_id" name="hr_person_id[]" class="form-control select2" multiple data-placeholder="Select at Least One Employee" style="width: 100%;">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->full_name }}</option>
