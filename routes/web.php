@@ -34,7 +34,8 @@ Route::post('users/search', 'UsersController@getSearch');
 Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
-Route::get('users/setup', 'UsersController@setup');
+Route::get('users/modules', 'UsersController@modules');
+Route::get('users/ ', 'UsersController@setup');
 Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
@@ -246,9 +247,11 @@ Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
 
 #Employees upload
 Route::get('/employee_upload', 'EmployeeUploadController@index');
-Route::post('/employees_upload', 'EmployeeUploadController@store');
+Route::get('/employees_upload', 'EmployeeUploadController@store');
 
-
+#Employee Search
+Route::get('/hr/emp_search', 'EmployeeSearchController@index');
+Route::post('/hr/search', 'EmployeeSearchController@getSearch');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');

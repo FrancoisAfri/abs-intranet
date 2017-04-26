@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <!-- Search User Form -->
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
             <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -29,13 +29,10 @@
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
             
-                            @foreach ($highestLvl->divisionLevelGroup as $type)
+                            @foreach ($qualifications as $type)
                                 <tr>
                                     <td style=" text-align: center;" nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                        @if($highestLvl->level > $lowestactiveLvl && $type->childDiv())
-                                            <a href="/hr/child_setup/{{$highestLvl->level}}/{{$type->id}}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
-                                        @endif
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
@@ -54,7 +51,7 @@
          
                         <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#level-module-modal">Add {{$highestLvl->name}}</button>  
+                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#level-module-modal">Add </button>  
                     </div>
         </div>
                     <!-- /.box-body -->

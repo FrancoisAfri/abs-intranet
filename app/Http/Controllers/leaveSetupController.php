@@ -144,14 +144,14 @@ class LeaveSetupController extends Controller
     }
 
     public function  leavecredit(Request $request, HRPerson $person ){
-    $validator = Validator::make($request->all(), [      
-            'leave_type' => 'bail|required',       
-            'division_level_2' => 'bail|required',       
-            'division_level_1' => 'bail|required',       
-            'hr_person_id' => 'bail|required',
+ 
+      $this->validate($request, [    
+        'leave_type' => 'bail|required',       
+            'Division' => 'bail|required',       
+            'Department' => 'bail|required',       
+            'Employee name' => 'bail|required',
             'adjust_days' => 'bail|required', 
             'number_of_days' => 'bail|numeric|required',
-                 
         ]);
 
         $allData= $request->all();
@@ -180,10 +180,14 @@ class LeaveSetupController extends Controller
 
 
     public function addAnnual(Request $request, $id) {
-
-        $this->validate($request, [
-            'number_of_days_annual' => 'required|numeric',
-            
+         $this->validate($request, [    
+         'number_of_days_annual' => 'required|numeric',  
+            // 'leave_type' => 'bail|required',       
+            // 'division_level_2' => 'bail|required',       
+            // 'division_level_1' => 'bail|required',       
+            // 'hr_person_id' => 'bail|required',
+            // 'resert_days' => 'bail|required', 
+                 
         ]);
            $lateData = $request->all();
         unset($lateData['_token']);
@@ -224,14 +228,15 @@ class LeaveSetupController extends Controller
 
 public function  resert(Request $request)
 {
-    $validator = Validator::make($request->all(), [      
+            $this->validate($request, [      
             'leave_type' => 'bail|required',       
-            'division_level_2' => 'bail|required',       
-            'division_level_1' => 'bail|required',       
-            'hr_person_id' => 'bail|required',
+            'Division' => 'bail|required',       
+            'Department' => 'bail|required',       
+            'Employee name' => 'bail|required',
             'resert_days' => 'bail|required', 
                  
         ]);
+   
 
         $resertData= $request->all();
         unset($resertData['_token']);
