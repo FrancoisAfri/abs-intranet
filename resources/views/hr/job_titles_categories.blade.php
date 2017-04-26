@@ -52,7 +52,7 @@
 
         <!-- Include add new prime rate modal -->
         @include('hr.partials.add_new_category')
-        @include('hr.partials.edit_category')
+        @include('hr.partials.edit_category_modal')
     </div>
 @endsection
 

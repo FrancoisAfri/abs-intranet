@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Storage;
 
 class AppraisalGraphsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,9 +38,9 @@ class AppraisalGraphsController extends Controller
     }
 
     //returns a group's avg performance from jan to last month or a list of emp from that group and their avg performances
-    public static function empGroupPerformance($divID, $divLvl, $returnEmpList = false, $topTen = false, $bottomTen = false, $empGroup = []) {
-        if ($returnEmpList && ($topTen || $bottomTen)) $employees = HRPerson::get()->load('jobTitle');
-        elseif (count($empGroup) > 0) $employees = $empGroup;
+    public static function empGroupPerformance($divID, $divLvl, $returnEmpList = false, $topTen = false, $bottomTen = false, $empGroup = [], $rankLimit = 10) {
+        //if ($returnEmpList && ($topTen || $bottomTen)) $employees = HRPerson::get()->load('jobTitle');
+        if (count($empGroup) > 0) $employees = $empGroup;
         else {
             $employees = HRPerson::where(function ($query) use($divID, $divLvl) {
                 if ($divLvl == 5) $query->where('division_level_5', $divID);
@@ -76,11 +80,11 @@ class AppraisalGraphsController extends Controller
         if ($returnEmpList) {
             if ($topTen) {
                 usort($empAvgs, function($a, $b){return $a->emp_result - $b->emp_result;});
-                $empAvgs = array_slice($empAvgs, 0, 10);
+                $empAvgs = array_slice($empAvgs, 0, $rankLimit);
             }
             elseif ($bottomTen) {
                 usort($empAvgs, function($a, $b){return $b->emp_result - $a->emp_result;});
-                $empAvgs = array_slice($empAvgs, 0, 10);
+                $empAvgs = array_slice($empAvgs, 0, $rankLimit);
             }
             return $empAvgs;
         }
@@ -100,6 +104,39 @@ class AppraisalGraphsController extends Controller
         }]);
         $divisions = $divLvl->divisionLevelGroup;
         $divAverages = [];
+        $parenLevel = $divLvl->level;
+        $childLevel = $parenLevel - 1;
+        $childLevelDetails = DivisionLevel::where('level', $childLevel)->get();
+        $isChildLevelActive = ($childLevel > 0) ? (boolean) $childLevelDetails->first()->active : false;
+        $childLevelName = ($childLevel > 0) ? $childLevelDetails->first()->name : '';
+        $childLevelPluralName = ($childLevel > 0) ? $childLevelDetails->first()->plural_name : '';
+        foreach ($divisions as $division){
+            $objResult = (object) [];
+            $objResult->div_id = $division->id;
+            $objResult->div_name = $division->name;
+            $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
+            $objResult->div_level = $parenLevel;
+            $objResult->is_child_level_active = $isChildLevelActive;
+            $objResult->child_level = $childLevel;
+            $objResult->child_level_name = $childLevelName;
+            $objResult->child_level_plural_name = $childLevelPluralName;
+            $divAverages[] = $objResult;
+        }
+
+        return $divAverages;
+    }
+
+    //returns a list of divisions and their avg performances (static function)
+    public static function parentDivisionPerformance(DivisionLevel $divLvl, $parentDivisionID = 0, $managerID = 0) {
+        //$divisions = $divLvl->divisionLevelGroup->sortBy('name');
+        $divLvl->load(['divisionLevelGroup' => function ($query) use($parentDivisionID, $managerID) {
+            if ($parentDivisionID > 0) $query->where('parent_id', $parentDivisionID);
+            if ($managerID > 0) $query->where('manager_id', $managerID);
+            $query->orderBy('name', 'asc');
+        }]);
+        $divisions = $divLvl->divisionLevelGroup;
+        $divAverages = [];
+        return $divisions;
         $parenLevel = $divLvl->level;
         $childLevel = $parenLevel - 1;
         $childLevelDetails = DivisionLevel::where('level', $childLevel)->get();

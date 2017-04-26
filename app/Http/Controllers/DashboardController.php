@@ -39,7 +39,10 @@ class DashboardController extends Controller
             $totNumEmp = HRPerson::count();
             
             //check if user can view the company performance widget (must be superuser or div head or have people reporting to him/her)
-            $appraisalModAccess = module_access::where('module_id', 6)->where('user_id', $user->id)->get()->first()->access_level;
+            $objAppraisalModAccess = module_access::where('module_id', 6)->where('user_id', $user->id)->get();
+            if ($objAppraisalModAccess && count($objAppraisalModAccess) > 0) $appraisalModAccess = $objAppraisalModAccess->first()->access_level;
+            else $appraisalModAccess = 0;
+            //$appraisalModAccess = module_access::where('module_id', 6)->where('user_id', $user->id)->get()->first()->access_level;
             $numManagedDivs5 = DivisionLevelFive::where('manager_id', $user->person->id)->count();
             $numManagedDivs4 = DivisionLevelFour::where('manager_id', $user->person->id)->count();
             $numManagedDivs3 = DivisionLevelThree::where('manager_id', $user->person->id)->count();
