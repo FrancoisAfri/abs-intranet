@@ -131,7 +131,7 @@ class AppraisalReportsController extends Controller
             if ($rankingType == 1){
                 $empsResult = AppraisalGraphsController::empGroupPerformance($divID, $divLevel, true, true, false, [], $rankingLimit);
             }
-            elseif ($rankingType == 1) {
+            elseif ($rankingType == 2) {
                 $empsResult = AppraisalGraphsController::empGroupPerformance($divID, $divLevel, true, false, true, [], $rankingLimit);
             }
             //return $empsResult;
