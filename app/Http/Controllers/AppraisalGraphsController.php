@@ -136,7 +136,7 @@ class AppraisalGraphsController extends Controller
         }]);
         $divisions = $divLvl->divisionLevelGroup;
         $divAverages = [];
-        return $divisions;
+        //return $divisions;
         $parenLevel = $divLvl->level;
         $childLevel = $parenLevel - 1;
         $childLevelDetails = DivisionLevel::where('level', $childLevel)->get();

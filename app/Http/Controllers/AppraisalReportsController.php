@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\AppraisalKPIResult;
 use App\DivisionLevel;
+use App\DivisionLevelFive;
+use App\DivisionLevelFour;
+use App\DivisionLevelOne;
+use App\DivisionLevelThree;
+use App\DivisionLevelTwo;
 use App\HRPerson;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -81,6 +86,7 @@ class AppraisalReportsController extends Controller
             }
             $dateFrom->setTime(0, 0, 0);
             $dateTo->setTime(0, 0, 0);
+            $printDateFrom = $dateFrom->copy();
 
             $empIDs = $request->input('hr_person_id');
             $empsResult = [];
@@ -97,35 +103,54 @@ class AppraisalReportsController extends Controller
                     $rangeResult[] = $monthResult;
                     $dateFrom->addMonth();
                 }
-                $empResult->apprasail_result = $rangeResult;
+                $empResult->appraisal_result = $rangeResult;
                 $empsResult[] = $empResult;
             }
-            return $empsResult;
+            //return $empsResult;
+            $data['empsResult'] = $empsResult;
+            $data['dateFrom'] = $printDateFrom->format('F Y');
+            $data['dateTo'] = $dateTo->format('F Y');
+            $data['page_title'] = "Appraisal Reports";
+            $data['page_description'] = "Employees Performance Report (Time Period)";
+            $data['breadcrumb'] = [
+                ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
+            ];
+            $data['active_mod'] = 'Performance Appraisal';
+            $data['active_rib'] = 'Reports';
+            return view('appraisals.appraisal_report_employees')->with($data);
         }
         elseif ($reportType == 2) { //return ranking report
             $rankingLimit = $request->input('ranking_limit');
             $rankingType = $request->input('ranking_type');
             $divLevel = $divID = 0;
+            $divName = '[all]';
+            $rankingTypes = [1 => 'Top ' . $rankingLimit, 2 => 'Bottom ' . $rankingLimit];
             $empsResult = [];
             if ($request->input('division_level_1') && $request->input('division_level_1') > 0) {
                 $divLevel = 1;
                 $divID = $request->input('division_level_1');
+                $divName = DivisionLevelOne::find($divID)->name;
             }
             elseif ($request->input('division_level_2') && $request->input('division_level_2') > 0) {
                 $divLevel = 2;
                 $divID = $request->input('division_level_2');
+                $divName = DivisionLevelTwo::find($divID)->name;
             }
             elseif ($request->input('division_level_3') && $request->input('division_level_3') > 0) {
                 $divLevel = 3;
                 $divID = $request->input('division_level_3');
+                $divName = DivisionLevelThree::find($divID)->name;
             }
             elseif ($request->input('division_level_4') && $request->input('division_level_4') > 0) {
                 $divLevel = 4;
                 $divID = $request->input('division_level_4');
+                $divName = DivisionLevelFour::find($divID)->name;
             }
             elseif ($request->input('division_level_5') && $request->input('division_level_5') > 0) {
                 $divLevel = 5;
                 $divID = $request->input('division_level_5');
+                $divName = DivisionLevelFive::find($divID)->name;
             }
 
             if ($rankingType == 1){
@@ -134,12 +159,18 @@ class AppraisalReportsController extends Controller
             elseif ($rankingType == 2) {
                 $empsResult = AppraisalGraphsController::empGroupPerformance($divID, $divLevel, true, false, true, [], $rankingLimit);
             }
-            //return $empsResult;
+
+            if ($divLevel > 0) $divLevelName = DivisionLevel::where('level', $divLevel)->get()->first()->name;
+            else $divLevelName = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->name;
+                //return $empsResult;
             $data['empsResult'] = $empsResult;
+            $data['divLevelName'] = $divLevelName;
+            $data['divName'] = $divName;
+            $data['rankingType'] = $rankingTypes[$rankingType];
             $data['page_title'] = "Appraisal Reports";
-            $data['page_description'] = "Generate Employees Appraisal Reports";
+            $data['page_description'] = "Employees Performance Ranking Report";
             $data['breadcrumb'] = [
-                ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
             ];
             $data['active_mod'] = 'Performance Appraisal';
@@ -147,30 +178,46 @@ class AppraisalReportsController extends Controller
             return view('appraisals.appraisal_report_top_bottom')->with($data);
         }
         elseif ($reportType == 3) { //return divisions report
-            $parentDivLvl = 5;
+            $divLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first();
             $parentDivisionID = 0;
+            $parentDivName = "[all $divLvl->plural_name]";
             //if ($request->input('division_level_1') && $request->input('division_level_1') > 0) {
             //}
-            if ($request->input('division_level_2') && $request->input('division_level_2') > 0) {
-                $parentDivLvl = 2;
-                $parentDivisionID = $request->input('division_level_2');
+            if ($request->input('division_level_2')) {
+                $divLvl = DivisionLevel::find(1);
+                $parentDivisionID = !empty($request->input('division_level_2')) ? $request->input('division_level_2') : 0;
+                $parentDivName = "All $divLvl->plural_name under " . DivisionLevelTwo::find($parentDivisionID)->name;
             }
-            elseif ($request->input('division_level_3') && $request->input('division_level_3') > 0) {
-                $parentDivLvl = 3;
-                $parentDivisionID = $request->input('division_level_3');
+            elseif ($request->input('division_level_3')) {
+                $divLvl = DivisionLevel::find(2);
+                $parentDivisionID = !empty($request->input('division_level_3')) ? $request->input('division_level_3') : 0;
+                $parentDivName = "All $divLvl->plural_name under " . DivisionLevelThree::find($parentDivisionID)->name;
             }
-            elseif ($request->input('division_level_4') && $request->input('division_level_4') > 0) {
-                $parentDivLvl = 4;
-                $parentDivisionID = $request->input('division_level_4');
+            elseif ($request->input('division_level_4')) {
+                $divLvl = DivisionLevel::find(3);
+                $parentDivisionID = !empty($request->input('division_level_4')) ? $request->input('division_level_4') : 0;
+                $parentDivName = "All $divLvl->plural_name under " . DivisionLevelFour::find($parentDivisionID)->name;
             }
-            elseif ($request->input('division_level_5') && $request->input('division_level_5') > 0) {
-                $parentDivLvl = 5;
-                $parentDivisionID = $request->input('division_level_5');
+            elseif ($request->input('division_level_5')) {
+                $divLvl = DivisionLevel::find(4);
+                $parentDivisionID = !empty($request->input('division_level_5')) ? $request->input('division_level_5') : 0;
+                $parentDivName = "All $divLvl->plural_name under " . DivisionLevelFive::find($parentDivisionID)->name;
             }
-            $parentDivLvl = DivisionLevel::find($parentDivLvl);
-            $parentDivLvl = DivisionLevel::find(2);
-            //return 'lvl: ' . $parentDivLvl . ' id: ' . $parentDivisionID;
-            return AppraisalGraphsController::parentDivisionPerformance($parentDivLvl, $parentDivisionID);
+
+            $divResults = AppraisalGraphsController::parentDivisionPerformance($divLvl, $parentDivisionID);
+
+            $data['divResults'] = $divResults;
+            $data['divLvl'] = $divLvl;
+            $data['parentDivName'] = $parentDivName;
+            $data['page_title'] = "Appraisal Reports";
+            $data['page_description'] = "$divLvl->plural_name Performance Report";
+            $data['breadcrumb'] = [
+                ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
+            ];
+            $data['active_mod'] = 'Performance Appraisal';
+            $data['active_rib'] = 'Reports';
+            return view('appraisals.appraisal_report_divisions')->with($data);
         }
         //return $request;
     }
