@@ -1,7 +1,7 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
-        <!-- bootstrap datepicker -->
+<!-- bootstrap datepicker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                         @foreach($division_levels as $division_level)
-                            <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}{{ $loop->last ? ' last-level' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
                                 <div class="col-sm-10">
@@ -66,8 +66,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <select id="hr_person_id" name="hr_person_id[]" class="form-control select2" multiple data-placeholder="Select at Least One Employee" style="width: 100%;">
-                                        <option value="">*** Select an Employee ***</option>
+                                    <select id="hr_person_id" name="hr_person_id[]" class="form-control select2" multiple="multiple" data-placeholder="Select at Least One Employee" style="width: 100%;">
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->full_name }}</option>
                                         @endforeach
@@ -215,7 +214,7 @@
                 $('.emp-field').hide();
             }
             else if (reportType == 3) { //Divisions report
-                $('.emp-field, .ranking-field').hide();
+                $('.emp-field, .ranking-field, .last-level').hide();
             }
             return reportType;
         }

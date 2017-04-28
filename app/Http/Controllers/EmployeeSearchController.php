@@ -39,8 +39,6 @@ class EmployeeSearchController extends Controller
      	//ivisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         //ivision=DivisionLevelTwo::where('active', 1)->get();
         $personName = trim($request->person_name);
-        $personIDNum = trim($request->id_number);
-        $personPassport = trim($request->passport_number);
         $aPositions = [];
         $cPositions = DB::table('hr_positions')->get();
         foreach ($cPositions as $position) {
@@ -55,16 +53,7 @@ class EmployeeSearchController extends Controller
                     $query->where('first_name', 'ILIKE', "%$personName%");
                 }
             })
-            ->where(function ($query) use ($personIDNum) {
-                if (!empty($personIDNum)) {
-                    $query->where('id_number', 'ILIKE', "%$personIDNum%");
-                }
-            })
-            ->where(function ($query) use ($personPassport) {
-                if (!empty($personPassport)) {
-                    $query->where('passport_number', 'ILIKE', "%$personPassport%");
-                }
-            })
+
             ->orderBy('first_name')
             ->limit(100)
             ->get();
@@ -85,7 +74,7 @@ class EmployeeSearchController extends Controller
 		$data['active_mod'] = 'Security';
         $data['active_rib'] = 'Search Users';
 		AuditReportsController::store('Security', 'User Search Results Accessed', "By User", 0);
-        return view('hr.employee_search')->with($data);
+        return view('hr.users_search')->with($data);
     }
      public function store(Request $request) {
         //Save usr

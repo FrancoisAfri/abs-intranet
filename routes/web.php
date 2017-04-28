@@ -251,7 +251,7 @@ Route::get('/employees_upload', 'EmployeeUploadController@store');
 
 #Employee Search
 Route::get('/hr/emp_search', 'EmployeeSearchController@index');
-Route::post('/hr/search', 'EmployeeSearchController@getSearch');
+Route::post('/hr/users_search', 'EmployeeSearchController@getSearch');
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
