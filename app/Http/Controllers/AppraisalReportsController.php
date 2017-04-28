@@ -103,6 +103,7 @@ class AppraisalReportsController extends Controller
                     $rangeResult[] = $monthResult;
                     $dateFrom->addMonth();
                 }
+                $dateFrom = $printDateFrom->copy();
                 $empResult->appraisal_result = $rangeResult;
                 $empsResult[] = $empResult;
             }
