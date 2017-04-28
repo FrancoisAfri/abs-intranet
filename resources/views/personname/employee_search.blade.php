@@ -13,7 +13,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="/hr/users_search">
+                <form class="form-horizontal" method="POST" action="/hr/emp_search">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -30,13 +30,10 @@
                             </div>
                         </div>
 
-                         
-
-                       
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button href= "/hr/users_search" type="submit" class="btn btn-primary pull-right"><i class="fa fa-search"></i> Search</button>
+                        <button href="/hr/users_search" type="submit" class="btn btn-primary pull-right"><i class="fa fa-search"></i> Search</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
