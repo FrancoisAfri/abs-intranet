@@ -228,6 +228,7 @@ Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchCo
 //Appraisal reports
 Route::get('appraisal/reports', 'AppraisalReportsController@index');
 Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
+Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
 
 #Document setup module
 Route::get('/hr/document', 'DocumentTypeController@viewDoc');

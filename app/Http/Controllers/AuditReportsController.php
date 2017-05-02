@@ -175,7 +175,7 @@ class AuditReportsController extends Controller
 		$user = Auth::user()->load('person');
 		$data['support_email'] = 'support@afrixcel.co.za';
         $data['company_name'] = 'OSIZWENI EDUCATIONAL AND DEVELOPMENT \TRUST';
-        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.png');
+        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
 		$data['date'] = date("d-m-Y");
 		$data['user'] = $user;
 		//return $data;
