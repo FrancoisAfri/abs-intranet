@@ -14,7 +14,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AppraisalReportsController extends Controller
 {
@@ -50,11 +52,16 @@ class AppraisalReportsController extends Controller
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Performance Appraisal', 'Reports page accessed', "Accessed by User", 0);
-        return view('appraisals.appraisal_report_index')->with($data);
+        return view('appraisals.reports.appraisal_report_index')->with($data);
+    }
+
+    //Print the report
+    public function printReport(Request $request) {
+        return $this->getReport($request, true);
     }
 
     //Displays the report
-    public function getReport(Request $request){
+    public function getReport(Request $request, $print = false){
         $this->validate($request, [
             'report_type' => 'required',
             'hr_person_id' => 'required_if:report_type,1',
@@ -119,7 +126,20 @@ class AppraisalReportsController extends Controller
             ];
             $data['active_mod'] = 'Performance Appraisal';
             $data['active_rib'] = 'Reports';
-            return view('appraisals.appraisal_report_employees')->with($data);
+            //report printing data
+            $data['report_type'] = $reportType;
+            $data['hr_person_id'] = $empIDs;
+            
+            //return printable view if print = 1
+            if ($print === true) {
+                $data['report_name'] = 'Employee Appraisal Report';
+                $data['user'] = Auth::user()->load('person');
+                $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+                $data['date'] = Carbon::now()->format('d/m/Y');
+                return view('appraisals.reports.appraisal_report_employees_print')->with($data);
+            }
+
+            return view('appraisals.reports.appraisal_report_employees')->with($data);
         }
         elseif ($reportType == 2) { //return ranking report
             $rankingLimit = $request->input('ranking_limit');
@@ -163,7 +183,7 @@ class AppraisalReportsController extends Controller
 
             if ($divLevel > 0) $divLevelName = DivisionLevel::where('level', $divLevel)->get()->first()->name;
             else $divLevelName = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->name;
-                //return $empsResult;
+            //return $empsResult;
             $data['empsResult'] = $empsResult;
             $data['divLevelName'] = $divLevelName;
             $data['divName'] = $divName;
@@ -176,7 +196,27 @@ class AppraisalReportsController extends Controller
             ];
             $data['active_mod'] = 'Performance Appraisal';
             $data['active_rib'] = 'Reports';
-            return view('appraisals.appraisal_report_top_bottom')->with($data);
+            //report printing data
+            $data['report_type'] = $reportType;
+            $data['ranking_limit'] = $rankingLimit;
+            $data['ranking_type'] = $rankingType;
+            for ($i = 1; $i <= 5; $i ++){
+                if ($request->input('division_level_' . $i) && $request->input('division_level_' . $i) > 0) {
+                    $data['division_level_' . $i] = $request->input('division_level_' . $i);
+                    $i = 6;
+                }
+            }
+
+            //return printable view if print = 1
+            if ($print === true) {
+                $data['report_name'] = 'Employee Performance Ranking Report';
+                $data['user'] = Auth::user()->load('person');
+                $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+                $data['date'] = Carbon::now()->format('d/m/Y');
+                return view('appraisals.reports.appraisal_report_top_bottom_print')->with($data);
+            }
+
+            return view('appraisals.reports.appraisal_report_top_bottom')->with($data);
         }
         elseif ($reportType == 3) { //return divisions report
             $divLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first();
@@ -218,7 +258,25 @@ class AppraisalReportsController extends Controller
             ];
             $data['active_mod'] = 'Performance Appraisal';
             $data['active_rib'] = 'Reports';
-            return view('appraisals.appraisal_report_divisions')->with($data);
+            //report printing data
+            $data['report_type'] = $reportType;
+            for ($i = 2; $i <= 5; $i ++){
+                if ($request->input('division_level_' . $i) && $request->input('division_level_' . $i) > 0) {
+                    $data['division_level_' . $i] = $request->input('division_level_' . $i);
+                    $i = 6;
+                }
+            }
+
+            //return printable view if print = 1
+            if ($print === true) {
+                $data['report_name'] = 'Divisions Performance Report';
+                $data['user'] = Auth::user()->load('person');
+                $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+                $data['date'] = Carbon::now()->format('d/m/Y');
+                return view('appraisals.reports.appraisal_report_divisions_print')->with($data);
+            }
+
+            return view('appraisals.reports.appraisal_report_divisions')->with($data);
         }
         //return $request;
     }
