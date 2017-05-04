@@ -42,7 +42,7 @@ class LeaveApplicationController extends Controller
     public function index()
     {
         $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
-		if (!empty($leave_customs))
+        if (!empty($leave_customs))
             $leave_customs = $leave_customs->load('userCustom');
         
 
@@ -96,15 +96,17 @@ class LeaveApplicationController extends Controller
       //return $loggedInEmplID;
 
        $leaveApplication = DB::table('leave_application')
-		->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager')
+        ->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager','leave_credit.leave_balance as leave_Days') 
         ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
-        ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id')	
+        ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id') 
+        ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id' )
         ->where('hr_people.manager_id', $loggedInEmplID)
         // ->where('leave_application.status', '<',4)
         ->orderBy('leave_application.hr_id')
-		->get();
-      
-       
+        ->get();
+        // return $leaveApplication;
+        #    
+            //return $leave_appDetails;
 
      // return  $leaveApplication;
 
@@ -136,22 +138,25 @@ class LeaveApplicationController extends Controller
         
         // query the leave congif table and bring back the values
         $approvals  =  DB::table('leave_configuration')
-                    ->select('require_managers_approval','require_department_head_approval','require_hr_approval','require_payroll_approval')
-                    ->first(); 
-         // query the hrperon  model and bring back the values of the manager
+                        ->select('require_managers_approval','require_department_head_approval','require_hr_approval','require_payroll_approval')
+                        ->first(); 
+         // query the hrperon  model and bring back the values of the managerg
         $hrDetails = HRPerson::where('id',$hrID )->where('status', 1)->first();
 
         if ($approvals->require_managers_approval == 1  ) {
             # code...
+            $approvals  =  DB::table('leave_configuration')
+                        ->select('require_managers_approval','require_department_head_approval','require_hr_approval','require_payroll_approval')
+                        ->first();
             // query the hrperon  model and bring back the values of the manager
             $managerDetails = HRPerson::where('id', $hrDetails->manager_id)->where('status', 1)
-            -> select('first_name' , 'surname', 'email' )
-            ->first();
+                                -> select('first_name' , 'surname', 'email' )
+                                ->first();
 
                 // echo $managerDetails;
 
              $details = array('status' => 3,'first_name' => $managerDetails->first_name,'surname' => $managerDetails->surname,'email' => $managerDetails->email);
-             return  $details;
+             // return  $details;
 
              // echo $managerDetails;
 
@@ -160,7 +165,7 @@ class LeaveApplicationController extends Controller
                 elseif ($approvals->require_department_head_approval == 1 ) {
                     # code...  division_level_twos
                     // $dept = DB::('civ2')::were('id', $hrDetails->div2)->first();
-                       $Dept = DivisionLevelTwo::where('id' , $hrDetails->manager_id ) -> first();
+                       //$Dept = DivisionLevelTwo::where('id' , $hrDetails->manager_id ) -> first();
                     // query the hrperon  model and bring back the values of the manager
                     $msamgerDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
                     -> select('first_name' , 'surname', 'email' )
@@ -198,7 +203,7 @@ class LeaveApplicationController extends Controller
             else
             {
 
-            $details = array('status' => 1,'first_name' => $hrDetails->first_name,'surname' => $hrDetails->surname,'email' => $hrDetails->email);
+            $details = array('status' => 2,'first_name' => $hrDetails->first_name,'surname' => $hrDetails->surname,'email' => $hrDetails->email);
                
                 return $details;
               
@@ -206,22 +211,19 @@ class LeaveApplicationController extends Controller
 
     }
 
+    public function reject(Request $request, leave_application $levApp) {
+           $this->validate($request, [
+            'reason' => 'required',
 
+        ]);
 
-
- //    public function reject(Request $request, leave_application $levApp) {
-	//        $this->validate($request, [
- //            'reason' => 'required',
-
- //        ]);
-
-	// 	$leaveData = $request->all();
-	// 	unset($leaveData['_token']);
-		
-	// 	$levApp->status = 1;
- //        $levApp->save();
-	// 	AuditReportsController::store('leave', 'leavetype Added', "leave type Name: $levApp->name", 0);
-	// }
+        $leaveData = $request->all();
+        unset($leaveData['_token']);
+        
+        $levApp->status = 1;
+        $levApp->save();
+        AuditReportsController::store('leave', 'leavetype Added', "leave type Name: $levApp->name", 0);
+    }
 
 
 
@@ -236,7 +238,8 @@ class LeaveApplicationController extends Controller
 
         ]);
         $ApplicationDetails = array();
-        $leaveApp = $request->all();
+
+        $leaveApp = $request->all(); 
 
         //Exclude empty fields from query
         foreach ($leaveApp as $key => $value)
@@ -318,20 +321,35 @@ class LeaveApplicationController extends Controller
           //$iDiff = strtotime($start_date) - strtotime();
           $iDiff = $end_date - $start_date;
         
-          $iDays = ($iDiff / 86400) - $iNonweek + 1;
+          $diffDays = ($iDiff / 86400) - $iNonweek + 1; // use this for days diffrence
+          $iDays = $diffDays * 8;
 
+        // return   $iDays; 
         // call the function
         $ApplicationDetails =  LeaveApplicationController::ApplicationDetails(0, $request->input('hr_person_id'));
-                  // return $approveDetails;
+               
+               // return $ApplicationDetails;  
 
+               // // if hd == hd
+               // // {
+               // //  status = 2
+               // // }else
+               // {
+
+               // }
+        $applicatiionStaus = $ApplicationDetails['status'];
+       // return  $manage ;
+
+        // $levApp->status = '1';
         $levApp->start_date = $start_date;
         $levApp->end_date = $end_date;
+        $levApp->leave_days = $iDays;
         $levApp->leave_type_id = $request->input('leave_type');
         $levApp->hr_id = $request->input('hr_person_id');
         $levApp->notes = $request->input('description');
-        $levApp->status = 0;
-       
+
         $levApp->save();
+
          //Upload supporting Documents
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
@@ -341,22 +359,12 @@ class LeaveApplicationController extends Controller
                 //Update file name in hr table
                 $levApp->supporting_docs = $fileName;
                 $levApp->update();
-                
-//                return $levApp;
             }
         }
+                    // send email to manager
+        Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $ApplicationDetails['surname'] ,$ApplicationDetails['email']));
 
- 
-                   
-
-       Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $ApplicationDetails['surname'] ,$ApplicationDetails['email']));
-
-                  
-            //AuditReportsController::store('Leave application', 'Leave application Completed', "Leave application Completed By User", 0);
-           
-        
-
-
+  
         AuditReportsController::store('Leave', 'Leave application ', "Accessed By User", 0);
         return back();
         //return view('leave.application')->with($levTypVar);  
@@ -378,6 +386,7 @@ class LeaveApplicationController extends Controller
 
          $approveDetails = array();
         $leaveApp = $request->all();
+
         unset($leaveApp['_token']);
      
         
@@ -386,21 +395,25 @@ class LeaveApplicationController extends Controller
         $dates = explode(" ",$day);
         $start_date = str_replace('/', '-', $dates[0]);
         $start_date = strtotime($start_date);//date
-        $start_time = date('H:i:s',strtotime($dates[1] . ' ' . $dates[2]));// time
+        $start_time = date('Y-m-d H:i:s',strtotime($dates[1] . ' ' . $dates[2]));// time
         $start_time = strtotime($start_time);
+       //return $start_time;
         
         // explode right side
         $var = $leaveApp['datetime'];
         $days = explode(' - ',$var);
         $end_date = str_replace('/', '-', $days[0]);
-        $end_time = date('H:i:s',strtotime($days[1])); // time
+        $end_time = date('Y-m-d H:i:s',strtotime($days[1])); // time
         $end_time = strtotime($end_time);
-       //return $end_time;
+     // return $end_time;
 
        //Query the Holiday table and return the days
         $public_holiday = DB::table('public_holidays')->pluck('day');
         
-       $diffrenceDays = ($end_date - $start_date) / 86400 + 1;
+       $diffrencetime = ($end_time - $start_time);
+       $diffrencetime = strtotime($diffrencetime);
+
+      // return $diffrencetime;
     //#calculate 
         // #save the start and end date
         
@@ -412,22 +425,17 @@ class LeaveApplicationController extends Controller
                 $request->file('supporting_docs')->storeAs('levApp', $fileName);
                 //Update file name in hr table
                 $levApp->supporting_docs = $fileName;
-                $levApp->update();
-                
-//               
+                $levApp->update();               
             }
         }
         
-              
-    
-
-        $approveDetails =  LeaveApplicationController::ApprovalsDetails(0, $request->input('hr_person_id'));
+        $ApplicationDetails =  LeaveApplicationController::ApplicationDetails(0, $request->input('hr_person_id'));
         $levApp->leave_type_id = $request->input('leave_type');
         $levApp->hr_id = $request->input('hr_person_id');
         $levApp->notes = $request->input('description');
         $levApp->status = 1;
         $levApp->start_date = $start_date;
-        $levApp->start_time = $start_date;
+        $levApp->start_time = $start_time;
         $levApp->end_time = $end_time;
         $levApp->save();    
 
@@ -445,32 +453,32 @@ class LeaveApplicationController extends Controller
         return back();
     }
 
-//    {"hr_person_id":["2"],"application_type":"2","leave_type":"2","day":" ","date&time":"06\/04\/2017 12:00 AM - 06\/04\/2017 11:00 PM","description":"sss","supporting_doc":"","load-allocation":"Submit"}
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-   
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+//Function to accept leave applications
+    public function AcceptLeaave(Request $request, $id)
     {
-        //
+        // get the user application  details
+         $leave_appDetails = leave_application::where('id',$id )->first();
+
+            #get leave balance
+          $Application = DB::table('leave_application')
+        ->select('leave_application.*','leave_credit.leave_balance as leave_balance')  
+        ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id' )
+        ->where('leave_application.hr_id', 3)
+        ->first();
+
+         // get the leave days of the user sing the $id
+          $applied_for = DB::table('leave_application')->where('id' , $id)->pluck('leave_days');
+          #Get the user leave balance
+
+
+          #calculations
+        $leave_balance - $applied_for ;
+
+       
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+    /*
      */
     public function update(Request $request, $id)
     {

@@ -13,7 +13,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Reports Search criteria</h3>
+                    <h3 class="box-title">Leave Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                 <!-- /.box-header -->
@@ -22,7 +22,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-body">
-					<div class="form-group programmes">
+					<!-- <div class="form-group programmes">
                             <label for="module_name" class="col-sm-3 control-label">Modules</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
@@ -40,19 +40,23 @@
                                     </select>
 								</div>
                             </div>
-                        </div>
-						<div class="form-group">
-                            <label for="action_date" class="col-sm-3 control-label">Action Date</label>
+                        </div> -->
+                        <div class="form-group groups">
+                            <label for="user_id" class="col-sm-3 control-label">User</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-user"></i>
-								</div>
-								<input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" required>
+                                        <option selected="selected" value="0">*** Select a User ***</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->user_id }}">{{ $user->first_name.' '.$user->surname}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
-						
 						<div class="form-group">
                             <label for="action" class="col-sm-3 control-label">Action</label>
                             <div class="col-sm-9">
@@ -64,26 +68,23 @@
 								</div>
                             </div>
                         </div>
-						<div class="form-group groups">
-                            <label for="user_id" class="col-sm-3 control-label">User</label>
+                        <div class="form-group">
+                            <label for="action_date" class="col-sm-3 control-label">Action Date</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-									<div class="input-group-addon">
-                              			<i class="fa fa-user"></i>
-                            		</div>
-									<select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" required>
-                                        <option selected="selected" value="0">*** Select a User ***</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->user_id }}">{{ $user->first_name.' '.$user->surname}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                                <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
                                 </div>
                             </div>
                         </div>
+                        
+						
                      </div>   
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Generate</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-search-plus"></i> Search</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>

@@ -19,11 +19,13 @@ class AddStartToLeaveApplication extends Migration
             $table->bigInteger('end_date')->nullable();
             $table->bigInteger('start_time')->nullable();
             $table->bigInteger('end_time')->nullable();
-            $table->integer('status')->unsigned()->index()->nullable();
+            $table->integer('status')->nullable();
             $table->integer('hr_id')->nullable();
             $table->integer('leave_type_id')->nullable();
             $table->integer('manager_id')->nullable();
-            $table->integer('reject_reason')->nullable();
+            $table->string('reject_reason')->nullable();
+            $table->integer('leave_days')->nullable();
+            $table->integer('leave_hours')->nullable();
         });
     }
 
@@ -45,6 +47,8 @@ class AddStartToLeaveApplication extends Migration
             $table->dropColumn('end_time');
             $table->dropColumn('manager_id');
             $table->dropColumn('reject_reason');
+            $table->dropColumn('leave_days');
+            $table->dropColumn('leave_hours');
 
         });
     }

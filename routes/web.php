@@ -84,6 +84,9 @@ Route::get('leave/approval', 'LeaveApplicationController@show');
 //Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::post('leave/approval/reject', 'LeaveApplicationController@reject');
 
+#leaveHistory audit
+Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
+
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
 Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
