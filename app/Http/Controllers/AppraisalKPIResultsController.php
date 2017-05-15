@@ -203,8 +203,8 @@ class AppraisalKPIResultsController extends Controller
 					{
 						foreach ($value as $val) 
 						{
-							//$employeeCode = $val['pin_code'];
-							$employees = HRPerson::where('employee_number', 12)->first();
+							$employeeCode = $val['employee_number'];
+							$employees = HRPerson::where('employee_number', $employeeCode)->first();
 							$emp = HRPerson::find($employees->id)->load('jobTitle.kpiTemplate');
 							// do this for loop inside each if statement
 							foreach ($kpis as $kip)
