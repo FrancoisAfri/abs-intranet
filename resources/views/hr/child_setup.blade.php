@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{$childLevelname}}: {{$parentDiv->name}}</h3>
+                    <h3 class="box-title">{{$childLevel->plural_name}} under <b>{{$parentDiv->name}}</b></h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -28,7 +28,9 @@
                                 <tr>
                                     <td style=" text-align: center;" nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-child-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                     
+                                        @if($childLevel->level>$lowestactiveLvl)
+                                            <a href="/hr/child_setup/{{$childLevel->level}}/{{$type->id}}" id="manage_child" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$curLvlChild->plural_name}}</a>
+                                        @endif
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ ($type->manager) ? $type->manager->first_name." ".$type->manager->surname : ''}}</td>
@@ -44,12 +46,13 @@
                             @endforeach
                         </table>
                     </div>
+                </form>
          
                         <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="child_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-child-modal">Add {{$parentDiv->name}}</button>
+                     <button type="button" id="child_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-child-modal">Add {{$childLevel->name}}</button>
 
-                      <a type="button" href="/hr/company_setup" id="" class="btn btn-default pull-left">Back</a> 
+                      <a type="button" href="/hr/company_setup" id="" class="btn btn-default pull-left">Back</a>
                     </div>
         </div>
 
