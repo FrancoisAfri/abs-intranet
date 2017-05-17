@@ -18,29 +18,11 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST" action="/audits">
+                <form class="form-horizontal" id="report_form" method="POST" action="/">
+                <!-- audits -->
                     {{ csrf_field() }}
 
                     <div class="box-body">
-					<!-- <div class="form-group programmes">
-                            <label for="module_name" class="col-sm-3 control-label">Modules</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<select class="form-control select2" style="width: 100%;" id="module_name" name="module_name">
-                                        <option selected="selected" value="">*** Select a Module ***</option>
-                                            <option value="Audit">Audit</option>
-                                            <option value="Contacts">Contacts</option>
-                                            <option value="Employee Records">Employee Records</option>
-                                            <option value="Leave Management">Leave Management</option>
-                                            <option value="Performance Appraisal">Performance Appraisal</option>
-                                            <option value="Security">Security</option>
-                                    </select>
-								</div>
-                            </div>
-                        </div> -->
                         <div class="form-group groups">
                             <label for="user_id" class="col-sm-3 control-label">User</label>
                             <div class="col-sm-9">

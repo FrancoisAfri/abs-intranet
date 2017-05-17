@@ -77,12 +77,13 @@ Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
-Route::post('leave/application/leavDetails', 'LeaveApplicationController@leavDetails');
+Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
+#Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 
 #leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
 //Route::post('leave/type/add_leave', 'LeaveController@addleave');
-Route::post('leave/approval/reject', 'LeaveApplicationController@reject');
+Route::post('leave/approval/{levReject}', 'LeaveApplicationController@reject');
 
 #leaveHistory audit
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
@@ -100,22 +101,7 @@ Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLe
 Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
 Route::get('contacts/public', 'PublicRegistrationController@create');
-//Route::post('add_public_registration', 'PublicRegistrationController@store');
-//Route::get('contacts/public/{public}/edit', 'PublicRegistrationController@edit');
-//Route::patch('public/{public}', 'PublicRegistrationController@update');
-//Route::get('contacts/educator', 'EducatorsController@create');
-//Route::get('contacts/educator/extras/{project}/{activity}', ['uses' => 'EducatorsController@create', 'as' => 'educatorregistration']);
-//Route::post('add_educator', 'EducatorsController@store');
-//Route::get('contacts/educator/{educator}/edit', 'EducatorsController@edit');
-//Route::patch('educators/{educator}', 'EducatorsController@update');
-//Route::get('contacts/learner', 'LearnerRegistrationController@create');
-//Route::get('contacts/learner/extras/{project}/{activity}', ['uses' => 'LearnerRegistrationController@create', 'as' => 'learnerregistration']);
-//Route::post('add_learner', 'LearnerRegistrationController@store');
-//Route::get('contacts/learner/{learner}/edit', 'LearnerRegistrationController@edit');
-//Route::patch('learners/{learner}', 'LearnerRegistrationController@update');
-//Route::get('contacts/profile', 'ContactsController@profile');
-//Route::get('contacts/create', 'ContactsController@create');
-//Route::post('contacts/email', 'ContactsController@emailAdmin');
+
 Route::get('contacts/{contact}/edit', 'ContactsController@edit');
 Route::post('contacts', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');

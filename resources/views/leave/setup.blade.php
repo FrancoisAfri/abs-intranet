@@ -120,11 +120,30 @@
                                                 </tr>
                                             </div>
 
+                                           <div class="form-group">
+                                                <tr>
+                                                <td style="width: 10px"></td>
+                                                   <td>Numbe of Sick negative leave Days</td>
+                                                    <td >
+                                                         <label for="path" class="control-label"></label>
+                                <input type="text" class="form-control" id="Escalation" name="allow_sick_negative_days" placeholder="Enter days"required >
+                                                    </td>
+                                                </tr>
+                                            </div>  
 
+                                <!--  -->
 
-                                            
+                                <div class="form-group">
+                                                <tr>
+                                                <td style="width: 10px"></td>
+                                                   <td>Numbe of Annual negative leave Days</td>
+                                                    <td >
+                                                         <label for="path" class="control-label"></label>
+                                <input type="text" class="form-control" id="Escalation" name="allow_annual_negative_days" placeholder="Enter days"required >
+                                                    </td>
+                                                </tr>
+                                            </div>  
 
-                          
 
                         </table>
                     </div>
@@ -337,15 +356,15 @@
                               </tr>
                             </div>
                                 
-                                             <div class="form-group">
-                                                <tr>
-                                                   <td>Document compulsory when two sick leave within 8_weeks</td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="document_compulsory_when_two_sick_leave_8_weeks" value="0">
-                                                        <input   type="checkbox" name="document_compulsory_when_two_sick_leave_8_weeks" value="1" {{ $leave_configuration->document_compulsory_when_two_sick_leave_8_weeks === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                        </tr>
-                                                    </div>
+                            <div class="form-group">
+                                <tr>
+                                    <td>Document compulsory when two sick leave within 8_weeks</td>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <input type="hidden" name="document_compulsory_when_two_sick_leave_8_weeks" value="0">
+                                             <input   type="checkbox" name="document_compulsory_when_two_sick_leave_8_weeks" value="1" {{ $leave_configuration->document_compulsory_when_two_sick_leave_8_weeks === 1 ? 'checked ="checked"' : 0 }}>
+                                        </td>
+                                            </tr>
+                                        </div>
 
                                      </div>
                                 </table>

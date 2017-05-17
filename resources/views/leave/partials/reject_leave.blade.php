@@ -8,7 +8,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">reject leave</h4>
+                    <h4 class="modal-title">Reject Leave</h4>
                 </div>
                 <div class="modal-body">
                     <div id="leave-invalid-input-alert"></div>
@@ -19,7 +19,7 @@
                             <div class="col-sm-8">
                                <div class="input-group">
                                     <div class="input-group-addon">
-                                       <i class="fa fa-sticky-note"></i>
+                                       <i class="fa fa-comment-o"></i>
                                     </div>
                                     <textarea class="form-control" id="reason" name="reason" placeholder="Enter rejection reason ..." rows="4">{{ old('reason') }}</textarea>
                                 </div>

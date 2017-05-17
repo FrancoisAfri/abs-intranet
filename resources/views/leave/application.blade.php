@@ -87,18 +87,16 @@
                                 </div>
                             </div>                 
                             <!-- This is the dropbox which must receive a value from the leave dropbox via jquery -->
-                        <div class="form-group  ">
+                        <!-- <div class="form-group  ">
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     @foreach($employees as $employee)
-                        {{ ($balance = $employee ->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: ''}} 
-                                    @endforeach
-                       
-                                   
+                        {{ ($balance = $employee ->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: '' }} 
+                                    @endforeach  
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
 
                                     <!--                                                        -->

@@ -128,9 +128,6 @@
         else if (data == 'edit') location.href = "/leave/leave_edit/" + id;
         else if (data == 'actdeac') location.href = "/leave/leave_active/" + id; //leave_type_edit
          else if (data == 'cu_actdeac') location.href = "/leave/custom/leave_type_edit/" + id;
-
-        //		 	else if (data == 'access')
-        //		 		location.href = "/leave/module_access/" + id;
     }
     $(function () {
         var moduleId;
