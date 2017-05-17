@@ -69,22 +69,6 @@ class DatabaseSeeder extends Seeder
         $person->status = 1;
         $user->addPerson($person);
 
-        //insert default user
-        $user = new User;
-        $user->email = 'thato@afrixcel.co.za';
-        $user->password = Hash::make('h@kers');
-        $user->type = 3;
-        $user->status = 1;
-        $user->save();
-
-        //insert default user's hr record
-        $person = new HRPerson();
-        $person->first_name = 'Thato';
-        $person->surname = 'Lechuti';
-        $person->email = 'thato@afrixcel.co.za';
-        $person->status = 1;
-        $user->addPerson($person);
-
         //insert default country
         $country = new Country;
         $country->name = 'South Africa';
