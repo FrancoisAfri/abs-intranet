@@ -445,55 +445,50 @@ class LeaveApplicationController extends Controller
              $leave_balance = $Details['leave_balance'];
 
             #replace null with 0 in the table
-          if( $negDays == null)
-          {
-              $Days = 0;
-             DB::table('leave_configuration')
-            ->where('id', 1)
-            ->update(['allow_negative_days' => $Days]);
-          }
+          // if( $negDays == null)
+          // {
+          //     $Days = 0;
+          //    DB::table('leave_configuration')
+          //   ->where('id', 1)
+          //   ->update(['allow_negative_days' => $Days]);
+          // }
 
           if($levTyp == 1)
           {
              $anualdays = $negDays->allow_annual_negative_days * 8;
+              $daysApplied =  $id['leave_days']; 
+                $bal = $daysApplied + $anualdays;
+                $nwBal = $leave_balance - $bal;
+
+                 DB::table('leave_credit')
+                        ->where('hr_id', $hrID)
+                        ->where('leave_type_id', $typID) 
+                        ->update(['leave_balance' => $nwBal]);
+
          }
          elseif ($levTyp == 5) 
          {
             $sickdays = $negDays->allow_sick_negative_days * 8;
-         }
-  
-         #get leave balance
-           
-             return $leave_balance ;
+            $daysApplied =  $id['leave_days']; 
+                $bal = $daysApplied + $sickdays;
+                $nwBal = $leave_balance - $bal;
 
-            #leaveBalancr + total negative leave days
-           $Total_levBalance = $leave_balance + $NegDays;
-    
-         
+                 DB::table('leave_credit')
+                        ->where('hr_id', $hrID)
+                        ->where('leave_type_id', $typID) 
+                        ->update(['leave_balance' => $nwBal]);
+         }else
           #Get the user leave balance
              $daysApplied =  $id['leave_days'];       
           #calculations
              #subract current balance from the one applied for 
-        $newBalance = $Total_levBalance - $daysApplied  ;
-      // return  $newBalance;
-        if ($leave_balance != $newBalance)
-        {
-          //change status   
-        }
-
-        //$credit->leave_balance = $newBalance;
-        //$credit->update();
-
-         //$levHist->previous_balance = $leave_balance;
+        $newBalance = $leave_balance - $daysApplied  ;
         #save new leave balance 
-      DB::table('leave_credit')
-            ->where('hr_id', $hrID)
-            ->where('leave_type_id', $typID) 
-            ->update(['leave_balance' => $newBalance]);
+              DB::table('leave_credit')
+                    ->where('hr_id', $hrID)
+                    ->where('leave_type_id', $typID) 
+                    ->update(['leave_balance' => $newBalance]);
 
-       
-        // $levHist->update()::where('hr_id' , $hrID );
-        
 
      #get hr_id
      
