@@ -16,7 +16,7 @@ class CreateLeaveCreditTable extends Migration
         Schema::create('leave_credit', function (Blueprint $table) {
             $table->increments('id');
              $table->integer('hr_id')->nullable();
-             $table->integer('leave_balance')->nullable();
+             $table->double('leave_balance')->nullable();
              $table->integer('leave_type_id')->nullable();
             $table->timestamps();
         });

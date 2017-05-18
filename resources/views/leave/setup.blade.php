@@ -341,7 +341,7 @@
                                 <td>Number of Days Until Escalation</td>
                                     <td>
                                         <label for="path" class="control-label"></label>
-                                <input type="text" class="form-control" id="Escalation" name="mumber_of_days_until_escalation" placeholder="Enter  days" required >
+                                <input type="text" class="form-control" id="Escalation" name="mumber_of_days_until_escalation" placeholder="Enter  days"  >
                                     </td>
                               </tr> 
                             </div>

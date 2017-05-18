@@ -87,6 +87,10 @@ Route::post('leave/approval/{levReject}', 'LeaveApplicationController@reject');
 
 #leaveHistory audit
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
+#
+Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
+Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
+
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');

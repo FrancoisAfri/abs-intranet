@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLeaveCustomsTable extends Migration
+class RemoveLeaveApplicationFromLeaveApplication extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateLeaveCustomsTable extends Migration
      */
     public function up()
     {
-        Schema::create('leave_customs', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('hr_id')->nullable();
-            $table->double('number_of_days')->nullable();
-
-            $table->timestamps();
-        });
+        //
+         Schema::table('leave_application', function($table) {
+             $table->dropColumn('application');
+          });
     }
 
     /**
@@ -29,6 +26,6 @@ class CreateLeaveCustomsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('leave_customs');
+        //
     }
 }
