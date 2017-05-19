@@ -87,16 +87,17 @@
                                 </div>
                             </div>                 
                             <!-- This is the dropbox which must receive a value from the leave dropbox via jquery -->
-                        <!-- <div class="form-group  ">
+                        <div class="form-group  ">
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     @foreach($employees as $employee)
-                        {{ ($balance = $employee ->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: '' }} 
+                        {{ ($balance = $employee->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: '' }}
+              <!-- /  $emp->leave_types()->where('leave_type_id',$leveTyp)->sync([$empID => ['leave_balance' => $currentBalance ]]);  -->
                                     @endforeach  
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
 
                                     <!--                                                        -->
@@ -231,7 +232,10 @@
             $('#cancel').click(function () {
                 location.href = '/leave/application';
             });
-            
+             function postData(id, data) {
+        alert(id);
+         //if (data == 'approval_id') location.href = "/leave/approval/" + id;
+            }
              //Phone mask
             $("[data-mask]").inputmask();
 
@@ -305,11 +309,10 @@
             function changetextbox(){
                 var levID = document.getElementById("leave_type").value;
                 //return levID;
-                if ( levID == 3) { 
-                 $('.notes-field').hide();
-                }
-          
-              // alert(levID);
+               // if ( levID == 3) { 
+                    alert (levID)
+                // $('.notes-field').hide();
+                //}
             }
 //             function changetextbox(){
 //                var levID = document.getElementById("leave_type").value;

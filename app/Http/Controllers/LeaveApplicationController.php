@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
+use App\Http\Controllers\LeaveHistoryAuditController;
 use App\Mail\leave_applications;
 use App\Http\Requests;
 use App\LeaveType;
@@ -203,16 +204,49 @@ class LeaveApplicationController extends Controller
 
     }
 
-    public function day(Request $request, leave_application $levApp )
+    public function day(Request $request, leave_application $levApp  )
     {
+         $negDays  = leave_configuration::where('id' , 1)->first();
+
+         // if(count($negDays)){
+
+         // }
+         $study = $negDays->document_compulsory_on_Study_leave_application;
+         //return $study;
+
+        $sickdays = $negDays->document_compulsory_when_two_sick_leave_8_weeks;
+     
         $this->validate($request, [           
            'hr_person_id'=>'bail|required' ,
            "leave_type"=>'required',
             'day' =>'required',
+
+            // if ($study ==  1){
+            //   "supporting_doc"=>'required',  
+            // }
 //           'description' =>'required',
            //"supporting_doc",     
 
         ]);
+
+
+       
+       $negDays  = leave_configuration::where('id' , 1)->first();
+      // return $negDays;
+
+        $anualdays = $negDays->allow_annual_negative_days;
+        if($anualdays = null){
+            $anualdays = 0;
+        }else
+        $anualdays = $negDays->allow_annual_negative_days * 8;
+
+        $sickdays = $negDays->allow_sick_negative_days;
+        if($sickdays = null){
+         $sickdays = 0;
+        }else
+        $sickdays = $negDays->allow_sick_negative_days * 8;
+
+
         $ApplicationDetails = array();
 
         $leaveApp = $request->all(); 
@@ -228,8 +262,23 @@ class LeaveApplicationController extends Controller
         $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
             $query->orderBy('name', 'asc');
         }]);
+                $hrID = $leaveApp['hr_person_id'];
+                $typID = $leaveApp['leave_type'];
 
-        
+
+         $Details = leave_credit::where('hr_id',$hrID )
+                        ->where('leave_type_id', $typID) 
+                        ->first();
+
+             $leave_balance = $Details['leave_balance'];
+            // return $leave_balance;
+             return $anualdays;
+                    // if($anualdays == 1 && $typID == 1) {
+                    //         $anualdays +     #code ...
+                    //     }elseif ($sickdays == 1 && $typID == 5) {
+                    //         # code...
+                    //     }
+
         //Query leave holiday Tables
         $public_holiday = DB::table('public_holidays')->pluck('day');
 
@@ -241,12 +290,14 @@ class LeaveApplicationController extends Controller
         
           // Get employeeId from dropbbox
         $employees = $leaveApp['hr_person_id'];
+       
         
         // Get leavetype Id from dropbbox
         $tyop = $leaveApp['leave_type'];
         
         //query the hr table based on employeeId
         $HRpeople = HRPerson::find($employees);
+         $USername = $HRpeople->first_name;
         
         
          // separate day range
@@ -343,6 +394,8 @@ class LeaveApplicationController extends Controller
 
   
         AuditReportsController::store('Leave', 'Leave application ', "Accessed By User", 0);
+        #leave history audit
+        LeaveHistoryAuditController::store("Day leave application performed by : $USername", 1 ,0,2,$leave_balance);
         return back();
         //return view('leave.application')->with($levTypVar);  
     }
@@ -453,6 +506,9 @@ class LeaveApplicationController extends Controller
           //   ->update(['allow_negative_days' => $Days]);
           // }
 
+# check whose in the list of approving an application b4 writing into the db
+
+
           if($levTyp == 1)
           {
              $anualdays = $negDays->allow_annual_negative_days * 8;
@@ -487,19 +543,12 @@ class LeaveApplicationController extends Controller
               DB::table('leave_credit')
                     ->where('hr_id', $hrID)
                     ->where('leave_type_id', $typID) 
+             
                     ->update(['leave_balance' => $newBalance]);
-
-
-     #get hr_id
-     
-      // $leave_appDetails -> notes;
-      // $leave_appDetails -> hr_id;
-      // $leave_balance ;
-
-      // $levHist->hr_id = $hrIDet;
-      $levHist->description_action = $leave_appDetails;
-      $levHist->previous_balance = $leave_balance; 
-      $levHist->save();
+                #
+              $levHist->description_action = $leave_appDetails;
+              $levHist->previous_balance = $leave_balance; 
+              $levHist->save();
 
      
 
