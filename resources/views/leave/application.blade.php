@@ -98,8 +98,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                                     <!--                                                        -->
                         
                       <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">

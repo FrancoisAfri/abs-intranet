@@ -1,25 +1,35 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
+<!-- Include Date Range Picker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- bootstrap datepicker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-@endsection
 
+<!--Time Charger-->
+
+
+@endsection
 @section('content')
     <div class="row">
+        <!-- New User Form -->
         <div class="col-md-12">
+            <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <i class="fa fa-bug pull-right"></i>
-                    <h3 class="box-title">leave Reports</h3>
-                    <p>Select report parameters:</p>
+                    <i class="fa fa-anchor pull-right"></i>
+                    <h3 class="box-title">Leave Application</h3>
+                    <p id="box-subtitle">leave Application</p>
                 </div>
                 <!-- /.box-header -->
+                <!-- form start -->
 
-                <!-- Form Start -->
-                <form name="load-kpi-form" class="form-horizontal" method="POST" action="" >
+<!--                    <form name="leave-alloccation-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">-->
+                         <form name="leave-application-form" class="form-horizontal" method="POST" action="/" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -34,31 +44,19 @@
                                 </ul>
                             </div>
                         @endif
-                            <div class="form-group{{ $errors->has('report_type') ? ' has-error' : '' }}">
-                                <label for="report_type" class="col-sm-2 control-label">Report Type</label>
+                          <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                                <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
 
-                                <div class="col-sm-10">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_emp" name="report_type" value="1"{{ !old('report_type') ? ' checked' : '' }}{{ old('report_type') == 1 ? ' checked' : '' }}> Employees Appraisal</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_ranking" name="report_type" value="2" {{ old('report_type') == 2 ? ' checked' : '' }}> Employees Ranking</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_divisions" name="report_type" value="3" {{ old('report_type') == 2 ? ' checked' : '' }}> Group Performance</label>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Leave Taken </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Leave Balance</label>
+                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Leave Paid Out</label>
+                                      <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Leave Allowance</label>
+
                                 </div>
                             </div>
-                        @foreach($division_levels as $division_level)
-                            <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}{{ $loop->last ? ' last-level' : '' }}">
-                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                        <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                          <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employee(s)</label>
 
                             <div class="col-sm-10">
@@ -66,7 +64,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <select id="hr_person_id" name="hr_person_id[]" class="form-control select2" multiple="multiple" data-placeholder="Select at Least One Employee" style="width: 100%;">
+                                    <select id="hr_person_id" name="hr_person_id[]" class="form-control select2" multiple="multiple" data-placeholder="**Select at Least One Employee**">
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->full_name }}</option>
                                         @endforeach
@@ -74,10 +72,42 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="row emp-field" style="display: block;">
+                        <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                            <label for="leave_types_id" class="col-sm-2 control-label">Leave Type(s)</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <select id="leave_types_id" name="leave_types_id" class="form-control select2" multiple="multiple" data-placeholder="**Select Leave type**" >
+                                        @foreach($leaveTypes as $leaveType)
+                                                    <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                  @foreach($division_levels as $division_level)
+                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                          @endforeach   
+                    
+                         <div class="row emp-field" style="display: block;">
                                 <div class="col-xs-6">
-                                    <div class="form-group {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                        <label for="date_from" class="col-sm-4 control-label">From</label>
+                                    <div class="form-group from-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
+                                        <label for="date_from" class="col-sm-4 control-label">Date From</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
@@ -89,8 +119,8 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-6">
-                                    <div class="form-group {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                        <label for="date_to" class="col-sm-3 control-label">To</label>
+                                    <div class="form-group to-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
+                                        <label for="date_to" class="col-sm-3 control-label">Date To</label>
                                         <div class="col-sm-9">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
@@ -102,63 +132,65 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group ranking-field{{ $errors->has('ranking_type') ? ' has-error' : '' }}">
-                                <label for="ranking_type" class="col-sm-2 control-label">Ranking Type</label>
 
-                                <div class="col-sm-10">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rank_top" name="ranking_type" value="1"{{ !old('ranking_type') ? ' checked' : '' }}{{ old('ranking_type') == 1 ? ' checked' : '' }}> Top</label>
-                                    <label class="radio-inline"><input type="radio" id="rank_bottom" name="ranking_type" value="2" {{ old('ranking_type') == 2 ? ' checked' : '' }}> Bottom</label>
-                                </div>
-                            </div>
-                            <div class="form-group ranking-field{{ $errors->has('ranking_limit') ? ' has-error' : '' }}">
-                                <label for="ranking_limit" class="col-sm-2 control-label">Ranking Limit</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-sort-numeric-asc"></i>
-                                        </div>
-                                        <input type="number" class="form-control" id="ranking_limit" name="ranking_limit" value="10" placeholder="Ranking Limit">
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Cancel</button>
                         <button type="submit" id="gen_report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
                     </div>
+                    <!-- /.box-footer -->
+                 </div>
                 </form>
             </div>
+            <!-- /.box -->
         </div>
-        <!-- Include add new modal -->
+        <!-- End new User Form-->
+        <!-- Confirmation Modal -->
+        @if(Session('success_add'))
+            @include('contacts.partials.success_action', ['modal_title' => "Registration Successful!", 'modal_content' => session('success_add')])
+        @endif
     </div>
     @endsection
 
     @section('page_script')
-            <!-- Select2 -->
+    <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    <!-- Date Picker -->
+     <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <!-- Date rane picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- Date Picker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-    <!-- Ajax form submit -->
-    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-    <script>
+            <!-- Date picker -->
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+        
+<!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+        
+   <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
             //Cancel button click event
-            $('#back_button').click(function () {
-                location.href = '/';
+            $('#cancel').click(function () {
+                location.href = '/leave/application';
             });
-            //Initialize iCheck/iRadio Elements
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
+             function postData(id, data) {
+        alert(id);
+         //if (data == 'approval_id') location.href = "/leave/approval/" + id;
+            }
+             //Phone mask
+            $("[data-mask]").inputmask();
+
             //Date picker
             $('#date_from').datepicker({
                 format: 'MM yyyy',
@@ -175,18 +207,84 @@
                 todayHighlight: true
             });
 
-            //call hide/show fields functions on doc ready
-            hideFields();
-
-            //show/hide file upload or manual fields on radio checked
-            $('#rdo_emp, #rdo_ranking, #rdo_divisions').on('ifChecked', function(){
+            
+            //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
                 hideFields();
+            //show/hide fields on radio button toggles (depending on registration type)
+
+            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all').on('ifChecked', function(){      
+                var allType = hideFields();
+                if (allType == 1) $('#box-subtitle').html('Leave Taken');
+                else if (allType == 2) $('#box-subtitle').html('Leave Balance');
+                else if (allType == 3) $('#box-subtitle').html('Leave Paid Out');
+                 else if (allType == 4) $('#box-subtitle').html('Leave Allowance');
+            });
+            
+//                    $('input[name="daterange"]').daterangepicker();
+           
+
+//            
+              
+            //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                        dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
             });
 
-            //Load divisions drop down
-            var parentDDID = '';
-            var loadAllDivs = 1;
-            @foreach($division_levels as $division_level)
+            //Show success action modal
+            $('#success-action-modal').modal('show');
+        });      
+    
+        //function to hide/show fields depending on the allocation  type
+        function hideFields() {
+            var allType = $("input[name='application_type']:checked").val();
+            if (allType == 1) { //adjsut leave
+                 //$('.hours-field').hide();
+                 $('.to-field').show();
+                 $('.from-field').show();
+                //  $('form[name="leave-application-form"]').attr('action', '/leave/application/day');
+                // $('#load-allocation').val("Submit");        
+            }
+            else if (allType == 2) { //resert leave
+                 $('.to-field').show();
+                 $('.from-field').hide();
+                // $('.hours-field').show();
+                // $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
+                // $('#load-allocation').val("Submit");
+            }
+            else if(allType == 3){
+                $('.to-field').show();
+                 $('.from-field').show();
+            }
+            else if(allType == 4){
+                 $('.to-field').hide();
+                 $('.from-field').hide();
+            }
+                // $('form[name="leave-application-form"]').attr('action', '/leave/application/leavDetails');
+      
+            return allType;
+           
+        }
+          //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
             //Populate drop down on page load
             var ddID = '{{ 'division_level_' . $division_level->level }}';
             var postTo = '{!! route('divisionsdropdown') !!}';
@@ -197,26 +295,8 @@
             loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
             parentDDID = ddID;
             loadAllDivs = -1;
-            @endforeach
-        });
-
-        //function to hide/show report type fields
-        function hideFields() {
-            var reportType = $("input[name='report_type']:checked").val();
-            //console.log(reportType);
-            if (reportType == 1) { //Emp Appraisal report
-                $('.emp-field').show();
-                $('.ranking-field').hide();
-                //$('#load-kpi-form').attr('action', '/appraisal/upload_appraisals');
-            }
-            else if (reportType == 2) { //Ranking report
-                $('.ranking-field').show();
-                $('.emp-field').hide();
-            }
-            else if (reportType == 3) { //Divisions report
-                $('.emp-field, .ranking-field, .last-level').hide();
-            }
-            return reportType;
-        }
+        @endforeach
+      
+        
     </script>
 @endsection

@@ -8,6 +8,12 @@ use App\HRPerson;
 use App\programme;
 use App\projects;
 use App\User;
+use App\DivisionLevel;
+use App\LeaveType;
+use App\leave_custom;
+use App\leave_configuration;
+use App\leave_application;
+use App\hr_person;
 use App\AuditTrail;
 use App\leave_history;
 use Illuminate\Http\Request;
@@ -48,6 +54,48 @@ class LeaveHistoryAuditController extends Controller
 		$data['users'] = $users;
 		AuditReportsController::store('Leave History Audit', 'Reports page accessed', "Accessed by User", 0);
         return view('leave.reports.leave_search')->with($data);  
+    }
+
+        public function reports()
+    {   
+
+        $data['page_title'] = "Report";
+        $data['page_description'] = "Leave Reports";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Reports', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+             ['title' => 'Leave Reports', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+             ['title' => 'Leave Reports', 'active' => 1, 'is_module' => 0]
+
+        ];
+        $data['active_mod'] = 'leave';
+        $data['active_rib'] = 'Leave Reports';
+
+        
+        $users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+
+          $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
+        if (!empty($leave_customs))
+            $leave_customs = $leave_customs->load('userCustom');
+        
+
+
+        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
+            $query->orderBy('name', 'asc');
+        }]);
+        
+        $leaveTypes = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
+          $query->orderBy('name', 'asc');  
+        }]);
+         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+ 
+        
+        $data['users'] = $users;
+        $data['leaveTypes'] = $leaveTypes;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+        $data['leave_customs']=$leave_customs;
+        AuditReportsController::store('Leave History Audit', 'Reports page accessed', "Accessed by User", 0);
+        return view('leave.reports.leave_report_index')->with($data);  
     }
 
     public static function store($performedBy='',$descriptionAction ='',$previousBalance='',$transcation='' ,$current_balance ='')
