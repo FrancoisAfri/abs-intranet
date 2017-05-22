@@ -16,7 +16,7 @@ class CreateLeaveHistoryTable extends Migration
         Schema::create('leave_history', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('hr_id')->nullable(); //#employee_id
-            $table->string('performed_by')->nullable();
+            $table->string('action')->nullable();
             $table->smallInteger('description_action')->nullable();
             $table->smallInteger('previous_balance')->nullable();
             $table->smallInteger('transcation')->nullable();

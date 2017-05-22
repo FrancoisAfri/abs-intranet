@@ -16,6 +16,7 @@ use App\leave_application;
 use App\hr_person;
 use App\AuditTrail;
 use App\leave_history;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -114,13 +115,13 @@ class LeaveHistoryAuditController extends Controller
         return view('leave.reports.leave_report_index')->with($data);  
     }
 
-public static function store($performedBy='',$descriptionAction ='',$previousBalance='',$transcation='' ,$current_balance ='')
+public static function store($action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$current_balance ='')
     {
         $user = Auth::user();
         $leave_history = new leave_history();
 //        $leave_history
         $leave_history->hr_id = $user->id;
-        $leave_history->performed_by = $performedBy;
+        $leave_history->action = $action;
         $leave_history->description_action = $descriptionAction;   
         $leave_history->previous_balance = $previousBalance;  
         $leave_history->transcation = $transcation;
@@ -130,16 +131,230 @@ public static function store($performedBy='',$descriptionAction ='',$previousBal
         $leave_history->save();    
     }
     #draw history report according to search critea
-    public function getReport(Request $request)
-    {
+    public function taken(Request $request){
+        $this->validate($request, [    
+         #code here ....
 
-          $this->validate($request, [    
+        ]);
+           $request = $request->all();
+        unset($request['_token']);
+
+        // return $request;
+
+            //$dateFrom = trim($request->input('date_from'));
+            $empIDs = $request['hr_person_id'];
+            $LevTypID = $request['leave_types_id'];
+            $DivisionID =$request['division_level_2'];
+            $DepartmentID =$request['division_level_1'];
+            $dateFrom = trim($request['date_from']); 
+            $dateTo = trim($request['date_to']);;
+            //return $dateTo;
+
+            if ($dateFrom == '' && $dateTo == '') {
+                $dateFrom = Carbon::now()->day(15)->month(1);
+                $dateTo = Carbon::now()->day(15);
+            }
+            elseif ($dateFrom != '' && $dateTo == '') {
+                $dateFrom = Carbon::createFromFormat('d F Y', '15 ' . $dateFrom);
+                $dateTo = $dateFrom->copy()->month((int) date('m'));
+            }
+            elseif ($dateFrom == '' && $dateTo != '') {
+                $dateTo = Carbon::createFromFormat('d F Y', '15 ' . $dateTo);
+                $dateFrom = $dateTo->copy()->month(1);
+            }
+            elseif ($dateFrom != '' && $dateTo != '') {
+                $dateFrom = Carbon::createFromFormat('d F Y', '15 ' . $dateFrom);
+                $dateTo = Carbon::createFromFormat('d F Y', '15 ' . $dateTo);
+            }
+            $dateFrom->setTime(0, 0, 0);
+            $dateTo->setTime(0, 0, 0);
+            $printDateFrom = $dateFrom->copy();
+
+           
+
+
+            $empsResult = [];
+            #
+             foreach ($empIDs as $empID) {
+                $empResult = (object) [];
+                $emp = HRPerson::find($empID);
+                $empResult->emp_name = $emp->full_name;
+
+                
+                $historyAudit  = DB::table('leave_history')
+                ->select('leave_history.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
+                 ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo  > 0) {
+                  $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
+                }
+                })
+                 ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                  $query->where('leave_history.hr_id', $userID);
+                }
+                })
+                ->where(function ($query) use ($action) {
+                  if (!empty($action)) {
+                    $query->where('leave_history.action', 'ILIKE', "%$action%");
+                  }
+                })
+                ->orderBy('leave_history.hr_id')
+                ->get();
+             
+            }
+           
+
+
+    }
+#
+     public function leavebalance(Request $request){
+        $this->validate($request, [    
+          #code here ....
+          
+        ]);
+           $request = $request->all();
+        unset($request['_token']);
+
+        // return $request;
+            $userID = $request['hr_person_id'];
+            $LevTypID = $request['leave_types_id'];
+            $DivisionID =$request['division_level_2'];
+            $DepartmentID =$request['division_level_1'];
+            //$dateFrom = trim($request['date_from']); 
+            $dateTo = trim($request['date_to']);;
+            //return $dateTo;
+
+
+            #Query the leave credit
+      $credit  = DB::table('leave_credit')
+    ->select('leave_credit.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+    ->leftJoin('hr_people', 'leave_credit.hr_id', '=', 'hr_people.user_id')
+   
+     ->where(function ($query) use ($userID) {
+    if (!empty($userID)) {
+      $query->where('leave_credit.hr_id', $userID);
+    }
+    })
+    ->where(function ($query) use ($LevTypID) {
+      if (!empty($action)) {
+        $query->where('leave_credit.leave_types_id', $LevTypID );
+      }
+    })
+    ->orderBy('leave_credit.hr_id')
+    ->get();
+
+    return $credit;
          
+
+    }
+    #
+     public function leavepaidOut(Request $request){
+        $this->validate($request, [    
+          #code here ....
+          
         ]);
            $request = $request->all();
         unset($request['_token']);
 
         return $request;
+
+    }
+    #
+     public function leaveAllowance(Request $request){
+        $this->validate($request, [    
+          #code here ....
+          
+        ]);
+           $request = $request->all();
+        unset($request['_token']);
+
+        return $request;
+
+    }
+    #
+   
+    public function printreport(Request $request)
+    {
+        // $actionFrom = $actionTo = 0;
+        // $actionDate = $request->action_date;
+        // $userID = $request->user_id;
+        // $action = $request->action;
+        // $moduleName = $request->module_name;
+        // if (!empty($actionDate))
+        // {
+        //     $startExplode = explode('-', $actionDate);
+        //     $actionFrom = strtotime($startExplode[0]);
+        //     $actionTo = strtotime($startExplode[1]);
+        // }
+    }
+    #
+    #draw history report according to search critea
+    public function getlevhistoryReport(Request $request)
+    {
+          $this->validate($request, [    
+         
+        ]);
+           $request = $request->all();
+        unset($request['_token']);
+ // return $request;
+     
+    $actionFrom = $actionTo = 0;
+    $userID = $request['hr_person_id'];
+    $action = $request['action'];
+    $actionDate = $request['action_date'];  
+   //return $actionDate;
+    if (!empty($actionDate))
+    {
+      $startExplode = explode('-', $actionDate);
+      $actionFrom = strtotime($startExplode[0]);
+      $actionTo = strtotime($startExplode[1]);
+    }
+    $historyAudit  = DB::table('leave_history')
+    ->select('leave_history.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+    ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
+     ->where(function ($query) use ($actionFrom, $actionTo) {
+    if ($actionFrom > 0 && $actionTo  > 0) {
+      $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
+    }
+    })
+     ->where(function ($query) use ($userID) {
+    if (!empty($userID)) {
+      $query->where('leave_history.hr_id', $userID);
+    }
+    })
+    ->where(function ($query) use ($action) {
+      if (!empty($action)) {
+        $query->where('leave_history.action', 'ILIKE', "%$action%");
+      }
+    })
+    ->orderBy('leave_history.hr_id')
+    ->get();
+
+    //return $historyAudit;
+    #
+        $data['action'] = $action;
+        $data['user_id'] = $userID;
+        $data['action_date'] = $actionDate;
+        $data['historyAudit'] = $historyAudit;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+             ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],            //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+              ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+
+        ];
+        $data['active_mod'] = 'leave';
+        $data['active_rib'] = 'Leave History Audit';
+    AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('leave.leave_result_audit')->with($data);
+    }
+
+    #
+     public function getReport(Request $request)
+    {
+
+        
 
        // $actionFrom = $actionTo = 0;
         $action_date = $request->action_date;
@@ -149,16 +364,17 @@ public static function store($performedBy='',$descriptionAction ='',$previousBal
         //$moduleName = $request->module_name;
         if (!empty($actionDate))
         {
-            $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            // $startExplode = explode('-', $actionDate);
+            // $actionFrom = strtotime($startExplode[0]);
+            // $actionTo = strtotime($startExplode[1]);
         }
 
-        return $actionTo;
-       //  $audits = DB::table('audit_trail')
-       //  ->select('audit_trail.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
-       //  ->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.user_id')
-       //  ->where(function ($query) use ($actionFrom, $actionTo) {
+      //  return $actionTo;
+        // $audits = DB::table('leave_history')
+        //  ->select('leave_history.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+        //  ->leftJoin('hr_people', 'leave_history.user_id', '=', 'hr_people.user_id')
+        //  ->where(function ($query) use ($actionFrom, $actionTo)
+        //   {
        //  if ($actionFrom > 0 && $actionTo  > 0) {
        //      $query->whereBetween('audit_trail.action_date', [$actionFrom, $actionTo]);
        //  }
@@ -195,22 +411,9 @@ public static function store($performedBy='',$descriptionAction ='',$previousBal
        //  $data['active_mod'] = 'Audit';
        //  $data['active_rib'] = 'Audit Report';
        //  AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
-         return view('leave.leave_results_audit')->with($data);
-    // }
+         // return view('leave.leave_results_audit')->with($data);
+     //}
 
     }
-    public function printreport(Request $request)
-    {
-        // $actionFrom = $actionTo = 0;
-        // $actionDate = $request->action_date;
-        // $userID = $request->user_id;
-        // $action = $request->action;
-        // $moduleName = $request->module_name;
-        // if (!empty($actionDate))
-        // {
-        //     $startExplode = explode('-', $actionDate);
-        //     $actionFrom = strtotime($startExplode[0]);
-        //     $actionTo = strtotime($startExplode[1]);
-        // }
-    }
+
 }

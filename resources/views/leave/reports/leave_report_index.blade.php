@@ -24,7 +24,7 @@
                     <i class="fa fa-anchor pull-right"></i>
                     <h3 class="box-title">Leave Reports</h3>
                 </div>
-                         <form name="leave-application-form" class="form-horizontal" method="POST" action="/" enctype="multipart/form-data">
+                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -129,9 +129,13 @@
                             </div>
 
                     <!-- /.box-body -->
-                    <div class="box-footer">
+                    <!-- <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Cancel</button>
                         <button type="submit" id="gen_report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
+                    </div> -->
+                     <div class="box-footer">
+                        <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
+                       <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
                     </div>
                     <!-- /.box-footer -->
                  </div>
@@ -177,7 +181,7 @@
             $(".select2").select2();
             //Cancel button click event
             $('#cancel').click(function () {
-                location.href = '/leave/application';
+                location.href = '/leave/reports';
             });
              function postData(id, data) {
         alert(id);
@@ -201,8 +205,7 @@
                 minViewMode: "months",
                 todayHighlight: true
             });
-
-            
+        
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -219,22 +222,7 @@
                 else if (allType == 3) $('#box-subtitle').html('Leave Paid Out');
                  else if (allType == 4) $('#box-subtitle').html('Leave Allowance');
             });
-            
-//                    $('input[name="daterange"]').daterangepicker();
-           
-
-//            
-              
-            //Vertically center modals on page
-            function reposition() {
-                var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                modal.css('display', 'block');
-
-                // Dividing by two centers the modal exactly, but dividing by three
-                // or four works better for larger screens.
-                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-            }
+         
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
@@ -253,29 +241,30 @@
                  //$('.hours-field').hide();
                  $('.to-field').show();
                  $('.from-field').show();
-                //  $('form[name="leave-application-form"]').attr('action', '/leave/application/day');
-                // $('#load-allocation').val("Submit");        
+                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/taken');
+                 $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
                  $('.to-field').show();
                  $('.from-field').hide();
                 // $('.hours-field').show();
-                // $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
-                // $('#load-allocation').val("Submit");
+                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavebal');
+                 $('#gen-report').val("Submit"); 
             }
             else if(allType == 3){
                 $('.to-field').show();
                  $('.from-field').show();
+                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
+                   $('#gen-report').val("Submit"); 
             }
             else if(allType == 4){
                  $('.to-field').hide();
                  $('.from-field').hide();
+                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
+                 $('#gen-report').val("Submit"); 
             }
-                // $('form[name="leave-application-form"]').attr('action', '/leave/application/leavDetails');
-      
-            return allType;
-           
-        }
+            return allType;      
+            }
           //Load divisions drop down
         var parentDDID = '';
         var loadAllDivs = 1;

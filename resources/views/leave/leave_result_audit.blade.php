@@ -4,7 +4,7 @@
         <div class="col-sm-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Audit Report</h3>
+                    <h3 class="box-title">Leave History Report</h3>
                 </div>
                 <!-- /.box-header -->
 				<form class="form-horizontal" method="POST" action="/audits/print">
@@ -21,21 +21,27 @@
                             <div class="box-body">
 								<table class="table table-striped">
 									<tr>
-										<th>Module Name</th>
+										<!-- <th>Module Name</th> -->
 										<th>User</th>
 										<th>Action</th>
 										<th>Action Date</th>
-										<th>Notes</th>
+										<th>Previous Balance</th>
+										<th>Current Transaction</th>
+										<!-- <th>Previous Balance</th>
+										<th>Previous Balance</th>
+										<th>Previous Balance</th> -->
+
+
 									</tr>
-									@if(count($audits) > 0)
-										@foreach($audits as $audit)
+									@if(count($historyAudit) > 0)
+										@foreach($historyAudit as $audit)
 											<tr>
-												<td>{{ !empty($audit->module_name) ? $audit->module_name : '' }}</td>
+											<!-- <td>{{ !empty($audit->module_name) ? $audit->module_name : '' }}</td> -->
 												<td>{{ !empty($audit->firstname) && !empty($audit->surname) ? $audit->firstname.' '.$audit->surname : '' }}</td>
 												<td>{{ !empty($audit->action) ? $audit->action : '' }}</td>
 												<td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td>
-												<td>{{ !empty($audit->notes) ? $audit->notes : '' }}</td>
-												
+												<td>{{ !empty($audit->previous_balance) ? $audit->previous_balance : '' }}</td>
+												<td>{{ !empty($audit->transcation) ? $audit->transcation : '' }}</td>
 											</tr>
 										@endforeach
 									@endif

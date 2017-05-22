@@ -145,7 +145,7 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
 <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control pull-left" name="day" value=" " />
+                                    <input type="text" class="form-control pull-left" name="day" value=""  />
                                     
                                 </div>
                             </div>
@@ -270,12 +270,13 @@
              //Phone mask
             $("[data-mask]").inputmask();
 
-           //  var bal = $('#availdays').val();
-             //negsick
+            var bal = $('#availdays').val();
+            var negDays = $('#negsick').val();
+            var negannual = $('#negannual').val();
+            var varName = bal ;
 
-            // var negDays = $('#negDays').val();
-            // var negannual = $('#negannual').val();
-            // var varName = bal + negDays;
+            //alert (varName)
+
 
             //Initialise date range picker elements
             $('input[name="day"]').daterangepicker({
@@ -288,6 +289,7 @@
                 "dateLimit": {
                     "days": 3
                 },
+                autoclose: true
             });
             $('input[name="datetime"]').daterangepicker({
                 timePicker: true    ,
@@ -307,9 +309,7 @@
                 if (hr_person_id > 0 && leave_type >0) {
                     avilabledays(hr_person_id, leave_type,'availdays');
                 }
-            });
-
-            
+            });        
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',

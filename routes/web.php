@@ -89,11 +89,17 @@ Route::post('leave/approval/{levReject}', 'LeaveApplicationController@reject');
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
 Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
 Route::post('leave/reports/result', 'LeaveHistoryAuditController@getReport');
+Route::post('leave/reports/history', 'LeaveHistoryAuditController@getlevhistoryReport');
 
-#
+#leave history report
 Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
 
+#Leave Reports
+Route::post('leave/reports/taken', 'LeaveHistoryAuditController@taken');
+Route::post('leave/reports/leavebal', 'LeaveHistoryAuditController@leavebalance');
+Route::post('leave/reports/leavepaOut', 'LeaveHistoryAuditController@leavepaidOut');
+Route::post('leave/reports/leaveAll', 'LeaveHistoryAuditController@leaveAllowance');
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
