@@ -52,6 +52,16 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Create User Page Accessed', "Accessed By User", 0);
         return view('security.add_user')->with($data);
     }
+	public function deleteUser(User $user)
+	{
+		# Delete record form database
+		$user->load('person');
+		$name = $user->person->first_name.' '.$user->person->surname;
+		AuditReportsController::store('Security', 'User Deleted', "Del: $name ", 0);
+		DB::table('users')->where('id', '=', $user->id)->delete();
+		DB::table('hr_people')->where('user_id', '=', $user->id)->delete();
+		return redirect('/users')->with('success_delete', "User Successfully Deleted.");
+	}
 	public function modules() 
 	{
         $modules = DB::table('security_modules')->orderBy('name', 'asc')->get();
