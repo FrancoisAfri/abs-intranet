@@ -322,14 +322,9 @@
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Days');
                 else if (allType == 2) $('#box-subtitle').html('Hours');
-//                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
             
-//                    $('input[name="daterange"]').daterangepicker();
-           
-
-//            
-              
+         
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -354,18 +349,17 @@
 //      hide notes field if leave type is maternity
             function changetextbox(){
                 var levID = document.getElementById("leave_type").value;
-              
-                   // alert (levID)
-                   //   if (levID ==  1){
-                   //     $('.neg-field').hide();  
-                   // }else(levID ==  5){
-                   //  $('.Sick-field').hide(); 
-                   // }
-
-                    
-
-                 // Sick-field
-               
+                   // alert (levID);
+                     if (levID ==  1){
+                       $('.neg-field').hide();
+                       $('.Sick-field').show(); 
+                   }else if(levID == 2,3,4,6,7,8){
+                    $('.Sick-field').hide(); 
+                    $('.neg-field').hide();
+                   }else if(levID ==  5){
+                    $('.Sick-field').hide(); 
+                    $('.neg-field').show();
+                   }
             }
 
         //function to hide/show fields depending on the allocation  type
