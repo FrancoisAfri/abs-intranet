@@ -484,21 +484,4 @@ class UsersController extends Controller
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
 
-
-     public function updateAnnual(Request $request, leave_custom $lev)
-    {
-        //$user = Auth::user()->load('person');
-        $this->validate($request, [
-            //'hr_id' => 'required',
-            'number_of_days'=>  'numeric|required',
-
-        ]);
-        //$lev->hr_id = $request->input('hr_id');
-        $lev->number_of_days = $request->input('number_of_days');
-        $lev->update();
-        //return $lev;
-        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
-        return response()->json();
-    }
-    //
 }

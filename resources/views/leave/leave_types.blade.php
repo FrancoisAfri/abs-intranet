@@ -179,10 +179,6 @@
             //modal.find('#hr_id').val(hr_id);
             modal.find('#number_of_days').val(number_of_days);
             modal.find('#hr_id').val(employeeName);
-            // modal.find('#font_awesome').val(moduleFontAwesome);
-            //if(primeRate != null && primeRate != '' && primeRate > 0) {
-            //    modal.find('#prime_rate').val(primeRate.toFixed(2));
-            //}
         });
         ///leave/type/add_leave
         //****leave type post

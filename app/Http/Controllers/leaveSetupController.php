@@ -55,10 +55,10 @@ class LeaveSetupController extends Controller
         $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->get();
         $data['page_title'] = "leave Types";
-        $data['page_description'] = "Admin page for leave related settings";
+        $data['page_description'] = "leave types";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/leave/types', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => '', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Leave Management', 'path' => '/leave/types', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+             ['title' => 'Leave Types ', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Leave Types';
@@ -78,8 +78,7 @@ class LeaveSetupController extends Controller
         $data['page_title'] = "Allocate Leave Types";
         $data['page_description'] = "Allocate leave types ";
         $data['breadcrumb'] = [
-            ['title' => 'leave', 'path' => '/leave/Allocate_leave_types', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Allocate leave ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Leave Management', 'path' => '/leave/Allocate_leave_types', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],['title' => 'Allocate leave ', 'active' => 1, 'is_module' => 0]
         ];
         $leaveTypes = DB::table('leave_types')->orderBy('name', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
@@ -120,8 +119,7 @@ class LeaveSetupController extends Controller
         $data['page_title'] = "leave type";
         $data['page_description'] = "leave set up ";
         $data['breadcrumb'] = [
-            ['title' => 'leave', 'path' => '/leave/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Leave Management', 'path' => '/leave/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
             $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function($query) {
             $query->orderBy('id', 'asc');
@@ -324,26 +322,13 @@ public function  resert(Request $request, LeaveType $lev)
                  $custDays = $custLeave->number_of_days; 
                  $custstatus = $custLeave->status; 
 
-                 // DB::table('leave_custom')
-                 //        //->where('hr_id', $hrID)
-                 //        // ->where('leave_type_id', $typID) 
-                 //        ->save(['number_of_days' => $custDays]);
-
                 }
 
                 
                 //$custDays = $custLeave->number_of_days;
                     
                //$levcust = leave_custom::find($empID)->hr_id;
-               
 
-                // if($levcust ==  null)
-                // {
- 
-                //     // INSERT INTO leave_customs (ID,hr_id,leave_balance,leave_type_id) 
-                //     // VALUES (1, $empID, 0, $LevID);
-
-                // }
                 
             //return $custom days and custom status 
            
@@ -351,8 +336,7 @@ public function  resert(Request $request, LeaveType $lev)
             $levcustom = $custDays/12;
              $custleave = $levcustom * 8; 
                 // return leave profile id based on an user id;
-               // $levProfile = leave_profile::find($levPro)->id;
-                //return $levProfile;
+
          
                   //$credit = $minimum->hr_person->where('id', 1)->first();
 //            return $levCreditv;    
@@ -365,7 +349,7 @@ public function  resert(Request $request, LeaveType $lev)
                $minimum = type_profile::where('leave_type_id', $LevID)
                                 ->where('leave_profile_id' , $proId)
                                 ->first(); 
-                                
+
                                 $min = 0;
                                 if(count($minimum) > 0){
                                     
