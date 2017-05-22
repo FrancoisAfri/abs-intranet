@@ -235,28 +235,7 @@ class LeaveApplicationController extends Controller
                 return $balance->first()->leave_balance;
             }
 
-            #function to get negative sick leave days for user based on userID and LeaveID
-            public function negativesickDays($hrID, $typID){
-                 $balance = DB::table('leave_configuration')
-                  ->select('allow_sick_negative_days' ) 
-                        ->where('id', 1)
-                        ->get();
-
-                return $balance->first()->allow_sick_negative_days;
-            }
-
-              #function to get negative annual leave days for user based on userID and LeaveID
-            public function negativeannualDays($hrID, $typID){
-               
-                 $balance = DB::table('leave_configuration')
-                  ->select('allow_annual_negative_days' ) 
-                        ->where('id', 1)
-                        ->get();
-
-                return $balance->first()->allow_annual_negative_days;
-            }
-
-
+ 
     public function day(Request $request, leave_application $levApp  )
     {
          $negDays  = leave_configuration::where('id' , 1)->first();
@@ -524,7 +503,7 @@ class LeaveApplicationController extends Controller
         $levApp->leave_hours = $diffrencetime;
         $levApp->save();    
         
-        return back();
+        return back()->with('success_application', "leave application was successful.");;
     }
 
 //Function to accept leave applications
