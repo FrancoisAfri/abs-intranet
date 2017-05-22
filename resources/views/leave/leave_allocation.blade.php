@@ -131,8 +131,8 @@
         </div>
         <!-- End new User Form-->
         <!-- Confirmation Modal -->
-        @if(Session('success_add'))
-            @include('contacts.partials.success_action', ['modal_title' => "Registration Successful!", 'modal_content' => session('success_add')])
+       @if(Session('success_application'))
+            @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
         @endif
     </div>
     @endsection

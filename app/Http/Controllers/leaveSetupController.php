@@ -240,7 +240,7 @@ class LeaveSetupController extends Controller
         LeaveHistoryAuditController::store('Added annul leave Days', 1 ,0,0,$currentBalance);
        }
         
-    return back();
+    return back()->with('success_application', "leave action was successful adjusted.");
 }
         //leavecredit
 
@@ -277,7 +277,7 @@ public function  resert(Request $request, LeaveType $lev)
         }
     
 
-    return back();
+    return back()->with('success_application', "leave allocation was successful resert.");
 }
     
     public function allocate(Request $request , LeaveType $lev)
@@ -383,7 +383,7 @@ public function  resert(Request $request, LeaveType $lev)
         } 
        
             
-       return back(); 
+       return back()->with('success_application', "leave allocation was successful."); 
     }
     
         

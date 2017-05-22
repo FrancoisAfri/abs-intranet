@@ -503,7 +503,7 @@ class LeaveApplicationController extends Controller
         $levApp->leave_hours = $diffrencetime;
         $levApp->save();    
         
-        return back()->with('success_application', "leave application was successful.");;
+        return back()->with('success_application', "leave application was successful.");
     }
 
 //Function to accept leave applications
