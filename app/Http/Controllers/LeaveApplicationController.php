@@ -58,11 +58,30 @@ class LeaveApplicationController extends Controller
 
 
         $data['page_title'] = "leave Types";
-        $data['page_description'] = "Leave Application";
+        $data['page_description'] = "Leave Management";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => '', 'active' => 1, 'is_module' => 0]
+          ['title' => 'Leave Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Leave Application', 'active' => 1, 'is_module' => 0]
         ];
+
+         #Query to get negative annual leave days for user based on userID and LeaveID
+          $negativeannualDays = DB::table('leave_configuration')
+                  ->select('allow_annual_negative_days' ) 
+                        ->where('id', 1)
+                        ->get();
+           $negannualDays = $negativeannualDays->first()->allow_annual_negative_days;
+           
+
+          #Query to get negative sick leave days for user based on userID and LeaveID
+             $negativesickDays = DB::table('leave_configuration')
+                  ->select('allow_sick_negative_days' ) 
+                        ->where('id', 1)
+                        ->get();
+             $negsickDays = $negativesickDays->first()->allow_sick_negative_days;
+             
+
+        $data['negannualDays'] = $negannualDays;
+        $data['negsickDays'] = $negsickDays;
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Apply';
         $data['leaveTypes'] = $leaveTypes;
@@ -82,8 +101,8 @@ class LeaveApplicationController extends Controller
         $data['page_title'] = "leave Management";
         $data['page_description'] = "Leave Approvals";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => 'leave/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => '', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Leave Management', 'path' => 'leave/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
         ];
         // $hrDetails = HRPerson::where('id',3 )->where('status', 1)->get();
         // // $Dept = DivisionLevelTwo::where('id' , 2 ) -> get();
@@ -109,6 +128,7 @@ class LeaveApplicationController extends Controller
         ->orderBy('leave_application.hr_id')
         ->get();
 
+       
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Approve';
         $data['leaveTypes'] = $leaveTypes;
@@ -203,6 +223,39 @@ class LeaveApplicationController extends Controller
             }
 
     }
+          #function to get available days for user based on userID and LeaveID
+            public function availableDays($hrID, $typID){
+                
+                 $balance = DB::table('leave_credit')
+                  ->select('leave_balance' ) 
+                        ->where('hr_id', $hrID)
+                        ->where('leave_type_id', $typID) 
+                        ->get();
+
+                return $balance->first()->leave_balance;
+            }
+
+            #function to get negative sick leave days for user based on userID and LeaveID
+            public function negativesickDays($hrID, $typID){
+                 $balance = DB::table('leave_configuration')
+                  ->select('allow_sick_negative_days' ) 
+                        ->where('id', 1)
+                        ->get();
+
+                return $balance->first()->allow_sick_negative_days;
+            }
+
+              #function to get negative annual leave days for user based on userID and LeaveID
+            public function negativeannualDays($hrID, $typID){
+               
+                 $balance = DB::table('leave_configuration')
+                  ->select('allow_annual_negative_days' ) 
+                        ->where('id', 1)
+                        ->get();
+
+                return $balance->first()->allow_annual_negative_days;
+            }
+
 
     public function day(Request $request, leave_application $levApp  )
     {
@@ -272,7 +325,7 @@ class LeaveApplicationController extends Controller
 
              $leave_balance = $Details['leave_balance'];
             // return $leave_balance;
-             return $anualdays;
+           
                     // if($anualdays == 1 && $typID == 1) {
                     //         $anualdays +     #code ...
                     //     }elseif ($sickdays == 1 && $typID == 5) {
@@ -396,7 +449,8 @@ class LeaveApplicationController extends Controller
         AuditReportsController::store('Leave', 'Leave application ', "Accessed By User", 0);
         #leave history audit
         LeaveHistoryAuditController::store("Day leave application performed by : $USername", 1 ,0,2,$leave_balance);
-        return back();
+
+        return back()->with('success_application', "leave application was successful.");
         //return view('leave.application')->with($levTypVar);  
     }
     
@@ -532,7 +586,7 @@ class LeaveApplicationController extends Controller
                  DB::table('leave_credit')
                         ->where('hr_id', $hrID)
                         ->where('leave_type_id', $typID) 
-                        ->update(['leave_balance' => $nwBal]);
+                         ->update(['leave_balance' => $nwBal]);
          }else
           #Get the user leave balance
              $daysApplied =  $id['leave_days'];       

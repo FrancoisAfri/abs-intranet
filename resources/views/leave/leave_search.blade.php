@@ -18,46 +18,54 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST" action="/">
+                <form class="form-horizontal" id="report_form" method="POST" action="/leave/reports/result/">
                 <!-- audits -->
                     {{ csrf_field() }}
 
                     <div class="box-body">
-                        <div class="form-group groups">
-                            <label for="user_id" class="col-sm-3 control-label">User</label>
-                            <div class="col-sm-9">
+                        <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                            <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                                        <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" required>
-                                        <option selected="selected" value="0">*** Select a User ***</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->user_id }}">{{ $user->first_name.' '.$user->surname}}</option>
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
+                                        <option value="">*** Select an Employee ***</option>
+                                        @foreach($employees as $employee)
+                                            <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-						<div class="form-group">
-                            <label for="action" class="col-sm-3 control-label">Action</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<input type="text" class="form-control" id="action" name="action" placeholder="Enter an Action...">
-								</div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="action_date" class="col-sm-3 control-label">Action Date</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user"></i>
+                     <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select id="leave_type" name="leave_type" onChange= "changetextbox();" class="form-control">
+                                            <option value="leavetyes">*** Select leave Type ***</option> 
+                                                @foreach($leaveTypes as $leaveType)
+                                                    <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
+                            </div> 
+
+                          <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Action Date</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
+                                    <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
+                                    
                                 </div>
                             </div>
                         </div>

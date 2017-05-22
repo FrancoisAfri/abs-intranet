@@ -1,3 +1,17 @@
+/* function to get leave balance */
+function avilabledays(hr_id, levID, availdaystxt) {
+     postTo = '/api/leave/availableBalance/'+ hr_id + '/' + levID;
+    $.get(postTo, { hr_id: hr_id, levID: levID },
+        function(data) {
+            var txtBalance = $('#'+availdaystxt);
+            txtBalance.val(data);
+        });
+}
+
+/* function to get negative leave days */
+
+
+
 /* function to load [Divisions] drop down options */
 function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo) {
     parentDDID = parentDDID || '';

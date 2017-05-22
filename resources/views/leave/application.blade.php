@@ -87,19 +87,56 @@
                                 </div>
                             </div>                 
                             <!-- This is the dropbox which must receive a value from the leave dropbox via jquery -->
-                        <div class="form-group  ">
+                      <!--   <div class="form-group  ">
+                            <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
+                            <div class="col-sm-5">
+                                    <input type="text" id ="availdays" class="form-control pull-left" name="val" value=" " disabled="true">
+                            </div>
+                        </div> -->
+                         <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-                                    @foreach($employees as $employee)
-                        {{ ($balance = $employee->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: '' }}
-              <!-- /  $emp->leave_types()->where('leave_type_id',$leveTyp)->sync([$empID => ['leave_balance' => $currentBalance ]]);  -->
-                                    @endforeach  
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id ="availdays" class="form-control pull-left" name="val" value=" " disabled="true">
                                 </div>
                             </div>
                         </div>
-                                    <!--                                                        -->
-                        
+
+                        <!--  -->
+                           <div class="row emp-field" style="display: block;">
+                                <div class="col-xs-6">
+                                    <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
+                                        <label for="date_from" class="col-sm-4 control-label">Available Ann Sick Days:</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" id ="negsick" class="form-control pull-left" name="val" value=" {{$negannualDays}}" disabled="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                          
+                                 <div class="col-xs-6">
+                                    <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
+                                        <label for="date_to" class="col-sm-3 control-label">Available neg Sick Days:</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                               <input type="text" id ="negannual" class="form-control pull-left" name="val" value=" {{$negsickDays}}" disabled="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!--  -->
+
                       <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Day</label>
                             <div class="col-sm-10">
@@ -123,16 +160,12 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     
-                                    <input type="text" class="form-control pull-left" name="datetime" value=" " />
+                                    <input type="text" class="form-control pull-left" name="av" value=" " />
                                     
                                 </div>
                             </div>
                         </div>
-                             
-                                        <!--    / collumn -->
- 
-                        
-                        
+              
                         <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
@@ -169,8 +202,8 @@
         </div>
         <!-- End new User Form-->
         <!-- Confirmation Modal -->
-        @if(Session('success_add'))
-            @include('contacts.partials.success_action', ['modal_title' => "Registration Successful!", 'modal_content' => session('success_add')])
+        @if(Session('success_application'))
+            @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
         @endif
     </div>
     @endsection
@@ -237,6 +270,13 @@
              //Phone mask
             $("[data-mask]").inputmask();
 
+           //  var bal = $('#availdays').val();
+             //negsick
+
+            // var negDays = $('#negDays').val();
+            // var negannual = $('#negannual').val();
+            // var varName = bal + negDays;
+
             //Initialise date range picker elements
             $('input[name="day"]').daterangepicker({
                 timePicker: false,
@@ -246,7 +286,7 @@
                     format: 'DD/MM/YYYY'
                 },
                 "dateLimit": {
-                    "days": 4
+                    "days": 3
                 },
             });
             $('input[name="datetime"]').daterangepicker({
@@ -260,6 +300,14 @@
                 },
             });
             
+            $('#hr_person_id , #leave_type').on('change', function(){
+              //  console.log('test message');
+                var hr_person_id = $('#hr_person_id').val();
+                var leave_type = $('#leave_type').val();
+                if (hr_person_id > 0 && leave_type >0) {
+                    avilabledays(hr_person_id, leave_type,'availdays');
+                }
+            });
 
             
             //Initialize iCheck/iRadio Elements
@@ -306,23 +354,20 @@
 //      hide notes field if leave type is maternity
             function changetextbox(){
                 var levID = document.getElementById("leave_type").value;
-                //return levID;
-               // if ( levID == 3) { 
-                    alert (levID)
-                // $('.notes-field').hide();
-                //}
-            }
-//             function changetextbox(){
-//                var levID = document.getElementById("leave_type").value;
-//                var EmpID = document.getElementById("employee").value;
-//
-//                //return levID;
-//               return EmpID;
-//        
-//            }
-      
+              
+                   // alert (levID)
+                   //   if (levID ==  1){
+                   //     $('.neg-field').hide();  
+                   // }else(levID ==  5){
+                   //  $('.Sick-field').hide(); 
+                   // }
 
-    
+                    
+
+                 // Sick-field
+               
+            }
+
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();
@@ -344,7 +389,9 @@
             return allType;
            
         }
-      
+      // function getEmployeeBal(hr_id, levID, availdaystxt){
+
+      // }
         
     </script>
 @endsection

@@ -88,6 +88,7 @@ Route::post('leave/approval/{levReject}', 'LeaveApplicationController@reject');
 #leaveHistory audit
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
 Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
+Route::post('leave/reports/result', 'LeaveHistoryAuditController@getReport');
 
 #
 Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
@@ -281,6 +282,8 @@ Route::get('api/availableperks', 'AppraisalGraphsController@getAvailablePerks')-
 Route::get('api/appraisal/emp/topten', 'AppraisalGraphsController@getTopTenEmployees')->name('toptenemp');
 Route::get('api/appraisal/emp/bottomten', 'AppraisalGraphsController@getBottomTenEmployees')->name('bottomtenemp');
 Route::get('api/appraisal/staffunder/{managerID}', 'AppraisalGraphsController@getSubordinates')->name('staffperform');
+Route::get('api/leave/availableBalance/{hr_id}/{levID}', 'LeaveApplicationController@availableDays');
+Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController@negativeDays');
 
 //Email Test
 Route::get('testemail', function () {

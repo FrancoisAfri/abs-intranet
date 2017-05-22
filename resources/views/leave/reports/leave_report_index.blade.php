@@ -22,13 +22,8 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-anchor pull-right"></i>
-                    <h3 class="box-title">Leave Application</h3>
-                    <p id="box-subtitle">leave Application</p>
+                    <h3 class="box-title">Leave Reports</h3>
                 </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-
-<!--                    <form name="leave-alloccation-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">-->
                          <form name="leave-application-form" class="form-horizontal" method="POST" action="/" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
