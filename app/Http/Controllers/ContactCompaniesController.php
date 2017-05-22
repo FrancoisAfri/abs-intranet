@@ -39,9 +39,19 @@ class ContactCompaniesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+	public function create()
     {
-        //
+        $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
+        $data['page_title'] = "Clients";
+        $data['page_description'] = "Add a New Company";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Add company', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['provinces'] = $provinces;
+        $data['active_mod'] = 'clients';
+        $data['active_rib'] = 'add company';
+        return view('contacts.add_company')->with($data);
     }
 
     public $company_types = [1 => 'Service Provider', 2 => 'School', 3 => 'Sponsor'];
@@ -97,7 +107,169 @@ class ContactCompaniesController extends Controller
         return view('contacts.add_company')->with($data);
     }
 
+    public function storeCompany(Request $request)
+    {
+        //validate form data
+        $this->validate($request,[
+           'name' => 'required',
+           'bee_score' => 'numeric',
+           'email' => 'email',
+           'phys_postal_code' => 'integer',
+        ]);
+
+        $formData = $request->all();
+
+        //Exclude empty fields from query
+        foreach ($formData as $key => $value)
+        {
+            if (empty($formData[$key])) {
+                unset($formData[$key]);
+            }
+        }
+
+        //Insert Data
+        $company = new ContactCompany($formData);
+        $company->status = 1;
+        $company->save();
+
+        //Upload BEE document
+        if ($request->hasFile('bee_certificate_doc')) {
+            $fileExt = $request->file('bee_certificate_doc')->extension();
+            if (in_array($fileExt, ['pdf']) && $request->file('bee_certificate_doc')->isValid()) {
+                $fileName = $company->id . "_bee_certificate." . $fileExt;
+                $request->file('bee_certificate_doc')->storeAs('company_docs', $fileName);
+                //Update file name in the table
+                $company->bee_certificate_doc = $fileName;
+                $company->update();
+            }
+        }
+
+        //Upload Company Registration document
+        if ($request->hasFile('comp_reg_doc')) {
+            $fileExt = $request->file('comp_reg_doc')->extension();
+            if (in_array($fileExt, ['pdf']) && $request->file('comp_reg_doc')->isValid()) {
+                $fileName = $company->id . "_comp_reg_doc." . $fileExt;
+                $request->file('comp_reg_doc')->storeAs('company_docs', $fileName);
+                //Update file name in the table
+                $company->comp_reg_doc = $fileName;
+                $company->update();
+            }
+        }
+
+        return redirect('/contacts/company/' . $company->id . '/view')->with('success_add', "The company has been added successfully");
+    }
+
     /**
+     * Display the specified resource.
+     *
+     * @param  ContactCompany $company
+     * @return \Illuminate\Http\Response
+     */
+    public function showCompany(ContactCompany $company)
+    {
+        $user = Auth::user();
+        $beeCertDoc = $company->bee_certificate_doc;
+        $compRegDoc = $company->comp_reg_doc;
+        $provinces = Province::where('country_id', 1)->where('id', $company->phys_province)->get()->first();
+        $showEdit = (in_array($user->type, [1, 3])) ? true : false;
+
+        $data['page_title'] = "Clients";
+        $data['page_description'] = "View Company Details";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'View company', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'clients';
+        $data['active_rib'] = 'search';
+        $data['company'] = $company;
+        $data['bee_certificate_doc'] = (!empty($beeCertDoc)) ? Storage::disk('local')->url("company_docs/$beeCertDoc") : '';
+        $data['comp_reg_doc'] = (!empty($compRegDoc)) ? Storage::disk('local')->url("company_docs/$compRegDoc") : '';
+        $data['provinces'] = $provinces;
+        $data['show_edit'] = $showEdit;
+        return view('contacts.view_company')->with($data);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  ContactCompany $company
+     * @return \Illuminate\Http\Response
+     */
+    public function editCompany(ContactCompany $company)
+    {
+        $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
+        $data['page_title'] = "Clients";
+        $data['page_description'] = "Edit Company Details";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Edit company', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['company'] = $company;
+        $data['provinces'] = $provinces;
+        $data['active_mod'] = 'clients';
+        $data['active_rib'] = 'add company';
+        return view('contacts.edit_company')->with($data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  ContactCompany $company
+     * @return \Illuminate\Http\Response
+     */
+    public function updateCompany(Request $request, ContactCompany $company)
+    {
+        //Validation
+        $this->validate($request, [
+            'name' => 'required',
+            'bee_score' => 'numeric',
+            'email' => 'email',
+            'phys_postal_code' => 'integer',
+        ]);
+        $formData = $request->all();
+
+        //Exclude empty fields from query
+        foreach ($formData as $key => $value)
+        {
+            if (empty($formData[$key])) {
+                unset($formData[$key]);
+            }
+        }
+
+        //Update company data
+        $company->update($formData);
+
+        //Upload BEE document
+        if ($request->hasFile('bee_certificate_doc')) {
+            $fileExt = $request->file('bee_certificate_doc')->extension();
+            if (in_array($fileExt, ['pdf']) && $request->file('bee_certificate_doc')->isValid()) {
+                $fileName = $company->id . "_bee_certificate." . $fileExt;
+                $request->file('bee_certificate_doc')->storeAs('company_docs', $fileName);
+                //Update file name in the table
+                $company->bee_certificate_doc = $fileName;
+                $company->update();
+            }
+        }
+
+        //Upload Company Registration document
+        if ($request->hasFile('comp_reg_doc')) {
+            $fileExt = $request->file('comp_reg_doc')->extension();
+            if (in_array($fileExt, ['pdf']) && $request->file('comp_reg_doc')->isValid()) {
+                $fileName = $company->id . "_comp_reg_doc." . $fileExt;
+                $request->file('comp_reg_doc')->storeAs('company_docs', $fileName);
+                //Update file name in the table
+                $company->comp_reg_doc = $fileName;
+                $company->update();
+            }
+        }
+
+        return redirect('/contacts/company/' . $company->id . '/view')->with('success_edit', "The company details have been successfully updated");
+    }
+	
+	
+	
+	/**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

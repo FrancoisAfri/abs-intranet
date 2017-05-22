@@ -66,7 +66,7 @@
             var ribbonId;
 			
 			document.getElementById("back_button").onclick = function () {
-			location.href = "/users/setup";	};
+			location.href = "/users/modules";	};
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 

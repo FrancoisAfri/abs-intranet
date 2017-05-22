@@ -121,7 +121,7 @@
                         _token: $('input[name=_token]').val()
                     },
                     success: function(success) {
-                        location.href = "/users/setup/";
+                        location.href = "/users/modules/";
                         $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
                         $('form[name=' + formName + ']').trigger('reset'); //Reset the form
 

@@ -47,6 +47,19 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+//#Contacts Management
+
+Route::get('contacts', 'ContactsController@index');
+Route::get('contacts/create', 'ContactsController@create');
+Route::post('contacts/email', 'ContactsController@emailAdmin');
+Route::get('contacts/{user}/edit', 'ContactsController@edit');
+Route::get('contacts/profile', 'ContactsController@profile');
+Route::post('contacts', 'ContactsController@store');
+Route::post('contacts/search', 'ContactsController@getSearch');
+Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
+Route::patch('contacts/{user}', 'ContactsController@update');
+
+
 //#Leave Management
 //Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -123,12 +136,15 @@ Route::patch('contacts/{contact}', 'ContactsController@update');
 //Route::get('contacts/provider/create', 'ContactCompaniesController@createServiceProvider');
 //Route::get('contacts/sponsor/create', 'ContactCompaniesController@createSponsor');
 //Route::get('contacts/school/create', 'ContactCompaniesController@createSchool');
-Route::post('contacts/company/create', 'ContactCompaniesController@store');
-Route::get('contacts/company/{company}/view', 'ContactCompaniesController@show');
+Route::get('contacts/company/create', 'ContactCompaniesController@create');
+Route::post('contacts/company/create', 'ContactCompaniesController@storeCompany');
+Route::get('contacts/company/{company}/view', 'ContactCompaniesController@showCompany');
 Route::post('contacts/company/{company}/reject', 'ContactCompaniesController@reject');
 Route::post('contacts/company/{company}/approve', 'ContactCompaniesController@approve');
-Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@edit');
-Route::patch('contacts/company/{company}', 'ContactCompaniesController@update');
+Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@editCompany');
+Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
+Route::get('contacts/company_search', 'CompanySearchController@index');
+Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
 //AGM
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');

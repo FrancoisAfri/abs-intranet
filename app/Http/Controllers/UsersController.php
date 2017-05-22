@@ -65,11 +65,11 @@ class UsersController extends Controller
 	public function modules() 
 	{
         $modules = DB::table('security_modules')->orderBy('name', 'asc')->get();
-		$data['page_title'] = "Security Setup";
+		$data['page_title'] = "Security Modules";
 		$data['page_description'] = "Admin page for security related settings";
 		$data['breadcrumb'] = [
-			['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-			['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+			['title' => 'Security', 'path' => '/users/modules', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+			['title' => 'Modules', 'active' => 1, 'is_module' => 0]
 		];
 		$data['active_mod'] = 'Security';
         $data['active_rib'] = 'Setup';
@@ -128,7 +128,7 @@ class UsersController extends Controller
 			$data['page_title'] = "Security Setup";
 			$data['page_description'] = "Module ribbons page";
 			$data['breadcrumb'] = [
-				['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+				['title' => 'Security', 'path' => '/users/modules', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
 				['title' => 'Ribbons', 'active' => 1, 'is_module' => 0]];
 			$data['ribbons'] = $mod;
 			$data['arrayRights'] = $aRarrayRights;
