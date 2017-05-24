@@ -21,6 +21,7 @@ class CreateLeaveHistoryTable extends Migration
             $table->smallInteger('previous_balance')->nullable();
             $table->smallInteger('transcation')->nullable();
             $table->smallInteger('current_balance')->nullable();
+            $table->integer('leave_type_id')->nullable();
             $table->timestamps();
         });
     }

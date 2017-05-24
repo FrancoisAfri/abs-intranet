@@ -40,7 +40,7 @@
                             </div>
                         </div>
                      <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>
+                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Action</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
@@ -52,17 +52,7 @@
                                     </div>
                                 </div>
                             </div> 
-                          <!--   <div class="form-group">
-                            <label for="action" class="col-sm-2 control-label">Action</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="action" name="action" placeholder="Enter an Action...">
-                                </div>
-                            </div>
-                        </div> -->
+                        
                           <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Action Date</label>
                             <div class="col-sm-10">

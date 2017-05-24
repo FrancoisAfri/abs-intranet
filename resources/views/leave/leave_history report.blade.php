@@ -7,10 +7,10 @@
                     <h3 class="box-title">Leave History Report</h3>
                 </div>
                 <!-- /.box-header -->
-				<form class="form-horizontal" method="POST" action="/audits/print">
-                 <input type="hidden" name="action_date" value="{{!empty($action_date) ? $action_date : ''}}">
-                 <input type="hidden" name="user_id" value="{{!empty($user_id) ? $user_id : ''}}">
-                 <input type="hidden" name="module_name" value="{{!empty($module_name) ? $module_name : ''}}">
+				<form class="form-horizontal" method="POST" action="/leave/print">
+                 <input type="hidden" name="actionDate" value="{{!empty($actionDate) ? $actionDate : ''}}">
+                 <input type="hidden" name="userID" value="{{!empty($userID) ? $userID : ''}}">
+                 <input type="hidden" name="report" value="{{!empty($report) ? $report : ''}}">
                  <input type="hidden" name="action" value="{{!empty($action) ? $action : ''}}">
 					{{ csrf_field() }}
                 <div class="box-body">
@@ -48,7 +48,8 @@
 								</table>
 								<div class="row no-print">
 									<div class="col-xs-12">
-										<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
+										<button type="submit" id="cancel" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
+										 <!-- <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
 									</div>
 								</div>
 								<!-- End amortization /table -->
@@ -62,3 +63,11 @@
         </div>
     </div>
 @endsection
+@section('page_script')
+<!--  -->
+
+<!--  -->
+ <script type="text/javascript">
+ // 
+ </script>
+ @endsection

@@ -109,7 +109,7 @@
                            <div class="row emp-field" style="display: block;">
                                 <div class="col-xs-6">
                                     <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                        <label for="date_from" class="col-sm-4 control-label">Available Ann Sick Days:</label>
+                                        <label for="date_from" class="col-sm-4 control-label">Available neg Annual Days:</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
@@ -273,9 +273,10 @@
             var bal = $('#availdays').val();
             var negDays = $('#negsick').val();
             var negannual = $('#negannual').val();
-            var varName = bal ;
+            var varName = availdays ;
 
-            //alert (varName)
+            var res = negDays + negannual;
+             //alert (2 + 1)
 
 
             //Initialise date range picker elements
@@ -347,16 +348,16 @@
         });
        
 //      hide notes field if leave type is maternity
-            function changetextbox(){
-                var levID = document.getElementById("leave_type").value;
+        function changetextbox(){
+            var levID = document.getElementById("leave_type").value;
                    // alert (levID);
-                     if (levID ==  1){
-                       $('.neg-field').hide();
-                       $('.Sick-field').show(); 
-                   }else if(levID == 2,3,4,6,7,8){
+                if (levID ==  1){
+                     $('.neg-field').hide();
+                    $('.Sick-field').show(); 
+                }else if(levID == 2,3,4,6,7,8){
                     $('.Sick-field').hide(); 
                     $('.neg-field').hide();
-                   }else if(levID ==  5){
+                }else if(levID ==  5){
                     $('.Sick-field').hide(); 
                     $('.neg-field').show();
                    }
