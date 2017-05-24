@@ -22,11 +22,12 @@
 								<table class="table table-striped">
 									<tr>
 										<!-- <th>Module Name</th> -->
-										<th>User</th>
 										<th>Action</th>
-										<th>Action Date</th>
-										<th>Previous Balance</th>
-										<th>Current Transaction</th>
+					                    <th>Action Date</th>
+					                    <th>Previous Balance</th>
+					                    <th>Transaction</th>
+					                    <th>Current Balance</th>
+					                    <th>Leave Type</th>
 										<!-- <th>Previous Balance</th>
 										<th>Previous Balance</th>
 										<th>Previous Balance</th> -->

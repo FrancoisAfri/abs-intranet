@@ -55,7 +55,9 @@
                     <th>Action</th>
                     <th>Action Date</th>
                     <th>Previous Balance</th>
-                    <th>Current Transaction</th>
+                    <th>Transaction</th>
+                    <th>Current Balance</th>
+                    <th>Leave Type</th>
 					</tr>
 					@if(count($historyAudit) > 0)
                     @foreach($historyAudit as $audit)
