@@ -1,5 +1,9 @@
 @extends('layouts.main_layout')
 
+@section('page_dependencies')
+<!-- dependencies -->
+
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
@@ -114,8 +118,7 @@
 </div>
 @endsection
 <!--        edit ribbon-->
-            (Session('success_edit'))
-            @include('leave.partials.success_action', ['modal_title' => 'Contact Details Updated!', 'modal_content' => session('success_edit')])
+           
     </div>
 <!-- Ajax form submit -->
 
