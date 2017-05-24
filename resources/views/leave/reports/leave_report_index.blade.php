@@ -123,7 +123,7 @@
                             </div>
                         </div>
                        
-                        <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                        <div class="form-group lev-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Leave Type(s)</label>
 
                             <div class="col-sm-10">
@@ -332,15 +332,17 @@
                  $('.to-field').hide();
                  $('.from-field').hide();
                  $('.levAction-field').hide();
+                  $('.manual-field').show();
+                 $('.lev-field').show();
                  $('.date-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
                  $('#gen-report').val("Submit"); 
             } else if(allType == 5){
                   $('.to-field').hide();
                  $('.from-field').hide();
-                 $('.emp-field').hide();
+                 $('.lev-field-field').hide();
                  $('.manual-field').hide();
-                 $('.levAction-field').show();
+                 $('.levAction-field').hide();
                  $('.date-field').show();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/history/');    
                  $('#gen-report').val("Submit"); 
