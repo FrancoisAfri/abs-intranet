@@ -160,7 +160,7 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     
-                                    <input type="text" class="form-control pull-left" name="av" value=" " />
+                                    <input type="text" class="form-control pull-left" name="datetime" value=" " />
                                     
                                 </div>
                             </div>
@@ -290,7 +290,7 @@
                 "dateLimit": {
                     "days": 3
                 },
-                autoclose: true
+                
             });
             $('input[name="datetime"]').daterangepicker({
                 timePicker: true    ,
@@ -298,7 +298,8 @@
 //                timePickerIncrement: 30,
                 locale: {
                     format: 'DD/MM/YYYY h:mm A'
-                },"dateLimit": {
+                },
+                "dateLimit": {
                     "days": 1
                 },
             });
