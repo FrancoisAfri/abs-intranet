@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CompanyIdentity;
 use App\DivisionLevel;
 use App\Mail\ConfirmRegistration;
 use Illuminate\Http\Request;
@@ -69,13 +70,28 @@ class UsersController extends Controller
 		$data['page_description'] = "Admin page for security related settings";
 		$data['breadcrumb'] = [
 			['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-			['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+			['title' => 'Modules', 'active' => 1, 'is_module' => 0]
 		];
 		$data['active_mod'] = 'Security';
-        $data['active_rib'] = 'Setup';
+        $data['active_rib'] = 'modules';
 		$data['modules'] = $modules;
-		AuditReportsController::store('Security', 'Setup Page Accessed', "Accessed By User", 0);
+		AuditReportsController::store('Security', 'Modules Setup Page Accessed', "Accessed By User", 0);
         return view('security.setup')->with($data);
+    }
+    public function companySetup()
+    {
+        $companyDetails = CompanyIdentity::first();
+        $data['page_title'] = "Security Setup";
+        $data['page_description'] = "Company settings that will be used by the system";
+        $data['breadcrumb'] = [
+            ['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Security';
+        $data['active_rib'] = 'Setup';
+        $data['companyDetails'] = $companyDetails;
+        AuditReportsController::store('Security', 'Setup Page Accessed', "Accessed By User", 0);
+        return view('security.company_identity')->with($data);
     }
 	public function moduleAccess(User $user) 
 	{

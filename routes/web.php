@@ -35,7 +35,7 @@ Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
 Route::get('users/modules', 'UsersController@modules');
-Route::get('users/ ', 'UsersController@setup');
+Route::get('users/setup', 'UsersController@companySetup');
 Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
@@ -47,6 +47,10 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+
+//Company Identity (company details: logo, theme color, etc)
+Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
+
 //#Leave Management
 //Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');

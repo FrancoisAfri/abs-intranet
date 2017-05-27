@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\CompanyIdentity;
 use App\module_access;
 use App\module_ribbons;
 use App\modules;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -19,23 +21,34 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $companyDetails = CompanyIdentity::systemSettings();
+        //$companyDetails = (Schema::hasTable('company_identities')) ? CompanyIdentity::first() : null;
+
         //Compose header
-        view()->composer('layouts.header', function($view) {
+        view()->composer('layouts.header', function($view) use($companyDetails) {
             $user = Auth::user()->load('person');
             $defaultAvatar = ($user->person->gender === 0) ? 'avatars/f-silhouette.jpg' : 'avatars/m-silhouette.jpg';
             $avatar = $user->person->profile_pic;
             $position = ($user->person->position) ? DB::table('hr_positions')->find($user->person->position)->name : '';
+            $headerNameBold = $companyDetails['header_name_bold'];
+            $headerNameRegular = $companyDetails['header_name_regular'];
+            $headerAcronymBold = $companyDetails['header_acronym_bold'];
+            $headerAcronymRegular = $companyDetails['header_acronym_regular'];
 
             $data['user'] = $user;
             $data['full_name'] = $user->person->first_name . " " . $user->person->surname;
             $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("avatars/$avatar") : Storage::disk('local')->url($defaultAvatar);
             $data['position'] = $position;
+            $data['headerNameBold'] = $headerNameBold;
+            $data['headerNameRegular'] = $headerNameRegular;
+            $data['headerAcronymBold'] = $headerAcronymBold;
+            $data['headerAcronymRegular'] = $headerAcronymRegular;
 
             $view->with($data);
         });
 
         //Compose left sidebar
-        view()->composer('layouts.sidebar', function($view) {
+        view()->composer('layouts.sidebar', function($view) use($companyDetails) {
 			$user = Auth::user();
             $modulesAccess = modules::whereHas('moduleRibbon', function ($query) {
                 $query->where('active', 1);
@@ -55,8 +68,17 @@ class AppServiceProvider extends ServiceProvider
                 }])
                 ->orderBy('name', 'ASC')->get();
 
-            $data['company_logo'] = Storage::disk('local')->url('logos/logo.jpg');
+            $data['company_logo'] = $companyDetails['company_logo_url'];
 			$data['modulesAccess'] = $modulesAccess;
+            $view->with($data);
+        });
+
+        //Compose main layout
+        view()->composer('layouts.main_layout', function($view) use($companyDetails) {
+            $skinColor = $companyDetails['sys_theme_color'];
+
+            $data['skinColor'] = $skinColor;
+
             $view->with($data);
         });
     }

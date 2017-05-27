@@ -4,9 +4,9 @@
     <!-- Logo -->
     <a href="/" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>A</b>BS</span>
+        <span class="logo-mini"><b>{{ $headerAcronymBold }}</b>{{ $headerAcronymRegular }}</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Afrixcel</b> BS</span>
+        <span class="logo-lg"><b>{{ $headerNameBold }}</b> {{ $headerNameRegular }}</span>
     </a>
 
     <!-- Header Navbar -->
