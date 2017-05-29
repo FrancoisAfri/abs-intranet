@@ -157,14 +157,5 @@
             });
     });
 
- 
-
-
-          /*  $('#update-module').on('click', function() {
-                postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
-            });
-            */
-
-
     </script>
 @endsection

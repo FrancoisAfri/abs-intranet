@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="reject-leave-form">
                 {{ csrf_field() }}
-<!--                {{ method_field('PATCH') }}-->
+                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -12,7 +12,7 @@
                 </div>
                 <div class="modal-body">
                     <div id="leave-invalid-input-alert"></div>
-                    <div id="leave-success-alert"></div>
+                    <div id="success-alert"></div>
         
                     <div class="form-group">
                            <label for="days" class="col-sm-2 control-label">Rejection Reason</label>
@@ -30,6 +30,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <button type="button" id="rejection-reason" class="btn btn-primary">Save</button>
+                    
                 </div>
             </form>
         </div>

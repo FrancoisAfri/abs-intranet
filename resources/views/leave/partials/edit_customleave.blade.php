@@ -12,7 +12,7 @@
                 </div>
                 <div class="modal-body">
                     <div id="leave-invalid-input-alert"></div>
-                    <div id="leave-success-alert"></div>
+                    <div id="success-alert"></div>
 
 
                     <div class="form-group">

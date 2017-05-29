@@ -50,7 +50,7 @@
                     @foreach($leaveApplication as $approval)
                       <tr>
                         <td>{{ !empty($approval->firstname) && !empty($approval->surname) ? $approval->firstname.' '.$approval->surname : '' }}</td>
-                             <td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>                             <td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
+                             <td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>                       <td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
                             <td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
                               <td>{{ !empty($approval->start_time) ? date('H:i:s',$approval->start_time) : '' }}</td>
                               <td>{{ !empty($approval->end_time) ? date('H:i:s',$approval->end_time) : '' }}</td>
@@ -71,12 +71,11 @@
                                <td>{{ !empty($approval->status) ? $approval->status : '' }}</td>    
                                <!--  <td>{{ !empty($approval->leave_Days) ? $approval->leave_Days : '' }}</td> -->
                                 <td>
-                                 <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$approval->id}}" onclick="postData({{$approval->id}}, 'approval_id')">Accept</button>
+                                 <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$approval->id}}")">Accept</button>
 
                                </td>
                                <td>
-                <!-- <button type="button" id="reject_leave" class="btn btn-danger btn-xs"><i  data-toggle="modal" data-target="#reject-leave-modal" data-id="{{$approval->id}}" data-description="{{$approval->application}}"></i> Decline</button> -->   
-
+            
                 <button type="button" id="reject-reason" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#reject-leave-modal" data-id="{{ $approval->id }}"  data-description="{{ $approval->reject_reason }}"> </i> Decline</button>   
                                 </td>
                     @endforeach
@@ -138,7 +137,7 @@
     // };
         // post data
          function postData(id, data) {
-        alert(id);
+
          if (data == 'approval_id') location.href = "/leave/approval/" + id;
        }
 
@@ -165,7 +164,6 @@
 
              var reject_ID;
             $('#reject-leave-modal').on('show.bs.modal', function (e) {
-                    //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
                 reject_ID = btnEdit.data('id');
                 // var name = btnEdit.data('name');
@@ -176,10 +174,10 @@
              });
 
             //Post module form to server using ajax (ADD)
-            $('#reject-reason').on('click', function() {
+            $('#rejection-reason').on('click', function() {
                 //console.log('strUrl');
                 var strUrl = '/leave/approval/' + reject_ID; 
-                var modalID = 'Reject-leave-modal';
+                var modalID = 'reject-leave-modal';
                 var objData = {
                     // name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),

@@ -144,6 +144,7 @@ class LeaveApplicationController extends Controller
 
         $approvalstatus = array(1 => 'require_managers_approval ', 2 => 'require_department_head_approval', 3 => 'require_hr_approval', 4 => 'require_payroll_approval', 5 => 'Approved', 6 => 'Rejected');
         
+        $rejectstatus = array(7 => 'rejectd by managers ', 8 => 'rejectd by department_head', 9 => 'rejectd by hr', 10 => 'rejectd by payroll');
        return $approvalstatus;
     }
     
@@ -213,7 +214,7 @@ class LeaveApplicationController extends Controller
             else
             {
 
-            $details = array('status' => 2,'first_name' => $hrDetails->first_name,'surname' => $hrDetails->surname,'email' => $hrDetails->email);
+            $details = array('status' => 1,'first_name' => $hrDetails->first_name,'surname' => $hrDetails->surname,'email' => $hrDetails->email);
                
                 return $details;
               
@@ -394,10 +395,12 @@ class LeaveApplicationController extends Controller
         // return   $iDays; 
         // call the function
         $ApplicationDetails =  LeaveApplicationController::ApplicationDetails(0, $request->input('hr_person_id'));
+        $statusnames =  LeaveApplicationController::status();
 
         $applicatiionStaus = $ApplicationDetails['status'];
-        $statusnames =  LeaveApplicationController::status();
+       
         $status = $statusnames[$applicatiionStaus];
+        return  $status;
         // return $applicatiionStaus;
         $levtype = $request->input('leave_type');
 
@@ -530,7 +533,7 @@ class LeaveApplicationController extends Controller
         
          #$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$current_balance ='',$leave_type ='')
   AuditReportsController::store('Leave', 'Leave hours application ', "Accessed By User", 0);
-  // LeaveHistoryAuditController::store("Hours leave application performed by : $USername",0,$leave_balance,$iDays,$current_balance,$levtype);
+ LeaveHistoryAuditController::store("Hours leave application performed by : $USername",0,$leave_balance,0,$leave_balance,$typID);
 
         return back()->with('success_application', "leave application was successful.");
     }
@@ -627,16 +630,17 @@ class LeaveApplicationController extends Controller
     {
         //
         $this->validate($request, [
-            'description' => 'required',
+            // 'description' => 'required',
         ]);
            $leaveData = $request->all();
             unset($leaveData['_token']);
 
             #leave_application $id
             // $levReject = new leave_application(leaveData);
+             $loggedInEmplID = Auth::user()->person->id;
             $levReject-> reject_reason = $request->input('description');
             $levReject->save();
-              AuditReportsController::store('Leave approval ', 'leave rejection  Informations Edited', "Edited by User", 0);
+              AuditReportsController::store('Leave rejected by : ', 'leave rejection  Informations Edited', "Edited by User", 0);
             return response()->json();
 
     }
