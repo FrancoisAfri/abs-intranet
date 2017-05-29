@@ -45,22 +45,22 @@
                             </div>
 
 <!--                        <div class="form-group ">-->
-                           <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select name="leave_type" class="form-control">
-                                            <option value="">*** Select leave Type ***</option> 
-                                                @foreach($leaveTypes as $leaveType)
-                                                    <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
-                                                @endforeach
-                                        </select>
+                            <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                            <label for="leave_types_id" class="col-sm-2 control-label">Leave Type(s)</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
                                     </div>
+                                    <select id="leave_types_id" name="leave_types_id[]" class="form-control select2" multiple="multiple" data-placeholder="**Select Leave type**" >
+                                        @foreach($leaveTypes as $leaveType)
+                                                    <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>                 
+                            </div>
+                        </div>                
                                 @foreach($division_levels as $division_level)
 							<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 								<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -131,8 +131,8 @@
         </div>
         <!-- End new User Form-->
         <!-- Confirmation Modal -->
-        @if(Session('success_add'))
-            @include('contacts.partials.success_action', ['modal_title' => "Registration Successful!", 'modal_content' => session('success_add')])
+       @if(Session('success_application'))
+            @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
         @endif
     </div>
     @endsection

@@ -18,7 +18,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST" action="/leave/reports/result/">
+                <form class="form-horizontal" id="report_form" method="POST" action="/leave/reports/history/">
                 <!-- audits -->
                     {{ csrf_field() }}
 
@@ -40,22 +40,19 @@
                             </div>
                         </div>
                      <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>
+                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Action</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
+                                            <i class="fa fa-user"></i>
                                         </div>
-                                        <select id="leave_type" name="leave_type" onChange= "changetextbox();" class="form-control">
-                                            <option value="leavetyes">*** Select leave Type ***</option> 
-                                                @foreach($leaveTypes as $leaveType)
-                                                    <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
-                                                @endforeach
-                                        </select>
+                                        
+                                             <input type="text" class="form-control" id="action" name="action" placeholder="Enter an Action...">
+                                      
                                     </div>
                                 </div>
                             </div> 
-
+                        
                           <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Action Date</label>
                             <div class="col-sm-10">
@@ -128,7 +125,7 @@
             $(".select2").select2();
 		//Date Range picker
 		$('.daterangepicker').daterangepicker({
-			format: 'dd/mm/yyyy',
+			format: 'DD/MM/YYYY',
 			endDate: '-1d',
 			autoclose: true
 		});

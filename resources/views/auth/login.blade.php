@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ "Afrixcel Business Solutions" }}</title>
+    <title>{{ \App\CompanyIdentity::systemSettings('company_name') . 'online system'  }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -27,7 +27,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <img src="{{ Storage::disk('local')->url('logos/logo.jpg') }}" width="100%" class="img-responsive" alt="Company Logo">
+        <img src="{{ \App\CompanyIdentity::systemSettings('company_logo_url') }}" width="100%" class="img-responsive" alt="Company Logo">
         <!-- <a href="/"><b>NU-LAXMI</b> LEASING</a> -->
     </div>
     <!-- /.login-logo -->
@@ -70,7 +70,7 @@
         </form>
 
         <a href="#" data-toggle="modal" data-target="#forgot-password-modal"><font data-toggle="tooltip" title="Click here to reset your password.">I forgot my password</font></a><br>
-        New Client? Click <a href="/register" class="text-center">here to register</a>
+        <!-- New Client? Click <a href="/register" class="text-center">here to register</a> -->
     </div>
     <!-- /.login-box-body -->
 

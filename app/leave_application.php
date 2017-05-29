@@ -12,14 +12,14 @@ class leave_application extends Model
                           'end_time','manager_id','reject_reason','leave_days','leave_hours'
                           ];
     
-     public $status = [
-     0 => 'Pending', 
-     1 => 'require_managers_approval',
-     2 => 'require_department_head_approval',
-     3 => 'require_hr_approval',
-     4 => 'require_payroll_approval',
-     5 => 'Approved', 5 => 'Rejected'
-     ];
+     // public $status = [
+     // 0 => 'Pending', 
+     // 1 => 'require_managers_approval',
+     // 2 => 'require_department_head_approval',
+     // 3 => 'require_hr_approval',
+     // 4 => 'require_payroll_approval',
+     // 5 => 'Approved', 5 => 'Rejected'
+     // ];
     
     //->status
     //->leave_status
@@ -40,8 +40,8 @@ class leave_application extends Model
         return $this->hasMany(HRPerson::class, 'hr_id');
     }
 
-    //Return leave status string valu
-    public function getLeaveStatusAttribute () {
-      return $status[$this->status];
-    }
+    // //Return leave status string valu
+    // public function getLeaveStatusAttribute () {
+    //   return $status[$this->status];
+    // }
 }

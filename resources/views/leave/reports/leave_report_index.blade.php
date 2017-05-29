@@ -1,5 +1,10 @@
 @extends('layouts.main_layout')
-
+<!--  -->
+ <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap file input -->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<!--  -->
 @section('page_dependencies')
 <!-- Include Date Range Picker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
@@ -9,7 +14,28 @@
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+<!-- Select 2-->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+            <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 
+    <!-- Bootstrap date picker -->
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Start Bootstrap File input -->
+    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
 <!--Time Charger-->
 
 
@@ -22,9 +48,10 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-anchor pull-right"></i>
-                    <h3 class="box-title">Leave Reports</h3>
+                    <h3 class="box-title">Leave Reports Search criteria</h3>
+                    <p>Enter search details:</p>
                 </div>
-                         <form name="leave-application-form" class="form-horizontal" method="POST" action="/" enctype="multipart/form-data">
+                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -47,27 +74,56 @@
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Leave Balance</label>
                                      <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Leave Paid Out</label>
                                       <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Leave Allowance</label>
+                                      <label class="radio-inline"><input type="radio" id="rdo_levH" name="application_type" value="5">  Leave History</label>
 
                                 </div>
                             </div>
 
-                          <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                            <label for="hr_person_id" class="col-sm-2 control-label">Employee(s)</label>
-
+                          <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                            <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                                        <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select id="hr_person_id" name="hr_person_id[]" class="form-control select2" multiple="multiple" data-placeholder="**Select at Least One Employee**">
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id" data-placeholder="**Select employee **">
+                                        <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
-                                            <option value="{{ $employee->id }}">{{ $employee->full_name }}</option>
+                                            <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                        <div class="form-group levAction-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Action</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                        
+                                             <input type="text" class="form-control" id="action" name="action" placeholder="Enter an Action...">
+                                      
+                                    </div>
+                                </div>
+                            </div> 
+                        
+                          <div class="form-group date-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Action Date</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
+                                    <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="form-group lev-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Leave Type(s)</label>
 
                             <div class="col-sm-10">
@@ -75,7 +131,8 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <select id="leave_types_id" name="leave_types_id" class="form-control select2" multiple="multiple" data-placeholder="**Select Leave type**" >
+                                    <select id="leave_types_id" name="leave_types_id" class="form-control select2"  data-placeholder="**Select Leave type**" >
+                                    <option value="">*** Select a leaveType ***</option>
                                         @foreach($leaveTypes as $leaveType)
                                                     <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
                                         @endforeach
@@ -129,9 +186,13 @@
                             </div>
 
                     <!-- /.box-body -->
-                    <div class="box-footer">
+                    <!-- <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Cancel</button>
                         <button type="submit" id="gen_report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
+                    </div> -->
+                     <div class="box-footer">
+                        <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
+                       <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
                     </div>
                     <!-- /.box-footer -->
                  </div>
@@ -176,8 +237,9 @@
             //Initialize Select2 Elements
             $(".select2").select2();
             //Cancel button click event
+
             $('#cancel').click(function () {
-                location.href = '/leave/application';
+                location.href = '/leave/reports';
             });
              function postData(id, data) {
         alert(id);
@@ -201,8 +263,7 @@
                 minViewMode: "months",
                 todayHighlight: true
             });
-
-            
+        
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -210,31 +271,23 @@
                 increaseArea: '20%' // optional
             });
                 hideFields();
+                //Date Range picker
+        $('.daterangepicker').daterangepicker({
+            format: 'DD/MM/YYYY',
+            endDate: '-1d',
+            autoclose: true
+        });
             //show/hide fields on radio button toggles (depending on registration type)
 
-            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all').on('ifChecked', function(){      
+            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH').on('ifChecked', function(){      
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Leave Taken');
                 else if (allType == 2) $('#box-subtitle').html('Leave Balance');
                 else if (allType == 3) $('#box-subtitle').html('Leave Paid Out');
                  else if (allType == 4) $('#box-subtitle').html('Leave Allowance');
+                  else if (allType == 5) $('#box-subtitle').html('Leave History');
             });
-            
-//                    $('input[name="daterange"]').daterangepicker();
-           
-
-//            
-              
-            //Vertically center modals on page
-            function reposition() {
-                var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                modal.css('display', 'block');
-
-                // Dividing by two centers the modal exactly, but dividing by three
-                // or four works better for larger screens.
-                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-            }
+         
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
@@ -253,29 +306,49 @@
                  //$('.hours-field').hide();
                  $('.to-field').show();
                  $('.from-field').show();
-                //  $('form[name="leave-application-form"]').attr('action', '/leave/application/day');
-                // $('#load-allocation').val("Submit");        
+                 $('.levAction-field').hide();
+                 $('.date-field').hide();
+                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/taken');
+                 $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
                  $('.to-field').show();
                  $('.from-field').hide();
-                // $('.hours-field').show();
-                // $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
-                // $('#load-allocation').val("Submit");
+                $('.levAction-field').hide();
+                 $('.date-field').hide();
+                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavebal');
+                 //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
+                 $('#gen-report').val("Submit"); 
             }
             else if(allType == 3){
                 $('.to-field').show();
                  $('.from-field').show();
+                 $('.levAction-field').hide();
+                 $('.date-field').hide();
+                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
+                   $('#gen-report').val("Submit"); 
             }
             else if(allType == 4){
                  $('.to-field').hide();
                  $('.from-field').hide();
+                 $('.levAction-field').hide();
+                  $('.manual-field').show();
+                 $('.lev-field').show();
+                 $('.date-field').hide();
+                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
+                 $('#gen-report').val("Submit"); 
+            } else if(allType == 5){
+                  $('.to-field').hide();
+                 $('.from-field').hide();
+                 $('.lev-field-field').hide();
+                 $('.manual-field').hide();
+                 $('.levAction-field').hide();
+                 $('.date-field').show();
+                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/history/');    
+                 $('#gen-report').val("Submit"); 
             }
-                // $('form[name="leave-application-form"]').attr('action', '/leave/application/leavDetails');
-      
-            return allType;
-           
-        }
+            return allType;      
+            }
           //Load divisions drop down
         var parentDDID = '';
         var loadAllDivs = 1;

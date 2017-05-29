@@ -35,7 +35,7 @@ Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
 Route::get('users/modules', 'UsersController@modules');
-Route::get('users/ ', 'UsersController@setup');
+Route::get('users/setup', 'UsersController@companySetup');
 Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
@@ -48,7 +48,6 @@ Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
 //#Contacts Management
-
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
@@ -58,7 +57,8 @@ Route::post('contacts', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
 Route::patch('contacts/{user}', 'ContactsController@update');
-
+//Company Identity (company details: logo, theme color, etc)
+Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
 //#Leave Management
 //Route::get('leave/types', 'LeaveController@types');
@@ -102,10 +102,19 @@ Route::post('leave/approval/{levReject}', 'LeaveApplicationController@reject');
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
 Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
 Route::post('leave/reports/result', 'LeaveHistoryAuditController@getReport');
+Route::post('leave/reports/history', 'LeaveHistoryAuditController@getlevhistoryReport');
 
-#
+#leave history report
 Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
+
+#Leave Reports
+Route::post('leave/reports/taken', 'LeaveHistoryAuditController@taken');
+Route::post('leave/reports/leavebal', 'LeaveHistoryAuditController@leavebalance');
+Route::post('leave/reports/leavepaOut', 'LeaveHistoryAuditController@leavepaidOut');
+Route::post('leave/reports/leaveAll', 'LeaveHistoryAuditController@leaveAllowance');
+Route::post('leave/print', 'LeaveHistoryAuditController@printlevhistoReport');
+Route::post('leave/bal', 'LeaveHistoryAuditController@printlevbalReport');
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');

@@ -268,7 +268,7 @@
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    The NU-LAXMI LEASING customer services
+                                                    The {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>
@@ -276,7 +276,7 @@
                                 </tr>
                                 <tr>
                                     <td valign="top" class="footer-cell">
-                                        NU-LAXMI LEASING (PTY) LTD.<br>
+                                        {{ $full_company_name }}.<br>
                                         Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>
                                     </td>
                                 </tr>

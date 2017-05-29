@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $user->person->first_name }},<br><br>
-                                                    We would like you to know that your registration with the NU-LAXMI LEASING online system was succesful! Use the credentials below to login to the system. To view your profile or make any changes please <a target="_blank" href="{{ $profile_url }}">click here.</a>
+                                                    We would like you to know that we have successfully created your new account with the {{ $company_name }} online system! Use the credentials below to login to the system. To view your profile or make any changes please <a target="_blank" href="{{ $profile_url }}">click here.</a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -268,7 +268,7 @@
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    The NU-LAXMI LEASING customer services
+                                                    The {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>
@@ -276,7 +276,7 @@
                                 </tr>
                                 <tr>
                                     <td valign="top" class="footer-cell">
-                                        NU-LAXMI LEASING (PTY) LTD.<br>
+                                        {{ $full_company_name }}.<br>
                                         Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>
                                     </td>
                                 </tr>

@@ -210,11 +210,13 @@ class LeaveSetupController extends Controller
         unset($allData['_token']);
     
         $employees = $allData['hr_person_id'];
-        $leveTyp = $allData['leave_type'];
+        $leveTyps = $allData['leave_types_id'];
         $days = $allData['adjust_days'];
         $HRpeople = HRPerson::find($employees);
 //        return $HRpeople;
-        foreach($employees as $empID) {
+        foreach ($leveTyps as $leveTyp ) {
+          # code...
+           foreach($employees as $empID) {
             $emp = HRPerson::find($empID);
 //            $pro = $emp->leave_types;
             $profile =$emp->leave_types->where('id', $empID)->first() ;
@@ -239,8 +241,10 @@ class LeaveSetupController extends Controller
          AuditReportsController::store('Leave', 'leave days adjusted ', "Edited by User: $lev->name", 0);
         LeaveHistoryAuditController::store('Added annul leave Days', 1 ,0,0,$currentBalance);
        }
+        }
+       
         
-    return back();
+    return back()->with('success_application', "leave action was successful adjusted.");
 }
         //leavecredit
 
@@ -264,20 +268,24 @@ public function  resert(Request $request, LeaveType $lev)
             $resertDays = $resertData['resert_days'];
              $hrID = $resertData['hr_person_id'];
              //return $hrID;
-             $typID = $resertData['leave_type'];
+             $typIDs = $resertData['leave_types_id'];
             $resert_days = $resertDays * 8;
        // $employees = $resertData['hr_person_id'];
-    
-        foreach($hrID as $empID) {
+
+    foreach ($typIDs as $typID ) {
+        
+      foreach($hrID as $empID) {
             $emp = HRPerson::find($empID);
         $emp->leave_types()->where('leave_type_id',$typID)->sync([$empID => ['leave_balance' => $resert_days]]);
 
          AuditReportsController::store('Leave', 'leave days reset Edited', "Edited by User: $lev->name", 0);
          LeaveHistoryAuditController::store("leave days reseted ", 1 ,0,0,$resert_days);
         }
+    }
+        
     
 
-    return back();
+    return back()->with('success_application', "leave allocation was successful resert.");
 }
     
     public function allocate(Request $request , LeaveType $lev)
@@ -294,11 +302,13 @@ public function  resert(Request $request, LeaveType $lev)
        // return $allData;
         
         $empl = $allData['hr_person_id'];
-        $LevID = $allData['leave_type'];
+        $LevIDs = $allData['leave_types_id'];
         //return $LevID;
        $days = $allData['adjust_days'];
+       
+       foreach($LevIDs as $LevID) {
 
-        foreach($empl as $empID) {
+               foreach($empl as $empID) {
             //return person records based on employee id
                 $emp = HRPerson::find($empID);
                 // return leave types records based on leave type id
@@ -381,9 +391,11 @@ public function  resert(Request $request, LeaveType $lev)
          AuditReportsController::store('Leave', 'leave days allocation Edited', "Edited by User: $lev->name", 0);
         LeaveHistoryAuditController::store('leave days allocation', 1 ,0,1,0 );
         } 
+       }
+ 
        
             
-       return back(); 
+       return back()->with('success_application', "leave allocation was successful."); 
     }
     
         
