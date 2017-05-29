@@ -41,6 +41,18 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="passport_number" class="col-sm-3 control-label">Passport Number</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ old('passport_number') }}" placeholder="Search by passport number...">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

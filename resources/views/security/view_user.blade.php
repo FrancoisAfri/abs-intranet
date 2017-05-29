@@ -381,7 +381,7 @@
 
         <!-- Confirmation Modal -->
         @if(Session('success_edit'))
-            @include('contacts.partials.success_action', ['modal_title' => "User's Details Updated!", 'modal_content' => session('success_edit')])
+            @include('contacts.action_partials.success_action', ['modal_title' => "User's Details Updated!", 'modal_content' => session('success_edit')])
         @endif
     </div>
 @endsection

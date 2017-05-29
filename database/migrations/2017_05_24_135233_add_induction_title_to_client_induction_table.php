@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToLeaveApplicationTable extends Migration
+class AddInductionTitleToClientInductionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddStatusToLeaveApplicationTable extends Migration
      */
     public function up()
     {
-        Schema::table('leave_application', function (Blueprint $table) {
-            //
+         Schema::table('client_inductions', function($table) {
+            $table->string('induction_title')->nullable()->unsigned()->index();
         });
     }
 
@@ -25,8 +25,8 @@ class AddStatusToLeaveApplicationTable extends Migration
      */
     public function down()
     {
-        Schema::table('leave_application', function (Blueprint $table) {
-            //
+         Schema::table('client_inductions', function($table) {
+            $table->dropColumn('induction_title');
         });
     }
 }

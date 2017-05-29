@@ -185,5 +185,4 @@ class AuditReportsController extends Controller
 		AuditReportsController::store('Audit', 'Print Audit Search Results', "Print Audit Results", 0);
         return view('audit.audit_print')->with($data);
     }
-    
 }

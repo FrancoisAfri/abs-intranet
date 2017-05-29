@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddExistingKpiIdToAppraisalKpiTable extends Migration
+class AddCompanyToClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class AddExistingKpiIdToAppraisalKpiTable extends Migration
      */
     public function up()
     {
-        Schema::table('appraisals_kpis', function($table) {
-            $table->integer('existing_kpi_id')->nullable();
+        Schema::table('contacts_contacts', function($table) {
+            $table->integer('company_id')->nullable()->unsigned()->index();
         });
     }
+    
 
     /**
      * Reverse the migrations.
@@ -25,9 +26,8 @@ class AddExistingKpiIdToAppraisalKpiTable extends Migration
      */
     public function down()
     {
-        Schema::table('appraisals_kpis', function($table) {
-            $table->dropColumn('existing_kpi_id');
-          
+        Schema::table('contacts_contacts', function($table) {
+            $table->dropColumn('company_id');
         });
-    }
+	}
 }
