@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Mail;
-
+use App\CompanyIdentity;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -37,17 +37,18 @@ class Accept_application extends Mailable
      */
     public function build()
     {
-        //Should get these details from setup
-        $fromAddress = 'noreply@afrixcel.co.za';
-        $fromName = 'Afrixcel Support';
-        $subject = 'leave Application Approved | Afrixcel Business Solutions';
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $subject = "Welcome to $companyName online system.";
 
-        $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'Afrixcel Business Solutions';
-        $data['company_logo'] = 'http://www.afrixcel.co.za' . Storage::disk('local')->url('logos/logo.jpg');
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['profile_url'] = url('/users/profile');
 
         return $this->view('mails.approved_leave_application')
-            ->from($fromAddress, $fromName)
+            ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);
     }
