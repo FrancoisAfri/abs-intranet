@@ -40,7 +40,7 @@
 						  <td>{{!empty($kpi->weight) ? $kpi->weight : ''}}</td>
 						  <td>{{($kpi->is_upload == 1) && !empty($kpi->is_upload) ? 'Yes' : 'No'}}</td>
 						  <td>{{(!empty($kpi->upload_type)) && !empty($kpi->upload_type) ? $KpiUploadTypeArray[$kpi->upload_type] : 'N/A'}}</td>
-						  <td><button type="button" id="view_kpi" class="btn btn-xs" onclick="postData({{$kpi->id}}, '{{!empty($kpi->kpi_type) ? $KpiTypeArray[$kpi->kpi_type] : '' }}');">{{ !empty($kpi->kpi_type) ? $KpiTypeArray[$kpi->kpi_type] : ''}}</td>
+						  <td><button type="button" id="view_kpi" class="btn btn-xs" onclick="postData({{$kpi->id}}, '{{!empty($kpi->kpi_type) ? $KpiTypeArray[$kpi->kpi_type] : '' }}');">{{!empty($kpi->kpi_type) ? $KpiTypeArray[$kpi->kpi_type] : '' }}</td>
 						  <td nowrap>
                               <button type="button" id="view_kpi" class="btn {{ (!empty($kpi->status) && $kpi->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$kpi->id}}, 'actdeac');"><i class="fa {{ (!empty($kpi->status) && $kpi->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($kpi->status) && $kpi->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
