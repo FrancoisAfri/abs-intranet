@@ -107,15 +107,10 @@ Route::post('leave/reports/result', 'LeaveHistoryAuditController@getReport');
 Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
 
-
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
 Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
-
-
-
-
 
 //Contacts related requests
 Route::get('contacts', 'ContactsController@index');
@@ -140,11 +135,12 @@ Route::patch('contacts/{contact}', 'ContactsController@update');
 //Route::get('contacts/sponsor/create', 'ContactCompaniesController@createSponsor');
 //Route::get('contacts/school/create', 'ContactCompaniesController@createSchool');
 Route::get('contacts/company/create', 'ContactCompaniesController@create');
-Route::post('contacts/company/create', 'ContactCompaniesController@storeCompany');
+Route::post('contacts/company', 'ContactCompaniesController@storeCompany');
 Route::get('contacts/company/{company}/view', 'ContactCompaniesController@showCompany');
 Route::post('contacts/company/{company}/reject', 'ContactCompaniesController@reject');
 Route::post('contacts/company/{company}/approve', 'ContactCompaniesController@approve');
 Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@editCompany');
+Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@actCompany');
 Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
@@ -275,6 +271,16 @@ Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupControlle
 Route::patch('/hr/firstchild/{parentLevel}/{childID}', 'EmployeeCompanySetupController@updateChild');
 Route::post('/hr/firstchild/add/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
 Route::get('/hr/firstchild/{parentLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateChild');
+# Induction
+Route::get('/induction/create', 'InductionAdminController@index');
+Route::get('/induction/search', 'InductionAdminController@search');
+Route::get('/induction/{induction}/view', 'InductionAdminController@show');
+Route::get('/induction/tasks_library', 'TaskLibraryController@index');
+Route::post('induction/add_library_task', 'TaskLibraryController@store');
+Route::post('induction/client_add', 'InductionAdminController@store');
+Route::post('induction/search_results', 'InductionAdminController@searchResults');
+Route::patch('/induction/tasks_library_edit/{TaskLibrary}', 'TaskLibraryController@update');
+Route::get('/induction/library_tasks_activate/{TaskLibrary}', 'TaskLibraryController@actDeact');
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');

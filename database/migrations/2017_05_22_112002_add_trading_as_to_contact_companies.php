@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTradingAsToContactCompaniesTable extends Migration
+class AddTradingAsToContactCompanies extends Migration
 {
     /**
      * Run the migrations.
@@ -29,7 +29,7 @@ class AddTradingAsToContactCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::table('contact_companies', function($table) {
+       Schema::table('contact_companies', function($table) {
             $table->dropColumn('trading_as');
             $table->dropColumn('contact_person');
             $table->dropColumn('cp_cell_number');

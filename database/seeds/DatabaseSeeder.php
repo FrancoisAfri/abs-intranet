@@ -602,45 +602,45 @@ class DatabaseSeeder extends Seeder
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'Templates';
-        $ribbon->description = 'Templates';
-        $ribbon->ribbon_path = 'appraisal/templates';
+        $ribbon->ribbon_name = 'Create Induction';
+        $ribbon->description = 'Create Induction';
+        $ribbon->ribbon_path = 'induction/create';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Categories';
-        $ribbon->description = 'Categories';
-        $ribbon->ribbon_path = 'appraisal/categories';
+        $ribbon->ribbon_name = 'Tasks Library';
+        $ribbon->description = 'Tasks Library';
+        $ribbon->ribbon_path = 'induction/tasks_library';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Appraisals';
-        $ribbon->description = 'Appraisals';
-        $ribbon->ribbon_path = 'appraisal/load_appraisals';
+        $ribbon->ribbon_name = 'Induction Search';
+        $ribbon->description = 'Induction Search';
+        $ribbon->ribbon_path = 'induction/search';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Perks';
-        $ribbon->description = 'Appraisal Perks';
-        $ribbon->ribbon_path = 'appraisal/perks';
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'induction/reports';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
-        $ribbon->ribbon_name = 'Search';
-        $ribbon->description = 'Search';
-        $ribbon->ribbon_path = 'appraisal/search';
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'induction/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 		

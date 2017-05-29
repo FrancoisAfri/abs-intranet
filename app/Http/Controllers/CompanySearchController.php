@@ -24,8 +24,8 @@ class CompanySearchController extends Controller
             ['title' => 'Companies Search', 'active' => 1, 'is_module' => 0]
         ];
 		
-        $data['active_mod'] = 'Companies';
-        $data['active_rib'] = 'Search';
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Search Company';
         return view('contacts.company_search')->with($data);
     }
 	
@@ -62,8 +62,8 @@ class CompanySearchController extends Controller
         ];
 		$companyTypeArray = array(1 => 'Service Provider', 2 => 'School', 3 => 'Sponsor');
 		$data['companyTypeArray'] = $companyTypeArray;
-		$data['active_mod'] = 'Companies';
-        $data['active_rib'] = 'Search';
+		 $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Search Company';
 		//return $data;
         return view('contacts.company_search_results')->with($data);
     }

@@ -9,26 +9,29 @@ use App\programme;
 use App\projects;
 use App\User;
 use App\AuditTrail;
+use App\EmployeeTasks;
+use App\Mail\EmployeesTasksMail;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
-class AuditReportsController extends Controller
+class TaskManagementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
 	public function __construct()
     {
         $this->middleware('auth');
     }
-	
+	/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    	
 	public function index()
     {
         $data['page_title'] = "Audit Report";
@@ -44,7 +47,7 @@ class AuditReportsController extends Controller
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
 		$data['users'] = $users;
-		AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
+		AuditReportsController::store('Task Management', 'Add Task Page Accessed', "By User", 0);
         return view('audit.audit_search')->with($data);
     }
     /**
@@ -53,18 +56,46 @@ class AuditReportsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
     */
-    public static function store($moduleName='',$action='',$notes='',$referenceID=0)
+    public static function store($description='',$duedate='',$startDate='',$escalationID=0,$employeeID=0,$taskType=0
+	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0)
     {
+		//convert dates to unix time stamp
+        if (!empty($duedate)) {
+            $duedate = str_replace('/', '-', $duedate);
+            $intduedate = strtotime($duedate);
+        }
+		else $intduedate = 0;
+		if (!empty($startDate)) {
+            $startDate = str_replace('/', '-', $startDate);
+            $intstartDate = strtotime($startDate);
+        }
+		else $intstartDate = 0;
 		$user = Auth::user();
-		$AuditTrail = new AuditTrail();
-		$AuditTrail->module_name = $moduleName;
-		$AuditTrail->user_id = $user->id;
-		$AuditTrail->action = $action;
-		$AuditTrail->action_date = time();//strtotime(date('Y-m-d'));
-		$AuditTrail->notes = $notes;
-		$AuditTrail->reference_id = $referenceID;
-		// Save Audit
-        $AuditTrail->save();
+		$EmployeeTasks = new EmployeeTasks();
+		$EmployeeTasks->induction_id = $inductionID;
+		$EmployeeTasks->meeting_id = $meetingID;
+		$EmployeeTasks->is_dependent = ($taskType == 1) ? 1 : 0;
+		$EmployeeTasks->order_no = $orderNo;
+		$EmployeeTasks->added_by = $user->id;
+		$EmployeeTasks->escalation_id = $escalationID;
+		$EmployeeTasks->upload_required = $uploadRequired;
+		$EmployeeTasks->priority = $priority;
+		$EmployeeTasks->status = 1;
+		$EmployeeTasks->task_type = $taskType;
+		$EmployeeTasks->employee_id = $employeeID;
+		$EmployeeTasks->library_id = $libraryID;
+		$EmployeeTasks->description = $description;
+		$EmployeeTasks->due_date = $intduedate;
+		$EmployeeTasks->start_date = $intstartDate;
+		// Save task
+        $EmployeeTasks->save();
+		
+		# Send Email to employee
+		$employee = HRPerson::where('id', $employeeID)->first();
+		Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
+		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
+		//if ($taskType == 3)
+			//return redirect('/education/activity/' . $activity->id . '/view')->with('success_add', "The task has been added successfully");
     }
 	// draw audit report acccording to search criteria
 	public function getReport(Request $request)

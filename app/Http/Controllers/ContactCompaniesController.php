@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ContactCompany;
 use App\contacts_company;
 use App\HRPerson;
 use App\Mail\ApprovedCompany;
@@ -42,15 +43,15 @@ class ContactCompaniesController extends Controller
 	public function create()
     {
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
-        $data['page_title'] = "Clients";
+        $data['page_title'] = "Contacts";
         $data['page_description'] = "Add a New Company";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Add company', 'active' => 1, 'is_module' => 0]
         ];
         $data['provinces'] = $provinces;
-        $data['active_mod'] = 'clients';
-        $data['active_rib'] = 'add company';
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Add Company';
         return view('contacts.add_company')->with($data);
     }
 
@@ -179,8 +180,8 @@ class ContactCompaniesController extends Controller
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'View company', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'clients';
-        $data['active_rib'] = 'search';
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Search Company';
         $data['company'] = $company;
         $data['bee_certificate_doc'] = (!empty($beeCertDoc)) ? Storage::disk('local')->url("company_docs/$beeCertDoc") : '';
         $data['comp_reg_doc'] = (!empty($compRegDoc)) ? Storage::disk('local')->url("company_docs/$compRegDoc") : '';
@@ -209,6 +210,15 @@ class ContactCompaniesController extends Controller
         $data['active_mod'] = 'clients';
         $data['active_rib'] = 'add company';
         return view('contacts.edit_company')->with($data);
+    }
+	public function actCompany(ContactCompany $company) 
+    {
+        if ($company->status == 1) $stastus = 0;
+        else $stastus = 1;
+
+        $company->status = $stastus;    
+        $company->update();
+        return back();
     }
 
     /**

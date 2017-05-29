@@ -21,7 +21,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="/users/{{ $user->id }}" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="/contacts/{{ $user->id }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
 
@@ -257,22 +257,23 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label for="change_password" class="col-sm-3 control-label">Password</label>
 
                             <div class="col-sm-9">
                                 <button type="button" id="change_password" class="btn btn-link" data-toggle="modal" data-target="#myPasswordModal"><font data-toggle="tooltip" title="Click here to change password.">Change Password</font></button>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <!-- /.box-body -->
 
                     <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-default">Cancel</button>
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
-						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$user->person->user_id}}, 'access');">Modules Access</button>
 					</div>
-                    <!-- /.box-footer -->
+                    <!-- 
+					
+						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$user->person->user_id}}, 'access');">Modules Access</button>/.box-footer -->
                 </form>
             </div>
             <!-- /.box -->

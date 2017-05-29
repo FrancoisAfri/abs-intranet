@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateContactsDocumentsTable extends Migration
+class CreateTaskLibrariesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateContactsDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contacts_documents', function (Blueprint $table) {
+        Schema::create('task_libraries', function (Blueprint $table) {
             $table->increments('id');
+			$table->integer('order_no')->nullable();
+            $table->string('description')->nullable();
+			$table->smallInteger('upload_required')->nullable();
+			$table->smallInteger('active')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateContactsDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contacts_documents');
+        Schema::dropIfExists('task_libraries');
     }
 }

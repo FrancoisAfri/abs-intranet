@@ -189,6 +189,8 @@
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">
                         <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                        <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-success " : " btn-danger" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Activate" : "De-Activate"}}</a>
+                       
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -199,7 +201,7 @@
 
         <!-- Confirmation Modal -->
         @if(Session('success_add'))
-            @include('action_partials.success_action', ['modal_title' => "New Company Added!", 'modal_content' => session('success_add')])
+            @include('contacts.action_partials.success_action', ['modal_title' => "New Company Added!", 'modal_content' => session('success_add')])
         @endif
     </div>
     @endsection

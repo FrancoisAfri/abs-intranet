@@ -6,7 +6,7 @@
 @section('content')
     <div class="row">
         <!-- New User Form -->
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-0">
             <!-- Horizontal Form -->
 			<form class="form-horizontal">
             <div class="box box-primary">
