@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CompanyIdentity;
 use App\DivisionLevel;
 use App\Mail\ConfirmRegistration;
 use Illuminate\Http\Request;
@@ -52,20 +53,45 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Create User Page Accessed', "Accessed By User", 0);
         return view('security.add_user')->with($data);
     }
+	public function deleteUser(User $user)
+	{
+		# Delete record form database
+		$user->load('person');
+		$name = $user->person->first_name.' '.$user->person->surname;
+		AuditReportsController::store('Security', 'User Deleted', "Del: $name ", 0);
+		DB::table('users')->where('id', '=', $user->id)->delete();
+		DB::table('hr_people')->where('user_id', '=', $user->id)->delete();
+		return redirect('/users')->with('success_delete', "User Successfully Deleted.");
+	}
 	public function modules() 
 	{
         $modules = DB::table('security_modules')->orderBy('name', 'asc')->get();
-		$data['page_title'] = "Security Setup";
+		$data['page_title'] = "Security Modules";
 		$data['page_description'] = "Admin page for security related settings";
 		$data['breadcrumb'] = [
-			['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-			['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+			['title' => 'Security', 'path' => '/users/modules', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+			['title' => 'Modules', 'active' => 1, 'is_module' => 0]
 		];
 		$data['active_mod'] = 'Security';
-        $data['active_rib'] = 'Setup';
+        $data['active_rib'] = 'modules';
 		$data['modules'] = $modules;
-		AuditReportsController::store('Security', 'Setup Page Accessed', "Accessed By User", 0);
+		AuditReportsController::store('Security', 'Modules Setup Page Accessed', "Accessed By User", 0);
         return view('security.setup')->with($data);
+    }
+    public function companySetup()
+    {
+        $companyDetails = CompanyIdentity::first();
+        $data['page_title'] = "Security Setup";
+        $data['page_description'] = "Company settings that will be used by the system";
+        $data['breadcrumb'] = [
+            ['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Security';
+        $data['active_rib'] = 'Setup';
+        $data['companyDetails'] = $companyDetails;
+        AuditReportsController::store('Security', 'Setup Page Accessed', "Accessed By User", 0);
+        return view('security.company_identity')->with($data);
     }
 	public function moduleAccess(User $user) 
 	{
@@ -118,7 +144,7 @@ class UsersController extends Controller
 			$data['page_title'] = "Security Setup";
 			$data['page_description'] = "Module ribbons page";
 			$data['breadcrumb'] = [
-				['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+				['title' => 'Security', 'path' => '/users/modules', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
 				['title' => 'Ribbons', 'active' => 1, 'is_module' => 0]];
 			$data['ribbons'] = $mod;
 			$data['arrayRights'] = $aRarrayRights;
@@ -474,21 +500,4 @@ class UsersController extends Controller
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
 
-
-     public function updateAnnual(Request $request, leave_custom $lev)
-    {
-        //$user = Auth::user()->load('person');
-        $this->validate($request, [
-            //'hr_id' => 'required',
-            'number_of_days'=>  'numeric|required',
-
-        ]);
-        //$lev->hr_id = $request->input('hr_id');
-        $lev->number_of_days = $request->input('number_of_days');
-        $lev->update();
-        //return $lev;
-        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
-        return response()->json();
-    }
-    //
 }

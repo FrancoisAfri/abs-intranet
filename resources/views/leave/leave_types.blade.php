@@ -1,5 +1,9 @@
 @extends('layouts.main_layout')
 
+@section('page_dependencies')
+<!-- dependencies -->
+
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
@@ -114,8 +118,7 @@
 </div>
 @endsection
 <!--        edit ribbon-->
-            (Session('success_edit'))
-            @include('leave.partials.success_action', ['modal_title' => 'Contact Details Updated!', 'modal_content' => session('success_edit')])
+           
     </div>
 <!-- Ajax form submit -->
 
@@ -128,9 +131,6 @@
         else if (data == 'edit') location.href = "/leave/leave_edit/" + id;
         else if (data == 'actdeac') location.href = "/leave/leave_active/" + id; //leave_type_edit
          else if (data == 'cu_actdeac') location.href = "/leave/custom/leave_type_edit/" + id;
-
-        //		 	else if (data == 'access')
-        //		 		location.href = "/leave/module_access/" + id;
     }
     $(function () {
         var moduleId;
@@ -182,10 +182,6 @@
             //modal.find('#hr_id').val(hr_id);
             modal.find('#number_of_days').val(number_of_days);
             modal.find('#hr_id').val(employeeName);
-            // modal.find('#font_awesome').val(moduleFontAwesome);
-            //if(primeRate != null && primeRate != '' && primeRate > 0) {
-            //    modal.find('#prime_rate').val(primeRate.toFixed(2));
-            //}
         });
         ///leave/type/add_leave
         //****leave type post

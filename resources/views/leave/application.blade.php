@@ -87,22 +87,56 @@
                                 </div>
                             </div>                 
                             <!-- This is the dropbox which must receive a value from the leave dropbox via jquery -->
-                        <div class="form-group  ">
+                      <!--   <div class="form-group  ">
+                            <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
+                            <div class="col-sm-5">
+                                    <input type="text" id ="availdays" class="form-control pull-left" name="val" value=" " disabled="true">
+                            </div>
+                        </div> -->
+                         <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-                                    @foreach($employees as $employee)
-                        {{ ($balance = $employee ->leave_types->where ('id',3)->first()) ? $balance->pivot->leave_balance: ''}} 
-                                    @endforeach
-                       
-                                   
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id ="availdays" class="form-control pull-left" name="val" value=" " disabled="true">
                                 </div>
                             </div>
                         </div>
 
+                        <!--  -->
+                           <div class="row emp-field" style="display: block;">
+                                <div class="col-xs-6">
+                                    <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
+                                        <label for="date_from" class="col-sm-4 control-label">Available neg Annual Days:</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" id ="negsick" class="form-control pull-left" name="val" value=" {{$negannualDays}}" disabled="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                          
+                                 <div class="col-xs-6">
+                                    <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
+                                        <label for="date_to" class="col-sm-3 control-label">Available neg Sick Days:</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                               <input type="text" id ="negannual" class="form-control pull-left" name="val" value=" {{$negsickDays}}" disabled="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!--  -->
 
-                                    <!--                                                        -->
-                        
                       <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Day</label>
                             <div class="col-sm-10">
@@ -111,7 +145,7 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
 <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control pull-left" name="day" value=" " />
+                                    <input type="text" class="form-control pull-left" name="day" value=""  />
                                     
                                 </div>
                             </div>
@@ -131,11 +165,7 @@
                                 </div>
                             </div>
                         </div>
-                             
-                                        <!--    / collumn -->
- 
-                        
-                        
+              
                         <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
                             <div class="col-sm-10">
@@ -172,8 +202,8 @@
         </div>
         <!-- End new User Form-->
         <!-- Confirmation Modal -->
-        @if(Session('success_add'))
-            @include('contacts.partials.success_action', ['modal_title' => "Registration Successful!", 'modal_content' => session('success_add')])
+        @if(Session('success_application'))
+            @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
         @endif
     </div>
     @endsection
@@ -233,9 +263,21 @@
             $('#cancel').click(function () {
                 location.href = '/leave/application';
             });
-            
+             function postData(id, data) {
+        alert(id);
+         //if (data == 'approval_id') location.href = "/leave/approval/" + id;
+            }
              //Phone mask
             $("[data-mask]").inputmask();
+
+            var bal = $('#availdays').val();
+            var negDays = $('#negsick').val();
+            var negannual = $('#negannual').val();
+            var varName = availdays ;
+
+            var res = negDays + negannual;
+             //alert (2 + 1)
+
 
             //Initialise date range picker elements
             $('input[name="day"]').daterangepicker({
@@ -246,8 +288,9 @@
                     format: 'DD/MM/YYYY'
                 },
                 "dateLimit": {
-                    "days": 4
+                    "days": 3
                 },
+                
             });
             $('input[name="datetime"]').daterangepicker({
                 timePicker: true    ,
@@ -255,13 +298,20 @@
 //                timePickerIncrement: 30,
                 locale: {
                     format: 'DD/MM/YYYY h:mm A'
-                },"dateLimit": {
+                },
+                "dateLimit": {
                     "days": 1
                 },
             });
             
-
-            
+            $('#hr_person_id , #leave_type').on('change', function(){
+              //  console.log('test message');
+                var hr_person_id = $('#hr_person_id').val();
+                var leave_type = $('#leave_type').val();
+                if (hr_person_id > 0 && leave_type >0) {
+                    avilabledays(hr_person_id, leave_type,'availdays');
+                }
+            });        
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -274,14 +324,9 @@
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Days');
                 else if (allType == 2) $('#box-subtitle').html('Hours');
-//                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
             
-//                    $('input[name="daterange"]').daterangepicker();
-           
-
-//            
-              
+         
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -304,26 +349,21 @@
         });
        
 //      hide notes field if leave type is maternity
-            function changetextbox(){
-                var levID = document.getElementById("leave_type").value;
-                //return levID;
-                if ( levID == 3) { 
-                 $('.notes-field').hide();
-                }
-          
-              // alert(levID);
+        function changetextbox(){
+            var levID = document.getElementById("leave_type").value;
+                   // alert (levID);
+                if (levID ==  1){
+                     $('.neg-field').hide();
+                    $('.Sick-field').show(); 
+                }else if(levID == 2,3,4,6,7,8){
+                    $('.Sick-field').hide(); 
+                    $('.neg-field').hide();
+                }else if(levID ==  5){
+                    $('.Sick-field').hide(); 
+                    $('.neg-field').show();
+                   }
             }
-//             function changetextbox(){
-//                var levID = document.getElementById("leave_type").value;
-//                var EmpID = document.getElementById("employee").value;
-//
-//                //return levID;
-//               return EmpID;
-//        
-//            }
-      
 
-    
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();
@@ -345,7 +385,9 @@
             return allType;
            
         }
-      
+      // function getEmployeeBal(hr_id, levID, availdaystxt){
+
+      // }
         
     </script>
 @endsection

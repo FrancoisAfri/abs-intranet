@@ -4,6 +4,8 @@
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+	<!-- iCheck -->
+	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
 @endsection
 @section('content')
     <div class="row">
@@ -13,77 +15,51 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Reports Search criteria</h3>
+                    <h3 class="box-title">Compamies Search</h3>
                     <p>Enter search details:</p>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST" action="/audits">
+                <form class="form-horizontal" id="report_form" method="POST" action="/contacts/company_search_results">
                     {{ csrf_field() }}
-
                     <div class="box-body">
-					<div class="form-group programmes">
-                            <label for="module_name" class="col-sm-3 control-label">Modules</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<select class="form-control select2" style="width: 100%;" id="module_name" name="module_name">
-                                        <option selected="selected" value="">*** Select a Module ***</option>
-                                            <option value="Audit">Audit</option>
-                                            <option value="Contacts">Contacts</option>
-                                            <option value="Employee Records">Employee Records</option>
-                                            <option value="Leave Management">Leave Management</option>
-                                            <option value="Performance Appraisal">Performance Appraisal</option>
-                                            <option value="Security">Security</option>
-                                    </select>
-								</div>
-                            </div>
-                        </div>
 						<div class="form-group">
-                            <label for="action_date" class="col-sm-3 control-label">Action Date</label>
+                            <label for="company_name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
+								<input type="text" class="form-control" id="company_name" name="company_name" value="" placeholder="Enter Compamy Name...">
                                 </div>
                             </div>
                         </div>
-						
 						<div class="form-group">
-                            <label for="action" class="col-sm-3 control-label">Action</label>
+                            <label for="reg_no" class="col-sm-3 control-label">Registration Number</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<input type="text" class="form-control" id="action" name="action" placeholder="Enter an Action...">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
 								</div>
+								<input type="text" class="form-control" id="reg_no" name="reg_no" value="" placeholder="Enter Registration Number...">
+                                </div>
                             </div>
                         </div>
-						<div class="form-group groups">
-                            <label for="user_id" class="col-sm-3 control-label">User</label>
+						<div class="form-group">
+                            <label for="vat_no" class="col-sm-3 control-label">VAT Number</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-									<div class="input-group-addon">
-                              			<i class="fa fa-user"></i>
-                            		</div>
-									<select class="form-control select2" style="width: 100%;" id="user_id" name="user_id" required>
-                                        <option selected="selected" value="0">*** Select a User ***</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->user_id }}">{{ $user->first_name.' '.$user->surname}}</option>
-                                        @endforeach
-                                    </select>
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<input type="text" class="form-control" id="vat_no" name="vat_no" value="" placeholder="Enter VAT Number...">
                                 </div>
                             </div>
                         </div>
                      </div>   
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Generate</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Search</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -126,7 +102,9 @@
 			autoclose: true
             }); -->
     <!-- End Bootstrap File input -->
-
+	<!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	
     <script type="text/javascript">
         //Cancel button click event
         /*document.getElementById("cancel").onclick = function () {
@@ -141,8 +119,12 @@
 			endDate: '-1d',
 			autoclose: true
 		});
-        });
-        //Phone mask
-        $("[data-mask]").inputmask();
+		//Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+                increaseArea: '20%' // optional
+            });
+		});
     </script>
 @endsection

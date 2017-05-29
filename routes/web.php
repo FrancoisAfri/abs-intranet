@@ -35,7 +35,7 @@ Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
 Route::get('users/modules', 'UsersController@modules');
-Route::get('users/ ', 'UsersController@setup');
+Route::get('users/setup', 'UsersController@companySetup');
 Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
@@ -46,6 +46,19 @@ Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
+Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+//#Contacts Management
+Route::get('contacts', 'ContactsController@index');
+Route::get('contacts/create', 'ContactsController@create');
+Route::post('contacts/email', 'ContactsController@emailAdmin');
+Route::get('contacts/{user}/edit', 'ContactsController@edit');
+Route::get('contacts/profile', 'ContactsController@profile');
+Route::post('contacts', 'ContactsController@store');
+Route::post('contacts/search', 'ContactsController@getSearch');
+Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
+Route::patch('contacts/{user}', 'ContactsController@update');
+//Company Identity (company details: logo, theme color, etc)
+Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
 //#Leave Management
 //Route::get('leave/types', 'LeaveController@types');
@@ -77,42 +90,42 @@ Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
-Route::post('leave/application/leavDetails', 'LeaveApplicationController@leavDetails');
+Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
+#Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 
 #leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
 //Route::post('leave/type/add_leave', 'LeaveController@addleave');
-Route::post('leave/approval/reject', 'LeaveApplicationController@reject');
+Route::post('leave/approval/{levReject}', 'LeaveApplicationController@reject');
+
+#leaveHistory audit
+Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
+Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
+Route::post('leave/reports/result', 'LeaveHistoryAuditController@getReport');
+Route::post('leave/reports/history', 'LeaveHistoryAuditController@getlevhistoryReport');
+
+#leave history report
+Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
+Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
+
+#Leave Reports
+Route::post('leave/reports/taken', 'LeaveHistoryAuditController@taken');
+Route::post('leave/reports/leavebal', 'LeaveHistoryAuditController@leavebalance');
+Route::post('leave/reports/leavepaOut', 'LeaveHistoryAuditController@leavepaidOut');
+Route::post('leave/reports/leaveAll', 'LeaveHistoryAuditController@leaveAllowance');
+Route::post('leave/print', 'LeaveHistoryAuditController@printlevhistoReport');
+Route::post('leave/bal', 'LeaveHistoryAuditController@printlevbalReport');
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
 Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
 
-
-
-
-
 //Contacts related requests
 Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
 Route::get('contacts/public', 'PublicRegistrationController@create');
-//Route::post('add_public_registration', 'PublicRegistrationController@store');
-//Route::get('contacts/public/{public}/edit', 'PublicRegistrationController@edit');
-//Route::patch('public/{public}', 'PublicRegistrationController@update');
-//Route::get('contacts/educator', 'EducatorsController@create');
-//Route::get('contacts/educator/extras/{project}/{activity}', ['uses' => 'EducatorsController@create', 'as' => 'educatorregistration']);
-//Route::post('add_educator', 'EducatorsController@store');
-//Route::get('contacts/educator/{educator}/edit', 'EducatorsController@edit');
-//Route::patch('educators/{educator}', 'EducatorsController@update');
-//Route::get('contacts/learner', 'LearnerRegistrationController@create');
-//Route::get('contacts/learner/extras/{project}/{activity}', ['uses' => 'LearnerRegistrationController@create', 'as' => 'learnerregistration']);
-//Route::post('add_learner', 'LearnerRegistrationController@store');
-//Route::get('contacts/learner/{learner}/edit', 'LearnerRegistrationController@edit');
-//Route::patch('learners/{learner}', 'LearnerRegistrationController@update');
-//Route::get('contacts/profile', 'ContactsController@profile');
-//Route::get('contacts/create', 'ContactsController@create');
-//Route::post('contacts/email', 'ContactsController@emailAdmin');
+
 Route::get('contacts/{contact}/edit', 'ContactsController@edit');
 Route::post('contacts', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
@@ -130,12 +143,16 @@ Route::patch('contacts/{contact}', 'ContactsController@update');
 //Route::get('contacts/provider/create', 'ContactCompaniesController@createServiceProvider');
 //Route::get('contacts/sponsor/create', 'ContactCompaniesController@createSponsor');
 //Route::get('contacts/school/create', 'ContactCompaniesController@createSchool');
-Route::post('contacts/company/create', 'ContactCompaniesController@store');
-Route::get('contacts/company/{company}/view', 'ContactCompaniesController@show');
+Route::get('contacts/company/create', 'ContactCompaniesController@create');
+Route::post('contacts/company', 'ContactCompaniesController@storeCompany');
+Route::get('contacts/company/{company}/view', 'ContactCompaniesController@showCompany');
 Route::post('contacts/company/{company}/reject', 'ContactCompaniesController@reject');
 Route::post('contacts/company/{company}/approve', 'ContactCompaniesController@approve');
-Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@edit');
-Route::patch('contacts/company/{company}', 'ContactCompaniesController@update');
+Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@editCompany');
+Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@actCompany');
+Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
+Route::get('contacts/company_search', 'CompanySearchController@index');
+Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
 //AGM
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');
@@ -263,6 +280,16 @@ Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupControlle
 Route::patch('/hr/firstchild/{parentLevel}/{childID}', 'EmployeeCompanySetupController@updateChild');
 Route::post('/hr/firstchild/add/{parentLevel}/{parent_id}', 'EmployeeCompanySetupController@addChild');
 Route::get('/hr/firstchild/{parentLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateChild');
+# Induction
+Route::get('/induction/create', 'InductionAdminController@index');
+Route::get('/induction/search', 'InductionAdminController@search');
+Route::get('/induction/{induction}/view', 'InductionAdminController@show');
+Route::get('/induction/tasks_library', 'TaskLibraryController@index');
+Route::post('induction/add_library_task', 'TaskLibraryController@store');
+Route::post('induction/client_add', 'InductionAdminController@store');
+Route::post('induction/search_results', 'InductionAdminController@searchResults');
+Route::patch('/induction/tasks_library_edit/{TaskLibrary}', 'TaskLibraryController@update');
+Route::get('/induction/library_tasks_activate/{TaskLibrary}', 'TaskLibraryController@actDeact');
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
@@ -286,6 +313,8 @@ Route::get('api/availableperks', 'AppraisalGraphsController@getAvailablePerks')-
 Route::get('api/appraisal/emp/topten', 'AppraisalGraphsController@getTopTenEmployees')->name('toptenemp');
 Route::get('api/appraisal/emp/bottomten', 'AppraisalGraphsController@getBottomTenEmployees')->name('bottomtenemp');
 Route::get('api/appraisal/staffunder/{managerID}', 'AppraisalGraphsController@getSubordinates')->name('staffperform');
+Route::get('api/leave/availableBalance/{hr_id}/{levID}', 'LeaveApplicationController@availableDays');
+Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController@negativeDays');
 
 //Email Test
 Route::get('testemail', function () {

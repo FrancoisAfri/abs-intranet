@@ -4,13 +4,13 @@
         <div class="col-sm-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Audit Report</h3>
+                    <h3 class="box-title">Leave History Report</h3>
                 </div>
                 <!-- /.box-header -->
-				<form class="form-horizontal" method="POST" action="/audits/print">
-                 <input type="hidden" name="action_date" value="{{!empty($action_date) ? $action_date : ''}}">
-                 <input type="hidden" name="user_id" value="{{!empty($user_id) ? $user_id : ''}}">
-                 <input type="hidden" name="module_name" value="{{!empty($module_name) ? $module_name : ''}}">
+				<form class="form-horizontal" method="POST" action="/leave/print">
+                 <input type="hidden" name="actionDate" value="{{!empty($actionDate) ? $actionDate : ''}}">
+                 <input type="hidden" name="userID" value="{{!empty($userID) ? $userID : ''}}">
+                 <input type="hidden" name="report" value="{{!empty($report) ? $report : ''}}">
                  <input type="hidden" name="action" value="{{!empty($action) ? $action : ''}}">
 					{{ csrf_field() }}
                 <div class="box-body">
@@ -21,28 +21,37 @@
                             <div class="box-body">
 								<table class="table table-striped">
 									<tr>
-										<th>Module Name</th>
-										<th>User</th>
+										<!-- <th>Module Name</th> -->
+										<th>Employee Number </th>
 										<th>Action</th>
-										<th>Action Date</th>
-										<th>Notes</th>
+					                    <th>Action Date</th>
+					                    <th>Previous Balance</th>
+					                    <th>Transaction</th>
+					                    <th>Current Balance</th>
+					                    <th>Leave Type</th>
+										<!-- <th>Previous Balance</th>
+										<th>Previous Balance</th>
+										<th>Previous Balance</th> -->
+
+
 									</tr>
-									@if(count($audits) > 0)
-										@foreach($audits as $audit)
+									@if(count($historyAudit) > 0)
+										@foreach($historyAudit as $audit)
 											<tr>
-												<td>{{ !empty($audit->module_name) ? $audit->module_name : '' }}</td>
+											   <td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
 												<td>{{ !empty($audit->firstname) && !empty($audit->surname) ? $audit->firstname.' '.$audit->surname : '' }}</td>
 												<td>{{ !empty($audit->action) ? $audit->action : '' }}</td>
 												<td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td>
-												<td>{{ !empty($audit->notes) ? $audit->notes : '' }}</td>
-												
+												<td>{{ !empty($audit->previous_balance) ? $audit->previous_balance : '' }}</td>
+												<td>{{ !empty($audit->transcation) ? $audit->transcation : '' }}</td>
 											</tr>
 										@endforeach
 									@endif
 								</table>
 								<div class="row no-print">
 									<div class="col-xs-12">
-										<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
+										<button type="submit" id="cancel" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
+										 <!-- <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
 									</div>
 								</div>
 								<!-- End amortization /table -->
@@ -56,3 +65,11 @@
         </div>
     </div>
 @endsection
+@section('page_script')
+<!--  -->
+
+<!--  -->
+ <script type="text/javascript">
+ // 
+ </script>
+ @endsection

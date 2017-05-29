@@ -64,23 +64,6 @@ class LeaveController extends Controller
         AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json();
     }
- 
-
-        public function rules(Request $request)
-        {
-
-            // $rules[
-            //     'credit' => required
-            //   ];
-
-                
-            // $input = Input:only('Allow_AnnualLeave_Credit','Allow_SickLeave_Credit','Show_non_employees_in_Leave_Module');
-            // $leave = new Leave;
-            // $leave->Allow_AnnualLeave_Credit = $Input['Allow_AnnualLeave_Credit']
-            // $data = 
-
-        }
-
 
 
     //#leave types

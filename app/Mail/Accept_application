@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Loan;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -9,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
 
-class RequestDirectorApproval extends Mailable
+class Accept_application extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,13 +19,13 @@ class RequestDirectorApproval extends Mailable
      *
      * @return void
      */
-    public $user;
-    public $loan_url = 'http://devloans.afrixcel.co.za/loan/view/';
-    
-    public function __construct(User $user, $loan_id)
+    public $first_name;
+    public $surname;
+
+    public function __construct($first_name, $surname)
     {
-        $this->user = $user->load('person');
-        $this->loan_url .= $loan_id.'';
+        $this->first_name = $first_name;
+        $this->surname = $surname;
     }
 
     /**
@@ -37,13 +38,13 @@ class RequestDirectorApproval extends Mailable
         //Should get these details from setup
         $fromAddress = 'noreply@afrixcel.co.za';
         $fromName = 'Afrixcel Support';
-        $subject = 'Approval Needed | NU-LAXMI LEASING';
+        $subject = 'leave Application Approved | Afrixcel Business Solutions';
 
         $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'NU-LAXMI LEASING';
-        $data['company_logo'] = 'http://devloans.afrixcel.co.za' . Storage::disk('local')->url('logos/logo.jpg');
+        $data['company_name'] = 'Afrixcel Business Solutions';
+        $data['company_logo'] = 'http://www.afrixcel.co.za' . Storage::disk('local')->url('logos/logo.jpg');
 
-        return $this->view('mails.request_director_approval')
+        return $this->view('mails.approved_leave_application')
             ->from($fromAddress, $fromName)
             ->subject($subject)
             ->with($data);

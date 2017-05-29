@@ -16,7 +16,7 @@ class CreateLeaveCustomsTable extends Migration
         Schema::create('leave_customs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('hr_id')->nullable();
-            $table->integer('number_of_days')->nullable();
+            $table->double('number_of_days')->nullable();
 
             $table->timestamps();
         });

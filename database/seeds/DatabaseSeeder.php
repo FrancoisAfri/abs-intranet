@@ -267,8 +267,45 @@ class DatabaseSeeder extends Seeder
         $module->path = 'contacts';
         $module->font_awesome = 'fa-users';
         $module->save();
-
-        $module = new modules();
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Add Company';
+        $ribbon->description = 'Add Company';
+        $ribbon->ribbon_path = 'contacts/company/create';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Add Client';
+        $ribbon->description = 'Add Client';
+        $ribbon->ribbon_path = 'contacts/create';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Search Clients';
+        $ribbon->description = 'Search Clients';
+        $ribbon->ribbon_path = 'contacts';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Search Company';
+        $ribbon->description = 'Search Company';
+        $ribbon->ribbon_path = 'contacts/company_search';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		
+        $module = new modules(); // Security
         $module->active = 1;
         $module->name = 'Security';
         $module->path = 'users';
@@ -451,14 +488,6 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-         $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Leave History Audit';
-        $ribbon->description = 'Leave History Audit';
-        $ribbon->ribbon_path = 'leave/Leave_History_Audit';
-        $ribbon->access_level = 5;
-        $module->addRibbon($ribbon);
 
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
@@ -468,6 +497,16 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'leave/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+
+        
+        //  $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 4;
+        // $ribbon->ribbon_name = 'Leave History Audit';
+        // $ribbon->description = 'Leave History Audit';
+        // $ribbon->ribbon_path = 'leave/Leave_History_Audit';
+        // $ribbon->access_level = 5;
+        // $module->addRibbon($ribbon);
 		
 		$module = new modules(); //Audit Management
         $module->active = 1;
@@ -554,6 +593,79 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+		
+		$module = new modules(); //Induction/Tasks
+        $module->active = 1;
+        $module->name = 'Induction';
+        $module->path = 'induction';
+        $module->font_awesome = 'fa-tasks';
+        $module->save();
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Create Induction';
+        $ribbon->description = 'Create Induction';
+        $ribbon->ribbon_path = 'induction/create';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Tasks Library';
+        $ribbon->description = 'Tasks Library';
+        $ribbon->ribbon_path = 'induction/tasks_library';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Induction Search';
+        $ribbon->description = 'Induction Search';
+        $ribbon->ribbon_path = 'induction/search';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'induction/reports';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'induction/setup';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'appraisal/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'appraisal/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+        $leave_config = new leave_configuration();
+        $leave_config->save();
+		
         $leave_config = new leave_configuration();
         $leave_config->save();
         

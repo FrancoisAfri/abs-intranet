@@ -2,12 +2,12 @@
 
 namespace App\Mail;
 
+use App\CompanyIdentity;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
 
 class ConfirmRegistration extends Mailable
 {
@@ -35,18 +35,18 @@ class ConfirmRegistration extends Mailable
      */
     public function build()
     {
-        //Should get these details from setup
-        $fromAddress = 'noreply@afrixcel.co.za';
-        $fromName = 'Afrixcel Support';
-        $subject = 'Welcome to NU-LAXMI LEASING online system.';
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $subject = "Welcome to $companyName online system.";
 
-        $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'NU-LAXMI LEASING';
-        $data['company_logo'] = 'http://devloans.afrixcel.co.za' . Storage::disk('local')->url('logos/logo.jpg');
-        $data['profile_url'] = 'http://devloans.afrixcel.co.za/users/profile';
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['profile_url'] = url('/users/profile');
 
         return $this->view('mails.confirm_registration')
-            ->from($fromAddress, $fromName)
+            ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);
     }

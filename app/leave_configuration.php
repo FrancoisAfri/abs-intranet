@@ -18,7 +18,7 @@ class leave_configuration extends Model
 'require_hr_approval',
 'require_payroll_approval',
 'limit_administration_to_assigned_divisions',
-'mumber_of_days_until_escalation',
+'number_of_days_until_escalation',
 'document_compulsory_on_Study_leave_application',
 'document_compulsory_when_two_sick_leave_8_weeks',
 'notify_hr_with_application',
@@ -27,5 +27,8 @@ class leave_configuration extends Model
 'annual_negative_days',
 'sick_negative_days',
 'number_of_days_annual',
-'number_of_days_sick' ];
+'number_of_days_sick',
+'allow_sick_negative_days',
+'allow_annual_negative_days',
+ ];
 }

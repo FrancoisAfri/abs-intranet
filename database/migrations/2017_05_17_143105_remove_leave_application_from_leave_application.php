@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddExistingKpiIdToAppraisalKpiTable extends Migration
+class RemoveLeaveApplicationFromLeaveApplication extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddExistingKpiIdToAppraisalKpiTable extends Migration
      */
     public function up()
     {
-        Schema::table('appraisals_kpis', function($table) {
-            $table->integer('existing_kpi_id')->nullable();
-        });
+        //
+         Schema::table('leave_application', function($table) {
+             $table->dropColumn('application');
+          });
     }
 
     /**
@@ -25,9 +26,6 @@ class AddExistingKpiIdToAppraisalKpiTable extends Migration
      */
     public function down()
     {
-        Schema::table('appraisals_kpis', function($table) {
-            $table->dropColumn('existing_kpi_id');
-          
-        });
+        //
     }
 }
