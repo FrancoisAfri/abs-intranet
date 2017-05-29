@@ -21,7 +21,7 @@
                                     <div class="input-group-addon">
                                        <i class="fa fa-comment-o"></i>
                                     </div>
-                                    <textarea class="form-control" id="reason" name="reason" placeholder="Enter rejection reason ..." rows="4">{{ old('reason') }}</textarea>
+                                    <textarea class="form-control" id="description" name="description" placeholder="Enter rejection reason ..." rows="4"></textarea>
                                 </div>
                             </div>
                         </div>

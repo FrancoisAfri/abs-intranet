@@ -40,11 +40,7 @@
                        <!--  -->
                        <!-- loop through the leave application info   -->
                   @if(count($leaveApplication) > 0)
-                       <!--  <div class="callout callout-danger">
-                            <h4><i class="fa fa-database"></i> No Records found</h4>
-
-                            <p>No Recods matching your search criteria in the database. Please refine your search parameters.</p>
-                        </div> -->
+                    
                     @endif
                     <ul class="products-list product-list-in-box">
                     @foreach($leaveApplication as $approval)
@@ -71,7 +67,7 @@
                                <td>{{ !empty($approval->status) ? $approval->status : '' }}</td>    
                                <!--  <td>{{ !empty($approval->leave_Days) ? $approval->leave_Days : '' }}</td> -->
                                 <td>
-                                 <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$approval->id}}")">Accept</button>
+                                <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$approval->id}}" onclick="postData({{$approval->id}}, 'approval_id')">Accept</button>
 
                                </td>
                                <td>
@@ -109,6 +105,10 @@
         <!-- Include the reject leave modal-->
           @include('leave.partials.reject_leave')
         <!--  -->
+         @if(Session('success_application'))
+            @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
+        @endif
+        <!--  -->
     </div>
     @endsection
 
@@ -137,7 +137,6 @@
     // };
         // post data
          function postData(id, data) {
-
          if (data == 'approval_id') location.href = "/leave/approval/" + id;
        }
 
@@ -176,7 +175,7 @@
             //Post module form to server using ajax (ADD)
             $('#rejection-reason').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/leave/approval/' + reject_ID; 
+                var strUrl = '/leave/reject/' + reject_ID; 
                 var modalID = 'reject-leave-modal';
                 var objData = {
                     // name: $('#'+modalID).find('#name').val(),
