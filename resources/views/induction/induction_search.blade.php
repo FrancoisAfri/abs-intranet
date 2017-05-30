@@ -38,7 +38,7 @@
 								</div>
                             </div>
                         </div>
-						<div class="form-group">
+						<!--<div class="form-group">
                             <label for="induction_date" class="col-sm-3 control-label">Induction Date</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
@@ -48,7 +48,7 @@
 								<input type="text" class="form-control daterangepicker" id="induction_date" name="induction_date" value="" placeholder="Select Induction Date...">
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 						
 						<div class="form-group">
                             <label for="induction_title" class="col-sm-3 control-label">Induction Title</label>

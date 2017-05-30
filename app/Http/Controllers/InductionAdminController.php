@@ -91,7 +91,7 @@ class InductionAdminController extends Controller
 					$duedate = !empty($inductionData['due_date_'.$libraryID]) ? $inductionData['due_date_'.$libraryID] : '';
 					$startDate = !empty($inductionData['start_date_'.$libraryID]) ? $inductionData['start_date_'.$libraryID] : '';
 					$escalationID = !empty($inductionData['escalation_id_'.$libraryID]) ? $inductionData['escalation_id_'.$libraryID] : 0;
-					$employeeID = !empty($inductionData['employee_id_'.$libraryID]) ? $inductionData['escalation_id_'.$libraryID] : 0;
+					$employeeID = !empty($inductionData['employee_id_'.$libraryID]) ? $inductionData['employee_id_'.$libraryID] : 0;
 					$orderNo = !empty($inductionData['order_no_'.$libraryID]) ? $inductionData['order_no_'.$libraryID] : 0;
 					$uploadRequired = !empty($inductionData['upload_required_'.$libraryID]) ? $inductionData['upload_required_'.$libraryID] : 0;
 					TaskManagementController::store($description,$duedate,$startDate,$escalationID,$employeeID,1
@@ -114,20 +114,34 @@ class InductionAdminController extends Controller
     {
         if ($induction->status == 1) 
 		{
-			$induction->load('TasksList');
+			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+			$tasks = DB::table('employee_tasks')
+			->select('employee_tasks.description','employee_tasks.order_no','employee_tasks.notes'
+			,'employee_tasks.status','employee_tasks.date_completed'
+			,'hr_people.first_name as hr_fist_name','hr_people.surname as hr_surname'
+			, 'employee_tasks_documents.document as emp_doc')
+			->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+			->leftJoin('employee_tasks_documents', 'employee_tasks_documents.task_id', '=', 'employee_tasks.id')
+			->where('employee_tasks.induction_id', $induction->id)
+			->orderBy('employee_tasks.order_no')
+			->get();
+			$induction->load('ClientName')->first();
 			$data['page_title'] = "View Induction Details";
 			$data['page_description'] = "Induction Details";
 			$data['breadcrumb'] = [
-            ['title' => 'Audit', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
-        ];
+            ['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Induction Search', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+           // ['title' => 'Induction Search Results', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Induction Details', 'active' => 1, 'is_module' => 0]
+				];
 			$data['active_mod'] = 'Induction';
 			$data['active_rib'] = 'Induction Search';
 			$data['induction'] = $induction;
-			return $induction;
+			$data['tasks'] = $tasks;
+			$data['taskStatus'] = $taskStatus;
+			//return $tasks;
 			AuditReportsController::store('Induction', 'Induction Details Page Accessed', "Accessed by User", 0);
-			return view('appraisals.kpas')->with($data);
+			return view('induction.view_induction')->with($data);
 		}
 		else return back();
     }
@@ -173,9 +187,9 @@ class InductionAdminController extends Controller
         $data['page_title'] = "Induction Search";
         $data['page_description'] = "Induction Search";
         $data['breadcrumb'] = [
-            ['title' => 'Audit', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            //['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Induction Search', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Induction';
         $data['active_rib'] = 'Induction Search';
@@ -204,11 +218,11 @@ class InductionAdminController extends Controller
 		, 'contact_companies.name as comp_name')
 		->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.user_id')
 		->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
-		->where(function ($query) use ($actionFrom, $actionTo) {
+		/*->where(function ($query) use ($actionFrom, $actionTo) {
 		if ($actionFrom > 0 && $actionTo  > 0) {
-			$query->whereBetween('client_inductions.action_date', [$actionFrom, $actionTo]);
+			$query->whereBetween('client_inductions.create_by', [$actionFrom, $actionTo]);
 		}
-		})
+		})*/
 		->where(function ($query) use ($companyID) {
 		if (!empty($companyID)) {
 			$query->where('client_inductions.company_id', $companyID);
@@ -231,10 +245,13 @@ class InductionAdminController extends Controller
 		$data['page_title'] = "Induction Search Results";
         $data['page_description'] = "Induction Search Results";
         $data['breadcrumb'] = [
-            ['title' => 'Audit', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Induction Search', 'path' => '/induction/search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Induction Search Results', 'active' => 1, 'is_module' => 0]
         ];
+        $data['active_mod'] = 'Induction';
+        $data['active_rib'] = 'Induction Search';
+		
         $data['active_mod'] = 'Induction';
         $data['active_rib'] = 'Induction Search';
 		AuditReportsController::store('Induction', 'View Induction Search Results', "view Induction Results", 0);

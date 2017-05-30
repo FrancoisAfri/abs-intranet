@@ -196,6 +196,69 @@
             <!-- /.Bottom Ten Employees Performance Ranking Widgets -->
         </div>
     </div>
+	<div class="row">
+        <div class="col-md-6">
+		 <!-- /Tasks List -->
+		  <div class="box box-info">
+            <div class="box-header with-border">
+			 <i class="ion ion-clipboard"></i>
+              <h3 class="box-title">Tasks List</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+					<thead>
+						<tr>
+							<th>Order #</th>
+							<th>Description</th>
+							<th>Due Date</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+					@if (!empty($tasks))
+						@foreach($tasks as $task)
+						  <tr>
+							<td>{{ (!empty($task->order_no)) ?  $task->order_no : ''}}</td>
+							<td>{{ (!empty($task->description)) ?  $task->description : ''}}</td>
+							<td>{{ (!empty($task->due_date)) ?  date('Y-m-d',$task->due_date) : ''}}</td>
+							<td>
+							<!-- @if($isSuperuser)
+							{{ $topGroupLvl->plural_name }}
+							@elseif($isDivHead)
+							{{ $managedDivsLevel->plural_name }}
+							@endif -->
+							@if(!empty($task->status) && ($task->status == 1 || $task->status == 3))
+							  <a href="/task/{{$task->task_id}}/start" class="btn btn-sm btn-default btn-flat pull-right">Start</a>
+							@elseif(!empty($task->status) && $task->status == 2)                     
+							  <a href="/task/{{$task->task_id}}/end" class="btn btn-sm btn-default btn-flat pull-right">End</a>
+							 <a href="/task/{{$task->task_id}}/pause" class="btn btn-sm btn-default btn-flat pull-right">Pause</a>
+							@endif
+							</td>
+						  </tr>
+						@endforeach
+					@endif
+                  </tbody>
+                </table>
+              </div>
+			  @include('tasks.partials.end_task', ['isReaOnly' => true])
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+            </div>
+            <!-- /.box-footer -->
+          </div>
+		  <!-- /Tasks List End -->
+        </div>
+    </div>
     @endsection
 
     @section('page_script')

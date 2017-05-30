@@ -11,7 +11,7 @@ class EmployeeTasksDocuments extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'task_id', 'name', 'employee_id', 'added_by', 'document', 'status'];
+        'task_id', 'employee_id', 'added_by', 'document', 'status'];
 
     //relationship between tasks and document
     public function employeeDocs() {
