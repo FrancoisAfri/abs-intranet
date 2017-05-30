@@ -214,7 +214,7 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $user->person->first_name }},<br><br>
+                                                    Hi {{ $first_name }},<br><br>
                                                     We would like to inform you that your application for a leave application has been approved.<br>
                                                 </td>
                                             </tr>

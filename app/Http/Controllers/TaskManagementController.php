@@ -10,7 +10,9 @@ use App\projects;
 use App\User;
 use App\AuditTrail;
 use App\EmployeeTasks;
+use App\EmployeeTasksDocuments;
 use App\Mail\EmployeesTasksMail;
+use App\Mail\NextTaskNotifications;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -53,11 +55,30 @@ class TaskManagementController extends Controller
 	# Start task
 	public function startTask(EmployeeTasks $task) 
 	{
-		// Add Code to check if task is dependent if its check is previous task is done if yes start this one
-		// otherwise chech if that one is pass due date if not send message
-		// check if this user already have another task started before starting a new one 
+		$user = Auth::user()->load('person');
+		if ($task->is_dependent == 1 && !empty($task->induction_id))
+		{
+			$order = $task->order_no - 1;
+			$oldTask = DB::table('employee_tasks')
+			->select('employee_tasks.status','employee_tasks.order_no','employee_tasks.id')
+			->where('employee_tasks.induction_id', $task->induction_id)
+			->where('employee_tasks.order_no', $order)
+			->orderBy('employee_tasks.order_no')
+			->first();
+			
+			if (!empty($oldTask->status) && $oldTask->status != 4) 
+				return redirect('/')->with('error_starting', "You can not start this task, The task it depends on have not been completed yet.");
+		}
+		$OnProgress = DB::table('employee_tasks')
+		->select('employee_tasks.id')
+		->where('employee_tasks.employee_id', $user->person->id)
+		->where('employee_tasks.status', 2)
+		->first();
+		if (!empty($OnProgress->id))
+			return redirect('/')->with('error_starting', "You can not start this task, You have another task in progess.");
 		$stastus = 2;
 		$task->status = $stastus;	
+		$task->date_started = strtotime(date('Y-m-d'));	
 		$task->update();
 		AuditReportsController::store('Task Management', "Task Started", "Edited by User", 0);
 		return back();
@@ -67,18 +88,77 @@ class TaskManagementController extends Controller
 	{
 		$stastus = 3;
 		$task->status = $stastus;	
+		$task->date_paused =  strtotime(date('Y-m-d'));	
 		$task->update();
 		AuditReportsController::store('Task Management', "Task Paused", "Edited by User", 0);
 		return back();
     }
 	# End task
-	public function endTask(EmployeeTasks $task) 
+	public function endTask(Request $request) 
 	{
-		$stastus = 4;
-		$task->status = $stastus;	
-		$task->update();
+		$this->validate($request, [
+            'task_id' => 'bail|required|numeric|min:1',
+            'employee_id' => 'bail|required|numeric|min:1',
+			 'document' => 'required_if:upload_required,2',
+        ]);
+		$user = Auth::user();
+		$endData = $request->all();
+
+        //Exclude empty fields from query
+        foreach ($endData as $key => $value)
+        {
+            if (empty($endData[$key])) {
+                unset($endData[$key]);
+            }
+        }
+
+        $endtask = new EmployeeTasksDocuments();
+        $endtask->task_id = $endData['task_id'];
+        $endtask->employee_id = $endData['employee_id'];
+        $endtask->added_by = $user->id;
+        $endtask->status = 1;
+        $endtask->save();
+
+        //Upload task doc
+        if ($request->hasFile('document')) {
+            $fileExt = $request->file('document')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document')->isValid()) {
+                $fileName = $endtask->id . "_task_doc_" . '.' . $fileExt;
+                $request->file('document')->storeAs('tasks', $fileName);
+                //Update file name in the appraisal_perks table
+                $endtask->document = $fileName;
+                $endtask->update();
+            }
+        }
+		# update Task
+        $dateCompleted = strtotime(date('Y-m-d'));
+		$notes = !empty($endData['notes']) ? $endData['notes'] : '';
+		DB::table('employee_tasks')
+		->where('id', $endData['task_id'])
+		->update([
+			'status' => 4,
+			'date_completed' => $dateCompleted,
+			'notes' => $notes
+		]);
+		$task = EmployeeTasks::where('id', $endData['task_id'])->first();
+		if (!empty($task->is_dependent) && $task->is_dependent == 1&& !empty($task->induction_id))
+		{
+			$next = $task->order_no + 1;
+			$nextTask = DB::table('employee_tasks')
+			->select('employee_tasks.employee_id')
+			->where('employee_tasks.induction_id', $task->induction_id)
+			->where('employee_tasks.order_no', $next)
+			->first();
+			if(!empty($nextTask->employee_id))
+			{
+				# Send Email to employee
+				$employee = HRPerson::where('id', $nextTask->employee_id)->first();
+				Mail::to($employee->email)->send(new NextTaskNotifications($employee));
+				
+			}
+		}
 		AuditReportsController::store('Task Management', "Task Ended", "Edited by User", 0);
-		return back();
+		return response()->json(['employee_id' => $endtask->employee_id], 200);
     }
     /**
      * Store a newly created resource in storage.
