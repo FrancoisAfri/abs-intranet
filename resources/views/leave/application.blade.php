@@ -276,7 +276,7 @@
             var negannual = $('#negannual').val();
             var balance =  parseInt(bal);
             var NegDays =  parseInt(negDays);
-            var Negannual =  parseInt(negannual);
+              var Negannual =  parseInt(negannual);
 
             var Sick = bal + negDays;
             var Annual = bal + negannual;
@@ -287,12 +287,12 @@
             $('input[name="day"]').daterangepicker({
                 timePicker: false,
                 //timePickerIncrement: 30,
-                // locale: {
-                //     //format: 'MM/DD/YYYY h:mm A'
-                //     format: 'DD/MM/YYYY'
-                // },
+                locale: {
+                    //format: 'MM/DD/YYYY h:mm A'
+                    format: 'DD/MM/YYYY'
+                },
                 "dateLimit": {
-                    "days": NegDays
+                    "days": 1
                 },
                 
             });

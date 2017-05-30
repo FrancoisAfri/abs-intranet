@@ -27,6 +27,7 @@ class Accept_application extends Mailable
         $this->first_name = $first_name;
         $this->surname = $surname;
         $this->email = $email;
+
     }
 
 
