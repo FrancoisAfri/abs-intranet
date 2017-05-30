@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <div id="leave-invalid-input-alert"></div>
-                    <div id="leave-success-alert"></div>
+                    <div id="success-alert"></div>
                     <div class="form-group groups">
                         <label for="user_id" class="col-sm-3 control-label">Employee</label>
                         <div class="col-sm-9">

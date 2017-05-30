@@ -117,9 +117,13 @@ class LeaveController extends Controller
 
         $leaveData = $request->all();
         unset($leaveData['_token']);
-        $leave_customs = new leave_custom($leaveData);
-        $leave_customs->status = 1;
-        $leave_customs->save();
+        $leave_customs = new leave_custom();
+        //$leave_customs->status = 1;
+        // if(){
+
+        // }
+        $leave_customs->updateOrCreate(['hr_id' => $leaveData['hr_id']], ['number_of_days' => $leaveData['number_of_days'], 'status' => 1]);
+        //$leave_customs->save();
         AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
         return response()->json();
     }

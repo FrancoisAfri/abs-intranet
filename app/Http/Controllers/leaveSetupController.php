@@ -239,7 +239,7 @@ class LeaveSetupController extends Controller
 //         return $val;   
 
          AuditReportsController::store('Leave', 'leave days adjusted ', "Edited by User: $lev->name", 0);
-        LeaveHistoryAuditController::store('Added annul leave Days', 1 ,0,0,$currentBalance);
+        #LeaveHistoryAuditController::store('Added annul leave Days', 1 ,0,0,$currentBalance);
        }
         }
        
@@ -271,6 +271,7 @@ public function  resert(Request $request, LeaveType $lev)
              $typIDs = $resertData['leave_types_id'];
             $resert_days = $resertDays * 8;
        // $employees = $resertData['hr_person_id'];
+            //return $request->all();
 
     foreach ($typIDs as $typID ) {
         
@@ -279,7 +280,7 @@ public function  resert(Request $request, LeaveType $lev)
         $emp->leave_types()->where('leave_type_id',$typID)->sync([$empID => ['leave_balance' => $resert_days]]);
 
          AuditReportsController::store('Leave', 'leave days reset Edited', "Edited by User: $lev->name", 0);
-         LeaveHistoryAuditController::store("leave days reseted ", 1 ,0,0,$resert_days);
+         // LeaveHistoryAuditController::store("leave days reseted ", 1 ,0,0,$resert_days);
         }
     }
         
@@ -389,8 +390,8 @@ public function  resert(Request $request, LeaveType $lev)
         
         //
          AuditReportsController::store('Leave', 'leave days allocation Edited', "Edited by User: $lev->name", 0);
-        LeaveHistoryAuditController::store('leave days allocation', 1 ,0,1,0 );
-        } 
+       
+        }  // LeaveHistoryAuditController::store('leave days allocation', 1 ,0,1,0 );
        }
  
        

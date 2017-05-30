@@ -260,6 +260,7 @@
             //Initialize Select2 Elements
             $(".select2").select2();
             //Cancel button click event
+             changetextbox();
             $('#cancel').click(function () {
                 location.href = '/leave/application';
             });
