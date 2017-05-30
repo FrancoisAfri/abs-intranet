@@ -215,11 +215,11 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi ,<br><br>
-                                                    We would like you to know that your leave application with the Afrixcel LEAVE online system was succesful! Use the credentials below to login to the system. To view your profile or make any changes please <a target="_blank" click here.</a>
+                                                    We would like you to know that your leave application with the Afrixcel leave online system was succesful! Login to the system to view your profile or make any changes please <a target="_blank" click here.</a>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>
+                                    <!--             <td>
                                                     <table cellspacing="0" cellpadding="0" width="100%" bgcolor="#ffffff">
                                                         <tr>
                                                             <td align="center" style="padding:20px 0;">
@@ -263,7 +263,7 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                </td>
+                                                </td -->>
                                             </tr>
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">

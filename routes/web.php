@@ -82,7 +82,7 @@ Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
 
 #leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
-Route::post('leave/Allocate_leave', 'LeaveSetupController@leavecredit');
+Route::post('leave/Allocate_leave', 'LeaveSetupController@Adjust');
 Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resert'); 
 Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
