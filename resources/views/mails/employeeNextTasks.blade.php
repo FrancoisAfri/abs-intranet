@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Confirmation Email</title>
+    <title>{{ $company_name }} - New Task</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -214,61 +214,15 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi ,<br><br>
-                                                    We would like you to know that your leave application with the Afrixcel leave online system was succesful! Login to the system to view your profile or make any changes please <a target="_blank" click here.</a>
+                                                    Hi {{ $person->first_name }},<br><br>
+                                                    We would like to inform you, the induction task preceding yours have been completed.<br>
+                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system and see more details.
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                    <!--             <td>
-                                                    <table cellspacing="0" cellpadding="0" width="100%" bgcolor="#ffffff">
-                                                        <tr>
-                                                            <td align="center" style="padding:20px 0;">
-                                                                <center>
-                                                                    <table cellspacing="0" cellpadding="0" class="card">
-                                                                        <tr>
-                                                                            <td style="background-color:green; text-align:center; padding:10px; color:white; ">
-                                                                                Your Login Details
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td style="border:1px solid green;">
-                                                                                <table cellspacing="0" cellpadding="20" width="100%">
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
-                                                                                                <tr>
-                                                                                                    <td width="150" class="data-heading">
-                                                                                                        Email Address:
-                                                                                                    </td>
-                                                                                                    <td class="data-value">
-                                                                                                        
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                                <tr>
-                                                                                                    <td width="150" class="data-heading">
-                                                                                                        Password:
-                                                                                                    </td>
-                                                                                                    <td class="data-value">
-                                                                                                       
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            </table>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </center>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td -->>
                                             </tr>
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    The Afrixcel  customer services
+                                                    The {{ $company_name }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -276,7 +230,8 @@
                                 </tr>
                                 <tr>
                                     <td valign="top" class="footer-cell">
-                                        Afrixcel Business Solution (PTY) LTD.<br>
+                                        <h4>{{ $company_name }}</h4>
+                                        <i></i><br>
                                         Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>
                                     </td>
                                 </tr>

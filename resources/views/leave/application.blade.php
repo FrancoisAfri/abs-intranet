@@ -260,6 +260,7 @@
             //Initialize Select2 Elements
             $(".select2").select2();
             //Cancel button click event
+             changetextbox();
             $('#cancel').click(function () {
                 location.href = '/leave/application';
             });
@@ -273,10 +274,13 @@
             var bal = $('#availdays').val();
             var negDays = $('#negsick').val();
             var negannual = $('#negannual').val();
-            var varName = availdays ;
+            var balance =  parseInt(bal);
+            var NegDays =  parseInt(negDays);
+              var Negannual =  parseInt(negannual);
 
-            var res = negDays + negannual;
-             //alert (2 + 1)
+            var Sick = bal + negDays;
+            var Annual = bal + negannual;
+             // alert (bal)
 
 
             //Initialise date range picker elements
@@ -288,7 +292,7 @@
                     format: 'DD/MM/YYYY'
                 },
                 "dateLimit": {
-                    "days": 3
+                    "days": Annual
                 },
                 
             });

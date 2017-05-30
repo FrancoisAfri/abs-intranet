@@ -45,7 +45,10 @@ class LeaveController extends Controller
             'shiftmax'=>'numeric|min:2',
         ]);
         
+
         $day5min = (trim($request->input('day5min')) != '') ? (int) $request->input('day5min') : null;
+        // return $day5min;
+
         $day5max = (trim($request->input('day5max')) != '') ? (int) $request->input('day5max') : null;
         
         $day6min= (trim($request->input('day6min')) != '') ? (int) $request->input('day6min') : null;
@@ -80,7 +83,7 @@ class LeaveController extends Controller
         $lev->description = $request->input('description');
         //$lev->font_awesome = $request->input('font_awesome');
         $lev->update();
-        return $lev;
+        //return $lev;
         AuditReportsController::store('Leave', 'leavetype Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json(['new_name' => $lev->name, 'description' => $lev->description], 200);
     }
@@ -117,9 +120,13 @@ class LeaveController extends Controller
 
         $leaveData = $request->all();
         unset($leaveData['_token']);
-        $leave_customs = new leave_custom($leaveData);
-        $leave_customs->status = 1;
-        $leave_customs->save();
+        $leave_customs = new leave_custom();
+        //$leave_customs->status = 1;
+        // if(){
+
+        // }
+        $leave_customs->updateOrCreate(['hr_id' => $leaveData['hr_id']], ['number_of_days' => $leaveData['number_of_days'], 'status' => 1]);
+        //$leave_customs->save();
         AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
         return response()->json();
     }

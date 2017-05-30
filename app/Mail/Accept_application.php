@@ -1,16 +1,15 @@
 <?php
 
 namespace App\Mail;
-
+use App\CompanyIdentity;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\HRPerson;
-use App\CompanyIdentity;
 use Illuminate\Support\Facades\Storage;
 
-class EmployeesTasksMail extends Mailable
+class Accept_application extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,13 +18,18 @@ class EmployeesTasksMail extends Mailable
      *
      * @return void
      */
-	public $person;
-	public $urls = '/';
+    public $first_name;
+    public $surname;
+    public $email;
 
-    public function __construct(HRPerson $person)
+    public function __construct($first_name, $surname ,$email)
     {
-        $this->person = $person;
+        $this->first_name = $first_name;
+        $this->surname = $surname;
+        $this->email = $email;
+
     }
+
 
     /**
      * Build the message.
@@ -34,17 +38,17 @@ class EmployeesTasksMail extends Mailable
      */
     public function build()
     {
-		$companyDetails = CompanyIdentity::systemSettings();
+        $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-
-		//Should get these details from setup
-        $subject = "New Task on $companyName online system.";
+        $subject = "Welcome to $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
-        $data['company_name'] = $companyDetails['full_company_name'] ;
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['profile_url'] = url('/users/profile');
 
-        return $this->view('mails.employeeTasks')
+        return $this->view('mails.approved_leave_application')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);

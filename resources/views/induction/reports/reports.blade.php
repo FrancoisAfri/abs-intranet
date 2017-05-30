@@ -13,12 +13,12 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Search criteria</h3>
+                    <h3 class="box-title">Reports Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST" action="/induction/search_results">
+                <form class="form-horizontal" id="report_form" method="POST" action="/induction/reports">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -38,17 +38,28 @@
 								</div>
                             </div>
                         </div>
-						<!--<div class="form-group">
-                            <label for="induction_date" class="col-sm-3 control-label">Induction Date</label>
+						<div class="form-group">
+                            <label for="induction_date" class="col-sm-3 control-label">Due Date</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="induction_date" name="induction_date" value="" placeholder="Select Induction Date...">
+								<input type="text" class="form-control daterangepicker" id="creation_date" name="creation_date" value="" placeholder="Select Induction Date...">
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
+						<div class="form-group">
+                            <label for="induction_date" class="col-sm-3 control-label">Completion Date</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<input type="text" class="form-control daterangepicker" id="completion_date" name="completion_date" value="" placeholder="Select Induction Date...">
+                                </div>
+                            </div>
+                        </div>
 						
 						<div class="form-group">
                             <label for="induction_title" class="col-sm-3 control-label">Induction Title</label>
@@ -62,16 +73,33 @@
                             </div>
                         </div>
 						<div class="form-group groups">
-                            <label for="created_by" class="col-sm-3 control-label">Added By</label>
+                            <label for="status" class="col-sm-3 control-label">Status</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
 									<div class="input-group-addon">
                               			<i class="fa fa-user"></i>
                             		</div>
-									<select class="form-control select2" style="width: 100%;" id="created_by" name="created_by">
-                                        <option selected="selected" value="0">*** Select a User ***</option>
+									<select class="form-control select2" style="width: 100%;" id="status" name="status">
+                                        <option selected="selected" value="0">*** Select a Status ***</option>
+                                        <option value="1">Not Started</option>
+                                        <option value="2">In Progress</option>
+                                        <option value="3">Paused</option>
+                                        <option value="4">Completed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group groups">
+                            <label for="employee_id" class="col-sm-3 control-label">Employees</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+									<div class="input-group-addon">
+                              			<i class="fa fa-user"></i>
+                            		</div>
+									<select class="form-control select2" style="width: 100%;" id="employee_id" name="employee_id">
+                                        <option selected="selected" value="0">*** Select an Employee ***</option>
                                         @foreach($users as $user)
-                                            <option value="{{ $user->user_id }}">{{ $user->first_name.' '.$user->surname}}</option>
+                                            <option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -80,7 +108,7 @@
                      </div>   
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Search</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Generate</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>

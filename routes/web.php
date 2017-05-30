@@ -82,7 +82,7 @@ Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
 
 #leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
-Route::post('leave/Allocate_leave', 'LeaveSetupController@leavecredit');
+Route::post('leave/Allocate_leave', 'LeaveSetupController@Adjust');
 Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resert'); 
 Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
@@ -96,7 +96,7 @@ Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
 #leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
 //Route::post('leave/type/add_leave', 'LeaveController@addleave');
-Route::post('leave/approval/{levReject}', 'LeaveApplicationController@reject');
+Route::post('leave/reject/{levReject}', 'LeaveApplicationController@reject');
 
 #leaveHistory audit
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
@@ -290,6 +290,12 @@ Route::post('induction/client_add', 'InductionAdminController@store');
 Route::post('induction/search_results', 'InductionAdminController@searchResults');
 Route::patch('/induction/tasks_library_edit/{TaskLibrary}', 'TaskLibraryController@update');
 Route::get('/induction/library_tasks_activate/{TaskLibrary}', 'TaskLibraryController@actDeact');
+Route::get('/task/start/{task}', 'TaskManagementController@startTask');
+Route::get('/task/pause/{task}', 'TaskManagementController@pauseTask');
+Route::post('/task/end', 'TaskManagementController@endTask');
+Route::get('/induction/reports', 'InductionAdminController@reports');
+Route::post('/induction/reports', 'InductionAdminController@getReport');
+Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
