@@ -11,7 +11,7 @@ class EmployeeTasks extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'order_no', 'name', 'escalation_id', 'employee_id', 'library_id', 'added_by'
+        'order_no', 'escalation_id', 'employee_id', 'library_id', 'added_by'
 		, 'duration', 'description', 'notes', 'priority'
 		, 'task_type', 'upload_required', 'status', 'start_date', 'date_started'
 		, 'date_completed', 'date_paused', 'due_date', 'induction_id', 'meeting_id'

@@ -50,6 +50,36 @@ class TaskManagementController extends Controller
 		AuditReportsController::store('Task Management', 'Add Task Page Accessed', "By User", 0);
         return view('audit.audit_search')->with($data);
     }
+	# Start task
+	public function startTask(EmployeeTasks $task) 
+	{
+		// Add Code to check if task is dependent if its check is previous task is done if yes start this one
+		// otherwise chech if that one is pass due date if not send message
+		// check if this user already have another task started before starting a new one 
+		$stastus = 2;
+		$task->status = $stastus;	
+		$task->update();
+		AuditReportsController::store('Task Management', "Task Started", "Edited by User", 0);
+		return back();
+    }
+	# Pause task
+	public function pauseTask(EmployeeTasks $task) 
+	{
+		$stastus = 3;
+		$task->status = $stastus;	
+		$task->update();
+		AuditReportsController::store('Task Management', "Task Paused", "Edited by User", 0);
+		return back();
+    }
+	# End task
+	public function endTask(EmployeeTasks $task) 
+	{
+		$stastus = 4;
+		$task->status = $stastus;	
+		$task->update();
+		AuditReportsController::store('Task Management', "Task Ended", "Edited by User", 0);
+		return back();
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -89,7 +119,6 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->start_date = $intstartDate;
 		// Save task
         $EmployeeTasks->save();
-		
 		# Send Email to employee
 		$employee = HRPerson::where('id', $employeeID)->first();
 		Mail::to($employee->email)->send(new EmployeesTasksMail($employee));

@@ -18,6 +18,10 @@ class ClientInduction extends Model
     public function TasksList() {
         return $this->hasMany(EmployeeTasks::class, 'induction_id');
     }
+	//relationship between contact_company and contact person (contacts_contacts)
+    public function ClientName() {
+        return $this->belongsTo(ContactCompany::class, 'company_id');
+    }
 
 	
 }

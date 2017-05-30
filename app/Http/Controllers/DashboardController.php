@@ -83,12 +83,26 @@ class DashboardController extends Controller
             }
             $isSupervisor = ($numSupervisedEmp > 0) ? true : false;
             $canViewCPWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
-
+			
+			// Get tasks for logged user
+			$today = strtotime(date('Y-m-d'));
+			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+			$tasks = DB::table('employee_tasks')
+			->select('employee_tasks.description','employee_tasks.start_date'
+			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date','employee_tasks.id as task_id')
+			->where('employee_tasks.employee_id', $user->person->id)
+			->where('employee_tasks.start_date', '<=', $today)
+			->where('employee_tasks.status', '<', 4)
+			->orderBy('employee_tasks.order_no')
+			->get();
+			//return $tasks;
+			$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
             $data['topGroupLvl'] = $topGroupLvl;
             $data['isSuperuser'] = $isSuperuser;
             $data['isDivHead'] = $isDivHead;
+            $data['tasks'] = $tasks;
             //$data['managedDivsIDs'] = json_encode($managedDivsIDs);
             $data['managedDivsLevel'] = $managedDivsLevel;
             $data['isSupervisor'] = $isSupervisor;
