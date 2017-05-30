@@ -657,7 +657,7 @@ class LeaveApplicationController extends Controller
            $leaveData = $request->all();
             unset($leaveData['_token']);
 
-            #leave_application $id
+            
             // $levReject = new leave_application(leaveData);
              $loggedInEmplID = Auth::user()->person->id;
             $levReject->reject_reason = $request->input('description');
