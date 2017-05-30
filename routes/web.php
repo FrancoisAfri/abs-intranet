@@ -290,9 +290,12 @@ Route::post('induction/client_add', 'InductionAdminController@store');
 Route::post('induction/search_results', 'InductionAdminController@searchResults');
 Route::patch('/induction/tasks_library_edit/{TaskLibrary}', 'TaskLibraryController@update');
 Route::get('/induction/library_tasks_activate/{TaskLibrary}', 'TaskLibraryController@actDeact');
-Route::get('/task/{task}/start', 'TaskManagementController@startTask');
-Route::get('/task/{task}/pause', 'TaskManagementController@pauseTask');
-Route::get('/task/{task}/end', 'TaskManagementController@endTask');
+Route::get('/task/start/{task}', 'TaskManagementController@startTask');
+Route::get('/task/pause/{task}', 'TaskManagementController@pauseTask');
+Route::post('/task/end', 'TaskManagementController@endTask');
+Route::get('/induction/reports', 'InductionAdminController@reports');
+Route::post('/induction/reports', 'InductionAdminController@getReport');
+Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');

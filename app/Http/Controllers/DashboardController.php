@@ -89,6 +89,7 @@ class DashboardController extends Controller
 			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 			$tasks = DB::table('employee_tasks')
 			->select('employee_tasks.description','employee_tasks.start_date'
+			,'employee_tasks.employee_id','employee_tasks.upload_required'
 			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date','employee_tasks.id as task_id')
 			->where('employee_tasks.employee_id', $user->person->id)
 			->where('employee_tasks.start_date', '<=', $today)

@@ -69,8 +69,6 @@ class AuditReportsController extends Controller
 	// draw audit report acccording to search criteria
 	public function getReport(Request $request)
     {
-    	return $request->action_date;
-
 		$actionFrom = $actionTo = 0;
 		$actionDate = $request->action_date;
 		$userID = $request->user_id;

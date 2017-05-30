@@ -1,49 +1,37 @@
-<div id="add-new-perk-modal" class="modal modal-default fade">
+<div id="end-task-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" name="add-new-perk-form" enctype="multipart/form-data">
+            <form class="form-horizontal" name="end-task-form" enctype="multipart/form-data">
+			<input type="hidden" name="task_id" id="task_id" value="">
+			<input type="hidden" name="employee_id" id="employee_id" value="">
+			<input type="hidden" name="upload_required" id="upload_required" value="">
                 {{ csrf_field() }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add New Perk</h4>
+                    <h4 class="modal-title">End Task</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="form-group">
-                        <label for="name" class="col-sm-2 control-label">Name</label>
+                        <label for="notes" class="col-sm-2 control-label">Note</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter The Perk Name" >
+						<textarea rows="4" cols="50" class="form-control" id="notes" name="notes"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="description" class="col-sm-2 control-label">Description</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control" id="description" name="description" placeholder="Enter The Perk's Description" ></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="req_percent" class="col-sm-2 control-label">Performance Score</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="req_percent" name="req_percent" value="" placeholder="Required Performance Score (in percentage)" >
-                                <span class="input-group-addon"><i class="fa fa-percent"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="img" class="col-sm-2 control-label">Perk Image</label>
+                        <label for="document" class="col-sm-2 control-label">Document Upload</label>
 
                         <div class="col-sm-10">
-                            <input type="file" id="img" name="img" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            <input type="file" id="document" name="document" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "xlsx", "doc", "xltm"]' data-show-upload="false">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Close</button>
-                    <button type="button" id="add-perk" class="btn btn-primary"><i class="fa fa-upload"></i> Save</button>
+                    <button type="button" id="end-task" class="btn btn-primary"><i class="fa fa-upload"></i> Save</button>
                 </div>
             </form>
         </div>

@@ -1,5 +1,8 @@
 @extends('layouts.main_layout')
-
+@section('page_dependencies')
+    <!-- bootstrap file input -->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+@endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -236,10 +239,12 @@
 							{{ $managedDivsLevel->plural_name }}
 							@endif -->
 							@if(!empty($task->status) && ($task->status == 1 || $task->status == 3))
-							  <a href="/task/{{$task->task_id}}/start" class="btn btn-sm btn-default btn-flat pull-right">Start</a>
+							  <button type="button" id="start-task" class="btn btn-sm btn-default btn-flat pull-right" onclick="postData({{$task->task_id}}, 'start');">Start</button>
 							@elseif(!empty($task->status) && $task->status == 2)                     
-							  <a href="/task/{{$task->task_id}}/end" class="btn btn-sm btn-default btn-flat pull-right">End</a>
-							 <a href="/task/{{$task->task_id}}/pause" class="btn btn-sm btn-default btn-flat pull-right">Pause</a>
+							  <button type="button" id="end-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
+							  data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}" 
+							  data-upload_required="{{ $task->upload_required }}" >End</button>
+							  <button type="button" id="pause-task" class="btn btn-sm btn-default btn-flat pull-right" onclick="postData({{$task->task_id}}, 'pause');">Pause</button>
 							@endif
 							</td>
 						  </tr>
@@ -248,8 +253,11 @@
                   </tbody>
                 </table>
               </div>
-			  @include('tasks.partials.end_task', ['isReaOnly' => true])
-              <!-- /.table-responsive -->
+				@if(Session('error_starting'))
+					@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
+				@endif
+				@include('tasks.partials.end_task')
+              <!-- /.table-responsive  onclick="postData({{$task->task_id}}, 'end');"-->
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
@@ -268,8 +276,20 @@
     <script src="/custom_components/js/admindbcharts.js"></script>
     <!-- matchHeight.js
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>-->
-
+	   <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
+		function postData(id, data)
+		{
+			if (data == 'start')
+				location.href = "/task/start/" + id;
+			else if (data == 'pause')
+				location.href = "/task/pause/" + id;
+			else if (data == 'end')
+				location.href = "/task/end/" + id;
+		}
         $(function () {
             //initialise matchHeight on widgets
             //$('.same-height-widget').matchHeight();
@@ -370,6 +390,35 @@
                 var perkLink = $(e.relatedTarget);
                 var modal = $(this);
                 perkDetailsOnShow(perkLink, modal);
+            });
+			//Show success action modal
+            $('#success-action-modal').modal('show');
+			document.getElementById("notes").placeholder = "Enter Task Note or Summary";
+			//Post end task form to server using ajax (add)
+			var taskID;
+			var employeeID;
+			var uploadRequired;
+			
+             $('#end-task-modal').on('show.bs.modal', function (e) {
+                var btnEnd = $(e.relatedTarget);
+                taskID = btnEnd.data('task_id');
+                employeeID = btnEnd.data('employee_id');
+                uploadRequired = btnEnd.data('upload_required');
+                var modal = $(this);
+                modal.find('#task_id').val(taskID);
+                modal.find('#employee_id').val(employeeID);
+                modal.find('#upload_required').val(uploadRequired);
+            });
+			
+            $('#end-task').on('click', function() {
+                var strUrl = '/task/end';
+                var formName = 'end-task-form';
+                var modalID = 'end-task-modal';
+                var submitBtnID = 'end-task';
+                var redirectUrl = '/';
+                var successMsgTitle = 'Task Ended!';
+                var successMsg = 'Task has been Successfully ended!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
         });
     </script>

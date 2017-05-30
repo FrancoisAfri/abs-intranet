@@ -117,7 +117,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Module Access Page Accessed', "Accessed By User", 0);
         return view('security.module_access')->with($data);
     }
-		
+	
 	public function accessSave(Request $request, User $user) {
 		$AccessData =  $request->module_access;
 		DB::table('security_modules_access')->where('user_id', '=', $user->id)->delete();
