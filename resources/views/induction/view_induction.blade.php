@@ -10,8 +10,9 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+				<div style="overflow-X:auto;">
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px">Order #</th><th>Description</th><th>Person Responsible</th><th>Status</th><th>Notes</th></tr>
+					 <tr><th style="width: 10px">Order #</th><th>Description</th><th>Person Responsible</th><th>Status</th><th>Notes</th><th>Document</th></tr>
                     @if (!empty($tasks))
 						@foreach($tasks as $task)
 						 <tr id="categories-list">
@@ -19,7 +20,12 @@
 						  <td>{{ (!empty($task->description)) ?  $task->description : ''}} </td>
 						  <td>{{ (!empty($task->hr_fist_name)) && (!empty($task->hr_surname)) ?  $task->hr_fist_name." ".$task->hr_surname : ''}} </td>
 						  <td>{{ (!empty($task->status)) ?  $taskStatus[$task->status] : ''}} </td>
-						  <td>{{ (!empty($task->emp_doc)) ?  $task->emp_doc : ''}} </td>
+						  <td>{{ (!empty($task->status)) ?  $task->notes : ''}} </td>
+						  @if(!empty($task->emp_doc))
+							<td><a class="btn btn-default btn-flat btn-block" href="{{ Storage::disk('local')->url("tasks/$task->emp_doc") }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Click Here</a></td>
+                          @else
+                            <td><a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i>N/A</a></td>
+                          @endif
 						</tr>
 						@endforeach
                     @else
@@ -33,6 +39,7 @@
 						</tr>
                     @endif
 					</table>
+					</div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">

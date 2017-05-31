@@ -31,6 +31,8 @@
 						  data-kpa_id="{{ $kpi->kpa_id }}" 
 						  data-category_id="{{ $kpi->category_id }}" 
 						  data-upload_type="{{ $kpi->upload_type }}" 
+						  data-is_task_kpi="{{ $kpi->is_task_kpi }}"
+						  data-kpi_task_type="{{ $kpi->kpi_task_type }}"
 						  data-weight="{{ $kpi->weight }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
 						  <td>{{!empty($kpi->cat_name) ? $kpi->cat_name : ''}}</td>
 						  <td>{{!empty($kpi->kpa_name) ? $kpi->kpa_name : ''}}</td>
@@ -77,6 +79,9 @@
 
 	<!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
+
+    <!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 	
     <script>
 		function postData(id, data)
@@ -94,6 +99,9 @@
             var kpiId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
+
+            //Initialize Select2 Elements
+            $(".select2").select2();
 			
 			document.getElementById("back_button").onclick = function () {
 			location.href = "/appraisal/templates";	};
@@ -114,6 +122,11 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
+
+            //show/hide fields
+            hideFields($('#add-new-kpi-modal').find('#is_upload'));
+            hideTaskTypeField($('#add-new-kpi-modal').find('#is_task_kpi'));
+
             //pass category data to the edit category modal
             $('#edit-kpi-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
@@ -127,6 +140,8 @@
                 var Indicator = btnEdit.data('indicator');
                 var kpaId = btnEdit.data('kpa_id');
                 var CategoryId = btnEdit.data('category_id');
+                var isTaskKPI = btnEdit.data('is_task_kpi');
+                var taskType = btnEdit.data('kpi_task_type');
                 var modal = $(this);
                 modal.find('#measurement').val(Measurement);
                 modal.find('#weight').val(Weight);
@@ -137,11 +152,13 @@
                 modal.find('#indicator').val(Indicator);
                 modal.find('#kpa_id').val(kpaId);
                 modal.find('#category_id').val(CategoryId);
-				$('select#category_id').val(CategoryId);
-				$('select#kpa_id').val(kpaId);
-				$('select#kpi_type').val(KpiType);
-				$('select#is_upload').val(IsUpload);
-				$('select#upload_type').val(UploadType);
+                modal.find('select#category_id').val(CategoryId);
+                modal.find('select#kpa_id').val(kpaId);
+                modal.find('select#kpi_type').val(KpiType);
+                modal.find('select#is_upload').val(IsUpload);
+                modal.find('select#upload_type').val(UploadType);
+                modal.find('select#is_task_kpi').val(isTaskKPI);
+                modal.find('select#kpi_task_type').val(taskType);
             });
 
             //function to post category form to server using ajax
@@ -160,6 +177,8 @@
                         kpa_id: $('form[name=' + formName + ']').find('#kpa_id').val(),
                         category_id: $('form[name=' + formName + ']').find('#category_id').val(),
                         existing_kpi_id: $('form[name=' + formName + ']').find('#existing_kpi_id').val(),
+                        is_task_kpi: $('form[name=' + formName + ']').find('#is_task_kpi').val(),
+                        kpi_task_type: $('form[name=' + formName + ']').find('#kpi_task_type').val(),
                         template_id: {{$template->id}},
                          _token: $('input[name=_token]').val()
                     },
@@ -236,21 +255,36 @@
            // $('#upload_type_div').hide();
         });
 		//function to hide/show manual or file upload fields
-        function hideFields() 
+        function hideFields(ddBox)
 		{
-            var uploadID = $("#is_upload").val();
+            var uploadID = $(ddBox).val();
             if (uploadID == 1)
 			{
 				$('#upload_type_div').show();
-				$("#upload_type").prop('disabled', false);
-				$("upload_type").prop('required',true);
+				$('.task-kpi').hide();
+				$("#upload_type").prop('disabled', false).prop('required',true);
 			}
             else if (uploadID == 2)
 			{
 				$('#upload_type_div').hide();
-				$("#upload_type").prop('disabled', true);
-				$("upload_type").prop('required',false);
+                $('.task-kpi').show();
+				$("#upload_type").prop('disabled', true).prop('required',false);
 			}
+        }
+        //function to hide/show task type field
+        function hideTaskTypeField(ddBox)
+        {
+            var isTaskKPI = $(ddBox).val();
+            if (isTaskKPI == 1)
+            {
+                $('#task-type-div').show();
+                $("#kpi_task_type").prop('disabled', false).prop('required',true);
+            }
+            else if (isTaskKPI == 0)
+            {
+                $('#task-type-div').hide();
+                $("#kpi_task_type").prop('disabled', true).prop('required',false);
+            }
         }
 		function hideexisting() 
 		{
@@ -260,7 +294,7 @@
 				$('.existing_one').show();
 				$('#old_kpi').hide();
 				$("#existing_kpi_id").prop('disabled', true);
-				$("existing_kpi_id").prop('required',false)
+				$("existing_kpi_id").prop('required',false);
 				
 				$("#upload_type").prop('disabled', false);
 				$("#is_upload").prop('disabled', false);
@@ -271,19 +305,19 @@
 				$("#indicator").prop('disabled', false);
 				$("#kpa_id").prop('disabled', false);
 				$("#category_id").prop('disabled', false);
-				$("is_upload").prop('required',true)
-				$("kpi_type").prop('required',true)
-				$("weight").prop('required',true)
-				$("indicator").prop('required',true)
-				$("kpa_id").prop('required',true)
-				$("category_id").prop('required',true)
+				$("is_upload").prop('required',true);
+				$("kpi_type").prop('required',true);
+				$("weight").prop('required',true);
+				$("indicator").prop('required',true);
+				$("kpa_id").prop('required',true);
+				$("category_id").prop('required',true);
 			}
             else if (kpi == 2)
 			{
 				$('.existing_one').hide();
 				$('#old_kpi').show();
 				$("#existing_kpi_id").prop('disabled', false);
-				$("existing_kpi_id").prop('required',true)
+				$("existing_kpi_id").prop('required',true);
 				
 				$("#upload_type").prop('disabled', true);
 				$("#is_upload").prop('disabled', true);
@@ -294,12 +328,12 @@
 				$("#indicator").prop('disabled', true);
 				$("#kpa_id").prop('disabled', true);
 				$("#category_id").prop('disabled', true);
-				$("is_upload").prop('required',false)
-				$("kpi_type").prop('required',false)
-				$("weight").prop('required',false)
-				$("indicator").prop('required',false)
-				$("kpa_id").prop('required',false)
-				$("category_id").prop('required',false)
+				$("is_upload").prop('required',false);
+				$("kpi_type").prop('required',false);
+				$("weight").prop('required',false);
+				$("indicator").prop('required',false);
+				$("kpa_id").prop('required',false);
+				$("category_id").prop('required',false);
 			}
         }
     </script>

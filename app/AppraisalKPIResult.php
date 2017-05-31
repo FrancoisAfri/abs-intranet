@@ -119,13 +119,15 @@ class AppraisalKPIResult extends Model
                         ->count();
                     $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
                     $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
-                    $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+                    //$highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+                    $highestDeduction = $kpi->kpiranges->where('status', 1)->sortByDesc('range_to')->first()->percentage;
 
                     if ($score < $lowestRange) $percentage = 0;
                     elseif ($score > $highestRange) $percentage = $highestDeduction;
                     else {
                         $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
                     }
+                    $percentage = ($kpi->weight > 0) ? ($percentage * $kpi->weight) / 100 : $percentage;
                     $kpiResults[$kpi->id] = $percentage;
                     $kpaResult += $percentage;
                 }
@@ -137,17 +139,41 @@ class AppraisalKPIResult extends Model
                         ->count();
                     $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
                     $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
-                    $highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+                    //$highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+                    $highestDeduction = $kpi->kpiranges->where('status', 1)->sortByDesc('range_to')->first()->percentage;
 
                     if ($score < $lowestRange) $percentage = 0;
                     elseif ($score > $highestRange) $percentage = $highestDeduction;
                     else {
                         $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
                     }
+                    $percentage = ($kpi->weight > 0) ? ($percentage * $kpi->weight) / 100 : $percentage;
                     $kpiResults[$kpi->id] = $percentage;
                     $kpaResult += $percentage;
                 }
-                else {
+                elseif ($kpi->is_upload === 2 && $kpi->is_task_kpi === 1) { //tasks KPI (Both induction and meeting tasks)
+                    $score = EmployeeTasks::where('employee_id', $empID)
+                        //->where('kip_id', $kpi->id)
+                        ->where('task_type', $kpi->kpi_task_type)
+                        ->where('date_completed', '>', 0)
+                        ->whereRaw('date_completed<=due_date')
+                        ->whereBetween('due_date', [$monthStart, $monthEnd])
+                        ->count();
+                    $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
+                    $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
+                    //$highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
+                    $highestDeduction = $kpi->kpiranges->where('status', 1)->sortByDesc('range_to')->first()->percentage;
+
+                    if ($score < $lowestRange) $percentage = 0;
+                    elseif ($score > $highestRange) $percentage = $highestDeduction;
+                    else {
+                        $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
+                    }
+                    $percentage = ($kpi->weight > 0) ? ($percentage * $kpi->weight) / 100 : $percentage;
+                    $kpiResults[$kpi->id] = $percentage;
+                    $kpaResult += $percentage;
+                }
+                else { //Normal KPIs
                     $kpiResults[$kpi->id] = (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
                     $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
                 }
@@ -215,9 +241,9 @@ class AppraisalKPIResult extends Model
     /**
      * Helper function to return an employee's kpi appraisal result from a specific KPA.
      *
-     * @param  int  $empID
-     * @param  string  $appraisalMonth
-     * @param  int  $kpaID
+     * @param  int      $empID
+     * @param  string   $appraisalMonth
+     * @param  int      $kpaID
      * @return HRPerson $emp (with ->kpa_appraisal->kpi_appraisal)
      */
     public static function empAppraisalForKPA($empID, $appraisalMonth, $kpaID) {
