@@ -259,6 +259,7 @@ Route::patch('/hr/category/{doc_type_category}', 'DocumentTypeController@updateD
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
+Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
 
 #Employees Qualifications Module
 Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
