@@ -257,7 +257,6 @@
 					@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
 				@endif
 				@include('tasks.partials.end_task')
-              <!-- /.table-responsive  onclick="postData({{$task->task_id}}, 'end');"-->
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">

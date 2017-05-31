@@ -18,7 +18,7 @@ class EmployeeTasksOverdue extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'This command will command will check for tasks that are overdue and send an email notification to the relevant person';
 
     /**
      * Create a new command instance.
@@ -37,6 +37,6 @@ class EmployeeTasksOverdue extends Command
      */
     public function handle()
     {
-        //
+        \Log::info('Test - I was here @ ' . \Carbon\Carbon::now());
     }
 }
