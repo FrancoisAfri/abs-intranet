@@ -81,11 +81,13 @@ class LeaveHistoryAuditController extends Controller
         $leaveTypes = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
           $query->orderBy('name', 'asc');  
         }]);
-
+        // 
+     
+        // 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
-        $data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Leave Reports';
+       $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
 
         
         $users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();

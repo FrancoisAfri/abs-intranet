@@ -19,8 +19,8 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">User</h3>
-                    <p>User details:</p>
+                    <h3 class="box-title">Employee Documents</h3>
+                    <p>Employee Documents details:</p>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -122,8 +122,7 @@
                                     </div>
                                 </div>
                             </div>
-                              @endforeach
-                         
+                          @endforeach   
 						
 						  <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                              <label for="days" class="col-sm-2 control-label">Expiry Date</label>
@@ -154,17 +153,10 @@
                     <!-- /.box-body -->
 
                     <div class="box-footer" style="text-align: center;">
-                        <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
-                        <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
-						@if (isset($view_by_admin) && $view_by_admin === 1)
-						<button type="button" class="btn btn-primary" id="access_button" onclick="postData({{$user->id}}, 'access');">Modules Access</button>
-						@endif
-						@if (isset($view_by_admin) && $view_by_admin === 1)
-						<button type="button" class="btn btn-warning" id="delete_button" name="command"
-								onclick="if(confirm('Are you sure you want to delete this User ?')){ deleteRecord()} else {return false;}"
-                                value="Delete"><i class="fa fa-trash"></i> Delete User
-                        </button>
-						@endif
+                       <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
+                      
+
+                        <input type="submit" id="emp_documents" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -239,7 +231,10 @@
             // document.getElementById("cancel").onclick = function () {
             //     location.href ;
             // };
-				
+				 changetextbox();
+            $('#cancel').click(function () {
+                location.href = '/hr/emp_document';
+            });
 				//
 				 //Initialise Date picker picker elements
             $('input[name="expirydate"]').datepicker({              
@@ -283,27 +278,21 @@
 
 
             //Load divisions drop down
-            var parentDDID = '';
-            var loadAllDivs = 1;
-            @if (isset($view_by_admin) && $view_by_admin === 1)
-                @foreach($division_levels as $division_level)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $division_level->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    var divLevel = parseInt('{{ $division_level->level }}');
-                    if (divLevel == 5) selectedOption = '{{ $user->person->division_level_5 }}';
-                    else if(divLevel == 4) selectedOption = '{{ $user->person->division_level_4 }}';
-                    else if(divLevel == 3) selectedOption = '{{ $user->person->division_level_3 }}';
-                    else if(divLevel == 2) selectedOption = '{{ $user->person->division_level_2 }}';
-                    else if(divLevel == 1) selectedOption = '{{ $user->person->division_level_1 }}';
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
-            @endif
+          var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+            //Populate drop down on page load
+            var ddID = '{{ 'division_level_' . $division_level->level }}';
+            var postTo = '{!! route('divisionsdropdown') !!}';
+            var selectedOption = '';
+            var divLevel = parseInt('{{ $division_level->level }}');
+            var incInactive = -1;
+            var loadAll = loadAllDivs;
+            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+            parentDDID = ddID;
+            loadAllDivs = -1;
+        @endforeach
+      
         });
 		
     </script>
