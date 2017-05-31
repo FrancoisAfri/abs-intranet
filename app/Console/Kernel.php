@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //\App\Console\Commands\Inspire::class,
         \App\Console\Commands\SendStatement::class,
+        \App\Console\Commands\EmployeeTasksOverdue::class,
     ];
 
     /**
