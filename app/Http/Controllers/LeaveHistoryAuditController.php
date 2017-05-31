@@ -464,8 +464,8 @@ class LeaveHistoryAuditController extends Controller
          //return $request;
             $userID = $request['hr_person_id'];
             $LevTypID = $request['leave_types_id'];
-            $DivisionID =$request['division_level_2'];
-            $DepartmentID =$request['division_level_1'];
+            // $DivisionID =$request['division_level_2'];
+            // $DepartmentID =$request['division_level_1'];
            # $dateFrom = trim($request['date_from']); 
            # $dateTo = trim($request['date_to']);;
             //return $dateTo;
@@ -519,8 +519,8 @@ class LeaveHistoryAuditController extends Controller
                     $data['userID'] = $userID;
                     $data['LevTypID'] = $LevTypID;
                     $data['custom'] = $custom;
-                    $data['DivisionID'] = $DivisionID;
-                    $data['DepartmentID'] = $DepartmentID;
+                    // $data['DivisionID'] = $DivisionID;
+                    // $data['DepartmentID'] = $DepartmentID;
                     $data['page_title'] = "Leave Reports";
                     $data['page_description'] = "Leave Report";
                     $data['breadcrumb'] = [
