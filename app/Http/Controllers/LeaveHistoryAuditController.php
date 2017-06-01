@@ -60,7 +60,7 @@ class LeaveHistoryAuditController extends Controller
 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
-		$data['users'] = $users;
+		    $data['users'] = $users;
 		AuditReportsController::store('Leave History Audit', 'Reports page accessed', "Accessed by User", 0);
         return view('leave.leave_search')->with($data);  
     }
