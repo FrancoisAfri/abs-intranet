@@ -296,6 +296,7 @@ Route::post('/task/end', 'TaskManagementController@endTask');
 Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
+Route::get('/cron/induction', 'InductionCronController@execute');
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');
