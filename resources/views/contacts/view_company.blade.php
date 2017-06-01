@@ -201,7 +201,7 @@
 
         <!-- Confirmation Modal -->
         @if(Session('success_add'))
-            @include('contacts.action_partials.success_action', ['modal_title' => "New Company Added!", 'modal_content' => session('success_add')])
+            @include('contacts.partials.success_action', ['modal_title' => "New Company Added!", 'modal_content' => session('success_add')])
         @endif
     </div>
     @endsection

@@ -131,10 +131,12 @@ class LeaveApplicationController extends Controller
 
         #
         // 
+      
+        // 
 
        
         $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Approve';
+        $data['active_rib'] = 'Approval';
         $data['leaveTypes'] = $leaveTypes;
         //$data['employees'] = $employees;
         $data['leaveApplication'] = $leaveApplication;

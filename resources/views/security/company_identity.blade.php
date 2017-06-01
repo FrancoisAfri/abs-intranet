@@ -39,7 +39,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-building-o"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="company_name" name="company_name" value="{{ ($companyDetails) ? $companyDetails->company_name : '' }}" placeholder="Company Name">
+                                    <input type="text" class="form-control" id="company_name" name="company_name" value="{{ ($companyDetails) ? $companyDetails->company_name : '' }}" placeholder=Company Name">
                                 </div>
                             </div>
                         </div>

@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class SendStatement extends Command
+class EmployeeTasksOverdue extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'send:statement';
+    protected $signature = 'emptask:overdue';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Send monthly statement to clients via email';
+    protected $description = 'This command will command will check for tasks that are overdue and send an email notification to the relevant person';
 
     /**
      * Create a new command instance.
@@ -37,7 +37,6 @@ class SendStatement extends Command
      */
     public function handle()
     {
-        //\Log::info('Test - I was here @ ' . \Carbon\Carbon::now());
-        //Get all active loans
+        \Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
     }
 }

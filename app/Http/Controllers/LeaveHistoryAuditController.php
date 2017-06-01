@@ -60,7 +60,7 @@ class LeaveHistoryAuditController extends Controller
 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
-		$data['users'] = $users;
+		    $data['users'] = $users;
 		AuditReportsController::store('Leave History Audit', 'Reports page accessed', "Accessed by User", 0);
         return view('leave.leave_search')->with($data);  
     }
@@ -81,11 +81,13 @@ class LeaveHistoryAuditController extends Controller
         $leaveTypes = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
           $query->orderBy('name', 'asc');  
         }]);
-
+        // 
+     
+        // 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
-        $data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Leave Reports';
+       $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
 
         
         $users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
@@ -464,8 +466,8 @@ class LeaveHistoryAuditController extends Controller
          //return $request;
             $userID = $request['hr_person_id'];
             $LevTypID = $request['leave_types_id'];
-            $DivisionID =$request['division_level_2'];
-            $DepartmentID =$request['division_level_1'];
+            // $DivisionID =$request['division_level_2'];
+            // $DepartmentID =$request['division_level_1'];
            # $dateFrom = trim($request['date_from']); 
            # $dateTo = trim($request['date_to']);;
             //return $dateTo;
@@ -519,8 +521,8 @@ class LeaveHistoryAuditController extends Controller
                     $data['userID'] = $userID;
                     $data['LevTypID'] = $LevTypID;
                     $data['custom'] = $custom;
-                    $data['DivisionID'] = $DivisionID;
-                    $data['DepartmentID'] = $DepartmentID;
+                    // $data['DivisionID'] = $DivisionID;
+                    // $data['DepartmentID'] = $DepartmentID;
                     $data['page_title'] = "Leave Reports";
                     $data['page_description'] = "Leave Report";
                     $data['breadcrumb'] = [

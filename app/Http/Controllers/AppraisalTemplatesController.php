@@ -186,6 +186,8 @@ class AppraisalTemplatesController extends Controller
 		$kpi->is_upload = !empty($kpiData['existing_kpi_id']) ? $kpis['is_upload'] : $kpiData['is_upload'];
 		$kpi->template_id = $kpiData['template_id'];
 		$kpi->upload_type = !empty($kpiData['existing_kpi_id']) ? $kpis['upload_type'] : $kpiData['upload_type'];
+		$kpi->is_task_kpi = !empty($kpiData['existing_kpi_id']) ? $kpis['is_task_kpi'] : $kpiData['is_task_kpi'];
+		$kpi->kpi_task_type = !empty($kpiData['existing_kpi_id']) ? $kpis['kpi_task_type'] : $kpiData['kpi_task_type'];
 
 		$newkpi = !empty($kpiData['existing_kpi_id']) ? $kpis['indicator'] : $kpiData['indicator'];
         $kpi->save();
@@ -211,7 +213,9 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpi_type = $request->input('kpi_type');
 		$kpi->is_upload = $request->input('is_upload');
 		$kpi->upload_type = ($request->input('is_upload') == 1) ? $request->input('upload_type') : null;
-		
+		$kpi->is_task_kpi = ($request->input('is_upload') == 2) ? $request->input('is_task_kpi') : null;
+		$kpi->kpi_task_type = ($request->input('is_upload') == 2 && $request->input('is_task_kpi') == 1) ? $request->input('kpi_task_type') : null;
+
         $kpi->update();
 		$newtemplate = $request->input('indicator');
         AuditReportsController::store('Performance Appraisal', 'KPI Informations Edited', "Edited by User", 0);

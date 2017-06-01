@@ -44,7 +44,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_library_task" class="btn btn-primary">Add Leave</button>
+                    <button type="button" id="add_library_task" class="btn btn-primary">Add Task</button>
                 </div>
             </form>
         </div>
