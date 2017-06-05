@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //\App\Console\Commands\Inspire::class,
-        \App\Console\Commands\SendStatement::class,
         \App\Console\Commands\EmployeeTasksOverdue::class,
     ];
 
@@ -27,10 +26,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        $filePath = '/storage/logs/tasks.log';
-        $schedule->command('send:statement')->everyMinute()->appendOutputTo($filePath);
+        //$filePath = '/storage/logs/tasks.log';
+        //$schedule->command('send:statement')->everyMinute()->appendOutputTo($filePath);
+        $schedule->command('emptask:overdue')->daily();
     }
 
     /**

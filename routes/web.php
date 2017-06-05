@@ -259,6 +259,7 @@ Route::patch('/hr/category/{doc_type_category}', 'DocumentTypeController@updateD
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
+Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
 
 #Employees Qualifications Module
 Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
@@ -296,6 +297,7 @@ Route::post('/task/end', 'TaskManagementController@endTask');
 Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
+Route::get('/cron/induction', 'InductionCronController@execute');
 
 //Route::post('audits', 'AuditReportsController@getReport');
 //Route::post('audits/print', 'AuditReportsController@printreport');

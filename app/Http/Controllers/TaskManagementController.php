@@ -153,7 +153,7 @@ class TaskManagementController extends Controller
 			{
 				# Send Email to employee
 				$employee = HRPerson::where('id', $nextTask->employee_id)->first();
-				Mail::to($employee->email)->send(new NextTaskNotifications($employee));
+				Mail::to($employee->email)->send(new NextTaskNotifications($employee, $task));
 				
 			}
 		}
