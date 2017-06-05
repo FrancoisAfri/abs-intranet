@@ -52,7 +52,7 @@
                                         <th>Source of Evidence</th>
                                         <th style="text-align: center;">KPI Weight</th>
                                         <!--<th style="text-align: center;">Score Range</th>-->
-                                        <th>Result</th>
+                                        <th width="150px">Result</th>
                                     </tr>
                                     @foreach ($kpis as $kpi)
                                         <input type="hidden" name="kpi_id[]" value="{{ $kpi->id }}">
