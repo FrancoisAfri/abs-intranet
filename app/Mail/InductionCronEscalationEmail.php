@@ -11,18 +11,19 @@ use App\EmployeeTasks;
 use App\CompanyIdentity;
 use Illuminate\Support\Facades\Storage;
 
-class InductionCronEmail extends Mailable
+class InductionCronEscalationEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+	use Queueable, SerializesModels;
 
 	public $person;
 	public $task;
 	public $urls = '/';
 
-    public function __construct(HRPerson $person, EmployeeTasks $task)
+    public function __construct(HRPerson $person, EmployeeTasks $task, $employeeName)
     {
         $this->person = $person;
         $this->task = $task;
+        $this->employeeName = $employeeName;
     }
 
     /**
@@ -42,7 +43,7 @@ class InductionCronEmail extends Mailable
         $data['company_name'] = $companyDetails['full_company_name'] ;
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 
-        return $this->view('mails.employeeLateTask')
+        return $this->view('mails.employeeEscalationTasks')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);

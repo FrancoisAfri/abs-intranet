@@ -11,8 +11,8 @@ use App\User;
 use App\AuditTrail;
 use App\EmployeeTasks;
 use App\EmployeeTasksDocuments;
-use App\Mail\EmployeesTasksMail;
-use App\Mail\NextTaskNotifications;
+use App\Mail\InductionCronEmail;
+use App\Mail\InductionCronEscalationEmail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -31,91 +31,34 @@ class InductionCronController extends Controller
     public function execute()
     {
 		$today = strtotime(date('Y-m-d'));
-		$oldTask = DB::table('employee_tasks')
-		->select('employee_tasks.status','employee_tasks.order_no','employee_tasks.id')
-		->where('employee_tasks.due_date', $today)
-		->where('employee_tasks.order_no', $order)
+		$escalationTasks = DB::table('employee_tasks')
+		->select('employee_tasks.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+		->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+		->where('employee_tasks.due_date', '<=', $today)
 		->orderBy('employee_tasks.order_no')
-		->first();
+		->get();
+		//return $escalationTasks;
+		foreach ($escalationTasks as $task)
+		{
+			$employeeName = $task->firstname.' '.$task->surname;
+						
+			if(!empty($task->employee_id))
+			{
+				# Send Email to employee
+				$employee = HRPerson::where('id', $task->employee_id)->first();
+				Mail::to($employee->email)->send(new InductionCronEmail($employee, $task));
+				
+			}
+			if(!empty($task->escalation_id))
+			{
+				# Send Email to escalation person
+				$employee = HRPerson::where('id', $task->escalation_id)->first();
+				Mail::to($employee->email)->send(new InductionCronEscalationEmail($employee, $task, $employeeName));
+				
+			}
+		}
 		
-		$OnProgress = DB::table('employee_tasks')
-		->select('employee_tasks.id')
-		->where('employee_tasks.employee_id', $user->person->id)
-		->where('employee_tasks.status', 2)
-		->first();
-		if (!empty($OnProgress->id))
-			return redirect('/')->with('error_starting', "You can not start this task, You have another task in progess.");
-		$stastus = 2;
-		$task->status = $stastus;	
-		$task->date_started = strtotime(date('Y-m-d'));	
-		$task->update();
 		AuditReportsController::store('Task Management', "Task Started", "Edited by User", 0);
 		return back();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
