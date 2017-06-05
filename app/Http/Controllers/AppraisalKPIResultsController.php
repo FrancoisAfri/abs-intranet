@@ -81,7 +81,11 @@ class AppraisalKPIResultsController extends Controller
 				$query->where('upload_type', null);
 				$query->orWhereNotIn('upload_type', [2, 3]);
 			})
-                ->where('is_task_kpi', '<>', 1)
+                ->where( function ($query) {
+                	$query->where('is_task_kpi', null);
+                	$query->where('is_task_kpi', '<>', 1);
+                })
+                //->where('is_task_kpi', '<>', 1)
 				->where('template_id', $emp->jobTitle->kpiTemplate->id)
 				->where('appraisals_kpis.status', 1)
 				->where('appraisal_kpas.status', 1)
