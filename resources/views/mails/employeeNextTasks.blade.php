@@ -211,12 +211,12 @@
                                 </tr>
                                 <tr>
                                     <td valign="top" class="body-cell">
-                                        <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+                                        <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">task
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $person->first_name }},<br><br>
-                                                    We would like to inform you, the induction task preceding yours have been completed.<br>
-                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system and see more details.
+                                                    We would like to inform you, the induction task "{{$task->description}}" preceding yours have been completed.<br>
+                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system to start yours.
                                                 </td>
                                             </tr>
                                             <tr>

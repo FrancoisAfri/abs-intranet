@@ -94,6 +94,7 @@ class DashboardController extends Controller
 			->where('employee_tasks.employee_id', $user->person->id)
 			->where('employee_tasks.start_date', '<=', $today)
 			->where('employee_tasks.status', '<', 4)
+			->orderBy('employee_tasks.id')
 			->orderBy('employee_tasks.order_no')
 			->get();
 			//return $tasks;

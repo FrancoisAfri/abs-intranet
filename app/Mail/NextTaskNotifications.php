@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\HRPerson;
+use App\EmployeeTasks;
 use App\CompanyIdentity;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,11 +16,13 @@ class NextTaskNotifications extends Mailable
     use Queueable, SerializesModels;
 
 	public $person;
+	public $task;
 	public $urls = '/';
 
-    public function __construct(HRPerson $person)
+    public function __construct(HRPerson $person, EmployeeTasks $task)
     {
         $this->person = $person;
+        $this->task = $task;
     }
 
     /**
