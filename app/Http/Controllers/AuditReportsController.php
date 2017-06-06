@@ -58,7 +58,7 @@ class AuditReportsController extends Controller
 		$user = Auth::user();
 		$AuditTrail = new AuditTrail();
 		$AuditTrail->module_name = $moduleName;
-		$AuditTrail->user_id = $user->id;
+		$AuditTrail->user_id = !empty($user->id) ? $user->id : 0;
 		$AuditTrail->action = $action;
 		$AuditTrail->action_date = time();//strtotime(date('Y-m-d'));
 		$AuditTrail->notes = $notes;

@@ -19,7 +19,7 @@ class InductionCronEmail extends Mailable
 	public $task;
 	public $urls = '/';
 
-    public function __construct(HRPerson $person, EmployeeTasks $task)
+    public function __construct(HRPerson $person, $task)
     {
         $this->person = $person;
         $this->task = $task;
@@ -36,7 +36,7 @@ class InductionCronEmail extends Mailable
         $companyName = $companyDetails['company_name'];
 
 		//Should get these details from setup
-        $subject = "Task Overdue $companyName online system.";
+        $subject = "Task Overdue on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyDetails['full_company_name'] ;

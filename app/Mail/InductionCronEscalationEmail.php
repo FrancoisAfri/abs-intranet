@@ -15,15 +15,16 @@ class InductionCronEscalationEmail extends Mailable
 {
 	use Queueable, SerializesModels;
 
-	public $person;
+	public $manager;
+	public $employee;
 	public $task;
 	public $urls = '/';
 
-    public function __construct(HRPerson $person, EmployeeTasks $task, $employeeName)
+    public function __construct(HRPerson $manager,$task, HRPerson $employee)
     {
-        $this->person = $person;
+        $this->manager = $manager;
         $this->task = $task;
-        $this->employeeName = $employeeName;
+        $this->employee = $employee;
     }
 
     /**
@@ -37,7 +38,7 @@ class InductionCronEscalationEmail extends Mailable
         $companyName = $companyDetails['company_name'];
 
 		//Should get these details from setup
-        $subject = "Task Overdue $companyName online system.";
+        $subject = "Task Overdue on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyDetails['full_company_name'] ;
