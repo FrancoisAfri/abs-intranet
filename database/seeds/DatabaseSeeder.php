@@ -646,25 +646,48 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 		
+		$module = new modules(); //Meeting Munites/Tasks
+        $module->active = 1;
+        $module->name = 'Meeting Minutes';
+        $module->path = 'meeting_minutes';
+        $module->font_awesome = 'fa-calendar-check-o';
+        $module->save();
+		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 6;
-        $ribbon->ribbon_name = 'Reports';
-        $ribbon->description = 'Reports';
-        $ribbon->ribbon_path = 'appraisal/reports';
-        $ribbon->access_level = 4;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Create Minutes';
+        $ribbon->description = 'Create Minutes';
+        $ribbon->ribbon_path = 'meeting_minutes/create';
+        $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 7;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search Minutes';
+        $ribbon->description = 'Search Minutes';
+        $ribbon->ribbon_path = 'meeting_minutes/search';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'meeting_minutes/reports';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
-        $ribbon->ribbon_path = 'appraisal/setup';
-        $ribbon->access_level = 5;
+        $ribbon->ribbon_path = 'meeting_minutes/setup';
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-        $leave_config = new leave_configuration();
-        $leave_config->save();
 		
         $leave_config = new leave_configuration();
         $leave_config->save();

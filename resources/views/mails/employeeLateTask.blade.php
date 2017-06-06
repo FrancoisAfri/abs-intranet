@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - New Task</title>
+    <title>{{ $company_name }} - Task Infomation</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -211,12 +211,13 @@
                                 </tr>
                                 <tr>
                                     <td valign="top" class="body-cell">
-                                        <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">task
+                                        <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $person->first_name }},<br><br>
-                                                    We would like to inform you, the induction task "{{$task->description}}" preceding yours have been completed.<br>
-                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system to start yours.
+                                                    We would to remind you that your task: {{$task}}, due will expired soon.
+                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system and attend to it.<br>
+													PS: A notification has also be sent to your manager.
                                                 </td>
                                             </tr>
                                             <tr>

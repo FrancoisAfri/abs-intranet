@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - New Task</title>
+    <title>{{ $company_name }} - Task Infomation</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -211,12 +211,12 @@
                                 </tr>
                                 <tr>
                                     <td valign="top" class="body-cell">
-                                        <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
+                                        <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">task
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $person->first_name }},<br><br>
-                                                    We would like to inform you that a new task has been assigned to you.<br>
-                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system and see more details.
+                                                    Hi {{ $manager->first_name }},<br><br>
+                                                    We would like to inform you, the task "{{$task}}" assigned to {{$employee->first_name." ".$employee->surname}} due date is about to expired.<br>
+                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system to view more details.
                                                 </td>
                                             </tr>
                                             <tr>

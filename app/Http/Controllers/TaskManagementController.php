@@ -56,7 +56,7 @@ class TaskManagementController extends Controller
 	public function startTask(EmployeeTasks $task) 
 	{
 		$user = Auth::user()->load('person');
-		if ($task->is_dependent == 1 && !empty($task->induction_id))
+		/*if ($task->is_dependent == 1 && !empty($task->induction_id))
 		{
 			$order = $task->order_no - 1;
 			$oldTask = DB::table('employee_tasks')
@@ -68,7 +68,7 @@ class TaskManagementController extends Controller
 			
 			if (!empty($oldTask->status) && $oldTask->status != 4) 
 				return redirect('/')->with('error_starting', "You can not start this task, The task it depends on have not been completed yet.");
-		}
+		}*/
 		$OnProgress = DB::table('employee_tasks')
 		->select('employee_tasks.id')
 		->where('employee_tasks.employee_id', $user->person->id)
