@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         //$companyDetails = (Schema::hasTable('company_identities')) ? CompanyIdentity::first() : null;
 
         //Compose header
-        view()->composer('layouts.header', function($view) use($companyDetails) {
+        view()->composer('layouts.header', function ($view) use ($companyDetails) {
             $user = Auth::user()->load('person');
             $defaultAvatar = ($user->person->gender === 0) ? 'avatars/f-silhouette.jpg' : 'avatars/m-silhouette.jpg';
             $avatar = $user->person->profile_pic;
@@ -48,8 +48,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         //Compose left sidebar
-        view()->composer('layouts.sidebar', function($view) use($companyDetails) {
-			$user = Auth::user();
+        view()->composer('layouts.sidebar', function ($view) use ($companyDetails) {
+            $user = Auth::user();
             $modulesAccess = modules::whereHas('moduleRibbon', function ($query) {
                 $query->where('active', 1);
             })->where('active', 1)
@@ -58,8 +58,8 @@ class AppServiceProvider extends ServiceProvider
                     $query->whereNotNull('access_level');
                     $query->where('access_level', '>', 0);
                 })->get())
-                ->with(['moduleRibbon' => function ($query) use($user) {
-                    $query->whereIn('id', module_ribbons::select('security_modules_ribbons.id')->join('security_modules_access', function($join) use($user) {
+                ->with(['moduleRibbon' => function ($query) use ($user) {
+                    $query->whereIn('id', module_ribbons::select('security_modules_ribbons.id')->join('security_modules_access', function ($join) use ($user) {
                         $join->on('security_modules_ribbons.module_id', '=', 'security_modules_access.module_id');
                         $join->on('security_modules_access.user_id', '=', DB::raw($user->id));
                         $join->on('security_modules_ribbons.access_level', '<=', 'security_modules_access.access_level');
@@ -69,12 +69,12 @@ class AppServiceProvider extends ServiceProvider
                 ->orderBy('name', 'ASC')->get();
 
             $data['company_logo'] = $companyDetails['company_logo_url'];
-			$data['modulesAccess'] = $modulesAccess;
+            $data['modulesAccess'] = $modulesAccess;
             $view->with($data);
         });
 
         //Compose main layout
-        view()->composer('layouts.main_layout', function($view) use($companyDetails) {
+        view()->composer('layouts.main_layout', function ($view) use ($companyDetails) {
             $skinColor = $companyDetails['sys_theme_color'];
 
             $data['skinColor'] = $skinColor;

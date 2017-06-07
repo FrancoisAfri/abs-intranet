@@ -37,6 +37,7 @@ class EmployeeTasksOverdue extends Command
      */
     public function handle()
     {
-        \Log::info('Test - I was here @ ' . \Carbon\Carbon::now());
+        //app('App\Http\Controllers\InductionCronController')->execute();
+        \Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
     }
 }

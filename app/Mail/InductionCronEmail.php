@@ -11,7 +11,7 @@ use App\EmployeeTasks;
 use App\CompanyIdentity;
 use Illuminate\Support\Facades\Storage;
 
-class NextTaskNotifications extends Mailable
+class InductionCronEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +19,7 @@ class NextTaskNotifications extends Mailable
 	public $task;
 	public $urls = '/';
 
-    public function __construct(HRPerson $person, EmployeeTasks $task)
+    public function __construct(HRPerson $person, $task)
     {
         $this->person = $person;
         $this->task = $task;
@@ -36,13 +36,13 @@ class NextTaskNotifications extends Mailable
         $companyName = $companyDetails['company_name'];
 
 		//Should get these details from setup
-        $subject = "Task completed $companyName online system.";
+        $subject = "Task Overdue on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyDetails['full_company_name'] ;
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 
-        return $this->view('mails.employeeNextTasks')
+        return $this->view('mails.employeeLateTask')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);

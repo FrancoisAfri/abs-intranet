@@ -116,35 +116,9 @@
         </div>
         <!-- /.col -->
     </div>
-    <div class="row">
-        <div class="col-md-4">
-            <!-- Available Perks Widgets -->
-            <div class="box box-warning same-height-widget">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Available Perks</h3>
-
-                    <div class="box-tools pull-right">
-                        <!-- <span class="label label-warning">8 New Members</span> -->
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                    <ul class="users-list clearfix" id="perks-widget-list">
-                    </ul>
-                    <!-- /.users-list -->
-                </div>
-                <!-- /.box-body -->
-                <!-- include perk details modal -->
-                @include('appraisals.partials.edit_perk', ['isReaOnly' => true])
-            </div>
-            <!-- /.Available Perks Widgets -->
-        </div>
-        <div class="col-md-4">
+@if($isSuperuser)
+    <div class="row">                         
+        <div class="col-md-6">
             <!-- Top Ten Employees Performance Ranking Widget -->
             <div class="box box-success same-height-widget">
                 <div class="box-header with-border">
@@ -170,7 +144,7 @@
             </div>
             <!-- /.Top Ten Employees Performance Ranking Widgets -->
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <!-- Bottom Ten Employees Performance Ranking Widgets -->
             <div class="box box-danger same-height-widget">
                 <div class="box-header with-border">
@@ -199,6 +173,8 @@
             <!-- /.Bottom Ten Employees Performance Ranking Widgets -->
         </div>
     </div>
+@endif
+<!-- /Check if induction is active before showing this  And Meeting-->
 	<div class="row">
         <div class="col-md-6">
 		 <!-- /Tasks List -->
@@ -214,7 +190,7 @@
               </div>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
+            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
               <div class="table-responsive">
                 <table class="table no-margin">
 					<thead>
@@ -264,6 +240,35 @@
             <!-- /.box-footer -->
           </div>
 		  <!-- /Tasks List End -->
+        </div>
+    </div>
+	<div class="row">
+        <div class="col-md-6">
+            <!-- Available Perks Widgets -->
+            <div class="box box-warning same-height-widget">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Available Perks</h3>
+
+                    <div class="box-tools pull-right">
+                        <!-- <span class="label label-warning">8 New Members</span> -->
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <ul class="users-list clearfix" id="perks-widget-list">
+                    </ul>
+                    <!-- /.users-list -->
+                </div>
+                <!-- /.box-body -->
+                <!-- include perk details modal -->
+                @include('appraisals.partials.edit_perk', ['isReaOnly' => true])
+            </div>
+            <!-- /.Available Perks Widgets -->
         </div>
     </div>
     @endsection
