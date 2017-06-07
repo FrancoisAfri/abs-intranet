@@ -9,7 +9,7 @@ class qualifications extends Model
       protected $table = 'qualification';
 
     protected $fillable = [
-       'Institution','Qualification','Year Obtained', 'Qualification Type', 'Certificate', 'status'
+       'division_level_2','division_level_1','hr_person_id''Institution','Qualification','yearObtained', 'Qualification_Type',Certificate','Qualification_status','Major','status,'country','supporting_docs'
     ];
 }
- 
+

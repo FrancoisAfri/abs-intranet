@@ -718,7 +718,7 @@ class DatabaseSeeder extends Seeder
         $type->description = 'Special Leave Type' ;
         $type->save();
 
-        //#insert leave profilse
+        //#insert leave profiles
         $profile = new leave_profile();
         $profile->name = 'Employee with no leave';
         $profile->description = 'Employee with no leave' ;

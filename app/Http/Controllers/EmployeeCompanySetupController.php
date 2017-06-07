@@ -15,6 +15,8 @@ use App\DivisionLevelThree;
 use App\DivisionLevelFour;
 use App\DivisionLevelFive;
 use App\TopLevel;
+use App\doc_type;
+use App\Qualification_type;
 use App\DivisionLevel;
 
 class EmployeeCompanySetupController extends Controller
@@ -30,6 +32,8 @@ class EmployeeCompanySetupController extends Controller
         //get the highest active level
         $childLevelname = null;
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
+        $Qualif_type = DB::table('Qualification_type')->orderBy('id')->get();
+        #Qualification_type::where('status', 1)->get();
         $employees = HRPerson::where('status', 1)->get();
         $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
         $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
@@ -39,6 +43,7 @@ class EmployeeCompanySetupController extends Controller
         //return $lowestactiveLvl;
 
         $data['division_types'] = $division_types;
+        $data['Qualif_type'] = $Qualif_type;
         $data['employees'] = $employees;
         $data['highestLvl'] = $highestLvl;
         $data['lowestactiveLvl'] = $lowestactiveLvl;
@@ -297,6 +302,88 @@ class EmployeeCompanySetupController extends Controller
         return back();
     }
 
+    public function addqualType(Request $request  ){
+
+         $this->validate($request, [
+            'name' => 'required',
+            'description'=> 'required',
+
+        ]);
+         $Data = $request->all();
+        unset($Data['_token']);
+        $qualtype = new Qualification_type();
+         $qualtype->updateOrCreate(['name' => $Data['name']], ['description' => $Data['description']]);
+
+        AuditReportsController::store('Leave', 'Leave Qualification_type saved ', "Edited by User",0);
+        return response()->json();
+    }
+     public function editQualType(Request $request, Qualification_type $qul)
+    {
+        //$user = Auth::user()->load('person');
+        $this->validate($request, [
+            'name' => 'required',
+            'description'=> 'required',
+
+        ]);
+        //$lev->hr_id = $request->input('hr_id');
+         $qul->name =  $request->input('name');
+         $qul->description = $request->input('description');
+         $qul->update();
+        //return $lev;
+AuditReportsController::store('Leave Qualification Type', 'Qualification Type Informations Edited',"Edited by User", 0);
+         return response()->json();
+    }
+     public function QualAct(Qualification_type $sta) 
+    {
+        if ($sta->status == 1) $stastus = 0;
+        else $stastus = 1;
+
+        $sta->status = $stastus;    
+        $sta->update();
+        return back();
+    }
+
+
+      #Document Type
+      public function addDocType(Request $request  ){
+
+         $this->validate($request, [
+            'name' => 'required',
+            'description'=> 'required',
+
+        ]);
+         $Data = $request->all();
+        unset($Data['_token']);
+        $Doctype = new doc_type();
+        $Doctype->updateOrCreate(['name' => $Data['name']], ['description' => $Data['description']]);
+
+        AuditReportsController::store('Document Type', 'Document Type saved ', "Edited by User",0);
+        return response()->json();
+    }
+     public function editDocType(Request $request, doc_type $doc)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'description'=> 'required',
+
+        ]);
+        //$lev->hr_id = $request->input('hr_id');
+         $doc->name =  $request->input('name');
+         $doc->description = $request->input('description');
+         $doc->update();
+        //return $lev;
+AuditReportsController::store('Document Type', 'Document  Type Informations Edited',"Edited by User", 0);
+         return response()->json();
+    }
+     public function DocAct(doc_type $sta) 
+    {
+        if ($sta->active == 1) $stastus = 0;
+        else $stastus = 1;
+
+        $sta->active = $stastus;    
+        $sta->update();
+        return back();
+    }  
 }
 
 

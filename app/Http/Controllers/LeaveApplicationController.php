@@ -650,7 +650,7 @@ class LeaveApplicationController extends Controller
 
     /*
      */
-    public function reject(Request $request, leave_application $levReject)
+    public function reject(leave_application $levReject)
     {
         //
         $this->validate($request, [
