@@ -102,62 +102,69 @@
           @include('hr.partials.add_qualificationType_modal')
           @include('hr.partials.edit_qualificationType_modal')
         </div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Document Types</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+   <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">List Catagories</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
                 </div>
-            </div>
-            <!-- /.box-header -->
-
-            <div class="box-body"> <!-- {{-- start custom leave--}} -->
-                <table class="table table-bordered">
-                    <tr>
-                        <th style="width: 10px; text-align: center;"></th>
-                        <th>Document Type Name</th>
-                        <th>Description</th>
-                        <th style="width: 40px; text-align: center;"></th>
-                        <!-- $Doc_type -->
-                    </tr> @if (count($Doc_type) > 0)
-                    @foreach($Doc_type as $leavecustom)
-                    <tr id="modules-list">
-                        <td nowrap>
-                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-document-modal" data-id="{{ $leavecustom->id }}" data-name="{{$leavecustom->name}}" data-description="{{ $leavecustom->description }}"> <i class="fa fa-pencil-square-o">
-                                </i> Edit</button>
-                        </td>
-                        <td>{{ $leavecustom->name }} </td>
-                        <td>{{ $leavecustom->description }} </td>
-                        <td>
-                            <!--   leave here  -->
-                            <button type="button" id="view_ribbons" class="btn {{ (!empty($leavecustom->active) && $leavecustom->active == 1) ? " btn-danger " : "btn-success " }}
-                                        btn-xs" onclick="postData({{$leavecustom->id}}, 'doc');"><i class="fa {{ (!empty($leavecustom->active) && $leavecustom->active == 1) ?
-                              " fa-times " : "fa-check " }}"></i> {{(!empty($leavecustom->active) && $leavecustom->active == 1) ? "De-Activate" : "Activate"}}</button>
-                        </td>
-                    </tr> 
-                    @endforeach @else
-                    <tr id="modules-list">
+                <form class="form-horizontal" method="POST" action="/hr/document">
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table table-bordered"> 
+                            <tr>
+                                <th style="width: 10px; text-align: center;"></th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                            </tr>
+                            @if (count($doc_type) > 0)
+                              @foreach ($doc_type as $type)
+                               <tr id="categories-list">
+                               <td nowrap>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                            <a href="/hr/category" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-eye"></i> Document Type</a>
+                                    </td>
+                                    <td>{{ $type->name }}</td>
+                                    <td>{{ $type->description }}</td>
+                                    <td>      
+                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>  
+                                    </td>
+                                </tr>  
+                                   @endforeach  
+                               @else
+                               <tr id="categories-list">
                         <td colspan="5">
-                            <div class="alert alert-danger alert-dismissable">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No Custom leaves to display, please start by adding a new Custom leave . </div>
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            No category to display, please start by adding a new category.
+                        </div>
                         </td>
-                    </tr>
-                    @endif
-                </table>
-            </div>
-            <!-- /.box-body -->
-             <div class="box-footer">
-                    <button type="button" id="add-new-doc" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-document-modal">Add Document Type</button>
-            </div>
+                        </tr>
+                           @endif         
+                            </table>
+                        </div>
+                                   <!-- /.box-body -->
+                    <div class="box-footer">
+                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add new Category </button>  
+                    </div>
+             </div>
         </div>
-          @include('hr.partials.add_document_modal')
-          @include('hr.partials.edit_document_modal')
-    </div>
-    </div>
+   <!-- Include add new prime rate modal -->
+        @include('hr.partials.add_category_modal')
+        @include('hr.partials.edit_category_modal')
+     
+  
+</div>
+
 
 @endsection
 
@@ -168,6 +175,7 @@
 		function postData(id , data ){
             if (data == 'qual') location.href = "/hr/addqul/" + id;
              else if (data == 'doc') location.href = "/hr/adddoc/" + id;
+              else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
 		}
         $(function () {
             var moduleId;
@@ -348,6 +356,56 @@
                 var successMsg = 'The group level has been updated successfully.';
                 var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
+            });
+                 // 
+             var doc_typeID;
+            $('#edit-category-modal').on('show.bs.modal', function (e) {
+                    //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                doc_typeID = btnEdit.data('id');
+                var name = btnEdit.data('name');
+                var description = btnEdit.data('description');
+                //var employeeName = btnEdit.data('employeename');
+                var modal = $(this);
+                modal.find('#name').val(name);
+                modal.find('#description').val(description);
+                
+             });
+
+            // 
+
+            //Post module form to server using ajax (ADD)
+            $('#save_category').on('click', function() {
+                //console.log('strUrl');
+                var strUrl = '/hr/document/add/' +  'doc_type'; 
+                var modalID = 'add-category-modal';
+                var objData = {
+                    name: $('#'+modalID).find('#name').val(),
+                    description: $('#'+modalID).find('#description').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'cat_module';
+                var redirectUrl = '/hr/document';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The group has been updated successfully.';
+                //var formMethod = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+    /**/   $('#edit_category').on('click', function () {
+                var strUrl = '/hr/document/' + doc_typeID;
+                var modalID = 'edit-category-modal';
+                var objData = {
+                    name: $('#'+modalID).find('#name').val(),
+                    description: $('#'+modalID).find('#description').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'edit_category';
+                var redirectUrl = '/hr/document';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'Category modal has been updated successfully.';
+                var Method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 /*
             $('#update-module').on('click', function() {

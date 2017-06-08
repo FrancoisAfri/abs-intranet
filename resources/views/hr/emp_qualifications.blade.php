@@ -1,29 +1,85 @@
 @extends('layouts.main_layout')
-
+<!--  -->
+ <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap file input -->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+<!--  -->
 @section('page_dependencies')
+<!-- Include Date Range Picker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+<!-- Select 2-->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+            <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+    <!-- Bootstrap date picker -->
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Start Bootstrap File input -->
+    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+<!--Time Charger-->
+
 
 @endsection
-
 @section('content')
     <div class="row">
-        <!-- User Form -->
-         <div class="col-md-8 col-md-offset-2">
+        <!-- New User Form -->
+        <div class="col-md-12">
             <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Search Employee Qualifications</h3>
-                    <p>Enter Search Criteria :</p>
+                    <i class="fa fa-anchor pull-right"></i>
+                    <h3 class="box-title"> Documents Search criteria</h3>
+                    <p>Enter search Criteria:</p>
                 </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-            <form name="employee-docs" class="form-horizontal" method="POST" action="/hr/emp_qual/Search" enctype="multipart/form-data">
+                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
-                  
+
                     <div class="box-body">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                          <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                                <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
+
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Employee Document </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2"> Employee Qualification</label>
+                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Employee Search</label>
+                                </div>
+                            </div>
+
+                           <div class="box-body">
                        <div class="form-group">
                         @foreach($division_levels as $division_level)
-                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                            <div class="form-group {{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
                                 <div class="col-sm-10">
@@ -38,7 +94,7 @@
                             </div>
                           @endforeach  
                            
-                          <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                          <div class="form-group user-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -54,8 +110,57 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="form-group {{ $errors->has('qualification_id') ? ' has-error' : '' }}">
-                            <label for="qualification_id" class="col-sm-2 control-label">Document Type</label>
+                        <!--  -->
+                        <div class="form-group emp-field">
+                            <label for="person_name" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="person_name" name="person_name" value="{{ old('person_name') }}" placeholder="Search by name...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group emp-field">
+                            <label for="id_number" class="col-sm-2 control-label">ID Number</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="number" class="form-control" id="id_number" name="id_number" value="{{ old('id_number') }}" placeholder="Search by ID number...">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group emp-field">
+                            <label for="passport_number" class="col-sm-2 control-label">Passport Number</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ old('passport_number') }}" placeholder="Search by passport number...">
+                                </div>
+                            </div>
+                        </div>
+                          <div class="form-group emp-field">
+                            <label for="passport_number" class="col-sm-2 control-label">Employee Number</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle-o"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="employee_number" name="employee_number" value="{{ old('employee_number') }}" placeholder="Search by employee number...">
+                                </div>
+                            </div>
+                        </div>
+                        <!--  -->
+                         <div class="form-group qul-field {{ $errors->has('qualification_id') ? ' has-error' : '' }}">
+                            <label for="qualification_id" class="col-sm-2 control-label">Qualification Type</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -70,118 +175,126 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="doc_description" class="col-sm-2 control-label">Search For:</label>
-
+                          <div class="form-group doc-field {{ $errors->has('qualification_id') ? ' has-error' : '' }}">
+                            <label for="qualification_id" class="col-sm-2 control-label">Document Type</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                                        <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="doc_description" name="doc_description" value="{{ old('doc_description') }}" placeholder="Search by name...">
+                                    <select class="form-control select2" style="width: 100%;" id="qualification_id" name="qualification_id">
+                                        <option value="">*** Select a Document Type ***</option>
+                                        @foreach($DocType as $DocumentType)
+                                            <option value="{{ $employee->id }}">{{ $DocumentType->name  }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                        </div>
+                                </div>
+                            </div>
+                      
                         
-                        
-                    </div>
-                    <!-- /.box-body -->
-
-                    <div class="box-footer" style="text-align: center;">
-                        <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
+                   <!--  -->
                    
-
-                   <button type="submit" id="" name="" class="btn btn-primary pull-right"> Submit</button>
+                     </div>
+                   <!--  -->
+                     <div class="box-footer">
+                        <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
+                       <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Document</button>
                     </div>
                     <!-- /.box-footer -->
+                 </div>
                 </form>
             </div>
             <!-- /.box -->
         </div>
-
-
+        <!-- End new User Form-->
         <!-- Confirmation Modal -->
-        @if(Session('success_application'))
-            @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
+        @if(Session('success_add'))
+            @include('contacts.partials.success_action', ['modal_title' => "Registration Successful!", 'modal_content' => session('success_add')])
         @endif
     </div>
-@endsection
+    @endsection
 
-@section('page_script')
-    <!-- bootstrap datepicker -->
-    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-
-    <!-- InputMask -->
+    @section('page_script')
+    <!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
-    <!-- Start Bootstrap File input -->
-    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
-    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-    <!-- optionally if you need translation for your language then include locale file as mentioned below
-    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
-    <!-- End Bootstrap File input -->
-
-
+    <!-- Date rane picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- Date Picker -->
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
+            <!-- Date picker -->
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
-    <!-- Ajax dropdown options load -->
-    <script src="/custom_components/js/load_dropdown_options.js"></script>
-
-    <script>
-        $(function () {
-            //Cancel button click event
-             document.getElementById("cancel").onclick = function () {
-                 location.href = '/hr/emp_document';
-             };
         
-                //
-                 //Initialise Date picker picker elements
-            $('input[name="expirydate"]').datepicker({              
-                   format: 'dd/mm/yyyy', 
-                   autoclose: true        
-            });
-                //
-           
-           // $('form[name="employee-docs"]').attr('action', '/hr/emp_document/docs');
-           //      $('#employeedocs').val("Submit"); 
+<!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+        
+   <script type="text/javascript">
+        $(function () {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+            //Cancel button click event
 
-            //Phone mask
+            $('#cancel').click(function () {
+                location.href = '/leave/reports';
+            });
+             function postData(id, data) {
+        alert(id);
+         //if (data == 'approval_id') location.href = "/leave/approval/" + id;
+            }
+             //Phone mask
             $("[data-mask]").inputmask();
 
-            // [bootstrap file input] initialize with defaults
-            $("#input-1").fileinput();
-            // with plugin options
-            //$("#input-id").fileinput({'showUpload':false, 'previewFileType':'any'});
+            //Date picker
+            $('#date_from').datepicker({
+                format: 'MM yyyy',
+                autoclose: true,
+                startView: "months",
+                minViewMode: "months",
+                todayHighlight: true
+            });
+            $('#date_to').datepicker({
+                format: 'MM yyyy',
+                autoclose: true,
+                startView: "months",
+                minViewMode: "months",
+                todayHighlight: true
+            });
+        
+            //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+                hideFields();
+                //Date Range picker
+        $('.daterangepicker').daterangepicker({
+            format: 'DD/MM/YYYY',
+            endDate: '-1d',
+            autoclose: true
+        });
+            //show/hide fields on radio button toggles (depending on registration type)
 
-            //Tooltip
-            $('[data-toggle="tooltip"]').tooltip();
-
-            //Vertically center modals on page
-            function reposition() {
-                var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                modal.css('display', 'block');
-
-                // Dividing by two centers the modal exactly, but dividing by three
-                // or four works better for larger screens.
-                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-            }
+            $('#rdo_levTkn, #rdo_bal ,#rdo_po').on('ifChecked', function(){      
+                var allType = hideFields();
+                if (allType == 1) $('#box-subtitle').html('Employee Document ');
+                else if (allType == 2) $('#box-subtitle').html('Employee Qualification ');
+                else if (allType == 3) $('#box-subtitle').html('Employee Search');
+               
+            });
+         
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
@@ -191,10 +304,40 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
+        });      
+    
+        //function to hide/show fields depending on the allocation  type
+        function hideFields() {
+            var allType = $("input[name='application_type']:checked").val();
+            if (allType == 1) { //adjsut leave
+                 //$('.hours-field').hide();
+                 $('.doc-field').show();
+                 $('.qul-field').hide();
+                 $('.emp-field').hide();     
+                 $('form[name="leave-application-form"]').attr('action', '/hr/emp_doc/Search');
+                 $('#gen-report').val("Submit");        
+            }
+            else if (allType == 2) { //resert leave
+                 $('.doc-field').hide();
+                 $('.qul-field').show();
+                 $('.emp-field').hide();
+                 $('form[name="leave-application-form"]').attr('action', '/hr/emp_qual/Search');
+                 //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
+                 $('#gen-report').val("Submit"); 
+            }
+             else if(allType == 3){
+                  $('.doc-field').hide();
+                  $('.qul-field').hide();
+                  $('.emp-field').show();
+                  $('.user-field').hide();                
+                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
+                   $('#gen-report').val("Submit"); 
+            }
 
-
-            //Load divisions drop down
-          var parentDDID = '';
+            return allType;      
+            }
+          //Load divisions drop down
+        var parentDDID = '';
         var loadAllDivs = 1;
         @foreach($division_levels as $division_level)
             //Populate drop down on page load
@@ -209,7 +352,6 @@
             loadAllDivs = -1;
         @endforeach
       
-        });
         
     </script>
 @endsection

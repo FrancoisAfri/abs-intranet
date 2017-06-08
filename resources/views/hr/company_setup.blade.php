@@ -23,10 +23,10 @@
                                 <th>Manager's Name</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-            
+                              @if (count($highestLvl->divisionLevelGroup) > 0)
                             @foreach ($highestLvl->divisionLevelGroup as $type)
-                                <tr>
-                                    <td style=" text-align: center;" nowrap>
+                                <tr id="divisionLevelGroup-list">
+                                     <td nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                         @if($highestLvl->level > $lowestactiveLvl && $type->childDiv())
                                             <a href="/hr/child_setup/{{$highestLvl->level}}/{{$type->id}}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
@@ -44,6 +44,16 @@
                                     </td>
                                 </tr>    
                             @endforeach
+                        @else
+                        <tr id="divisionLevelGroup-list">
+                        <td colspan="5">
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            No Company Divisions to display, please start by adding a new Company Divisions.
+                        </div>
+                        </td>
+                        </tr>
+                    @endif
                         </table>
                     </div>
          
