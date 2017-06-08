@@ -86,8 +86,8 @@ class LeaveHistoryAuditController extends Controller
         // 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
-       $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Reports';
+       // $data['active_mod'] = 'Leave Management';
+       //  $data['active_rib'] = 'Reports';
 
         
         $users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
@@ -107,7 +107,8 @@ class LeaveHistoryAuditController extends Controller
         }]);
          $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
  
-        
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
         $data['users'] = $users;
         $data['leaveTypes'] = $leaveTypes;
         $data['division_levels'] = $divisionLevels;
@@ -193,8 +194,8 @@ class LeaveHistoryAuditController extends Controller
               ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
 
         ];
-        $data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Leave History Audit';
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
     AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
         return view('leave.leave_history report')->with($data);
     }
@@ -255,8 +256,8 @@ class LeaveHistoryAuditController extends Controller
               ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
 
         ];
-        $data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Leave History Report';
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
         $user = Auth::user()->load('person');
         $data['support_email'] = 'support@afrixcel.co.za';
         $data['company_name'] = 'Afrixcel Business Solution';
@@ -317,8 +318,8 @@ class LeaveHistoryAuditController extends Controller
              ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],            //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
               ['title' => 'Leave Balance Audit', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Leave Reports';
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
         AuditReportsController::store('Audit', 'View Reports Search Results', "view Reports Results", 0);
         return view('leave.leave_report_balance')->with($data);
     }
@@ -367,8 +368,8 @@ class LeaveHistoryAuditController extends Controller
               ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
 
         ];
-        $data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Leave History Audit';
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
         $user = Auth::user()->load('person');
         $data['support_email'] = 'support@afrixcel.co.za';
         $data['company_name'] = 'Afrixcel Business Solution';
@@ -424,8 +425,8 @@ class LeaveHistoryAuditController extends Controller
                          ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],           
                           ['title' => 'Leave Taken Audit', 'active' => 1, 'is_module' => 0]
                     ];
-                    $data['active_mod'] = 'leave';
-                    $data['active_rib'] = 'Leave Reports';
+                    $data['active_mod'] = 'Leave Management';
+                    $data['active_rib'] = 'Reports';
                     AuditReportsController::store('Audit', 'View Reports Search Results', "view Reports Results", 0);
                     return view('leave.leave_allowance report')->with($data);
                 
@@ -501,8 +502,9 @@ class LeaveHistoryAuditController extends Controller
                          ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],            //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
                           ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
                     ];
-                    $data['active_mod'] = 'leave';
-                    $data['active_rib'] = 'Leave Reports';
+                    
+                    $data['active_mod'] = 'Leave Management';
+                    $data['active_rib'] = 'Reports';
                     AuditReportsController::store('Audit', 'View Reports Search Results', "view Reports Results", 0);
                     return view('leave.leave_taken report')->with($data);
                 
@@ -585,8 +587,8 @@ class LeaveHistoryAuditController extends Controller
                          ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],            //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
                           ['title' => 'Leave Taken Audit', 'active' => 1, 'is_module' => 0]
                     ];
-                    $data['active_mod'] = 'leave';
-                    $data['active_rib'] = 'Leave Reports';
+                    $data['active_mod'] = 'Leave Management';
+                    $data['active_rib'] = 'Reports';
                     AuditReportsController::store('Audit', 'View Reports Search Results', "view Reports Results", 0);
                     return view('leave.leave_paid_out report')->with($data);
 
