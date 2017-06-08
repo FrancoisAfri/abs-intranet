@@ -28,11 +28,11 @@ class EmployeeQualificationsController extends Controller
     }
     public function viewDoc() {
 
-        $data['page_title'] = "Employee Qualifications";
+        $data['page_title'] = "Employee Records";
         $data['page_description'] = "Employee records";
         $data['breadcrumb'] = [
-            ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Employee records', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Records', 'active' => 1, 'is_module' => 0]
         ];
 
         //$user->load('person');
@@ -44,6 +44,7 @@ class EmployeeQualificationsController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $division=DivisionLevelTwo::where('active', 1)->get();
         $QulificationType = Qualification_type::where('status', 1)->get();
+        $DocType = doc_type::where('active', 1)->get();
          // return $QulificationType;
         //$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
      
@@ -53,6 +54,7 @@ class EmployeeQualificationsController extends Controller
         $data['active_rib'] = 'Employee Qualifications';
         $data['qualifications'] = $qualifications;
         $data['employees'] = $employees;
+        $data['DocType'] = $DocType;
         $data['QulificationType'] = $QulificationType;
         $data['category'] = $category;
         $data['hr_people'] = $hr_people;
@@ -106,12 +108,12 @@ class EmployeeQualificationsController extends Controller
                 if (!empty($Search)) {
                     $query->where('qualification.supporting_docs', 'ILIKE', "%$Search%");
                 }
-             }) 
-                     ->orderBy('Name')
-                    ->limit(50)
-                    ->get();
+                 }) 
+                  ->orderBy('Name')
+                  ->limit(50)
+                  ->get();
                      
-                      return  $qualification ;
+                      // return  $qualification ;
 
               #
         $data['qualification'] = $qualification;   

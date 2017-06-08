@@ -172,8 +172,10 @@ class EmployeeDocumentsController extends Controller
             #
                  $document  = DB::table('employee_documents')
         ->select('employee_documents.*','hr_people.status as statas','hr_people.first_name as Name','hr_people.surname as Surname','division_level_ones.name as Department', 'division_level_twos.name as Division' , 'doc_type.name as name')
+          
+          ->leftJoin('doc_type','employee_documents.document_type_id', '=','doc_type.id')
           ->leftJoin('hr_people', 'employee_documents.hr_person_id', '=', 'hr_people.id')
-         ->leftJoin('division_level_ones','employee_documents.division_level_1', '=', 'division_level_ones.id')
+          ->leftJoin('division_level_ones','employee_documents.division_level_1', '=', 'division_level_ones.id')
           ->leftJoin('division_level_twos', 'employee_documents.division_level_2', '=', 'division_level_twos.id')
         
          ->where('hr_people.status' ,1) 
@@ -200,7 +202,7 @@ class EmployeeDocumentsController extends Controller
                      ->orderBy('Name')
                     ->limit(50)
                     ->get();
-                     // return  $document ;
+                  
 
 
         $data['document'] = $document;   

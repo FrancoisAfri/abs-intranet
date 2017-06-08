@@ -14,6 +14,11 @@ class doc_type_category extends Model
 
 
  public function doctypeCategory() {
-        return $this->belongsTo(doc_type::class, 'category_id');
+        return $this->hasmany(doc_type::class, 'category_id');
+    }
+
+    //add a function to add a document type from the relationship
+     public function update($doctypeCategory) {
+            return $this->doctypeCategory()->save($doctypeCategory);
     }
 }

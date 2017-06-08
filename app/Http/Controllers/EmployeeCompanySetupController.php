@@ -18,6 +18,7 @@ use App\TopLevel;
 use App\doc_type;
 use App\Qualification_type;
 use App\DivisionLevel;
+use App\JobCategory;
 
 class EmployeeCompanySetupController extends Controller
 {
@@ -29,7 +30,12 @@ class EmployeeCompanySetupController extends Controller
 
     public function viewLevel()
     {
+           $jobCategories = JobCategory::orderBy('name', 'asc')->get();
+        if (!empty($leave_customs))
+          $jobCategories = $jobCategories->load('catJobTitle');
+        // return $jobCategories ;
         //get the highest active level
+        $doc_type = DB::table('doc_type')->orderBy('name', 'description')->get();
         $childLevelname = null;
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $Qualif_type = DB::table('Qualification_type')->orderBy('id')->get();
@@ -41,7 +47,7 @@ class EmployeeCompanySetupController extends Controller
             $childLevelname = DivisionLevel::where('level', $highestLvl->level - 1)->get()->first()->plural_name;
         }
         //return $lowestactiveLvl;
-
+        $data['doc_type'] =$doc_type;
         $data['division_types'] = $division_types;
         $data['Qualif_type'] = $Qualif_type;
         $data['employees'] = $employees;

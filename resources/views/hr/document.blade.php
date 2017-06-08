@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">List </h3>
+                    <h3 class="box-title">List Categories </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -42,7 +42,7 @@
                         </div>
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add </button>  
+                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add Category</button>  
                     </div>
         </div>
             </div>

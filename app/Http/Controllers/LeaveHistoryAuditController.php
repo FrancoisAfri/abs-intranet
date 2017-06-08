@@ -412,7 +412,7 @@ class LeaveHistoryAuditController extends Controller
                           })
                           ->orderBy('type_profile.leave_type_id')
                           ->get();
-                          return $custom;
+                        
 
 
                     $data['userID'] = $userID;
