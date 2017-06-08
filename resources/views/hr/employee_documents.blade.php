@@ -1,51 +1,28 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
-    <!-- bootstrap datepicker -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-<!-- bootstrap datepicker -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-<!-- iCheck -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-<!-- bootstrap file input -->
-<link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+
 @endsection
 
 @section('content')
     <div class="row">
         <!-- User Form -->
-        <div class="col-md-12">
+         <div class="col-md-8 col-md-offset-2">
             <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Employee Documents</h3>
-                    <p>Employee Documents details:</p>
+                    <h3 class="box-title">Search Employee Documents</h3>
+                    <p>Enter Search Criteria :</p>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-            <form name="employee-docs" class="form-horizontal" method="POST" action="/hr/emp_document/docs" enctype="multipart/form-data">
+            <form name="employee-docs" class="form-horizontal" method="POST" action="/hr/emp_doc/Search" enctype="multipart/form-data">
                     {{ csrf_field() }}
                   
                     <div class="box-body">
                        <div class="form-group">
-                                <label for="leave_profile" class="col-sm-2 control-label">Category</label>
-
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                <select id="category_id" name="category_id" class="form-control select2"  style="width: 100%;" >
-                                    <option selected="selected" value="" >*** Select a Category ***</option>
-                                    @foreach($category as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                                    </div>
-                                </div>
-                            </div>
-							   @foreach($division_levels as $division_level)
+                        @foreach($division_levels as $division_level)
                             <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
@@ -59,8 +36,9 @@
                                     </div>
                                 </div>
                             </div>
-                          @endforeach   
-						 <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                          @endforeach  
+                           
+                          <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -76,78 +54,36 @@
                                 </div>
                             </div>
                         </div>
-						
-					 <div class="form-group">
-                        <label for="action" class="col-sm-2 control-label">Document Type</label>
-
-                         <div class="col-sm-10">
-                           <div class="input-group">
-                                <div class="input-group-addon">
-                                   <i class="fa fa-user"></i>
+                         <div class="form-group {{ $errors->has('qualification_id') ? ' has-error' : '' }}">
+                            <label for="qualification_id" class="col-sm-2 control-label">Document Type</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
                                     </div>
-                             <select id="category_id" name="category_id" class="form-control select2"  style="width: 100%;" >
-                                <option selected="selected" value="" >*** Select a Document Type ***</option>
-                                    @foreach($document as $document)
-                                    <option value="{{ $document->id }}">{{ $document->name }}</option>
-                                    @endforeach
-                            </select>
+                                    <select class="form-control select2" style="width: 100%;" id="qualification_id" name="qualification_id">
+                                        <option value="">*** Select a Qualification Type ***</option>
+                                        @foreach($DocType as $qualification)
+                                            <option value="{{ $employee->id }}">{{ $qualification->name  }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                             </div>
-                         </div>  
-                        <!-- <div class="form-group">
-                            <label for="doc_description" class="col-sm-2 control-label">Document Description</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="doc_description" class="col-sm-2 control-label">Search For:</label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-black-tie"></i>
+                                        <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="doc_description" name="doc_description" value="{{ old('doc_description') }}"  placeholder="Driver's licence, ID, etc..." data-mask>
-                                </div>
-                            </div>
-                        </div> -->
-						<!-- -->
-						<div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
-                           <label for="days" class="col-sm-2 control-label">Document Description</label>
-                            <div class="col-sm-10">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-sticky-note"></i>
-                                    </div>
-								
-                                    <textarea class="form-control" id="doc_description" name="doc_description" placeholder="Driver's licence, ID, etc..." rows="4">{{ old('description') }}</textarea>
+                                    <input type="text" class="form-control" id="doc_description" name="doc_description" value="{{ old('doc_description') }}" placeholder="Search by name...">
                                 </div>
                             </div>
                         </div>
-						
-                    <!--  -->
-                       
-						
-						  <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                             <label for="Expiry Date" class="col-sm-2 control-label">Expiry Date</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control pull-left" name="expirydate" value=""  />
-                                </div>
-                            </div>
-                        </div>
-                     <div class="form-group supDoc-field{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
-                        <label for="Supporting Document" class="col-sm-2 control-label">Supporting Document</label>
-                            <div class="col-sm-10">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-upload"></i>
-                                    </div>
-                                    <input type="file" id="supporting_docs" name="supporting_docs" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
-                                </div>
-                            </div>
-                        </div>
-						
-						
+                        
+                        
                     </div>
                     <!-- /.box-body -->
 
@@ -155,7 +91,7 @@
                         <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
                    
 
-                   <button type="submit" id="employeedocs" name="employeedocs" class="btn btn-primary pull-right"> Submit</button>
+                   <button type="submit" id="" name="" class="btn btn-primary pull-right"> Submit</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -196,19 +132,10 @@
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
     <!-- End Bootstrap File input -->
 
-    <!-- Date rane picker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
 
-    <!-- iCheck -->
-    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-            <!-- Date picker -->
-    <script src="/cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-        <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-
 
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
@@ -222,14 +149,14 @@
              document.getElementById("cancel").onclick = function () {
                  location.href = '/hr/emp_document';
              };
-		
-				//
-				 //Initialise Date picker picker elements
+        
+                //
+                 //Initialise Date picker picker elements
             $('input[name="expirydate"]').datepicker({              
                    format: 'dd/mm/yyyy', 
-				   autoclose: true        
+                   autoclose: true        
             });
-				//
+                //
            
            // $('form[name="employee-docs"]').attr('action', '/hr/emp_document/docs');
            //      $('#employeedocs').val("Submit"); 
@@ -283,6 +210,6 @@
         @endforeach
       
         });
-		
+        
     </script>
 @endsection

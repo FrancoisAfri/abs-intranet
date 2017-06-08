@@ -209,11 +209,15 @@ class AppraisalKPIResultsController extends Controller
 						{
 							$employeeCode = $val['employee_number'];
 							$employees = HRPerson::where('employee_number', $employeeCode)->first();
-							if (empty($employees->id)) continue;
-							$emp = HRPerson::find($employees->id)->load('jobTitle.kpiTemplate');
+							if ($employees) {
+								$employees->load('jobTitle.kpiTemplate');
+							} else continue;
+							//if (empty($employees->id)) continue;
+							//$emp = HRPerson::find($employees->id)->load('jobTitle.kpiTemplate');
 							// do this for loop inside each if statement
 							foreach ($kpis as $kip)
 							{
+								if (! $emp->jobTitle || ! $emp->jobTitle->kpiTemplate || ! $emp->jobTitle->kpiTemplate->id) continue;
 								if ($emp->jobTitle->kpiTemplate->id == $kip->template_id)
 								{
 									if ($uploadType == 1)

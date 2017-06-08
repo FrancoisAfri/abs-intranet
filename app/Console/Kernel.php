@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
     {
         //$filePath = '/storage/logs/tasks.log';
         //$schedule->command('send:statement')->everyMinute()->appendOutputTo($filePath);
-        $schedule->command('emptask:overdue')->daily();
+        //$schedule->command('emptask:overdue')->daily();
+        $schedule->command('emptask:overdue')->everyMinute();
     }
 
     /**

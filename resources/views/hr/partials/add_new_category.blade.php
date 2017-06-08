@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <div id="category-invalid-input-alert"></div>
-                    <div id="category-success-alert"></div>
+                    <div id="category-ssuccess-alert"></div>
                     <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">

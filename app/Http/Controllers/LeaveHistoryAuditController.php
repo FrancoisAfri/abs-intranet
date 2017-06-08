@@ -135,25 +135,7 @@ class LeaveHistoryAuditController extends Controller
         $leave_history->save();    
     }
     #draw history report according to search critea  
-#
-  
-    #
-   
-   
-    public function printreport(Request $request)
-    {
-        // $actionFrom = $actionTo = 0;
-        // $actionDate = $request->action_date;
-        // $userID = $request->user_id;
-        // $action = $request->action;
-        // $moduleName = $request->module_name;
-        // if (!empty($actionDate))
-        // {
-        //     $startExplode = explode('-', $actionDate);
-        //     $actionFrom = strtotime($startExplode[0]);
-        //     $actionTo = strtotime($startExplode[1]);
-        // }
-    }
+
     #
     #draw history report according to search critea
     public function getlevhistoryReport(Request $request)
@@ -208,7 +190,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
              ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],            //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-              ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+              ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
 
         ];
         $data['active_mod'] = 'leave';
@@ -270,14 +252,14 @@ class LeaveHistoryAuditController extends Controller
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
              ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],            //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-              ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+              ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
 
         ];
         $data['active_mod'] = 'leave';
-        $data['active_rib'] = 'Leave History Audit';
+        $data['active_rib'] = 'Leave History Report';
         $user = Auth::user()->load('person');
         $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'OSIZWENI EDUCATIONAL AND DEVELOPMENT \TRUST';
+        $data['company_name'] = 'Afrixcel Business Solution';
         $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
         $data['date'] = date("d-m-Y");
         AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
@@ -296,8 +278,8 @@ class LeaveHistoryAuditController extends Controller
         // return $request;
             $userID = $request['hr_person_id'];
             $LevTypID = $request['leave_types_id'];
-            $DivisionID =$request['division_level_2'];
-            $DepartmentID =$request['division_level_1'];
+            // $DivisionID =$request['division_level_2'];
+            // $DepartmentID =$request['division_level_1'];
             //$dateFrom = trim($request['date_from']); 
             $dateTo = trim($request['date_to']);;
             //return $dateTo;
@@ -316,7 +298,7 @@ class LeaveHistoryAuditController extends Controller
                     })
                     ->where(function ($query) use ($LevTypID) {
                       if (!empty($LevTypID)) {
-                        $query->where('leave_credit.leave_types_id', $LevTypID );
+                        $query->where('leave_credit.leave_type_id', $LevTypID );
                       }
                     })
                     //->GROUPBY('leave_credit.hr_id')
@@ -389,7 +371,7 @@ class LeaveHistoryAuditController extends Controller
         $data['active_rib'] = 'Leave History Audit';
         $user = Auth::user()->load('person');
         $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'OSIZWENI EDUCATIONAL AND DEVELOPMENT \TRUST';
+        $data['company_name'] = 'Afrixcel Business Solution';
         $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
         $data['date'] = date("d-m-Y");
         AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
@@ -407,8 +389,8 @@ class LeaveHistoryAuditController extends Controller
          //return $request;
             $userID = $request['hr_person_id'];
             $LevTypID = $request['leave_types_id'];
-            $DivisionID =$request['division_level_2'];
-            $DepartmentID =$request['division_level_1'];
+            // $DivisionID =$request['division_level_2'];
+            // $DepartmentID =$request['division_level_1'];
      
             $custom = DB::table('hr_people')                 
                         ->select('hr_people.*', 'type_profile.max as max','type_profile.leave_type_id as levID','type_profile.leave_profile_id as ProfID','leave_customs.hr_id as empID','leave_customs.number_of_days as Days','leave_types.name as leaveType')
@@ -428,11 +410,6 @@ class LeaveHistoryAuditController extends Controller
                               $query->where('type_profile.leave_type_id', $LevTypID );
                             }
                           })
-                            // if(){
-
-                            // }elseif (condition) {
-                            //   # code...
-                            // }
                           ->orderBy('type_profile.leave_type_id')
                           ->get();
                           return $custom;
@@ -441,8 +418,6 @@ class LeaveHistoryAuditController extends Controller
                     $data['userID'] = $userID;
                     $data['LevTypID'] = $LevTypID;
                     $data['custom'] = $custom;
-                    $data['DivisionID'] = $DivisionID;
-                    $data['DepartmentID'] = $DepartmentID;
                     $data['page_title'] = "Leave Reports";
                     $data['page_description'] = "Leave Report";
                     $data['breadcrumb'] = [
@@ -466,8 +441,7 @@ class LeaveHistoryAuditController extends Controller
          //return $request;
             $userID = $request['hr_person_id'];
             $LevTypID = $request['leave_types_id'];
-            // $DivisionID =$request['division_level_2'];
-            // $DepartmentID =$request['division_level_1'];
+            
            # $dateFrom = trim($request['date_from']); 
            # $dateTo = trim($request['date_to']);;
             //return $dateTo;
@@ -521,13 +495,11 @@ class LeaveHistoryAuditController extends Controller
                     $data['userID'] = $userID;
                     $data['LevTypID'] = $LevTypID;
                     $data['custom'] = $custom;
-                    // $data['DivisionID'] = $DivisionID;
-                    // $data['DepartmentID'] = $DepartmentID;
                     $data['page_title'] = "Leave Reports";
                     $data['page_description'] = "Leave Report";
                     $data['breadcrumb'] = [
                          ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],            //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-                          ['title' => 'Leave Taken Audit', 'active' => 1, 'is_module' => 0]
+                          ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
                     ];
                     $data['active_mod'] = 'leave';
                     $data['active_rib'] = 'Leave Reports';
@@ -548,8 +520,8 @@ class LeaveHistoryAuditController extends Controller
         //return $request;
             $userID = $request['hr_person_id'];
             $LevTypID = $request['leave_types_id'];
-            $DivisionID =$request['division_level_2'];
-            $DepartmentID =$request['division_level_1'];
+            // $DivisionID =$request['division_level_2'];
+            // $DepartmentID =$request['division_level_1'];
            # $dateFrom = trim($request['date_from']); 
            # $dateTo = trim($request['date_to']);;
             //return $dateTo;
@@ -605,8 +577,8 @@ class LeaveHistoryAuditController extends Controller
                     $data['userID'] = $userID;
                     $data['LevTypID'] = $LevTypID;
                     $data['custom'] = $custom;
-                    $data['DivisionID'] = $DivisionID;
-                    $data['DepartmentID'] = $DepartmentID;
+                    // $data['DivisionID'] = $DivisionID;
+                    // $data['DepartmentID'] = $DepartmentID;
                     $data['page_title'] = "Leave Reports";
                     $data['page_description'] = "Leave Report";
                     $data['breadcrumb'] = [

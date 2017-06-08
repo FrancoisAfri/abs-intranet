@@ -18,15 +18,23 @@ class HrController extends Controller
     }
     public function showSetup() {
     	$division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
+        $Qualif_type = DB::table('Qualification_type')->orderBy('status', 1)->get();
+        $Doc_type = DB::table('doc_type')->orderBy('active', 1)->get();
+       
+        $data['Qualif_type'] = $Qualif_type;
+        $data['Doc_type'] = $Doc_type;
         $data['page_title'] = "HR";
         $data['page_description'] = "Employee records";
         $data['breadcrumb'] = [
             ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
+
+       
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'setup';
         $data['division_types'] = $division_types;
+        $data['Qualif_type'] = $Qualif_type;
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('hr.setup')->with($data);
     }
