@@ -96,12 +96,14 @@ class InductionAdminController extends Controller
 					$description = !empty($inductionData['description_'.$libraryID]) ? $inductionData['description_'.$libraryID] : '';
 					$duedate = !empty($inductionData['due_date_'.$libraryID]) ? $inductionData['due_date_'.$libraryID] : '';
 					$startDate = !empty($inductionData['start_date_'.$libraryID]) ? $inductionData['start_date_'.$libraryID] : '';
-					$escalationID = !empty($inductionData['escalation_id_'.$libraryID]) ? $inductionData['escalation_id_'.$libraryID] : 0;
+					$administratorID = !empty($inductionData['administrator_id'.$libraryID]) ? $inductionData['administrator_id'.$libraryID] : 0;
 					$employeeID = !empty($inductionData['employee_id_'.$libraryID]) ? $inductionData['employee_id_'.$libraryID] : 0;
 					$orderNo = !empty($inductionData['order_no_'.$libraryID]) ? $inductionData['order_no_'.$libraryID] : 0;
 					$uploadRequired = !empty($inductionData['upload_required_'.$libraryID]) ? $inductionData['upload_required_'.$libraryID] : 0;
-					TaskManagementController::store($description,$duedate,$startDate,$escalationID,$employeeID,1
-					,$orderNo,$libraryID,0,$uploadRequired,0,$ClientInduction->id);
+					$escalationPerson = HRPerson::where('id', $employeeID)->first();
+					$escalationPerson->manager_id = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
+					TaskManagementController::store($description,$duedate,$startDate,$escalationPerson->manager_id,$employeeID,1
+					,$orderNo,$libraryID,0,$uploadRequired,0,$ClientInduction->id, $administratorID);
 				}
 			}
 		}
@@ -120,9 +122,12 @@ class InductionAdminController extends Controller
     {
         if ($induction->status == 1) 
 		{
+			$user = Auth::user()->load('person');
+			$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 			$tasks = DB::table('employee_tasks')
-			->select('employee_tasks.description','employee_tasks.order_no','employee_tasks.notes'
+			->select('employee_tasks.id as task_id','employee_tasks.employee_id','employee_tasks.upload_required'
+			,'employee_tasks.description','employee_tasks.order_no','employee_tasks.notes'
 			,'employee_tasks.status','employee_tasks.date_completed'
 			,'hr_people.first_name as hr_fist_name','hr_people.surname as hr_surname'
 			, 'employee_tasks_documents.document as emp_doc')
@@ -143,9 +148,11 @@ class InductionAdminController extends Controller
 			$data['active_mod'] = 'Induction';
 			$data['active_rib'] = 'Induction Search';
 			$data['induction'] = $induction;
+			$data['user'] = $user;
+			$data['employees'] = $employees;
 			$data['tasks'] = $tasks;
 			$data['taskStatus'] = $taskStatus;
-			//return $tasks;
+			//return $data;
 			AuditReportsController::store('Induction', 'Induction Details Page Accessed', "Accessed by User", 0);
 			return view('induction.view_induction')->with($data);
 		}
