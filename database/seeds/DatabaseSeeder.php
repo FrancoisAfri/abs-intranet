@@ -373,29 +373,29 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Document Type';
-        $ribbon->description = 'Document Type';
-        $ribbon->ribbon_path = 'hr/document';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Document Type';
+        // $ribbon->description = 'Document Type';
+        // $ribbon->ribbon_path = 'hr/document';
+        // $ribbon->access_level = 4;
+        // $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Employees Documents';
-        $ribbon->description = 'Employees Documents';
-        $ribbon->ribbon_path = 'hr/emp_document';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 4;
+        // $ribbon->ribbon_name = 'Employees Documents';
+        // $ribbon->description = 'Employees Documents';
+        // $ribbon->ribbon_path = 'hr/emp_document';
+        // $ribbon->access_level = 4;
+        // $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
-        $ribbon->ribbon_name = 'Employee Qualifications';
-        $ribbon->description = 'Employee Qualifications';
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
         $ribbon->ribbon_path = 'hr/emp_qualification';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
@@ -409,14 +409,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 7;
-        $ribbon->ribbon_name = 'Employee Search';
-        $ribbon->description = 'Employee Search';
-        $ribbon->ribbon_path = 'hr/emp_search';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 7;
+        // $ribbon->ribbon_name = 'Employee Search';
+        // $ribbon->description = 'Employee Search';
+        // $ribbon->ribbon_path = 'hr/emp_search';
+        // $ribbon->access_level = 4;
+        // $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
@@ -741,7 +741,7 @@ class DatabaseSeeder extends Seeder
         $type->description = 'Special Leave Type' ;
         $type->save();
 
-        //#insert leave profilse
+        //#insert leave profiles
         $profile = new leave_profile();
         $profile->name = 'Employee with no leave';
         $profile->description = 'Employee with no leave' ;

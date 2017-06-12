@@ -314,6 +314,7 @@
             else if (allType == 2) { //resert leave
                  $('.to-field').show();
                  $('.from-field').hide();
+                 $('.manual-field').hide();
                 $('.levAction-field').hide();
                  $('.date-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavebal');
