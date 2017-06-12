@@ -126,7 +126,9 @@ class InductionAdminController extends Controller
 			$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 			$tasks = DB::table('employee_tasks')
-			->select('employee_tasks.id as task_id','employee_tasks.employee_id','employee_tasks.upload_required'
+			->select('employee_tasks.id as task_id','employee_tasks.employee_id','employee_tasks.start_date'
+			,'employee_tasks.due_date'
+			,'employee_tasks.administrator_id','employee_tasks.upload_required'
 			,'employee_tasks.description','employee_tasks.order_no','employee_tasks.notes'
 			,'employee_tasks.status','employee_tasks.date_completed'
 			,'hr_people.first_name as hr_fist_name','hr_people.surname as hr_surname'
