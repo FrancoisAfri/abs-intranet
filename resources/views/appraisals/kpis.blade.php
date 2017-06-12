@@ -124,8 +124,8 @@
             });
 
             //show/hide fields
-            hideFields($('#add-new-kpi-modal').find('#is_upload'));
-            hideTaskTypeField($('#add-new-kpi-modal').find('#is_task_kpi'));
+            hideFields('add-new-kpi-modal', 'is_upload');
+            hideTaskTypeField('add-new-kpi-modal', 'is_task_kpi');
 
             //pass category data to the edit category modal
             $('#edit-kpi-modal').on('show.bs.modal', function (e) {
@@ -152,13 +152,13 @@
                 modal.find('#indicator').val(Indicator);
                 modal.find('#kpa_id').val(kpaId);
                 modal.find('#category_id').val(CategoryId);
-                modal.find('select#category_id').val(CategoryId);
-                modal.find('select#kpa_id').val(kpaId);
-                modal.find('select#kpi_type').val(KpiType);
-                modal.find('select#is_upload').val(IsUpload);
-                modal.find('select#upload_type').val(UploadType);
-                modal.find('select#is_task_kpi').val(isTaskKPI);
-                modal.find('select#kpi_task_type').val(taskType);
+                modal.find('select#category_id').val(CategoryId).trigger("change");
+                modal.find('select#kpa_id').val(kpaId).trigger("change");
+                modal.find('select#kpi_type').val(KpiType).trigger("change");
+                modal.find('select#is_upload').val(IsUpload).trigger("change");
+                modal.find('select#upload_type').val(UploadType).trigger("change");
+                modal.find('select#is_task_kpi').val(isTaskKPI).trigger("change");
+                modal.find('select#kpi_task_type').val(taskType).trigger("change");
             });
 
             //function to post category form to server using ajax
@@ -255,35 +255,37 @@
            // $('#upload_type_div').hide();
         });
 		//function to hide/show manual or file upload fields
-        function hideFields(ddBox)
+        function hideFields(modalID, ddBox)
 		{
-            var uploadID = $(ddBox).val();
+            var modalWindow = $('#'+modalID);
+            var uploadID = modalWindow.find('#'+ddBox).val();
             if (uploadID == 1)
 			{
-				$('#upload_type_div').show();
-				$('.task-kpi').hide();
-				$("#upload_type").prop('disabled', false).prop('required',true);
+				modalWindow.find('#upload_type_div').show();
+				modalWindow.find('.task-kpi').hide();
+				modalWindow.find("#upload_type").prop('disabled', false).prop('required',true);
 			}
             else if (uploadID == 2)
 			{
-				$('#upload_type_div').hide();
-                $('.task-kpi').show();
-				$("#upload_type").prop('disabled', true).prop('required',false);
+				modalWindow.find('#upload_type_div').hide();
+                modalWindow.find('.task-kpi').show();
+				modalWindow.find("#upload_type").prop('disabled', true).prop('required',false);
 			}
         }
         //function to hide/show task type field
-        function hideTaskTypeField(ddBox)
+        function hideTaskTypeField(modalID, ddBox)
         {
-            var isTaskKPI = $(ddBox).val();
+            var modalWindow = $('#'+modalID);
+            var isTaskKPI = modalWindow.find('#'+ddBox).val();
             if (isTaskKPI == 1)
             {
-                $('#task-type-div').show();
-                $("#kpi_task_type").prop('disabled', false).prop('required',true);
+                modalWindow.find('#task-type-div').show();
+                modalWindow.find("#kpi_task_type").prop('disabled', false).prop('required',true);
             }
             else if (isTaskKPI == 0)
             {
-                $('#task-type-div').hide();
-                $("#kpi_task_type").prop('disabled', true).prop('required',false);
+                modalWindow.find('#task-type-div').hide();
+                modalWindow.find("#kpi_task_type").prop('disabled', true).prop('required',false);
             }
         }
 		function hideexisting() 
