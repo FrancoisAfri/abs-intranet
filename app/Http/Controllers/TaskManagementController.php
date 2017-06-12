@@ -140,7 +140,7 @@ class TaskManagementController extends Controller
 			'date_completed' => $dateCompleted,
 			'notes' => $notes
 		]);
-		$task = EmployeeTasks::where('id', $endData['task_id'])->first();
+		/*$task = EmployeeTasks::where('id', $endData['task_id'])->first();
 		if (!empty($task->is_dependent) && $task->is_dependent == 1&& !empty($task->induction_id))
 		{
 			$next = $task->order_no + 1;
@@ -156,7 +156,7 @@ class TaskManagementController extends Controller
 				Mail::to($employee->email)->send(new NextTaskNotifications($employee, $task));
 				
 			}
-		}
+		}*/
 		AuditReportsController::store('Task Management', "Task Ended", "Edited by User", 0);
 		return response()->json(['employee_id' => $endtask->employee_id], 200);
     }
@@ -167,7 +167,7 @@ class TaskManagementController extends Controller
      * @return \Illuminate\Http\Response
     */
     public static function store($description='',$duedate='',$startDate='',$escalationID=0,$employeeID=0,$taskType=0
-	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0)
+	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0)
     {
 		//convert dates to unix time stamp
         if (!empty($duedate)) {
@@ -197,6 +197,7 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->description = $description;
 		$EmployeeTasks->due_date = $intduedate;
 		$EmployeeTasks->start_date = $intstartDate;
+		$EmployeeTasks->administrator_id = $administratorID;
 		// Save task
         $EmployeeTasks->save();
 		# Send Email to employee

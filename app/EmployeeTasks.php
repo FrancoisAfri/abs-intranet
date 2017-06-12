@@ -15,7 +15,7 @@ class EmployeeTasks extends Model
 		, 'duration', 'description', 'notes', 'priority'
 		, 'task_type', 'upload_required', 'status', 'start_date', 'date_started'
 		, 'date_completed', 'date_paused', 'due_date', 'induction_id', 'meeting_id'
-		, 'is_dependent'
+		, 'is_dependent', 'administrator_id'
     ];
 
     //relationship between EmployeeTasks and employeetasksDocument
