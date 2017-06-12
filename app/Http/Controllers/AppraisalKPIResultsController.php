@@ -217,8 +217,8 @@ class AppraisalKPIResultsController extends Controller
 							// do this for loop inside each if statement
 							foreach ($kpis as $kip)
 							{
-								if (! $emp->jobTitle || ! $emp->jobTitle->kpiTemplate || ! $emp->jobTitle->kpiTemplate->id) continue;
-								if ($emp->jobTitle->kpiTemplate->id == $kip->template_id)
+								if (! $employees->jobTitle || ! $employees->jobTitle->kpiTemplate || ! $employees->jobTitle->kpiTemplate->id) continue;
+								if ($employees->jobTitle->kpiTemplate->id == $kip->template_id)
 								{
 									if ($uploadType == 1)
 										$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
