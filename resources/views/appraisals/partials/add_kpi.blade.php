@@ -115,7 +115,7 @@
 								<span class="input-group-addon">
 								  <i class="fa fa-black-tie"></i>
 								</span>
-                                <select id="is_upload" name="is_upload" class="form-control select2" onchange="hideFields(this);"
+                                <select id="is_upload" name="is_upload" class="form-control select2" onchange="hideFields('add-new-kpi-modal', 'is_upload');"
                                         style="width: 100%;" required>
                                     <option value="1">Yes</option>
                                     <option value="2">No</option>
@@ -142,7 +142,7 @@
                     <div class="form-group existing_one task-kpi" id="">
                         <label for="is_task_kpi" class="col-sm-3 control-label">Is Task KPI</label>
                         <div class="col-sm-9">
-                                <select id="is_task_kpi" name="is_task_kpi" class="form-control select2" style="width: 100%;" onchange="hideTaskTypeField(this);">
+                                <select id="is_task_kpi" name="is_task_kpi" class="form-control select2" style="width: 100%;" onchange="hideTaskTypeField('add-new-kpi-modal', 'is_task_kpi');">
                                     <option value="1">Yes</option>
                                     <option value="0" selected>No</option>
                                 </select>
