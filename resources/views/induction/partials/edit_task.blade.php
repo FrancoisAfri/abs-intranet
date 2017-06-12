@@ -36,7 +36,6 @@
                                 <select id="upload_required" name="upload_required" class="form-control">
                                     <option value="1">No</option>
                                     <option value="2">Yes</option>
-                                    
 								</select>
                             </div>
                         </div>

@@ -69,13 +69,9 @@
                                 <td>
                                 <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$approval->id}}" onclick="postData({{$approval->id}}, 'approval_id')">Accept</button>
 
-                               </td>
-                               <td>
-            
-          <button type="button" id="reject-reason" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#reject-leave-modal" data-id="{{ $approval->id }}" onclick="reject({{$approval->id}},'reject_id' data-description="{{ $approval->reject_reason }}"  > </i> Decline</button>   
-
-
-                                </td>
+                               </td>     
+           <td><button type="button" id="reject-reason" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#reject-leave-modal" data-id="{{ $approval->id }}" onclick="reject({{$approval->id}},'reject_id' data-description="{{ $approval->reject_reason }}"  > </i> Decline</button></td>  
+                               
                     @endforeach
                         </tbody>
                         <tfoot>
@@ -142,6 +138,7 @@
          if (data == 'approval_id') location.href = "/leave/approval/" + id;
        }
         function reject(id, data) {
+          alert(id)
          if (data == 'reject_id') location.href = "/leave/reject/" + id;
        }
 

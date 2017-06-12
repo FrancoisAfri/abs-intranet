@@ -40,7 +40,7 @@ class DocumentTypeController extends Controller
         return view('hr.document')->with($data);
     }
 
-     public function addList(Request $request, doc_type $doc_type) {
+     public function addList(Request $request, doc_type_category $doc_type) {
         $this->validate($request, [
             'name' => 'required',
             'description'=> 'required',
@@ -109,10 +109,13 @@ class DocumentTypeController extends Controller
 		        $docData = $request->all();
 		        unset($docData['_token']);
 
-		        $doc_type_category = new doc_type_category($docData);
-		      	$doc_type_category->name = $request->input('name');
-		        $doc_type_category->description = $request->input('description');
-		        $doc_type_category->save();
+		        //$doc_type_category = new doc_type_category($docData);
+                $docType = new doc_type($docData);
+                $doc_type_category->addDocue($docType);
+
+		      	// $doc_type_category->name = $request->input('name');
+		       //  $doc_type_category->description = $request->input('description');
+		       //  $doc_type_category->save();
 		        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
 		        return response()->json();
 
@@ -136,7 +139,7 @@ class DocumentTypeController extends Controller
 		        ]);
 		        //save the changes
 		        $catData=$request->all();
-		        $doc_type_category->update($catData);
+		        $doc_type_category->addDocue($catData);
 		        AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
 		     }
 

@@ -259,10 +259,16 @@ Route::patch('/hr/category/{doc_type_category}', 'DocumentTypeController@updateD
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
+// Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewQul');
 Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
+Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@Searchdoc');
+Route::post('/hr/emp_doc/Search', 'EmployeeDocumentsController@Searchdoc');
+Route::post('/hr/emp_qual/Search', 'EmployeeDocumentsController@Searchqul');
 
 #Employees Qualifications Module
 Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
+Route::post('/hr/emp_qual/Search', 'EmployeeQualificationsController@Searchqul');
+Route::post('/hr/upload/{docs}', 'EmployeeQualificationsController@uploadDocs');
 
 #Employees upload
 Route::get('/employee_upload', 'EmployeeUploadController@index');
@@ -271,10 +277,20 @@ Route::get('/employees_upload', 'EmployeeUploadController@store');
 #Employee Search
 Route::get('/hr/emp_search', 'EmployeeSearchController@index');
 Route::post('/hr/users_search', 'EmployeeSearchController@getSearch');
+
 # Company setup Module
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
 Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupController@updateLevel');
+#Add qualification Type
+Route::post('hr/addqultype', 'EmployeeCompanySetupController@addqualType');
+Route::get('/hr/addqul/{sta}', 'EmployeeCompanySetupController@QualAct');
+Route::post('hr/qul_type_edit/{qul}', 'EmployeeCompanySetupController@editQualType');
+#DocType
+Route::post('hr/addDoctype', 'EmployeeCompanySetupController@addDocType');
+Route::get('/hr/adddoc/{sta}', 'EmployeeCompanySetupController@DocAct');
+Route::post('/hr/Doc_type_edit/{doc}', 'EmployeeCompanySetupController@editDocType');
+
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
 Route::get('/hr/child_setup/{level}/{parent_id}', 'EmployeeCompanySetupController@viewchildLevel');

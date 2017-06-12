@@ -42,9 +42,9 @@
                         </div>
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="doc_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-document-modal">Add </button>  
+                     <button type="button" id="doc_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-document-modal">Add Document</button>  
 
-                       <a type="button" href="/hr/document" id="" class="btn btn-default pull-left">Back</a> 
+                      <!--  <a type="button" href="/hr/document" id="" class="btn btn-default pull-left">Back</a>  -->
                     </div>
         </div>
             </div>
