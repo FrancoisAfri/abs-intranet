@@ -4,7 +4,6 @@
             <form class="form-horizontal" name="end-task-form" enctype="multipart/form-data">
 			<input type="hidden" name="task_id" id="task_id" value="">
                 {{ csrf_field() }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -34,18 +33,6 @@
 							<option value="{{ $employee->id }}">{{ $employee->first_name.' '.$employee->surname}}</option>
 						@endforeach
 						</select> </div>
-                    </div>
-					<div class="form-group">
-                        <label for="notes" class="col-sm-2 control-label">Start Date</label>
-                        <div class="col-sm-10">
-						<input type="text" class="form-control datepicker" id="start_date" name="start_date" value="" placeholder="Start Date...">
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <label for="notes" class="col-sm-2 control-label">Due Date</label>
-                        <div class="col-sm-10">
-						<input type="text" class="form-control datepicker" id="due_date" name="due_date" value="" placeholder="Due Date...">
-                        </div>
                     </div>
 					<div class="form-group">
                         <label for="notes" class="col-sm-2 control-label">Administrator</label>

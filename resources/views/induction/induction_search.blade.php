@@ -87,6 +87,9 @@
             </div>
             <!-- /.box -->
         </div>
+		@if(Session('success_delete'))
+            @include('contacts.partials.success_action', ['modal_title' => "Induction Deleted!", 'modal_content' => session('success_delete')])
+        @endif
         <!-- End new User Form-->
     </div>
     @endsection
@@ -138,6 +141,26 @@
 			endDate: '-1d',
 			autoclose: true
 		});
+		
+		 //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                        dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
+            });
+
+		 //Show success action modal
+            $('#success-action-modal').modal('show');
         });
         //Phone mask
         $("[data-mask]").inputmask();

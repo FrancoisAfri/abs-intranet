@@ -143,31 +143,36 @@
             });
 			// Call Edit task modal
 			$('#edit-tasks-modal').on('show.bs.modal', function (e) {
-				//console.log('kjhsjs');
 				var btnEdit = $(e.relatedTarget);
-				taskID = btnEdit.data('id');
+				taskID = btnEdit.data('task_id');
 				var orderNo = btnEdit.data('order_no');
 				var uploadRequired = btnEdit.data('upload_required');
 				var Description = btnEdit.data('description');
+				var EmployeeID = btnEdit.data('employee_id');
+				var AdministratorID = btnEdit.data('administrator_id');
 				var modal = $(this);
 				modal.find('#order_no').val(orderNo);
 				modal.find('#upload_required').val(uploadRequired);
 				modal.find('#description').val(Description);
+				modal.find('#employee_id').val(EmployeeID);
+				modal.find('#administrator_id').val(AdministratorID);
 			});
 			// Update task
 			$('#update-task').on('click', function () {
             var strUrl = '/tasks/update/' + taskID;
             var objData = {
-                order_no: $('#edit-library_tasks-modal').find('#order_no').val()
-                , description: $('#edit-library_tasks-modal').find('#description').val()
-                , upload_required: $('#edit-library_tasks-modal').find('#upload_required').val()
-                , _token: $('#edit-library_tasks-modal').find('input[name=_token]').val()
+                order_no: $('#edit-tasks-modal').find('#order_no').val()
+                , description: $('#edit-tasks-modal').find('#description').val()
+                , upload_required: $('#edit-tasks-modal').find('#upload_required').val()
+                , employee_id: $('#edit-tasks-modal').find('#employee_id').val()
+                , administrator_id: $('#edit-tasks-modal').find('#administrator_id').val()
+                , _token: $('#edit-tasks-modal').find('input[name=_token]').val()
             };
-            var modalID = 'edit-library_tasks-modal';
-            var submitBtnID = 'update-library_tasks';
-            var redirectUrl = '/induction/tasks_library';
+            var modalID = 'edit-tasks-modal';
+            var submitBtnID = 'update-task';
+            var redirectUrl = '/induction/' + {{$induction->id}} + '/view';
             var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'Task type has been changed successfully.';
+            var successMsg = 'Task details has been updated successfully.';
             var method = 'PATCH';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
         });
