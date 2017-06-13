@@ -198,6 +198,7 @@
 							<th>Order #</th>
 							<th>Description</th>
 							<th>Due Date</th>
+							<th>Client Name</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -208,6 +209,7 @@
 							<td>{{ (!empty($task->order_no)) ?  $task->order_no : ''}}</td>
 							<td>{{ (!empty($task->description)) ?  $task->description : ''}}</td>
 							<td>{{ (!empty($task->due_date)) ?  date('Y-m-d',$task->due_date) : ''}}</td>
+							<td>{{ (!empty($task->client_name)) ?  $task->client_name : ''}}</td>
 							<td>
 							<!-- @if($isSuperuser)
 							{{ $topGroupLvl->plural_name }}
