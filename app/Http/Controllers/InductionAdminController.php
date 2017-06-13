@@ -434,6 +434,15 @@ class InductionAdminController extends Controller
 		AuditReportsController::store('Induction', 'Print with Search Results', "Print with Results", 0);
         return view('induction.reports.induction_print')->with($data);
     }
+	public function deleteInduction(ClientInduction $induction)
+	{
+		# Delete record form database
+		$name = $induction->induction_title;
+		AuditReportsController::store('Induction', 'Induction Deleted', "Del: $name ", 0);
+		DB::table('client_inductions')->where('id', '=', $induction->id)->delete();
+		DB::table('employee_tasks')->where('induction_id', '=', $induction->id)->delete();
+		return redirect('/induction/search')->with('success_delete', "Induction Successfully Deleted.");
+	}
 	/*public function excel() {
 
     // Execute the query used to retrieve the data. In this example
