@@ -212,7 +212,7 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpa_id = $request->input('kpa_id');
 		$kpi->kpi_type = $request->input('kpi_type');
 		$kpi->is_upload = $request->input('is_upload');
-		$kpi->upload_type = ($request->input('is_upload') == 1) ? $request->input('upload_type') : null;
+		$kpi->upload_type = ((int) $request->input('is_upload') === 1) ? $request->input('upload_type') : null;
 		$kpi->is_task_kpi = ($request->input('is_upload') == 2) ? $request->input('is_task_kpi') : null;
 		$kpi->kpi_task_type = ($request->input('is_upload') == 2 && $request->input('is_task_kpi') == 1) ? $request->input('kpi_task_type') : null;
 
