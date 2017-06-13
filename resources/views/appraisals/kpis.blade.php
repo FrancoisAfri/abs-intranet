@@ -147,7 +147,7 @@
                 modal.find('#weight').val(Weight);
                 modal.find('#kpi_type').val(KpiType);
                 modal.find('#is_upload').val(IsUpload);
-                modal.find('#upload_type').val(UploadType);
+                //modal.find('#upload_type').val(UploadType);
                 modal.find('#source_of_evidence').val(SourceOfEvidence);
                 modal.find('#indicator').val(Indicator);
                 modal.find('#kpa_id').val(kpaId);
