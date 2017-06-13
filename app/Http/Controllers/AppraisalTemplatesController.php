@@ -202,7 +202,9 @@ class AppraisalTemplatesController extends Controller
             'kpa_id' => 'bail|required|integer|min:0',       
             'category_id' => 'bail|required|integer|min:0',       
             'kpi_type' => 'bail|required|integer|min:0',        
-            'is_upload' => 'bail|required|integer|min:0',        
+            'is_upload' => 'bail|required|integer|min:0',
+            'kpi_task_type' => 'bail|required_if:is_task_kpi,1',
+            'upload_type' => 'bail|required_if:is_upload,1',
         ]);
 		$kpi->measurement = $request->input('measurement');
 		$kpi->weight = $request->input('weight');
