@@ -12,6 +12,19 @@
                 <div class="modal-body">
                     <div id="task-invalid-input-alert"></div>
                     <div id="task-success-alert"></div>
+					<div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">Choose {{$dept->name}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <select class="form-control select2" style="width:150px;" id="dept_id" name="dept_id">
+						<option selected="selected" value="0">*** Select {{$dept->name}} ***</option>
+						@foreach($deparments as $deparment)
+							<option value="{{ $deparment->id }}">{{ $deparment->name}}</option>
+						@endforeach
+						</select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Order No</label>
                         <div class="col-sm-9">

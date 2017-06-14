@@ -301,6 +301,7 @@ Route::get('/hr/firstchild/{parentLevel}/{childID}/activate', 'EmployeeCompanySe
 Route::get('/induction/create', 'InductionAdminController@index');
 Route::get('/induction/search', 'InductionAdminController@search');
 Route::get('/induction/{induction}/view', 'InductionAdminController@show');
+Route::get('/induction/delete/{induction}', 'InductionAdminController@deleteInduction');
 Route::get('/induction/tasks_library', 'TaskLibraryController@index');
 Route::post('induction/add_library_task', 'TaskLibraryController@store');
 Route::post('induction/client_add', 'InductionAdminController@store');
@@ -309,6 +310,7 @@ Route::patch('/induction/tasks_library_edit/{TaskLibrary}', 'TaskLibraryControll
 Route::get('/induction/library_tasks_activate/{TaskLibrary}', 'TaskLibraryController@actDeact');
 Route::get('/task/start/{task}', 'TaskManagementController@startTask');
 Route::get('/task/pause/{task}', 'TaskManagementController@pauseTask');
+Route::patch('/tasks/update/{task}', 'TaskManagementController@update');
 Route::post('/task/end', 'TaskManagementController@endTask');
 Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');

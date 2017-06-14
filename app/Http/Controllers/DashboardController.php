@@ -90,11 +90,14 @@ class DashboardController extends Controller
 			$tasks = DB::table('employee_tasks')
 			->select('employee_tasks.description','employee_tasks.start_date'
 			,'employee_tasks.employee_id','employee_tasks.upload_required'
-			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date','employee_tasks.id as task_id')
+			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date'
+			,'employee_tasks.id as task_id','contact_companies.name as client_name')
+			->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
+			->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
 			->where('employee_tasks.employee_id', $user->person->id)
 			->where('employee_tasks.start_date', '<=', $today)
 			->where('employee_tasks.status', '<', 4)
-			->orderBy('employee_tasks.id')
+			->orderBy('client_name')
 			->orderBy('employee_tasks.order_no')
 			->get();
 			//return $tasks;

@@ -11,7 +11,7 @@ class TaskLibrary extends Model
 	
 	// Mass assignable fields
     protected $fillable = [
-        'order_no', 'description', 'upload_required', 'active'];
+        'order_no', 'description', 'upload_required', 'active', 'dept_id'];
 		
 	//Relationship library and tasks
     public function TaskLibraryTasks() {

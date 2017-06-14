@@ -68,6 +68,9 @@
         @if(Session('success_add'))
             @include('contacts.partials.success_action', ['modal_title' => "New User Added!", 'modal_content' => session('success_add')])
         @endif
+		@if(Session('success_delete'))
+            @include('contacts.partials.success_action', ['modal_title' => "User Deleted!", 'modal_content' => session('success_delete')])
+        @endif
     </div>
 @endsection
 @section('page_script')

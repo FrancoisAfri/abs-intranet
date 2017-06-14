@@ -62,6 +62,40 @@ class InductionCronController extends Controller
 			AuditReportsController::store('Task Management', "Cron Tasks Ran", "Automatic Ran by Server", 0);
 		}
 		else
+		AuditReportsController::store('Task Management', "Cron Tasks Ran", "Automatic Ran by Server no data to process", 0);//$today = strtotime(date('Y-m-d'));
+		
+		$Thirthydays    = mktime(0, 0, 0, date('m'), date('d')+30, date('Y'));
+		$SIxtydays    = mktime(0, 0, 0, date('m'), date('d')+60, date('Y'));
+		$escalationTasks = DB::table('employee_tasks')
+		->select('employee_tasks.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+		->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+		->where('employee_tasks.due_date', '<=', $today)
+		->where('employee_tasks.status', '<', 4)
+		->orderBy('employee_tasks.order_no')
+		->get();
+		if (!empty($escalationTasks))
+		{
+			foreach ($escalationTasks as $task)
+			{
+				$employeeName = $task->firstname.' '.$task->surname;
+							
+				if(!empty($task->employee_id))
+				{
+					# Send Email to employee
+					$employee = HRPerson::where('id', $task->employee_id)->first();
+					
+					Mail::to($employee->email)->send(new InductionCronEmail($employee, $task->description));
+					# Send Email to escalation person
+					if(!empty($employee->manager_id))
+					{
+						$manager = HRPerson::where('id', $employee->manager_id)->first();
+						Mail::to($manager->email)->send(new InductionCronEscalationEmail($manager, $task->description, $employee));
+					}
+				}
+			}
+			AuditReportsController::store('Task Management', "Cron Tasks Ran", "Automatic Ran by Server", 0);
+		}
+		else
 		AuditReportsController::store('Task Management', "Cron Tasks Ran", "Automatic Ran by Server no data to process", 0);
     }
 }

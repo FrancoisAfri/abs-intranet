@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class TaskManagementController extends Controller
 {
@@ -206,6 +207,29 @@ class TaskManagementController extends Controller
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
 		//if ($taskType == 3)
 			//return redirect('/education/activity/' . $activity->id . '/view')->with('success_add', "The task has been added successfully");
+    }
+	
+	public function update(Request $request, EmployeeTasks $task)
+    {
+		//convert dates to unix time stamp
+        $this->validate($request, [       
+            'description' => 'required',       
+            'order_no' => 'bail|required|integer|min:1',       
+            'upload_required' => 'bail|required|integer|min:1',       
+            'employee_id' => 'bail|required|integer|min:1',        
+            'administrator_id' => 'bail|required|integer|min:1',        
+        ]);
+		
+		$task->order_no = $request->input('order_no');
+		$task->upload_required = $request->input('upload_required');
+		$task->employee_id = $request->input('employee_id');
+		$task->description = $request->input('description');
+		$task->administrator_id = $request->input('administrator_id');
+
+        $task->update();
+		$description = $request->input('description');
+        AuditReportsController::store('Task Management', 'task Informations Updated', "Updated by User", 0);
+        return response()->json(['new_description' => $description], 200);
     }
 	// draw audit report acccording to search criteria
 	public function getReport(Request $request)
