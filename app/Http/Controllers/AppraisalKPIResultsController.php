@@ -228,7 +228,7 @@ class AppraisalKPIResultsController extends Controller
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
 									{// 1 for late, 2 for not late
 										$attendance = 2;
-										if (!empty($val['entry']))
+										if (!empty($val['entry']) && !empty($val['normal_time']))
 										{
 											$entryDate =  explode(" ", $val['entry']);
 											$normalTimeDate = explode(" ", $val['normal_time']);
@@ -284,10 +284,10 @@ class AppraisalKPIResultsController extends Controller
 				if(!empty($insert))
 				{
 					if ($uploadType == 1)
-						
 						AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2)
-						AppraisalClockinResults::insert($insert);
+						die('do you get here');
+						//AppraisalClockinResults::insert($insert);
 					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");	
 				}
 
