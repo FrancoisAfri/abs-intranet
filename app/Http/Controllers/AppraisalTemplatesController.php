@@ -215,10 +215,9 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpi_type = $request->input('kpi_type');
 		$kpi->is_upload = $request->input('is_upload');
 		$kpi->upload_type = ((int) $request->input('is_upload') === 1) ? $request->input('upload_type') : null;
-		$kpi->is_task_kpi = ($request->input('is_upload') == 2) ? $request->input('is_task_kpi') : null;
+		$kpi->is_task_kpi = ($request->input('is_upload') == 2) ? !empty($request->input('is_task_kpi')) ? $request->input('is_task_kpi') : null : null;
 		$kpi->kpi_task_type = ($request->input('is_upload') == 2 && $request->input('is_task_kpi') == 1) ? $request->input('kpi_task_type') : null;
-
-        $kpi->update();
+		$kpi->update();
 		$newtemplate = $request->input('indicator');
         AuditReportsController::store('Performance Appraisal', 'KPI Informations Edited', "Edited by User", 0);
         return response()->json(['new_template' => $newtemplate], 200);
