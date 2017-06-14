@@ -240,7 +240,7 @@ class AppraisalKPIResultsController extends Controller
 												if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
 												else $attendance = 2;
 											}
-											$insert[] = ['kpi_id' => $kip->id, 'attendance' => $attendance, 
+											$insert[] = ['kip_id' => $kip->id, 'attendance' => $attendance, 
 											'date_uploaded' => $templateData['date_uploaded'], 
 											'hr_id' => $employees->id];
 										}
