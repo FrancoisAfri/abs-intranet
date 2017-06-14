@@ -125,7 +125,7 @@ class AppraisalKPIResult extends Model
                     if ($score < $lowestRange) $percentage = 0;
                     elseif ($score > $highestRange) $percentage = $highestDeduction;
                     else {
-                        $percentage = $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage;
+                        $percentage = ($kpi->kpiranges && $kpi->kpiranges->where('status', 1) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()) ? $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage : 0;
                     }
                     $percentage = ($kpi->weight > 0) ? ($percentage * $kpi->weight) / 100 : $percentage;
                     $kpiResults[$kpi->id] = $percentage;
