@@ -31,7 +31,10 @@ class InductionAdminController extends Controller
      */
     public function index()
     {
-		$libraries = DB::table('task_libraries')->orderBy('order_no', 'asc')->get();
+		$libraries = DB::table('task_libraries')
+		->orderBy('dept_id', 'asc')
+		->orderBy('order_no', 'asc')
+		->get();
 		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
 		$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
@@ -83,6 +86,7 @@ class InductionAdminController extends Controller
 		$ClientInduction->company_id = $companyID;
 		$ClientInduction->status = 1;
 		$ClientInduction->create_by = $user->id;
+		$ClientInduction->date_created = strtotime(date('Y-m-d'));
 		$ClientInduction->save();
 		foreach ($inductionData as $key => $sValue) 
 		{
@@ -135,7 +139,9 @@ class InductionAdminController extends Controller
 			, 'employee_tasks_documents.document as emp_doc')
 			->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
 			->leftJoin('employee_tasks_documents', 'employee_tasks_documents.task_id', '=', 'employee_tasks.id')
+			->leftJoin('task_libraries', 'employee_tasks.library_id', '=', 'task_libraries.id')
 			->where('employee_tasks.induction_id', $induction->id)
+			->orderBy('task_libraries.dept_id')
 			->orderBy('employee_tasks.order_no')
 			->get();
 			$induction->load('ClientName')->first();

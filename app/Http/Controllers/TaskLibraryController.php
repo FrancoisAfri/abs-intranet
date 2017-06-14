@@ -30,7 +30,15 @@ class TaskLibraryController extends Controller
 	
     public function index()
     {
-        $libraries = DB::table('task_libraries')->orderBy('order_no', 'asc')->get();
+		//->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.user_id')
+        $libraries = DB::table('task_libraries')
+		->select('task_libraries.*','division_level_fours.name as deptname')
+		->leftJoin('division_level_fours', 'task_libraries.dept_id', '=', 'division_level_fours.id')
+		->orderBy('dept_id', 'asc')
+		->orderBy('order_no', 'asc')
+		->get();
+        $deparments = DB::table('division_level_fours')->where('active', 1)->orderBy('name', 'asc')->get();
+        $dept = DB::table('division_setup')->where('level', 4)->first();
         $data['page_title'] = "Tasks Library";
         $data['page_description'] = "Tasks Library";
         $data['breadcrumb'] = [
@@ -40,20 +48,12 @@ class TaskLibraryController extends Controller
         $data['active_mod'] = 'Induction';
         $data['active_rib'] = 'Tasks Library';
         $data['libraries'] = $libraries;
+        $data['deparments'] = $deparments;
+        $data['dept'] = $dept;
 
         AuditReportsController::store('Induction', 'Taks Library Page Accessed', "Accessed By User", 0);
 
         return view('induction.library_view')->with($data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -65,9 +65,10 @@ class TaskLibraryController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'order_no' => 'integer',
+            'order_no' => 'bail|required|integer|min:1',
             'description' => 'required',
-            'upload_required' => 'integer',
+            'upload_required' => 'bail|required|integer|min:1',
+            'dept_id' => 'bail|required|integer|min:1',
         ]);
 
 		$taskLibrary = $request->all();
@@ -76,17 +77,6 @@ class TaskLibraryController extends Controller
 		$library->active = 1;
         $library->save();
 		AuditReportsController::store('Induction', 'Task Library Added', "Task Description: $library->description", 0);
-    }
-	
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 	
 	public function actDeact(TaskLibrary $TaskLibrary) 
@@ -107,15 +97,17 @@ class TaskLibraryController extends Controller
     public function update(Request $request, TaskLibrary $TaskLibrary)
     {
         $this->validate($request, [
-            'order_no' => 'integer',
+            'order_no' => 'bail|required|integer|min:1',
             'description' => 'required',
-            'upload_required' => 'integer',
+            'upload_required' => 'bail|required|integer|min:1',
+            'dept_id' => 'bail|required|integer|min:1',
 
         ]);
 
         $TaskLibrary->order_no = $request->input('order_no');
         $TaskLibrary->description = $request->input('description');
-        $TaskLibrary->upload_required = $request->input('upload_required');
+        $TaskLibrary->dept_id = $request->input('dept_id');
+        $TaskLibrary->update();
         $TaskLibrary->update();
         return $TaskLibrary;
         AuditReportsController::store('Induction', 'Library Tasks Informations Edited', "Edited by User: $TaskLibrary->description", 0);

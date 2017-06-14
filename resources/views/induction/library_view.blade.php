@@ -1,5 +1,8 @@
 @extends('layouts.main_layout')
 
+@section('page_dependencies')
+	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/select2/select2.min.css">
+@endsection
 @section('content')
 <div class="row">
     <div class="col-md-12">
@@ -16,6 +19,7 @@
                 <table class="table table-bordered">
                     <tr>
                         <th style="width: 10px"></th>
+						<th>{{$dept->name}}</th>
                         <th>Order No</th>
                         <th>Description</th>
                         <th>Required upload</th>
@@ -25,9 +29,14 @@
                     @foreach($libraries as $library)
                     <tr id="modules-list">
                         <td nowrap>
-                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-library_tasks-modal" data-id="{{ $library->id }}" data-order_no="{{ $library->order_no }}" data-description="{{ $library->description }}" data-upload_required="{{ $library->upload_required }}"> <i class="fa fa-pencil-square-o">
+                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" 
+							data-target="#edit-library_tasks-modal" data-id="{{ $library->id }}" 
+							data-order_no="{{ $library->order_no }}" data-description="{{ $library->description }}" 
+							data-upload_required="{{ $library->upload_required }}" data-dept_id="{{ $library->dept_id }}"
+							> <i class="fa fa-pencil-square-o">
                                 </i> Edit</button>
                         </td>
+                        <td>{{ $library->deptname }} </td>
                         <td>{{ $library->order_no }} </td>
                         <td>{{ $library->description }} </td>
                         <td>{{ (!empty($library->upload_required) && $library->upload_required == 2) ? "Yes" : "No" }} </td>
@@ -65,6 +74,8 @@
 
 @section('page_script')
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
+<!-- Select2 -->
+<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 <script>
     function postData(id, data) {
        if (data == 'actdeac') location.href = "/induction/library_tasks_activate/" + id;
@@ -96,10 +107,12 @@
             var orderNo = btnEdit.data('order_no');
             var uploadRequired = btnEdit.data('upload_required');
             var Description = btnEdit.data('description');
+            var deptID = btnEdit.data('dept_id');
             var modal = $(this);
             modal.find('#order_no').val(orderNo);
             modal.find('#upload_required').val(uploadRequired);
             modal.find('#description').val(Description);
+            modal.find('#dept_id').val(deptID);
         });
         
         $('#add_library_task').on('click', function () {
@@ -108,6 +121,7 @@
                 order_no: $('#add-new-task-modal').find('#order_no').val()
                 , description: $('#add-new-task-modal').find('#description').val()
                 , upload_required: $('#add-new-task-modal').find('#upload_required').val()
+                , dept_id: $('#add-new-task-modal').find('#dept_id').val()
                 , _token: $('#add-new-task-modal').find('input[name=_token]').val()
             };
             var modalID = 'add-new-task-modal';
@@ -123,6 +137,7 @@
                 order_no: $('#edit-library_tasks-modal').find('#order_no').val()
                 , description: $('#edit-library_tasks-modal').find('#description').val()
                 , upload_required: $('#edit-library_tasks-modal').find('#upload_required').val()
+                , dept_id: $('#edit-library_tasks-modal').find('#dept_id').val()
                 , _token: $('#edit-library_tasks-modal').find('input[name=_token]').val()
             };
             var modalID = 'edit-library_tasks-modal';
