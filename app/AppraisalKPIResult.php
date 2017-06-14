@@ -120,8 +120,12 @@ class AppraisalKPIResult extends Model
                     $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
                     $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
                     //$highestDeduction = $kpi->kpiranges->where('status', 1)->max('lowest');
-                    $highestDeduction = ($kpi && $kpi->kpiranges && $kpi->kpiranges->where('status', 1)) ? $kpi->kpiranges->where('status', 1)->sortByDesc('range_to')->first()->percentage : 0;
-
+                    //$highestDeduction = ($kpi->kpiranges && $kpi->kpiranges->where('status', 1)) ? $kpi->kpiranges->where('status', 1)->sortByDesc('range_to')->first()->percentage : 0;
+                    try {
+                        $highestDeduction = $kpi->kpiranges->where('status', 1)->sortByDesc('range_to')->first()->percentage;
+                    } catch (Exception $e) {
+                        $highestDeduction = 0;
+                    }
                     if ($score < $lowestRange) $percentage = 0;
                     elseif ($score > $highestRange) $percentage = $highestDeduction;
                     else {
