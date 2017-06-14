@@ -286,8 +286,7 @@ class AppraisalKPIResultsController extends Controller
 					if ($uploadType == 1)
 						AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2)
-						die('do you get here');
-						//AppraisalClockinResults::insert($insert);
+						AppraisalClockinResults::insert($insert);
 					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");	
 				}
 
