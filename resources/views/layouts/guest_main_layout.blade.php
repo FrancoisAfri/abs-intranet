@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $page_title or "ABS Systems" }}</title>
+    <title>{{ ($page_title) ? 'Nexus Travel | ' . $page_title : "ABS Systems" }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -72,17 +72,17 @@ desired effect
 <div class="wrapper">
 
     <!-- Header -->
-    @include('layouts.header')
+    @include('layouts.guest_header')
 
     <!-- Sidebar -->
-    @include('layouts.sidebar')
+    @include('layouts.guest_sidebar')
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                {{ $page_title or "Osizweni Education &amp; Development Centre" }}
+                {{ $page_title or "ABS Systems" }}
                 <small>{{ $page_description or null }}</small>
             </h1>
             @if (isset($breadcrumb) && count($breadcrumb) > 0)

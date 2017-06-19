@@ -322,6 +322,7 @@ Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
 //Survey (Guest)
 Route::get('rate-our-services', 'SurveyGuestsController@index');
+Route::post('rate-our-services', 'SurveyGuestsController@store');
 
 # Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');
