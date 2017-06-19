@@ -11,7 +11,7 @@ class ClientInduction extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'induction_title', 'company_id', 'status', 'create_by', 'notes'
+        'induction_title', 'company_id', 'status', 'create_by', 'notes', 'date_created'
     ];
 
     //relationship between contact_company and contact person (contacts_contacts)

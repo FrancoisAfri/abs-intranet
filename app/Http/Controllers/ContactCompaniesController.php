@@ -130,7 +130,7 @@ class ContactCompaniesController extends Controller
 
         //Insert Data
         $company = new ContactCompany($formData);
-        $company->status = 1;
+        $company->status = 2;
         $company->save();
 
         //Upload BEE document
@@ -213,11 +213,12 @@ class ContactCompaniesController extends Controller
     }
 	public function actCompany(ContactCompany $company) 
     {
-        if ($company->status == 1) $stastus = 0;
+        if ($company->status == 1) $stastus = 2;
         else $stastus = 1;
 
         $company->status = $stastus;    
         $company->update();
+		AuditReportsController::store('Contacts', 'Client Status Changed', "Status Changed to $stastus for $company->name", 0);
         return back();
     }
 

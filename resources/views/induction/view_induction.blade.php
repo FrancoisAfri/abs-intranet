@@ -55,7 +55,7 @@
 						@endforeach
                     @else
 						<tr id="categories-list">
-						<td colspan="6">
+						<td colspan="8">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             No task to display, please start by adding a new task.
@@ -63,6 +63,21 @@
 						</td>
 						</tr>
                     @endif
+					<tr id="categories-list">
+						<td colspan="8">
+						@if($induction->status == 1)
+                        <div>
+                           <button type="button" id="complete-induction-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#comp-induction-modal"
+							  data-induction_id="{{ $induction->id }}">Complete Induction</button>
+                        </div>
+						@else
+						<div class="alert alert-danger alert-dismissable">
+						Induction Note : {{$induction->notes}} </br>
+						<a class="btn btn-default btn-flat btn-block" href="{{ Storage::disk('local')->url("induction/$induction->completion_document") }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Completion Document</a>
+						</div>
+						@endif
+						</td>
+					</tr>
 					</table>
 					</div>
                 </div>
@@ -73,6 +88,7 @@
         </div>
 		@include('tasks.partials.edit_task')
 		@include('tasks.partials.end_task')
+		@include('induction.partials.complete_induction')
     </div>
 @endsection
 @section('page_script')
@@ -157,7 +173,25 @@
 				modal.find('#employee_id').val(EmployeeID);
 				modal.find('#administrator_id').val(AdministratorID);
 			});
-			// Update task
+			// Call Complete Induction modal
+			$('#comp-induction-modal').on('show.bs.modal', function (e) {
+				var btnEdit = $(e.relatedTarget);
+				inductionID = btnEdit.data('induction_id');
+				var modal = $(this);
+				modal.find('#induction_id').val(inductionID);
+			});
+			// Complete Induction
+			$('#complete-induction').on('click', function () {
+				var strUrl = '/induction/complete';
+                var formName = 'comp-induction-form';
+                var modalID = 'comp-induction-modal';
+                var submitBtnID = 'complete-induction';
+                var redirectUrl = '/induction/' + {{$induction->id}} + '/view';
+                var successMsgTitle = 'Induction Completed!';
+                var successMsg = 'Induction has been Successfully Completed!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
+		// Update task
 			$('#update-task').on('click', function () {
             var strUrl = '/tasks/update/' + taskID;
             var objData = {
