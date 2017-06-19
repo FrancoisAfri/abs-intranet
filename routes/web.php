@@ -317,11 +317,12 @@ Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
 
-//Route::post('audits', 'AuditReportsController@getReport');
-//Route::post('audits/print', 'AuditReportsController@printreport');
 //Clients (contacts) registration
-//Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
+
+//Survey (Guest)
+Route::get('rate-our-services', 'SurveyGuestsController@index');
+
 # Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');
 Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
