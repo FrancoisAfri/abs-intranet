@@ -38,11 +38,11 @@ class AppraisalKPIResult extends Model
             if ($this->score < $lowestRange) $percentage = 0;
             elseif ($this->score > $highestRange) $percentage = $highestPercentage;
             else {
-                $percentage = ($kpi->kpiranges && $kpi->kpiranges->where('status', 1) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score)) ? $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score)->first()->percentage : 0;
+                $percentage = ($kpi->kpiranges && $kpi->kpiranges->where('status', 1) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score)->first()) ? $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score)->first()->percentage : 0;
             }
         }
         elseif ($kpi->is_upload === 2 && $kpi->kpi_type === 2) { //Number
-            $latestNumber = ($kpi->kpiNumber && $kpi->kpiNumber->where('status', 1)->sortBy('id')) ? $kpi->kpiNumber->where('status', 1)->sortBy('id')->last() : null;
+            $latestNumber = ($kpi->kpiNumber && $kpi->kpiNumber->where('status', 1)->sortBy('id') && $kpi->kpiNumber->where('status', 1)->sortBy('id')->last()) ? $kpi->kpiNumber->where('status', 1)->sortBy('id')->last() : null;
             $lowesNumber = ($latestNumber) ? $latestNumber->min_number : 0;
             $highestNumber = ($latestNumber) ? $latestNumber->max_number : 1;
             $highestPercentage = 100;
@@ -61,7 +61,7 @@ class AppraisalKPIResult extends Model
             if ($this->score < $lowestScore) $percentage = 0;
             elseif ($this->score > $highestScore) $percentage = $highestPercentage;
             else {
-                $percentage = ($kpi->kpiIntScore && $kpi->kpiIntScore->where('status', 1) && $kpi->kpiIntScore->where('status', 1)->where('score', $this->score)) ? $kpi->kpiIntScore->where('status', 1)->where('score', $this->score)->first()->percentage : 0;
+                $percentage = ($kpi->kpiIntScore && $kpi->kpiIntScore->where('status', 1) && $kpi->kpiIntScore->where('status', 1)->where('score', $this->score) && $kpi->kpiIntScore->where('status', 1)->where('score', $this->score)->first()) ? $kpi->kpiIntScore->where('status', 1)->where('score', $this->score)->first()->percentage : 0;
             }
         }
 
