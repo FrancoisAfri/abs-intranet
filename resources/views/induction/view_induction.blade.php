@@ -22,7 +22,7 @@
                     @if (!empty($tasks))
 						@foreach($tasks as $task)
 						 <tr id="categories-list">
-						  <td>@if(!empty($task->status) && $task->status < 4)
+						  <td>@if(!empty($task->status) && $task->status < 4 && $induction->status == 1)
 							<button type="button" id="view_kpi" class="btn btn-xs" data-toggle="modal" data-target="#edit-tasks-modal"
 							  data-task_id="{{ $task->task_id }}" 
 							  data-employee_id="{{ $task->employee_id }}" 
@@ -36,7 +36,7 @@
 							  >Edit</button>
 							@endif 
 							</td>
-						 <td>@if(!empty($task->administrator_id) && $task->administrator_id == $user->person->id && $task->status < 4)           
+						 <td>@if(!empty($task->administrator_id) && $task->administrator_id == $user->person->id && $task->status < 4 && $induction->status == 1)           
 							  <button type="button" id="end-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
 							  data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}" 
 							  data-upload_required="{{ $task->upload_required }}" >End</button>
