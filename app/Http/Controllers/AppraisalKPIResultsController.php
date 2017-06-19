@@ -184,7 +184,7 @@ class AppraisalKPIResultsController extends Controller
         ]);
 		$uploadTypes = [1 => "General", 2 => 'Clock In', 3 => 'Query Report '];
 		$templateData = $request->all();
-		$queryCodeNew = 0;
+		$queryCodeNew = $employeeNO = $date = 0;
 		unset($templateData['_token']);
 		$appraisalMonth = trim($templateData['date_uploaded']);
 		$uploadType = $request->input('upload_type');
@@ -228,8 +228,9 @@ class AppraisalKPIResultsController extends Controller
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
 									{// 1 for late, 2 for not late
 										$attendance = 2;
-										if (!empty($val['entry']))
+										if (!empty($val['entry']) && !empty($val['normal_time']))
 										{
+											if ($employeeNO == $employees->id && $date == $val['date']) continue;
 											$entryDate =  explode(" ", $val['entry']);
 											$normalTimeDate = explode(" ", $val['normal_time']);
 											$entry = explode(":", $entryDate[1]);
@@ -240,14 +241,15 @@ class AppraisalKPIResultsController extends Controller
 												if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
 												else $attendance = 2;
 											}
-											$insert[] = ['kpi_id' => $kip->id, 'attendance' => $attendance, 
+											$insert[] = ['kip_id' => $kip->id, 'attendance' => $attendance, 
 											'date_uploaded' => $templateData['date_uploaded'], 
 											'hr_id' => $employees->id];
+											$employeeNO = $employees->id;
+											$date = $val['date'];
 										}
 									}
 									elseif ($uploadType == 3)
 									{
-										
 										if ($queryCodeNew == $value['query_code']) continue;
 										$value['query_date'] = !empty($value['query_date']) ? strtotime($value['query_date']) : 0;
 										$value['departure_date'] = !empty($value['departure_date']) ? strtotime($value['departure_date']) : 0;
@@ -284,7 +286,6 @@ class AppraisalKPIResultsController extends Controller
 				if(!empty($insert))
 				{
 					if ($uploadType == 1)
-						
 						AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2)
 						AppraisalClockinResults::insert($insert);
