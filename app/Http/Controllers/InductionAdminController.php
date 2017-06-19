@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-
+use App\Mail\InductionGroupTaskEmail;
 class InductionAdminController extends Controller
 {
     
@@ -35,7 +35,7 @@ class InductionAdminController extends Controller
 		->orderBy('dept_id', 'asc')
 		->orderBy('order_no', 'asc')
 		->get();
-		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+		$companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
 		$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
         $data['page_title'] = "Induction";
@@ -78,7 +78,7 @@ class InductionAdminController extends Controller
 				unset($inductionData[$key]);
 			}
 		}
-
+		$emp = $count = $depID = 0;
 		$user = Auth::user();
         $companyID = (int) $inductionData['company_id'];
         $ClientInduction = new ClientInduction();
@@ -88,6 +88,7 @@ class InductionAdminController extends Controller
 		$ClientInduction->create_by = $user->id;
 		$ClientInduction->date_created = strtotime(date('Y-m-d'));
 		$ClientInduction->save();
+		$company = ContactCompany::where('id', $companyID)->first();
 		foreach ($inductionData as $key => $sValue) 
 		{
 			if (strlen(strstr($key, 'selected')))
@@ -95,26 +96,38 @@ class InductionAdminController extends Controller
 				$aValue = explode("_", $key);
 				$unit = $aValue[0];
 				$libraryID = $aValue[1];
+				$deptID = $aValue[2];
 				if (($unit == 'selected'))
 				{
-					$description = !empty($inductionData['description_'.$libraryID]) ? $inductionData['description_'.$libraryID] : '';
-					$duedate = !empty($inductionData['due_date_'.$libraryID]) ? $inductionData['due_date_'.$libraryID] : '';
-					$startDate = !empty($inductionData['start_date_'.$libraryID]) ? $inductionData['start_date_'.$libraryID] : '';
-					$administratorID = !empty($inductionData['administrator_id'.$libraryID]) ? $inductionData['administrator_id'.$libraryID] : 0;
-					$employeeID = !empty($inductionData['employee_id_'.$libraryID]) ? $inductionData['employee_id_'.$libraryID] : 0;
-					$orderNo = !empty($inductionData['order_no_'.$libraryID]) ? $inductionData['order_no_'.$libraryID] : 0;
-					$uploadRequired = !empty($inductionData['upload_required_'.$libraryID]) ? $inductionData['upload_required_'.$libraryID] : 0;
+					$employeeID = !empty($inductionData['employee_id_'.$libraryID.'_'.$deptID]) ? $inductionData['employee_id_'.$libraryID.'_'.$deptID] : 0;
+					if ($depID == $deptID && empty($employeeID))$employeeID = $emp;
+					$count = $count + 1;
+					if ($emp != $employeeID  && !empty($emp))
+					{
+						# Send Email to employee
+						$employee = HRPerson::where('id', $emp)->first();
+						Mail::to($employee->email)->send(new InductionGroupTaskEmail($employee, $count, $company->name));
+						$count = 0;
+					}
+					
+					$description = !empty($inductionData['description_'.$libraryID.'_'.$deptID]) ? $inductionData['description_'.$libraryID.'_'.$deptID] : '';
+					$duedate = mktime(0, 0, 0, date('m'), date('d')+30, date('Y'));
+					$startDate = strtotime(date('Y-m-d'));
+					$administratorID = !empty($inductionData['administrator_id'.$libraryID.'_'.$deptID]) ? $inductionData['administrator_id'.$libraryID.'_'.$deptID] : 0;
+					$orderNo = !empty($inductionData['order_no_'.$libraryID.'_'.$deptID]) ? $inductionData['order_no_'.$libraryID.'_'.$deptID] : 0;
+					$uploadRequired = !empty($inductionData['upload_required_'.$libraryID.'_'.$deptID]) ? $inductionData['upload_required_'.$libraryID.'_'.$deptID] : 0;
 					$escalationPerson = HRPerson::where('id', $employeeID)->first();
-					$escalationPerson->manager_id = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
-					TaskManagementController::store($description,$duedate,$startDate,$escalationPerson->manager_id,$employeeID,1
+					$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
+					TaskManagementController::store($description,$duedate,$startDate,$managerID,$employeeID,1
 					,$orderNo,$libraryID,0,$uploadRequired,0,$ClientInduction->id, $administratorID);
+					$emp = $employeeID;
+					$depID = $deptID;
 				}
 			}
 		}
 		AuditReportsController::store('Induction', 'induction Added', "Induction Title: $ClientInduction->title", 0);
 		return redirect('/induction/' . $ClientInduction->id . '/view')->with('success_add', "The Induction has been added successfully");
     }
-
     /**
      * Display the specified resource.
      *
@@ -124,8 +137,8 @@ class InductionAdminController extends Controller
 	
     public function show(ClientInduction $induction)
     {
-        if ($induction->status == 1) 
-		{
+        //if ($induction->status == 1) 
+		//{
 			$user = Auth::user()->load('person');
 			$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
@@ -163,8 +176,6 @@ class InductionAdminController extends Controller
 			//return $data;
 			AuditReportsController::store('Induction', 'Induction Details Page Accessed', "Accessed by User", 0);
 			return view('induction.view_induction')->with($data);
-		}
-		else return back();
     }
 
     /**
@@ -173,6 +184,41 @@ class InductionAdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+	public function completeInduction(Request $request, ClientInduction $induction) 
+    {
+		$this->validate($request, [
+            'induction_id' => 'bail|required|numeric|min:1',
+			 'completion_document' => 'required',
+        ]);
+		$compData = $request->all();
+
+        //Exclude empty fields from query
+        foreach ($compData as $key => $value)
+        {
+            if (empty($compData[$key])) {
+                unset($compData[$key]);
+            }
+        }
+		//Upload completion doc
+        if ($request->hasFile('completion_document')) {
+            $fileExt = $request->file('completion_document')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('completion_document')->isValid()) {
+                $fileName = $compData['induction_id'] . "_induction_completion_doc_" . '.' . $fileExt;
+                $request->file('completion_document')->storeAs('induction', $fileName);
+                //Update file name 
+				DB::table('client_inductions')
+				->where('id', $compData['induction_id'])
+				->update([
+					'status' => 2,
+					'completion_document' => $fileName,
+					'notes' => $compData['notes']
+				]);
+            }
+        }
+		AuditReportsController::store('Induction', 'Induction Completed', "Induction: $induction->induction_title", 0);
+		return response()->json(['Induction' => $induction->induction_title], 200);
+    }
+	
 	public function search()
     {
 		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
