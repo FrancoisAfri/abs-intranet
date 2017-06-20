@@ -206,8 +206,8 @@ class AppraisalKPIResultsController extends Controller
 					{
 						foreach ($value as $val) 
 						{
-							//echo $val;
-							$employeeCode = $value['employee_number'];
+							if ($uploadType == 1) $employeeCode = $value['employee_number'];
+							elseif ($uploadType == 2) $val['employee_number'];
 							$employees = HRPerson::where('employee_number', $employeeCode)->first();
 							if ($employees) {
 								$employees->load('jobTitle.kpiTemplate');
