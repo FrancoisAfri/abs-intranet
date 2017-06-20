@@ -214,7 +214,6 @@ class AppraisalKPIResultsController extends Controller
 							} else continue;
 							foreach ($kpis as $kip)
 							{
-								//if (!empty($employees->jobTitle) || ! $employees->jobTitle->kpiTemplate || ! $employees->jobTitle->kpiTemplate->id) continue;
 								if (!empty($employees->jobTitle) && !empty($employees->jobTitle->kpiTemplate) && !empty($employees->jobTitle->kpiTemplate->id) && ($employees->jobTitle->kpiTemplate->id == $kip->template_id))
 								{
 									if ($uploadType == 1) die ('jndjndjndjnd');
