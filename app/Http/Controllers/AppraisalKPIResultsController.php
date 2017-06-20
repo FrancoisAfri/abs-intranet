@@ -279,9 +279,10 @@ class AppraisalKPIResultsController extends Controller
 						}
 					}
 				}
-				die('do j');
 				if(!empty($insert))
 				{
+					echo $insert;
+					die('dd');
 					if ($uploadType == 1) die('do you come jere');
 						//AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2)
