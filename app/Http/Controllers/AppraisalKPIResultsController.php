@@ -202,29 +202,26 @@ class AppraisalKPIResultsController extends Controller
 			{
 				foreach ($data->toArray() as $key => $value) 
 				{
-					//return $value;
 					if(!empty($value))
 					{
 						foreach ($value as $val) 
 						{
-							$employeeCode = $val['employee_number'];
+							//echo $val;
+							$employeeCode = $value['employee_number'];
 							$employees = HRPerson::where('employee_number', $employeeCode)->first();
 							if ($employees) {
 								$employees->load('jobTitle.kpiTemplate');
 							} else continue;
-							//if (empty($employees->id)) continue;
-							//$emp = HRPerson::find($employees->id)->load('jobTitle.kpiTemplate');
-							// do this for loop inside each if statement
 							foreach ($kpis as $kip)
 							{
-								if (! $employees->jobTitle || ! $employees->jobTitle->kpiTemplate || ! $employees->jobTitle->kpiTemplate->id) continue;
-								if ($employees->jobTitle->kpiTemplate->id == $kip->template_id)
+								if (!empty($employees->jobTitle) || ! $employees->jobTitle->kpiTemplate || ! $employees->jobTitle->kpiTemplate->id) continue;
+								if (!empty($employees->jobTitle) && !empty($employees->jobTitle->kpiTemplate) && !empty($employees->jobTitle->kpiTemplate->id) && ($employees->jobTitle->kpiTemplate->id == $kip->template_id))
 								{
-									if ($uploadType == 1)
-										$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
+									if ($uploadType == 1) die ('jndjndjndjnd');
+										/*$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
 										'score' => $val['result'], 
 										'date_uploaded' => $templateData['date_uploaded'],
-										'hr_id' => $employees->id];
+										'hr_id' => $employees->id];*/
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
 									{// 1 for late, 2 for not late
 										$attendance = 2;
@@ -283,10 +280,11 @@ class AppraisalKPIResultsController extends Controller
 						}
 					}
 				}
+				die('do j');
 				if(!empty($insert))
 				{
-					if ($uploadType == 1)
-						AppraisalKPIResult::insert($insert);
+					if ($uploadType == 1) die('do you come jere');
+						//AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2)
 						AppraisalClockinResults::insert($insert);
 					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");	
