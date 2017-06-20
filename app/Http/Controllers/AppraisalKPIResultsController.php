@@ -217,10 +217,10 @@ class AppraisalKPIResultsController extends Controller
 								if (!empty($employees->jobTitle) && !empty($employees->jobTitle->kpiTemplate) && !empty($employees->jobTitle->kpiTemplate->id) && ($employees->jobTitle->kpiTemplate->id == $kip->template_id))
 								{
 									if ($uploadType == 1)
-										/*$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
+										$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
 										'score' => $val['result'], 
 										'date_uploaded' => $templateData['date_uploaded'],
-										'hr_id' => $employees->id];*/
+										'hr_id' => $employees->id];
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
 									{// 1 for late, 2 for not late
 										$attendance = 2;
