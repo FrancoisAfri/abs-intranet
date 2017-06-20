@@ -218,7 +218,7 @@ class AppraisalKPIResultsController extends Controller
 								{
 									if ($uploadType == 1)
 										$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
-										'score' => $val['result'], 
+										'score' => $value['result'], 
 										'date_uploaded' => $templateData['date_uploaded'],
 										'hr_id' => $employees->id];
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
