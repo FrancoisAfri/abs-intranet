@@ -28,7 +28,7 @@
 							  <th>Apr</th>
 							  <th>May</th>
 							  <th>Jun</th>
-							  <th>July</th>
+							  <th>Jul</th>
 							  <th>Aug</th>
 							  <th>Sept</th>
 							  <th>Oct</th>
