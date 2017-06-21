@@ -30,7 +30,7 @@
 							<tr>
 								<td><a href="{{'/appraisal/' . $emp_id . '/' . $kpas->id . '/' . $monthyear . '/kpis'}}" class="product-title">{{  $kpas->name }}</a></td>
 								<td>{{  $kpas->weight }} %</td>
-								<td>{{  $kpas->appraisal_result }} %</td>
+								<td>{{  round($kpas->appraisal_result, 2) }} %</td>
 							</tr>	
 						@endforeach
 					@endif
