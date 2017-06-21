@@ -115,7 +115,8 @@ class AppraisalGraphsController extends Controller
             $objResult = (object) [];
             $objResult->div_id = $division->id;
             $objResult->div_name = $division->name;
-            $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
+            //$objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
+            $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $parenLevel);
             $objResult->div_level = $parenLevel;
             $objResult->is_child_level_active = $isChildLevelActive;
             $objResult->child_level = $childLevel;
@@ -148,7 +149,7 @@ class AppraisalGraphsController extends Controller
         foreach ($divisions as $division){
             $objResult = (object) [];
             $objResult->div_id = $division->id;
-            $objResult->div_name = $division->name;// . ' _id=' . $division->id . '_level=' . $division->level;
+            $objResult->div_name = $division->name;
             $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $parenLevel);
             //$objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
             $objResult->div_level = $parenLevel;
