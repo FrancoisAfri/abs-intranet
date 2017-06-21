@@ -688,6 +688,31 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'meeting_minutes/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+
+        $module = new modules(); //Survey
+        $module->active = 1;
+        $module->name = 'Survey';
+        $module->path = 'survey';
+        $module->font_awesome = 'fa-list-alt';
+        $module->save();
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Rating Links';
+        $ribbon->description = 'Generate rate my service links';
+        $ribbon->ribbon_path = 'survey/rating-links';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Generate survey reports';
+        $ribbon->ribbon_path = 'survey/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 		
         $leave_config = new leave_configuration();
         $leave_config->save();

@@ -144,6 +144,7 @@ function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, man
             $.each(data, function(key, value) {
                 divResults.push(value['div_result']);
                 divLabels.push(value['div_name']);
+                console.log()
             });
             var chartData = perfChartData(divResults, divLabels);
 
@@ -151,7 +152,7 @@ function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, man
             divPerfChart.Bar(chartData, divChartOptions);
 
             //sort the data by performance
-            var sortedData = data.sort(function(a, b){return a['div_result']-b['div_result']});
+            var sortedData = data.sort(function(a, b){return b['div_result'] - a['div_result']});
 
             //Load ranking
             rankingList.empty();
@@ -234,7 +235,7 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
         function(data) {
             //console.log(JSON.stringify(data));
             //sort the data by performance
-            var sortedData = data.sort(function(a, b){return a['emp_result']-b['emp_result']});
+            var sortedData = data.sort(function(a, b){return b['emp_result']-a['emp_result']});
 
             //Load ranking
             rankingList.empty();

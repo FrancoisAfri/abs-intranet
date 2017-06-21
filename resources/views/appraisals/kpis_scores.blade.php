@@ -40,7 +40,7 @@
 								<td>{{  $kpis->source_of_evidence }}</td>
 								<td>{{  $kpis->indicator }}</td>
 								<td>{{  $kpis->weight }} %</td>
-								<td>{{  $kpis->appraisal_result }} %</td>
+								<td>{{  round($kpis->appraisal_result, 2) }} %</td>
 							</tr>	
 						@endforeach
 					@endif

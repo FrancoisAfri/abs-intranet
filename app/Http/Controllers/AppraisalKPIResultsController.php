@@ -78,8 +78,8 @@ class AppraisalKPIResultsController extends Controller
 		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate');
 		if ($emp->jobTitle && $emp->jobTitle->kpiTemplate) {
 			$kpis = appraisalsKpis::where(function ($query) {
-				$query->where('upload_type', null);
-				$query->orWhereNotIn('upload_type', [2, 3]);
+				$query->where('is_upload', 2);
+				//$query->orWhereNotIn('upload_type', [1, 2, 3]);
 			})
 				->where('template_id', $emp->jobTitle->kpiTemplate->id)
 				->where(function ($query) {
@@ -210,7 +210,6 @@ class AppraisalKPIResultsController extends Controller
 							elseif ($uploadType == 3) $employeeCode = $value['employee_number'];
 							else $employeeCode = $val['employee_number'];
 							$employees = HRPerson::where('employee_number', $employeeCode)->first();
-							//return $employees;
 							if ($employees) {
 								$employees->load('jobTitle.kpiTemplate');
 							} else continue;
@@ -291,7 +290,7 @@ class AppraisalKPIResultsController extends Controller
 					elseif ($uploadType == 2) AppraisalClockinResults::insert($insert);
 					return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were successfully inserted.");
 				}
-				else die('File was not uploaded');
+				else return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were not uploaded.");
 
 			}
 			else return back()->with('error','Please Check your file, Something is wrong there.');
