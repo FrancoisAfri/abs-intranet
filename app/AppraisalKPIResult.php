@@ -30,7 +30,7 @@ class AppraisalKPIResult extends Model
         $kpi = $this->kpi;
         $percentage = 0;
 
-        if ($kpi->is_upload === 2 && $kpi->kpi_type === 1) { //Range
+        if ($kpi->kpi_type === 1) { //Range [$kpi->is_upload === 2 && ]
             $lowestRange = $kpi->kpiranges->where('status', 1)->min('range_from');
             $highestRange = $kpi->kpiranges->where('status', 1)->max('range_to');
             $highestPercentage = $kpi->kpiranges->where('status', 1)->max('percentage');
@@ -41,7 +41,7 @@ class AppraisalKPIResult extends Model
                 $percentage = ($kpi->kpiranges && $kpi->kpiranges->where('status', 1) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score)->first()) ? $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $this->score)->where('range_to', '>=', $this->score)->first()->percentage : 0;
             }
         }
-        elseif ($kpi->is_upload === 2 && $kpi->kpi_type === 2) { //Number
+        elseif ($kpi->kpi_type === 2) { //Number
             $latestNumber = ($kpi->kpiNumber && $kpi->kpiNumber->where('status', 1)->sortBy('id') && $kpi->kpiNumber->where('status', 1)->sortBy('id')->last()) ? $kpi->kpiNumber->where('status', 1)->sortBy('id')->last() : null;
             $lowesNumber = ($latestNumber) ? $latestNumber->min_number : 0;
             $highestNumber = ($latestNumber) ? $latestNumber->max_number : 1;
@@ -53,7 +53,7 @@ class AppraisalKPIResult extends Model
                 $percentage = ($this->score / $highestNumber) * 100;
             }
         }
-        elseif ($kpi->is_upload === 2 && $kpi->kpi_type === 3) { //1 To ...
+        elseif ($kpi->kpi_type === 3) { //1 To ...
             $lowestScore = $kpi->kpiIntScore->where('status', 1)->min('score');
             $highestScore = $kpi->kpiIntScore->where('status', 1)->max('score');
             $highestPercentage = $kpi->kpiIntScore->where('status', 1)->max('percentage');
