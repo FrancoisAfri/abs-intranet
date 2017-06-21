@@ -247,7 +247,7 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
                     empEmail = value['emp_email'],
                     empJobTitle = value['emp_job_title'],
                     empProfilePic = value['emp_profile_pic'],
-                    empResult = value['emp_result'],
+                    empResult = round(value['emp_result'], 2),
                     resultColor = '';
                 if (empResult < 50) resultColor = 'red';
                 else if (empResult >= 50 && empResult < 60) resultColor = 'yellow';
@@ -362,3 +362,8 @@ function perkDetailsOnShow(objTrigger, modalWin) {
 //------------------------------
 //- END AVAILABLE PERKS WIDGET -
 //------------------------------
+
+//Decimal round function
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
