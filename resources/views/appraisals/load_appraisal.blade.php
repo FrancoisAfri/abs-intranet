@@ -153,8 +153,8 @@
                 </form>
             </div>
         </div>
-        @if (session('success'))
-        @include('appraisals.partials.success_action', ['modal_title' => 'Appraisal Successfully Uploaded!', 'modal_content' => session('success')])
+        @if (session('success_insert'))
+        @include('appraisals.partials.success_action', ['modal_title' => 'Appraisal Successfully Uploaded!', 'modal_content' => session('success_insert')])
         @endif
         @if (session('error'))
         @include('appraisals.partials.success_action', ['modal_title' => 'An Error Occurred!', 'modal_content' => session('error')])
@@ -176,6 +176,26 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <script>
         $(function () {
+			           //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                        dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
+            });
+
+            //Show success action modal
+            $('#success-action-modal').modal('show');
+
             //Initialize Select2 Elements
             $(".select2").select2();
             //Cancel button click event

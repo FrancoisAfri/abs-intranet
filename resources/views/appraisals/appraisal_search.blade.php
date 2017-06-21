@@ -83,7 +83,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <input type="submit" id="load-kpis" name="load-kpis" class="btn btn-primary pull-right" value="Get Template">
+                        <input type="submit" id="load-kpis" name="load-kpis" class="btn btn-primary pull-right" value="Search">
                     </div>
                 </form>
             </div>
