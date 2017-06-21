@@ -320,7 +320,8 @@ Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
-
+// Minutes Meeting
+Route::get('/meeting_minutes/create', 'MeetingMinutesAdminController@index');
 //Clients (contacts) registration
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
