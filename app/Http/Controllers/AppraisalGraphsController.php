@@ -79,11 +79,13 @@ class AppraisalGraphsController extends Controller
         }
         if ($returnEmpList) {
             if ($topTen) {
-                usort($empAvgs, function($a, $b){return $a->emp_result - $b->emp_result;});
+                //usort($empAvgs, function($a, $b){return $a->emp_result - $b->emp_result;});
+                usort($empAvgs, function($a, $b){return $b->emp_result - $a->emp_result;});
                 $empAvgs = array_slice($empAvgs, 0, $rankLimit);
             }
             elseif ($bottomTen) {
-                usort($empAvgs, function($a, $b){return $b->emp_result - $a->emp_result;});
+                //usort($empAvgs, function($a, $b){return $b->emp_result - $a->emp_result;});
+                usort($empAvgs, function($a, $b){return $a->emp_result - $b->emp_result;});
                 $empAvgs = array_slice($empAvgs, 0, $rankLimit);
             }
             return $empAvgs;
