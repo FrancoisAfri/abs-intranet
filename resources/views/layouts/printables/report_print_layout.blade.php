@@ -24,6 +24,9 @@
 
     <!-- custom style -->
     <link rel="stylesheet" href="/custom_components/css/style.css">
+
+    <!-- Page dependencies -->
+    @yield('page_dependencies')
 </head>
 <body onload="window.print();">
 <div class="wrapper">
@@ -47,5 +50,16 @@
     <!-- /.section -->
 </div>
 <!-- ./wrapper -->
+
+<!-- REQUIRED JS SCRIPTS -->
+
+<!-- jQuery 2.2.3 -->
+<script src="/bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/bower_components/AdminLTE/dist/js/app.min.js"></script>
+<!-- Additional page script -->
+@yield('page_script')
 </body>
 </html>

@@ -20,6 +20,9 @@ Route::get('/', function () {
 
 Route::get('/', 'DashboardController@index');
 Route::get('test', 'PagesController@testPage');
+Route::get('/home', function () {
+    return Redirect::action('DashboardController@index');
+});
 
 Auth::routes();
 
@@ -322,8 +325,14 @@ Route::get('/cron/induction', 'InductionCronController@execute');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
 //Survey (Guest)
-Route::get('rate-our-services', 'SurveyGuestsController@index');
+Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
+
+//Survey
+Route::get('survey/reports', 'SurveysController@indexReports');
+Route::get('survey/rating-links', 'SurveysController@indexRatingLinks');
+Route::post('survey/reports', 'SurveysController@getReport');
+Route::post('survey/reports/print', 'SurveysController@printReport');
 
 # Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');
