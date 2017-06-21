@@ -47,7 +47,7 @@ class AppraisalKPIResultsController extends Controller
             ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
         ];
-		phpinfo();
+		//phpinfo();
         $data['active_mod'] = 'Performance Appraisal';
         $data['active_rib'] = 'Appraisals';
         AuditReportsController::store('Performance Appraisal', 'Upload page accessed', "Accessed by User", 0);
