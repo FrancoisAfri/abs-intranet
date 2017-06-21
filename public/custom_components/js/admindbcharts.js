@@ -144,6 +144,7 @@ function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, man
             $.each(data, function(key, value) {
                 divResults.push(value['div_result']);
                 divLabels.push(value['div_name']);
+                console.log()
             });
             var chartData = perfChartData(divResults, divLabels);
 
