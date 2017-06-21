@@ -207,8 +207,10 @@ class AppraisalKPIResultsController extends Controller
 						foreach ($value as $val) 
 						{
 							if ($uploadType == 1) $employeeCode = $value['employee_number'];
+							elseif ($uploadType == 3) $employeeCode = $value['employee_number'];
 							else $employeeCode = $val['employee_number'];
 							$employees = HRPerson::where('employee_number', $employeeCode)->first();
+							//return $employees;
 							if ($employees) {
 								$employees->load('jobTitle.kpiTemplate');
 							} else continue;
@@ -285,11 +287,11 @@ class AppraisalKPIResultsController extends Controller
 				}
 				if(!empty($insert))
 				{
-					//return $insert;
 					if ($uploadType == 1) AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2) AppraisalClockinResults::insert($insert);
-					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");	
+					return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were successfully inserted.");
 				}
+				else die('File was not uploaded');
 
 			}
 			else return back()->with('error','Please Check your file, Something is wrong there.');
