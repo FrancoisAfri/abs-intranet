@@ -246,6 +246,7 @@ class AppraisalReportsController extends Controller
             }
 
             $divResults = AppraisalGraphsController::parentDivisionPerformance($divLvl, $parentDivisionID);
+            //return $divResults;
 
             $data['divResults'] = $divResults;
             $data['divLvl'] = $divLvl;
