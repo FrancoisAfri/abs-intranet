@@ -78,8 +78,8 @@ class AppraisalKPIResultsController extends Controller
 		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate');
 		if ($emp->jobTitle && $emp->jobTitle->kpiTemplate) {
 			$kpis = appraisalsKpis::where(function ($query) {
-				$query->where('upload_type', null);
-				$query->orWhereNotIn('upload_type', [2, 3]);
+				$query->where('is_upload', 2);
+				//$query->orWhereNotIn('upload_type', [1, 2, 3]);
 			})
 				->where('template_id', $emp->jobTitle->kpiTemplate->id)
 				->where(function ($query) {
@@ -166,7 +166,7 @@ class AppraisalKPIResultsController extends Controller
                 $result->kpi_id = $kpiID;
                 $result->hr_id = $hrID;
                 $result->date_uploaded = strtotime('15 ' . $appraisalMonth);
-                $result->score = (array_key_exists($kpiID, $scores) && trim($scores[$kpiID]) != '') ? trim($scores[$kpiID]) : null;
+                $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
                 $result->save();
             }
         }
@@ -202,29 +202,29 @@ class AppraisalKPIResultsController extends Controller
 			{
 				foreach ($data->toArray() as $key => $value) 
 				{
+					//return $value;
 					if(!empty($value))
 					{
 						foreach ($value as $val) 
 						{
-							if ($uploadType == 1) $employeeCode = $value['employee_number'];
-							else $employeeCode = $val['employee_number'];
+							$employeeCode = $val['employee_number'];
 							$employees = HRPerson::where('employee_number', $employeeCode)->first();
 							if ($employees) {
 								$employees->load('jobTitle.kpiTemplate');
 							} else continue;
+							//if (empty($employees->id)) continue;
+							//$emp = HRPerson::find($employees->id)->load('jobTitle.kpiTemplate');
+							// do this for loop inside each if statement
 							foreach ($kpis as $kip)
 							{
-								if (!empty($employees->jobTitle) && !empty($employees->jobTitle->kpiTemplate) && !empty($employees->jobTitle->kpiTemplate->id) && ($employees->jobTitle->kpiTemplate->id == $kip->template_id))
+								if (! $employees->jobTitle || ! $employees->jobTitle->kpiTemplate || ! $employees->jobTitle->kpiTemplate->id) continue;
+								if ($employees->jobTitle->kpiTemplate->id == $kip->template_id)
 								{
 									if ($uploadType == 1)
-									{
-										if ($employeeNO == $employees->id) continue;
 										$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
-										'score' => $value['result'], 
+										'score' => $val['result'], 
 										'date_uploaded' => $templateData['date_uploaded'],
 										'hr_id' => $employees->id];
-										$employeeNO = $employees->id;
-									}
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
 									{// 1 for late, 2 for not late
 										$attendance = 2;
@@ -285,9 +285,10 @@ class AppraisalKPIResultsController extends Controller
 				}
 				if(!empty($insert))
 				{
-					//return $insert;
-					if ($uploadType == 1) AppraisalKPIResult::insert($insert);
-					elseif ($uploadType == 2) AppraisalClockinResults::insert($insert);
+					if ($uploadType == 1)
+						AppraisalKPIResult::insert($insert);
+					elseif ($uploadType == 2)
+						AppraisalClockinResults::insert($insert);
 					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");	
 				}
 
