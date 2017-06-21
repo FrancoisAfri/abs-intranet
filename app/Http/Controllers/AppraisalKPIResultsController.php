@@ -78,8 +78,8 @@ class AppraisalKPIResultsController extends Controller
 		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate');
 		if ($emp->jobTitle && $emp->jobTitle->kpiTemplate) {
 			$kpis = appraisalsKpis::where(function ($query) {
-				$query->where('upload_type', null);
-				$query->orWhereNotIn('upload_type', [2, 3]);
+				$query->where('is_upload', 2);
+				//$query->orWhereNotIn('upload_type', [1, 2, 3]);
 			})
 				->where('template_id', $emp->jobTitle->kpiTemplate->id)
 				->where(function ($query) {
