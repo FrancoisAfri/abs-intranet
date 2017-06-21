@@ -89,7 +89,7 @@ class AppraisalGraphsController extends Controller
             return $empAvgs;
         }
         else {
-            $divAvg = array_sum($empAvgs) / count($empAvgs);
+            $divAvg = (count($empAvgs) > 0) ? array_sum($empAvgs) / count($empAvgs) : 0;
             return number_format($divAvg, 2);
         }
     }
@@ -144,11 +144,13 @@ class AppraisalGraphsController extends Controller
         $isChildLevelActive = ($childLevel > 0) ? (boolean) $childLevelDetails->first()->active : false;
         $childLevelName = ($childLevel > 0) ? $childLevelDetails->first()->name : '';
         $childLevelPluralName = ($childLevel > 0) ? $childLevelDetails->first()->plural_name : '';
+
         foreach ($divisions as $division){
             $objResult = (object) [];
             $objResult->div_id = $division->id;
-            $objResult->div_name = $division->name;
-            $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
+            $objResult->div_name = $division->name;// . ' _id=' . $division->id . '_level=' . $division->level;
+            $objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $parenLevel);
+            //$objResult->div_result = AppraisalGraphsController::empGroupPerformance($division->id, $division->level);
             $objResult->div_level = $parenLevel;
             $objResult->is_child_level_active = $isChildLevelActive;
             $objResult->child_level = $childLevel;
