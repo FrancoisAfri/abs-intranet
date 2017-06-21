@@ -166,7 +166,7 @@ class AppraisalKPIResultsController extends Controller
                 $result->kpi_id = $kpiID;
                 $result->hr_id = $hrID;
                 $result->date_uploaded = strtotime('15 ' . $appraisalMonth);
-                $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
+                $result->score = (array_key_exists($kpiID, $scores) && trim($scores[$kpiID]) != '') ? trim($scores[$kpiID]) : null;
                 $result->save();
             }
         }
