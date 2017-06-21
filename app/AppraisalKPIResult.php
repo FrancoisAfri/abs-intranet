@@ -151,7 +151,7 @@ class AppraisalKPIResult extends Model
                     $kpiResults[$kpi->id] = $percentage;
                     $kpaResult += $percentage;
                 }
-                elseif ($kpi->is_upload === 2 && $kpi->is_task_kpi === 1) { //tasks KPI (Both induction and meeting tasks)
+                elseif ($kpi->is_upload === 2 && $kpi->is_task_kpi === 1 && in_array($kpi->kpi_task_type, [1, 2])) { //tasks KPI (Both induction and meeting tasks)
                     $score = EmployeeTasks::where('employee_id', $empID)
                         //->where('kip_id', $kpi->id)
                         ->where('task_type', $kpi->kpi_task_type)
@@ -168,6 +168,33 @@ class AppraisalKPIResult extends Model
                     elseif ($score > $highestRange) $percentage = $highestDeduction;
                     else {
                         $percentage = ($kpi->kpiranges && $kpi->kpiranges->where('status', 1) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score) && $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()) ? $kpi->kpiranges->where('status', 1)->where('range_from', '<=', $score)->where('range_to', '>=', $score)->first()->percentage : 0;
+                    }
+                    $percentage = ($kpi->weight > 0) ? ($percentage * $kpi->weight) / 100 : $percentage;
+                    $kpiResults[$kpi->id] = $percentage;
+                    $kpaResult += $percentage;
+                }
+                elseif ($kpi->is_upload === 2 && $kpi->is_task_kpi === 1 && $kpi->kpi_task_type === 3) { //Survey KPI
+                    $empFeedbacks = AppraisalSurvey::where('hr_person_id', $empID)
+                        ->whereBetween('feedback_date', [$monthStart, $monthEnd])
+                        ->get();
+                    $empTotalRating = 0;
+                    $ratingsCount = 0;
+                    foreach ($empFeedbacks as $empFeedback) {
+                        if ($empFeedback->avg_rating != null) {
+                            $empTotalRating += $empFeedback->avg_rating;
+                            $ratingsCount += 1;
+                        }
+                    }
+                    $score = ($ratingsCount > 0) ? (int) round($empTotalRating / $ratingsCount) : 0;
+
+                    $lowestScore = $kpi->kpiIntScore->where('status', 1)->min('score');
+                    $highestScore = $kpi->kpiIntScore->where('status', 1)->max('score');
+                    $highestPercentage = $kpi->kpiIntScore->where('status', 1)->max('percentage');
+
+                    if ($score < $lowestScore) $percentage = 0;
+                    elseif ($score > $highestScore) $percentage = $highestPercentage;
+                    else {
+                        $percentage = ($kpi->kpiIntScore && $kpi->kpiIntScore->where('status', 1) && $kpi->kpiIntScore->where('status', 1)->where('score', $score) && $kpi->kpiIntScore->where('status', 1)->where('score', $score)->first()) ? $kpi->kpiIntScore->where('status', 1)->where('score', $score)->first()->percentage : 0;
                     }
                     $percentage = ($kpi->weight > 0) ? ($percentage * $kpi->weight) / 100 : $percentage;
                     $kpiResults[$kpi->id] = $percentage;

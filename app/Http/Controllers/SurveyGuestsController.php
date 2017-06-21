@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AppraisalSurvey;
 use App\CompanyIdentity;
 use App\HRPerson;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -24,12 +25,20 @@ class SurveyGuestsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($eid)
     {
-        //[TODO]check if the module is acrivce
+        //[TODO]check if the Appraisal module is acrivce
         
+        //$consultantID = $eid;
+        try {
+            $consultantID = decrypt($eid);
+        } catch (DecryptException $e) {
+            $consultantID = null;
+        }
+        //$consultantID = decrypt($eid);
         $companyDetails = CompanyIdentity::systemSettings();
-        $employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+        $employees = ((int) $consultantID) ? HRPerson::where('status', 1)->where('id', $consultantID)->orderBy('first_name')->orderBy('surname')->get() : null;
+        $isEmpFound = (count($employees) > 0) ? true : false;
 
         $data['page_title'] = "Rate Our Services";
         $data['page_description'] = "Please submit your review below";
@@ -46,6 +55,8 @@ class SurveyGuestsController extends Controller
         $data['headerNameRegular'] = $companyDetails['header_name_regular'];
         $data['company_logo'] = $companyDetails['company_logo_url'];
         $data['employees'] = $employees;
+        $data['isEmpFound'] = $isEmpFound;
+        $data['consultantID'] = $consultantID;
 
         AuditReportsController::store('Performance Appraisal', 'Rate Our Services Page Accessed', "Accessed By Guest", 0);
         return view('appraisals.guests.rate-our-services')->with($data);
@@ -78,11 +89,13 @@ class SurveyGuestsController extends Controller
         }
 
         $clientFeedback = new AppraisalSurvey($feedbackData);
+        $clientFeedback->feedback_date = strtotime(date('Y-m-d'));
+        //return $clientFeedback;
         $clientFeedback->save();
 
         //Redirect the client feedback page with a success message
         AuditReportsController::store('Performance Appraisal', 'New Customer Feedbacked', "Customer feedback added successfully", 0);
-        return redirect("/rate-our-services")->with('success_add', "Your feedback has been successfully submitted, we value your feedback and appreciate your comments. Thank you");
+        return back()->with('success_add', "Your feedback has been successfully submitted, we value your feedback and appreciate your comments. Thank you");
     }
 
     /**
