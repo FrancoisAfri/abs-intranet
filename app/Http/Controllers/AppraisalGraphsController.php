@@ -89,7 +89,7 @@ class AppraisalGraphsController extends Controller
             return $empAvgs;
         }
         else {
-            $divAvg = array_sum($empAvgs) / count($empAvgs);
+            $divAvg = (count($empAvgs) > 0) ? array_sum($empAvgs) / count($empAvgs) : 0;
             return number_format($divAvg, 2);
         }
     }
