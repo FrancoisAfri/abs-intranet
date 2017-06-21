@@ -98,6 +98,7 @@ class AppraisalGraphsController extends Controller
     public function divisionsPerformance(DivisionLevel $divLvl, $parentDivisionID = 0, $managerID = 0) {
         //$divisions = $divLvl->divisionLevelGroup->sortBy('name');
         $divLvl->load(['divisionLevelGroup' => function ($query) use($parentDivisionID, $managerID) {
+            $query->where('active', 1);
             if ($parentDivisionID > 0) $query->where('parent_id', $parentDivisionID);
             if ($managerID > 0) $query->where('manager_id', $managerID);
             $query->orderBy('name', 'asc');
