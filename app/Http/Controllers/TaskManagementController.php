@@ -201,9 +201,12 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->administrator_id = $administratorID;
 		// Save task
         $EmployeeTasks->save();
-		# Send Email to employee
-		$employee = HRPerson::where('id', $employeeID)->first();
-		Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
+		if (empty($inductionID))
+		{
+			# Send Email to employee
+			$employee = HRPerson::where('id', $employeeID)->first();
+			Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
+		}
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
 		//if ($taskType == 3)
 			//return redirect('/education/activity/' . $activity->id . '/view')->with('success_add', "The task has been added successfully");

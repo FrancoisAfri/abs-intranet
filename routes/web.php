@@ -305,6 +305,7 @@ Route::get('/induction/create', 'InductionAdminController@index');
 Route::get('/induction/search', 'InductionAdminController@search');
 Route::get('/induction/{induction}/view', 'InductionAdminController@show');
 Route::get('/induction/delete/{induction}', 'InductionAdminController@deleteInduction');
+Route::post('/induction/complete', 'InductionAdminController@completeInduction');
 Route::get('/induction/tasks_library', 'TaskLibraryController@index');
 Route::post('induction/add_library_task', 'TaskLibraryController@store');
 Route::post('induction/client_add', 'InductionAdminController@store');

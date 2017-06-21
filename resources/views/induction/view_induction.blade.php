@@ -22,7 +22,7 @@
                     @if (!empty($tasks))
 						@foreach($tasks as $task)
 						 <tr id="categories-list">
-						  <td>@if(!empty($task->status) && $task->status < 4)
+						  <td>@if(!empty($task->status) && $task->status < 4 && $induction->status == 1)
 							<button type="button" id="view_kpi" class="btn btn-xs" data-toggle="modal" data-target="#edit-tasks-modal"
 							  data-task_id="{{ $task->task_id }}" 
 							  data-employee_id="{{ $task->employee_id }}" 
@@ -36,7 +36,7 @@
 							  >Edit</button>
 							@endif 
 							</td>
-						 <td>@if(!empty($task->administrator_id) && $task->administrator_id == $user->person->id && $task->status < 4)           
+						 <td>@if(!empty($task->administrator_id) && $task->administrator_id == $user->person->id && $task->status < 4 && $induction->status == 1)           
 							  <button type="button" id="end-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
 							  data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}" 
 							  data-upload_required="{{ $task->upload_required }}" >End</button>
@@ -55,7 +55,7 @@
 						@endforeach
                     @else
 						<tr id="categories-list">
-						<td colspan="6">
+						<td colspan="8">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             No task to display, please start by adding a new task.
@@ -63,6 +63,21 @@
 						</td>
 						</tr>
                     @endif
+					<tr id="categories-list">
+						<td colspan="8">
+						@if($induction->status == 1)
+                        <div>
+                           <button type="button" id="complete-induction-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#comp-induction-modal"
+							  data-induction_id="{{ $induction->id }}">Complete Induction</button>
+                        </div>
+						@else
+						<div class="alert alert-danger alert-dismissable">
+						Induction Note : {{$induction->notes}} </br>
+						<a class="btn btn-default btn-flat btn-block" href="{{ Storage::disk('local')->url("induction/$induction->completion_document") }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Completion Document</a>
+						</div>
+						@endif
+						</td>
+					</tr>
 					</table>
 					</div>
                 </div>
@@ -73,6 +88,7 @@
         </div>
 		@include('tasks.partials.edit_task')
 		@include('tasks.partials.end_task')
+		@include('induction.partials.complete_induction')
     </div>
 @endsection
 @section('page_script')
@@ -157,7 +173,25 @@
 				modal.find('#employee_id').val(EmployeeID);
 				modal.find('#administrator_id').val(AdministratorID);
 			});
-			// Update task
+			// Call Complete Induction modal
+			$('#comp-induction-modal').on('show.bs.modal', function (e) {
+				var btnEdit = $(e.relatedTarget);
+				inductionID = btnEdit.data('induction_id');
+				var modal = $(this);
+				modal.find('#induction_id').val(inductionID);
+			});
+			// Complete Induction
+			$('#complete-induction').on('click', function () {
+				var strUrl = '/induction/complete';
+                var formName = 'comp-induction-form';
+                var modalID = 'comp-induction-modal';
+                var submitBtnID = 'complete-induction';
+                var redirectUrl = '/induction/' + {{$induction->id}} + '/view';
+                var successMsgTitle = 'Induction Completed!';
+                var successMsg = 'Induction has been Successfully Completed!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
+		// Update task
 			$('#update-task').on('click', function () {
             var strUrl = '/tasks/update/' + taskID;
             var objData = {
