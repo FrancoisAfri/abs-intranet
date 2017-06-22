@@ -246,7 +246,7 @@ Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults
 Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
 
 //  360 appraisal
-Route::get('appraisal/three_sixty', 'AppraisalKPIResultsController@index');
+Route::get('appraisal/three_sixty', 'AppraisalThreeSixtyController@index');
 
 //Appraisal reports
 Route::get('appraisal/reports', 'AppraisalReportsController@index');

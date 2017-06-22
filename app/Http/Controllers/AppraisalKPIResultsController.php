@@ -53,7 +53,7 @@ class AppraisalKPIResultsController extends Controller
         return view('appraisals.load_appraisal')->with($data);
     }
 
-    public function loadEmpAppraisals($empID, $appraisalMonth){
+    public function loadEmpAppraisals($empID, $appraisalMonth, $isThreeSixty = false){
 		//test
 		//return AppraisalKPIResult::empAppraisal(2);
 		//return AppraisalKPIResult::empAppraisalByKPA(2, 'March 2017');
@@ -122,19 +122,24 @@ class AppraisalKPIResultsController extends Controller
 
         $data['emp'] = $emp;
         $data['kpis'] = $kpis;
+        $data['isThreeSixty'] = $isThreeSixty;
         $data['appraisalMonth'] = $appraisalMonth;
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
         $data['page_title'] = "Employee Appraisals";
-        $data['page_description'] = "Load an Employee's Appraisals";
+        $data['page_description'] = "Capture an Employee's Appraisal Score";
         $data['breadcrumb'] = [
             ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 0],
             ['title' => 'List', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
+        $data['active_rib'] = ($isThreeSixty) ? '360 Appraisal' : 'Appraisals';
         AuditReportsController::store('Performance Appraisal', "Employee Appraisal $appraisalMonth Result Page Accessed", "Accessed by User", 0);
+
+        /*if ($isThreeSixty) return view('appraisals.view_emp_three_sixty_appraisals')->with($data);
+        else return view('appraisals.view_emp_appraisals')->with($data);*/
+
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
