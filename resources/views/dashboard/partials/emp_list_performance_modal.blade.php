@@ -6,20 +6,27 @@
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="emp-list-modal-title">Performance</h4>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <!-- Ranking col -->
-                    <div class="col-md-12">
-                        <p class="text-center">
-                            <strong>Employees Performance Ranking ({{ date('Y') }})</strong>
-                        </p>
-                        <div class="no-padding" style="max-height: 420px; overflow-y: scroll;">
-                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-ranking-list">
-                            </ul>
+            <div class="modal-body no-padding">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="row">
+                            <!-- Ranking col -->
+                            <div class="col-md-12">
+                                <p class="text-center">
+                                    <strong>Employees Performance Ranking ({{ date('Y') }})</strong>
+                                </p>
+                                <div class="no-padding" style="max-height: 420px; overflow-y: scroll;">
+                                    <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-ranking-list">
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+                        <!-- /.row -->
+                    </div>
+                    <div class="overlay" id="lo-emp-list-performance-modal">
+                        <i class="fa fa-refresh fa-spin"></i>
                     </div>
                 </div>
-                <!-- /.row -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</button>

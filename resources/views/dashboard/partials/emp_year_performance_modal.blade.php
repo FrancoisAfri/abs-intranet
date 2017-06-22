@@ -6,21 +6,28 @@
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="emp-year-modal-title">Appraisal</h4>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="text-center">
-                            <strong id="emp-year-chart-title">Employee Performance For {{ date('Y') }}</strong>
-                        </p>
+            <div class="modal-body no-padding">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="text-center">
+                                    <strong id="emp-year-chart-title">Employee Performance For {{ date('Y') }}</strong>
+                                </p>
 
-                        <div class="chart">
-                            <!-- Sales Chart Canvas-->
-                            <canvas id="empMonthlyPerformanceModalChart" style="height: 220px;"></canvas>
+                                <div class="chart">
+                                    <!-- Sales Chart Canvas-->
+                                    <canvas id="empMonthlyPerformanceModalChart" style="height: 220px;"></canvas>
+                                </div>
+                                <!-- /.chart-responsive -->
+                            </div>
                         </div>
-                        <!-- /.chart-responsive -->
+                        <!-- /.row -->
+                    </div>
+                    <div class="overlay" id="lo-emp-year-performance-modal">
+                        <i class="fa fa-refresh fa-spin"></i>
                     </div>
                 </div>
-                <!-- /.row -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</button>
