@@ -324,12 +324,23 @@ Route::get('/task/start/{task}', 'TaskManagementController@startTask');
 Route::get('/task/pause/{task}', 'TaskManagementController@pauseTask');
 Route::patch('/tasks/update/{task}', 'TaskManagementController@update');
 Route::post('/task/end', 'TaskManagementController@endTask');
+Route::post('/task/check', 'TaskManagementController@checkTask');
 Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
 // Minutes Meeting
 Route::get('/meeting_minutes/create', 'MeetingMinutesAdminController@index');
+Route::post('/meeting/search_results', 'MeetingMinutesAdminController@searchResults');
+Route::post('/meeting/add_attendees/{meeting}', 'MeetingMinutesAdminController@saveAttendee');
+Route::post('/meeting/add_minutes/{meeting}', 'MeetingMinutesAdminController@saveMinute');
+Route::post('/meeting/add_task/{meeting}', 'MeetingMinutesAdminController@saveTask');
+Route::post('/meeting_minutes/add_meeting', 'MeetingMinutesAdminController@store');
+Route::get('/meeting_minutes/view_meeting/{meeting}/view', 'MeetingMinutesAdminController@show');
+Route::get('/meeting_minutes/search', 'MeetingMinutesAdminController@search');
+Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
+Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
+Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
 //Clients (contacts) registration
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
