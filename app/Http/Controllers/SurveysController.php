@@ -25,8 +25,8 @@ class SurveysController extends Controller
         $employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
         $data['division_levels'] = $divisionLevels;
         $data['employees'] = $employees;
-        $data['page_title'] = "Appraisal Reports";
-        $data['page_description'] = "Generate Employees Appraisal Reports";
+        $data['page_title'] = "Survey Reports";
+        $data['page_description'] = "Generate Employees Survey Reports";
         $data['breadcrumb'] = [
             ['title' => 'Survey', 'path' => '/survey/reports', 'icon' => 'fa fa-list-alt', 'active' => 0, 'is_module' => 1],
             ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
@@ -44,7 +44,16 @@ class SurveysController extends Controller
      */
     public function indexRatingLinks()
     {
-        return 'rating links';
+        $data['page_title'] = "Appraisal Reports";
+        $data['page_description'] = "Generate Employees Appraisal Reports";
+        $data['breadcrumb'] = [
+            ['title' => 'Survey', 'path' => '/survey/reports', 'icon' => 'fa fa-list-alt', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Survey';
+        $data['active_rib'] = 'Reports';
+        AuditReportsController::store('Survey', 'Reports page accessed', "Accessed by User", 0);
+        return view('survey.reports.survey_report_index')->with($data);
     }
 
     /**
