@@ -176,10 +176,11 @@ Route::post('audits/print', 'AuditReportsController@printreport');
 
 # Performance Appraisals Module
 
-Route::get('/appraisal/setup', 'AppraisalSetupController@show');
-Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
-Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
-Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
+Route::get('appraisal/setup', 'AppraisalSetupController@index');
+Route::post('appraisal/setup', 'AppraisalSetupController@saveOrUpdate');
+//Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
+//Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
+//Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
 # Performance Appraisals Module
 
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
@@ -245,8 +246,12 @@ Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchContro
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
 Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
 
-//  360 appraisal
-Route::get('appraisal/three_sixty', 'AppraisalThreeSixtyController@index');
+//  Emp appraisal and 360 appraisal
+Route::get('appraisal/appraise-yourself', 'AppraisalThreeSixtyController@index');
+Route::post('appraisal/appraise-yourself', 'AppraisalThreeSixtyController@storeEmpAppraisals');
+Route::get('appraisal/appraise-your-colleague/{empID}', 'AppraisalThreeSixtyController@indexThreeSixty');
+Route::post('appraisal/add-three-sixty-people/{empID}', 'AppraisalThreeSixtyController@addEmpToThreeSixty');
+Route::get('appraisal/remove-from-three-sixty-people/{empID}/{threeSixtyPersonID}', 'AppraisalThreeSixtyController@removeEmpFromThreeSixty');
 
 //Appraisal reports
 Route::get('appraisal/reports', 'AppraisalReportsController@index');

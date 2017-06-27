@@ -561,9 +561,9 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = '360 Appraisal';
-        $ribbon->description = '360 Appraisal';
-        $ribbon->ribbon_path = 'appraisal/three_sixty';
+        $ribbon->ribbon_name = 'My Appraisal';
+        $ribbon->description = 'My Appraisal';
+        $ribbon->ribbon_path = 'appraisal/appraise-yourself';
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 

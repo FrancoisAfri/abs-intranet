@@ -22,6 +22,11 @@ class CompanyIdentityController extends Controller
      */
     public function saveOrUpdate(Request $request)
     {
+        $this->validate($request, [
+            'mailing_address' => 'email',
+            'support_email' => 'email',
+        ]);
+
         $compDetails = CompanyIdentity::first();
         //$compDetails = (Schema::hasTable('company_identities')) ? CompanyIdentity::first() : null;
         if ($compDetails) { //update
