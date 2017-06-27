@@ -100,7 +100,18 @@ class DashboardController extends Controller
 			->orderBy('client_name')
 			->orderBy('employee_tasks.order_no')
 			->get();
-			//return $tasks;
+			// check task
+			$checkTasks = DB::table('employee_tasks')
+			->select('employee_tasks.description','employee_tasks.employee_id'
+			,'employee_tasks.status','employee_tasks.id as task_id'
+			,'hr_people.first_name as firstname','hr_people.surname as surname')
+			->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+			->where('employee_tasks.check_by_id', $user->person->id)
+			->where('employee_tasks.status', '=', 4)
+			->whereNull('checked')
+			->orderBy('employee_tasks.employee_id')
+			->get();
+			//return $checkTasks;
 			$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
@@ -108,6 +119,7 @@ class DashboardController extends Controller
             $data['isSuperuser'] = $isSuperuser;
             $data['isDivHead'] = $isDivHead;
             $data['tasks'] = $tasks;
+            $data['checkTasks'] = $checkTasks;
             //$data['managedDivsIDs'] = json_encode($managedDivsIDs);
             $data['managedDivsLevel'] = $managedDivsLevel;
             $data['isSupervisor'] = $isSupervisor;

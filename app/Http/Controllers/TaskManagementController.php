@@ -161,6 +161,30 @@ class TaskManagementController extends Controller
 		AuditReportsController::store('Task Management', "Task Ended", "Edited by User", 0);
 		return response()->json(['employee_id' => $endtask->employee_id], 200);
     }
+	# Check task
+	public function checkTask(Request $request) 
+	{
+		$checkData = $request->all();
+        //Exclude empty fields from query
+        foreach ($checkData as $key => $value)
+        {
+            if (empty($checkData[$key])) {
+                unset($checkData[$key]);
+            }
+        }
+		# update Task
+        $dateChecked = strtotime(date('Y-m-d'));
+		$notes = !empty($checkData['notes']) ? $checkData['notes'] : '';
+		DB::table('employee_tasks')
+		->where('id', $checkData['task_id'])
+		->update([
+			'checked' => 1,
+			'check_date' => $dateChecked,
+			'check_comments' => $notes
+		]);
+		AuditReportsController::store('Task Management', "Task Checked", "Checked by User", 0);
+	return response()->json(['employee_id' => $checkData['task_id']], 200);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -168,7 +192,7 @@ class TaskManagementController extends Controller
      * @return \Illuminate\Http\Response
     */
     public static function store($description='',$duedate='',$startDate='',$escalationID=0,$employeeID=0,$taskType=0
-	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0)
+	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0)
     {
 		//convert dates to unix time stamp
         if (!empty($duedate)) {
@@ -199,6 +223,7 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->due_date = $intduedate;
 		$EmployeeTasks->start_date = $intstartDate;
 		$EmployeeTasks->administrator_id = $administratorID;
+		$EmployeeTasks->check_by_id = $checkByID;
 		// Save task
         $EmployeeTasks->save();
 		if (empty($inductionID))

@@ -10,80 +10,74 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12">
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Create Meeting Minutes</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+        <!-- New User Form -->
+        <div class="col-md-8 col-md-offset-2">
+            <!-- Horizontal Form -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">New Meeting</h3>
+                    <p>Enter Meeting details:</p>
                 </div>
-            </div>
-			<form method="POST" action="/induction/client_add">
-            {{ csrf_field() }}
-            <!-- /.box-header -->
-            <div class="box-body">
-			
-			
-            <form class="form-horizontal" method="POST" name="add_new_leavetype-form">
-                {{ csrf_field() }}
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Meeting</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="task-invalid-input-alert"></div>
-                    <div id="task-success-alert"></div>
-                    <div class="form-group">
-                        <label for="Meeting Name" class="col-sm-2 control-label">Name</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="meeting_name" name="meeting_name" value="" placeholder="Enter Name">
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" method="POST"  action="/meeting_minutes/add_meeting">
+                    {{ csrf_field() }}
+                    <div class="box-body">
+					    @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
-                        </div>
-                    </div>
-					<div class="form-group">
+                        @endif
+                        <div class="form-group {{ $errors->has('meeting_name') ? ' has-error' : '' }}">
+							<label for="Meeting Name" class="col-sm-2 control-label">Title</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<input type="text" class="form-control" id="meeting_name" name="meeting_name" value="{{ old('meeting_name') }}" placeholder="Enter Name">
+								</div>
+							</div>
+						</div>
+                        <div class="form-group{{ $errors->has('meeting_date') ? ' has-error' : '' }}">
                         <label for="Meeting Date" class="col-sm-2 control-label">Date</label>
                         <div class="col-sm-10">
 							 <div class="input-group">
-                            <input type="text" class="form-control datepicker" name="meeting_date" placeholder="  dd/mm/yyyy" value="">
+                            <input type="text" class="form-control datepicker" name="meeting_date" placeholder="  dd/mm/yyyy" value="{{ old('meeting_date') }}">
 							</div>
                         </div>
-                    </div>
-					<div class="form-group">
-                        <label for="Meeting Location" class="col-sm-2 control-label">Location</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="meeting_location" name="meeting_location" value="" placeholder="Enter Location">
-                            </div>
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <label for="Meeting Agenda" class="col-sm-2 control-label">Agenda</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-							<textarea rows="4" cols="50" class="form-control" id="meeting_agenda" name="meeting_agenda" placeholder="Enter Agenda"></textarea>
+						</div>
+						<div class="form-group{{ $errors->has('meeting_location') ? ' has-error' : '' }}">
+							<label for="Meeting Location" class="col-sm-2 control-label">Location</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<input type="text" class="form-control" id="meeting_location" name="meeting_location" value="{{ old('meeting_location') }}" placeholder="Enter Location">
+								</div>
 							</div>
-                        </div>
+						</div>
+						<div class="form-group{{ $errors->has('meeting_agenda') ? ' has-error' : '' }}">
+							<label for="Meeting Agenda" class="col-sm-2 control-label">Agenda</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+								<textarea rows="4" cols="50" class="form-control" id="meeting_agenda" name="meeting_agenda" placeholder="Enter Agenda">{{ old('meeting_agenda') }}</textarea>
+								</div>
+							</div>
+						</div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_library_task" class="btn btn-primary">Add Task</button>
-                </div>
-            </form>
-         <!-- /.box-body -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-adn"></i>  Submit</button>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Submit</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
             </div>
+            <!-- /.box -->
         </div>
-		</form>
-        </div>
-    </div>
+        <!-- End new Form-->
 </div>
-
 @endsection
 <!-- Ajax form submit -->
 
