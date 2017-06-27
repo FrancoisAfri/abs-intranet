@@ -41,7 +41,7 @@ class emailMinutes extends Mailable
         $companyName = $companyDetails['company_name'];
 
 		//Should get these details from setup
-        $subject = "Induction Hand Hocin on $companyName online system.";
+        $subject = "Meeting Minutes on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyDetails['full_company_name'] ;
