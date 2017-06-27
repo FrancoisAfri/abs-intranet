@@ -165,7 +165,7 @@
 									<td>{{ $task->description }}</td>
 									<td>{{ $task->employeesTasks->first_name  .' '. $task->employeesTasks->surname}}</td>
 									<td>{{ $taskStatus[$task->status] }}</td>
-									<td>{{ !empty($task->checked) && $task->checked == 1 ? 'Yes,' $task->check_comments: 'No' }}</td>
+									<td>{{ !empty($task->checked) && $task->checked == 1 ?  $task->check_comments : 'No' }}</td>
 								</tr>
 							@endforeach
 							@else
