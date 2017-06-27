@@ -68,7 +68,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-{{ $skinColor }} sidebar-mini">
+<body class="hold-transition skin-{{ $skinColor }} fixed sidebar-mini">
 <div class="wrapper">
 
     <!-- Header -->
@@ -207,6 +207,8 @@ desired effect
 <script src="/bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="/bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.js"></script>
 <!-- AdminLTE App -->
 <script src="/bower_components/AdminLTE/dist/js/app.min.js"></script>
 <!-- Additional page script -->
