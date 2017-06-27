@@ -132,7 +132,7 @@
         </div>
         <!-- Include add new modal -->
     </div>
-    @endsection
+@endsection
 
     @section('page_script')
             <!-- Select2 -->

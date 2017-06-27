@@ -13,7 +13,7 @@ class AppraisalKPIResult extends Model
     public $table = 'appraisal_k_p_i_results';
 
     // Mass assignable fields
-    protected $fillable = ['score', 'percent', 'date_uploaded', 'comment', 'hr_id', 'template_id'];
+    protected $fillable = ['score', 'percent', 'date_uploaded', 'comment', 'hr_id', 'template_id', 'appraiser_id'];
 
     //Relationship result and kpi
     public function kpi() {
@@ -96,6 +96,11 @@ class AppraisalKPIResult extends Model
         $emp = HRPerson::where('id', $empID)
             ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
+                $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+            }])
+            ->with(['jobTitle.kpiTemplate.kpi.empResults' => function ($query) use ($empID, $monthStart, $monthEnd) {
+                $query->where('hr_id', $empID);
+                //$query->where('appraiser_id', $empID);
                 $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
             }])
             ->with('jobTitle.kpiTemplate.kpi.kpiskpas')
@@ -201,8 +206,36 @@ class AppraisalKPIResult extends Model
                     $kpaResult += $percentage;
                 }
                 else { //Normal KPIs
-                    $kpiResults[$kpi->id] = (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
-                    $kpaResult += (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
+                    $appraisalSettings = AppraisalSetup::first(); //Get Appraisal Settings
+
+                    $managerScore =  (count($kpi->results) > 0) ? $kpi->results->first()->weighted_percentage : 0;
+                    $empScore =  ($kpi->empResults && $kpi->empResults->where('appraiser_id', $empID) && $kpi->empResults->where('appraiser_id', $empID)->first()) ? $kpi->empResults->where('appraiser_id', $empID)->first()->weighted_percentage : 0;
+                    $colleaguesResults = $kpi->empResults;
+                    $totalColleaguesScore = $colleaguesCount = 0;
+                    foreach ($colleaguesResults as $colleaguesResult) {
+                        if ($colleaguesResult->appraiser_id != $empID && $colleaguesResult->weighted_percentage > 0) {
+                            $totalColleaguesScore += $colleaguesResult->weighted_percentage;
+                            $colleaguesCount++;
+                        }
+                    }
+                    $colleaguesScore =  ($colleaguesCount > 0) ? $totalColleaguesScore / $colleaguesCount : 0;
+
+                    if ($appraisalSettings) {
+                        $isThreeSixtyActive = $appraisalSettings->three_sixty_status;
+                        $managerWeight = $appraisalSettings->manager_appraisal_weight;
+                        $empWeight = $appraisalSettings->employee_appraisal_weight;
+                        if ($isThreeSixtyActive === 1) { //360 is active
+                            $colleaguesWeight = $appraisalSettings->colleagues_appraisal_weight;
+                            $totalScore = (($managerScore * $managerWeight) / 100) + (($empScore * $empWeight) / 100) + (($colleaguesScore * $colleaguesWeight) / 100);
+                        } else { //360 is not active
+                            $totalScore = (($managerScore * $managerWeight) / 100) + (($empScore * $empWeight) / 100);
+                        }
+                    } else {
+                        $totalScore = $managerScore;
+                    }
+
+                    $kpiResults[$kpi->id] = $totalScore;
+                    $kpaResult += $totalScore;
                 }
             }
             if ($kpaID != null && $groupKey == $kpaID) return $kpiResults;

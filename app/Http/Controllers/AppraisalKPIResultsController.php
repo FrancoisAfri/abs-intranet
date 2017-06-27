@@ -12,6 +12,7 @@ use App\AppraisalQuery_report;
 use App\AppraisalClockinResults;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Excel;
@@ -53,7 +54,7 @@ class AppraisalKPIResultsController extends Controller
         return view('appraisals.load_appraisal')->with($data);
     }
 
-    public function loadEmpAppraisals($empID, $appraisalMonth){
+    public function loadEmpAppraisals($empID, $appraisalMonth, $isEmpAppraisal = false){
 		//test
 		//return AppraisalKPIResult::empAppraisal(2);
 		//return AppraisalKPIResult::empAppraisalByKPA(2, 'March 2017');
@@ -63,6 +64,7 @@ class AppraisalKPIResultsController extends Controller
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
         $monthEnd = strtotime($monthEnd->endOfDay());
+        $appraiserID = Auth::user()->person->id;
         /*$emp = HRPerson::where('id', $empID)
             ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
@@ -75,10 +77,11 @@ class AppraisalKPIResultsController extends Controller
             ->get()
             ->first();*/
 
-		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate');
+		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate', 'threeSixtyPeople');
 		if ($emp->jobTitle && $emp->jobTitle->kpiTemplate) {
 			$kpis = appraisalsKpis::where(function ($query) {
 				$query->where('is_upload', 2);
+				$query->WhereNotIn('is_task_kpi', [1]);
 				//$query->orWhereNotIn('upload_type', [1, 2, 3]);
 			})
 				->where('template_id', $emp->jobTitle->kpiTemplate->id)
@@ -89,11 +92,19 @@ class AppraisalKPIResultsController extends Controller
 				->where('appraisals_kpis.status', 1)
 				->where('appraisal_kpas.status', 1)
 				->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
-
 				->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
-					$query->where('hr_id', $empID);
-					$query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+				    //if (! $isEmpAppraisal) {
+                        $query->where('hr_id', $empID);
+                        $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+                    //}
 				}])
+                ->with(['empResults' => function ($query) use ($empID, $monthStart, $monthEnd, $appraiserID) {
+                    //if ($isEmpAppraisal) {
+                        $query->where('hr_id', $empID);
+                        $query->where('appraiser_id', $appraiserID);
+                        $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+                    //}
+                }])
 				->with('kpiranges')
 				->with('kpiNumber')
 				->with('kpiIntScore')
@@ -120,21 +131,46 @@ class AppraisalKPIResultsController extends Controller
             ->get();*/
         //return $kpis;
 
+        $aPositions = [];
+        $cPositions = DB::table('hr_positions')->get();
+        foreach ($cPositions as $position) {
+            $aPositions[$position->id] = $position->name;
+        }
+
+        $formAction = '/appraisal/emp/appraisal/save';
+        if ($isEmpAppraisal) $formAction = '/appraisal/appraise-yourself';
+
+        $showThreeSixtySection = ($isEmpAppraisal && $empID === $appraiserID) ? true : false;
+        $threeSixtyPeopleCollection = $emp->threeSixtyPeople;
+        $threeSixtyPeopleIDs = [];
+        foreach ($threeSixtyPeopleCollection as $threeSixtyPerson) {
+            $threeSixtyPeopleIDs[] = $threeSixtyPerson->appraiser_id;
+        }
+        $threeSixtyPeople = HRPerson::whereIn('id', $threeSixtyPeopleIDs)->get();
+        $threeSixtyPeopleIDs[] = $empID;
+        $threeSixtyDDEmps = HRPerson::where('status', 1)->whereNotIn('id', $threeSixtyPeopleIDs)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+
         $data['emp'] = $emp;
         $data['kpis'] = $kpis;
+        $data['isEmpAppraisal'] = $isEmpAppraisal;
         $data['appraisalMonth'] = $appraisalMonth;
-        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
-        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
+        $data['positions'] = $aPositions;
+        $data['formAction'] = $formAction;
+        $data['showThreeSixtySection'] = $showThreeSixtySection;
+        $data['threeSixtyPeople'] = $threeSixtyPeople;
+        $data['threeSixtyDDEmps'] = $threeSixtyDDEmps;
         $data['page_title'] = "Employee Appraisals";
-        $data['page_description'] = "Load an Employee's Appraisals";
+        $data['page_description'] = "Capture an Employee's Appraisal Score";
         $data['breadcrumb'] = [
             ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 0],
             ['title' => 'List', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
+        $data['active_rib'] = ($isEmpAppraisal) ? 'My Appraisal' : 'Appraisals';
         AuditReportsController::store('Performance Appraisal', "Employee Appraisal $appraisalMonth Result Page Accessed", "Accessed by User", 0);
+
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
@@ -167,6 +203,7 @@ class AppraisalKPIResultsController extends Controller
                 $result->hr_id = $hrID;
                 $result->date_uploaded = strtotime('15 ' . $appraisalMonth);
                 $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
+                $result->appraiser_id = Auth::user()->person->id;
                 $result->save();
             }
         }
