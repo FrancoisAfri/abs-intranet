@@ -221,7 +221,7 @@ class AppraisalKPIResultsController extends Controller
         ]);
 		$uploadTypes = [1 => "General", 2 => 'Clock In', 3 => 'Query Report '];
 		$templateData = $request->all();
-		$queryCodeNew = $employeeNO = $date = 0;
+		$queryCodeNew = $employeeNO = $date = $count = 0;
 		unset($templateData['_token']);
 		$appraisalMonth = trim($templateData['date_uploaded']);
 		$uploadType = $request->input('upload_type');
@@ -262,6 +262,7 @@ class AppraisalKPIResultsController extends Controller
 										'date_uploaded' => $templateData['date_uploaded'],
 										'hr_id' => $employees->id];
 										$employeeNO = $employees->id;
+										$count =  $count + 1;
 									}
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
 									{// 1 for late, 2 for not late
@@ -284,6 +285,7 @@ class AppraisalKPIResultsController extends Controller
 											'hr_id' => $employees->id];
 											$employeeNO = $employees->id;
 											$date = $val['date'];
+											$count =  $count + 1;
 										}
 									}
 									elseif ($uploadType == 3)
@@ -313,7 +315,8 @@ class AppraisalKPIResultsController extends Controller
 										$query->comment = $value['query_comments'];
 										$query->date_uploaded = $templateData['date_uploaded'];
 										$query->save();	
-										$insert = 1;	
+										$insert = 1;
+										$count =  $count + 1;										
 										$queryCodeNew = $value['query_code'];										
 									}
 								}
@@ -325,7 +328,7 @@ class AppraisalKPIResultsController extends Controller
 				{
 					if ($uploadType == 1) AppraisalKPIResult::insert($insert);
 					elseif ($uploadType == 2) AppraisalClockinResults::insert($insert);
-					return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were successfully inserted.");
+					return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were successfully inserted $count.");
 				}
 				else return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were not uploaded.");
 
