@@ -52,9 +52,14 @@ class appraisalsKpis extends Model
     public function kpiScoreType() {
         if ($this->kpi_type) return $this->kpiIntScore();
     }*/
-    //Relationship kpi and result
+    //Relationship kpi and result (Appraised by manager)
     public function results() {
         return $this->hasMany(AppraisalKPIResult::class, 'kpi_id');
+    }
+
+    //Relationship kpi and result (Appraised by self)
+    public function empResults() {
+        return $this->hasMany(AppraisalEmpKPIResult::class, 'kpi_id');
     }
 
     //Function to add a new kpi integer range

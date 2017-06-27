@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class HRPerson extends Model
 {
@@ -61,9 +62,21 @@ class HRPerson extends Model
         return $this->belongsTo(JobTitle::class, 'position');
     }
 
+    //Relationship hr person and 360 person
+    public function threeSixtyPeople() {
+        return $this->hasMany(AppraisalThreeSixtyPerson::class, 'hr_id');
+    }
+
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;
+    }
+
+    //Full Profile picture url accessor
+    public function getProfilePicUrlAttribute() {
+        $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        return (!empty($this->profile_pic)) ? Storage::disk('local')->url("avatars/$this->profile_pic") : (($this->gender === 0) ? $f_silhouette : $m_silhouette);
     }
 
     //function ro get people from a specific div level

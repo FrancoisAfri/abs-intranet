@@ -1,3 +1,4 @@
+
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
@@ -288,11 +289,11 @@
             }
             else $('#load-kpis').show();
         }
-        //function to set the url of the lod kpi btn
+        //function to set the url of the load kpi btn
         function loadKPIsOnClick() {
             var selectedEmp = $('#hr_person_id').val();
             var appraisalMonth = $.trim($('#appraisal_month').val());
-            if (appraisalMonth == '') appraisalMonth = 'March 2017';
+            if (appraisalMonth == '') appraisalMonth = '{{ \Carbon\Carbon::now()->format('F Y') }}';
             //$('#load-kpis').click(function () {
             location.href = '/appraisal/load/result/' + selectedEmp + '/' + appraisalMonth;
             //});

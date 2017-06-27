@@ -176,10 +176,11 @@ Route::post('audits/print', 'AuditReportsController@printreport');
 
 # Performance Appraisals Module
 
-Route::get('/appraisal/setup', 'AppraisalSetupController@show');
-Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
-Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
-Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
+Route::get('appraisal/setup', 'AppraisalSetupController@index');
+Route::post('appraisal/setup', 'AppraisalSetupController@saveOrUpdate');
+//Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
+//Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
+//Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
 # Performance Appraisals Module
 
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
@@ -193,7 +194,7 @@ Route::post('appraisal/kpi', 'AppraisalTemplatesController@kpiSave');
 Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi');
 Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
 
-#Kpi Types
+#    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
 Route::patch('appraisal/range_edit/{range}', 'AppraisalKpiTypeController@kpiEditRange');
@@ -244,6 +245,13 @@ Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasVi
 Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
 Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
+
+//  Emp appraisal and 360 appraisal
+Route::get('appraisal/appraise-yourself', 'AppraisalThreeSixtyController@index');
+Route::post('appraisal/appraise-yourself', 'AppraisalThreeSixtyController@storeEmpAppraisals');
+Route::get('appraisal/appraise-your-colleague/{empID}', 'AppraisalThreeSixtyController@indexThreeSixty');
+Route::post('appraisal/add-three-sixty-people/{empID}', 'AppraisalThreeSixtyController@addEmpToThreeSixty');
+Route::get('appraisal/remove-from-three-sixty-people/{empID}/{threeSixtyPersonID}', 'AppraisalThreeSixtyController@removeEmpFromThreeSixty');
 
 //Appraisal reports
 Route::get('appraisal/reports', 'AppraisalReportsController@index');
@@ -339,6 +347,7 @@ Route::post('survey/reports/print', 'SurveysController@printReport');
 Route::get('/hr/setup', 'HrController@showSetup');
 Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
 Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
+
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
