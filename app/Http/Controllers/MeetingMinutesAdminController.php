@@ -333,15 +333,21 @@ class meetingMinutesAdminController extends Controller
 			->get();
 			
 			# Send Email to attendees
-			foreach($attendees as $attendee)
+			if (!empty($attendees))
 			{
-				$employee = HRPerson::where('id', $attendee->employee_id)->first();
-				Mail::to($employee->email)->send(new emailMinutes($employee,$meeting));
+				foreach($attendees as $attendee)
+				{
+					$employee = HRPerson::where('id', $attendee->employee_id)->first();
+					Mail::to($employee->email)->send(new emailMinutes($employee,$meeting));
+				}
 			}
+			else
+				return back()->with('success_email', "No Minutes have been added to this meetiing. Please start by adding minutes.");
 			
 		}
+		else
+			return back()->with('success_email', "Meeting Details not found. Please contact your system administrator");
 		AuditReportsController::store('Minutes Meeting', 'email minutes to attendees', "Email Minutes", 0);
         return back()->with('success_email', "Meeting Minutes Emails Has Successfully Been Sent To Attendees.");
-        //return view('induction.reports.induction_print')->with($data);
     }
 }
