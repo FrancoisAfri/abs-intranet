@@ -332,8 +332,15 @@ class meetingMinutesAdminController extends Controller
 			->orderBy('meeting_attendees.employee_id', 'asc')
 			->get();
 			
-			# Send Email to attendees
-			if (!empty($attendees))
+			$minutesMeeting = DB::table('meetings_minutes')
+			->select('meetings_minutes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+			->leftJoin('hr_people', 'meetings_minutes.employee_id', '=', 'hr_people.id')
+			->where('meetings_minutes.meeting_id', $meeting->id)
+			->orderBy('meetings_minutes.id')
+			->first();
+			
+			# Send Email to attendees if minutes exist
+			if (!empty($minutesMeeting->id))
 			{
 				foreach($attendees as $attendee)
 				{
@@ -342,11 +349,11 @@ class meetingMinutesAdminController extends Controller
 				}
 			}
 			else
-				return back()->with('success_email', "No Minutes have been added to this meetiing. Please start by adding minutes.");
+				return back()->with('success_error', "No Minutes have been added to this meetiing. Please start by adding minutes.");
 			
 		}
 		else
-			return back()->with('success_email', "Meeting Details not found. Please contact your system administrator");
+			return back()->with('success_error', "Meeting Details not found. Please contact your system administrator");
 		AuditReportsController::store('Minutes Meeting', 'email minutes to attendees', "Email Minutes", 0);
         return back()->with('success_email', "Meeting Minutes Emails Has Successfully Been Sent To Attendees.");
     }

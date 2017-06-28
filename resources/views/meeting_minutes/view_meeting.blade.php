@@ -133,6 +133,9 @@
                 <!-- Confirmation Modal -->
         @if(Session('success_email'))
             @include('contacts.partials.success_action', ['modal_title' => "Emails Sent!", 'modal_content' => session('success_email')])
+		        <!-- Confirmation Modal -->
+        @elseif(Session('success_error'))
+            @include('contacts.partials.warning_action', ['modal_title' => "Meeting Minutes Error!", 'modal_content' => session('success_error')])
 		@endif
     </div>
     <div class="row">
