@@ -50,6 +50,7 @@ class emailMinutes extends Mailable
 		$minutesMeeting = DB::table('meetings_minutes')
 		->select('meetings_minutes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
 		->leftJoin('hr_people', 'meetings_minutes.employee_id', '=', 'hr_people.id')
+		->where('meetings_minutes.meeting_id', $this->meeting->id)
 		->orderBy('meetings_minutes.id')
 		->get();
 		$data['minutesMeeting'] = $minutesMeeting;
