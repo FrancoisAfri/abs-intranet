@@ -247,15 +247,15 @@ Route::get('appraisal/reports', 'AppraisalReportsController@index');
 Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
 
-#Document setup module
-Route::get('/hr/document', 'DocumentTypeController@viewDoc');
-Route::post('/hr/document/add/doc_type', 'DocumentTypeController@addList');
-Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
-Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');
-Route::get('/hr/category', 'DocumentTypeController@viewCategory');
-Route::post('/hr/category/add/doc_type_category', 'DocumentTypeController@addDoc');
-Route::get('/hr/category/{listLevel}/activate', 'DocumentTypeController@activateDoc');
-Route::patch('/hr/category/{doc_type_category}', 'DocumentTypeController@updateDoc');
+// #Document setup module
+// Route::get('/hr/document', 'DocumentTypeController@viewDoc');
+// Route::post('/hr/document/add/doc_type', 'DocumentTypeController@addList');
+// Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
+// Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');
+// Route::get('/hr/category', 'DocumentTypeController@viewCategory');
+// Route::post('/hr/category/add/doc_type_category', 'DocumentTypeController@addDoc');
+// Route::get('/hr/category/{listLevel}/activate', 'DocumentTypeController@activateDoc');
+// Route::patch('/hr/category/{doc_type_category}', 'DocumentTypeController@updateDoc');
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
@@ -264,6 +264,7 @@ Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
 Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@Searchdoc');
 Route::post('/hr/emp_doc/Search', 'EmployeeDocumentsController@Searchdoc');
 Route::post('/hr/emp_qual/Search', 'EmployeeDocumentsController@Searchqul');
+Route::post('/hr/emp_search/Search', 'EmployeeDocumentsController@SearchEmp');
 
 #Employees Qualifications Module
 Route::get('/hr/emp_qualification', 'EmployeeQualificationsController@viewDoc');
@@ -282,14 +283,14 @@ Route::post('/hr/users_search', 'EmployeeSearchController@getSearch');
 Route::get('/hr/company_setup', 'EmployeeCompanySetupController@viewLevel');
 Route::post('/hr/firstleveldiv/add/{divLevel}', 'EmployeeCompanySetupController@addLevel');
 Route::patch('/hr/company_edit/{divLevel}/{childID}', 'EmployeeCompanySetupController@updateLevel');
-#Add qualification Type
-Route::post('hr/addqultype', 'EmployeeCompanySetupController@addqualType');
-Route::get('/hr/addqul/{sta}', 'EmployeeCompanySetupController@QualAct');
-Route::post('hr/qul_type_edit/{qul}', 'EmployeeCompanySetupController@editQualType');
+// #Add qualification Type
+// Route::post('hr/addqultype', 'EmployeeCompanySetupController@addqualType');
+// Route::get('/hr/addqul/{sta}', 'EmployeeCompanySetupController@QualAct');
+// Route::post('hr/qul_type_edit/{qul}', 'EmployeeCompanySetupController@editQualType');
 #DocType
-Route::post('hr/addDoctype', 'EmployeeCompanySetupController@addDocType');
-Route::get('/hr/adddoc/{sta}', 'EmployeeCompanySetupController@DocAct');
-Route::post('/hr/Doc_type_edit/{doc}', 'EmployeeCompanySetupController@editDocType');
+// Route::post('hr/addDoctype', 'EmployeeCompanySetupController@addDocType');
+// Route::get('/hr/adddoc/{sta}', 'EmployeeCompanySetupController@DocAct');
+// Route::post('/hr/Doc_type_edit/{doc}', 'EmployeeCompanySetupController@editDocType');
 
 //Route::post('/hr/company_edit/{divLevel}', 'EmployeeCompanySetupController@editlevel');
 Route::get('/hr/company_edit/{divLevel}/{childID}/activate', 'EmployeeCompanySetupController@activateLevel');
@@ -324,6 +325,24 @@ Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 Route::get('/hr/setup', 'HrController@showSetup');
 Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
 Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
+#
+Route::post('hr/addqultype', 'HrController@addqualType');
+Route::get('/hr/addqul/{sta}', 'HrController@QualAct');
+Route::post('hr/qul_type_edit/{qul}', 'HrController@editQualType');
+#
+Route::get('/hr/document', 'HrController@viewDoc');
+Route::post('/hr/document/add/doc_type', 'HrController@addList');
+Route::get('/hr/document/{listLevel}/activate', 'HrController@activateList');
+Route::patch('/hr/document/{cat_type}', 'HrController@updateList');
+Route::get('/hr/category/{category}', 'HrController@viewCategory');
+Route::post('/hr/category/add/doc_type_category', 'HrController@addDoc');
+Route::get('/hr/category/{listLevel}/activate', 'HrController@activateDoc');
+Route::patch('/hr/category/{doc_type_category}', 'HrController@updateDoc');
+#
+Route::post('hr/addDoctype/{category}', 'HrController@addDocType');
+Route::post('/hr/Doc_type_edit/{edit_DocID}', 'HrController@editDocType');
+Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
+// /hr/category/' . $type->id
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');

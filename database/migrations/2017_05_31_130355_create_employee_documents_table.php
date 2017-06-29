@@ -20,6 +20,7 @@ class CreateEmployeeDocumentsTable extends Migration
             $table->integer('division_level_1')->nullable();
             $table->integer('hr_person_id')->nullable();
 			$table->integer('document_type_id')->nullable();
+			$table->integer('qualification_type_id')->nullable();
             $table->string('doc_description')->nullable();
             $table->bigInteger('expirydate')->nullable();
             $table->string('supporting_docs')->nullable();

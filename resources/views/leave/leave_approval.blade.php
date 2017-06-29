@@ -60,7 +60,7 @@
                                                       @else
                                                           <br><a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                                       @endif
-                                                  </div>
+                                            </div>
                               </td>
                              
 

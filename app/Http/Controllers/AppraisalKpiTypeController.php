@@ -66,6 +66,7 @@ class AppraisalKpiTypeController extends Controller
         ]);
 		$rangeData = $request->all();
 		unset($rangeData['_token']);
+        
 		$range = new appraisalsKpiRange($rangeData);
 		$range->status = 1;
         $range->save();
