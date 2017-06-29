@@ -67,7 +67,7 @@ function modalAjaxSubmit(strUrl, objData, modalID,submitBtnID, redirectUrl, succ
     });
 }
 
-function modalFormDataSubmit(strUrl, formName, modalID,submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod) {
+function modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod) {
     successMsgTitle = successMsgTitle || 'Success!';
     successMsg = successMsg || 'Action Performed Successfully.';
     redirectUrl = redirectUrl || -1;

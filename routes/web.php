@@ -20,6 +20,9 @@ Route::get('/', function () {
 
 Route::get('/', 'DashboardController@index');
 Route::get('test', 'PagesController@testPage');
+Route::get('/home', function () {
+    return Redirect::action('DashboardController@index');
+});
 
 Auth::routes();
 
@@ -173,10 +176,11 @@ Route::post('audits/print', 'AuditReportsController@printreport');
 
 # Performance Appraisals Module
 
-Route::get('/appraisal/setup', 'AppraisalSetupController@show');
-Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
-Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
-Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
+Route::get('appraisal/setup', 'AppraisalSetupController@index');
+Route::post('appraisal/setup', 'AppraisalSetupController@saveOrUpdate');
+//Route::post('/appraisal/add', 'AppraisalSetupController@addAppraisal');
+//Route::patch('/appraisal/latecomers/{appraisal_setup}', 'AppraisalSetupController@updateAppraisal');
+//Route::get('/appraisals/latecomers/{appraisal_setup}/activate', 'AppraisalSetupController@activateAppraisal');
 # Performance Appraisals Module
 
 Route::get('appraisal/templates', 'AppraisalTemplatesController@viewTemlates');
@@ -190,7 +194,7 @@ Route::post('appraisal/kpi', 'AppraisalTemplatesController@kpiSave');
 Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi');
 Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
 
-#Kpi Types
+#    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
 Route::patch('appraisal/range_edit/{range}', 'AppraisalKpiTypeController@kpiEditRange');
@@ -241,6 +245,13 @@ Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasVi
 Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
 Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
+
+//  Emp appraisal and 360 appraisal
+Route::get('appraisal/appraise-yourself', 'AppraisalThreeSixtyController@index');
+Route::post('appraisal/appraise-yourself', 'AppraisalThreeSixtyController@storeEmpAppraisals');
+Route::get('appraisal/appraise-your-colleague/{empID}', 'AppraisalThreeSixtyController@indexThreeSixty');
+Route::post('appraisal/add-three-sixty-people/{empID}', 'AppraisalThreeSixtyController@addEmpToThreeSixty');
+Route::get('appraisal/remove-from-three-sixty-people/{empID}/{threeSixtyPersonID}', 'AppraisalThreeSixtyController@removeEmpFromThreeSixty');
 
 //Appraisal reports
 Route::get('appraisal/reports', 'AppraisalReportsController@index');
@@ -302,6 +313,8 @@ Route::get('/hr/firstchild/{parentLevel}/{childID}/activate', 'EmployeeCompanySe
 Route::get('/induction/create', 'InductionAdminController@index');
 Route::get('/induction/search', 'InductionAdminController@search');
 Route::get('/induction/{induction}/view', 'InductionAdminController@show');
+Route::get('/induction/delete/{induction}', 'InductionAdminController@deleteInduction');
+Route::post('/induction/complete', 'InductionAdminController@completeInduction');
 Route::get('/induction/tasks_library', 'TaskLibraryController@index');
 Route::post('induction/add_library_task', 'TaskLibraryController@store');
 Route::post('induction/client_add', 'InductionAdminController@store');
@@ -310,17 +323,39 @@ Route::patch('/induction/tasks_library_edit/{TaskLibrary}', 'TaskLibraryControll
 Route::get('/induction/library_tasks_activate/{TaskLibrary}', 'TaskLibraryController@actDeact');
 Route::get('/task/start/{task}', 'TaskManagementController@startTask');
 Route::get('/task/pause/{task}', 'TaskManagementController@pauseTask');
+Route::patch('/tasks/update/{task}', 'TaskManagementController@update');
 Route::post('/task/end', 'TaskManagementController@endTask');
+Route::post('/task/check', 'TaskManagementController@checkTask');
 Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
-
-//Route::post('audits', 'AuditReportsController@getReport');
-//Route::post('audits/print', 'AuditReportsController@printreport');
+// Minutes Meeting
+Route::get('/meeting_minutes/create', 'MeetingMinutesAdminController@index');
+Route::post('/meeting/search_results', 'MeetingMinutesAdminController@searchResults');
+Route::post('/meeting/add_attendees/{meeting}', 'MeetingMinutesAdminController@saveAttendee');
+Route::post('/meeting/add_minutes/{meeting}', 'MeetingMinutesAdminController@saveMinute');
+Route::post('/meeting/add_task/{meeting}', 'MeetingMinutesAdminController@saveTask');
+Route::post('/meeting_minutes/add_meeting', 'MeetingMinutesAdminController@store');
+Route::get('/meeting_minutes/view_meeting/{meeting}/view', 'MeetingMinutesAdminController@show');
+Route::get('/meeting_minutes/search', 'MeetingMinutesAdminController@search');
+Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
+Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
+Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
+
+//Survey (Guest)
+Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
+Route::post('rate-our-services', 'SurveyGuestsController@store');
+
+//Survey
+Route::get('survey/reports', 'SurveysController@indexReports');
+Route::get('survey/rating-links', 'SurveysController@indexRatingLinks');
+Route::post('survey/reports', 'SurveysController@getReport');
+Route::post('survey/reports/print', 'SurveysController@printReport');
+
 # Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');
 Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');

@@ -265,6 +265,18 @@
                                 </div>
                             </div>
                         </div>
+						<div class="form-group{{ $errors->has('account_number') ? ' has-error' : '' }}">
+                            <label for="phone_number" class="col-sm-2 control-label">Account Number</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-info"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="account_number" name="account_number" value="{{ old('account_number') }}" placeholder="Account Number">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

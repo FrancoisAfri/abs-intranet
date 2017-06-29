@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $page_title or "Educational System" }}</title>
+    <title>{{ $page_title or "ABS Systems" }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -68,7 +68,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-{{ $skinColor }} sidebar-mini">
+<body class="hold-transition skin-{{ $skinColor }} fixed sidebar-mini">
 <div class="wrapper">
 
     <!-- Header -->
@@ -207,6 +207,8 @@ desired effect
 <script src="/bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="/bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.js"></script>
 <!-- AdminLTE App -->
 <script src="/bower_components/AdminLTE/dist/js/app.min.js"></script>
 <!-- Additional page script -->

@@ -69,17 +69,21 @@ var chartOptions = {
     multiTooltipTemplate: function(value){return value.value.toString() + '%';}
 };
 //function to draw the chart on the canvas
-function loadEmpMonthlyPerformance(chartCanvas, empID) {
+function loadEmpMonthlyPerformance(chartCanvas, empID, loadingWheel) {
+    loadingWheel = loadingWheel || null;
     // Get context with jQuery - using jQuery's .get() method.
     var empPerfChartCanvas = chartCanvas.get(0).getContext("2d");
     // This will get the first returned node in the jQuery collection.
     var empPerfChart = new Chart(empPerfChartCanvas);
     //char labels (months)
-    var monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     //get chart data with ajax
     $.get("/api/emp/" + empID + "/monthly-performance",
         function(data) {
             var chartData = perfChartData(data, monthLabels);
+
+            //hide loading wheel
+            if (loadingWheel != null) loadingWheel.hide();
 
             //Create the bar chart
             empPerfChart.Bar(chartData, chartOptions);
@@ -124,9 +128,10 @@ var divChartOptions = {
 };
 
 //function to draw the chart on the canvas and show rankings
-function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, managerID) {
+function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, managerID, loadingWheel) {
     parentDivID = parentDivID || 0;
     managerID = managerID || 0;
+    loadingWheel = loadingWheel || null;
     //console.log(chartCanvas, rankingList, divLevel, parentDivID, managerID);
     // Get context with jQuery - using jQuery's .get() method.
     var divPerfChartCanvas = chartCanvas.get(0).getContext("2d");
@@ -144,14 +149,15 @@ function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, man
             $.each(data, function(key, value) {
                 divResults.push(value['div_result']);
                 divLabels.push(value['div_name']);
+                console.log()
             });
             var chartData = perfChartData(divResults, divLabels);
 
-            //Create the bar chart
-            divPerfChart.Bar(chartData, divChartOptions);
+            //hide loading wheel
+            if (loadingWheel != null) loadingWheel.hide();
 
             //sort the data by performance
-            var sortedData = data.sort(function(a, b){return a['div_result']-b['div_result']});
+            var sortedData = data.sort(function(a, b){return b['div_result'] - a['div_result']});
 
             //Load ranking
             rankingList.empty();
@@ -193,6 +199,10 @@ function loadDivPerformance(chartCanvas, rankingList, divLevel, parentDivID, man
                     .append(listLink);
                 rankingList.append(listItem);
             });
+
+            //Create the bar chart
+            divPerfChart.Bar(chartData, divChartOptions);
+
             $(window).trigger('resize');
         });
 }
@@ -207,8 +217,9 @@ function subDivOnShow(objTrigger, modalWin) {
     if (isChildLevelActive) {
         var rankingList = modalWin.find('#sub-div-ranking-list-' + childLevel);
         var divChartCanvas = modalWin.find('#subDivisionsPerformanceChart' + childLevel);
+        var loadingWheelSubDiv = modalWin.find('#lo-sub-division-performance-modal-' + childLevel);
         modalWin.find('#sub-division-chart-title-' + childLevel).html(childLevelPluralName + ' Performance For ' + new Date().getFullYear());
-        loadDivPerformance(divChartCanvas, rankingList, childLevel, divID);
+        loadDivPerformance(divChartCanvas, rankingList, childLevel, divID, null, loadingWheelSubDiv);
     }
 }
 //-----------------------------------
@@ -220,11 +231,12 @@ function subDivOnShow(objTrigger, modalWin) {
 //- EMPLOYEE LIST PERFORMANCE -
 //-----------------------------
 //function to show employees performance ranking
-function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen, totEmp, managerID) {
+function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen, totEmp, managerID, loadingWheel) {
     topTen = topTen || false;
     bottomTen = bottomTen || false;
     totEmp = totEmp || 0;
     managerID = managerID || 0;
+    loadingWheel = loadingWheel || null;
     //Get employees performance data using ajax
     var getURL = "/api/divlevel/" + divLevel + "/div/" + divID + "/emps-performance"; //all employees from a specific divisionspecific parent div
     if (topTen) getURL = "/api/appraisal/emp/topten";
@@ -234,7 +246,10 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
         function(data) {
             //console.log(JSON.stringify(data));
             //sort the data by performance
-            var sortedData = data.sort(function(a, b){return a['emp_result']-b['emp_result']});
+            var sortedData = data.sort(function(a, b){return b['emp_result']-a['emp_result']});
+
+            //hide loading wheel
+            if (loadingWheel != null) loadingWheel.hide();
 
             //Load ranking
             rankingList.empty();
@@ -246,7 +261,7 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
                     empEmail = value['emp_email'],
                     empJobTitle = value['emp_job_title'],
                     empProfilePic = value['emp_profile_pic'],
-                    empResult = value['emp_result'],
+                    empResult = round(value['emp_result'], 2),
                     resultColor = '';
                 if (empResult < 50) resultColor = 'red';
                 else if (empResult >= 50 && empResult < 60) resultColor = 'yellow';
@@ -296,7 +311,8 @@ function empPerOnShow(objTrigger, modalWin) {
     var divName = objTrigger.data('division_name');
     modalWin.find('#emp-list-modal-title').html(divName + ' Performance');
     var rankingList = modalWin.find('#emp-ranking-list');
-    loadEmpListPerformance(rankingList, divLevel, divID);
+    var loadingWheelEmpList = modalWin.find('#lo-emp-list-performance-modal');
+    loadEmpListPerformance(rankingList, divLevel, divID, null, null, null, null, loadingWheelEmpList);
 }
 //---------------------------------------
 //- END EMPLOYEE LIST PERFORMANCE CHART -
@@ -361,3 +377,8 @@ function perkDetailsOnShow(objTrigger, modalWin) {
 //------------------------------
 //- END AVAILABLE PERKS WIDGET -
 //------------------------------
+
+//Decimal round function
+function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}

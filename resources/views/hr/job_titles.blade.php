@@ -36,7 +36,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-					<!-- <button type="button" class="btn btn-default pull-left" id="back_button">Back</button> -->
+					<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                     <button type="button" id="add-new-job_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-job_title-modal">Add New job Title</button>
                 </div>
             </div>

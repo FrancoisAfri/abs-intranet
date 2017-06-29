@@ -15,7 +15,7 @@ class EmployeeTasks extends Model
 		, 'duration', 'description', 'notes', 'priority'
 		, 'task_type', 'upload_required', 'status', 'start_date', 'date_started'
 		, 'date_completed', 'date_paused', 'due_date', 'induction_id', 'meeting_id'
-		, 'is_dependent'
+		, 'is_dependent', 'administrator_id', 'check_by_id', 'checked'
     ];
 
     //relationship between EmployeeTasks and employeetasksDocument
@@ -29,8 +29,17 @@ class EmployeeTasks extends Model
 		{ //task_type 1== induction
             return $this->belongsTo(ClientInduction::class, 'induction_id');
         }
-        /*elseif ($this->task_type === 2) { //2== Meeting tasks
-            return $this->belongsTo(ContactPerson::class, 'meeting_id');
-        }*/
+        elseif ($this->task_type === 2) { //2== Meeting tasks
+            return $this->belongsTo(MeetingMinutes::class, 'meeting_id');
+        }
+    }
+	
+	//Relationship categories and Kpas
+    public function employeesTasks() {
+        return $this->belongsTo(HRPerson::class, 'employee_id');       
+    }	
+	//Relationship categories and Kpas
+    public function checkedBy() {
+        return $this->belongsTo(HRPerson::class, 'checked_by');       
     }
 }

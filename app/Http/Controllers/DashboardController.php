@@ -90,14 +90,28 @@ class DashboardController extends Controller
 			$tasks = DB::table('employee_tasks')
 			->select('employee_tasks.description','employee_tasks.start_date'
 			,'employee_tasks.employee_id','employee_tasks.upload_required'
-			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date','employee_tasks.id as task_id')
+			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date'
+			,'employee_tasks.id as task_id','contact_companies.name as client_name')
+			->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
+			->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
 			->where('employee_tasks.employee_id', $user->person->id)
 			->where('employee_tasks.start_date', '<=', $today)
 			->where('employee_tasks.status', '<', 4)
-			->orderBy('employee_tasks.id')
+			->orderBy('client_name')
 			->orderBy('employee_tasks.order_no')
 			->get();
-			//return $tasks;
+			// check task
+			$checkTasks = DB::table('employee_tasks')
+			->select('employee_tasks.description','employee_tasks.employee_id'
+			,'employee_tasks.status','employee_tasks.id as task_id'
+			,'hr_people.first_name as firstname','hr_people.surname as surname')
+			->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+			->where('employee_tasks.check_by_id', $user->person->id)
+			->where('employee_tasks.status', '=', 4)
+			->whereNull('checked')
+			->orderBy('employee_tasks.employee_id')
+			->get();
+			//return $checkTasks;
 			$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
@@ -105,6 +119,7 @@ class DashboardController extends Controller
             $data['isSuperuser'] = $isSuperuser;
             $data['isDivHead'] = $isDivHead;
             $data['tasks'] = $tasks;
+            $data['checkTasks'] = $checkTasks;
             //$data['managedDivsIDs'] = json_encode($managedDivsIDs);
             $data['managedDivsLevel'] = $managedDivsLevel;
             $data['isSupervisor'] = $isSupervisor;

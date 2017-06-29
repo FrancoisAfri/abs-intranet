@@ -26,43 +26,39 @@
 			<div style="overflow-X:auto;">
                 <table class="table table-bordered">
                     <tr>
-                        <th style="width: 10px"></th>
+                        <th><input type="checkbox" id="checkallaccept" onclick="checkAllboxAccept()">  All</th>
                         <th>Order No</th>
                         <th>Description</th>
                         <th>Person Responsible</th>
-                        <th>Start Date</th>
-                        <th>Due Date</th>
-						<th>Escalation Person</th>
+						<th>Administrator</th>
                         <th>Required upload</th>
                     </tr> 
                     @if (!empty($libraries))
                     @foreach($libraries as $library)
                     <tr>
-                        <td><input type="checkbox" class="checkbox" id="selected_{{ $library->id }}" name="selected_{{ $library->id }}" value="1"></td>
-                        <td><input type="number" class="form-control" style="width:70px;" id="order_no_{{ $library->id }}" name="order_no_{{ $library->id }}" value="{{$library->order_no }}"></td>
-                        <td style="width:150px;">{{ $library->description }} <input type="hidden" id="description_{{ $library->id }}" name="description_{{ $library->id }}" value="{{ $library->description }}"></td>
-                        <td><select class="form-control select2" style="width:150px;" id="employee_id_{{ $library->id }}" name="employee_id_{{ $library->id }}" required>
+                        <td><input type="checkbox" class="checkbox selectall" id="selected_{{ $library->id }}_{{ $library->dept_id }}" name="selected_{{ $library->id }}_{{ $library->dept_id }}" value="1"></td>
+                        <td><input type="number" class="form-control" style="width:70px;" id="order_no_{{ $library->id }}_{{ $library->dept_id }}" name="order_no_{{ $library->id }}_{{ $library->dept_id }}" value="{{$library->order_no }}"></td>
+                        <td style="width:500px;">{{ $library->description }} <input type="hidden" id="description_{{ $library->id }}_{{ $library->dept_id }}" name="description_{{ $library->id }}_{{ $library->dept_id }}" value="{{ $library->description }}"></td>
+                        <td><select class="form-control select2" style="width:170px;" id="employee_id_{{ $library->id }}_{{ $library->dept_id }}" name="employee_id_{{ $library->id }}_{{ $library->dept_id }}">
 						<option selected="selected" value="0">*** Select Person Responsible ***</option>
 						@foreach($users as $user)
 							<option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
 						@endforeach
 						</select> </td>
-                        <td> <input type="text" class="form-control datepicker" id="start_date_{{ $library->id }}" name="start_date_{{ $library->id }}" value="" placeholder="Start Date..." required></td>
-                        <td> <input type="text" class="form-control datepicker" id="due_date_{{ $library->id }}" name="due_date_{{ $library->id }}" value="" placeholder="Due Date..." required></td>
-                        <td><select class="form-control select2" style="width:150px;" id="escalation_id_{{ $library->id }}" name="escalation_id_{{ $library->id }}" required>
-							<option selected="selected" value="0">*** Select escalation Person ***</option>
+                        <td><select class="form-control select2" style="width:170px;" id="administrator_id{{ $library->id }}_{{ $library->dept_id }}" name="administrator_id{{ $library->id }}_{{ $library->dept_id }}">
+							<option selected="selected" value="0">*** Select Admistrator ***</option>
 							@foreach($users as $user)
 								<option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
 							@endforeach
 						</select></td>
-                        <td style="width:20px;">{{ (!empty($library->upload_required) && $library->upload_required == 2) ? "Yes" : "No" }} <input type="hidden" id="upload_required_{{ $library->id }}" name="upload_required_{{ $library->id }}" value="{{ $library->upload_required }}"></td>
+                        <td>{{ (!empty($library->upload_required) && $library->upload_required == 2) ? "Yes" : "No" }} <input type="hidden" id="upload_required_{{ $library->id }}_{{ $library->dept_id }}" name="upload_required_{{ $library->id }}_{{ $library->dept_id }}" value="{{ $library->upload_required }}"></td>
                     </tr>
                      @endforeach
 					<tr>
                         <td colspan="2">Induction Title</td>
-						<td colspan="2"><input type="text" class="form-control" style="width:250px;" id="title" name="title" value=""  placeholder="Enter induction Title..." required></td>
+						<td><input type="text" class="form-control" style="width:200px;" id="title" name="title" value=""  placeholder="Enter induction Title..." required></td>
 						<td>Client</td>
-						<td colspan="3"><select class="form-control select2" style="width:400px;" id="company_id" name="company_id" required>
+						<td><select class="form-control select2" style="width:300px;" id="company_id" name="company_id" required>
 						<option selected="selected" value="0">*** Select a Client ***</option>
 						@foreach($companies as $company)
 							<option value="{{ $company->id }}">{{ $company->name}}</option>
@@ -102,6 +98,17 @@
     function postData(id, data) {
        if (data == 'actdeac') location.href = "/induction/library_tasks_activate/" + id;
     }
+	function checkAllboxAccept()
+	{
+		if($('#checkallaccept:checked').val() == 'on')
+		{
+			$('.selectall').prop('checked',true);
+		}
+		else
+		{
+			$('.selectall').prop('checked',false);
+		}
+	}
     $(function () {
 		  //Date picker
             $('.datepicker').datepicker({

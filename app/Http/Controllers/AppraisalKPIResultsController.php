@@ -12,6 +12,7 @@ use App\AppraisalQuery_report;
 use App\AppraisalClockinResults;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Excel;
@@ -53,7 +54,7 @@ class AppraisalKPIResultsController extends Controller
         return view('appraisals.load_appraisal')->with($data);
     }
 
-    public function loadEmpAppraisals($empID, $appraisalMonth){
+    public function loadEmpAppraisals($empID, $appraisalMonth, $isEmpAppraisal = false){
 		//test
 		//return AppraisalKPIResult::empAppraisal(2);
 		//return AppraisalKPIResult::empAppraisalByKPA(2, 'March 2017');
@@ -63,6 +64,7 @@ class AppraisalKPIResultsController extends Controller
         $monthStart = strtotime(new Carbon("first day of $appraisalMonth"));
         $monthEnd = new Carbon("last day of $appraisalMonth");
         $monthEnd = strtotime($monthEnd->endOfDay());
+        $appraiserID = Auth::user()->person->id;
         /*$emp = HRPerson::where('id', $empID)
             ->with(['jobTitle.kpiTemplate.kpi.results' => function ($query) use ($empID, $monthStart, $monthEnd) {
                 $query->where('hr_id', $empID);
@@ -75,11 +77,12 @@ class AppraisalKPIResultsController extends Controller
             ->get()
             ->first();*/
 
-		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate');
+		$emp = HRPerson::find($empID)->load('jobTitle.kpiTemplate', 'threeSixtyPeople');
 		if ($emp->jobTitle && $emp->jobTitle->kpiTemplate) {
 			$kpis = appraisalsKpis::where(function ($query) {
-				$query->where('upload_type', null);
-				$query->orWhereNotIn('upload_type', [2, 3]);
+				$query->where('is_upload', 2);
+				$query->WhereNotIn('is_task_kpi', [1]);
+				//$query->orWhereNotIn('upload_type', [1, 2, 3]);
 			})
 				->where('template_id', $emp->jobTitle->kpiTemplate->id)
 				->where(function ($query) {
@@ -89,11 +92,19 @@ class AppraisalKPIResultsController extends Controller
 				->where('appraisals_kpis.status', 1)
 				->where('appraisal_kpas.status', 1)
 				->join('appraisal_kpas', 'appraisals_kpis.kpa_id', '=', 'appraisal_kpas.id')
-
 				->with(['results' => function ($query) use ($empID, $monthStart, $monthEnd) {
-					$query->where('hr_id', $empID);
-					$query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+				    //if (! $isEmpAppraisal) {
+                        $query->where('hr_id', $empID);
+                        $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+                    //}
 				}])
+                ->with(['empResults' => function ($query) use ($empID, $monthStart, $monthEnd, $appraiserID) {
+                    //if ($isEmpAppraisal) {
+                        $query->where('hr_id', $empID);
+                        $query->where('appraiser_id', $appraiserID);
+                        $query->whereBetween('date_uploaded', [$monthStart, $monthEnd]);
+                    //}
+                }])
 				->with('kpiranges')
 				->with('kpiNumber')
 				->with('kpiIntScore')
@@ -120,21 +131,46 @@ class AppraisalKPIResultsController extends Controller
             ->get();*/
         //return $kpis;
 
+        $aPositions = [];
+        $cPositions = DB::table('hr_positions')->get();
+        foreach ($cPositions as $position) {
+            $aPositions[$position->id] = $position->name;
+        }
+
+        $formAction = '/appraisal/emp/appraisal/save';
+        if ($isEmpAppraisal) $formAction = '/appraisal/appraise-yourself';
+
+        $showThreeSixtySection = ($isEmpAppraisal && $empID === $appraiserID) ? true : false;
+        $threeSixtyPeopleCollection = $emp->threeSixtyPeople;
+        $threeSixtyPeopleIDs = [];
+        foreach ($threeSixtyPeopleCollection as $threeSixtyPerson) {
+            $threeSixtyPeopleIDs[] = $threeSixtyPerson->appraiser_id;
+        }
+        $threeSixtyPeople = HRPerson::whereIn('id', $threeSixtyPeopleIDs)->get();
+        $threeSixtyPeopleIDs[] = $empID;
+        $threeSixtyDDEmps = HRPerson::where('status', 1)->whereNotIn('id', $threeSixtyPeopleIDs)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+
         $data['emp'] = $emp;
         $data['kpis'] = $kpis;
+        $data['isEmpAppraisal'] = $isEmpAppraisal;
         $data['appraisalMonth'] = $appraisalMonth;
-        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
-        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
+        $data['positions'] = $aPositions;
+        $data['formAction'] = $formAction;
+        $data['showThreeSixtySection'] = $showThreeSixtySection;
+        $data['threeSixtyPeople'] = $threeSixtyPeople;
+        $data['threeSixtyDDEmps'] = $threeSixtyDDEmps;
         $data['page_title'] = "Employee Appraisals";
-        $data['page_description'] = "Load an Employee's Appraisals";
+        $data['page_description'] = "Capture an Employee's Appraisal Score";
         $data['breadcrumb'] = [
             ['title' => 'Performance Appraisal', 'path' => '/appraisal/templates', 'icon' => 'fa fa-line-chart', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 0],
             ['title' => 'List', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
+        $data['active_rib'] = ($isEmpAppraisal) ? 'My Appraisal' : 'Appraisals';
         AuditReportsController::store('Performance Appraisal', "Employee Appraisal $appraisalMonth Result Page Accessed", "Accessed by User", 0);
+
         return view('appraisals.view_emp_appraisals')->with($data);
     }
 
@@ -167,6 +203,7 @@ class AppraisalKPIResultsController extends Controller
                 $result->hr_id = $hrID;
                 $result->date_uploaded = strtotime('15 ' . $appraisalMonth);
                 $result->score = trim($scores[$kpiID]) != '' ? trim($scores[$kpiID]) : null;
+                $result->appraiser_id = Auth::user()->person->id;
                 $result->save();
             }
         }
@@ -184,7 +221,7 @@ class AppraisalKPIResultsController extends Controller
         ]);
 		$uploadTypes = [1 => "General", 2 => 'Clock In', 3 => 'Query Report '];
 		$templateData = $request->all();
-		$queryCodeNew = 0;
+		$queryCodeNew = $employeeNO = $date = $count = 0;
 		unset($templateData['_token']);
 		$appraisalMonth = trim($templateData['date_uploaded']);
 		$uploadType = $request->input('upload_type');
@@ -202,34 +239,37 @@ class AppraisalKPIResultsController extends Controller
 			{
 				foreach ($data->toArray() as $key => $value) 
 				{
-					//return $value;
 					if(!empty($value))
 					{
 						foreach ($value as $val) 
 						{
-							$employeeCode = $val['employee_number'];
+							if ($uploadType == 1) $employeeCode = $value['employee_number'];
+							elseif ($uploadType == 3) $employeeCode = $value['employee_number'];
+							else $employeeCode = $val['employee_number'];
 							$employees = HRPerson::where('employee_number', $employeeCode)->first();
 							if ($employees) {
 								$employees->load('jobTitle.kpiTemplate');
 							} else continue;
-							//if (empty($employees->id)) continue;
-							//$emp = HRPerson::find($employees->id)->load('jobTitle.kpiTemplate');
-							// do this for loop inside each if statement
 							foreach ($kpis as $kip)
 							{
-								if (! $emp->jobTitle || ! $emp->jobTitle->kpiTemplate || ! $emp->jobTitle->kpiTemplate->id) continue;
-								if ($emp->jobTitle->kpiTemplate->id == $kip->template_id)
+								if (!empty($employees->jobTitle) && !empty($employees->jobTitle->kpiTemplate) && !empty($employees->jobTitle->kpiTemplate->id) && ($employees->jobTitle->kpiTemplate->id == $kip->template_id))
 								{
 									if ($uploadType == 1)
+									{
+										if ($employeeNO == $employees->id) continue;
 										$insert[] = ['kpi_id' => $kip->id,'template_id' => $kip->template_id,
-										'score' => $val['result'], 
+										'score' => $value['result'], 
 										'date_uploaded' => $templateData['date_uploaded'],
 										'hr_id' => $employees->id];
+										$employeeNO = $employees->id;
+										$count =  $count + 1;
+									}
 									elseif ($uploadType == 2) // Make calculations if clockin time is greater than normal time late else not late
 									{// 1 for late, 2 for not late
 										$attendance = 2;
-										if (!empty($val['entry']))
+										if (!empty($val['entry']) && !empty($val['normal_time']))
 										{
+											if ($employeeNO == $employees->id && $date == $val['date']) continue;
 											$entryDate =  explode(" ", $val['entry']);
 											$normalTimeDate = explode(" ", $val['normal_time']);
 											$entry = explode(":", $entryDate[1]);
@@ -240,14 +280,16 @@ class AppraisalKPIResultsController extends Controller
 												if ($entry[1] > ($normalTime[1] + 15)) $attendance = 1;
 												else $attendance = 2;
 											}
-											$insert[] = ['kpi_id' => $kip->id, 'attendance' => $attendance, 
+											$insert[] = ['kip_id' => $kip->id, 'attendance' => $attendance, 
 											'date_uploaded' => $templateData['date_uploaded'], 
 											'hr_id' => $employees->id];
+											$employeeNO = $employees->id;
+											$date = $val['date'];
+											$count =  $count + 1;
 										}
 									}
 									elseif ($uploadType == 3)
 									{
-										
 										if ($queryCodeNew == $value['query_code']) continue;
 										$value['query_date'] = !empty($value['query_date']) ? strtotime($value['query_date']) : 0;
 										$value['departure_date'] = !empty($value['departure_date']) ? strtotime($value['departure_date']) : 0;
@@ -273,7 +315,8 @@ class AppraisalKPIResultsController extends Controller
 										$query->comment = $value['query_comments'];
 										$query->date_uploaded = $templateData['date_uploaded'];
 										$query->save();	
-										$insert = 1;	
+										$insert = 1;
+										$count =  $count + 1;										
 										$queryCodeNew = $value['query_code'];										
 									}
 								}
@@ -283,13 +326,11 @@ class AppraisalKPIResultsController extends Controller
 				}
 				if(!empty($insert))
 				{
-					if ($uploadType == 1)
-						
-						AppraisalKPIResult::insert($insert);
-					elseif ($uploadType == 2)
-						AppraisalClockinResults::insert($insert);
-					return back()->with('success',"$uploadTypes[$uploadType] Records were successfully inserted.");	
+					if ($uploadType == 1) AppraisalKPIResult::insert($insert);
+					elseif ($uploadType == 2) AppraisalClockinResults::insert($insert);
+					return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were successfully inserted $count.");
 				}
+				else return redirect('/appraisal/load_appraisals')->with('success_insert', "$uploadTypes[$uploadType] Records were not uploaded.");
 
 			}
 			else return back()->with('error','Please Check your file, Something is wrong there.');

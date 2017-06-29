@@ -36,6 +36,10 @@
                     </div>
                     <!-- /.row -->
                 </div>
+                <!-- Loading wheel overlay -->
+                <div class="overlay" id="loading_overlay_emp_monthly_appraisal">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
             </div>
             <!-- /.box Employee Monthly performance Widget -->
         </div>
@@ -101,14 +105,18 @@
                     </div>
                     <!-- /.row -->
                 </div>
+                <!-- Loading wheel overlay -->
+                <div class="overlay" id="lo_company_appraisal">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
                 <!-- Include division performance modal -->
                 @include('dashboard.partials.division_4_performance_modal')
                 @include('dashboard.partials.division_3_performance_modal')
                 @include('dashboard.partials.division_2_performance_modal')
                 @include('dashboard.partials.division_1_performance_modal')
-                        <!-- Include emp list performance modal -->
+                <!-- Include emp list performance modal -->
                 @include('dashboard.partials.emp_list_performance_modal')
-                        <!-- Include emp year performance modal -->
+                <!-- Include emp year performance modal -->
                 @include('dashboard.partials.emp_year_performance_modal')
             </div>
             <!-- /.box company performance Widget -->
@@ -198,6 +206,7 @@
 							<th>Order #</th>
 							<th>Description</th>
 							<th>Due Date</th>
+							<th>Client Name</th>
 							<th></th>
 						</tr>
 					</thead>
@@ -208,6 +217,7 @@
 							<td>{{ (!empty($task->order_no)) ?  $task->order_no : ''}}</td>
 							<td>{{ (!empty($task->description)) ?  $task->description : ''}}</td>
 							<td>{{ (!empty($task->due_date)) ?  date('Y-m-d',$task->due_date) : ''}}</td>
+							<td>{{ (!empty($task->client_name)) ?  $task->client_name : ''}}</td>
 							<td>
 							<!-- @if($isSuperuser)
 							{{ $topGroupLvl->plural_name }}
@@ -233,6 +243,62 @@
 					@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
 				@endif
 				@include('tasks.partials.end_task')
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+            </div>
+            <!-- /.box-footer -->
+          </div>
+		  <!-- /Tasks List End -->
+        </div>
+		<div class="col-md-6">
+		 <!-- /Tasks List -->
+		  <div class="box box-info">
+            <div class="box-header with-border">
+			 <i class="ion ion-clipboard"></i>
+              <h3 class="box-title">Tasks To Check</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+              <div class="table-responsive">
+                <table class="table no-margin">
+					<thead>
+						<tr>
+							<th>Employee</th>
+							<th>Description</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+					@if (!empty($checkTasks))
+						@foreach($checkTasks as $checkTask)
+						  <tr>
+							<td>{{ (!empty($checkTask->description)) ?  $checkTask->firstname." ".$checkTask->surname : ''}}</td>
+							<td>{{ (!empty($checkTask->description)) ?  $checkTask->description : ''}}</td>
+							<td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td>
+							<td>
+							@if(!empty($checkTask->status) && ($checkTask->status == 1 || $checkTask->status == 3))                    
+							  <button type="button" id="close-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#close-task-modal"
+							  data-task_id="{{ $checkTask->task_id }}"">Close</button>
+							@endif
+							</td>
+						  </tr>
+						@endforeach
+					@endif
+                  </tbody>
+                </table>
+              </div>
+				@if(Session('error_starting'))
+					@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
+				@endif
+				@include('tasks.partials.end_task')
+				@include('tasks.partials.check_task')
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix">
@@ -319,7 +385,8 @@
             //Draw employee performance graph
             var empID = parseInt('{{ $user->person->id }}');
             var empChartCanvas = $('#empMonthlyPerformanceChart');
-            loadEmpMonthlyPerformance(empChartCanvas, empID);
+            var loadingWheel = $('#loading_overlay_emp_monthly_appraisal');
+            loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
 
             //Company appraisal
             var isSuperuser = parseInt({{ (int) $isSuperuser }}),
@@ -330,21 +397,22 @@
                 //Draw divisions performance graph [Comp Appraisal Widget]
                 var rankingList = $('#ranking-list');
                 var divChartCanvas = $('#divisionsPerformanceChart');
+                var loadingWheelCompApr = $('#lo_company_appraisal');
                 var managerID = parseInt({{ $user->person->id }});
                 if (isSuperuser == 1) {
                     var divLevel = parseInt('{{ $topGroupLvl->id }}');
-                    loadDivPerformance(divChartCanvas, rankingList, divLevel);
+                    loadDivPerformance(divChartCanvas, rankingList, divLevel, null, null, loadingWheelCompApr);
                 }
                 else if (isDivHead == 1) {
                     var divLevel = parseInt({{ $managedDivsLevel->level }});
-                    loadDivPerformance(divChartCanvas, rankingList, divLevel, null, managerID);
+                    loadDivPerformance(divChartCanvas, rankingList, divLevel, null, managerID, loadingWheelCompApr);
                 }
                 else if (isSupervisor) {
                     $('#topLvlDivGraphAndRankingRow').hide();
                     var staffPerfRow = $('#myStaffPerformanceRankingRow');
                     staffPerfRow.show();
                     rankingList = staffPerfRow.find('#my-staff-ranking-list');
-                    loadEmpListPerformance(rankingList, 0, 0, false, false, null, managerID);
+                    loadEmpListPerformance(rankingList, 0, 0, false, false, null, managerID, loadingWheelCompApr);
                 }
 
                 //show performance of sub division levels on modals (modal show) [Comp Appraisal Widget]
@@ -355,13 +423,20 @@
                         var modalWin = $(this);
                         subDivOnShow(linkDiv, modalWin);
                     });
+                    $('#sub-division-performance-modal-' + i).on('hidden.bs.modal', function (e) {
+                        $('#lo-sub-division-performance-modal-' + i).show();
+                    });
                 }
 
                 //show performance of employees on modals [Comp Appraisal Widget]
                 $('#emp-list-performance-modal').on('show.bs.modal', function (e) {
                     var linkDiv = $(e.relatedTarget);
                     var modalWin = $(this);
+                    var loadingWheelEmpList = $('#lo-emp-list-performance-modal');
                     empPerOnShow(linkDiv, modalWin);
+                });
+                $('#emp-list-performance-modal').on('hidden.bs.modal', function (e) {
+                    $('#lo-emp-list-performance-modal').show();
                 });
 
                 //show employee monthly performance on modal [Comp Appraisal Widget]
@@ -370,9 +445,13 @@
                     var empID = parseInt(linkDiv.data('emp_id'));
                     var empName = linkDiv.data('emp_name');
                     var empChartCanvas = $('#empMonthlyPerformanceModalChart');
+                    var loadingWheel = $('#lo-emp-year-performance-modal');
                     var modalWin = $(this);
                     modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
-                    loadEmpMonthlyPerformance(empChartCanvas, empID);
+                    loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
+                });
+                $('#emp-year-performance-modal').on('hidden.bs.modal', function (e) {
+                    $('#lo-emp-year-performance-modal').show();
                 });
             }
 
@@ -422,6 +501,23 @@
                 var redirectUrl = '/';
                 var successMsgTitle = 'Task Ended!';
                 var successMsg = 'Task has been Successfully ended!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+			$('#close-task-modal').on('show.bs.modal', function (e) {
+                var btnEnd = $(e.relatedTarget);
+                taskID = btnEnd.data('task_id');
+                var modal = $(this);
+                modal.find('#task_id').val(taskID);
+            });
+			
+            $('#close-task').on('click', function() {
+                var strUrl = '/task/check';
+                var formName = 'close-task-form';
+                var modalID = 'close-task-modal';
+                var submitBtnID = 'close-task';
+                var redirectUrl = '/';
+                var successMsgTitle = 'Task Checked!';
+                var successMsg = 'Task has been Successfully checked!';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
         });

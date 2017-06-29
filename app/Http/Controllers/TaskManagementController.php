@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class TaskManagementController extends Controller
 {
@@ -140,7 +141,7 @@ class TaskManagementController extends Controller
 			'date_completed' => $dateCompleted,
 			'notes' => $notes
 		]);
-		$task = EmployeeTasks::where('id', $endData['task_id'])->first();
+		/*$task = EmployeeTasks::where('id', $endData['task_id'])->first();
 		if (!empty($task->is_dependent) && $task->is_dependent == 1&& !empty($task->induction_id))
 		{
 			$next = $task->order_no + 1;
@@ -156,9 +157,33 @@ class TaskManagementController extends Controller
 				Mail::to($employee->email)->send(new NextTaskNotifications($employee, $task));
 				
 			}
-		}
+		}*/
 		AuditReportsController::store('Task Management', "Task Ended", "Edited by User", 0);
 		return response()->json(['employee_id' => $endtask->employee_id], 200);
+    }
+	# Check task
+	public function checkTask(Request $request) 
+	{
+		$checkData = $request->all();
+        //Exclude empty fields from query
+        foreach ($checkData as $key => $value)
+        {
+            if (empty($checkData[$key])) {
+                unset($checkData[$key]);
+            }
+        }
+		# update Task
+        $dateChecked = strtotime(date('Y-m-d'));
+		$notes = !empty($checkData['notes']) ? $checkData['notes'] : '';
+		DB::table('employee_tasks')
+		->where('id', $checkData['task_id'])
+		->update([
+			'checked' => 1,
+			'check_date' => $dateChecked,
+			'check_comments' => $notes
+		]);
+		AuditReportsController::store('Task Management', "Task Checked", "Checked by User", 0);
+	return response()->json(['employee_id' => $checkData['task_id']], 200);
     }
     /**
      * Store a newly created resource in storage.
@@ -167,7 +192,7 @@ class TaskManagementController extends Controller
      * @return \Illuminate\Http\Response
     */
     public static function store($description='',$duedate='',$startDate='',$escalationID=0,$employeeID=0,$taskType=0
-	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0)
+	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0)
     {
 		//convert dates to unix time stamp
         if (!empty($duedate)) {
@@ -197,14 +222,42 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->description = $description;
 		$EmployeeTasks->due_date = $intduedate;
 		$EmployeeTasks->start_date = $intstartDate;
+		$EmployeeTasks->administrator_id = $administratorID;
+		$EmployeeTasks->check_by_id = $checkByID;
 		// Save task
         $EmployeeTasks->save();
-		# Send Email to employee
-		$employee = HRPerson::where('id', $employeeID)->first();
-		Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
+		if (empty($inductionID))
+		{
+			# Send Email to employee
+			$employee = HRPerson::where('id', $employeeID)->first();
+			Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
+		}
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
 		//if ($taskType == 3)
 			//return redirect('/education/activity/' . $activity->id . '/view')->with('success_add', "The task has been added successfully");
+    }
+	
+	public function update(Request $request, EmployeeTasks $task)
+    {
+		//convert dates to unix time stamp
+        $this->validate($request, [       
+            'description' => 'required',       
+            'order_no' => 'bail|required|integer|min:1',       
+            'upload_required' => 'bail|required|integer|min:1',       
+            'employee_id' => 'bail|required|integer|min:1',        
+            'administrator_id' => 'bail|required|integer|min:1',        
+        ]);
+		
+		$task->order_no = $request->input('order_no');
+		$task->upload_required = $request->input('upload_required');
+		$task->employee_id = $request->input('employee_id');
+		$task->description = $request->input('description');
+		$task->administrator_id = $request->input('administrator_id');
+
+        $task->update();
+		$description = $request->input('description');
+        AuditReportsController::store('Task Management', 'task Informations Updated', "Updated by User", 0);
+        return response()->json(['new_description' => $description], 200);
     }
 	// draw audit report acccording to search criteria
 	public function getReport(Request $request)

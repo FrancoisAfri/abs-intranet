@@ -13,6 +13,19 @@
                 <div class="modal-body">
                     <div id="library_tasks-invalid-input-alert"></div>
                     <div id="library_tasks-success-alert"></div>
+					<div class="form-group">
+                        <label for="name" class="col-sm-3 control-label">Choose {{$dept->name}}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <select class="form-control select2" style="width:150px;" id="dept_id" name="dept_id">
+						<option selected="selected" value="0">*** Select {{$dept->name}} ***</option>
+						@foreach($deparments as $deparment)
+							<option value="{{ $deparment->id }}">{{ $deparment->name}}</option>
+						@endforeach
+						</select>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Order No</label>
                         <div class="col-sm-9">
@@ -36,7 +49,6 @@
                                 <select id="upload_required" name="upload_required" class="form-control">
                                     <option value="1">No</option>
                                     <option value="2">Yes</option>
-                                    
 								</select>
                             </div>
                         </div>

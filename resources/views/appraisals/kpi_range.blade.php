@@ -26,9 +26,9 @@
 						  data-range_from="{{ $range->range_from }}" 
 						  data-range_to="{{ $range->range_to }}" 
 						  data-percentage="{{ $range->percentage}}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-						  <td>{{!empty($range->range_from) ? $range->range_from : ''}}</td>
-						  <td>{{!empty($range->range_to) ?$range->range_to : ''}}</td>
-						  <td>{{!empty($range->percentage) ?$range->percentage : ''}}</td>
+						  <td>{{$range->range_from}}</td>
+						  <td>{{$range->range_to}}</td>
+						  <td>{{$range->percentage}}</td>
 						  <td nowrap>
                               <button type="button" id="view_kpi" class="btn {{ (!empty($range->status) && $range->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$range->id}}, 'actdeac');"><i class="fa {{ (!empty($range->status) && $range->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($range->status) && $range->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>

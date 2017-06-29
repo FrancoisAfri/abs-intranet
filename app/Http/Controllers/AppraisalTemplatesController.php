@@ -202,7 +202,9 @@ class AppraisalTemplatesController extends Controller
             'kpa_id' => 'bail|required|integer|min:0',       
             'category_id' => 'bail|required|integer|min:0',       
             'kpi_type' => 'bail|required|integer|min:0',        
-            'is_upload' => 'bail|required|integer|min:0',        
+            'is_upload' => 'bail|required|integer|min:0',
+            'kpi_task_type' => 'bail|required_if:is_task_kpi,1',
+            'upload_type' => 'bail|required_if:is_upload,1',
         ]);
 		$kpi->measurement = $request->input('measurement');
 		$kpi->weight = $request->input('weight');
@@ -212,11 +214,10 @@ class AppraisalTemplatesController extends Controller
 		$kpi->kpa_id = $request->input('kpa_id');
 		$kpi->kpi_type = $request->input('kpi_type');
 		$kpi->is_upload = $request->input('is_upload');
-		$kpi->upload_type = ($request->input('is_upload') == 1) ? $request->input('upload_type') : null;
-		$kpi->is_task_kpi = ($request->input('is_upload') == 2) ? $request->input('is_task_kpi') : null;
+		$kpi->upload_type = ((int) $request->input('is_upload') === 1) ? $request->input('upload_type') : null;
+		$kpi->is_task_kpi = ($request->input('is_upload') == 2) ? !empty($request->input('is_task_kpi')) ? $request->input('is_task_kpi') : null : null;
 		$kpi->kpi_task_type = ($request->input('is_upload') == 2 && $request->input('is_task_kpi') == 1) ? $request->input('kpi_task_type') : null;
-
-        $kpi->update();
+		$kpi->update();
 		$newtemplate = $request->input('indicator');
         AuditReportsController::store('Performance Appraisal', 'KPI Informations Edited', "Edited by User", 0);
         return response()->json(['new_template' => $newtemplate], 200);

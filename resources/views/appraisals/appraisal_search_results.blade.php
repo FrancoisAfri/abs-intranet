@@ -22,18 +22,18 @@
 							<thead>
 							<tr>
 							  <th>Employee Name</th>
-							  <th>January</th>
-							  <th>February</th>
-							  <th>March</th>
-							  <th>April</th>
+							  <th>Jan</th>
+							  <th>Feb</th>
+							  <th>Mar</th>
+							  <th>Apr</th>
 							  <th>May</th>
-							  <th>June</th>
-							  <th>July</th>
-							  <th>August</th>
-							  <th>September</th>
-							  <th>October</th>
-							  <th>November</th>
-							  <th>December</th>
+							  <th>Jun</th>
+							  <th>Jul</th>
+							  <th>Aug</th>
+							  <th>Sept</th>
+							  <th>Oct</th>
+							  <th>Nov</th>
+							  <th>Dec</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -43,7 +43,7 @@
 									<td>{{ $emp->first_name . ' ' . $emp->surname }}</td>
 									@foreach($emp->year_appraisal as $key => $appraisal)
 										@if (!empty($appraisal))
-											<td><a href="{{ '/appraisal/' . $emp->id . '/' . $key. ' ' .  $year. '/kpas' }}" class="product-title">{{ $appraisal }} % </a></td>
+											<td><a href="{{ '/appraisal/' . $emp->id . '/' . $key. ' ' .  $year. '/kpas' }}" class="product-title">{{ round($appraisal, 2)}} % </a></td>
 										@else
 											<td></td>
 										@endif
@@ -55,18 +55,18 @@
 							<tfoot>
 							<tr>
 							  <th>Employee Name</th>
-							  <th>January</th>
-							  <th>February</th>
-							  <th>March</th>
-							  <th>April</th>
+							  <th>Jan</th>
+							  <th>Feb</th>
+							  <th>Mar</th>
+							  <th>Apr</th>
 							  <th>May</th>
-							  <th>June</th>
-							  <th>July</th>
-							  <th>August</th>
-							  <th>September</th>
-							  <th>October</th>
-							  <th>November</th>
-							  <th>December</th>
+							  <th>Jun</th>
+							  <th>Jul</th>
+							  <th>Aug</th>
+							  <th>Sept</th>
+							  <th>Oct</th>
+							  <th>Nov</th>
+							  <th>Dec</th>
 							</tr>
 							</tfoot>
 						  </table>

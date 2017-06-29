@@ -17,6 +17,7 @@
                             <div class="box-body">
 								<table class="table table-striped">
 									<tr>
+										<th></th>
 										<th>Induction Title</th>
 										<th>Compamy</th>
 										<th>Date Created</th>
@@ -25,6 +26,10 @@
 									@if(count($inductions) > 0)
 										@foreach($inductions as $induction)
 											<tr>
+												<td><button type="button" class="btn btn-warning" id="delete_button" name="command"
+								onclick="if(confirm('Are you sure you want to delete this Induction ?')){ deleteRecord({{$induction->id}})} else {return false;}"
+                                value="Delete"><i class="fa fa-trash"></i> Delete Induction
+                        </button></td>
 												<td><a href="{{ '/induction/' . $induction->id . '/view' }}" class="product-title">{{ !empty($induction->induction_title) ? $induction->induction_title : '' }}</a></td>
 												<td>{{ !empty($induction->comp_name) ? $induction->comp_name : '' }}</td>
 												<td>{{ !empty($induction->created_at) ? $induction->created_at : '' }}</td>
@@ -64,5 +69,8 @@
                 location.href = '/induction/search';
             });
         });
+		function deleteRecord(induction_id) {
+			location.href = "/induction/delete/" + induction_id;
+		}
     </script>
 @endsection
