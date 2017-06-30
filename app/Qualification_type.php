@@ -10,6 +10,6 @@ class Qualification_type extends Model
      protected $table = 'Qualification_type';
 
     protected $fillable = [
-       'name','description','status'
+       'description','name','status'
     ];
 }
