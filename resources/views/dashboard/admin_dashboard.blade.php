@@ -359,13 +359,14 @@
                     <thead>
                         <tr>
                             <th>Leave Type</th>
-                       
+
                             <th style="text-align: right;">Leave Balance</th>
                           <!--   <th>Due Date</th>
                             <th>Client Name</th> -->
                             <th></th>
                         </tr>
                     </thead>
+
                     <tbody>
                     @if (!empty($balance))
                         @foreach($balance as $task)
@@ -380,6 +381,10 @@
                     @endif
                   </tbody>
                 </table>
+                <div class="box-footer">
+                   <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
+                     <button id="Apply"class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Apply For Leave</button>
+                </div>
               </div>
                 @if(Session('error_starting'))
                     @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
@@ -462,6 +467,10 @@
 				location.href = "/task/end/" + id;
 		}
         $(function () {
+
+             $('#Apply').click(function () {
+                location.href = '/leave/application';
+            });
             //initialise matchHeight on widgets
             //$('.same-height-widget').matchHeight();
 

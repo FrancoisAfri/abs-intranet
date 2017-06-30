@@ -119,15 +119,13 @@ class DashboardController extends Controller
 
                 #leave Application 
             $application = DB::table('leave_application')
-            ->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager','leave_credit.leave_balance as leave_Days','leave_status.name as leaveStatus') 
-            ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
+            ->select('leave_application.*','leave_types.name as leavetype','leave_status.name as leaveStatus') 
             ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id') 
-            ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id' )
             ->leftJoin('leave_status', 'leave_application.hr_id', '=', 'leave_status.id') 
             ->where('leave_application.hr_id', $user->person->id)
-            ->orderBy('leave_application.hr_id')
+            ->orderBy('leave_application.id')
             ->get();
-           // return $application;
+       // return $application;
 
 			// check task
 			$checkTasks = DB::table('employee_tasks')

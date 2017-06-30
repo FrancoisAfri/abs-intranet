@@ -65,7 +65,7 @@
     <script type="text/javascript">
     //Cancel button click event
     document.getElementById("back_to_user_search").onclick = function () {
-        location.href = "/users";
+        location.href = "/hr/emp_qualification";
     };
     </script>
 @endsection
