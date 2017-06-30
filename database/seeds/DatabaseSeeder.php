@@ -117,7 +117,57 @@ class DatabaseSeeder extends Seeder
         $province = new Province();
         $province->name = 'Western Cape';
         $country->addProvince($province);
+        #
         
+         //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Approved',
+            'description' => 'Approved',
+        ]);
+         //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Require managers approval',
+            'description' => 'Require managers approval',
+        ]);
+         //insert leave statuses
+         DB::table('leave_status')->insert([
+            'name' => 'Require department head approval',
+            'description' => 'Require department head approval',
+        ]);
+         //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Require hr approval',
+            'description' => 'Require hr approval',
+        ]);
+          //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Require payroll approval',
+            'description' => 'Require payroll approval',
+        ]);
+          //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Rejectd by managers',
+            'description' => 'Rejectd by managers',
+        ]);
+          //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Rejectd by department head',
+            'description' => 'Rejectd by department head',
+        ]);
+          //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Rejectd by hr',
+            'description' => 'rejectd_by_hr',
+        ]);
+          //insert leave statuses
+        DB::table('leave_status')->insert([
+            'name' => 'Rejectd by payroll',
+            'description' => 'rejectd_by_payroll',
+        ]);
+
+
+
+        #
         //insert marital statuses
         DB::table('marital_statuses')->insert([
             'value' => 'Single',

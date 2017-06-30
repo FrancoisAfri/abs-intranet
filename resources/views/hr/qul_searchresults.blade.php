@@ -8,20 +8,51 @@
             <div class="box box-success">
                 <div class="box-header with-border">
                     <h3 class="box-title">Qualifications Search Result</h3>
-
+                     <p>Qualifications Details:</p>
        
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    @if(!(count($qualification) > 0))
+                 <!-- /.box-header -->
+                <form class="form-horizontal" method="POST" action=" ">
+                   <!--  <input type="hidden" name="registration_type" value="{{!empty($registration_type) ? $registration_type : ''}}">
+                    <input type="hidden" name="programme_id" value="{{!empty($programme_id) ? $programme_id : ''}}">
+                    <input type="hidden" name="project_id" value="{{!empty($project_id) ? $project_id : ''}}">
+                    <input type="hidden" name="registration_year" value="{{!empty($registration_year) ? $registration_year : ''}}">
+                    <input type="hidden" name="course_type" value="{{!empty($course_type) ? $course_type : ''}}">
+                    <input type="hidden" name="registration_semester" value="{{!empty($registration_semester) ? $registration_semester : ''}}"> -->
+                    {{ csrf_field() }}
+
+            <!-- well -->
+            <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    <strong class="lead">Registration Report Parameters</strong><br>
+                                    <strong>Registration Type :</strong> <em>{{ $str_report_type }}</em> &nbsp; &nbsp;
+                                    @if(!empty($programme))
+                                        | &nbsp; &nbsp; <strong>Programme:</strong> <em>{{ $programme }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($project))
+                                        | &nbsp; &nbsp; <strong>Project:</strong> <em>{{ $project }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($registration_year))
+                                        | &nbsp; &nbsp; <strong>Registration Year:</strong> <em>{{ $registration_year }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($str_course_type) && $registration_type != 3)
+                                        | &nbsp; &nbsp; <strong>Course Type:</strong> <em>{{ $str_course_type }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($registration_semester))
+                                        | &nbsp; &nbsp; <strong>Registration Semester:</strong> <em>{{ $registration_semester }}</em> &nbsp; &nbsp;
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+            <!-- end well -->
+            @if(!(count($qualification) > 0))
                         <div class="callout callout-danger">
                             <h4><i class="fa fa-database"></i> No Records found</h4>
 
                             <p>No user matching your search criteria in the database. Please refine your search parameters.</p>
                         </div>
                     @endif
-                    <ul class="products-list product-list-in-box">
-            <div class="box-body">
                 <table class="table table-bordered">
                     <tr>
                         <th style="width: 10px"></th>

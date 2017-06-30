@@ -13,8 +13,8 @@ class doc_type extends Model
 
    
      public function docType() {
-        return $this->belongsTo(doc_type_category::class, 'category_id');
-
+        return $this->belongsTo(Categories::class, 'category_id');
+	
     } 
     
 }

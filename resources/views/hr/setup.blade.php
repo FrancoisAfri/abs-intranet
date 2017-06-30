@@ -106,7 +106,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">List Catagories</h3>
+                    <h3 class="box-title">List Document Type Catagories</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -124,12 +124,12 @@
                                 <th>Description</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($doc_type) > 0)
-                              @foreach ($doc_type as $type)
+                            @if (count($cat_type) > 0)
+                              @foreach ($cat_type as $type)
                                <tr id="categories-list">
                                <td nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                            <a href="/hr/category" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-eye"></i> Document Type</a>
+                                            <a href="{{ '/hr/category/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Document Type</a>
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }}</td>
@@ -220,7 +220,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'add-document';
+                var submitBtnID = 'add-qualification';
                 var redirectUrl = '/hr/setup';
                 var successMsgTitle = 'Qualification Type Saved!';
                 var successMsg = 'The Qualification Type has been Saved successfully.';
@@ -228,68 +228,7 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
             
-                //Document
-                 //Add Qualification Type 
-             //pass module data to the edit module modal
-             var docID;
-            $('#add-document-modal').on('show.bs.modal', function (e) {
-                var btnEdit = $(e.relatedTarget);
-                docID = btnEdit.data('id');
-                var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
-                var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#description').val(description);  
-             });
 
-             //Post module form to server using ajax (ADD)
-            $('#save_doc').on('click', function() {
-                var strUrl = '/hr/addDoctype/' ; 
-                var modalID = 'add-document-modal';
-                var objData = {
-                     name: $('#'+modalID).find('#name').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
-                var submitBtnID = 'add-document';
-                var redirectUrl = '/hr/setup';
-                var successMsgTitle = 'Document Type Saved!';
-                var successMsg = 'The Document Type has been Saved successfully.';
-                //var formMethod = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
-                //
-                        // Edit
-              var edit_DocID;
-        $('#edit-document-modal').on('show.bs.modal', function (e) {
-            //console.log('kjhsjs');
-            var btnEdit = $(e.relatedTarget);
-            edit_DocID = btnEdit.data('id');
-            var name = btnEdit.data('name');
-            var description = btnEdit.data('description');
-            var modal = $(this);
-            modal.find('#name').val(name);
-            modal.find('#description').val(description);
-           
-        });
-
-         $('#edit_document').on('click', function () {
-            var strUrl = '/hr/Doc_type_edit/' + edit_DocID;
-            var objData = {
-                 name: $('#edit-document-modal').find('#name').val()
-                ,description: $('#edit-document-modal').find('#description').val()
-                , _token: $('#edit-document-modal').find('input[name=_token]').val()
-            };
-            var modalID = 'edit-document-modal';
-            var submitBtnID = 'edit_document';
-            var redirectUrl = '/hr/setup';
-            var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'The Document Type has been changed successfully.';
-            // var method = 'PATCH';
-           modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        //modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
-        });
-                // 
 
             // Edit
               var edit_QualID;
@@ -357,20 +296,6 @@
                 var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
             });
-                 // 
-             var doc_typeID;
-            $('#edit-category-modal').on('show.bs.modal', function (e) {
-                    //console.log('kjhsjs');
-                var btnEdit = $(e.relatedTarget);
-                doc_typeID = btnEdit.data('id');
-                var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
-                //var employeeName = btnEdit.data('employeename');
-                var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#description').val(description);
-                
-             });
 
             // 
 
@@ -385,14 +310,27 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'cat_module';
-                var redirectUrl = '/hr/document';
+                var redirectUrl = '/hr/setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group has been updated successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-    /**/   $('#edit_category').on('click', function () {
+              var doc_typeID;
+            $('#edit-category-modal').on('show.bs.modal', function (e) {
+                    //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                doc_typeID = btnEdit.data('id');
+                var name = btnEdit.data('name');
+                var description = btnEdit.data('description');
+                //var employeeName = btnEdit.data('employeename');
+                var modal = $(this);
+                modal.find('#name').val(name);
+                modal.find('#description').val(description);
+                
+             });
+            $('#edit_category').on('click', function () {
                 var strUrl = '/hr/document/' + doc_typeID;
                 var modalID = 'edit-category-modal';
                 var objData = {
@@ -400,18 +338,14 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'edit_category';
-                var redirectUrl = '/hr/document';
+                var submitBtnID = 'save_category';
+                var redirectUrl = '/hr/setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Category modal has been updated successfully.';
                 var Method = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-/*
-            $('#update-module').on('click', function() {
-                postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
-            });
-            */
+
         });
     </script>
 @endsection

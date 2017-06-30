@@ -23,9 +23,11 @@
                                 <th>Description</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                              @foreach ($doc_type_category as $type)
+                             @if (count($doc_type) > 0)
+                              @foreach ($doc_type as $type)
                                <tr>
-                                    <td style=" text-align: center;" nowrap>
+                                <tr id="doc_type-list">
+                                    <td nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-document-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                            
                                     </td>
@@ -38,6 +40,16 @@
                                     </td>
                                 </tr>  
                                    @endforeach  
+                                       @else
+                               <tr id="doc_type-list">
+                        <td colspan="5">
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            No Document Type to display, please start by adding a new Document Type.
+                        </div>
+                        </td>
+                        </tr>
+                           @endif 
                             </table>
                         </div>
                                    <!-- /.box-body -->
@@ -92,14 +104,53 @@
                 $('.modal:visible').each(reposition);
             });
               
+        var edit_DocID;
+        $('#edit-document-modal').on('show.bs.modal', function (e) {
+            //console.log('kjhsjs');
+            var btnEdit = $(e.relatedTarget);
+            edit_DocID = btnEdit.data('id');
+            var name = btnEdit.data('name');
+            var description = btnEdit.data('description');
+            var modal = $(this);
+            modal.find('#name').val(name);
+            modal.find('#description').val(description);
+           
+        });
 
+            //  var docID;
+            // $('#add-document-modal').on('show.bs.modal', function (e) {
+            //     var btnEdit = $(e.relatedTarget);
+            //     docID = btnEdit.data('id');
+            //     var name = btnEdit.data('name');
+            //     var description = btnEdit.data('description');
+            //     var modal = $(this);
+            //     modal.find('#name').val(name);
+            //     modal.find('#description').val(description);  
+            //  });
+
+             //Post module form to server using ajax (ADD)
+            $('#save_doc').on('click', function() {
+                var strUrl = '/hr/addDoctype/{{ $category }}'; 
+                var modalID = 'add-document-modal';
+                var objData = {
+                     name: $('#'+modalID).find('#name').val()
+                    ,description: $('#'+modalID).find('#description').val()
+                   , _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'add-document';
+                var redirectUrl = '/hr/category/{{ $category }}';
+                var successMsgTitle = 'Document Type Saved!';
+                var successMsg = 'The Document Type has been Saved successfully.';
+                //var formMethod = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
 
             // 
-             var ID;
+             var edit_DocID;
             $('#edit-document-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                doc_type_categoryID = btnEdit.data('id');
+                edit_DocID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
                 //var employeeName = btnEdit.data('employeename');
@@ -109,42 +160,57 @@
                 
              });
 
+              $('#edit_document').on('click', function () {
+            var strUrl = '/hr/Doc_type_edit/' + edit_DocID;
+            var objData = {
+                 name: $('#edit-document-modal').find('#name').val()
+                ,description: $('#edit-document-modal').find('#description').val()
+                , _token: $('#edit-document-modal').find('input[name=_token]').val()
+            };
+            var modalID = 'edit-document-modal';
+            var submitBtnID = 'edit_document';
+            var redirectUrl = '/hr/setup';
+            var successMsgTitle = 'Changes Saved!';
+            var successMsg = 'The Document Type has been changed successfully.';
+            // var method = 'PATCH';
+           modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
             // 
 
-            //Post module form to server using ajax (ADD)
-            $('#save_doc').on('click', function() {
-                //console.log('strUrl');
-                var strUrl = '/hr/category/add/' + 'doc_type_category';
-                var modalID = 'add-document-modal';
-                var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
-                var submitBtnID = 'doc_module';
-                var redirectUrl = '/hr/category';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The group has been updated successfully.';
-                //var formMethod = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
+    //         //Post module form to server using ajax (ADD)
+    //         $('#save_doc').on('click', function() {
+    //             //console.log('strUrl');
+    //             var strUrl = '/hr/category/add/' + 'doc_type_category';
+    //             var modalID = 'add-document-modal';
+    //             var objData = {
+    //                 name: $('#'+modalID).find('#name').val(),
+    //                 description: $('#'+modalID).find('#description').val(),
+    //                 _token: $('#'+modalID).find('input[name=_token]').val()
+    //             };
+    //             var submitBtnID = 'doc_module';
+    //             var redirectUrl = '/hr/category';
+    //             var successMsgTitle = 'Changes Saved!';
+    //             var successMsg = 'The group has been updated successfully.';
+    //             //var formMethod = 'PATCH';
+    //             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+    //         });
 
-    /**/
-    });   $('#edit_doc').on('click', function () {
-                var strUrl = '/hr/category/' + ID;
-                var modalID = 'edit-document-modal';
-                var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
-                var submitBtnID = 'edit_doc';
-                var redirectUrl = '/hr/category';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'Company modal has been updated successfully.';
-                var Method = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-            });
+    // /**/
+    // });   $('#edit_doc').on('click', function () {
+    //             var strUrl = '/hr/category/' + ID;
+    //             var modalID = 'edit-document-modal';
+    //             var objData = {
+    //                 name: $('#'+modalID).find('#name').val(),
+    //                 description: $('#'+modalID).find('#description').val(),
+    //                 _token: $('#'+modalID).find('input[name=_token]').val()
+    //             };
+    //             var submitBtnID = 'edit_doc';
+    //             var redirectUrl = '/hr/category';
+    //             var successMsgTitle = 'Changes Saved!';
+    //             var successMsg = 'Company modal has been updated successfully.';
+    //             var Method = 'PATCH';
+    //             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+             });
 
 
           /*  $('#update-module').on('click', function() {

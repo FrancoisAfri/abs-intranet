@@ -9,6 +9,7 @@ use App\DivisionLevelOne;
 use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
 use App\HRPerson;
+use App\leave_application;
 use App\module_access;
 use Illuminate\Http\Request;
 
@@ -33,6 +34,8 @@ class DashboardController extends Controller
         ];
 		$data['active_mod'] = 'dashboard';
         $user = Auth::user()->load('person');
+
+
 		
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -83,6 +86,8 @@ class DashboardController extends Controller
             }
             $isSupervisor = ($numSupervisedEmp > 0) ? true : false;
             $canViewCPWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
+
+             $statusLabels = [10 => "label-danger", 50 => "label-warning", 80 => 'label-success', 100 => 'label-info'];
 			
 			// Get tasks for logged user
 			$today = strtotime(date('Y-m-d'));
@@ -100,6 +105,28 @@ class DashboardController extends Controller
 			->orderBy('client_name')
 			->orderBy('employee_tasks.order_no')
 			->get();
+
+
+              #leave Balance
+            $balance = DB::table('leave_credit')
+            ->select('leave_credit.*','leave_types.name as leavetype')
+            ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id') 
+            ->where('leave_credit.hr_id', $user->person->id)
+            ->orderBy('leave_credit.id')
+            ->get();
+
+            //return $application;
+
+                #leave Application 
+            $application = DB::table('leave_application')
+            ->select('leave_application.*','leave_types.name as leavetype','leave_status.name as leaveStatus') 
+            ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id') 
+            ->leftJoin('leave_status', 'leave_application.hr_id', '=', 'leave_status.id') 
+            ->where('leave_application.hr_id', $user->person->id)
+            ->orderBy('leave_application.id')
+            ->get();
+       // return $application;
+
 			// check task
 			$checkTasks = DB::table('employee_tasks')
 			->select('employee_tasks.description','employee_tasks.employee_id'
@@ -112,6 +139,11 @@ class DashboardController extends Controller
 			->orderBy('employee_tasks.employee_id')
 			->get();
 			//return $checkTasks;
+
+            $data['statusLabels'] = $statusLabels;
+            $data['balance'] = $balance;
+            $data['application'] = $application;
+            $data['taskStatus'] = $taskStatus;
 			$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;

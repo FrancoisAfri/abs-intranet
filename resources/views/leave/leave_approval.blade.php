@@ -46,7 +46,8 @@
                     @foreach($leaveApplication as $approval)
                       <tr>
                         <td>{{ !empty($approval->firstname) && !empty($approval->surname) ? $approval->firstname.' '.$approval->surname : '' }}</td>
-                             <td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>                       <td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
+                             <td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>  
+                            <td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
                             <td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
                               <td>{{ !empty($approval->start_time) ? date('H:i:s',$approval->start_time) : '' }}</td>
                               <td>{{ !empty($approval->end_time) ? date('H:i:s',$approval->end_time) : '' }}</td>
@@ -60,7 +61,7 @@
                                                       @else
                                                           <br><a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                                       @endif
-                                                  </div>
+                                            </div>
                               </td>
                              
 

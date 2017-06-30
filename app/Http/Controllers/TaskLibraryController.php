@@ -107,6 +107,7 @@ class TaskLibraryController extends Controller
         $TaskLibrary->order_no = $request->input('order_no');
         $TaskLibrary->description = $request->input('description');
         $TaskLibrary->dept_id = $request->input('dept_id');
+        $TaskLibrary->upload_required = $request->input('upload_required');
         $TaskLibrary->update();
         $TaskLibrary->update();
         return $TaskLibrary;
