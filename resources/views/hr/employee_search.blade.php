@@ -31,7 +31,7 @@
                         @foreach($SearchEmp as $person)
                             <li class="item">
                                 <div class="product-img">
-                                    <img src="{{ (!empty($person->profile_pic)) ? Storage::disk('local')->url("avatars/$person->profile_pic") : (($person->gender === 0) ? $f_silhouette : $m_silhouette) }}" alt="Profile Picture">
+                                    <img src="{{ $person->profile_pic_url }}" alt="Profile Picture">
                                 </div>
                                 <div class="product-info">
                                     <a href="{{ '/users/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>

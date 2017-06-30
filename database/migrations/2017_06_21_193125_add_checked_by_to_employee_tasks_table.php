@@ -25,8 +25,8 @@ class AddCheckedByToEmployeeTasksTable extends Migration
      */
     public function down()
     {
-        Schema::table('employee_tasks', function($table) {
-            $table->dropColumn('checked_by');
-        });
+        // Schema::table('employee_tasks', function($table) {
+        //     $table->dropColumn('checked_by');
+        // });
     }
 }

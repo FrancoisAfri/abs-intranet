@@ -337,6 +337,107 @@
             <!-- /.Available Perks Widgets -->
         </div>
     </div>
+    <!--  -->
+     <div class="row">
+        <div class="col-md-6">
+         <!-- /Tasks List -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+             <i class="fa fa-hourglass"></i>
+              <h3 class="box-title">Leave Balance</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                    <thead>
+                        <tr>
+                            <th>Leave Type</th>
+                       
+                            <th style="text-align: right;">Leave Balance</th>
+                          <!--   <th>Due Date</th>
+                            <th>Client Name</th> -->
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (!empty($balance))
+                        @foreach($balance as $task)
+                          <tr>
+                        <td>{{ (!empty($task->leavetype)) ?  $task->leavetype : ''}}</td>
+            <!-- <td style="text-align: right;"><span class="label {{ $statusLabels[$task->leave_balance] }} pull-right"> -->
+                <td style="text-align: right;">{{ (!empty($task->leave_balance)) ?  $task->leave_balance : ''}}</td>
+                            
+                          
+                          </tr>
+                        @endforeach
+                    @endif
+                  </tbody>
+                </table>
+              </div>
+                @if(Session('error_starting'))
+                    @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
+                @endif
+                @include('tasks.partials.end_task')
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+            </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /Tasks List End -->
+        </div>
+        <div class="col-md-6">
+         <!-- /Tasks List -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+             <i class="fa fa-hourglass"></i>
+              <h3 class="box-title">Leave Applied For Status</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                    <thead>
+                        <tr>
+                            <th>Leave Type</th>
+                            <th>Date From </th>
+                             <th>Date To </th>
+                            <th style="text-align: right;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (!empty($application))
+                        @foreach($application as $checkTask)
+                          <tr>
+                            <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
+                           <!--  <td>{{ (!empty($checkTask->start_date)) ?  $checkTask->start_date : ''}}</td> -->
+                             <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
+                             <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
+                           <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
+                            <!-- <td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td> -->
+                            <td>
+                           
+                            </td>
+                          </tr>
+                        @endforeach
+                    @endif
+                  </tbody>
+                </table>
+              </div>
+    <!--  -->
     @endsection
 
     @section('page_script')
@@ -467,6 +568,10 @@
             var bottomTenList = $('#emp-bottom-ten-list');
             var totnumEmp = parseInt('{{ $totNumEmp }}');
             loadEmpListPerformance(bottomTenList, 0, 0, false, true, totnumEmp);
+
+            //leave status (widget)
+            var LeaveStatus = $('#leave-status-list');
+            //loadLeaveStatus();
 
             //Show perk details
             $('#edit-perk-modal').on('show.bs.modal', function (e) {
