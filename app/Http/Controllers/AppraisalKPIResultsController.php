@@ -82,6 +82,7 @@ class AppraisalKPIResultsController extends Controller
 			$kpis = appraisalsKpis::where(function ($query) {
 				$query->where('is_upload', 2);
 				$query->WhereNotIn('is_task_kpi', [1]);
+				$query->orWhereNull('is_task_kpi');
 				//$query->orWhereNotIn('upload_type', [1, 2, 3]);
 			})
 				->where('template_id', $emp->jobTitle->kpiTemplate->id)
