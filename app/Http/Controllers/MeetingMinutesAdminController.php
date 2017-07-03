@@ -332,16 +332,29 @@ class meetingMinutesAdminController extends Controller
 			->orderBy('meeting_attendees.employee_id', 'asc')
 			->get();
 			
-			# Send Email to attendees
-			foreach($attendees as $attendee)
+			$minutesMeeting = DB::table('meetings_minutes')
+			->select('meetings_minutes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+			->leftJoin('hr_people', 'meetings_minutes.employee_id', '=', 'hr_people.id')
+			->where('meetings_minutes.meeting_id', $meeting->id)
+			->orderBy('meetings_minutes.id')
+			->first();
+			
+			# Send Email to attendees if minutes exist
+			if (!empty($minutesMeeting->id))
 			{
-				$employee = HRPerson::where('id', $attendee->employee_id)->first();
-				Mail::to($employee->email)->send(new emailMinutes($employee,$meeting));
+				foreach($attendees as $attendee)
+				{
+					$employee = HRPerson::where('id', $attendee->employee_id)->first();
+					Mail::to($employee->email)->send(new emailMinutes($employee,$meeting));
+				}
 			}
+			else
+				return back()->with('success_error', "No Minutes have been added to this meetiing. Please start by adding minutes.");
 			
 		}
+		else
+			return back()->with('success_error', "Meeting Details not found. Please contact your system administrator");
 		AuditReportsController::store('Minutes Meeting', 'email minutes to attendees', "Email Minutes", 0);
         return back()->with('success_email', "Meeting Minutes Emails Has Successfully Been Sent To Attendees.");
-        //return view('induction.reports.induction_print')->with($data);
     }
 }

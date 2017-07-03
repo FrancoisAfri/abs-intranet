@@ -101,7 +101,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
+                                    <select class="form-control select2" style="width: 100%;" id="employe_name" name="employe_name">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -118,7 +118,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="person_name" name="person_name" value="{{ old('person_name') }}" placeholder="Search by name...">
+                                    <input type="text" class="form-control" id="user_name" name="user_name" value="{{ old('user_name') }}" placeholder="Search by name...">
                                 </div>
                             </div>
                         </div>
@@ -166,32 +166,33 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="qualification_id" name="qualification_id">
+                                    <select class="form-control select2" style="width: 100%;" id="qualification_id" name="qualification_type">
                                         <option value="">*** Select a Qualification Type ***</option>
                                         @foreach($QulificationType as $qualification)
-                                            <option value="{{ $employee->id }}">{{ $qualification->name  }}</option>
+                                            <option value="{{ $qualification->id }}">{{ $qualification->name  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-                          <div class="form-group doc-field {{ $errors->has('qualification_id') ? ' has-error' : '' }}">
-                            <label for="qualification_id" class="col-sm-2 control-label">Document Type</label>
+
+                          <div class="form-group doc-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
+                            <label for="document_id" class="col-sm-2 control-label">Document Type</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="qualification_id" name="qualification_id">
+                                    <select class="form-control select2" style="width: 100%;" id="document_id" name="document_type">
                                         <option value="">*** Select a Document Type ***</option>
-                                        @foreach($DocType as $DocumentType)
-                                            <option value="{{ $employee->id }}">{{ $DocumentType->name  }}</option>
+                                        @foreach($DocType as $documentType)
+                                            <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
                       
                         
                    <!--  -->
@@ -330,7 +331,7 @@
                   $('.qul-field').hide();
                   $('.emp-field').show();
                   $('.user-field').hide();                
-                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
+                  $('form[name="leave-application-form"]').attr('action', '/hr/emp_search/Search');
                    $('#gen-report').val("Submit"); 
             }
 

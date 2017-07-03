@@ -39,7 +39,7 @@ class EmployeeDocumentsController extends Controller
 
         //$user->load('person');
         //$avatar = $user->person->profile_pic;
-    	$hr_people = DB::table('hr_people')->orderBy('first_name', 'surname')->get();
+    	  $hr_people = DB::table('hr_people')->orderBy('first_name', 'surname')->get();
         $employees = HRPerson::where('status', 1)->get();
         $DocType = doc_type::where('active', 1)->get();
         $category = doc_type::where('active', 1)->get();
@@ -157,17 +157,28 @@ class EmployeeDocumentsController extends Controller
         $this->validate($request, [           
                // 'division_level_2'=> 'required',
                // 'division_level_1'=> 'required',
-               'hr_person_id'=> 'required',
+               // ' User_name'=> 'required',
                // 'doc_description'=>'bail|required|min:6',
+
+ //         "division_level_2"
+ //        division_level_1"
+ //       employe_name"
+     
+ //     id_number"
+ //     passport_number
+ //   employee_number"
+ // qualification-type
+ // document-type"
+
         ]);
             $docs = $request->all();
             unset($docs['_token']);
-            //return $docs;
+             return $docs;
 
          $division = trim($request->division_level_2);
          $department = trim($request->division_level_1);
-         $userID = trim($request->hr_person_id);
-         $Search = trim($request->doc_description);   
+         $userID = trim($request->employe_name);
+         $Search = trim($request->document_type);   
 
             #
                  $document  = DB::table('employee_documents')
@@ -177,7 +188,8 @@ class EmployeeDocumentsController extends Controller
           ->leftJoin('hr_people', 'employee_documents.hr_person_id', '=', 'hr_people.id')
           ->leftJoin('division_level_ones','employee_documents.division_level_1', '=', 'division_level_ones.id')
           ->leftJoin('division_level_twos', 'employee_documents.division_level_2', '=', 'division_level_twos.id')
-        
+          // ->leftJoin()
+
          ->where('hr_people.status' ,1) 
         ->where(function ($query) use ($userID) {
                 if (!empty($userID)) {
@@ -196,7 +208,7 @@ class EmployeeDocumentsController extends Controller
                  }) 
         ->where(function ($query) use ($Search) {
                 if (!empty($Search)) {
-                    $query->where('doc_description', 'ILIKE', "%$Search%");
+                   $query->where('employee_documents.document_type_id', $Search );
                 }
              }) 
                      ->orderBy('Name')
@@ -221,6 +233,116 @@ class EmployeeDocumentsController extends Controller
         //return back();
         return view('hr.doc_searchresults')->with($data);
     }
+    public function SearchEmp(Request $request){
+             $this->validate($request, [                     
+               //  'division_level_2'=> 'required',
+               // 'division_level_1'=> 'required',
+              //  'employe_name'=> 'required',
+               // 'doc_description'=>'bail|required|min:6',
+
+               //         "division_level_2"
+ //        division_level_1"
+ //       employe_name"
+     
+ //     id_number"
+ //     passport_number
+ //   employee_number"
+ // qualification_type
+ // document-type"
+
+              #
+// "division_level_2":"","division_level_1":"","employe_name":"","User_name":"","id_number":"","passport_number":"","employee_number":"","qualification_type":"","document_type"
+              #
+                 ]);
+            $emp = $request->all();
+            unset($emp['_token']);
+           // return $emp;
+
+
+         $division = trim($request->division_level_2);
+         $department = trim($request->division_level_1);
+         $employeName = trim($request->user_name);
+         $personIDNum = trim($request->id_number);  
+         $personPassport = trim($request->passport_number);         
+         $personEmployee_no = trim($request->employee_number);  
+
+
+      //$SearchEmp  = DB::table('hr_people')
+       $SearchEmp = HRPerson::whereHas('user', function ($query) {
+            $query->whereIn('type', [1, 3]);
+          })
+            ->select('hr_people.*','division_level_ones.name as Department', 'division_level_twos.name as Division')
+            ->leftJoin('division_level_ones','hr_people.division_level_1', '=', 'division_level_ones.id')
+            ->leftJoin('division_level_twos', 'hr_people.division_level_2', '=', 'division_level_twos.id')
+
+                    ->where('hr_people.status',1) 
+                    
+                    ->where(function ($query) use ($division) {
+                                 if (!empty($division)) {
+                                    $query->where('hr_people.division_level_2', $division );
+                                  }
+                             })   
+                    ->where(function ($query) use ($department) {
+                                  if (!empty($department)) {
+                                    $query->where('hr_people.division_level_1', $department );
+                                  }
+                             }) 
+                      ->where(function ($query) use ($employeName) {
+                            if (!empty($employeName)) {
+                                $query->where('first_name', 'ILIKE', "%$employeName%");
+                            }
+                        })
+
+                      ->where(function ($query) use ($personIDNum) {
+                            if (!empty($personIDNum)) {
+                                $query->where('id_number', 'ILIKE', "%$personIDNum%");
+                            }
+                        })
+
+                      ->where(function ($query) use ($personPassport) {
+                            if (!empty($personPassport)) {
+                                $query->where('passport_number', 'ILIKE', "%$personPassport%");
+                            }
+                        })
+
+                      ->where(function ($query) use ($personEmployee_no) {
+                            if (!empty($personEmployee_no)) {
+                               $query->where('employee_number', 'ILIKE', "%$personEmployee_no%");
+                            }
+                         })        
+                          // ->orderBy('Name')
+                          ->limit(50)
+                          ->get();
+
+                      //return $SearchEmp;
+
+                      $data['SearchEmp'] = $SearchEmp;   
+                      $data['personIDNum'] = $personIDNum;
+                      $data['division'] = $division;
+                      $data['department'] = $department;
+                      $data['employeName'] = $employeName;
+                      $data['personPassport'] = $personPassport;
+                      $data['personEmployee_no'] = $personEmployee_no;
+                      $data['page_title'] = "Employee records";
+                      $data['page_description'] = "Employee Search";
+                      $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
+                      $data['breadcrumb'] = [
+                          ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+                          ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+                      ];
+                      $data['active_mod'] = 'Employee Records';
+                      $data['active_rib'] = 'Search';
+                      AuditReportsController::store('Employee Search', 'Employee Search Page Accessed', "Actioned By User", 0);
+                      //return back();
+                      return view('hr.employee_search')->with($data);
+
+
+
+          }
+
+
+           
+
     public function uploadDocs(){
 
     }

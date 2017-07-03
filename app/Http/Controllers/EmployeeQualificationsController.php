@@ -34,6 +34,8 @@ class EmployeeQualificationsController extends Controller
             ['title' => 'Employee records', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Records', 'active' => 1, 'is_module' => 0]
         ];
+        $data['active_mod'] = 'Employee Records';
+        $data['active_rib'] = 'Search';
 
         //$user->load('person');
         //$avatar = $user->person->profile_pic;
@@ -51,7 +53,8 @@ class EmployeeQualificationsController extends Controller
      
       
         $data['active_mod'] = 'Employee Records';
-        $data['active_rib'] = 'Employee Qualifications';
+        $data['active_rib'] = 'Search';
+      
         $data['qualifications'] = $qualifications;
         $data['employees'] = $employees;
         $data['DocType'] = $DocType;
@@ -68,16 +71,26 @@ class EmployeeQualificationsController extends Controller
             $this->validate($request, [                     
                //  'division_level_2'=> 'required',
                // 'division_level_1'=> 'required',
-               'hr_person_id'=> 'required',
+               // 'User_name'=> 'required',
                // 'doc_description'=>'bail|required|min:6',
+
+               //         "division_level_2"
+ //        division_level_1"
+ //       employe_name"
+     
+ //     id_number"
+ //     passport_number
+ //   employee_number"
+ // qualification_type
+ // document-type"
                  ]);
             $qul = $request->all();
             unset($qul['_token']);
 
              $division = trim($request->division_level_2);
              $department = trim($request->division_level_1);
-             $userID = trim($request->hr_person_id);
-             $Search = trim($request->doc_description);   
+             $userID = trim($request->employe_name);
+             $Search = trim($request->qualification_type);   
              
 
           #
@@ -88,25 +101,26 @@ class EmployeeQualificationsController extends Controller
           ->leftJoin('hr_people', 'qualification.hr_person_id', '=', 'hr_people.id')
           ->leftJoin('division_level_ones','qualification.division_level_1', '=', 'division_level_ones.id')
           ->leftJoin('division_level_twos', 'qualification.division_level_2', '=', 'division_level_twos.id')
-         ->where('hr_people.status' ,1) 
-        ->where(function ($query) use ($userID) {
+
+          ->where('hr_people.status' ,1) 
+          ->where(function ($query) use ($userID) {
                 if (!empty($userID)) {
                     $query->where('qualification.hr_person_id', $userID);
                     }
                 })
-        ->where(function ($query) use ($division) {
+          ->where(function ($query) use ($division) {
                      if (!empty($division)) {
                         $query->where('qualification.division_level_2', $division );
                       }
                  })   
-        ->where(function ($query) use ($department) {
+          ->where(function ($query) use ($department) {
                       if (!empty($department)) {
                         $query->where('qualification.division_level_1', $department );
                       }
                  }) 
-        ->where(function ($query) use ($Search) {
+          ->where(function ($query) use ($Search) {
                 if (!empty($Search)) {
-                    $query->where('qualification.supporting_docs', 'ILIKE', "%$Search%");
+                     $query->where('qualification.Qualification_Type', $Search );
                 }
                  }) 
                   ->orderBy('Name')
@@ -123,17 +137,21 @@ class EmployeeQualificationsController extends Controller
         $data['Search'] = $Search;
         $data['page_title'] = "Employee Qualifications";
 
-        $data['active_mod'] = 'Employee Records';
-        $data['active_rib'] = 'Employee Qualifications';
         $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
         $data['breadcrumb'] = [
             ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
+
+        $data['active_mod'] = 'Employee Records';
+        $data['active_rib'] = 'Search';
         AuditReportsController::store('Employee Documents', 'Employee Documents Search Page Accessed', "Actioned By User", 0);
         //return back();
         return view('hr.qul_searchresults')->with($data);       
 
         }
+
+          
+
 
 }
