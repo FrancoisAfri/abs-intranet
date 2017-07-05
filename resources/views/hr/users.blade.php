@@ -5,7 +5,7 @@
         <div class="col-md-12">
 
             <!-- HR PEOPLE LIST -->
-            <div class="box box-success">
+           <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Users Search Result</h3>
 
@@ -19,7 +19,7 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    @if(!(count($SearchEmp) > 0))
+                    @if(!(count($persons) > 0))
                         <div class="callout callout-danger">
                             <h4><i class="fa fa-database"></i> No Records found</h4>
 
@@ -28,13 +28,13 @@
                     @endif
                     <ul class="products-list product-list-in-box">
                         <!-- item -->
-                        @foreach($SearchEmp as $person)
+                        @foreach($persons as $person)
                             <li class="item">
                                 <div class="product-img">
-                                    <img src="{{ $person->profile_pic_url }}" alt="Profile Picture">
+                                    <img src="{{ (!empty($person->profile_pic)) ? Storage::disk('local')->url("avatars/$person->profile_pic") : (($person->gender === 0) ? $f_silhouette : $m_silhouette) }}" alt="Profile Picture">
                                 </div>
                                 <div class="product-info">
-                                    <a href="{{ '/hr/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
+                                    <a href="{{ '/users/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
                                         <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span><!-- </a> -->
                             <span class="product-description">
                                 @if(!empty($person->email))
@@ -43,8 +43,25 @@
                                 @if(!empty($person->position) && count($positions) > 0)
                                     &nbsp; {{ ' | ' }} &nbsp; <i class="fa fa-user-circle"></i> {{ $positions[$person->position] }}
                                 @endif
-                            </span>
+
+                                  <div align="right" class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-1 control-label"></label>
+                            
+                                <div class="input-group">
+                                     <input type="hidden" name="IAF1_approval" value="0">
+                                    <input   type="checkbox" name="IAF1_approval" value="1" 
                                 </div>
+                            </div>
+                      
+                          </div> 
+                            </span>
+
+                          
+                    </div>
+                                
+
+                                            
+ 
                             </li>
                         @endforeach
                         <!-- /.item -->
@@ -52,7 +69,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search </button>
+                    <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
                 </div>
                 <!-- /.box-footer -->
             </div>
@@ -63,9 +80,9 @@
 
 @section('page_script')
     <script type="text/javascript">
-    //Cancel button click event
-    document.getElementById("back_to_user_search").onclick = function () {
-        location.href = "/hr/emp_qualification";
-    };
+	//Cancel button click event
+	document.getElementById("back_to_user_search").onclick = function () {
+		location.href = "/hr/business_card";
+	};
     </script>
 @endsection
