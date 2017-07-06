@@ -3,21 +3,36 @@
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
     <div class="row">
-        <!-- User Form -->
+        <div class="container">
+ <!--  <h2 class="headertekst">General Information</h2> -->
+
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <h3>General Information</h3>
+        <!-- begin -->
+           <!-- User Form -->
         <div class="col-md-12">
             <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
+                  <ul id="nav" class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#home">General Info</a></li>
+                    <li><a data-toggle="tab" href="#menu1">Employee Document  </a></li>
+                    <li><a data-toggle="tab" href="#menu2">Employee Qualification</a></li>
+                   <!--  <li><a data-toggle="tab" href="#menu3">Menu 3</a></li> -->
+                  </ul>
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">User</h3>
-                    <p>User details:</p>
+                   <!--  <h3 class="box-title">General Information</h3>
+                    <p>User details:</p> -->
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -81,23 +96,7 @@
                             </div>
                         </div>
                             {{--add leave porfile--}}
-                           <!--  <div class="form-group">
-                                <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-tags"></i>
-                                        </div>
-                                        <select name="leave_profile" class="form-control">
-                                            <option value="">*** Select leave Profile ***</option>
-                                            <option value="1" {{ ($user->person->leave_profile === 1) ? ' selected' : '' }}>Employee with no leave</option>
-                                            <option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>5 Day Employee </option>
-                                            <option value="3"{{ ($user->person->leave_profile === 3) ? ' selected' : '' }}>6 Day Employee</option>
-                                            <option value="4"{{ ($user->person->leave_profile === 4) ? ' selected' : '' }}>Shift Worker</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div> -->
+                      
                             <div class="form-group">
                                 <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
 
@@ -135,24 +134,24 @@
                                 </div>
                             </div>
                         @endif
-						@if (isset($view_by_admin) && $view_by_admin === 1)
-						<div class="form-group">
-						<label for="action" class="col-sm-2 control-label">Reports to</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user-circle"></i>
-									</div>
-									<select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;">
-										<option selected="selected" value="" >*** Select a Manager ***</option>
-											@foreach($employees as $employee)
-											<option value="{{ $employee->id }}" {{ ($user->person->manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
-											@endforeach
-									</select>
-								</div>
-							</div>
-						</div>
-						@endif
+                        @if (isset($view_by_admin) && $view_by_admin === 1)
+                        <div class="form-group">
+                        <label for="action" class="col-sm-2 control-label">Reports to</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                    <select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;">
+                                        <option selected="selected" value="" >*** Select a Manager ***</option>
+                                            @foreach($employees as $employee)
+                                            <option value="{{ $employee->id }}" {{ ($user->person->manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                            @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                         <div class="form-group">
                             <label for="cell_number" class="col-sm-2 control-label">Cell Number</label>
 
@@ -340,7 +339,162 @@
                                 <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                             </div>
                         </div>
-                        <hr>
+                      
+                    </div>
+                    <!-- /.box-body -->
+
+                   
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+       <!--  End -->
+    </div>
+    </div>
+
+    <div id="menu1" class="tab-pane fade">
+      <h3>Employee Document</h3>
+     <!--  -->
+             <div class="col-md-12">
+            <!-- Horizontal Form -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-user pull-right"></i>
+                      <ul id="nav" class="nav nav-tabs">
+                        <li><a data-toggle="tab" href="#home">General Info</a></li>
+                        <li  class="active"><a data-toggle="tab" href="#menu1">Employee Document  </a></li>
+                        <li><a data-toggle="tab" href="#menu2">Employee Qualification</a></li>
+                       <!--  <li><a data-toggle="tab" href="#menu3">Menu 3</a></li> -->
+                      </ul>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" method="POST" action="/users/{{ $user->id }}" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+
+                    <div class="box-body">
+                        @if (isset($view_by_admin) && $view_by_admin === 1)
+                            @foreach($division_levels as $division_level)
+                                <div class="form-group">
+                                    <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-black-tie"></i>
+                                            </div>
+                                            <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    <div class="form-group">
+                            <label for="first_name" class="col-sm-2 control-label">First Name </label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $user->person->first_name }}" placeholder="First Name" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname" class="col-sm-2 control-label">Surname</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ $user->person->surname }}" placeholder="Surname" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+     <!--  -->
+    </div>
+    <!--  -->
+    <div id="menu2" class="tab-pane fade">
+     <h3>Employee Qualification</h3>
+     <!--  -->
+             <div class="col-md-12">
+            <!-- Horizontal Form -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-user pull-right"></i>
+                      <ul id="nav" class="nav nav-tabs">
+                        <li><a data-toggle="tab" href="#home">General Info</a></li>
+                        <li><a data-toggle="tab" href="#menu1">Employee Document  </a></li>
+                        <li  class="active"><a data-toggle="tab" href="#menu2">Employee Qualification</a></li>
+                       <!--  <li><a data-toggle="tab" href="#menu3">Menu 3</a></li> -->
+                      </ul>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" method="POST" action="/users/{{ $user->id }}" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+
+                    <div class="box-body">
+                        @if (isset($view_by_admin) && $view_by_admin === 1)
+                            @foreach($division_levels as $division_level)
+                                <div class="form-group">
+                                    <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-black-tie"></i>
+                                            </div>
+                                            <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    <div class="form-group">
+                            <label for="first_name" class="col-sm-2 control-label">First Name </label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $user->person->first_name }}" placeholder="First Name" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname" class="col-sm-2 control-label">Surname</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ $user->person->surname }}" placeholder="Surname" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+    
+        <!-- End new User Form-->
+         <div class="box-footer" style="text-align: center;">
+
                         <div class="form-group">
                             <label for="change_password" class="col-sm-2 control-label">Password</label>
 
@@ -348,28 +502,20 @@
                                 <font data-toggle="tooltip" title="Click here to change password."><button type="button" id="change_password" class="btn btn-default btn-flat btn-block" data-toggle="modal" data-target="#myPasswordModal"><i class="fa fa-lock"></i> Change Password</button></font>
                             </div>
                         </div>
-                    </div>
-                    <!-- /.box-body -->
-
-                    <div class="box-footer" style="text-align: center;">
+                       <p>
+                       <p>
                         <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
-						@if (isset($view_by_admin) && $view_by_admin === 1)
-						<button type="button" class="btn btn-primary" id="access_button" onclick="postData({{$user->id}}, 'access');">Modules Access</button>
-						@endif
-						@if (isset($view_by_admin) && $view_by_admin === 1)
-						<button type="button" class="btn btn-warning" id="delete_button" name="command"
-								onclick="if(confirm('Are you sure you want to delete this User ?')){ deleteRecord()} else {return false;}"
+                        @if (isset($view_by_admin) && $view_by_admin === 1)
+                        <button type="button" class="btn btn-primary" id="access_button" onclick="postData({{$user->id}}, 'access');">Modules Access</button>
+                        @endif
+                        @if (isset($view_by_admin) && $view_by_admin === 1)
+                        <button type="button" class="btn btn-warning" id="delete_button" name="command"
+                                onclick="if(confirm('Are you sure you want to delete this User ?')){ deleteRecord()} else {return false;}"
                                 value="Delete"><i class="fa fa-trash"></i> Delete User
                         </button>
-						@endif
-                    </div>
-                    <!-- /.box-footer -->
-                </form>
+                        @endif
             </div>
-            <!-- /.box -->
-        </div>
-        <!-- End new User Form-->
 
         <!-- Password Modal form-->
         @if (isset($user_profile) && $user_profile === 1)
@@ -410,10 +556,18 @@
     <!-- optionally if you need translation for your language then include locale file as mentioned below
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
     <!-- End Bootstrap File input -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+    .bs-example{
+        margin: 20px;
+    }
+    </style>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 

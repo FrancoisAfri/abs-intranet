@@ -423,14 +423,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 3;
-        // $ribbon->ribbon_name = 'Document Type';
-        // $ribbon->description = 'Document Type';
-        // $ribbon->ribbon_path = 'hr/document';
-        // $ribbon->access_level = 4;
-        // $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Business card';
+        $ribbon->description = 'Business card';
+        $ribbon->ribbon_path = 'hr/business_card';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         // $ribbon = new module_ribbons();
         // $ribbon->active = 1;

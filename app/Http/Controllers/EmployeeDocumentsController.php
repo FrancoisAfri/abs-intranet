@@ -8,6 +8,8 @@ use App\hr_people;
 use App\DivisionLevel;
 use App\employee_documents;
 use App\doc_type;
+use App\User;
+use App\Province;
 use App\doc_type_category;
 use App\DivisionLevelTwo;
 
@@ -43,7 +45,7 @@ class EmployeeDocumentsController extends Controller
         $employees = HRPerson::where('status', 1)->get();
         $DocType = doc_type::where('active', 1)->get();
         $category = doc_type::where('active', 1)->get();
-     
+        $doc_type  = DB::table('doc_type')->where('active',1)->get();
         //$document = doc_type_category::where('active', 1)->get();
         $document = DB::table('doc_type_category')->orderBy('id')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -52,7 +54,7 @@ class EmployeeDocumentsController extends Controller
     	//$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
      
      
-      
+       $data['doc_type'] = $doc_type; 
          $data['active_mod'] = 'Employee Records';
          $data['DocType'] = $DocType;
         $data['active_rib'] = 'Employees Documents';
@@ -63,6 +65,43 @@ class EmployeeDocumentsController extends Controller
         $data['division_levels'] = $divisionLevels;
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('hr.employee_documents')->with($data);
+    }
+    #
+      public function editUser(User $user) {
+        $user->load('person');
+        $avatar = $user->person->profile_pic;
+        $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
+        $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
+        $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
+        $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
+        $employees = HRPerson::where('status', 1)->get();
+
+        //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
+        $positions = DB::table('hr_positions')->where('status', 1)->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
+        $data['page_title'] = "Employee Documents";
+        $data['page_description'] = "Employee records";
+        $data['back'] = "/users";
+        $data['view_by_admin'] = 1;
+        $data['user'] = $user;
+        $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("avatars/$avatar") : '';
+        $data['provinces'] = $provinces;
+        $data['active_mod'] = 'Employee Records';
+        $data['active_rib'] = 'Search';
+        $data['ethnicities'] = $ethnicities;
+        $data['positions'] = $positions;
+        $data['division_levels'] = $divisionLevels;
+        $data['marital_statuses'] = $marital_statuses;
+        $data['leave_profile'] = $leave_profile;
+        $data['employees'] = $employees;
+        $data['breadcrumb'] = [
+            ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+
+    //return $user;
+    AuditReportsController::store('Security', 'User Information Edited', "On Edit Mode", 0);
+        return view('hr.view_users')->with($data);
     }
     #
      public function viewQul() {
@@ -85,9 +124,11 @@ class EmployeeDocumentsController extends Controller
         $division=DivisionLevelTwo::where('active', 1)->get();
         // return $divisionLevels;
         //$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
+        $doc_type  = DB::table('doc_type')->where('active',1)->get();
+        
      
      
-      
+        $data['doc_type'] = $doc_type;   
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'employees Qualifications';
         $data['employees'] = $employees;
@@ -123,16 +164,16 @@ class EmployeeDocumentsController extends Controller
             $dates = $docs['expirydate'] = str_replace('/', '-', $docs['expirydate']);
             $expirydate = $docs['expirydate'] = strtotime($docs['expirydate']);
 
-        //Upload supporting Documents
-        if ($request->hasFile('supporting_docs')) {
-            $fileExt = $request->file('supporting_docs')->extension();
-            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $empDocs->id . "_supporting_docs." . $fileExt;
-                $request->file('supporting_docs')->storeAs('Employee_Docs', $fileName);
-                $empDocs->supporting_docs = $fileName;
-                $empDocs->update();               
-            }
-        }
+        // //Upload supporting Documents
+        // if ($request->hasFile('supporting_docs')) {
+        //     $fileExt = $request->file('supporting_docs')->extension();
+        //     if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
+        //         $fileName = $empDocs->id . "_supporting_docs." . $fileExt;
+        //         $request->file('supporting_docs')->storeAs('Employee_Docs', $fileName);
+        //         $empDocs->supporting_docs = $fileName;
+        //         $empDocs->update();               
+        //     }
+        // }
         
             #Save to the table
         $empDocs->category_id = $category_id;
@@ -148,6 +189,51 @@ class EmployeeDocumentsController extends Controller
          return back();
     }
 
+        public function uploadDoc(Request $request){
+         $this->validate($request, [
+            // 'name' => 'required',
+
+        ]);
+
+         $docs = $request->all();
+         unset($docs['_token']);
+
+          $DocS = new employee_documents();
+          $DocS->doc_type_id =  $request->input('doc_type'); 
+          $DocS->doc_description =  $request->input('description'); 
+           
+
+           #Explode date
+            $dates = $docs['date_from'] = str_replace('/', '-', $docs['date_from']);
+            $Date_from = $docs['date_from'] = strtotime($docs['date_from']);
+
+            #
+             #Explode date
+            $dates = $docs['exp_date'] = str_replace('/', '-', $docs['exp_date']);
+            $expirydate = $docs['exp_date'] = strtotime($docs['exp_date']);
+
+
+            #
+             //Upload supporting Documents
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $empDocs->id . "_supporting_docs." . $fileExt;
+                $request->file('supporting_docs')->storeAs('Employee_Docs', $fileName);
+                $DocS->supporting_docs = $fileName;
+                $DocS->update();               
+            }
+        }
+
+          $DocS->date_from =  $Date_from;
+          $DocS->expirydate =  $expirydate;
+
+          $DocS->save();
+          return back();
+
+    }
+
+   
     // public function getSearch(){
 
 
@@ -159,21 +245,20 @@ class EmployeeDocumentsController extends Controller
                // 'division_level_1'=> 'required',
                // ' User_name'=> 'required',
                // 'doc_description'=>'bail|required|min:6',
-
- //         "division_level_2"
- //        division_level_1"
- //       employe_name"
-     
- //     id_number"
- //     passport_number
- //   employee_number"
- // qualification-type
- // document-type"
+               //         "division_level_2"
+               //        division_level_1"
+               //       employe_name"
+                   
+               //     id_number"
+               //     passport_number
+               //   employee_number"
+               // qualification-type
+               // document-type"
 
         ]);
             $docs = $request->all();
             unset($docs['_token']);
-             return $docs;
+             //return $docs;
 
          $division = trim($request->division_level_2);
          $department = trim($request->division_level_1);
@@ -181,10 +266,13 @@ class EmployeeDocumentsController extends Controller
          $Search = trim($request->document_type);   
 
             #
+             $doc_type  = DB::table('doc_type')->where('active',1)->get();
+             //return $doc_type;
+
                  $document  = DB::table('employee_documents')
-        ->select('employee_documents.*','hr_people.status as statas','hr_people.first_name as Name','hr_people.surname as Surname','division_level_ones.name as Department', 'division_level_twos.name as Division' , 'doc_type.name as name')
+        ->select('employee_documents.*','hr_people.status as statas','hr_people.first_name as Name','hr_people.surname as Surname','division_level_ones.name as Department', 'division_level_twos.name as Division' , 'doc_type.name as DocTypeName')
           
-          ->leftJoin('doc_type','employee_documents.document_type_id', '=','doc_type.id')
+          ->leftJoin('doc_type','employee_documents.doc_type_id', '=','doc_type.id')
           ->leftJoin('hr_people', 'employee_documents.hr_person_id', '=', 'hr_people.id')
           ->leftJoin('division_level_ones','employee_documents.division_level_1', '=', 'division_level_ones.id')
           ->leftJoin('division_level_twos', 'employee_documents.division_level_2', '=', 'division_level_twos.id')
@@ -215,8 +303,9 @@ class EmployeeDocumentsController extends Controller
                     ->limit(50)
                     ->get();
                   
+                      //return $document;
 
-
+        $data['doc_type'] = $doc_type;           
         $data['document'] = $document;   
         $data['userID'] = $userID;
         $data['division'] = $division;
@@ -231,8 +320,10 @@ class EmployeeDocumentsController extends Controller
         ];
         AuditReportsController::store('Employee Documents', 'Employee Documents Search Page Accessed', "Actioned By User", 0);
         //return back();
-        return view('hr.doc_searchresults')->with($data);
+         return view('hr.doc_searchresults')->with($data);
     }
+
+
     public function SearchEmp(Request $request){
              $this->validate($request, [                     
                //  'division_level_2'=> 'required',
