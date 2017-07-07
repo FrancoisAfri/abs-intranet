@@ -9,6 +9,7 @@ use App\modules;
 use App\module_ribbons;
 use App\DivisionLevel;
 use App\LeaveType;
+use App\business_card;
 use App\leave_profile;
 use App\leave_configuration;
 
@@ -68,6 +69,24 @@ class DatabaseSeeder extends Seeder
         $person->email = 'nkosana@afrixcel.co.za';
         $person->status = 1;
         $user->addPerson($person);
+
+        # 
+        $card = new business_card;
+        $card->hr_id = 1;
+        $card->status = 0;
+        $card->save();
+
+        $card = new business_card;
+        $card->hr_id = 2;
+        $card->status = 0;
+        $card->save();
+
+        $card = new business_card;
+        $card->hr_id = 3;
+        $card->status = 0;
+        $card->save();
+        
+
 
         //insert default country
         $country = new Country;

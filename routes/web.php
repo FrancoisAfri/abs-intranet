@@ -66,7 +66,10 @@ Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrU
 
 #Business Card
 Route::get('hr/business_card', 'BusinessCardsController@view');
+Route::get('hr/active_card', 'BusinessCardsController@cards');
 Route::post('hr/search', 'BusinessCardsController@getSearch');
+Route::get('/hr/card_active/{lev}', 'BusinessCardsController@activeCard');
+
 
 //#Leave Management
 //Route::get('leave/types', 'LeaveController@types');
