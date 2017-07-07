@@ -164,7 +164,7 @@ class meetingMinutesAdminController extends Controller
 		$meeting->meeting_agenda = $request->input('meeting_agenda');
         $meeting->update();
 		$meeting_name = $request->input('meeting_name');
-        AuditReportsController::store('Minutes Meeting', 'task Informations Updated', "Updated by User", 0);
+        AuditReportsController::store('Minutes Meeting', 'Meeting Informations Updated', "Updated by User", 0);
         return response()->json(['new_meeting_name' => $meeting_name], 200);
     }
 	public function saveAttendee(Request $request, MeetingMinutes $meeting)
@@ -189,7 +189,6 @@ class meetingMinutesAdminController extends Controller
         AuditReportsController::store('Minutes Meeting', 'Meeting Attendee Added', "Added by User", 0);
         return response()->json(['new_attendance' => $attendance], 200);
     }
-	
 	public function saveMinute(Request $request, MeetingMinutes $meeting)
     {
         $this->validate($request, [       
@@ -250,7 +249,6 @@ class meetingMinutesAdminController extends Controller
 		AuditReportsController::store('Minutes Meeting', 'View Meeting Search Page', "Updated by User", 0);
         return view('meeting_minutes.meeting_search')->with($data);
     }
-	
 	public function searchResults(Request $request)
     {
         $From = $To = 0;

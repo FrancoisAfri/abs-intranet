@@ -331,6 +331,12 @@ Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
 // Minutes Meeting
+Route::get('/meeting_minutes/recurring', 'RecurringMeetingsController@index');
+Route::get('/meeting_minutes/recurring/{recurring}/view', 'RecurringMeetingsController@show');
+Route::get('/meeting_minutes/recurring/{recurring}/actdect', 'RecurringMeetingsController@meetingAct');
+Route::post('/meeting/add_recurring_attendees', 'RecurringMeetingsController@saveRecurringAttendee');
+Route::post('/meeting_minutes/add_recurring_meeting', 'RecurringMeetingsController@store');
+Route::patch('/meeting_minutes/recurring/update/{recurring}', 'RecurringMeetingsController@update');
 Route::get('/meeting_minutes/create', 'MeetingMinutesAdminController@index');
 Route::post('/meeting/search_results', 'MeetingMinutesAdminController@searchResults');
 Route::post('/meeting/add_attendees/{meeting}', 'MeetingMinutesAdminController@saveAttendee');
