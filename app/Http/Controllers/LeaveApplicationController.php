@@ -150,7 +150,7 @@ class LeaveApplicationController extends Controller
 
     $approvalstatus = array(1 => 'Approved' , 2 => 'require_managers_approval ', 3 => 'require_department_head_approval', 4 =>          'require_hr_approval', 5 => 'require_payroll_approval', 6 => 'Approved', 7 => 'Rejected');
         
-        $rejectstatus = array(7 => 'rejectd by managers ', 8 => 'rejectd by department_head', 9 => 'rejectd by hr', 10 => 'rejectd by payroll');
+        $rejectstatus = array(7 => 'rejectd_by_managers ', 8 => 'rejectd_by_department_head', 9 => 'rejectd_by_hr', 10 => 'rejectd_by_payroll');
        return $approvalstatus;
     }
 

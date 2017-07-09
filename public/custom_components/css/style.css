@@ -38,3 +38,20 @@ hr.hr-text::after {
      color: #818078;
      background-color: #fcfcfa;
  }
+ h2.headertekst {
+  text-align: center;
+}
+#nav {
+width:750px;
+margin:0 auto;
+list-style:none;
+}
+#nav li {
+float:left;
+}
+#nav a {
+display:block;
+text-align:center;
+width:150px; /* fixed width */
+text-decoration:none; 
+}

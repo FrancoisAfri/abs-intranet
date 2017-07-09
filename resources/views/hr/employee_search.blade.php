@@ -34,7 +34,7 @@
                                     <img src="{{ $person->profile_pic_url }}" alt="Profile Picture">
                                 </div>
                                 <div class="product-info">
-                                    <a href="{{ '/users/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
+                                    <a href="{{ '/hr/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
                                         <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span><!-- </a> -->
                             <span class="product-description">
                                 @if(!empty($person->email))
@@ -52,7 +52,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
+                    <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search </button>
                 </div>
                 <!-- /.box-footer -->
             </div>

@@ -63,6 +63,14 @@ Route::patch('contacts/{user}', 'ContactsController@update');
 //Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
+
+#Business Card
+Route::get('hr/business_card', 'BusinessCardsController@view');
+Route::get('hr/active_card', 'BusinessCardsController@cards');
+Route::post('hr/search', 'BusinessCardsController@getSearch');
+Route::get('/hr/card_active/{lev}', 'BusinessCardsController@activeCard');
+
+
 //#Leave Management
 //Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -270,10 +278,14 @@ Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printR
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
+Route::get('/hr/{user}/edit', 'EmployeeDocumentsController@editUser');
+Route::get('/hr/doc_results', 'EmployeeDocumentsController@SearchResults');
 // Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewQul');
-Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
-Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@Searchdoc');
+// Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
+//Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@Searchdoc');
+
 Route::post('/hr/emp_doc/Search', 'EmployeeDocumentsController@Searchdoc');
+Route::post('/hr/emp_document/upload_doc','EmployeeDocumentsController@uploadDoc');
 Route::post('/hr/emp_qual/Search', 'EmployeeDocumentsController@Searchqul');
 Route::post('/hr/emp_search/Search', 'EmployeeDocumentsController@SearchEmp');
 

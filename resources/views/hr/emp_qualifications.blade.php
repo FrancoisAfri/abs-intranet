@@ -1,44 +1,8 @@
 @extends('layouts.main_layout')
-<!--  -->
- <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 <!--  -->
 @section('page_dependencies')
-<!-- Include Date Range Picker -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-<!-- bootstrap datepicker -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-<!-- bootstrap datepicker -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-<!-- iCheck -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-<!-- Select 2-->
-    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <!-- InputMask -->
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
-    <!-- Bootstrap date picker -->
-    <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Start Bootstrap File input -->
-    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
-    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-<!--Time Charger-->
-
-
 @endsection
 @section('content')
     <div class="row">
@@ -76,6 +40,7 @@
                                 </div>
                             </div>
 
+
                            <div class="box-body">
                        <div class="form-group">
                         @foreach($division_levels as $division_level)
@@ -110,6 +75,8 @@
                                 </div>
                             </div>
                         </div>
+                        <!--  -->
+               
                         <!--  -->
                         <div class="form-group emp-field">
                             <label for="person_name" class="col-sm-2 control-label">Name</label>
@@ -200,8 +167,8 @@
                      </div>
                    <!--  -->
                      <div class="box-footer">
-                        <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
-                       <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Document</button>
+                       <!--  <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
+                       <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i>Search</button>
                     </div>
                     <!-- /.box-footer -->
                  </div>
@@ -247,9 +214,9 @@
             $(".select2").select2();
             //Cancel button click event
 
-            $('#cancel').click(function () {
-                location.href = '/leave/reports';
-            });
+            // $('#cancel').click(function () {
+            //     location.href = '/leave/reports';
+            // });
              function postData(id, data) {
         alert(id);
          //if (data == 'approval_id') location.href = "/leave/approval/" + id;
@@ -258,20 +225,7 @@
             $("[data-mask]").inputmask();
 
             //Date picker
-            $('#date_from').datepicker({
-                format: 'MM yyyy',
-                autoclose: true,
-                startView: "months",
-                minViewMode: "months",
-                todayHighlight: true
-            });
-            $('#date_to').datepicker({
-                format: 'MM yyyy',
-                autoclose: true,
-                startView: "months",
-                minViewMode: "months",
-                todayHighlight: true
-            });
+          
         
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
@@ -296,12 +250,20 @@
                
             });
          
-            // Reposition when a modal is shown
-            $('.modal').on('show.bs.modal', reposition);
-            // Reposition when the window is resized
-            $(window).on('resize', function() {
-                $('.modal:visible').each(reposition);
-            });
+           function reposition() {
+            var modal = $(this)
+                , dialog = modal.find('.modal-dialog');
+            modal.css('display', 'block');
+            // Dividing by two centers the modal exactly, but dividing by three
+            // or four works better for larger screens.
+            dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+        }
+        // Reposition when a modal is shown
+        $('.modal').on('show.bs.modal', reposition);
+        // Reposition when the window is resized
+        $(window).on('resize', function () {
+            $('.modal:visible').each(reposition);
+        });
 
             //Show success action modal
             $('#success-action-modal').modal('show');

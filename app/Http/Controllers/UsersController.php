@@ -16,7 +16,9 @@ use App\leave_custom;
 use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
+use App\business_card;
 use App\Province;
+// use App\business_card;
 use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -246,13 +248,15 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Ribbon Added', "Ribbon Name: $ribbonData[ribbon_name]", 0);
 		return response()->json();
 	}
-    public function store(Request $request) {
+    public function store(Request $request ) {
         //Save usr
         $user = new User;
+        $card = new business_card;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->type = 1;
         $user->status = 1;
+        $card->status = 0;
         $user->save();
 
         //exclude empty fields from query
@@ -277,6 +281,11 @@ class UsersController extends Controller
 
     public function edit(User $user) {
         $user->load('person');
+
+         $business_cards = business_card::where('status', 1)->get()->load('HrPersons');
+        // return $business_cards;
+
+        // return $user;
         $avatar = $user->person->profile_pic;
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
@@ -285,9 +294,12 @@ class UsersController extends Controller
         $employees = HRPerson::where('status', 1)->get();
 
         //$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
+        $businessCard = DB::table('business_card')->get();
+        // return $businessCard;
         $positions = DB::table('hr_positions')->where('status', 1)->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
         $data['page_title'] = "Users";
+        $data['businessCard'] = $businessCard;
         $data['page_description'] = "View/Update user details";
         $data['back'] = "/users";
         $data['view_by_admin'] = 1;
