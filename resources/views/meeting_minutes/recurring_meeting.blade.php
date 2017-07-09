@@ -15,7 +15,7 @@
                 <div class="box-body">
 				<div style="overflow-X:auto;">
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px"></th><th>Title</th><th>Location</th><th>Agenda</th><th style="width: 40px"></th></tr>
+					 <tr><th style="width: 10px"></th><th>Title</th><th>Location</th><th>Agenda</th><th style="text-align: center">Attendees</th><th style="width: 40px"></th></tr>
                     @if (!empty($recurringMeetings))
 						@foreach($recurringMeetings as $recurringMeeting)
 						 <tr id="recurring-list">
@@ -26,9 +26,10 @@
 						  data-meeting_title="{{ $recurringMeeting->meeting_title }}"
 						  data-meeting_location="{{ $recurringMeeting->meeting_location }}"
 						  data-meeting_agenda="{{ $recurringMeeting->meeting_agenda }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-						  <td><a href="{{ '/meeting_minutes/recurring/' . $recurringMeeting->id . '/view' }}" class="product-title">{{!empty($recurringMeeting->meeting_title) ? $recurringMeeting->meeting_title : ''}}</a></td>
+						  <td>{{!empty($recurringMeeting->meeting_title) ? $recurringMeeting->meeting_title : ''}}</td>
 						  <td>{{!empty($recurringMeeting->meeting_location) ? $recurringMeeting->meeting_location : ''}}</td>
 						  <td>{{!empty($recurringMeeting->meeting_agenda) ? $recurringMeeting->meeting_agenda : ''}}</td>
+						  <td style="text-align: center"><a href="{{ '/meeting_minutes/recurring/' . $recurringMeeting->id . '/view' }}" class="product-title">{{$recurringMeeting->recurringAttendees->count()}}</a></td>
 						  <td nowrap>
                               <button type="button" id="view_meeting" class="btn {{ (!empty($recurringMeeting->status) && $recurringMeeting->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$recurringMeeting->id}}, 'actdeac');"><i class="fa {{ (!empty($recurringMeeting->status) && $recurringMeeting->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($recurringMeeting->status) && $recurringMeeting->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
@@ -76,26 +77,14 @@ function postData(id, data)
 }
 $(function () {
 	
-	 //show/hide fields on radio button toggles
-	/*$('#attendance_yes, #attendance_no').on('ifChecked', function(){
-		var companyType = hideFields();
-	});*/
-	
-	/*$('.datepicker').datepicker({
-		format: 'dd/mm/yyyy',
-		autoclose: true,
-		todayHighlight: true
-		});*/
-	//Vertically center modals on page
-	function reposition() {
+		function reposition() {
 		var modal = $(this),
-				dialog = modal.find('.modal-dialog');
+		dialog = modal.find('.modal-dialog');
 		modal.css('display', 'block');
 		// Dividing by two centers the modal exactly, but dividing by three
 		// or four works better for larger screens.
 		dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 	}
-
 	// Reposition when a modal is shown
 	$('.modal').on('show.bs.modal', reposition);
 	// Reposition when the window is resized

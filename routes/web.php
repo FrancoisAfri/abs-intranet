@@ -346,6 +346,7 @@ Route::get('/cron/induction', 'InductionCronController@execute');
 Route::get('/meeting_minutes/recurring', 'RecurringMeetingsController@index');
 Route::get('/meeting_minutes/recurring/{recurring}/view', 'RecurringMeetingsController@show');
 Route::get('/meeting_minutes/recurring/{recurring}/actdect', 'RecurringMeetingsController@meetingAct');
+Route::get('/meeting_recurring/actdeac/{recurring}', 'RecurringMeetingsController@attendeeAct');
 Route::post('/meeting/add_recurring_attendees', 'RecurringMeetingsController@saveRecurringAttendee');
 Route::post('/meeting_minutes/add_recurring_meeting', 'RecurringMeetingsController@store');
 Route::patch('/meeting_minutes/recurring/update/{recurring}', 'RecurringMeetingsController@update');
@@ -370,7 +371,10 @@ Route::post('rate-our-services', 'SurveyGuestsController@store');
 
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');
+Route::get('survey/question_activate/{question}', 'SurveysController@actDeact');
+Route::get('survey/questions', 'SurveysController@questionsLists');
 Route::get('survey/rating-links', 'SurveysController@indexRatingLinks');
+Route::post('survey/add_question', 'SurveysController@saveQuestions');
 Route::post('survey/reports', 'SurveysController@getReport');
 Route::post('survey/reports/print', 'SurveysController@printReport');
 

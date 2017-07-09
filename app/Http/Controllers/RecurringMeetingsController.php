@@ -31,8 +31,8 @@ class RecurringMeetingsController extends Controller
     public function index()
     {
 		$recurringMeetings = RecurringMeetings::orderBy('meeting_title', 'asc')->get();
-		//$recurringMeetings = $recurringMeetings->load('recurringAttendees','recurringAttendees.recurringAttendees');
-		//return $recurringMeetings;
+		if (!empty($recurringMeetings)) $recurringMeetings->load('recurringAttendees');
+		
         $data['page_title'] = "Recurring Meeting";
         $data['page_description'] = "Recurring Meeting";
         $data['breadcrumb'] = [
@@ -73,7 +73,7 @@ class RecurringMeetingsController extends Controller
         $meeting->status = 1;
         $meeting->save();
 		AuditReportsController::store('Minutes Meeting', 'New Recurring Meeting Added', "Added By User", 0);
-        return redirect('/meeting_minutes/view_recurring_meeting/' . $meeting->id . '/view')->with('success_add', "The Meeting has been added successfully.");
+        return response()->json(['new_attendance' => $meeting->meeting_title], 200);
     }
 
     /**
@@ -84,21 +84,20 @@ class RecurringMeetingsController extends Controller
      */
     public function show(RecurringMeetings $recurring)
     {
-        $recurring->load('recurringAttendees.recurringAttendees');
+        $recurring->load('recurringAttendees.attendeesDetails');
 		$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
-		
+		//return $recurring;
 		$data['page_title'] = "View Recurring Meeting Details";
 		$data['page_description'] = "Recurring Meeting Details";
 		$data['breadcrumb'] = [
 		['title' => 'Recurring Meeting Minutes', 'path' => '/meeting_minutes/recurring', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
-		['title' => 'Recurring Meeting Minutes Search', 'path' => '/meeting_minutes/recurring', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
 		['title' => 'Recurring Meeting Minutes Details', 'active' => 1, 'is_module' => 0]
 			];
 		$data['active_mod'] = 'Meeting Minutes';
 		$data['active_rib'] = 'Recurring Meetings';
 		$data['recurring'] = $recurring;
 		$data['employees'] = $employees;
-//return $data;
+
 		AuditReportsController::store('Minutes Meeting', 'Recurring Minutes Meeting Details Page Accessed', "Accessed by User", 0);
 		return view('meeting_minutes.view_recurring_meeting')->with($data);
     }
@@ -115,13 +114,14 @@ class RecurringMeetingsController extends Controller
     }
 	# Act/deac attendees
 	public function attendeeAct(RecurringMeetingsAttendees $recurring) 
-	{ 
+	{
 		if ($recurring->status == 1) $stastus = 0;
-		else $recurring = 1;
-		
+		else $stastus = 1;
+		/*echo $recurring;
+		die ;*/
 		$recurring->status = $stastus;	
 		$recurring->update();
-		AuditReportsController::store('Minutes Meeting', "Template Status Changed: $stastus", "Edited by User", 0);
+		AuditReportsController::store('Minutes Meeting', "Recurring Meeting Attendee Status Changed: $stastus", "Edited by User", 0);
 		return back();
     }
     /**
@@ -160,18 +160,27 @@ class RecurringMeetingsController extends Controller
         return response()->json(['new_meeting_title' => $meetingTitle], 200);
     }
 	
-	public function saveRecurringAttendee(Request $request, MeetingMinutes $meeting)
+	public function saveRecurringAttendee(Request $request)
     {
         $this->validate($request, [
-            'employee_id' => 'bail|required|integer|min:1',        
+            'employee_id.*' => 'bail|required|integer|min:1',        
             'meeting_id' => 'bail|required|integer|min:1',        
         ]);
 		$attendeeData = $request->all();
 		unset($attendeeData['_token']);
-		
-		$attendee = new RecurringMeetingsAttendees($attendeeData);
-        $attendee->save();
-		$attendance = $request->input('employee_id');
+        foreach ($attendeeData['employee_id'] as $employeeID) {
+			$previous = RecurringMeetingsAttendees::where('employee_id', '=',$employeeID)
+			->where('meeting_id', '=',$attendeeData['meeting_id'])
+			->first();
+			if (empty($previous)) {
+			   $attendee = new RecurringMeetingsAttendees();
+				$attendee->employee_id = $employeeID;
+				$attendee->meeting_id = $attendeeData['meeting_id'];
+				$attendee->status = 1;
+				$attendee->save();
+			}
+        }
+		$attendance = $attendeeData['meeting_id'];
         AuditReportsController::store('Minutes Meeting', 'Recurring Meeting Attendee Added', "Added by User", 0);
         return response()->json(['new_attendance' => $attendance], 200);
     }

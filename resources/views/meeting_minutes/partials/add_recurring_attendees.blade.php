@@ -14,14 +14,14 @@
                     <div id="invalid-exp-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="form-group">
-                        <label for="attendee[]" class="col-sm-3 control-label">Attendee</label>
+                        <label for="employee_id[]" class="col-sm-3 control-label">Attendee</label>
 
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-briefcase"></i>
                                 </div>
-								<select class="form-control select2" multiple="multiple" data-placeholder="Select Employee" style="width: 100%;" id="employee_id" name="employee_id">
+								<select class="form-control select2" multiple="multiple" data-placeholder="Select Employee" style="width: 100%;" id="employee_id" name="employee_id[]">
 								<option  value="0">*** Select Attendee ***</option>
 								@foreach($employees as $employee)
 									<option value="{{ $employee->id }}">{{ $employee->first_name.' '.$employee->surname}}</option>

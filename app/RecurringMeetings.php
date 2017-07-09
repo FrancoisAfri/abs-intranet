@@ -17,4 +17,12 @@ class RecurringMeetings extends Model
     public function recurringAttendees() {
         return $this->hasmany(RecurringMeetingsAttendees::class, 'meeting_id');
     }
+	//Function to save recurring meeting employees
+   /* public function addEmployees(array $areaIDs) {
+        $areas = [];
+        foreach ($areaIDs as $areaID) {
+            $areas[] = new RegistrationArea(['area_id' => $areaID]);
+        }
+        return $this->subjects()->saveMany($areas);
+    }*/
 }

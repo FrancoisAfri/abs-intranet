@@ -10,10 +10,10 @@
 
 @section('content')
     <div class="row">
-		<div style="width:700px; align: center">
+		<div class="col-md-8 col-md-offset-2">
 			<div class="box box-success">
 				<div class="box-header with-border">
-					<h3 class="box-title">Meeting Attendees for {{$recurring->meeting_title}}</h3>
+					<h3 class="box-title">Meeting Attendees for: {{$recurring->meeting_title}}</h3>
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
 									class="fa fa-minus"></i></button>
@@ -25,17 +25,20 @@
 				<div class="box-body">
 					<table class="table table-striped">
 						<tbody>
-						<tr><th>Name</th><th>Type</th></tr>
-						@if(!empty($recurring->recurring_attendees))
-							@foreach($recurring->recurring_attendees as $attendee)
+						<tr><th>Name</th><th>Type</th><th></th></tr>
+						@if(!empty($recurring->recurringAttendees))
+							@foreach($recurring->recurringAttendees as $attendee)
 								<tr>
-									<td>{{ $attendee->attendeesInfo->first_name  .' '. $attendee->attendeesInfo->surname}}</td>
+									<td>{{ $attendee->attendeesDetails->first_name  .' '. $attendee->attendeesDetails->surname}}</td>
 									<td>Employee</td>
+									<td nowrap>
+										<button type="button" id="actdeac" class="btn {{ (!empty($attendee->status) && $attendee->status == 1) ? "btn-danger" : "btn-success" }} btn-xs pull-right" onclick="postData({{$attendee->id}}, 'actdeac');"><i class="fa {{ (!empty($attendee->status) && $attendee->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($attendee->status) && $attendee->status == 1) ? "De-Activate" : "Activate"}}</button>
+									</td>
 								</tr>
 							@endforeach
 						@else
 							<tr>
-								<td colspan="2">
+								<td colspan="3">
 									<div class="alert alert-danger alert-dismissable">
 										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No attendee to display, please start by adding one. </div>
 								</td>
@@ -46,6 +49,7 @@
 				</div>
 				<!-- /.box-body -->
 				<div class="box-footer">
+					<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
 					<button type="button" id="add-attendee" class="btn btn-success pull-right" data-toggle="modal"
 							data-target="#add-recurring-attendee-modal" data-meeting_id="{{ $recurring->id }}">Add Attendee
 					</button>
@@ -71,18 +75,19 @@
 
 function postData(id, data)
 {
-	if (data == 'print_minutes')
-		location.href = "/meeting/prnt_meeting/" + id;
-	else if (data == 'email_minutes')
-		location.href = "/meeting/email_meeting/" + id;
+	if (data == 'actdeac')
+		location.href = "/meeting_recurring/actdeac/" + id;
 }
 $(function () {
 	
 	//Initialize Select2 Elements
     $(".select2").select2();
+	document.getElementById("back_button").onclick = function () {
+			location.href = "/meeting_minutes/recurring";	};
+			
 	function reposition() {
 		var modal = $(this),
-				dialog = modal.find('.modal-dialog');
+		dialog = modal.find('.modal-dialog');
 		modal.css('display', 'block');
 		// Dividing by two centers the modal exactly, but dividing by three
 		// or four works better for larger screens.
@@ -97,14 +102,14 @@ $(function () {
 	//Show success action modal
 	$('#success-action-modal').modal('show');
 	//Post end task form to server using ajax (add)
-	var minuteID;
+	var meetingID;
 	
 	// Call add attendee Modal
-	$('#add-attendee-modal').on('show.bs.modal', function (e) {
+	$('#add-recurring-attendee-modal').on('show.bs.modal', function (e) {
 		var btnEnd = $(e.relatedTarget);
-		minuteID = btnEnd.data('meeting_id');
+		meetingID = btnEnd.data('meeting_id');
 		var modal = $(this);
-		modal.find('#meeting_id').val(minuteID);
+		modal.find('#meeting_id').val(meetingID);
 	});
 	// Add attendee Submit
 	$('#save-recurring-attendee').on('click', function() {
@@ -119,7 +124,7 @@ $(function () {
 	});
 	$('#update-meeting').on('click', function () {
 		
-		var strUrl = '/meeting/update/' + minuteID;
+		var strUrl = '/meeting/update/' + meetingID;
 		var formName = 'edit-meeting-form';
 		var modalID = 'edit-meeting-modal';
 		var submitBtnID = 'update-meeting';
