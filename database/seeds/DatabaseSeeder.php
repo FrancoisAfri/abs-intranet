@@ -782,10 +782,19 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'survey/rating-links';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Survey Questions';
+        $ribbon->description = 'Survey Questions';
+        $ribbon->ribbon_path = '	survey/questions';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 2;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Generate survey reports';
         $ribbon->ribbon_path = 'survey/reports';
