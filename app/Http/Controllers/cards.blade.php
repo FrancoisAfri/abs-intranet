@@ -10,7 +10,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                  <i class="fa fa-search pull-right"></i>
-                    <h3 class="box-title">User</h3>
+                    <h3 class="box-title">Business Cards</h3>
                     <!--
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -70,7 +70,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
-                    <button id="active_card" class="btn btn-default pull-right"><i class="fa fa-arrow-right"></i> Activate Card</button>
+                    <button id="back_to_user_search" class="btn btn-default pull-right"><i class="fa fa-arrow-right"></i> Activate Card</button>
                   <!--   <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Submit</button> -->
                 </div>
                 <!-- /.box-footer -->
@@ -94,13 +94,8 @@
    
 	//Cancel button click event
 	document.getElementById("back_to_user_search").onclick = function () {
-		location.href = "/hr/search";
+		location.href = "/hr/business_card";
 	};
-
-    document.getElementById("active_card").onclick = function () {
-        location.href = "/hr/active_card";
-    };
-
 
     function toggle(source) {
     var checkboxes = document.querySelectorAll('input[type="checkbox"]');

@@ -72,6 +72,10 @@ class HRPerson extends Model
         return $this->first_name . ' ' . $this->surname;
     }
 
+    #
+     public function business_cards() {
+        return $this->hasOne(business_card::class, 'hr_id');
+    }
     //Full Profile picture url accessor
     public function getProfilePicUrlAttribute() {
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');

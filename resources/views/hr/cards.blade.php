@@ -10,7 +10,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                  <i class="fa fa-search pull-right"></i>
-                    <h3 class="box-title">User</h3>
+                    <h3 class="box-title">Business Cards</h3>
                     <!--
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -40,14 +40,14 @@
                                 </div>
                                 <div class="product-info">
                                     <a href="{{ '/users/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
-                                    <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span>
+                                   <!--  <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span> -->
 
-                                   <!--   <span class="chkCheckbox pull-right "> -->
-                                       <!--   leave here  -->
-                         <!--    <button type="button" id="view_ribbons" class="btn {{ (!empty($person->card_status) && $person->card_status == 1) ? " btn-danger " : "btn-success " }}
+                                    <span class="chkCheckbox pull-right "> 
+                                         
+                            <button type="button" id="view_ribbons" class="btn {{ (!empty($person->card_status) && $person->card_status == 1) ? " btn-danger " : "btn-success " }}
                               btn-xs" onclick="postData({{$person->id}}, 'actdeac');"><i class="fa {{ (!empty($person->card_status) && $person->card_status == 1) ?
                               " fa-times " : "fa-check " }}"></i> {{(!empty($person->card_status) && $person->card_status == 1) ? "De-Activate" : "Activate"}}</button>
-                                    </span> -->
+                                    </span>
 
                             <span class="product-description">
                                 @if(!empty($person->email))
@@ -70,7 +70,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
-                    <button id="active_card" class="btn btn-default pull-right"><i class="fa fa-arrow-right"></i> Activate Card</button>
+                  
                   <!--   <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Submit</button> -->
                 </div>
                 <!-- /.box-footer -->
@@ -94,13 +94,8 @@
    
 	//Cancel button click event
 	document.getElementById("back_to_user_search").onclick = function () {
-		location.href = "/hr/search";
+		location.href = "/hr/business_card";
 	};
-
-    document.getElementById("active_card").onclick = function () {
-        location.href = "/hr/active_card";
-    };
-
 
     function toggle(source) {
     var checkboxes = document.querySelectorAll('input[type="checkbox"]');

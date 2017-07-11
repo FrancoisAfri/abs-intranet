@@ -9,6 +9,7 @@ use App\modules;
 use App\module_ribbons;
 use App\DivisionLevel;
 use App\LeaveType;
+use App\business_card;
 use App\leave_profile;
 use App\leave_configuration;
 
@@ -68,6 +69,24 @@ class DatabaseSeeder extends Seeder
         $person->email = 'nkosana@afrixcel.co.za';
         $person->status = 1;
         $user->addPerson($person);
+
+        # 
+        $card = new business_card;
+        $card->hr_id = 1;
+        $card->status = 0;
+        $card->save();
+
+        $card = new business_card;
+        $card->hr_id = 2;
+        $card->status = 0;
+        $card->save();
+
+        $card = new business_card;
+        $card->hr_id = 3;
+        $card->status = 0;
+        $card->save();
+        
+
 
         //insert default country
         $country = new Country;
@@ -763,10 +782,19 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'survey/rating-links';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Survey Questions';
+        $ribbon->description = 'Survey Questions';
+        $ribbon->ribbon_path = '	survey/questions';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 2;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Generate survey reports';
         $ribbon->ribbon_path = 'survey/reports';

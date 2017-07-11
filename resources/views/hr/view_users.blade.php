@@ -310,6 +310,18 @@
                                 </div>
                             </div>
                         </div>
+                         <div class="form-group">
+                            <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
+
+                            <div class="col-sm-10">
+                                @if(!empty($avatar))
+                                    <div style="margin-bottom: 10px;">
+                                        <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
+                                    </div>
+                                @endif
+                                <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="ethnicity" class="col-sm-2 control-label">Ethnicity</label>
 
@@ -327,18 +339,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
-
-                            <div class="col-sm-10">
-                                @if(!empty($avatar))
-                                    <div style="margin-bottom: 10px;">
-                                        <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
-                                    </div>
-                                @endif
-                                <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
-                            </div>
-                        </div>
+                       
                       
                     </div>
                     <!-- /.box-body -->

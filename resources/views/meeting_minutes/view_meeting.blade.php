@@ -5,7 +5,8 @@
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- Select2 -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/select2/select2.min.css">
-
+<!-- iCheck -->
+	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css"> 
 @endsection
 
 @section('content')
@@ -209,6 +210,7 @@
 						<table class="table table-striped">
 							<tbody>
 							<tr>
+								<th></th>
 								<th>Name</th>
 								<th>Type</th>
 								<th>Attendance</th>
@@ -217,6 +219,15 @@
 							@if(!empty($meeting->attendees))
 								@foreach($meeting->attendees as $attendee)
 									<tr>
+										<td>
+											<button type="button" id="edit-attendee" class="btn btn-success pull-right"
+											data-toggle="modal" data-target="#edit-attendees-modal"
+											data-attendee_id="{{ $attendee->id }}" 
+											data-employee_id="{{ $attendee->employee_id }}" 
+											data-attendance="{{ $attendee->attendance }}" 
+											data-apology="{{ $attendee->apology }}">Edit
+										</button>
+										</td>
 										<td>{{ $attendee->attendeesInfo->first_name  .' '. $attendee->attendeesInfo->surname}}</td>
 										<td>{{ !empty($attendee->client_id) ? 'Client' : 'Employee' }}</td>
 										<td>{{ ($attendee->attendance == 1) ? 'Yes' : 'No'  }}</td>
@@ -225,7 +236,7 @@
 								@endforeach
 							@else
 								<tr>
-									<td colspan="4">
+									<td colspan="5">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No attendee to display, please start by adding one. </div>
 									</td>
@@ -248,23 +259,34 @@
             @include('meeting_minutes.partials.add_task', ['modal_title' => 'Add Task To This Meeting'])
             @include('meeting_minutes.partials.add_minutes', ['modal_title' => 'Add Minutes To This Meeting'])
             @include('meeting_minutes.partials.edit_meeting', ['modal_title' => 'Edit Minutes Details'])
+            @include('meeting_minutes.partials.edit_attendees', ['modal_title' => 'Edit Attendee Details'])
     </div>
 @endsection
 
 @section('page_script')
-			<!-- Select2 -->
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+<!-- Select2 -->
+<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 
-	<!-- bootstrap datepicker -->
-	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 
-	<!-- Ajax form submit -->
-	<script src="/custom_components/js/modal_ajax_submit.js"></script>
-
+<!-- Ajax form submit -->
+<script src="/custom_components/js/modal_ajax_submit.js"></script>
+<!-- iCheck -->
+<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 <script type="text/javascript">
 
 function hideFields() {
 	var radioCheck = $("input[name='attendance']:checked").val();
+	if (radioCheck == 1) {
+		$('.no_field').hide();
+	}
+	else if (radioCheck == 2) {
+		$('.no_field').show();
+	}
+}
+function hideFieldsEdit() {
+	var radioCheck = $("input[name='attendance_edit']:checked").val();
 	if (radioCheck == 1) {
 		$('.no_field').hide();
 	}
@@ -280,12 +302,19 @@ function postData(id, data)
 		location.href = "/meeting/email_meeting/" + id;
 }
 $(function () {
-	
-	 //show/hide fields on radio button toggles
-	/*$('#attendance_yes, #attendance_no').on('ifChecked', function(){
-		var companyType = hideFields();
-	});*/
-	
+
+	 //Initialize iCheck/iRadio Elements
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-green',
+		radioClass: 'iradio_square-green',
+		increaseArea: '20%' // optional
+	});
+	$('#attendance_yes, #attendance_no').on('ifChecked', function(){
+           hideFields();
+    });
+	$('#attendance_yes_edit, #attendance_no_edit').on('ifChecked', function(){
+           hideFieldsEdit();
+    });
 	$('.datepicker').datepicker({
 		format: 'dd/mm/yyyy',
 		autoclose: true,
@@ -312,6 +341,7 @@ $(function () {
 	$('#success-action-modal').modal('show');
 	//Post end task form to server using ajax (add)
 	var minuteID;
+	var attendeeID;
 	
 	// Call add attendee Modal
 	$('#add-attendee-modal').on('show.bs.modal', function (e) {
@@ -381,7 +411,6 @@ $(function () {
 		modal.find('#meeting_id').val(minuteID);
 	});
 	//Update meeting
-
 	$('#update-meeting').on('click', function () {
 		
 		var strUrl = '/meeting/update/' + minuteID;
@@ -430,7 +459,41 @@ $(function () {
 	var successMsg = 'Task details has been updated successfully.';
 	var method = 'PATCH';
 	modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
-});
+	});
+	// Call Edit meeting modal/*data-meeting_id="{{ $meeting->id }}"
+	$('#edit-attendees-modal').on('show.bs.modal', function (e) {
+		var btnEdit = $(e.relatedTarget);
+		attendeeID = btnEdit.data('attendee_id');
+		var employeeID = btnEdit.data('employee_id');
+		var Attendance = btnEdit.data('attendance');
+		var Apology = btnEdit.data('apology');
+		var modal = $(this);
+		modal.find('#employee_id').val(employeeID);
+		modal.find('#apology').val(Apology);
+		modal.find('#attendee_id').val(attendeeID);
+		modal.find('select#employee_id').val(employeeID);
+		if (Attendance == 2)
+		{
+			$("#attendance_no_edit").iCheck('check');
+			$('.no_field').show();
+		}
+		else
+		{
+			$("#attendance_yes_edit").iCheck('check');
+			$('.no_field').hide();
+		}
+	});
+	$('#update-attendees').on('click', function () {
+		var strUrl = '/meeting/update_attendee/' + attendeeID;
+		var formName = 'edit-attendees-form';
+		var modalID = 'edit-attendees-modal';
+		var submitBtnID = 'update-attendees';
+		var successMsgTitle = 'Changes Saved!';
+		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$meeting->id}} + '/view';
+		var successMsg = 'Meeting details has been updated successfully.';
+		var method = 'PATCH';
+		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+	});
 });
 </script>
 @endsection

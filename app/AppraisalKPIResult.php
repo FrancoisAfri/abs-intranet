@@ -239,7 +239,7 @@ class AppraisalKPIResult extends Model
                 }
             }
             if ($kpaID != null && $groupKey == $kpaID) return $kpiResults;
-            $kpaWeight = appraisalKpas::find($groupKey)->weight; //get the KPA's weight from the database
+            $kpaWeight = (appraisalKpas::find($groupKey)) ? appraisalKpas::find($groupKey)->weight : 1; //get the KPA's weight from the database
             $kpaResult = ($kpaResult * $kpaWeight) / 100; //weighted KPA result
             $kpaResults[$groupKey] = $kpaResult;
             $kpaResult = 0;
