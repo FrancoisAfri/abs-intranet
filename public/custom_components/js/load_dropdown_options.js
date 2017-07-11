@@ -29,7 +29,7 @@ function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll
     divHeadSpecific = divHeadSpecific || 0;
 
     var parentDDVal = $('#'+parentDDID).val();
-    console.log('divHeadSpecific = ' + divHeadSpecific);
+    //console.log('divHeadSpecific = ' + divHeadSpecific);
     var parentDDLabel = $('label[for="' + parentDDID + '"]').html();
     var ddLabel = $('label[for="' + ddID + '"]').html();
     //console.log('calls the function with: ' + ddID + ', ' + ddLabel + ', ' + postTo + ', ' + selectedOption + ', ' + parentDDVal + ', ' + parentDDLabel + ', ' + incInactive + ', ' + loadAll + ', ');

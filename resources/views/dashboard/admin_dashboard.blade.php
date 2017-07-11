@@ -533,12 +533,56 @@
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
 
+            //widgets permissions
+            var isSuperuser = parseInt({{ (int) $isSuperuser }}),
+                isDivHead = parseInt({{ (int) $isDivHead }}),
+                isSupervisor = parseInt({{ (int) $isSupervisor }}),
+                canViewCPWidget = parseInt({{ (int) $canViewCPWidget }}),
+                canViewEmpRankWidget = parseInt({{ (int) $canViewEmpRankWidget }});
+
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
             $(window).on('resize', function () {
                 $('.modal:visible').each(reposition);
             });
+
+            //Employees ranking widget
+            if (canViewEmpRankWidget == 1) {
+                //Load divisions drop down
+                var parentDDID = '';
+                var loadAllDivs = 1;
+                var firstDivDDID = null;
+                @foreach($divisionLevels as $divisionLevel)
+                //Populate drop down on page load
+                var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
+                var postTo = '{!! route('divisionsdropdown') !!}';
+                var selectedOption = '';
+                //var divLevel = parseInt('{{ $divisionLevel->level }}');
+                var incInactive = -1;
+                var loadAll = loadAllDivs;
+                        @if($loop->first)
+                var selectFirstDiv = 1;
+                var divHeadSpecific = 1;
+                loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific);
+                firstDivDDID = ddID;
+                @else
+                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+                @endif
+                //parentDDID
+                parentDDID = ddID;
+                loadAllDivs = -1;
+                @endforeach
+
+                //Load top ten performing employees (widget)
+                //var topTenList = $('#emp-top-ten-list');
+                //loadEmpListPerformance(topTenList, 0, 0, true);
+
+                //Load Bottom ten performing employees (widget)
+                //var bottomTenList = $('#emp-bottom-ten-list');
+                //var totNumEmp = parseInt('{{ $totNumEmp }}');
+                //loadEmpListPerformance(bottomTenList, 0, 0, false, true, totNumEmp);
+            }
 
             //Draw employee performance graph
             var empID = parseInt('{{ $user->person->id }}');
@@ -547,11 +591,6 @@
             loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
 
             //Company appraisal
-            var isSuperuser = parseInt({{ (int) $isSuperuser }}),
-                    isDivHead = parseInt({{ (int) $isDivHead }}),
-                    isSupervisor = parseInt({{ (int) $isSupervisor }}),
-                    canViewCPWidget = parseInt({{ (int) $canViewCPWidget }});
-                    canViewEmpRankWidget = parseInt({{ (int) $canViewEmpRankWidget }});
             if (canViewCPWidget == 1) {
                 //Draw divisions performance graph [Comp Appraisal Widget]
                 var rankingList = $('#ranking-list');
@@ -617,42 +656,6 @@
             //Show available perks on the perks widget
             var perksWidgetList = $('#perks-widget-list');
             loadAvailablePerks(perksWidgetList);
-
-            //Employees ranking widget
-            if (canViewEmpRankWidget == 1) {
-                //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                var firstDivDDID = null;
-                @foreach($divisionLevels as $divisionLevel)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    //var divLevel = parseInt('{{ $divisionLevel->level }}');
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                    @if($loop->first)
-                        //var selectFirstDiv = 0;
-                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, 1, 1);
-                        firstDivDDID = ddID;
-                    @else
-                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                    @endif
-                    //parentDDID
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
-
-                //Load top ten performing employees (widget)
-                //var topTenList = $('#emp-top-ten-list');
-                //loadEmpListPerformance(topTenList, 0, 0, true);
-
-                //Load Bottom ten performing employees (widget)
-                //var bottomTenList = $('#emp-bottom-ten-list');
-                //var totNumEmp = parseInt('{{ $totNumEmp }}');
-                //loadEmpListPerformance(bottomTenList, 0, 0, false, true, totNumEmp);
-            }
 
             //leave status (widget)
             var LeaveStatus = $('#leave-status-list');
