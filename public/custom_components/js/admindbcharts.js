@@ -239,8 +239,8 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
     loadingWheel = loadingWheel || null;
     //Get employees performance data using ajax
     var getURL = "/api/divlevel/" + divLevel + "/div/" + divID + "/emps-performance"; //all employees from a specific divisionspecific parent div
-    if (topTen) getURL = "/api/appraisal/emp/topten";
-    else if(bottomTen) getURL = "/api/appraisal/emp/bottomten";
+    if (topTen) getURL = "/api/appraisal/emp/topten/" + divLevel + "/" + divID;
+    else if(bottomTen) getURL = "/api/appraisal/emp/bottomten/" + divLevel + "/" + divID;
     if (managerID > 0) getURL = "/api/appraisal/staffunder/" + managerID;
     $.get(getURL,
         function(data) {

@@ -14,6 +14,11 @@ use App\Http\Requests;
 
 class SurveysController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display the report index page.
      *

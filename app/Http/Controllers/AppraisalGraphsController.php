@@ -184,13 +184,13 @@ class AppraisalGraphsController extends Controller
     }
 
     //returns the top ten employees
-    public function getTopTenEmployees() {
-        return AppraisalGraphsController::empGroupPerformance(0, 0, true, true);
+    public function getTopTenEmployees($divLevel = 0, $divID = 0) {
+        return AppraisalGraphsController::empGroupPerformance($divID, $divLevel, true, true);
     }
 
     //returns the bottom ten employees
-    public function getBottomTenEmployees() {
-        return AppraisalGraphsController::empGroupPerformance(0, 0, true, false, true);
+    public function getBottomTenEmployees($divLevel = 0, $divID = 0) {
+        return AppraisalGraphsController::empGroupPerformance($divID, $divLevel, true, false, true);
     }
 
     //returns all employees under someone
