@@ -20,24 +20,26 @@ function avilabledays(hr_id, levID, negDAYS) {
 
 
 /* function to load [Divisions] drop down options */
-function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific) {
+function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer) {
     parentDDID = parentDDID || '';
     loadAll = loadAll || -1;
     incInactive = incInactive || -1;
     postTo = postTo || '/api/divisionsdropdown';
     selectFirstDiv = selectFirstDiv || 0;
     divHeadSpecific = divHeadSpecific || 0;
+    parentContainer = parentContainer || $(document);
 
-    var parentDDVal = $('#'+parentDDID).val();
+    var parentDDVal = 0;
+    if (parentDDID != '') parentDDVal = parentContainer.find('#' + parentDDID).val();
     //console.log('divHeadSpecific = ' + divHeadSpecific);
-    var parentDDLabel = $('label[for="' + parentDDID + '"]').html();
-    var ddLabel = $('label[for="' + ddID + '"]').html();
+    var parentDDLabel = parentContainer.find('label[for="' + parentDDID + '"]').html();
+    var ddLabel = parentContainer.find('label[for="' + ddID + '"]').html();
     //console.log('calls the function with: ' + ddID + ', ' + ddLabel + ', ' + postTo + ', ' + selectedOption + ', ' + parentDDVal + ', ' + parentDDLabel + ', ' + incInactive + ', ' + loadAll + ', ');
     var divLvl = parseInt(ddID.substr(ddID.lastIndexOf("_") + 1));
     //console.log('division level: ' + divLvl);
     $.post(postTo, { div_level: divLvl, parent_id: parentDDVal, div_head_specific: divHeadSpecific, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
         function(data) {
-            var dropdown = $('#'+ddID);
+            var dropdown = parentContainer.find('#'+ddID);
             var firstDDOption = "*** Select a " + ddLabel + " ***";
             if (loadAll == 1) {
                 //console.log('load all is: ' + loadAll);
@@ -62,7 +64,7 @@ function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll
                     .append(ddOption);
             });
             if (selectFirstDiv == 1) { //select the first division
-                dropdown.val($('#' + ddID + ' option:nth-child(2)').val());
+                dropdown.val(parentContainer.find('#' + ddID + ' option:nth-child(2)').val());
                 dropdown.trigger('change');
             }
         });
