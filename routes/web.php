@@ -63,6 +63,14 @@ Route::patch('contacts/{user}', 'ContactsController@update');
 //Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
+
+#Business Card
+Route::get('hr/business_card', 'BusinessCardsController@view');
+Route::get('hr/active_card', 'BusinessCardsController@cards');
+Route::post('hr/search', 'BusinessCardsController@getSearch');
+Route::get('/hr/card_active/{lev}', 'BusinessCardsController@activeCard');
+
+
 //#Leave Management
 //Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -270,10 +278,14 @@ Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printR
 
 #Employees Documents Module
 Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewDoc');
+Route::get('/hr/{user}/edit', 'EmployeeDocumentsController@editUser');
+Route::get('/hr/doc_results', 'EmployeeDocumentsController@SearchResults');
 // Route::get('/hr/emp_document', 'EmployeeDocumentsController@viewQul');
-Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
-Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@Searchdoc');
+// Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@acceptDocs');
+//Route::post('/hr/emp_document/docs', 'EmployeeDocumentsController@Searchdoc');
+
 Route::post('/hr/emp_doc/Search', 'EmployeeDocumentsController@Searchdoc');
+Route::post('/hr/emp_document/upload_doc','EmployeeDocumentsController@uploadDoc');
 Route::post('/hr/emp_qual/Search', 'EmployeeDocumentsController@Searchqul');
 Route::post('/hr/emp_search/Search', 'EmployeeDocumentsController@SearchEmp');
 
@@ -331,6 +343,13 @@ Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
 // Minutes Meeting
+Route::get('/meeting_minutes/recurring', 'RecurringMeetingsController@index');
+Route::get('/meeting_minutes/recurring/{recurring}/view', 'RecurringMeetingsController@show');
+Route::get('/meeting_minutes/recurring/{recurring}/actdect', 'RecurringMeetingsController@meetingAct');
+Route::get('/meeting_recurring/actdeac/{recurring}', 'RecurringMeetingsController@attendeeAct');
+Route::post('/meeting/add_recurring_attendees', 'RecurringMeetingsController@saveRecurringAttendee');
+Route::post('/meeting_minutes/add_recurring_meeting', 'RecurringMeetingsController@store');
+Route::patch('/meeting_minutes/recurring/update/{recurring}', 'RecurringMeetingsController@update');
 Route::get('/meeting_minutes/create', 'MeetingMinutesAdminController@index');
 Route::post('/meeting/search_results', 'MeetingMinutesAdminController@searchResults');
 Route::post('/meeting/add_attendees/{meeting}', 'MeetingMinutesAdminController@saveAttendee');
@@ -340,6 +359,7 @@ Route::post('/meeting_minutes/add_meeting', 'MeetingMinutesAdminController@store
 Route::get('/meeting_minutes/view_meeting/{meeting}/view', 'MeetingMinutesAdminController@show');
 Route::get('/meeting_minutes/search', 'MeetingMinutesAdminController@search');
 Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
+Route::post('/meeting/update_attendee/{attendee}', 'MeetingMinutesAdminController@updateAttendee');
 Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
 //Clients (contacts) registration
@@ -352,9 +372,13 @@ Route::post('rate-our-services', 'SurveyGuestsController@store');
 
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');
+Route::get('survey/question_activate/{question}', 'SurveysController@actDeact');
+Route::get('survey/questions', 'SurveysController@questionsLists');
 Route::get('survey/rating-links', 'SurveysController@indexRatingLinks');
+Route::post('survey/add_question', 'SurveysController@saveQuestions');
 Route::post('survey/reports', 'SurveysController@getReport');
 Route::post('survey/reports/print', 'SurveysController@printReport');
+Route::patch('/survey/question_update/{question}', 'SurveysController@updateQuestions');
 
 # Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');

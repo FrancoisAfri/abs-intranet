@@ -1,15 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\AuditReportsController;
 use App\AppraisalSurvey;
 use App\CompanyIdentity;
 use App\DivisionLevel;
 use App\HRPerson;
+use App\SurveyQuestions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\TaskLibrary;
+use App\ribbons_access;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests;
 
 class SurveysController extends Controller
@@ -24,6 +29,10 @@ class SurveysController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	public function __construct(){
+
+		$this->middleware('auth');
+    }
     public function indexReports()
     {
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -60,7 +69,97 @@ class SurveysController extends Controller
         AuditReportsController::store('Survey', 'Reports page accessed', "Accessed by User", 0);
         return view('survey.reports.survey_report_index')->with($data);
     }
+	// Create questions per divisionLevels
+	public function questionsLists()
+    {
+        $questions = DB::table('survey_questions')
+		->select('survey_questions.*','division_level_fives.name as level5name'
+		,'division_level_fours.name as level4name','division_level_threes.name as level3name'
+		,'division_level_twos.name as level2name','division_level_ones.name as level1name')
+		->leftJoin('division_level_fives', 'survey_questions.division_level_5', '=', 'division_level_fives.id')
+		->leftJoin('division_level_fours', 'survey_questions.division_level_4', '=', 'division_level_fours.id')
+		->leftJoin('division_level_threes', 'survey_questions.division_level_3', '=', 'division_level_threes.id')
+		->leftJoin('division_level_twos', 'survey_questions.division_level_2', '=', 'division_level_twos.id')
+		->leftJoin('division_level_ones', 'survey_questions.division_level_1', '=', 'division_level_ones.id')
+		->orderBy('description', 'asc')
+		->get();
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $deptFive = DB::table('division_setup')->where('level', 5)->first();
+        $deptFour = DB::table('division_setup')->where('level', 4)->first();
+        $deptThree = DB::table('division_setup')->where('level', 3)->first();
+        $deptTwo = DB::table('division_setup')->where('level', 2)->first();
+        $deptOne = DB::table('division_setup')->where('level', 1)->first();
+        $data['page_title'] = "Survey Questions";
+        $data['page_description'] = "Group Questions According to Division Level";
+        $data['breadcrumb'] = [
+            ['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+             ['title' => ' ', 'active' => 1, 'is_module' => 0]
+        ];
+		$data['division_levels'] = $divisionLevels;
+        $data['active_mod'] = 'Survey';
+        $data['active_rib'] = 'Survey Questions';
+        $data['questions'] = $questions;
+        $data['LevelFive'] = $deptFive;
+        $data['LevelFour'] = $deptFour;
+        $data['LevelThree'] = $deptThree;
+        $data['LevelTwo'] = $deptTwo;
+        $data['LevelOne'] = $deptOne;
 
+        AuditReportsController::store('Survey', 'Questions Library Page Accessed', "Accessed By User", 0);
+
+        return view('survey.questions_lists')->with($data);
+    }
+	
+	// Save Questions
+	public function saveQuestions(Request $request)
+    {
+        $this->validate($request, [
+            'description' => 'required',
+            'division_level_5' => 'bail|required|integer|min:1',
+            'division_level_4' => 'bail|required|integer|min:1',
+        ]);
+
+		$questions = $request->all();
+		unset($questions['_token']);
+		$question = new SurveyQuestions($questions);
+		$question->status = 1;
+        $question->save();
+		AuditReportsController::store('Survey', 'Question Added', "Question Description: $question->description", 0);
+		return response()->json(['new_meeting_decs' => $question->description], 200);
+	}
+	// Save Questions
+	public function updateQuestions(Request $request, SurveyQuestions $question)
+    {
+        $this->validate($request, [
+            'description' => 'required',
+            'division_level_5' => 'bail|required|integer|min:1',
+            'division_level_4' => 'bail|required|integer|min:1',
+        ]);
+
+		$questions = $request->all();
+		unset($questions['_token']);
+		$question->description = $request->input('description');
+		$question->division_level_5 = $request->input('division_level_5');
+		$question->division_level_4 = $request->input('division_level_4');
+		$question->division_level_3 = $request->input('division_level_3');
+		$question->division_level_2 = $request->input('division_level_2');
+		$question->division_level_1 = $request->input('division_level_1');
+        $question->update();
+		AuditReportsController::store('Survey', 'Question Updated', "Question Description: $question->description", 0);
+		return response()->json(['new_meeting_decs' => $question->description], 200);
+	}
+	// ActDeac Question
+	public function actDeact(SurveyQuestions $question) 
+    {
+        if ($question->status == 1) $stastus = 0;
+		else $stastus = 1;
+		//echo $stastus;
+		//die ;
+		$question->status = $stastus;	
+		$question->update();
+		AuditReportsController::store('Survey', "Question Status Changed: $stastus", "Edited by User", 0);
+		return back();
+    }
     /**
      * Prints the ratings report.
      *

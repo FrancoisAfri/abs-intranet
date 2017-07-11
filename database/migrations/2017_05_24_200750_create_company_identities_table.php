@@ -26,6 +26,7 @@ class CreateCompanyIdentitiesTable extends Migration
             $table->string('mailing_name')->nullable();
             $table->string('mailing_address')->nullable();
             $table->string('support_email')->nullable();
+			$table->string('company_website')->nullable();
             $table->timestamps();
         });
     }

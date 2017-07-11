@@ -112,23 +112,20 @@ class TaskManagementController extends Controller
                 unset($endData[$key]);
             }
         }
-
-        $endtask = new EmployeeTasksDocuments();
-        $endtask->task_id = $endData['task_id'];
-        $endtask->employee_id = $endData['employee_id'];
-        $endtask->added_by = $user->id;
-        $endtask->status = 1;
-        $endtask->save();
-
         //Upload task doc
         if ($request->hasFile('document')) {
             $fileExt = $request->file('document')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document')->isValid()) {
-                $fileName = $endtask->id . "_task_doc_" . '.' . $fileExt;
+                $fileName = $endData['employee_id'] . "_task_doc_" . '.' . $fileExt;
                 $request->file('document')->storeAs('tasks', $fileName);
                 //Update file name in the appraisal_perks table
-                $endtask->document = $fileName;
-                $endtask->update();
+                $endtask = new EmployeeTasksDocuments();
+				$endtask->task_id = $endData['task_id'];
+				$endtask->employee_id = $endData['employee_id'];
+				$endtask->added_by = $user->id;
+				$endtask->status = 1;
+				$endtask->document = $fileName;
+				$endtask->save();
             }
         }
 		# update Task
@@ -159,7 +156,7 @@ class TaskManagementController extends Controller
 			}
 		}*/
 		AuditReportsController::store('Task Management', "Task Ended", "Edited by User", 0);
-		return response()->json(['employee_id' => $endtask->employee_id], 200);
+		return response()->json(['employee_id' => $endData['employee_id']], 200);
     }
 	# Check task
 	public function checkTask(Request $request) 

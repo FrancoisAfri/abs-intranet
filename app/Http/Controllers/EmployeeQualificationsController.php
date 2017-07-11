@@ -47,14 +47,15 @@ class EmployeeQualificationsController extends Controller
         $division=DivisionLevelTwo::where('active', 1)->get();
         $QulificationType = Qualification_type::where('status', 1)->get();
         $DocType = doc_type::where('active', 1)->get();
-         // return $QulificationType;
+        $doc_type = doc_type::where('active', 1)->get();
+        // return $DocType;
         //$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
      
      
       
         $data['active_mod'] = 'Employee Records';
         $data['active_rib'] = 'Search';
-      
+        $data['doc_type'] ='doc_type';  
         $data['qualifications'] = $qualifications;
         $data['employees'] = $employees;
         $data['DocType'] = $DocType;
