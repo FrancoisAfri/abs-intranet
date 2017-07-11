@@ -16,7 +16,7 @@
                     {{ method_field('PATCH') }} -->
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table class="table table-bordered"> 
+                        <table class="table table-bordered">
                             <tr>
                                 <th style="width: 10x; text-align: center;"></th>
                                 <th>Level</th>
@@ -24,7 +24,7 @@
                                 <th>Plural Name</th>
                                 <th style="width: 40px; text-align: center;"></th>
                             </tr>
-                 
+
                             @foreach ($division_types as $division_type)
                                 <tr>
                                     <td style="width: 5px; text-align: center;"><button type="button" id="edit_grouplevel" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-grouplevel-modal" data-id="{{ $division_type->id }}" data-name="{{ $division_type->name }}" data-plural_name="{{ $division_type->plural_name }}" data-level="{{ $division_type->level }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
@@ -33,16 +33,16 @@
                                     <td>{{ $division_type->plural_name }}</td>
                                     <td style="width: 5px; text-align: center;">
                                         @if ($division_type->name!='')
-                                            <button type="button" id="view_ribbons" class="btn {{ (!empty($division_type->active) && $division_type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$division_type->id}});"><i class="fa {{ (!empty($division_type->active) && $division_type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($division_type->active) && $division_type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                                            <button type="button" id="view_ribbons" class="btn {{ (!empty($division_type->active) && $division_type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$division_type->id}}, 'activateGroupLevel');"><i class="fa {{ (!empty($division_type->active) && $division_type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($division_type->active) && $division_type->active == 1) ? "De-Activate" : "Activate"}}</button>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </table>
                     </div>
-                
+
                         <!-- /.box-body -->
-              
+
                 </form>
         </div>
         <!-- Include add new prime rate modal -->
@@ -84,7 +84,7 @@
                                         btn-xs" onclick="postData({{$leavecustom->id}}, 'qual');"><i class="fa {{ (!empty($leavecustom->status) && $leavecustom->status == 1) ?
                               " fa-times " : "fa-check " }}"></i> {{(!empty($leavecustom->status) && $leavecustom->status == 1) ? "De-Activate" : "Activate"}}</button>
                         </td>
-                    </tr> 
+                    </tr>
                     @endforeach @else
                     <tr id="modules-list">
                         <td colspan="5">
@@ -117,7 +117,7 @@
                     {{ method_field('PATCH') }}
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table class="table table-bordered"> 
+                        <table class="table table-bordered">
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Name</th>
@@ -133,13 +133,13 @@
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }}</td>
-                                    <td>      
+                                    <td>
                                     <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>  
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
                                     </td>
-                                </tr>  
-                                   @endforeach  
+                                </tr>
+                                   @endforeach
                                @else
                                <tr id="categories-list">
                         <td colspan="5">
@@ -149,20 +149,20 @@
                         </div>
                         </td>
                         </tr>
-                           @endif         
+                           @endif
                             </table>
                         </div>
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add new Category </button>  
+                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add new Category </button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
         @include('hr.partials.add_category_modal')
         @include('hr.partials.edit_category_modal')
-     
-  
+
+
 </div>
 
 
@@ -174,8 +174,9 @@
     <script>
 		function postData(id , data ){
             if (data == 'qual') location.href = "/hr/addqul/" + id;
-             else if (data == 'doc') location.href = "/hr/adddoc/" + id;
-              else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
+            else if (data == 'doc') location.href = "/hr/adddoc/" + id;
+            else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
+            else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
 		}
         $(function () {
             var moduleId;
@@ -198,7 +199,7 @@
                 $('.modal:visible').each(reposition);
             });
 
-            //Add Qualification Type 
+            //Add Qualification Type
              //pass module data to the edit module modal
              var qualificationID;
             $('#add-qualificationType-modal').on('show.bs.modal', function (e) {
@@ -208,12 +209,12 @@
                 var description = btnEdit.data('description');
                 var modal = $(this);
                 modal.find('#name').val(name);
-                modal.find('#description').val(description);  
+                modal.find('#description').val(description);
              });
 
              //Post module form to server using ajax (ADD)
             $('#add_qualification').on('click', function() {
-                var strUrl = '/hr/addqultype/' ; 
+                var strUrl = '/hr/addqultype/' ;
                 var modalID = 'add-qualificationType-modal';
                 var objData = {
                      name: $('#'+modalID).find('#name').val(),
@@ -227,7 +228,7 @@
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-            
+
 
 
             // Edit
@@ -242,7 +243,7 @@
             var modal = $(this);
             modal.find('#name').val(name);
             modal.find('#description').val(description);
-           
+
         });
 
          $('#edit_qualification').on('click', function () {
@@ -297,12 +298,12 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
             });
 
-            // 
+            //
 
             //Post module form to server using ajax (ADD)
             $('#save_category').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/hr/document/add/' +  'doc_type'; 
+                var strUrl = '/hr/document/add/' +  'doc_type';
                 var modalID = 'add-category-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -328,7 +329,7 @@
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
-                
+
              });
             $('#edit_category').on('click', function () {
                 var strUrl = '/hr/document/' + doc_typeID;
