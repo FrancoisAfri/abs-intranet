@@ -128,7 +128,7 @@
     <div class="row">
         <div class="col-md-12">
             <!-- Employees Performance Ranking Widget -->
-            <div class="box box-success same-height-widget">
+            <div class="box box-success same-height-widget" id="empPerformanceRankingWidgetBox">
                 <div class="box-header with-border">
                     <h3 class="box-title">Employees Ranking</h3>
 
@@ -552,25 +552,26 @@
                 var parentDDID = '';
                 var loadAllDivs = 1;
                 var firstDivDDID = null;
+                var parentContainer = $('#empPerformanceRankingWidgetBox');
                 @foreach($divisionLevels as $divisionLevel)
-                //Populate drop down on page load
-                var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
-                var postTo = '{!! route('divisionsdropdown') !!}';
-                var selectedOption = '';
-                //var divLevel = parseInt('{{ $divisionLevel->level }}');
-                var incInactive = -1;
-                var loadAll = loadAllDivs;
-                        @if($loop->first)
-                var selectFirstDiv = 1;
-                var divHeadSpecific = 1;
-                loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific);
-                firstDivDDID = ddID;
-                @else
-                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                @endif
-                //parentDDID
-                parentDDID = ddID;
-                loadAllDivs = -1;
+                    //Populate drop down on page load
+                    var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
+                    var postTo = '{!! route('divisionsdropdown') !!}';
+                    var selectedOption = '';
+                    //var divLevel = parseInt('{{ $divisionLevel->level }}');
+                    var incInactive = -1;
+                    var loadAll = loadAllDivs;
+                    @if($loop->first)
+                        var selectFirstDiv = 1;
+                        var divHeadSpecific = 1;
+                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
+                        firstDivDDID = ddID;
+                    @else
+                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
+                    @endif
+                    //parentDDID
+                    parentDDID = ddID;
+                    loadAllDivs = -1;
                 @endforeach
 
                 //Load top ten performing employees (widget)
