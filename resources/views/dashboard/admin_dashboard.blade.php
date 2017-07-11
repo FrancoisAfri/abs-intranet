@@ -4,6 +4,7 @@
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
+
     <div class="row">
         <div class="col-md-12">
             <!-- Employee Monthly performance Widget-->
@@ -218,6 +219,72 @@
             <!-- /.Bottom Ten Employees Performance Ranking Widgets --
         </div>
         -->
+    </div>
+@endif
+@if($canViewEmpRankWidget)
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Employees Performance Ranking Widget -->
+            <div class="box box-success same-height-widget">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Company Tasks</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <!-- Emp Group Filters (divisions) -->
+                    <div class="col-sm-4 border-right">
+                        <p class="text-center">
+                            <strong>Filters</strong>
+                        </p>
+                        <form>
+                            @foreach($divisionLevels as $divisionLevel)
+                                <div class="form-group">
+                                    <label for="{{ 'division_level_' . $divisionLevel->level }}" class="control-label">{{ $divisionLevel->name }}</label>
+
+                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpPWOnChange(this, $('#emp-meeting-tasks-list'), $('#emp-bottom-ten-list'), parseInt('{{ $totNumEmp }}'))" style="width: 100%;">
+                                    </select>
+                                </div>
+                            @endforeach
+                        </form>
+                    </div>
+                    <!-- /.Emp Group Filters (divisions) -->
+
+                    <!-- Top ten -->
+                    <div class="col-sm-4 border-right">
+                        <p class="text-center">
+                            <strong class="label label-success"><i class="fa fa-level-up"></i> Meeting Tasks</strong>
+                        </p>
+                        <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
+                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-meeting-tasks-list">
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Bottom ten -->
+                    <div class="col-sm-4">
+                        <p class="text-center">
+                            <strong class="label label-danger"><i class="fa fa-level-down"></i> Induction Tasks</strong>
+                        </p>
+                        <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
+                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box"
+                                id="emp-bottom-ten-list">
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.Employees Performance Ranking Widget -->
+        </div>
     </div>
 @endif
 <!-- /Check if induction is active before showing this  And Meeting-->
