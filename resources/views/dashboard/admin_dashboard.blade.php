@@ -532,6 +532,12 @@
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function () {
+                $('.modal:visible').each(reposition);
+            });
 
             //widgets permissions
             var isSuperuser = parseInt({{ (int) $isSuperuser }}),
@@ -539,13 +545,6 @@
                 isSupervisor = parseInt({{ (int) $isSupervisor }}),
                 canViewCPWidget = parseInt({{ (int) $canViewCPWidget }}),
                 canViewEmpRankWidget = parseInt({{ (int) $canViewEmpRankWidget }});
-
-            // Reposition when a modal is shown
-            $('.modal').on('show.bs.modal', reposition);
-            // Reposition when the window is resized
-            $(window).on('resize', function () {
-                $('.modal:visible').each(reposition);
-            });
 
             //Employees ranking widget
             if (canViewEmpRankWidget == 1) {
