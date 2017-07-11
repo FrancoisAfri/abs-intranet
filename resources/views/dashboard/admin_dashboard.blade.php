@@ -589,7 +589,7 @@
             var empChartCanvas = $('#empMonthlyPerformanceChart');
             var loadingWheel = $('#loading_overlay_emp_monthly_appraisal');
             loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
-
+/*
             //Company appraisal
             if (canViewCPWidget == 1) {
                 //Draw divisions performance graph [Comp Appraisal Widget]
@@ -652,7 +652,7 @@
                     $('#lo-emp-year-performance-modal').show();
                 });
             }
-
+*/
             //Show available perks on the perks widget
             var perksWidgetList = $('#perks-widget-list');
             loadAvailablePerks(perksWidgetList);
