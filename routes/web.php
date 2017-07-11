@@ -359,6 +359,7 @@ Route::post('/meeting_minutes/add_meeting', 'MeetingMinutesAdminController@store
 Route::get('/meeting_minutes/view_meeting/{meeting}/view', 'MeetingMinutesAdminController@show');
 Route::get('/meeting_minutes/search', 'MeetingMinutesAdminController@search');
 Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
+Route::post('/meeting/update_attendee/{attendee}', 'MeetingMinutesAdminController@updateAttendee');
 Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
 //Clients (contacts) registration
@@ -377,6 +378,7 @@ Route::get('survey/rating-links', 'SurveysController@indexRatingLinks');
 Route::post('survey/add_question', 'SurveysController@saveQuestions');
 Route::post('survey/reports', 'SurveysController@getReport');
 Route::post('survey/reports/print', 'SurveysController@printReport');
+Route::patch('/survey/question_update/{question}', 'SurveysController@updateQuestions');
 
 # Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');

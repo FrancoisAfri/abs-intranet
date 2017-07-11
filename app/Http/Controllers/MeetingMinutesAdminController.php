@@ -9,6 +9,8 @@ use App\ClientInduction;
 use App\EmployeeTasks;
 use App\MeetingMinutes;
 use App\MeetingAttendees;
+use App\RecurringMeetingsAttendees;
+use App\RecurringMeetings;
 use App\MeetingsMinutes;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
@@ -35,24 +37,22 @@ class meetingMinutesAdminController extends Controller
      */
     public function index()
     {
-        $libraries = DB::table('task_libraries')
-		->orderBy('dept_id', 'asc')
-		->orderBy('order_no', 'asc')
+        $questions = DB::table('recurring_meetings')
+		->where('status', 1)
+		->orderBy('meeting_title', 'asc')
 		->get();
 		$companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
 		$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
         $data['page_title'] = "Meeting Minutes";
         $data['page_description'] = "Create Meeting Minutes";
-        $data['breadcrumb'] = [
-            ['title' => 'Meeting Minutes', 'path' => '/meeting_minutes/create', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+        $data['breadcrumb'] = [['title' => 'Meeting Minutes', 'path' => '/meeting_minutes/create', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
             ['title' => 'Meeting Minutes', 'path' => '/meeting_minutes/create', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Create Minutes', 'active' => 1, 'is_module' => 0]
-        ];
+            ['title' => 'Create Minutes', 'active' => 1, 'is_module' => 0]];
+        $data['questions'] = $questions;
         $data['active_mod'] = 'Meeting Minutes';
         $data['active_rib'] = 'Create Minutes';
-		
-		
+
 		AuditReportsController::store('Minutes Meeting', 'View Minutes Meeting', "view Audit", 0);
         return view('meeting_minutes.add_new_meeting')->with($data);
     }
@@ -76,10 +76,11 @@ class meetingMinutesAdminController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'meeting_name' => 'required',       
-            'meeting_date' => 'required',       
-            'meeting_location' => 'required',       
-            'meeting_agenda' => 'required',      
+            'meeting_name' => 'required_if:meeting_type,1',       
+            'meeting_date' => 'required_if:meeting_type,1',       
+            'meeting_location' => 'required_if:meeting_type,1',       
+            'meeting_agenda' => 'required_if:meeting_type,1',      
+            'recurring_id' => 'required_if:meeting_type,2|numeric|min:0.1',      
         ]);
 		$MeetingData = $request->all();
 		unset($MeetingData['_token']);
@@ -88,8 +89,30 @@ class meetingMinutesAdminController extends Controller
             $MeetingData['meeting_date'] = str_replace('/', '-', $MeetingData['meeting_date']);
             $MeetingData['meeting_date'] = strtotime($MeetingData['meeting_date']);
         }
-		$meeting = new MeetingMinutes($MeetingData);
-        $meeting->save();
+		if ($MeetingData['meeting_type'] && $MeetingData['recurring_id'])
+		{
+			$recurringMeeting = RecurringMeetings::where('id', $MeetingData['recurring_id'])->first();
+			$attendees = RecurringMeetingsAttendees::where('meeting_id', $MeetingData['recurring_id'])->get();
+			$meeting = new MeetingMinutes();
+			$meeting->meeting_name = $recurringMeeting->meeting_title;
+			$meeting->meeting_date = strtotime(date("Y-m-d"));
+			$meeting->meeting_location = $recurringMeeting->meeting_location;
+			$meeting->meeting_agenda = $recurringMeeting->meeting_agenda;
+			$meeting->save();
+			foreach ($attendees as $attendee)
+			{
+				$meetingAttendee = new MeetingAttendees();
+				$meetingAttendee->employee_id = $attendee->employee_id;
+				$meetingAttendee->meeting_id = $meeting->id;
+				$meetingAttendee->attendance = 1;
+				$meetingAttendee->save();
+			}
+		}
+		else
+		{
+			$meeting = new MeetingMinutes($MeetingData);
+			$meeting->save();
+		}
 		AuditReportsController::store('Minutes Meeting', 'New Meeting Added', "Added By User", 0);
         return redirect('/meeting_minutes/view_meeting/' . $meeting->id . '/view')->with('success_add', "The Meeting has been added successfully.");
     }
@@ -111,7 +134,7 @@ class meetingMinutesAdminController extends Controller
 		->where('hr_people.status', 1)
 		->where('meeting_attendees.meeting_id', $meeting->id)
 		->orderBy('hr_people.first_name', 'asc')->get();
-		//return $attendees;
+		//return $meeting;
 		$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 		$data['page_title'] = "View Meeting Details";
 		$data['page_description'] = "Meeting Minutes Details";
@@ -165,6 +188,24 @@ class meetingMinutesAdminController extends Controller
         $meeting->update();
 		$meeting_name = $request->input('meeting_name');
         AuditReportsController::store('Minutes Meeting', 'Meeting Informations Updated', "Updated by User", 0);
+        return response()->json(['new_meeting_name' => $meeting_name], 200);
+    }
+	public function updateAttendee(Request $request, MeetingAttendees $attendee)
+    {
+
+        $this->validate($request, [       
+            'employee_id' => 'bail|required|integer|min:1',        
+            'attendance_edit' => 'bail|required|integer|min:1',        
+            'apology' => 'required_if:attendance_edit,2',        
+            'attendee_id' => 'bail|required|integer|min:1',        
+        ]);
+		unset($request['_token']);
+		$attendee->employee_id = $request->input('employee_id');
+		$attendee->attendance = $request->input('attendance_edit');
+		$attendee->apology = $request->input('apology');
+        $attendee->update();
+		$meeting_name = $request->input('employee_id');
+        AuditReportsController::store('Minutes Meeting', 'Meeting Attendee Attendance Updated', "Updated by User", 0);
         return response()->json(['new_meeting_name' => $meeting_name], 200);
     }
 	public function saveAttendee(Request $request, MeetingMinutes $meeting)

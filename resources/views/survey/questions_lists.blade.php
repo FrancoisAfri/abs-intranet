@@ -73,7 +73,7 @@
         </div>
     </div>
     <!-- Include add new prime rate modal -->
-    @include('survey.partials.add_new_question') 
+	@include('survey.partials.add_new_question')
     @include('survey.partials.edit_question')
 </div>
 
@@ -111,27 +111,21 @@
         //pass module data to the leave type -edit module modal
         var questionId;
         $('#edit-question-modal').on('show.bs.modal', function (e) {
-            //console.log('kjhsjs');
             var btnEdit = $(e.relatedTarget);
             questionId = btnEdit.data('id');
             var dept5 = btnEdit.data('division_level_5');
             var dept4 = btnEdit.data('division_level_4');
-            var Description = btnEdit.data('description');
             var dept3 = btnEdit.data('division_level_3');
             var dept2 = btnEdit.data('division_level_2');
             var dept1 = btnEdit.data('division_level_1');
+            var Description = btnEdit.data('description');
             var modal = $(this);
-            modal.find('#division_level_5').val(dept5);
-            modal.find('#division_level_4').val(dept4);
-            modal.find('#description').val(Description);
-            modal.find('#division_level_3').val(dept3);
-            modal.find('#division_level_2').val(dept2);
-            modal.find('#division_level_1').val(dept1);
-			$('select#division_level_5').val(dept5);
-			$('select#division_level_4').val(dept4);
-			$('select#division_level_3').val(dept3);
-			$('select#division_level_2').val(dept2);
-			$('select#division_level_1').val(dept1);
+			modal.find('#description').val(Description);
+			modal.find('select#division_level_5').val(dept5).trigger("change");
+			modal.find('select#division_level_4').val(dept4).trigger("change");
+			modal.find('select#division_level_3').val(dept3).trigger("change");
+			modal.find('select#division_level_2').val(dept2).trigger("change");
+			modal.find('select#division_level_1').val(dept1).trigger("change");
         });
         
         $('#add_questions').on('click', function () {
@@ -152,22 +146,16 @@
             var successMsg = 'Question successfully Added.';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
-        $('#update-library_tasks').on('click', function () {
-            var strUrl = '/induction/tasks_library_edit/' + questionId;
-            var objData = {
-                order_no: $('#edit-question-modal').find('#order_no').val()
-                , description: $('#edit-question-modal').find('#description').val()
-                , upload_required: $('#edit-question-modal').find('#upload_required').val()
-                , dept_id: $('#edit-question-modal').find('#dept_id').val()
-                , _token: $('#edit-question-modal').find('input[name=_token]').val()
-            };
-            var modalID = 'edit-question-modal';
-            var submitBtnID = 'update-library_tasks';
-            var redirectUrl = '/induction/tasks_library';
-            var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'Task type has been changed successfully.';
-            var method = 'PATCH';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
+        $('#update-question').on('click', function () {
+			var strUrl = '/survey/question_update/' + questionId;
+			var formName = 'edit-question-form';
+			var modalID = 'edit-question-modal';
+			var submitBtnID = 'update-question';
+			var successMsgTitle = 'Changes Saved!';
+			var redirectUrl = '/survey/questions';
+			var successMsg = 'Question details has been updated successfully.';
+			var method = 'PATCH';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
 		//Load divisions drop down

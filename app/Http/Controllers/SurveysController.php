@@ -122,6 +122,27 @@ class SurveysController extends Controller
 		AuditReportsController::store('Survey', 'Question Added', "Question Description: $question->description", 0);
 		return response()->json(['new_meeting_decs' => $question->description], 200);
 	}
+	// Save Questions
+	public function updateQuestions(Request $request, SurveyQuestions $question)
+    {
+        $this->validate($request, [
+            'description' => 'required',
+            'division_level_5' => 'bail|required|integer|min:1',
+            'division_level_4' => 'bail|required|integer|min:1',
+        ]);
+
+		$questions = $request->all();
+		unset($questions['_token']);
+		$question->description = $request->input('description');
+		$question->division_level_5 = $request->input('division_level_5');
+		$question->division_level_4 = $request->input('division_level_4');
+		$question->division_level_3 = $request->input('division_level_3');
+		$question->division_level_2 = $request->input('division_level_2');
+		$question->division_level_1 = $request->input('division_level_1');
+        $question->update();
+		AuditReportsController::store('Survey', 'Question Updated', "Question Description: $question->description", 0);
+		return response()->json(['new_meeting_decs' => $question->description], 200);
+	}
 	// ActDeac Question
 	public function actDeact(SurveyQuestions $question) 
     {

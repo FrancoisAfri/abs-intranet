@@ -10,8 +10,8 @@
                     <h4 class="modal-title">Add New Question</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="question-invalid-input-alert"></div>
-                    <div id="question-success-alert"></div>
+                    <div id="invalid-input-alert"></div>
+                    <div id="success-alert"></div>
 					@foreach($division_levels as $division_level)
 						<div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 							<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>

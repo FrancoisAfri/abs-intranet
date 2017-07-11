@@ -123,7 +123,6 @@ $(function () {
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 	});
 	$('#update-meeting').on('click', function () {
-		
 		var strUrl = '/meeting/update/' + meetingID;
 		var formName = 'edit-meeting-form';
 		var modalID = 'edit-meeting-modal';
