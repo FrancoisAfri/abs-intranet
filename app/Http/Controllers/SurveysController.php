@@ -29,10 +29,6 @@ class SurveysController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-	public function __construct(){
-
-		$this->middleware('auth');
-    }
     public function indexReports()
     {
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
