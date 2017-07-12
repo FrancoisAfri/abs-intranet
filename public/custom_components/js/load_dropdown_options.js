@@ -118,9 +118,10 @@ function divDDOnChange(dropDownObj, hrPeopleDDID) {
 }
 
 /* function to load child [Division] and employees performance ranking */
-function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp) {
+function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp, loadingWheel) {
     //hrPeopleDDID = hrPeopleDDID || 'hr_person_id';
     totNumEmp = totNumEmp || 0;
+    loadingWheel = loadingWheel || null;
 
     var postTo = ''; var selectedOption = '';
     var ddID = dropDownObj.id;
@@ -130,6 +131,10 @@ function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp) {
     //var hrPeopleDDLabel = $('label[for="' + hrPeopleDDID + '"]').html();
     //console.log("function called by dd changed event: " + "ddID = " + ddID + ", parentDDVal = " + parentDDVal + ", topTenList = " + topTenList + ", totNumEmp = " + totNumEmp);
 
+    //show loading wheel
+    if (loadingWheel != null) loadingWheel.show();
+
+    //load the employee performance ranking list
     if (parentDDVal > 0) {
         switch(ddID) {
             case 'division_level_5':
@@ -138,7 +143,7 @@ function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp) {
                 loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 loadEmpListPerformance(topTenList, 5, parentDDVal, true);
-                loadEmpListPerformance(bottomTenList, 5, parentDDVal, false, true, totNumEmp);
+                loadEmpListPerformance(bottomTenList, 5, parentDDVal, false, true, totNumEmp, null, loadingWheel);
                 break;
             case 'division_level_4':
                 childDDID = 'division_level_3';
@@ -146,7 +151,7 @@ function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp) {
                 loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 loadEmpListPerformance(topTenList, 4, parentDDVal, true);
-                loadEmpListPerformance(bottomTenList, 4, parentDDVal, false, true, totNumEmp);
+                loadEmpListPerformance(bottomTenList, 4, parentDDVal, false, true, totNumEmp, null, loadingWheel);
                 break;
             case 'division_level_3':
                 childDDID = 'division_level_2';
@@ -154,7 +159,7 @@ function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp) {
                 loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 loadEmpListPerformance(topTenList, 3, parentDDVal, true);
-                loadEmpListPerformance(bottomTenList, 3, parentDDVal, false, true, totNumEmp);
+                loadEmpListPerformance(bottomTenList, 3, parentDDVal, false, true, totNumEmp, null, loadingWheel);
                 break;
             case 'division_level_2':
                 //console.log("level two div changed. parentDDVal = " + parentDDVal);
@@ -163,12 +168,12 @@ function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp) {
                 loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 loadEmpListPerformance(topTenList, 2, parentDDVal, true);
-                loadEmpListPerformance(bottomTenList, 2, parentDDVal, false, true, totNumEmp);
+                loadEmpListPerformance(bottomTenList, 2, parentDDVal, false, true, totNumEmp, null, loadingWheel);
                 break;
             case 'division_level_1':
                 //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
                 loadEmpListPerformance(topTenList, 1, parentDDVal, true);
-                loadEmpListPerformance(bottomTenList, 1, parentDDVal, false, true, totNumEmp);
+                loadEmpListPerformance(bottomTenList, 1, parentDDVal, false, true, totNumEmp, null, loadingWheel);
                 break;
             default:
                 return null;
@@ -177,6 +182,9 @@ function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp) {
     } else {
         topTenList.empty();
         bottomTenList.empty();
+
+        //hide loading wheel
+        if (loadingWheel != null) loadingWheel.hide();
     }
 }
 /* function to load child [Division] and employees Tasks */

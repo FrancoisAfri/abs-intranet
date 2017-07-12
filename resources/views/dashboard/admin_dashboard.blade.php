@@ -153,7 +153,7 @@
                                 <div class="form-group">
                                     <label for="{{ 'division_level_' . $divisionLevel->level }}" class="control-label">{{ $divisionLevel->name }}</label>
 
-                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpPWOnChange(this, $('#emp-top-ten-list'), $('#emp-bottom-ten-list'), parseInt('{{ $totNumEmp }}'))" style="width: 100%;">
+                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpPWOnChange(this, $('#emp-top-ten-list'), $('#emp-bottom-ten-list'), parseInt('{{ $totNumEmp }}'), $('#loading_overlay_emp_performance_ranking'))" style="width: 100%;">
                                     </select>
                                 </div>
                             @endforeach
@@ -186,6 +186,10 @@
 
                 </div>
                 <!-- /.box-body -->
+                <!-- Loading wheel overlay -->
+                <div class="overlay" id="loading_overlay_emp_performance_ranking">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
             </div>
             <!-- /.Employees Performance Ranking Widget -->
         </div>
@@ -601,9 +605,11 @@
                     var loadAll = loadAllDivs;
                     @if($loop->first)
                         var selectFirstDiv = 1;
-                        var divHeadSpecific = 1;
+                        var divHeadSpecific;
+                        if (isSuperuser) divHeadSpecific = 0;
+                        else if (isDivHead) divHeadSpecific = 1;
                         loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
-                        firstDivDDID = ddID;
+                        //firstDivDDID = ddID;
                     @else
                         loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
                     @endif
