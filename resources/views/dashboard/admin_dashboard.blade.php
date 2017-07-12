@@ -223,7 +223,7 @@
                                 <div class="form-group">
                                     <label for="{{ 'division_level_' . $divisionLevel->level }}" class="control-label">{{ $divisionLevel->name }}</label>
 
-                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpTasksOnChange(this, $('#emp-meeting-tasks-list'), $('#emp-induction-tasks-list'),$('#emptasksWidgetBox'))" style="width: 100%;">
+                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpTasksOnChange(this, $('#emp-meeting-tasks-list'), $('#emp-induction-tasks-list'),$('#emptasksWidgetBox'), $('#loading_overlay_emp_tasks'))" style="width: 100%;">
                                     </select>
                                 </div>
                             @endforeach
@@ -256,6 +256,10 @@
 
                 </div>
                 <!-- /.box-body -->
+				 <!-- Loading wheel overlay -->
+                <div class="overlay" id="loading_overlay_emp_tasks">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
             </div>
             <!-- /.Employees Performance Ranking Widget -->
         </div>
@@ -645,6 +649,8 @@
                     @if($loop->first)
                         var selectFirstDiv = 1;
                         var divHeadSpecific = 1;
+						if (isSuperuser) divHeadSpecific = 0;
+                        else if (isDivHead) divHeadSpecific = 1;
                         loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
                         firstDivDDID = ddID;
                     @else

@@ -323,9 +323,10 @@ function empPerOnShow(objTrigger, modalWin) {
 //- MEETING AND INDUCION TASK SHOW -
 //---------------------------------------
 //function to show employees tasks
-function loadEmpListTasks(taskList, divLevel, divID, meetingTask, inductionTask) {
+function loadEmpListTasks(taskList, divLevel, divID, meetingTask, inductionTask, loadingWheel) {
     meetingTask = meetingTask || false;
     inductionTask = inductionTask || false;
+	loadingWheel = loadingWheel || null;
     //Get employees tasks data using ajax
     if (meetingTask) getURL = "/api/tasks/emp/meetingTask/" + divLevel + "/" + divID;
     else if(inductionTask) getURL = "/api/tasks/emp/inductionTask/" + divLevel + "/" + divID;
@@ -344,8 +345,8 @@ function loadEmpListTasks(taskList, divLevel, divID, meetingTask, inductionTask)
                     
 				var prodTitleSpan = $("<span class='product-title text-blue'></span>").html(empFullName);
                 var prodDescHTML = '';
-                if (taskDesription != '') prodDescHTML += ' ' + taskDesription;
-                if (dueDate != '') prodDescHTML += ' ' + dueDate;
+                if (taskDesription != '') prodDescHTML += 'Task: ' + taskDesription;
+                if (dueDate != '') prodDescHTML += '</br> Due Date: ' + dueDate;
                 var productDescSpan = $("<span class='product-description'></span>").html(prodDescHTML);
                 var productInfoDiv = $("<div></div>")
                     .append(prodTitleSpan)
@@ -355,6 +356,8 @@ function loadEmpListTasks(taskList, divLevel, divID, meetingTask, inductionTask)
                     .append(productInfoDiv);
                 taskList.append(listItem);
             });
+			//hide loading wheel
+            if (loadingWheel != null) loadingWheel.hide();
             $(window).trigger('resize');
         });
 }
