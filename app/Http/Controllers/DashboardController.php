@@ -87,6 +87,7 @@ class DashboardController extends Controller
 
             $isSupervisor = ($numSupervisedEmp > 0) ? true : false;
             $canViewCPWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
+            $canViewTaskWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
             $canViewEmpRankWidget = ($isSuperuser || $isDivHead) ? true : false;
 
             //$numManagedDivs = 0;
@@ -169,6 +170,7 @@ class DashboardController extends Controller
             $data['managedDivsLevel'] = $managedDivsLevel;
             $data['isSupervisor'] = $isSupervisor;
             $data['canViewCPWidget'] = $canViewCPWidget;
+            $data['canViewTaskWidget'] = $canViewTaskWidget;
             $data['canViewEmpRankWidget'] = $canViewEmpRankWidget;
             $data['divisionLevels'] = $divisionLevels;
             $data['page_title'] = "Dashboard";

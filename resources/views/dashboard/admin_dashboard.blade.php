@@ -189,43 +189,13 @@
             </div>
             <!-- /.Employees Performance Ranking Widget -->
         </div>
-        <!--
-        <div class="col-md-6">
-            <!-- Bottom Ten Employees Performance Ranking Widgets --
-            <div class="box box-danger same-height-widget">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Employees Ranking</h3>
-
-                    <div class="box-tools pull-right">
-                        <span class="label label-danger"><i class="fa fa-level-down"></i> Bottom 10 Employees</span>
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.box-header --
-                <div class="box-body no-padding">
-                        <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
-                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box"
-                                id="emp-bottom-ten-list">
-                            </ul>
-                        </div>
-                        <!-- /.users-list --
-                    </div>
-                <!-- /.box-body --
-            </div>
-            <!-- /.Bottom Ten Employees Performance Ranking Widgets --
-        </div>
-        -->
     </div>
 @endif
-@if($canViewEmpRankWidget)
+@if($canViewTaskWidget)
     <div class="row">
         <div class="col-md-12">
             <!-- Employees Performance Ranking Widget -->
-            <div class="box box-success same-height-widget">
+            <div class="box box-success same-height-widget" id="emptasksWidgetBox">
                 <div class="box-header with-border">
                     <h3 class="box-title">Company Tasks</h3>
 
@@ -249,7 +219,7 @@
                                 <div class="form-group">
                                     <label for="{{ 'division_level_' . $divisionLevel->level }}" class="control-label">{{ $divisionLevel->name }}</label>
 
-                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpPWOnChange(this, $('#emp-meeting-tasks-list'), $('#emp-bottom-ten-list'), parseInt('{{ $totNumEmp }}'))" style="width: 100%;">
+                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpTasksOnChange(this, $('#emp-meeting-tasks-list'), $('#emp-induction-tasks-list'),$('#emptasksWidgetBox'))" style="width: 100%;">
                                     </select>
                                 </div>
                             @endforeach
@@ -260,7 +230,7 @@
                     <!-- Top ten -->
                     <div class="col-sm-4 border-right">
                         <p class="text-center">
-                            <strong class="label label-success"><i class="fa fa-level-up"></i> Meeting Tasks</strong>
+                            <strong class="label label-success"> Meeting Tasks</strong>
                         </p>
                         <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
                             <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-meeting-tasks-list">
@@ -271,11 +241,11 @@
                     <!-- Bottom ten -->
                     <div class="col-sm-4">
                         <p class="text-center">
-                            <strong class="label label-danger"><i class="fa fa-level-down"></i> Induction Tasks</strong>
+                            <strong class="label label-success">Induction Tasks</strong>
                         </p>
                         <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
                             <ul class="nav nav-pills nav-stacked products-list product-list-in-box"
-                                id="emp-bottom-ten-list">
+                                id="emp-induction-tasks-list">
                             </ul>
                         </div>
                     </div>
@@ -611,6 +581,7 @@
                 isDivHead = parseInt({{ (int) $isDivHead }}),
                 isSupervisor = parseInt({{ (int) $isSupervisor }}),
                 canViewCPWidget = parseInt({{ (int) $canViewCPWidget }}),
+                canViewTaskWidget = parseInt({{ (int) $canViewTaskWidget }}),
                 canViewEmpRankWidget = parseInt({{ (int) $canViewEmpRankWidget }});
 
             //Employees ranking widget
@@ -650,6 +621,34 @@
                 //var totNumEmp = parseInt('{{ $totNumEmp }}');
                 //loadEmpListPerformance(bottomTenList, 0, 0, false, true, totNumEmp);
             }
+			if (canViewTaskWidget == 1)
+			{
+				//Load divisions drop down
+                var parentDDID = '';
+                var loadAllDivs = 1;
+                var firstDivDDID = null;
+                var parentContainer = $('#emptasksWidgetBox');
+                @foreach($divisionLevels as $divisionLevel)
+                    //Populate drop down on page load
+                    var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
+                    var postTo = '{!! route('divisionsdropdown') !!}';
+                    var selectedOption = '';
+                    //var divLevel = parseInt('{{ $divisionLevel->level }}');
+                    var incInactive = -1;
+                    var loadAll = loadAllDivs;
+                    @if($loop->first)
+                        var selectFirstDiv = 1;
+                        var divHeadSpecific = 1;
+                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
+                        firstDivDDID = ddID;
+                    @else
+                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
+                    @endif
+                    //parentDDID
+                    parentDDID = ddID;
+                    loadAllDivs = -1;
+                @endforeach
+			}
 
             //Draw employee performance graph
             var empID = parseInt('{{ $user->person->id }}');

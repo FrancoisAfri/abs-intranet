@@ -418,6 +418,9 @@ Route::get('api/appraisal/staffunder/{managerID}', 'AppraisalGraphsController@ge
 Route::get('api/leave/availableBalance/{hr_id}/{levID}', 'LeaveApplicationController@availableDays');
 Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController@negativeDays');
 
+Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getMeetingEmployees')->name('meetingTasksEmployee');
+Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
+
 //Email Test
 Route::get('testemail', function () {
     //Mail::to('smalto@afrixcel.co.za')->send(new UserCreated);
