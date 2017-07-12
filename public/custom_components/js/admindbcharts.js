@@ -248,9 +248,6 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
             //sort the data by performance
             var sortedData = data.sort(function(a, b){return b['emp_result']-a['emp_result']});
 
-            //hide loading wheel
-            if (loadingWheel != null) loadingWheel.hide();
-
             //Load ranking
             rankingList.empty();
             var cnt = 1;
@@ -301,6 +298,10 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
                 rankingList.append(listItem);
                 cnt++;
             });
+
+            //hide loading wheel
+            if (loadingWheel != null) loadingWheel.hide();
+
             $(window).trigger('resize');
         });
 }
