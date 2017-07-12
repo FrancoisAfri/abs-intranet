@@ -72,6 +72,11 @@ class HRPerson extends Model
         return $this->first_name . ' ' . $this->surname;
     }
 
+    //Rate my service full link accessor (with encrypted hr ID)
+    public function getEncryptedRateMyServiceLinkAttribute() {
+        return url('/rate-our-services/') . '/' . encrypt($this->id);
+    }
+
     #
      public function business_cards() {
         return $this->hasOne(business_card::class, 'hr_id');
