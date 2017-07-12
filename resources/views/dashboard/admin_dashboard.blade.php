@@ -563,7 +563,9 @@
                     var loadAll = loadAllDivs;
                     @if($loop->first)
                         var selectFirstDiv = 1;
-                        var divHeadSpecific = 1;
+                        var divHeadSpecific;
+                        if (isSuperuser) divHeadSpecific = 0;
+                        else if (isDivHead) divHeadSpecific = 1;
                         loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
                         firstDivDDID = ddID;
                     @else
