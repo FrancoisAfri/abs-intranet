@@ -1,5 +1,12 @@
 @extends('layouts.main_layout')
 
+@section('page_dependencies')
+ <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/select2/select2.min.css">
+    <!-- bootstrap file input -->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -20,19 +27,15 @@
                     -->
                 </div>
                 <!-- /.box-header -->
-               
+                <form class="form-horizontal" method="POST" action="/hr/card_active">
+                
+            {{ csrf_field() }}
                 <div class="box-body">
-                    @if(!(count($persons) > 0))
-                        <div class="callout callout-danger">
-                            <h4><i class="fa fa-database"></i> No Records found</h4>
-
-                            <p>No user matching your search criteria in the database. Please refine your search parameters.</p>
-                        </div>
-                    @endif
                     <ul class="products-list product-list-in-box">
-                        <!-- <div align="right">
-                           <input type="checkbox" onclick="toggle(this);" /> Check all?<br />
-                           </div> -->
+                        <div align="right">
+                           <input type="checkbox" id="checkallaccept" onclick="checkAllboxAccept()"/> All<br />
+                         
+                           </div>
                         @foreach($persons as $person)
                             <li class="item">
                                 <div class="product-img">
@@ -40,14 +43,13 @@
                                 </div>
                                 <div class="product-info">
                                     <a href="{{ '/users/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
-                                    <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span>
+                                    <!-- <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span> -->
 
-                                   <!--   <span class="chkCheckbox pull-right "> -->
-                                       <!--   leave here  -->
-                         <!--    <button type="button" id="view_ribbons" class="btn {{ (!empty($person->card_status) && $person->card_status == 1) ? " btn-danger " : "btn-success " }}
-                              btn-xs" onclick="postData({{$person->id}}, 'actdeac');"><i class="fa {{ (!empty($person->card_status) && $person->card_status == 1) ?
-                              " fa-times " : "fa-check " }}"></i> {{(!empty($person->card_status) && $person->card_status == 1) ? "De-Activate" : "Activate"}}</button>
-                                    </span> -->
+                                     <span class="chkCheckbox pull-right ">
+                                        <input type="hidden" class="checkbox selectall" id="selected_{{ $person->id }}_{{ $person->user_id }}" name="selected_{{ $person->id }}_{{ $person->user_id }}" value="0">
+
+                                        <input type="checkbox" class="checkbox selectall" id="selected_{{ $person->id }}_{{ $person->user_id }}" name="selected_{{ $person->id }}_{{ $person->user_id }}"  value="1"  {{ $person->card_status === 1 ? 'checked ="checked"' : 0 }}> 
+                                    </span> 
 
                             <span class="product-description">
                                 @if(!empty($person->email))
@@ -70,8 +72,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
-                    <button id="active_card" class="btn btn-default pull-right"><i class="fa fa-arrow-right"></i> Activate Card</button>
-                  <!--   <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Submit</button> -->
+                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Submit</button>
                 </div>
                 <!-- /.box-footer -->
            
@@ -80,26 +81,26 @@
         </div>
     </div>
 @endsection
+
+@section('page_script')
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
+<!-- Select2 -->
+<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+ <!-- bootstrap datepicker -->
+<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 @section('page_script')
     <script type="text/javascript">
-
     //
      function postData(id, data) {
       
          if (data == 'actdeac') 
             location.href = "/hr/card_active/" + id; 
     }
-
    
 	//Cancel button click event
 	document.getElementById("back_to_user_search").onclick = function () {
 		location.href = "/hr/search";
 	};
-
-    document.getElementById("active_card").onclick = function () {
-        location.href = "/hr/active_card";
-    };
 
 
     function toggle(source) {
@@ -109,5 +110,17 @@
             checkboxes[i].checked = source.checked;
     }
 }
+// 
+function checkAllboxAccept()
+    {
+        if($('#checkallaccept:checked').val() == 'on')
+        {
+            $('.selectall').prop('checked',true);
+        }
+        else
+        {
+            $('.selectall').prop('checked',false);
+        }
+    }
     </script>
 @endsection

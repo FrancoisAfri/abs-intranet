@@ -65,12 +65,11 @@ class InductionAdminController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required',
-            'company_id' => 'integer',
+         
         ]);
 		
 		$inductionData = $request->all();
-
+		
 		//Exclude empty fields from query
 		foreach ($inductionData as $key => $value)
 		{
@@ -102,6 +101,7 @@ class InductionAdminController extends Controller
 					$employeeID = !empty($inductionData['employee_id_'.$libraryID.'_'.$deptID]) ? $inductionData['employee_id_'.$libraryID.'_'.$deptID] : 0;
 					if ($depID == $deptID && empty($employeeID))$employeeID = $emp;
 					$count = $count + 1;
+					return $emp;
 					if ($emp != $employeeID  && !empty($emp))
 					{
 						# Send Email to employee

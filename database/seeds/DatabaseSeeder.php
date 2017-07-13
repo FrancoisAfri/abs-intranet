@@ -70,23 +70,6 @@ class DatabaseSeeder extends Seeder
         $person->status = 1;
         $user->addPerson($person);
 
-        # 
-        $card = new business_card;
-        $card->hr_id = 1;
-        $card->status = 0;
-        $card->save();
-
-        $card = new business_card;
-        $card->hr_id = 2;
-        $card->status = 0;
-        $card->save();
-
-        $card = new business_card;
-        $card->hr_id = 3;
-        $card->status = 0;
-        $card->save();
-        
-
 
         //insert default country
         $country = new Country;
