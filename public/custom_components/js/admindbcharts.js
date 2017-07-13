@@ -239,17 +239,14 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
     loadingWheel = loadingWheel || null;
     //Get employees performance data using ajax
     var getURL = "/api/divlevel/" + divLevel + "/div/" + divID + "/emps-performance"; //all employees from a specific divisionspecific parent div
-    if (topTen) getURL = "/api/appraisal/emp/topten";
-    else if(bottomTen) getURL = "/api/appraisal/emp/bottomten";
+    if (topTen) getURL = "/api/appraisal/emp/topten/" + divLevel + "/" + divID;
+    else if(bottomTen) getURL = "/api/appraisal/emp/bottomten/" + divLevel + "/" + divID;
     if (managerID > 0) getURL = "/api/appraisal/staffunder/" + managerID;
     $.get(getURL,
         function(data) {
             //console.log(JSON.stringify(data));
             //sort the data by performance
             var sortedData = data.sort(function(a, b){return b['emp_result']-a['emp_result']});
-
-            //hide loading wheel
-            if (loadingWheel != null) loadingWheel.hide();
 
             //Load ranking
             rankingList.empty();
@@ -301,6 +298,10 @@ function loadEmpListPerformance(rankingList, divLevel, divID, topTen, bottomTen,
                 rankingList.append(listItem);
                 cnt++;
             });
+
+            //hide loading wheel
+            if (loadingWheel != null) loadingWheel.hide();
+
             $(window).trigger('resize');
         });
 }
@@ -318,7 +319,48 @@ function empPerOnShow(objTrigger, modalWin) {
 //- END EMPLOYEE LIST PERFORMANCE CHART -
 //---------------------------------------
 
-
+// --------------------------------------
+//- MEETING AND INDUCION TASK SHOW -
+//---------------------------------------
+//function to show employees tasks
+function loadEmpListTasks(taskList, divLevel, divID, meetingTask, inductionTask, loadingWheel) {
+    meetingTask = meetingTask || false;
+    inductionTask = inductionTask || false;
+	loadingWheel = loadingWheel || null;
+    //Get employees tasks data using ajax
+    if (meetingTask) getURL = "/api/tasks/emp/meetingTask/" + divLevel + "/" + divID;
+    else if(inductionTask) getURL = "/api/tasks/emp/inductionTask/" + divLevel + "/" + divID;
+	$.get(getURL,
+        function(data) {
+            //console.log(JSON.stringify(data));
+            //sort the data by performance
+            //var sortedData = data.sort(function(a, b){return b['emp_result']-a['emp_result']});
+            //Load ranking
+            taskList.empty();
+            $.each(data, function(key, value) {
+                var empID = value['emp_id'],
+                    empFullName = value['emp_full_name'],
+                    taskDesription = value['task_desription'],
+                    dueDate = value['due_date'];
+                    
+				var prodTitleSpan = $("<span class='product-title text-blue'></span>").html(empFullName);
+                var prodDescHTML = '';
+                if (taskDesription != '') prodDescHTML += 'Task: ' + taskDesription;
+                if (dueDate != '') prodDescHTML += '</br> Due Date: ' + dueDate;
+                var productDescSpan = $("<span class='product-description'></span>").html(prodDescHTML);
+                var productInfoDiv = $("<div></div>")
+                    .append(prodTitleSpan)
+                    .append(productDescSpan);
+             
+                var listItem = $("<li class=item'></li>")
+                    .append(productInfoDiv);
+                taskList.append(listItem);
+            });
+			//hide loading wheel
+            if (loadingWheel != null) loadingWheel.hide();
+            $(window).trigger('resize');
+        });
+}
 //--------------------------
 //- AVAILABLE PERKS WIDGET -
 //--------------------------

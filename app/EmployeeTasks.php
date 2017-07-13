@@ -23,7 +23,7 @@ class EmployeeTasks extends Model
         return $this->hasMany(EmployeeTasksDocuments::class, 'task_id');
     }
 	
-	 //relationship between EmployeeTasks and employeetasksDocument
+	 //relationship between meeting and induction tasks
     public function tasksInduction() {
 		if ($this->task_type === 1 || $this->type === 3) 
 		{ //task_type 1== induction

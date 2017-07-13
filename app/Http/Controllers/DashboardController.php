@@ -84,10 +84,24 @@ class DashboardController extends Controller
                 $managedDivsLevel = (object) [];
                 $managedDivsLevel->level = 0;
             }
+
             $isSupervisor = ($numSupervisedEmp > 0) ? true : false;
             $canViewCPWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
+            $canViewTaskWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
+            $canViewEmpRankWidget = ($isSuperuser || $isDivHead) ? true : false;
 
-             $statusLabels = [10 => "label-danger", 50 => "label-warning", 80 => 'label-success', 100 => 'label-info'];
+            //$numManagedDivs = 0;
+            //if ($isSuperuser) $numManagedDivs =
+
+            if ($isSuperuser) $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
+            elseif ($isDivHead) {
+                $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')
+                    ->where('level', $managedDivsLevel->level)
+                    ->get();
+            }
+            else $divisionLevels = (object) [];
+
+            $statusLabels = [10 => "label-danger", 50 => "label-warning", 80 => 'label-success', 100 => 'label-info'];
 			
 			// Get tasks for logged user
 			$today = strtotime(date('Y-m-d'));
@@ -156,9 +170,12 @@ class DashboardController extends Controller
             $data['managedDivsLevel'] = $managedDivsLevel;
             $data['isSupervisor'] = $isSupervisor;
             $data['canViewCPWidget'] = $canViewCPWidget;
+            $data['canViewTaskWidget'] = $canViewTaskWidget;
+            $data['canViewEmpRankWidget'] = $canViewEmpRankWidget;
+            $data['divisionLevels'] = $divisionLevels;
             $data['page_title'] = "Dashboard";
 			$data['page_description'] = "This is your main Dashboard";
-            //return $data;
+
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         }
         else {

@@ -346,6 +346,13 @@ Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
 // Minutes Meeting
+Route::get('/meeting_minutes/recurring', 'RecurringMeetingsController@index');
+Route::get('/meeting_minutes/recurring/{recurring}/view', 'RecurringMeetingsController@show');
+Route::get('/meeting_minutes/recurring/{recurring}/actdect', 'RecurringMeetingsController@meetingAct');
+Route::get('/meeting_recurring/actdeac/{recurring}', 'RecurringMeetingsController@attendeeAct');
+Route::post('/meeting/add_recurring_attendees', 'RecurringMeetingsController@saveRecurringAttendee');
+Route::post('/meeting_minutes/add_recurring_meeting', 'RecurringMeetingsController@store');
+Route::patch('/meeting_minutes/recurring/update/{recurring}', 'RecurringMeetingsController@update');
 Route::get('/meeting_minutes/create', 'MeetingMinutesAdminController@index');
 Route::post('/meeting/search_results', 'MeetingMinutesAdminController@searchResults');
 Route::post('/meeting/add_attendees/{meeting}', 'MeetingMinutesAdminController@saveAttendee');
@@ -355,6 +362,7 @@ Route::post('/meeting_minutes/add_meeting', 'MeetingMinutesAdminController@store
 Route::get('/meeting_minutes/view_meeting/{meeting}/view', 'MeetingMinutesAdminController@show');
 Route::get('/meeting_minutes/search', 'MeetingMinutesAdminController@search');
 Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
+Route::post('/meeting/update_attendee/{attendee}', 'MeetingMinutesAdminController@updateAttendee');
 Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
 //Clients (contacts) registration
@@ -367,9 +375,13 @@ Route::post('rate-our-services', 'SurveyGuestsController@store');
 
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');
+Route::get('survey/question_activate/{question}', 'SurveysController@actDeact');
+Route::get('survey/questions', 'SurveysController@questionsLists');
 Route::get('survey/rating-links', 'SurveysController@indexRatingLinks');
+Route::post('survey/add_question', 'SurveysController@saveQuestions');
 Route::post('survey/reports', 'SurveysController@getReport');
 Route::post('survey/reports/print', 'SurveysController@printReport');
+Route::patch('/survey/question_update/{question}', 'SurveysController@updateQuestions');
 
 # Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');
@@ -403,11 +415,14 @@ Route::get('api/divlevel/{divLvl}/parentdiv/{parentDivisionID}/group-performance
 Route::get('api/divlevel/{divLvl}/parentdiv/{parentDivisionID}/manager/{managerID}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
 Route::get('api/divlevel/{divLvl}/div/{divID}/emps-performance', 'AppraisalGraphsController@empListPerformance');
 Route::get('api/availableperks', 'AppraisalGraphsController@getAvailablePerks')->name('availableperks');
-Route::get('api/appraisal/emp/topten', 'AppraisalGraphsController@getTopTenEmployees')->name('toptenemp');
-Route::get('api/appraisal/emp/bottomten', 'AppraisalGraphsController@getBottomTenEmployees')->name('bottomtenemp');
+Route::get('api/appraisal/emp/topten/{divLvl}/{divID}', 'AppraisalGraphsController@getTopTenEmployees')->name('toptenemp');
+Route::get('api/appraisal/emp/bottomten/{divLvl}/{divID}', 'AppraisalGraphsController@getBottomTenEmployees')->name('bottomtenemp');
 Route::get('api/appraisal/staffunder/{managerID}', 'AppraisalGraphsController@getSubordinates')->name('staffperform');
 Route::get('api/leave/availableBalance/{hr_id}/{levID}', 'LeaveApplicationController@availableDays');
 Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController@negativeDays');
+
+Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getMeetingEmployees')->name('meetingTasksEmployee');
+Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
 
 //Email Test
 Route::get('testemail', function () {

@@ -112,23 +112,20 @@ class TaskManagementController extends Controller
                 unset($endData[$key]);
             }
         }
-
-        $endtask = new EmployeeTasksDocuments();
-        $endtask->task_id = $endData['task_id'];
-        $endtask->employee_id = $endData['employee_id'];
-        $endtask->added_by = $user->id;
-        $endtask->status = 1;
-        $endtask->save();
-
         //Upload task doc
         if ($request->hasFile('document')) {
             $fileExt = $request->file('document')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document')->isValid()) {
-                $fileName = $endtask->id . "_task_doc_" . '.' . $fileExt;
+                $fileName = $endData['employee_id'] . "_task_doc_" . '.' . $fileExt;
                 $request->file('document')->storeAs('tasks', $fileName);
                 //Update file name in the appraisal_perks table
-                $endtask->document = $fileName;
-                $endtask->update();
+                $endtask = new EmployeeTasksDocuments();
+				$endtask->task_id = $endData['task_id'];
+				$endtask->employee_id = $endData['employee_id'];
+				$endtask->added_by = $user->id;
+				$endtask->status = 1;
+				$endtask->document = $fileName;
+				$endtask->save();
             }
         }
 		# update Task
@@ -159,7 +156,7 @@ class TaskManagementController extends Controller
 			}
 		}*/
 		AuditReportsController::store('Task Management', "Task Ended", "Edited by User", 0);
-		return response()->json(['employee_id' => $endtask->employee_id], 200);
+		return response()->json(['employee_id' => $endData['employee_id']], 200);
     }
 	# Check task
 	public function checkTask(Request $request) 
@@ -191,11 +188,11 @@ class TaskManagementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
     */
-    public static function store($description='',$duedate='',$startDate='',$escalationID=0,$employeeID=0,$taskType=0
+    public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
 	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0)
     {
 		//convert dates to unix time stamp
-        if (!empty($duedate)) {
+        /*if (!empty($duedate)) {
             $duedate = str_replace('/', '-', $duedate);
             $intduedate = strtotime($duedate);
         }
@@ -204,7 +201,8 @@ class TaskManagementController extends Controller
             $startDate = str_replace('/', '-', $startDate);
             $intstartDate = strtotime($startDate);
         }
-		else $intstartDate = 0;
+		else $intstartDate = 0;*/
+
 		$user = Auth::user();
 		$EmployeeTasks = new EmployeeTasks();
 		$EmployeeTasks->induction_id = $inductionID;
@@ -220,8 +218,8 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->employee_id = $employeeID;
 		$EmployeeTasks->library_id = $libraryID;
 		$EmployeeTasks->description = $description;
-		$EmployeeTasks->due_date = $intduedate;
-		$EmployeeTasks->start_date = $intstartDate;
+		$EmployeeTasks->due_date = $duedate;
+		$EmployeeTasks->start_date = $startDate;
 		$EmployeeTasks->administrator_id = $administratorID;
 		$EmployeeTasks->check_by_id = $checkByID;
 		// Save task

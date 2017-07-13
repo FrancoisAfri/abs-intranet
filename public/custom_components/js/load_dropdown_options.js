@@ -20,22 +20,26 @@ function avilabledays(hr_id, levID, negDAYS) {
 
 
 /* function to load [Divisions] drop down options */
-function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo) {
+function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer) {
     parentDDID = parentDDID || '';
     loadAll = loadAll || -1;
     incInactive = incInactive || -1;
     postTo = postTo || '/api/divisionsdropdown';
+    selectFirstDiv = selectFirstDiv || 0;
+    divHeadSpecific = divHeadSpecific || 0;
+    parentContainer = parentContainer || $(document);
 
-    var parentDDVal = $('#'+parentDDID).val();
-    //console.log('parentDDVal = ' + parentDDVal);
-    var parentDDLabel = $('label[for="' + parentDDID + '"]').html();
-    var ddLabel = $('label[for="' + ddID + '"]').html();
+    var parentDDVal = 0;
+    if (parentDDID != '') parentDDVal = parentContainer.find('#' + parentDDID).val();
+    //console.log('divHeadSpecific = ' + divHeadSpecific);
+    var parentDDLabel = parentContainer.find('label[for="' + parentDDID + '"]').html();
+    var ddLabel = parentContainer.find('label[for="' + ddID + '"]').html();
     //console.log('calls the function with: ' + ddID + ', ' + ddLabel + ', ' + postTo + ', ' + selectedOption + ', ' + parentDDVal + ', ' + parentDDLabel + ', ' + incInactive + ', ' + loadAll + ', ');
     var divLvl = parseInt(ddID.substr(ddID.lastIndexOf("_") + 1));
     //console.log('division level: ' + divLvl);
-    $.post(postTo, { div_level: divLvl, parent_id: parentDDVal, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
+    $.post(postTo, { div_level: divLvl, parent_id: parentDDVal, div_head_specific: divHeadSpecific, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
         function(data) {
-            var dropdown = $('#'+ddID);
+            var dropdown = parentContainer.find('#'+ddID);
             var firstDDOption = "*** Select a " + ddLabel + " ***";
             if (loadAll == 1) {
                 //console.log('load all is: ' + loadAll);
@@ -59,6 +63,10 @@ function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll
                 dropdown
                     .append(ddOption);
             });
+            if (selectFirstDiv == 1) { //select the first division
+                dropdown.val(parentContainer.find('#' + ddID + ' option:nth-child(2)').val());
+                dropdown.trigger('change');
+            }
         });
 }
 
@@ -106,6 +114,135 @@ function divDDOnChange(dropDownObj, hrPeopleDDID) {
         default:
             return null;
             break;
+    }
+}
+
+/* function to load child [Division] and employees performance ranking */
+function divDDEmpPWOnChange(dropDownObj, topTenList, bottomTenList, totNumEmp, loadingWheel) {
+    //hrPeopleDDID = hrPeopleDDID || 'hr_person_id';
+    totNumEmp = totNumEmp || 0;
+    loadingWheel = loadingWheel || null;
+
+    var postTo = ''; var selectedOption = '';
+    var ddID = dropDownObj.id;
+    var parentDDVal = dropDownObj.value;
+    var incInactive = -1; var loadAll = -1;
+    var childDDID = ''; var childDDLabel = '';
+    //var hrPeopleDDLabel = $('label[for="' + hrPeopleDDID + '"]').html();
+    //console.log("function called by dd changed event: " + "ddID = " + ddID + ", parentDDVal = " + parentDDVal + ", topTenList = " + topTenList + ", totNumEmp = " + totNumEmp);
+
+    //show loading wheel
+    if (loadingWheel != null) loadingWheel.show();
+
+    //load the employee performance ranking list
+    if (parentDDVal > 0) {
+        switch(ddID) {
+            case 'division_level_5':
+                childDDID = 'division_level_4';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                loadEmpListPerformance(topTenList, 5, parentDDVal, true);
+                loadEmpListPerformance(bottomTenList, 5, parentDDVal, false, true, totNumEmp, null, loadingWheel);
+                break;
+            case 'division_level_4':
+                childDDID = 'division_level_3';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                loadEmpListPerformance(topTenList, 4, parentDDVal, true);
+                loadEmpListPerformance(bottomTenList, 4, parentDDVal, false, true, totNumEmp, null, loadingWheel);
+                break;
+            case 'division_level_3':
+                childDDID = 'division_level_2';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                loadEmpListPerformance(topTenList, 3, parentDDVal, true);
+                loadEmpListPerformance(bottomTenList, 3, parentDDVal, false, true, totNumEmp, null, loadingWheel);
+                break;
+            case 'division_level_2':
+                //console.log("level two div changed. parentDDVal = " + parentDDVal);
+                childDDID = 'division_level_1';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                loadEmpListPerformance(topTenList, 2, parentDDVal, true);
+                loadEmpListPerformance(bottomTenList, 2, parentDDVal, false, true, totNumEmp, null, loadingWheel);
+                break;
+            case 'division_level_1':
+                //loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+                loadEmpListPerformance(topTenList, 1, parentDDVal, true);
+                loadEmpListPerformance(bottomTenList, 1, parentDDVal, false, true, totNumEmp, null, loadingWheel);
+                break;
+            default:
+                return null;
+                break;
+        }
+    } else {
+        topTenList.empty();
+        bottomTenList.empty();
+
+        //hide loading wheel
+        if (loadingWheel != null) loadingWheel.hide();
+    }
+}
+/* function to load child [Division] and employees Tasks */
+function divDDEmpTasksOnChange(dropDownObj, meetingList, inductionList, prtContainer, loadingWheel) {
+    
+    loadingWheel = loadingWheel || null;
+	var postTo = ''; var selectedOption = '';
+    var ddID = dropDownObj.id;
+    var parentDDVal = dropDownObj.value;
+    var incInactive = -1; var loadAll = -1;
+    var childDDID = ''; var childDDLabel = '';
+	prtContainer = prtContainer || $(document);
+	//show loading wheel
+    if (loadingWheel != null) loadingWheel.show();
+	
+    if (parentDDVal > 0) {
+        switch(ddID) {
+            case 'division_level_5':
+                childDDID = 'division_level_4';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 5, parentDDVal, true);
+                loadEmpListTasks(inductionList, 5, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_4':
+                childDDID = 'division_level_3';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 4, parentDDVal, true);
+                loadEmpListTasks(inductionList, 4, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_3':
+                childDDID = 'division_level_2';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 3, parentDDVal, true);
+                loadEmpListTasks(inductionList, 3, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_2':
+                childDDID = 'division_level_1';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 2, parentDDVal, true);
+                loadEmpListTasks(inductionList, 2, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_1':
+                loadEmpListTasks(meetingList, 1, parentDDVal, true);
+                loadEmpListTasks(inductionList, 1, parentDDVal, false, true, loadingWheel);
+                break;
+            default:
+                return null;
+                break;
+        }
+    } else {
+        meetingList.empty();
+        inductionList.empty();
+		//hide loading wheel
+        if (loadingWheel != null) loadingWheel.hide();
     }
 }
 

@@ -12,6 +12,7 @@ use App\appraisalKpas;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 class DropDownAPIController extends Controller
 {
@@ -23,15 +24,16 @@ class DropDownAPIController extends Controller
     //load division level 5, 4, 3, 2, or 1
     public function divLevelGroupDD(Request $request) {
         $divLevel = (int) $request->input('div_level');
+        $divHeadSpecific = (int) $request->input('div_head_specific');
         $parentID = $request->input('parent_id');
         $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
         $loadAll = $request->input('load_all');
         $divisions = [];
+        $managerID = ($divHeadSpecific == 1) ? Auth::user()->person->id : 0;
         if ($divLevel === 5) {
-            $divisions = DivisionLevelFive::where(function ($query) use($incInactive) {
-                if ($incInactive == -1) {
-                    $query->where('active', 1);
-                }
+            $divisions = DivisionLevelFive::where(function ($query) use($incInactive, $managerID) {
+                if ($incInactive == -1) $query->where('active', 1);
+                if ($managerID > 0) $query->where('manager_id', $managerID);
             })->get()
                 ->sortBy('name')
                 ->pluck('id', 'name');
@@ -39,10 +41,9 @@ class DropDownAPIController extends Controller
         elseif ($divLevel === 4) {
             if ($parentID > 0 && $loadAll == -1) $divisions = DivisionLevelFour::divsFromParent($parentID, $incInactive);
             elseif ($loadAll == 1) {
-                $divisions = DivisionLevelFour::where(function ($query) use($incInactive) {
-                    if ($incInactive == -1) {
-                        $query->where('active', 1);
-                    }
+                $divisions = DivisionLevelFour::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
                 })->get()
                     ->sortBy('name')
                     ->pluck('id', 'name');
@@ -51,10 +52,9 @@ class DropDownAPIController extends Controller
         elseif ($divLevel === 3) {
             if ($parentID > 0 && $loadAll == -1) $divisions = DivisionLevelThree::divsFromParent($parentID, $incInactive);
             elseif ($loadAll == 1) {
-                $divisions = DivisionLevelThree::where(function ($query) use($incInactive) {
-                    if ($incInactive == -1) {
-                        $query->where('active', 1);
-                    }
+                $divisions = DivisionLevelThree::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
                 })->get()
                     ->sortBy('name')
                     ->pluck('id', 'name');
@@ -63,10 +63,9 @@ class DropDownAPIController extends Controller
         elseif ($divLevel === 2) {
             if ($parentID > 0 && $loadAll == -1) $divisions = DivisionLevelTwo::divsFromParent($parentID, $incInactive);
             elseif ($loadAll == 1) {
-                $divisions = DivisionLevelTwo::where(function ($query) use($incInactive) {
-                    if ($incInactive == -1) {
-                        $query->where('active', 1);
-                    }
+                $divisions = DivisionLevelTwo::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
                 })->get()
                     ->sortBy('name')
                     ->pluck('id', 'name');
@@ -75,10 +74,9 @@ class DropDownAPIController extends Controller
         elseif ($divLevel === 1) {
             if ($parentID > 0 && $loadAll == -1) $divisions = DivisionLevelOne::divsFromParent($parentID, $incInactive);
             elseif ($loadAll == 1) {
-                $divisions = DivisionLevelOne::where(function ($query) use($incInactive) {
-                    if ($incInactive == -1) {
-                        $query->where('active', 1);
-                    }
+                $divisions = DivisionLevelOne::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
                 })->get()
                     ->sortBy('name')
                     ->pluck('id', 'name');

@@ -765,13 +765,56 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'survey/rating-links';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Survey Questions';
+        $ribbon->description = 'Survey Questions';
+        $ribbon->ribbon_path = '	survey/questions';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 2;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Generate survey reports';
         $ribbon->ribbon_path = 'survey/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$module = new modules(); //Task Management
+        $module->active = 1;
+        $module->name = 'Task Management';
+        $module->path = 'tasks';
+        $module->font_awesome = 'fa-tasks';
+        $module->save();
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Add Task';
+        $ribbon->description = 'Add Task';
+        $ribbon->ribbon_path = 'tasks/add_task';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search Task';
+        $ribbon->description = 'Search Task';
+        $ribbon->ribbon_path = 'tasks/search_task';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Report';
+        $ribbon->description = 'Report';
+        $ribbon->ribbon_path = 'tasks/task_report';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 		
