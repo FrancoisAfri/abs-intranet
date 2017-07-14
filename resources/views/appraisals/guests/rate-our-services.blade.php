@@ -92,43 +92,17 @@
                             <hr class="hr-text" data-content="TELL US ABOUT YOUR EXPERIENCE">
 
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group {{ $errors->has('attitude_enthusiasm') ? ' has-error' : '' }}">
-                                        <label for="booking_number" class="col-sm-4 control-label">Attitude / Enthusiasm</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control rating rating-loading" id="attitude_enthusiasm" name="attitude_enthusiasm" value="{{ old('attitude_enthusiasm') }}" data-min="0" data-max="5" data-step="1" data-show-clear="false" data-size='xs'>
+                                @foreach($surveyQuestions as $surveyQuestion)
+                                    <div class="col-sm-6">
+                                        <div class="form-group {{ $errors->has("questions[$surveyQuestion->id]") ? ' has-error' : '' }}">
+                                            <label for="{{ 'question_id_' . $surveyQuestion->id }}" class="col-sm-4 control-label">{{ $surveyQuestion->description }}</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control rating rating-loading" id="{{ 'question_id_' . $surveyQuestion->id }}" name="{{ "questions[$surveyQuestion->id]" }}" value="{{ old("questions[$surveyQuestion->id]") }}" data-min="0" data-max="5" data-step="1" data-show-clear="false" data-size='xs'>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group {{ $errors->has('expertise') ? ' has-error' : '' }}">
-                                        <label for="expertise" class="col-sm-4 control-label">Expertise</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control rating rating-loading" id="expertise" name="expertise" value="{{ old('expertise') }}" data-min="0" data-max="5" data-step="1" data-show-clear="false" data-size='xs'>
-                                        </div>
-                                    </div>
-                                    <div class="form-group {{ $errors->has('efficiency') ? ' has-error' : '' }}">
-                                        <label for="efficiency" class="col-sm-4 control-label">Turnaround Time</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control rating rating-loading" id="efficiency" name="efficiency" value="{{ old('efficiency') }}" data-min="0" data-max="5" data-step="1" data-show-clear="false" data-size='xs'>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group {{ $errors->has('attentive_listening') ? ' has-error' : '' }}">
-                                        <label for="attentive_listening" class="col-sm-4 control-label">Attentive Listening</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control rating rating-loading" id="attentive_listening" name="attentive_listening" value="{{ old('attentive_listening') }}" data-min="0" data-max="5" data-step="1" data-show-clear="false" data-size='xs'>
-                                        </div>
-                                    </div>
-                                    <div class="form-group {{ $errors->has('general_overall_assistance') ? ' has-error' : '' }}">
-                                        <label for="general_overall_assistance" class="col-sm-4 control-label">Overall Experience</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control rating rating-loading" id="general_overall_assistance" name="general_overall_assistance" value="{{ old('general_overall_assistance') }}" data-min="0" data-max="5" data-step="1" data-show-clear="false" data-size='xs'>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
-
-                            
                             
                             <div class="form-group {{ $errors->has('additional_comments') ? ' has-error' : '' }}">
                                 <label for="additional_comments" class="col-sm-2 control-label">Additional Comments</label>

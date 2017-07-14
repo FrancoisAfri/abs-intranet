@@ -302,16 +302,12 @@ class DatabaseSeeder extends Seeder
         //insert the employees group levels (division departments)
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 1;
-        $groupLevel->name = "Department";
-        $groupLevel->plural_name = "Departments";
-        $groupLevel->active = 1;
+        $groupLevel->active = 0;
         $groupLevel->save();
         
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 2;
-        $groupLevel->name = "Division";
-        $groupLevel->plural_name = "Divisions";
-        $groupLevel->active = 1;
+        $groupLevel->active = 0;
         $groupLevel->save();
 
         $groupLevel = new DivisionLevel();
@@ -321,12 +317,16 @@ class DatabaseSeeder extends Seeder
 
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 4;
-        $groupLevel->active = 0;
+        $groupLevel->name = "Department";
+        $groupLevel->plural_name = "Departments";
+        $groupLevel->active = 1;
         $groupLevel->save();
 
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 5;
-        $groupLevel->active = 0;
+        $groupLevel->name = "Division";
+        $groupLevel->plural_name = "Divisions";
+        $groupLevel->active = 1;
         $groupLevel->save();
 
         //Insert navigation menus

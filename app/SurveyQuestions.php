@@ -12,4 +12,13 @@ class SurveyQuestions extends Model
     protected $fillable = [
         'division_level_1', 'division_level_2', 'division_level_3', 'division_level_4'
 		, 'division_level_5', 'status', 'description'];
+
+    /**
+     * Relationship with AppraisalSurvey [Many to Many].
+     *
+     * @return
+     */
+    public function appraisalSurvey() {
+        return $this->belongsToMany(AppraisalSurvey::class);
+    }
 }

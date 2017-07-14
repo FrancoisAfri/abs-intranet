@@ -185,7 +185,7 @@ class AppraisalKPIResult extends Model
                     $empTotalRating = 0;
                     $ratingsCount = 0;
                     foreach ($empFeedbacks as $empFeedback) {
-                        if ($empFeedback->avg_rating != null) {
+                        if ($empFeedback->avg_rating) {
                             $empTotalRating += $empFeedback->avg_rating;
                             $ratingsCount += 1;
                         }
