@@ -362,6 +362,8 @@ Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update')
 Route::post('/meeting/update_attendee/{attendee}', 'MeetingMinutesAdminController@updateAttendee');
 Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
+// Task Management
+Route::get('/tasks/task_report', 'TaskManagementController@report');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');

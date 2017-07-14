@@ -257,6 +257,27 @@ class TaskManagementController extends Controller
         AuditReportsController::store('Task Management', 'task Informations Updated', "Updated by User", 0);
         return response()->json(['new_description' => $description], 200);
     }
+	// Report Search
+	public function report()
+    {
+		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+        $data['page_title'] = "Induction Search";
+        $data['page_description'] = "Induction Search";
+        $data['breadcrumb'] = [
+            ['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            //['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Induction Search', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Induction';
+        $data['active_rib'] = 'Induction Search';
+		
+		$data['users'] = $users;
+		$data['companies'] = $companies;
+		AuditReportsController::store('Induction', 'View Induction Search', "Accessed By User", 0);
+        return view('induction.induction_search')->with($data);
+    }
+	
 	// draw audit report acccording to search criteria
 	public function getReport(Request $request)
     {
