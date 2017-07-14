@@ -188,11 +188,11 @@ class TaskManagementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
     */
-    public static function store($description='',$duedate='',$startDate='',$escalationID=0,$employeeID=0,$taskType=0
+    public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
 	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0)
     {
 		//convert dates to unix time stamp
-        if (!empty($duedate)) {
+        /*if (!empty($duedate)) {
             $duedate = str_replace('/', '-', $duedate);
             $intduedate = strtotime($duedate);
         }
@@ -201,7 +201,8 @@ class TaskManagementController extends Controller
             $startDate = str_replace('/', '-', $startDate);
             $intstartDate = strtotime($startDate);
         }
-		else $intstartDate = 0;
+		else $intstartDate = 0;*/
+
 		$user = Auth::user();
 		$EmployeeTasks = new EmployeeTasks();
 		$EmployeeTasks->induction_id = $inductionID;
@@ -217,8 +218,8 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->employee_id = $employeeID;
 		$EmployeeTasks->library_id = $libraryID;
 		$EmployeeTasks->description = $description;
-		$EmployeeTasks->due_date = $intduedate;
-		$EmployeeTasks->start_date = $intstartDate;
+		$EmployeeTasks->due_date = $duedate;
+		$EmployeeTasks->start_date = $startDate;
 		$EmployeeTasks->administrator_id = $administratorID;
 		$EmployeeTasks->check_by_id = $checkByID;
 		// Save task
@@ -256,6 +257,27 @@ class TaskManagementController extends Controller
         AuditReportsController::store('Task Management', 'task Informations Updated', "Updated by User", 0);
         return response()->json(['new_description' => $description], 200);
     }
+	// Report Search
+	public function report()
+    {
+		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+        $data['page_title'] = "Induction Search";
+        $data['page_description'] = "Induction Search";
+        $data['breadcrumb'] = [
+            ['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            //['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Induction Search', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Induction';
+        $data['active_rib'] = 'Induction Search';
+		
+		$data['users'] = $users;
+		$data['companies'] = $companies;
+		AuditReportsController::store('Induction', 'View Induction Search', "Accessed By User", 0);
+        return view('induction.induction_search')->with($data);
+    }
+	
 	// draw audit report acccording to search criteria
 	public function getReport(Request $request)
     {

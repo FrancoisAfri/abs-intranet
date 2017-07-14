@@ -120,21 +120,16 @@ class LeaveApplicationController extends Controller
       //return $loggedInEmplID;
 
        $leaveApplication = DB::table('leave_application')
-        ->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager','leave_credit.leave_balance as leave_Days') 
+        ->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager','leave_credit.leave_balance as leave_Days','leave_status.name as leaveStatus') 
         ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
         ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id') 
         ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id' )
-       ->where('hr_people.manager_id', $loggedInEmplID)
+        ->leftJoin('leave_status', 'leave_application.hr_id', '=', 'leave_status.id') 
+        ->where('hr_people.manager_id', $loggedInEmplID)
        //->where( 'leave_credit.leave_type_id',3)
         ->orderBy('leave_application.hr_id')
         ->get();
 
-        #
-        // 
-      
-        // 
-
-       
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Approval';
         $data['leaveTypes'] = $leaveTypes;

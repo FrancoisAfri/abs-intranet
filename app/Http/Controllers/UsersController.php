@@ -16,7 +16,6 @@ use App\leave_custom;
 use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
-use App\business_card;
 use App\Province;
 // use App\business_card;
 use App\Http\Controllers\AuditReportsController;
@@ -251,12 +250,10 @@ class UsersController extends Controller
     public function store(Request $request ) {
         //Save usr
         $user = new User;
-        $card = new business_card;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->type = 1;
         $user->status = 1;
-        $card->status = 0;
         $user->save();
 
         //exclude empty fields from query
@@ -282,7 +279,7 @@ class UsersController extends Controller
     public function edit(User $user) {
         $user->load('person');
 
-         $business_cards = business_card::where('status', 1)->get()->load('HrPersons');
+       //  $business_cards = business_card::where('status', 1)->get()->load('HrPersons');
         // return $business_cards;
 
         // return $user;

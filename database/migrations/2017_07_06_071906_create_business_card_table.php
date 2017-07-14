@@ -17,6 +17,7 @@ class CreateBusinessCardTable extends Migration
             $table->increments('id');
             $table->integer('hr_id')->nullable();
             $table->smallInteger('status')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }
