@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\AppraisalSurvey;
 use App\CompanyIdentity;
 use App\HRPerson;
+use App\SurveyQuestions;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 
 class SurveyGuestsController extends Controller
 {
@@ -27,7 +29,7 @@ class SurveyGuestsController extends Controller
      */
     public function index($eid)
     {
-        //[TODO]check if the Appraisal module is acrivce
+        //[TODO]check if the Appraisal module is active
         
         //$consultantID = $eid;
         try {
@@ -35,10 +37,38 @@ class SurveyGuestsController extends Controller
         } catch (DecryptException $e) {
             $consultantID = null;
         }
-        //$consultantID = decrypt($eid);
+
         $companyDetails = CompanyIdentity::systemSettings();
         $employees = ((int) $consultantID) ? HRPerson::where('status', 1)->where('id', $consultantID)->orderBy('first_name')->orderBy('surname')->get() : null;
         $isEmpFound = (count($employees) > 0) ? true : false;
+
+        //get employee's lowest div level
+        $emp = $employees->first();
+        if($emp->division_level_1 && $emp->division_level_1 > 0) {
+            $empDivLevelID = $emp->division_level_1;
+            $empDivLevel = 1;
+        } elseif ($emp->division_level_2 && $emp->division_level_2 > 0) {
+            $empDivLevelID = $emp->division_level_2;
+            $empDivLevel = 2;
+        } elseif ($emp->division_level_3 && $emp->division_level_3 > 0) {
+            $empDivLevelID = $emp->division_level_3;
+            $empDivLevel = 3;
+        } elseif ($emp->division_level_4 && $emp->division_level_4 > 0) {
+            $empDivLevelID = $emp->division_level_4;
+            $empDivLevel = 4;
+        } elseif ($emp->division_level_5 && $emp->division_level_5 > 0) {
+            $empDivLevelID = $emp->division_level_5;
+            $empDivLevel = 5;
+        } else {
+            $empDivLevelID = 0;
+            $empDivLevel = 0;
+        }
+
+        //get questions from the survey question library
+        $surveyQuestions = [];
+        if ($empDivLevelID > 0) {
+            $surveyQuestions = SurveyQuestions::where('status', 1)->where('division_level_' . $empDivLevel, $empDivLevelID)->orderBy('description')->get();
+        }
 
         $data['page_title'] = "Rate Our Services";
         $data['page_description'] = "Please submit your review below";
@@ -57,6 +87,7 @@ class SurveyGuestsController extends Controller
         $data['employees'] = $employees;
         $data['isEmpFound'] = $isEmpFound;
         $data['consultantID'] = $consultantID;
+        $data['surveyQuestions'] = $surveyQuestions;
 
         AuditReportsController::store('Performance Appraisal', 'Rate Our Services Page Accessed', "Accessed By Guest", 0);
         return view('appraisals.guests.rate-our-services')->with($data);
@@ -74,11 +105,7 @@ class SurveyGuestsController extends Controller
             'hr_person_id' => 'required',
             'client_name' => 'required',
             'booking_number' => 'unique:appraisal_surveys,booking_number',
-            'attitude_enthusiasm' => 'bail|integer|min:0|max:5',
-            'expertise' => 'bail|integer|min:0|max:5',
-            'efficiency' => 'bail|integer|min:0|max:5',
-            'attentive_listening' => 'bail|integer|min:0|max:5',
-            'general_overall_assistance' => 'bail|integer|min:0|max:5',
+            'questions.*' => 'bail|integer|min:0|max:5',
         ]);
 
         $feedbackData = $request->all();
@@ -88,10 +115,20 @@ class SurveyGuestsController extends Controller
             }
         }
 
-        $clientFeedback = new AppraisalSurvey($feedbackData);
-        $clientFeedback->feedback_date = strtotime(date('Y-m-d'));
-        //return $clientFeedback;
-        $clientFeedback->save();
+        DB::transaction(function () use($feedbackData){
+            //Save a new AppraisalSurvey record
+            $clientFeedback = new AppraisalSurvey($feedbackData);
+            $clientFeedback->feedback_date = time();
+            $clientFeedback->save();
+
+            //Save survey result for each question
+            $questionIDs = $feedbackData['questions'];
+            if (count($questionIDs) > 0){
+                foreach ($questionIDs as $questionID => $result) {
+                    if ($result > 0) $clientFeedback->surveyQuestions()->attach($questionID, ['result' => $result]);
+                }
+            }
+        });
 
         //Redirect the client feedback page with a success message
         AuditReportsController::store('Performance Appraisal', 'New Customer Feedbacked', "Customer feedback added successfully", 0);

@@ -7,7 +7,7 @@
                 <p>Generated report</p>
             </div>
             <!-- /.box-header -->
-            <form class="form-horizontal" method="POST" action="/survey/reports/print" target="_blank">
+            <form method="POST" action="/survey/reports/print" target="_blank">
                 {{ csrf_field() }}
                 <input type="hidden" name="hr_person_id" value="{{ $empID }}">
                 <input type="hidden" name="date_from" value="{{ $dateFrom }}">
@@ -20,7 +20,7 @@
                             | &nbsp; &nbsp; <strong>Report Period:</strong> <em>{{ ($strDateFrom) ? $strDateFrom : '[first entry]' . ' - ' . ($strDateTo) ? $strDateTo : '[last entry]' }}</em> &nbsp; &nbsp;
                         @endif
                     </p>
-                    <table class="table table-striped">
+                    <table class="table table-striped table-bordered">
                         <tr>
                             <th style="width: 5px">#</th>
                             <th nowrap>Feedback Date</th>
@@ -36,52 +36,16 @@
                                 <td nowrap>{{ $empRating->client_name }}</td>
                                 <td nowrap>{{ $empRating->booking_number }}</td>
                                 <td style="width: 244px;">
-                                    @if($empRating->attitude_enthusiasm)
+                                    @foreach($empRating->surveyQuestions as $surveyQuestion)
                                         <div class="form-group" style="margin-bottom: 0;">
-                                            <label class="col-sm-3 control-label">Attitude</label>
-                                            <div class="col-sm-9">
-                                                <input value="{{ $empRating->attitude_enthusiasm }}" class="form-control rating-loading" data-size='xs'>
-                                            </div>
+                                            <label class="control-label"><em>{{ $surveyQuestion->description }}</em></label>
+                                            <input value="{{ $surveyQuestion->pivot->result }}" class="form-control rating-loading" data-size='xs'>
                                         </div>
-                                    @endif
-                                    @if($empRating->expertise)
-                                        <div class="form-group" style="margin-bottom: 0;">
-                                            <label class="col-sm-3 control-label">Expertise</label>
-                                            <div class="col-sm-9">
-                                                <input value="{{ $empRating->expertise }}" class="form-control rating-loading" data-size='xs'>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if($empRating->efficiency)
-                                        <div class="form-group" style="margin-bottom: 0;">
-                                            <label class="col-sm-3 control-label">Efficiency</label>
-                                            <div class="col-sm-9">
-                                                <input value="{{ $empRating->efficiency }}" class="form-control rating-loading" data-size='xs'>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if($empRating->attentive_listening)
-                                        <div class="form-group" style="margin-bottom: 0;">
-                                            <label class="col-sm-3 control-label">Listening</label>
-                                            <div class="col-sm-9">
-                                                <input value="{{ $empRating->attentive_listening }}" class="form-control rating-loading" data-size='xs'>
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if($empRating->general_overall_assistance)
-                                        <div class="form-group" style="margin-bottom: 0;">
-                                            <label class="col-sm-3 control-label">Assistance</label>
-                                            <div class="col-sm-9">
-                                                <input value="{{ $empRating->general_overall_assistance }}" class="form-control rating-loading" data-size='xs'>
-                                            </div>
-                                        </div>
-                                    @endif
+                                    @endforeach
                                     @if($empRating->avg_rating)
                                         <div class="form-group" style="margin-bottom: 0; color: blue;">
-                                            <label class="col-sm-3 control-label">Total</label>
-                                            <div class="col-sm-9">
-                                                <input value="{{ $empRating->avg_rating }}" class="form-control rating-loading" data-size='xs'>
-                                            </div>
+                                            <label class="control-label"><em>Total Rating</em></label>
+                                            <input value="{{ $empRating->avg_rating }}" class="form-control rating-loading" data-size='xs'>
                                         </div>
                                     @endif
                                 </td>
