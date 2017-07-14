@@ -65,10 +65,13 @@ Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrU
 
 
 #Business Card
+Route::get('hr/user_card', 'BusinessCardsController@userCard');
 Route::get('hr/business_card', 'BusinessCardsController@view');
 Route::get('hr/active_card', 'BusinessCardsController@cards');
 Route::post('hr/search', 'BusinessCardsController@getSearch');
-Route::get('/hr/card_active/{lev}', 'BusinessCardsController@activeCard');
+Route::post('hr/print_card', 'BusinessCardsController@busibess_card');
+Route::post('/hr/card_active', 'BusinessCardsController@activeCard');
+Route::post('hr/emial', 'LeaveController@getEmail');
 
 
 //#Leave Management
@@ -417,6 +420,9 @@ Route::get('api/appraisal/emp/bottomten/{divLvl}/{divID}', 'AppraisalGraphsContr
 Route::get('api/appraisal/staffunder/{managerID}', 'AppraisalGraphsController@getSubordinates')->name('staffperform');
 Route::get('api/leave/availableBalance/{hr_id}/{levID}', 'LeaveApplicationController@availableDays');
 Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController@negativeDays');
+
+Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getMeetingEmployees')->name('meetingTasksEmployee');
+Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
 
 //Email Test
 Route::get('testemail', function () {

@@ -188,11 +188,11 @@ class TaskManagementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
     */
-    public static function store($description='',$duedate='',$startDate='',$escalationID=0,$employeeID=0,$taskType=0
+    public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
 	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0)
     {
 		//convert dates to unix time stamp
-        if (!empty($duedate)) {
+        /*if (!empty($duedate)) {
             $duedate = str_replace('/', '-', $duedate);
             $intduedate = strtotime($duedate);
         }
@@ -201,7 +201,8 @@ class TaskManagementController extends Controller
             $startDate = str_replace('/', '-', $startDate);
             $intstartDate = strtotime($startDate);
         }
-		else $intstartDate = 0;
+		else $intstartDate = 0;*/
+
 		$user = Auth::user();
 		$EmployeeTasks = new EmployeeTasks();
 		$EmployeeTasks->induction_id = $inductionID;
@@ -217,8 +218,8 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->employee_id = $employeeID;
 		$EmployeeTasks->library_id = $libraryID;
 		$EmployeeTasks->description = $description;
-		$EmployeeTasks->due_date = $intduedate;
-		$EmployeeTasks->start_date = $intstartDate;
+		$EmployeeTasks->due_date = $duedate;
+		$EmployeeTasks->start_date = $startDate;
 		$EmployeeTasks->administrator_id = $administratorID;
 		$EmployeeTasks->check_by_id = $checkByID;
 		// Save task

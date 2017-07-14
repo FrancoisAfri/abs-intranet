@@ -6,6 +6,8 @@ use App\CompanyIdentity;
 use App\module_access;
 use App\module_ribbons;
 use App\modules;
+use App\business_card;
+use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
@@ -22,23 +24,31 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $companyDetails = CompanyIdentity::systemSettings();
-        //$companyDetails = (Schema::hasTable('company_identities')) ? CompanyIdentity::first() : null;
-
-        //Compose header
-        view()->composer('layouts.header', function ($view) use ($companyDetails) {
+            view()->composer('layouts.header', function ($view) use ($companyDetails) {
             $user = Auth::user()->load('person');
+
             $defaultAvatar = ($user->person->gender === 0) ? 'avatars/f-silhouette.jpg' : 'avatars/m-silhouette.jpg';
             $avatar = $user->person->profile_pic;
             $position = ($user->person->position) ? DB::table('hr_positions')->find($user->person->position)->name : '';
+            
+              $row = business_card::count();
+                     
+                  if ($row<1) {  $status = 0;     
+                    }else{$business_card = DB::table('business_card')->where('hr_id' , $user->id)->get();          
+                       $status = $business_card->first()->status; 
+                    }
             $headerNameBold = $companyDetails['header_name_bold'];
             $headerNameRegular = $companyDetails['header_name_regular'];
             $headerAcronymBold = $companyDetails['header_acronym_bold'];
             $headerAcronymRegular = $companyDetails['header_acronym_regular'];
 
+            $data['status'] = 'status';
+
             $data['user'] = $user;
             $data['full_name'] = $user->person->first_name . " " . $user->person->surname;
             $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("avatars/$avatar") : Storage::disk('local')->url($defaultAvatar);
             $data['position'] = $position;
+            $data['status'] = $status;
             $data['headerNameBold'] = $headerNameBold;
             $data['headerNameRegular'] = $headerNameRegular;
             $data['headerAcronymBold'] = $headerAcronymBold;

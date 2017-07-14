@@ -257,7 +257,10 @@ class meetingMinutesAdminController extends Controller
         ]);
 		$taskData = $request->all();
 		unset($taskData['_token']);
-		$duedate = strtotime($taskData['due_date']);
+		if (!empty($taskData['due_date'])) {
+            $taskData['due_date'] = str_replace('/', '-', $taskData['due_date']);
+            $duedate = strtotime($taskData['due_date']);
+        }
 		$startDate = strtotime(date('Y-m-d'));
 		$employeeID = $taskData['employee_id'];
 		$escalationPerson = HRPerson::where('id', $employeeID)->first();
