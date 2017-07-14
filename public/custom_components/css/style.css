@@ -55,3 +55,144 @@ text-align:center;
 width:150px; /* fixed width */
 text-decoration:none; 
 }
+/*
+*/
+/*
+Align the 
+*/
+#content {
+    border: 2px ;
+    width: 100%;
+    height: 80%;
+   /* position: relative;*/
+    top: -15px;
+    left: -15px;
+    padding: 10px;
+  }
+
+  #content .A {
+    border: 3px ;
+    width:50%;
+    height: 50%;
+    float: left;
+   /* background: purple;*/
+  }
+
+  #content .B {
+  /*  border: 2px ;*/
+    width:50%;
+    height: 50%;
+    float: left;
+    /*background: purple;*/
+  }
+
+  #content .C {
+    border: 2px ;
+    width:50%;
+    height: 50%;
+    float: left;
+    /*background: purple;*/
+  }
+
+  #content .D {
+    border: 2px ;
+    width:50%;
+    height: 50%;
+    float: left;
+    /*background: purple;*/
+  }
+
+#content, #content > div {
+      -webkit-box-sixing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+}
+/**/
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  /* outline: 1px dotted salmon; */
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  
+  /* font-size: 14px; */
+  /* Helvetica/Arial-based sans serif stack */
+  font: 125%/1.5 Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.flexbox-parent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* align items in Main Axis */
+  align-items: stretch;
+  /* align items in Cross Axis */
+  align-content: stretch;
+  /* Extra space in Cross Axis */
+  background: rgba(255, 255, 255, .1);
+}
+
+.flexbox-item {
+  padding: 5px;
+}
+
+.flexbox-item-grow {
+  flex: 1;
+  /* same as flex: 1 1 auto; */
+}
+
+.fill-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* align items in Main Axis */
+  align-items: stretch;
+  /* align items in Cross Axis */
+  align-content: stretch;
+  /* Extra space in Cross Axis */
+}
+
+.fill-area-content {
+  background: rgba(55, 155, 225, .1);
+  padding: 7px;
+  /* Needed for when the area gets squished too far and there is content that can't be displayed */
+  overflow: hidden;
+}
+.panel-body {
+  /* height: 480px; */
+  height: calc(100vh - 200px);
+  overflow-y: auto; 
+}
+.header-page,
+.footer-page {
+  background-color: rgba(0,0,0,.75);
+  color: #fff;
+  text-align: center;
+  font-weight: 300;
+  height: 40px;
+}
+.header-page h1 {
+  font-size: 2em;
+  line-height: 1.5;
+  margin: 0;
+}
+.footer-page small {
+  display: inline-block;
+  font-size: 1.25em;
+  margin: .25em auto;
+} 

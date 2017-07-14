@@ -65,7 +65,7 @@
                               </td>
                              
 
-                               <td>{{ !empty($approval->status) ? $approval->status : '' }}</td>    
+                               <td>{{ !empty($approval->leaveStatus) ? $approval->leaveStatus : '' }}</td>    
                                <!--  <td>{{ !empty($approval->leave_Days) ? $approval->leave_Days : '' }}</td> -->
                                 <td>
                                 <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$approval->id}}" onclick="postData({{$approval->id}}, 'approval_id')">Accept</button>

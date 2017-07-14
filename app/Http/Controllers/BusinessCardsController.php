@@ -10,11 +10,16 @@ use App\DivisionLevel;
 use App\employee_documents;
 use App\doc_type;
 use App\User;
+use App\leave_custom;
 use App\business_card;
 use App\Province;
+use App\modules;
+use App\module_access;
+USE App\module_ribbons;
 use App\doc_type_category;
 use App\DivisionLevelTwo;
-
+use App\companyidentity;
+// use App\Http\Controllers\modules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -67,7 +72,133 @@ class BusinessCardsController extends Controller
         return view('hr.search_users')->with($data);
     }
 
-    	 public function cards() {
+    	public function userCard() {
+        $data['page_title'] = " ";
+        $data['page_description'] = "User Business Card";
+        $data['breadcrumb'] = [
+            ['title' => 'HR', 'path' => '/business_card', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Business Cards', 'active' => 1, 'is_module' => 0]
+        ];
+
+         $userLogged = Auth::user()->person->id;
+         
+         $names = HRPerson::where('id' , $userLogged)->get();
+     	 $name = $names->first()->first_name ;
+     	 $row = CompanyIdentity::count();
+     	 if($row < 1)
+     	 {
+
+         $website  = 'www.afrixcel.co.za';  
+                
+     	 }else{
+     	 	 $componyIdenities=companyidentity::orderBy('id', 'desc')->get();
+
+     	 	 $website = $componyIdenities->first()->company_website;
+     	 	
+     	 }
+
+     	 $companyDetails = CompanyIdentity::systemSettings(); 
+     	
+     	
+     	 $surname = $names->first()->surname ;
+     
+
+	    // $avatar = $user->person->profile_pic;
+		 $person  = DB::table('hr_people')
+					->select('hr_people.*' , 'business_card.status as card_status')
+					->leftJoin('business_card','hr_people.id', '=','business_card.hr_id')
+					// ->leftJoin()
+					->where('hr_people.id' , $userLogged)
+					->orderBy('first_name')
+					->orderBy('surname')
+					->get();
+ 	 // return $person;
+
+ 
+
+					#compony logo
+        view()->composer('layouts.sidebar', function ($view) use ($companyDetails) {
+            $user = Auth::user();
+            $modulesAccess = modules::whereHas('moduleRibbon', function ($query) {
+                $query->where('active', 1);
+            })->where('active', 1)
+              ->orderBy('name', 'ASC')->get();
+
+            $data['company_logo'] = $companyDetails['company_logo_url'];
+            $data['modulesAccess'] = $modulesAccess;
+            $view->with($data);
+        });
+     
+        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        $data['company_logo'] = $companyDetails['company_logo_url'];
+        // $data['componyIdenities'] = $componyIdenities;
+        $data['website'] = 'www.afrixcel.co.za';
+        $data['name'] = $name;
+        $data['surname']= $surname;
+        $data['company_logos'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+        $data['person'] = $person;
+        $data['active_mod'] = 'Employee Records';
+
+        $data['active_rib'] = 'Business card';
+		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        return view('hr.usercard')->with($data);
+
+    }
+    # print card
+        	public function busibess_card() {
+        $data['page_title'] = " ";
+        $data['page_description'] = "User Business Card";
+        $data['breadcrumb'] = [
+            ['title' => 'HR', 'path' => '/business_card', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Business Cards', 'active' => 1, 'is_module' => 0]
+        ];
+
+         $userLogged = Auth::user()->person->id;
+         $companyDetails = CompanyIdentity::systemSettings();
+     	 $componyIdenities=companyidentity::orderBy('id', 'desc')->get();
+     	 $names = HRPerson::where('id' , $userLogged)->get();
+     	 $name = $names->first()->first_name ;
+     	 $surname = $names->first()->surname ;
+     	 $website = $componyIdenities->first()->company_website;
+
+		 $person  = DB::table('hr_people')
+					->select('hr_people.*' , 'business_card.status as card_status')
+					->leftJoin('business_card','hr_people.id', '=','business_card.hr_id')
+					// ->leftJoin()
+					->where('hr_people.id' , $userLogged)
+					->orderBy('first_name')
+					->orderBy('surname')
+					->get();
+					#compony logo
+        view()->composer('layouts.sidebar', function ($view) use ($companyDetails) {
+            $user = Auth::user();
+            $modulesAccess = modules::whereHas('moduleRibbon', function ($query) {
+                $query->where('active', 1);
+            })->where('active', 1)
+              ->orderBy('name', 'ASC')->get();
+
+            $data['company_logo'] = $companyDetails['company_logo_url'];
+            $data['modulesAccess'] = $modulesAccess;
+            $view->with($data);
+        });
+     
+        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        $data['company_logo'] = $companyDetails['company_logo_url'];
+        $data['componyIdenities'] = $componyIdenities;
+        $data['website'] = $website;
+        $data['name'] = $name;
+        $data['surname']= $surname;
+        $data['company_logos'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+        $data['person'] = $person;
+        $data['active_mod'] = 'Employee Records';
+        $data['active_rib'] = 'Business card';
+		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        return view('hr.user_card_report')->with($data);
+
+    }
+    	 public function cards(User $user) {
 
         $data['page_title'] = "Activate Business Cards";
         $data['page_description'] = "User Business Cards";
@@ -78,6 +209,7 @@ class BusinessCardsController extends Controller
             ['title' => 'Business Cards', 'active' => 1, 'is_module' => 0]
         ];
 
+         $userLogged = Auth::user()->person->id;
         //$user->load('person');
         //$avatar = $user->person->profile_pic;
     	  $hr_people = DB::table('hr_people')->orderBy('first_name', 'surname')->get();
@@ -89,22 +221,17 @@ class BusinessCardsController extends Controller
         $document = DB::table('doc_type_category')->orderBy('id')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $division=DivisionLevelTwo::where('active', 1)->get();
+         $user = Auth::user()->load('person');
+       
+		 $avatar = $user->person->profile_pic;		
 
-
-        $persons  = DB::table('hr_people')
+         $persons  = DB::table('hr_people')
 					->select('hr_people.*' , 'business_card.status as card_status')
 					->leftJoin('business_card','hr_people.id', '=','business_card.hr_id')
-					->where('hr_people.status' ,1)
-					
 					->orderBy('first_name')
 					->orderBy('surname')
 					->get();
- 
-        // return $divisionLevels;
-    	//$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
-     
-     
-       
+
         $data['active_mod'] = 'Employee Records';
         $data['active_rib'] = 'Business card';
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
@@ -120,6 +247,35 @@ class BusinessCardsController extends Controller
         return view('hr.cards')->with($data);
     }
 
+    public function getEmail(Request $request) 
+    {
+    	 $this->validate($request, [
+            // 'name' => 'required',
+
+        ]);
+    	 $userLogged = Auth::user()->person->id;
+    	$emaildata = $request->all();
+		unset($leaveData['_token']);
+
+		$email = new business_card();
+		
+		$userDetails = HRPerson::where('id', $userLogged)->where('status', 1) -> select('first_name' , 'surname')->first();
+                                 $surname = $userDetails->surname;
+                               	 $firstname = $userDetails->first_name;
+
+		$emails = business_card::where('hr_id', $userLogged)->select('email') ->get()->first();
+								 $email = $emails->email;
+		
+
+		$email->email = $request->input('email');
+		//$email->hr_id = $userLogged;
+		$email->save();
+
+		#send email 
+         Mail::to($email)->send(new business_cardMail($firstname, $surname , $email));
+
+		 return response()->json();
+    }
 
 
         public function getSearch(Request $request) {
@@ -135,14 +291,15 @@ class BusinessCardsController extends Controller
         $personName = trim($request->employe_name);
       
         $aPositions = [];
-        // $cPositions = DB::table('hr_positions')->get()->first();
-        // foreach ($cPositions as $position) {
-        //     $aPositions[$position->id] = $position->name;
-        // }
-         // $employees = business_card::where('status', 1)->get();
-         // return $employees;
-          $business_card = DB::table('business_card')->get();
-         // return $business_card;
+   		
+   		$business_card = new business_card();
+
+        $business_card = $business_card::orderBy('hr_id', 'asc')->get();
+        if (!empty($business_card))
+         $business_card = $business_card->load('HrPersons');
+
+         //return $business_card;
+
         $division5 = !empty($results['division_level_5']) ? $results['division_level_5'] : 0;
 		$division4 = !empty($results['division_level_4']) ? $results['division_level_4'] : 0;
 		$division3 = !empty($results['division_level_3']) ? $results['division_level_3'] : 0;
@@ -155,7 +312,7 @@ class BusinessCardsController extends Controller
 		$persons  = DB::table('hr_people')
 					->select('hr_people.*' , 'business_card.status as card_status')
 					->leftJoin('business_card','hr_people.id', '=','business_card.hr_id')
-					->where('hr_people.status' ,1)
+					// ->where('hr_people.status' ,1)
 					->where(function ($query) use ($division5) {
 						if (!empty($division5)) {
 							$query->where('division_level_5', $division5);
@@ -183,14 +340,13 @@ class BusinessCardsController extends Controller
 					})
 					->where(function ($query) use ($personName) {
 						if (!empty($personName)) {
-							$query->where('id', $personName);
+							$query->where('hr_people.id', $personName);
 						}
 					})
 					->orderBy('first_name')
 					->orderBy('surname')
 					->get();
-
-		 //return $persons;
+	
 		$data['business_card'] = "business_card";
         $data['page_title'] = "Business Cards";
         $data['page_description'] = "List of users found";
@@ -209,31 +365,38 @@ class BusinessCardsController extends Controller
         return view('hr.users')->with($data);
     }
 
-      public function activeCard(business_card $lev) 
-    {
-       if ($lev->status == 1) $stastus = 0;
-        else $stastus = 1;
+      public function activeCard(Request $request , business_card $business_card ) {
+       
+      $this->validate($request, [   
+		    // 'date_uploaded' => 'required',
+        ]);
+		$results = $request->all();		
+		 //Exclude empty fields from query
+		unset($results['_token']);
+		foreach ($results as $key => $value)
+		{
+			if (empty($results[$key])) {
+				unset($results[$key]);
+			}
+		}
+		$emp = $count = $depID = 0;
+		$user = Auth::user();
+		foreach ($results as $key => $sValue) 
+		{
+			if (strlen(strstr($key, 'selected')))
+			{
+				$aValue = explode("_", $key);
+				$unit = $aValue[0];
+				$persons_id = $aValue[1];
 
-        $lev->status = $stastus;
-        $lev->save();
-        return back();
-    }
+				if (count($sValue) > 1){
+					$status = $sValue[1];
+				}else $status = $sValue[0];		
+		$business_card->updateOrCreate(['hr_id' => $persons_id], ['status' => $status]);
+				}
+			}
+			return redirect("/hr/active_card");
+		}
+	}
 
 
-  //   public function activeCard(Request $request){
-  //   	 $this->validate($request, [   
-		//     // 'date_uploaded' => 'required',
-  //       ]);
-		// $results = $request->all();
-
-		// unset($results['_token']);
-		// return $results;
-		//  //return view('hr.users');
-		//  $business_card = DB::table('business_card')->get();
-		//  $data['business_card'] = "business_card";
-
-
-
-  //   }
-
-}
