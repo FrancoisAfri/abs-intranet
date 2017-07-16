@@ -28,7 +28,7 @@ class EmployeeTasksWidgetController extends Controller
     //returns a group's avg performance from jan to last month or a list of emp from that group and their avg performances
     public static function empGroupPerformance($divID, $divLvl, $meetingtask = false, $inductiontask = false) {
 		$atual    = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-		$today    = mktime(0, 0, 0, date('m'), date('d')+14, date('Y'));
+		$today    = mktime(0, 0, 0, date('m'), date('d')+30, date('Y'));
 		if (!empty($meetingtask)) $taskType = 2;
 		else $taskType = 1;
 		$tasks = DB::table('hr_people')
