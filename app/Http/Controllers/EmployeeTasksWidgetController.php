@@ -28,7 +28,7 @@ class EmployeeTasksWidgetController extends Controller
     //returns a group's avg performance from jan to last month or a list of emp from that group and their avg performances
     public static function empGroupPerformance($divID, $divLvl, $meetingtask = false, $inductiontask = false) {
 		$atual    = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-		$today    = mktime(0, 0, 0, date('m'), date('d')+30, date('Y'));
+		$today    = mktime(0, 0, 0, date('m'), date('d')+14, date('Y'));
 		if (!empty($meetingtask)) $taskType = 2;
 		else $taskType = 1;
 		$tasks = DB::table('hr_people')
@@ -42,12 +42,13 @@ class EmployeeTasksWidgetController extends Controller
 		elseif ($divLvl == 3) $query->where('division_level_3', $divID);
 		elseif ($divLvl == 2) $query->where('division_level_2', $divID);
 		elseif ($divLvl == 1) $query->where('division_level_1', $divID);})
-		->where(function ($query) use ($atual, $today) {
+		/*->where(function ($query) use ($atual, $today) {
 		if ($atual > 0 && $today  > 0) {
 			$query->whereBetween('employee_tasks.due_date', [$atual, $today]);
 		}
-		})
+		})*/
 		->where('employee_tasks.status', '<', 4)
+		->where('employee_tasks.due_date', '<=', $today)
 		->where('hr_people.status', '=', 1)
 		->where('employee_tasks.task_type', $taskType)
 		->orderBy('employee_tasks.employee_id')
