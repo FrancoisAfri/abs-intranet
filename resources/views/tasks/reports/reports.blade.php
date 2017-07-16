@@ -2,7 +2,9 @@
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap file input -->
+    <!-- iCheck -->
+	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
+	<!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
@@ -18,11 +20,22 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST" action="/induction/reports">
+                <form class="form-horizontal"  id="report_form" method="POST">
                     {{ csrf_field() }}
 
                     <div class="box-body">
-					<div class="form-group">
+						<div class="form-group{{ $errors->has('meeting_type') ? ' has-error' : '' }}">
+							<label for="meeting_type" class="col-sm-3 control-label">Report Type</label>
+							<div class="col-sm-9">
+								<div class="input-group">
+									<select class="form-control" name="report_type" id="report_type" placeholder="Select Report Type"  onchange="changetype(this.value)">
+										<option value="1" selected>Induction Tasks</option>
+										<option value="2">Meeting Tasks</option>
+									</select>
+								</div>
+							</div>
+                        </div>
+						<div class="form-group inductionTasks">
                             <label for="company_id" class="col-sm-3 control-label">Client</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
@@ -45,7 +58,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="creation_date" name="creation_date" value="" placeholder="Select Induction Date...">
+								<input type="text" class="form-control daterangepicker" id="creation_date" name="creation_date" value="" placeholder="Select Due Date...">
                                 </div>
                             </div>
                         </div>
@@ -56,12 +69,12 @@
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="completion_date" name="completion_date" value="" placeholder="Select Induction Date...">
+								<input type="text" class="form-control daterangepicker" id="completion_date" name="completion_date" value="" placeholder="Select Completion Date...">
                                 </div>
                             </div>
                         </div>
 						
-						<div class="form-group">
+						<div class="form-group inductionTasks">
                             <label for="induction_title" class="col-sm-3 control-label">Induction Title</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
@@ -69,6 +82,17 @@
 										<i class="fa fa-user"></i>
 									</div>
 									<input type="text" class="form-control" id="induction_title" name="induction_title" placeholder="Enter an Title...">
+								</div>
+                            </div>
+                        </div>
+						<div class="form-group meetingTasks">
+                            <label for="meeting_name" class="col-sm-3 control-label">Meeting Title</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control" id="meeting_name" name="meeting_name" placeholder="Enter an Title...">
 								</div>
                             </div>
                         </div>
@@ -144,7 +168,9 @@
     <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
     <!-- optionally if you need translation for your language then include locale file as mentioned below -->
     <!--<script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
-    <!-- 		//Date picker
+    <!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>	
+	<!-- 		//Date picker
 		$('.datepicker').datepicker({
 			format: 'dd/mm/yyyy',
 			endDate: '-1d',
@@ -160,14 +186,44 @@
 		 $(function () {
 			//Initialize Select2 Elements
             $(".select2").select2();
-		//Date Range picker
-		$('.daterangepicker').daterangepicker({
-			format: 'dd/mm/yyyy',
-			endDate: '-1d',
-			autoclose: true
-		});
+			//Date Range picker
+			$('.daterangepicker').daterangepicker({
+				format: 'dd/mm/yyyy',
+				endDate: '-1d',
+				autoclose: true
+			});
+			//Initialize iCheck/iRadio Elements
+			$('input').iCheck({
+				checkboxClass: 'icheckbox_square-green',
+				radioClass: 'iradio_square-green',
+				increaseArea: '20%' // optional
+			});
+			$('#report_form').attr('action', '/task/indtuction_report');
         });
         //Phone mask
         $("[data-mask]").inputmask();
+		function changetype(type)
+		{
+			if (type == 1)
+			{
+				$('.inductionTasks').show();
+				$('.meetingTasks').hide();
+				$('#report_form').attr('action', '/task/indtuction_report');
+			}
+			else if (type == 2)
+			{
+				$('.inductionTasks').hide();
+				$('.meetingTasks').show();
+				$('#report_form').attr('action', '/task/meeting_report');
+			}
+			/*else if (type == 3)
+			{
+				$('.programmes').hide();
+				$('.projects').hide();
+				$('.activities').show();
+				$('#report_form').attr('action', '/activity/search');
+			}*/
+				
+		}
     </script>
 @endsection
