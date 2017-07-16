@@ -22,7 +22,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-body">
-					<div class="form-group">
+						<div class="form-group">
                             <label for="company_id" class="col-sm-3 control-label">Client</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
@@ -45,7 +45,7 @@
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="creation_date" name="creation_date" value="" placeholder="Select Induction Date...">
+								<input type="text" class="form-control daterangepicker" id="creation_date" name="creation_date" value="" placeholder="Select Due Date...">
                                 </div>
                             </div>
                         </div>
@@ -56,11 +56,10 @@
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="completion_date" name="completion_date" value="" placeholder="Select Induction Date...">
+								<input type="text" class="form-control daterangepicker" id="completion_date" name="completion_date" value="" placeholder="Select Completion Date...">
                                 </div>
                             </div>
                         </div>
-						
 						<div class="form-group">
                             <label for="induction_title" class="col-sm-3 control-label">Induction Title</label>
                             <div class="col-sm-9">
