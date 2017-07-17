@@ -368,6 +368,9 @@ Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@pri
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
 // Task Management
 Route::get('/tasks/task_report', 'TaskManagementController@report');
+Route::post('/task/indtuction_report', 'InductionAdminController@getReport');
+Route::post('/task/meeting_report', 'TaskManagementController@getReport');
+Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');

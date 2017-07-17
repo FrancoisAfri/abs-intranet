@@ -52,8 +52,7 @@
 			<div class="box-body">
 				<table class="table table-striped">
 					<tr>
-						<th>Induction Title</th>
-						<th>Compamy</th>
+						<th>Meeting Title</th>
 						<th>Task Description</th>
 						<th>Person Responsible</th>
 						<th>Status</th>
@@ -65,8 +64,7 @@
 					@if(count($employeesTasks) > 0)
 						@foreach($employeesTasks as $employeesTask)
 							<tr>
-								<td>{{ !empty($employeesTask->induction_title) ? $employeesTask->induction_title : '' }}</td>
-								<td>{{ !empty($employeesTask->comp_name) ? $employeesTask->comp_name : '' }}</td>
+								<td>{{ !empty($employeesTask->meeting_name) ? $employeesTask->meeting_name : '' }}</td>
 								<td style="width:200px;">{{ !empty($employeesTask->description) ? $employeesTask->description : '' }}</td>
 								<td>{{ !empty($employeesTask->firstname) && !empty($employeesTask->surname) ? $employeesTask->firstname.' '.$employeesTask->surname : '' }}</td>
 								<td>{{ (!empty($employeesTask->status)) ?  $taskStatus[$employeesTask->status] : ''}} </td>

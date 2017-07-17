@@ -4,7 +4,7 @@
         <div class="col-sm-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Audit Report</h3>
+                    <h3 class="box-title">Induction Tasks Report</h3>
                 </div>
                 <!-- /.box-header -->
 				<form class="form-horizontal" method="POST" action="/induction_tasks/print">
