@@ -23,7 +23,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <p class="text-center">
                                 <strong>My Performance For {{ date('Y') }}</strong>
                             </p>
@@ -33,6 +33,15 @@
                                 <canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>
                             </div>
                             <!-- /.chart-responsive -->
+                        </div>
+                        <!-- Appraised months list col -->
+                        <div class="col-md-4">
+                            <p class="text-center">
+                                <strong>Appraised Months List</strong>
+                            </p>
+                            <div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
+                                <ul class="nav nav-pills nav-stacked" id="emp-appraised-month-list"></ul>
+                            </div>
                         </div>
                     </div>
                     <!-- /.row -->
@@ -561,7 +570,7 @@
             //Initialize Select2 Elements
             $(".select2").select2();
 
-             $('#Apply').click(function () {
+            $('#Apply').click(function () {
                 location.href = '/leave/application';
             });
             //initialise matchHeight on widgets
@@ -666,7 +675,8 @@
             var empID = parseInt('{{ $user->person->id }}');
             var empChartCanvas = $('#empMonthlyPerformanceChart');
             var loadingWheel = $('#loading_overlay_emp_monthly_appraisal');
-            loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
+            var empAppraisedMonthList = $('#emp-appraised-month-list');
+            loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
 
             //Company appraisal
             if (canViewCPWidget == 1) {
@@ -722,9 +732,10 @@
                     var empName = linkDiv.data('emp_name');
                     var empChartCanvas = $('#empMonthlyPerformanceModalChart');
                     var loadingWheel = $('#lo-emp-year-performance-modal');
+                    var empAppraisedMonthList = $('#emp-appraised-month-modal-list');
                     var modalWin = $(this);
                     modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
-                    loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
+                    loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
                 });
                 $('#emp-year-performance-modal').on('hidden.bs.modal', function (e) {
                     $('#lo-emp-year-performance-modal').show();

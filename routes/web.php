@@ -255,6 +255,7 @@ Route::get('appraisal/{empID}/viewappraisal', 'AppraisalSearchController@viewApp
 Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasView');
 Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
+Route::get('appraisal/search_results/{empID}/{monthName}', 'AppraisalSearchController@searchResultsWithParameter');
 Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
 
 //  Emp appraisal and 360 appraisal
