@@ -10,7 +10,7 @@
                 <div class="box box-default">
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <p class="text-center">
                                     <strong id="emp-year-chart-title">Employee Performance For {{ date('Y') }}</strong>
                                 </p>
@@ -20,6 +20,15 @@
                                     <canvas id="empMonthlyPerformanceModalChart" style="height: 220px;"></canvas>
                                 </div>
                                 <!-- /.chart-responsive -->
+                            </div>
+                            <!-- Appraised months list col -->
+                            <div class="col-md-4">
+                                <p class="text-center">
+                                    <strong>Appraised Months List</strong>
+                                </p>
+                                <div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
+                                    <ul class="nav nav-pills nav-stacked" id="emp-appraised-month-modal-list"></ul>
+                                </div>
                             </div>
                         </div>
                         <!-- /.row -->
