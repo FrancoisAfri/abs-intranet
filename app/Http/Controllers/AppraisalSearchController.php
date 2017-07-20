@@ -135,6 +135,48 @@ class AppraisalSearchController extends Controller
         AuditReportsController::store('Performance Appraisal', 'Search page accessed', "Accessed by User", 0);
         return view('appraisals.appraisal_search_results')->with($data);
     }
+
+    //search result with predefined parameters
+    public function searchResultsWithParameter($hrID, $monthName) {
+        $hrPersonID = !empty($hrID) ? $hrID : 0;
+        $dateUploaded = !empty($monthName) ? $monthName . ' ' . date('Y') : 0;
+
+        $employees = HRPerson::where('status', 1)
+            ->where(function ($query) use ($hrPersonID) {
+                if (!empty($hrPersonID)) {
+                    $query->where('id', $hrPersonID);
+                }
+            })
+            ->orderBy('first_name')
+            ->orderBy('surname')
+            ->get();
+
+        $scoresArray = array();
+        foreach ($employees as $employee)
+        {
+            if (empty($employee->position)) continue;
+            if (!empty($dateUploaded))
+                $scoresArray[] = AppraisalKPIResult::empAppraisal($employee->id, $dateUploaded);
+            else
+                $scoresArray[] = AppraisalKPIResult::empAppraisal($employee->id);
+        }
+
+        $data['page_title'] = "Appraisals Search Results";
+        $data['page_description'] = "Appraisals Search Results";
+        $data['breadcrumb'] = [
+            ['title' => 'Performance Appraisal', 'path' => '/appraisal/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['scoresArray'] = $scoresArray;
+        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_rib'] = 'Search';
+        $data['year'] = date('Y');
+        //return $data;
+        AuditReportsController::store('Performance Appraisal', 'Search page accessed', "Accessed by User", 0);
+        return view('appraisals.appraisal_search_results')->with($data);
+    }
+
 	public function kpasView($empID, $monthYear)
     {
 		$kpasArray = array(); 
