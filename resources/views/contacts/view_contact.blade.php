@@ -21,7 +21,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="/contacts/{{ $user->id }}" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="/contacts/{{ $contactPerson->id }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
 
@@ -34,7 +34,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $user->person->first_name }}" placeholder="First Name" required>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $contactPerson->first_name }}" placeholder="First Name" required>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ $user->person->surname }}" placeholder="Surname" required>
+                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ $contactPerson->surname }}" placeholder="Surname" required>
                                 </div>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                                         <select id="company_id" name="company_id" class="form-control">
                                             <option value="">*** Select a Company ***</option>
                                             @foreach($companies as $company)
-                                                <option value="{{ $company->id }}" {{ ($user->person->company_id == $company->id) ? ' selected' : '' }}>{{ $company->name }}</option>
+                                                <option value="{{ $company->id }}" {{ ($contactPerson->company_id == $company->id) ? ' selected' : '' }}>{{ $company->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -77,7 +77,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-phone"></i>
                                     </div>
-                                    <input type="text" class="form-control" name="cell_number" value="{{ $user->person->cell_number }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
+                                    <input type="text" class="form-control" name="cell_number" value="{{ $contactPerson->cell_number }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-envelope"></i>
                                     </div>
-                                    <input type="email" class="form-control" id="email" name="email" value="{{ $user->person->email }}" placeholder="Email" required>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ $contactPerson->email }}" placeholder="Email" required>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <textarea name="res_address" class="form-control" placeholder="Address">{{ $user->person->res_address }}</textarea>
+                                    <textarea name="res_address" class="form-control" placeholder="Address">{{ $contactPerson->res_address }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="res_suburb" name="res_suburb" value="{{ $user->person->res_suburb }}" placeholder="Suburb">
+                                    <input type="text" class="form-control" id="res_suburb" name="res_suburb" value="{{ $contactPerson->res_suburb }}" placeholder="Suburb">
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="res_city" name="res_city" value="{{ $user->person->res_city }}" placeholder="City">
+                                    <input type="text" class="form-control" id="res_city" name="res_city" value="{{ $contactPerson->res_city }}" placeholder="City">
                                 </div>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <input type="number" class="form-control" id="res_postal_code" name="res_postal_code" value="{{ $user->person->res_postal_code }}" placeholder="Postal Code">
+                                    <input type="number" class="form-control" id="res_postal_code" name="res_postal_code" value="{{ $contactPerson->res_postal_code }}" placeholder="Postal Code">
                                 </div>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                                     <select name="res_province_id" class="form-control">
                                         <option value="">*** Select Your Province ***</option>
                                         @foreach($provinces as $province)
-                                            <option value="{{ $province->id }}" {{ ($user->person->res_province_id == $province->id) ? ' selected' : '' }}>{{ $province->name }}</option>
+                                            <option value="{{ $province->id }}" {{ ($contactPerson->res_province_id == $province->id) ? ' selected' : '' }}>{{ $province->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -166,7 +166,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" name="date_of_birth" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_of_birth) ? date('d/m/Y',$user->person->date_of_birth) : '' }}">
+                                    <input type="text" class="form-control datepicker" name="date_of_birth" placeholder="  dd/mm/yyyy" value="{{ ($contactPerson->date_of_birth) ? date('d/m/Y',$contactPerson->date_of_birth) : '' }}">
                                 </div>
                             </div>
                         </div>
@@ -180,8 +180,8 @@
                                     </div>
                                     <select name="gender" class="form-control">
                                         <option value="">*** Select Your gender ***</option>
-                                        <option value="1" {{ ($user->person->gender === 1) ? ' selected' : '' }}>Male</option>
-                                        <option value="0" {{ ($user->person->gender === 0) ? ' selected' : '' }}>Female</option>
+                                        <option value="1" {{ ($contactPerson->gender === 1) ? ' selected' : '' }}>Male</option>
+                                        <option value="0" {{ ($contactPerson->gender === 0) ? ' selected' : '' }}>Female</option>
                                     </select>
                                 </div>
                             </div>
@@ -194,7 +194,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="number" class="form-control" id="id_number" name="id_number" value="{{ $user->person->id_number }}" placeholder="ID Number">
+                                    <input type="number" class="form-control" id="id_number" name="id_number" value="{{ $contactPerson->id_number }}" placeholder="ID Number">
                                 </div>
                             </div>
                         </div>
@@ -206,7 +206,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ $user->person->passport_number }}" placeholder="Passport Number">
+                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ $contactPerson->passport_number }}" placeholder="Passport Number">
                                 </div>
                             </div>
                         </div>
@@ -221,7 +221,7 @@
                                     <select name="marital_status" class="form-control">
                                         <option value="">*** Select Your Marital Status ***</option>
                                         @foreach($marital_statuses as $marital_status)
-                                            <option value="{{ $marital_status->id }}" {{ ($user->person->marital_status == $marital_status->id) ? ' selected' : '' }}>{{ $marital_status->value }}</option>
+                                            <option value="{{ $marital_status->id }}" {{ ($contactPerson->marital_status == $marital_status->id) ? ' selected' : '' }}>{{ $marital_status->value }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -238,7 +238,7 @@
                                     <select name="ethnicity" class="form-control">
                                         <option value="">*** Select Your Ethnic Group ***</option>
                                         @foreach($ethnicities as $ethnicity)
-                                            <option value="{{ $ethnicity->id }}" {{ ($user->person->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option>
+                                            <option value="{{ $ethnicity->id }}" {{ ($contactPerson->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -273,7 +273,7 @@
 					</div>
                     <!-- 
 					
-						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$user->person->user_id}}, 'access');">Modules Access</button>/.box-footer -->
+						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$contactPerson->user_id}}, 'access');">Modules Access</button>/.box-footer -->
                 </form>
             </div>
             <!-- /.box -->
@@ -362,7 +362,7 @@
             $('#my-password').on('click', function() {
                 $.ajax({
                     method: 'POST',
-                    url: '{{ '/contacts/' . $user->id . '/pw' }}',
+                    url: '{{ '/contacts/' . $contactPerson->user_id . '/pw' }}',
                     data: {
                         current_password: $('#current_password').val(),
                         new_password: $('#new_password').val(),
@@ -427,7 +427,7 @@
             $('#user-password').on('click', function() {
                 $.ajax({
                     method: 'POST',
-                    url: '{{ '/users/' . $user->id . '/upw' }}',
+                    url: '{{ '/users/' . $contactPerson->user_id . '/upw' }}',
                     data: {
                         new_password: $('#new_password').val(),
                         _token: $('input[name=_token]').val()

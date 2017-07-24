@@ -106,25 +106,42 @@ class ContactsController extends Controller
         $this->validate($request, [
             'first_name' => 'required',
             'surname' => 'required',
-            'email' => 'unique:contacts_contacts,email',
+            'create_login' => 'required',
+            'email' => 'bail|unique:contacts_contacts,email|required_if:create_login,1',
             'cell_number' => 'unique:contacts_contacts,cell_number',
         ]);
-        $user = new User;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->type = 2;
-        $user->status = 1;
-        $user->save();
 
-        //Save ContactPerson record
-        $person = new ContactPerson($request->all());
+        $personData = $request->all();
+
+        //Cell number formatting
+        $personData['cell_number'] = str_replace(' ', '', $personData['cell_number']);
+        $personData['cell_number'] = str_replace('-', '', $personData['cell_number']);
+        $personData['cell_number'] = str_replace('(', '', $personData['cell_number']);
+        $personData['cell_number'] = str_replace(')', '', $personData['cell_number']);
+
+        //Create person object
+        $person = new ContactPerson($personData);
         $person->cell_number = (empty($person->cell_number)) ? null : $person->cell_number;
         $person->status = 1;
         if (!empty($request->company_id)) $person->company_id = $request->company_id;
-        $user->addPerson($person);
 
-        //Send email to client
-        //Mail::to("$user->email")->send(new ConfirmRegistration($user, $request->password));
+        $createLogin = (int) $request->input('create_login');
+        if ($createLogin === 1) {
+            //save user details
+            $user = new User;
+            $user->email = $request->email;
+            $generatedPassword = str_random(10);
+            $user->password = Hash::make($generatedPassword);
+            $user->type = 2;
+            $user->status = 1;
+            $user->save();
+
+            //Save ContactPerson record
+            $user->addPerson($person);
+
+            //Send email to client
+            Mail::to($user->email)->send(new ConfirmRegistration($user, $generatedPassword));
+        } else $person->save(); //save ContactPerson without login details
 
         //Notify admin about the new applicant
        /* $administrators = HRPerson::where('position', 2)->get();
@@ -134,7 +151,7 @@ class ContactsController extends Controller
 */
         //Redirect to all usr view
 		AuditReportsController::store('Contacts', 'New Contact Added', "Contact Successfully added", 0);
-        return redirect("/contacts/$user->id/edit")->with('success_add', "The contact has been added successfully.");
+        return redirect("/contacts/$person->id/edit")->with('success_add', "The contact has been added successfully.");
     }
 	
     /*public function edit(ContactPerson $contact) {
@@ -155,10 +172,8 @@ class ContactsController extends Controller
 		AuditReportsController::store('Contacts', 'Contact Edited', "Contact On Edit Mode", 0);
         return view('contacts.view_contact')->with($data);
     }*/
-	public function edit(User $user) {
-		
-        $user->load('person');
-        $avatar = $user->person->profile_pic;
+	public function edit(ContactPerson $person) {
+        $person->load('user');
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
@@ -168,8 +183,8 @@ class ContactsController extends Controller
         $data['back'] = "/contacts";
         $data['view_by_admin'] = 1;
 		
-        $data['user'] = $user;
-        $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("avatars/$avatar") : '';
+        $data['contactPerson'] = $person;
+        $data['avatar'] = $person->profile_pic_url;
         $data['provinces'] = $provinces;
         $data['ethnicities'] = $ethnicities;
         $data['marital_statuses'] = $marital_statuses;
@@ -269,7 +284,7 @@ class ContactsController extends Controller
         return redirect("/contacts/$contact->id/edit")->with('success_edit', "The contact details have been updated successfully.");
     }*/
 	
-	public function update(Request $request, User $user) {
+	public function update(Request $request, ContactPerson $contactPerson) {
         //exclude token, method and command fields from query.
         $person = $request->all();
         unset($person['_token'], $person['_method'], $person['command']);
@@ -314,19 +329,18 @@ class ContactsController extends Controller
         }
 
         //Update user and contact table
-        $user->update($person);
-        if (isset($person['company_id']) && $person['company_id'] > 0) $user->person->company_id = $person['company_id'];
-        $user->person()->update($person);
+        if ($contactPerson->user_id) $contactPerson->user()->update($person);
+        if (isset($person['company_id']) && $person['company_id'] > 0) $contactPerson->company_id = $person['company_id'];
+        $contactPerson->update($person);
 
         //Upload profile picture
         if ($request->hasFile('profile_pic')) {
             $fileExt = $request->file('profile_pic')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('profile_pic')->isValid()) {
-                $fileName = $user->id . "_avatar." . $fileExt;
+                $fileName = $contactPerson->user->id . "_avatar." . $fileExt;
                 $request->file('profile_pic')->storeAs('avatars', $fileName);
                 //Update file name in hr table
-                $user->person()->profile_pic = $fileName;
-                $user->person()->update(['profile_pic' => $fileName]);
+                $contactPerson->update(['profile_pic' => $fileName]);
             }
         }
 		AuditReportsController::store('Contacts', 'Record Updated', "Updated By User", 0);
@@ -337,8 +351,8 @@ class ContactsController extends Controller
         $personName = trim($request->person_name);
         $personIDNum = trim($request->id_number);
 
-		$persons = DB::table('contacts_contacts')
-		->where(function ($query) use ($personName) {
+		$persons = ContactPerson::
+		where(function ($query) use ($personName) {
 			if (!empty($personName)) {
 				$query->where('first_name', 'ILIKE', "%$personName%");
 			}
@@ -355,8 +369,6 @@ class ContactsController extends Controller
         $data['page_title'] = "Clients";
         $data['page_description'] = "List of clients found";
         $data['persons'] = $persons;
-        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
-        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
         $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],

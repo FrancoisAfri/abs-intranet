@@ -23,10 +23,10 @@
                         @foreach($persons as $person)
                             <li class="item">
                                 <div class="product-img">
-                                    <img src="{{ (!empty($person->profile_pic)) ? Storage::disk('local')->url("avatars/$person->profile_pic") : (($person->gender === 0) ? $f_silhouette : $m_silhouette) }}" alt="Profile Picture">
+                                    <img src="{{ $person->profile_pic_url }}" alt="Profile Picture">
                                 </div>
                                 <div class="product-info">
-                                    <a href="{{ '/contacts/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
+                                    <a href="{{ '/contacts/' . $person->id . '/edit' }}" class="product-title">{{ $person->full_name }}</a>
                                     <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span><!-- </a> -->
                         <span class="product-description">
                           {{ $person->email }}

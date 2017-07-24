@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ContactPerson extends Model
 {
@@ -17,5 +18,17 @@ class ContactPerson extends Model
     //Relationship contacts_contacts and user
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    //Full Name accessor
+    public function getFullNameAttribute() {
+        return $this->first_name . ' ' . $this->surname;
+    }
+
+    //Full Profile picture url accessor
+    public function getProfilePicUrlAttribute() {
+        $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        return (!empty($this->profile_pic)) ? Storage::disk('local')->url("avatars/$this->profile_pic") : (($this->gender === 0) ? $f_silhouette : $m_silhouette);
     }
 }
