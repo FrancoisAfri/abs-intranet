@@ -20,22 +20,11 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal"  id="report_form" method="POST">
+                <form class="form-horizontal"  id="search_form" method="POST">
                     {{ csrf_field() }}
 
                     <div class="box-body">
-						<div class="form-group{{ $errors->has('meeting_type') ? ' has-error' : '' }}">
-							<label for="meeting_type" class="col-sm-3 control-label">Report Type</label>
-							<div class="col-sm-9">
-								<div class="input-group">
-									<select class="form-control" name="report_type" id="report_type" placeholder="Select Report Type"  onchange="changetype(this.value)">
-										<option value="1" selected>Induction Tasks</option>
-										<option value="2">Meeting Tasks</option>
-									</select>
-								</div>
-							</div>
-                        </div>
-						<div class="form-group inductionTasks">
+						<div class="form-group">
                             <label for="company_id" class="col-sm-3 control-label">Client</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
@@ -52,48 +41,41 @@
                             </div>
                         </div>
 						<div class="form-group">
-                            <label for="induction_date" class="col-sm-3 control-label">Due Date</label>
+                            <label for="due_date" class="col-sm-3 control-label">Due Date</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="creation_date" name="creation_date" value="" placeholder="Select Due Date...">
+								<input type="text" class="form-control daterangepicker" id="due_date" name="due_date" value="" placeholder="Select Due Date...">
                                 </div>
                             </div>
                         </div>
 						<div class="form-group">
-                            <label for="induction_date" class="col-sm-3 control-label">Completion Date</label>
+                            <label for="task_number" class="col-sm-3 control-label">Task Number</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-user"></i>
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control" id="task_number" name="task_number" placeholder="Enter Task Number...">
 								</div>
-								<input type="text" class="form-control daterangepicker" id="completion_date" name="completion_date" value="" placeholder="Select Completion Date...">
+                            </div>
+                        </div>
+						<div class="form-group groups">
+                            <label for="employee_id" class="col-sm-3 control-label">Employees</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+									<div class="input-group-addon">
+                              			<i class="fa fa-user"></i>
+                            		</div>
+									<select class="form-control select2" style="width: 100%;" id="employee_id" name="employee_id">
+                                        <option selected="selected" value="0">*** Select an Employee ***</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                            </div>
-                        </div>
-						
-						<div class="form-group inductionTasks">
-                            <label for="induction_title" class="col-sm-3 control-label">Induction Title</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<input type="text" class="form-control" id="induction_title" name="induction_title" placeholder="Enter an Title...">
-								</div>
-                            </div>
-                        </div>
-						<div class="form-group meetingTasks">
-                            <label for="meeting_name" class="col-sm-3 control-label">Meeting Title</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<input type="text" class="form-control" id="meeting_name" name="meeting_name" placeholder="Enter an Title...">
-								</div>
                             </div>
                         </div>
 						<div class="form-group groups">
@@ -113,26 +95,10 @@
                                 </div>
                             </div>
                         </div>
-						<div class="form-group groups">
-                            <label for="employee_id" class="col-sm-3 control-label">Employees</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-									<div class="input-group-addon">
-                              			<i class="fa fa-user"></i>
-                            		</div>
-									<select class="form-control select2" style="width: 100%;" id="employee_id" name="employee_id">
-                                        <option selected="selected" value="0">*** Select an Employee ***</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                      </div>   
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Generate</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Search</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -198,8 +164,9 @@
 				radioClass: 'iradio_square-green',
 				increaseArea: '20%' // optional
 			});
-			$('#report_form').attr('action', '/task/indtuction_report');
+			$('#search_form').attr('action', '/task/search_results');
 			$('.meetingTasks').hide();
+			$('.heldeskTasks').hide();
         });
         //Phone mask
         $("[data-mask]").inputmask();
@@ -209,21 +176,26 @@
 			{
 				$('.inductionTasks').show();
 				$('.meetingTasks').hide();
-				$('#report_form').attr('action', '/task/indtuction_report');
+				$('.heldeskTasks').hide();
 			}
 			else if (type == 2)
 			{
 				$('.inductionTasks').hide();
 				$('.meetingTasks').show();
-				$('#report_form').attr('action', '/task/meeting_report');
+				$('.heldeskTasks').hide();
 			}
-			/*else if (type == 3)
+			else if (type == 3)
 			{
-				$('.programmes').hide();
-				$('.projects').hide();
-				$('.activities').show();
-				$('#report_form').attr('action', '/activity/search');
-			}*/
+				$('.inductionTasks').hide();
+				$('.meetingTasks').hide();
+				$('.heldeskTasks').hide();
+			}
+			else if (type == 4)
+			{
+				$('.inductionTasks').hide();
+				$('.meetingTasks').hide();
+				$('.heldeskTasks').show();
+			}
 				
 		}
     </script>
