@@ -382,6 +382,7 @@ class ContactsController extends Controller
 		->orderBy('first_name')
 		->orderBy('surname')
 		->limit(100)
+        ->with('company')
 		->get();
 			
         $data['page_title'] = "Clients";
@@ -400,6 +401,7 @@ class ContactsController extends Controller
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Search Clients';
 		AuditReportsController::store('Contacts', 'Contact Search Results Accessed', "Search Results Accessed", 0);
+
         return view('contacts.contacts')->with($data);
     }
 

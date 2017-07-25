@@ -168,6 +168,7 @@ class ContactCompaniesController extends Controller
      */
     public function showCompany(ContactCompany $company)
     {
+        $company->load('employees.company');
         $user = Auth::user();
         $beeCertDoc = $company->bee_certificate_doc;
         $compRegDoc = $company->comp_reg_doc;

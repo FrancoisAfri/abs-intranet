@@ -32,25 +32,10 @@
                             <p>No client matching your search criteria in the database. Please make sure there are clients registered in the system and refine your search parameters.</p>
                         </div>
                     @endif
-                    <ul class="products-list product-list-in-box">
-                        <!-- item -->
-                        @foreach($persons as $person)
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="{{ $person->profile_pic_url }}" alt="Profile Picture">
-                                </div>
-                                <div class="product-info">
-                                    <a href="{{ '/contacts/' . $person->id . '/edit' }}" class="product-title">{{ $person->full_name }}</a>
-                                    <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span><!-- </a> -->
-                        <span class="product-description">
-                          {{ $person->email }}
-                            {{ (!empty($person->position)) ? " ($person->position)" : '' }}
-                        </span>
-                                </div>
-                            </li>
-                            @endforeach
-                                    <!-- /.item -->
-                    </ul>
+
+                    <!-- Include the contacts result list blade -->
+                    @include('contacts.partials.contacts_result_list')
+
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">

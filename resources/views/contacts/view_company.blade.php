@@ -208,8 +208,28 @@
                 </form>
             </div>
             <!-- /.box -->
+
+            <!-- Company's contacts box -->
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Contacts From The Company</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding no-margin">
+                    <div id="company-contacts" style="margin-right: 10px; max-height: 250px;">
+                        <!-- Include the contacts list -->
+                        @include('contacts.partials.contacts_result_list', ['persons' => $company->employees])
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
         </div>
-        <!-- End new User Form-->
+        <!-- End Column -->
 
         <!-- Confirmation Modal -->
         @if(Session('success_add'))
@@ -240,13 +260,20 @@
 
     <script type="text/javascript">
         //Cancel button click event
-        document.getElementById("cancel").onclick = function () {
+        /*document.getElementById("cancel").onclick = function () {
             location.href = "/contacts";
-        };
+        };*/
 
         $(function () {
             //Phone mask
             $("[data-mask]").inputmask();
+
+            //slimScroll
+            $('#company-contacts').slimScroll({
+                height: '',
+                railVisible: true,
+                alwaysVisible: true
+            });
 
             //Vertically center modals on page
             function reposition() {

@@ -15,6 +15,9 @@ class ContactPerson extends Model
         'first_name', 'surname', 'middle_name', 'maiden_name', 'aka', 'initial', 'email', 'cell_number', 'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code', 'proof_drive_permit', 'proof_drive_permit_exp_date', 'drivers_licence_exp_date', 'gender', 'own_transport', 'marital_status', 'ethnicity', 'profile_pic', 'status', 'contact_type', 'organization_type', 'office_number', 'str_position'
     ];
 
+    //status values
+    private $statusValues = ['' => '', 0 => 'Inactive', 1 => 'Active'];
+
     //Relationship contacts_contacts and user
     public function user() {
         return $this->belongsTo(User::class, 'user_id');
@@ -28,6 +31,11 @@ class ContactPerson extends Model
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;
+    }
+
+    //Status string accessor
+    public function getStrStatusAttribute() {
+        return $this->statusValues[$this->status];
     }
 
     //Full Profile picture url accessor
