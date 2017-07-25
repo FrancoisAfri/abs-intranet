@@ -28,6 +28,8 @@ class ContactsController extends Controller
         $this->middleware('auth');
     }
     public function index() {
+        $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+
         $data['page_title'] = "Clients";
         $data['page_description'] = "Search Clients";
         $data['breadcrumb'] = [
@@ -35,7 +37,8 @@ class ContactsController extends Controller
             ['title' => 'Search client', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'contacts';
-        $data['active_rib'] = 'search';
+        $data['active_rib'] = 'search clients';
+        $data['companies'] = $companies;
 		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
         return view('contacts.search_contact')->with($data);
     }
@@ -350,11 +353,15 @@ class ContactsController extends Controller
     public function getSearch(Request $request) {
         $personName = trim($request->person_name);
         $personIDNum = trim($request->id_number);
+        $personPassportNum = trim($request->passport_number);
+        $personCompanyID = $request->company_id;
+        $personCompanyName = $request->company_name;
 
 		$persons = ContactPerson::
 		where(function ($query) use ($personName) {
 			if (!empty($personName)) {
 				$query->where('first_name', 'ILIKE', "%$personName%");
+				$query->orWhere('surname', 'ILIKE', "%$personName%");
 			}
 		})
 		->where(function ($query) use ($personIDNum) {
@@ -362,18 +369,36 @@ class ContactsController extends Controller
 				$query->where('id_number', 'ILIKE', "%$personIDNum%");
 			}
 		})
+		->where(function ($query) use ($personPassportNum) {
+			if (!empty($personPassportNum)) {
+				$query->where('passport_number', 'ILIKE', "%$personPassportNum%");
+			}
+		})
+		->where(function ($query) use ($personCompanyID) {
+			if (!empty($personCompanyID)) {
+				$query->where('company_id', $personCompanyID);
+			}
+		})
 		->orderBy('first_name')
+		->orderBy('surname')
 		->limit(100)
 		->get();
 			
         $data['page_title'] = "Clients";
         $data['page_description'] = "List of clients found";
+        $data['personName'] = $personName;
+        $data['personIDNum'] = $personIDNum;
+        $data['personPassportNum'] = $personPassportNum;
+        $data['personCompanyID'] = $personCompanyID;
+        $data['personCompanyName'] = $personCompanyName;
         $data['persons'] = $persons;
         $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Client search result', 'active' => 1, 'is_module' => 0]
         ];
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Search Clients';
 		AuditReportsController::store('Contacts', 'Contact Search Results Accessed', "Search Results Accessed", 0);
         return view('contacts.contacts')->with($data);
     }

@@ -201,7 +201,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">
                         <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                        <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-success " : " btn-danger" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Activate" : "De-Activate"}}</a>
+                        <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Deactivate" : "Activate"}}</a>
                        
                     </div>
                     <!-- /.box-footer -->

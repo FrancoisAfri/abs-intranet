@@ -20,6 +20,11 @@ class ContactPerson extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    //Relationship contacts_contacts and contact_companies
+    public function company() {
+        return $this->belongsTo(ContactCompany::class, 'company_id');
+    }
+
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;

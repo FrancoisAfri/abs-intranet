@@ -228,6 +228,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--
                         <hr>
                         <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
                             <label for="name" class="col-sm-2 control-label">Contact Person</label>
@@ -277,6 +278,7 @@
                                 </div>
                             </div>
                         </div>
+                        -->
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

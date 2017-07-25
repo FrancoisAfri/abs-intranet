@@ -11,6 +11,20 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
+                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                        <strong class="lead">Search Parameters</strong><br>
+                        <strong>Client Name:</strong> <em>{{ empty($personName) ? '[all]' : $personName }}</em> &nbsp; &nbsp;
+                        | &nbsp; &nbsp; <strong>ID Number:</strong> <em>{{ empty($personIDNum) ? '[all]' : $personIDNum }}</em> &nbsp; &nbsp;
+                        | &nbsp; &nbsp; <strong>Passport Number:</strong> <em>{{ empty($personPassportNum) ? '[all]' : $personPassportNum }}</em> &nbsp; &nbsp;
+                        | &nbsp; &nbsp; <strong>Company:</strong> <em>
+                            @if(empty($personCompanyName))
+                                [all]
+                            @else
+                                {{ $personCompanyName . ' ' }}
+                                <a href="{{ "/contacts/company/$personCompanyID/view" }}" class="btn btn-xs btn-link no-print"><i class="fa fa-eye"></i> View Company</a>
+                            @endif
+                        </em> &nbsp; &nbsp;
+                    </p>
                     @if(!(count($persons) > 0))
                         <div class="callout callout-danger">
                             <h4><i class="fa fa-database"></i> No Records found</h4>
