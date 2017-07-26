@@ -222,24 +222,18 @@ class TaskManagementController extends Controller
             $AddData['due_date'] = str_replace('/', '-', $AddData['due_date']);
             $startDate = strtotime($AddData['due_date']);
         }
+		//return $AddData;
 		# Add Task 
 		$employeeID = $AddData['employee_id'];
+		$companyID = $AddData['company_id'];
 		$escalationPerson = HRPerson::where('id', $employeeID)->first();
 		$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;			
 		$description = $AddData['description'];
-		,1
-		$orderNo
-		,$libraryID
-		,0
-		,$uploadRequired
-		,
-		0,
-		$ClientInduction->id
-		, $administratorID
+		
 		TaskManagementController::store($description,$duedate,$startDate,$managerID,$employeeID,3
-					,0,0,0,0,0,0, 0);
-		AuditReportsController::store('Task Management', "Task Checked", "Checked by User", 0);
-	return response()->json(['employee_id' => $AddData['task_id']], 200);
+					,0,0,0,0,0,0,0,$companyID);
+		AuditReportsController::store('Task Management', "Task Added", "Added By User", 0);
+	return Back();
     }
     /**
      * Store a newly created resource in storage.
@@ -248,7 +242,7 @@ class TaskManagementController extends Controller
      * @return \Illuminate\Http\Response
     */
     public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
-	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0)
+	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0,$clientID=0)
     {
 		//convert dates to unix time stamp
         /*if (!empty($duedate)) {
@@ -281,7 +275,8 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->start_date = $startDate;
 		$EmployeeTasks->administrator_id = $administratorID;
 		$EmployeeTasks->check_by_id = $checkByID;
-		// Save task
+		$EmployeeTasks->client_id = $clientID;
+		//Save task
         $EmployeeTasks->save();
 		if (empty($inductionID))
 		{

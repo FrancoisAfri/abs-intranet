@@ -368,8 +368,8 @@ Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@pri
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
 // Task Management
 Route::get('/tasks/add_task', 'TaskManagementController@addTask');
-Route::get('/tasks/search_task', 'TaskManagementController@addNewTask');
-Route::post('/tasks/add_new_task', 'TaskManagementController@searchResults');
+Route::get('/tasks/search_task', 'TaskManagementController@index');
+Route::post('/tasks/add_new_task', 'TaskManagementController@addNewTask');
 Route::post('/task/search_results', 'TaskManagementController@searchResults');
 Route::get('/tasks/task_report', 'TaskManagementController@report');
 Route::post('/task/indtuction_report', 'InductionAdminController@getReport');

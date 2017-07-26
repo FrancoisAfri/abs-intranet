@@ -48,7 +48,7 @@
 							<label for="start_date" class="col-sm-3 control-label">Start Date</label>
 							<div class="col-sm-9">
 								 <div class="input-group">
-								<input type="text" class="form-control datepicker" name="start_date" placeholder="  dd/mm/yyyy" value="{{ old('start_date') }}">
+								<input type="text" class="form-control datepicker" name="start_date" placeholder="Click to Select a Start Date..." value="{{ old('start_date') }}">
 								</div>
 							</div>
 						</div>

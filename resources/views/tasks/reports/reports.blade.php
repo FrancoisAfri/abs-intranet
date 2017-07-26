@@ -31,6 +31,8 @@
 									<select class="form-control" name="report_type" id="report_type" placeholder="Select Report Type"  onchange="changetype(this.value)">
 										<option value="1" selected>Induction Tasks</option>
 										<option value="2">Meeting Tasks</option>
+										<option value="3">Normal Tasks</option>
+										<option value="4">Helpdesk Tasks</option>
 									</select>
 								</div>
 							</div>
@@ -222,9 +224,15 @@
 				$('.programmes').hide();
 				$('.projects').hide();
 				$('.activities').show();
-				$('#report_form').attr('action', '/activity/search');
-			}*/
-				
+				$('#report_form').attr('action', '/task/normal_report');
+			}
+			else if (type == 4)
+			{
+				$('.programmes').hide();
+				$('.projects').hide();
+				$('.activities').show();
+				$('#report_form').attr('action', '/task/helpesk');
+			}	*/
 		}
     </script>
 @endsection

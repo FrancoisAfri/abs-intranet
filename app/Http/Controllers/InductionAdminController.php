@@ -88,7 +88,7 @@ class InductionAdminController extends Controller
 		$ClientInduction->date_created = strtotime(date('Y-m-d'));
 		$ClientInduction->save();
 		$company = ContactCompany::where('id', $companyID)->first();
-		foreach ($inductionData as $key => $sValue) 
+		foreach ($inductionData as $key => $sValue)
 		{
 			if (strlen(strstr($key, 'selected')))
 			{
@@ -101,7 +101,6 @@ class InductionAdminController extends Controller
 					$employeeID = !empty($inductionData['employee_id_'.$libraryID.'_'.$deptID]) ? $inductionData['employee_id_'.$libraryID.'_'.$deptID] : 0;
 					if ($depID == $deptID && empty($employeeID))$employeeID = $emp;
 					$count = $count + 1;
-					return $emp;
 					if ($emp != $employeeID  && !empty($emp))
 					{
 						# Send Email to employee
