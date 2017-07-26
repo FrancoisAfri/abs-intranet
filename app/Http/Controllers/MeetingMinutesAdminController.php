@@ -80,7 +80,7 @@ class meetingMinutesAdminController extends Controller
             'meeting_date' => 'required_if:meeting_type,1',       
             'meeting_location' => 'required_if:meeting_type,1',       
             'meeting_agenda' => 'required_if:meeting_type,1',      
-            'recurring_id' => 'required_if:meeting_type,2|numeric|min:0.1',      
+            'recurring_id' => 'required_if:meeting_type,2',      
         ]);
 		$MeetingData = $request->all();
 		unset($MeetingData['_token']);
