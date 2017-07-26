@@ -39,7 +39,7 @@ class TaskManagementController extends Controller
     	
 	public function index()
     {
-        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
         $data['page_title'] = "Task Search";
         $data['page_description'] = "Task Search";
@@ -58,7 +58,7 @@ class TaskManagementController extends Controller
 	// Add task
 	public function addTask()
     {
-        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
                 $data['page_title'] = "Add Task";
         $data['page_description'] = "Add Task";
@@ -378,7 +378,7 @@ class TaskManagementController extends Controller
 	// Report Search
 	public function report()
     {
-		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+		$companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
         $data['page_title'] = "Task Report";
         $data['page_description'] = "Task Report";
