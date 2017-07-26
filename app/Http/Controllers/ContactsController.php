@@ -43,7 +43,7 @@ class ContactsController extends Controller
 
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
         $orgTypes = [1 => 'Private Company', 2 => 'Parastatal', 3 => 'School', 4 => 'Government', 5 => 'Other'];
-        $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+        $companies = ContactCompany::where('status', 2)->orderBy('name')->get();
         $data['companies'] = $companies;
 		$data['page_title'] = "Contacts";
         $data['page_description'] = "Add a New Contact";
@@ -162,7 +162,7 @@ class ContactsController extends Controller
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
-        $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+        $companies = ContactCompany::where('status', 2)->orderBy('name')->get();
         $data['page_title'] = "Clients";
         $data['page_description'] = "View/Update client details";
         $data['back'] = "/contacts";
