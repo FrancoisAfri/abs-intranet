@@ -13,7 +13,7 @@ class CreateEmployeeTasksTable extends Migration
      */
     public function up()
     {
-		/*task_type 1== induction  2== Meeting tasks 3== Normal Tasks*/
+		/*task_type 1== induction  2== Meeting tasks 3== Normal Tasks 4== Helpdesk Tasks*/
 		/*priority 1== low 2== Medium 3== High*/
 		/*upload_required 1== NO 02== Yes*/
         Schema::create('employee_tasks', function (Blueprint $table) {

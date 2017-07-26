@@ -126,6 +126,31 @@
 			modal.find('select#division_level_3').val(dept3).trigger("change");
 			modal.find('select#division_level_2').val(dept2).trigger("change");
 			modal.find('select#division_level_1').val(dept1).trigger("change");
+			//Load divisions drop down
+			var parentDDID = '';
+			var loadAllDivs = 1;
+			var firstDivDDID = null;
+			var parentContainer = $('#edit-question-modal');
+			@foreach($division_levels as $divisionLevel)
+				//Populate drop down on page load
+				var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
+				var postTo = '{!! route('divisionsdropdown') !!}';
+				var selectedOption = '';
+				//var divLevel = parseInt('{{ $divisionLevel->level }}');
+				var incInactive = -1;
+				var loadAll = loadAllDivs;
+				@if($loop->first)
+					var selectFirstDiv = 1;
+					var divHeadSpecific = 1;
+					loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
+					firstDivDDID = ddID;
+				@else
+					loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
+				@endif
+				//parentDDID
+				parentDDID = ddID;
+				loadAllDivs = -1;
+			@endforeach
         });
         
         $('#add_questions').on('click', function () {
