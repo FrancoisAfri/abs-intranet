@@ -176,7 +176,7 @@ class ContactsController extends Controller
         return view('contacts.view_contact')->with($data);
     }*/
 	public function edit(ContactPerson $person) {
-        $person->load('user');
+        $person->load('user', 'company');
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
@@ -196,7 +196,7 @@ class ContactsController extends Controller
             ['title' => 'Client details', 'active' => 1, 'is_module' => 0]
         ];
 		$data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'search';
+        $data['active_rib'] = 'search clients';
         $data['companies'] = $companies;
         $data['view_by_admin'] = 1;
 		AuditReportsController::store('Contacts', 'Contact Edited', "Contact On Edit Mode", 0);
