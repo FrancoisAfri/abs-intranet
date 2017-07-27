@@ -431,4 +431,59 @@ class ContactsController extends Controller
 		AuditReportsController::store('Contacts', 'Contact Password Updated', "Password Updated", 0);
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
+
+    //function to activate/deactivate a contact person and his security user credentials
+    public function activateContact(ContactPerson $person)
+    {
+        $person->load('user');
+        if ($person->status == 1) $status = 0;
+        else $status = 1;
+
+        $person->status = $status;
+        $person->update();
+
+        if ($person->user) {
+            $user = $person->user;
+            $user->status = $status;
+            $user->update();
+        }
+
+        AuditReportsController::store('Contacts', 'Client Status Changed', "Status Changed to $status for [$person->id] $person->full_name", 0);
+        return back();
+    }
+
+    public function createLoginDetails(ContactPerson $person) {
+        //save user details
+        $user = new User;
+        $user->email = $person->email;
+        $generatedPassword = str_random(10);
+        $user->password = Hash::make($generatedPassword);
+        $user->type = 2;
+        $user->status = 1;
+        $user->save();
+
+        //update ContactPerson record
+        $person->user_id = $user->id;
+        $person->update();
+
+        //Send email to client
+        Mail::to($user->email)->send(new ConfirmRegistration($user, $generatedPassword));
+        AuditReportsController::store('Contacts', 'Login Details Create', "Contact  Login Details Successfully Created", 0);
+
+        return back();
+    }
+
+    //function to reset the client's password to a random one and email it to the client
+    /*public function resetRandomPassword(User $user) {
+        $generatedPassword = str_random(10);
+        $user->password = Hash::make($generatedPassword);
+        $user->update();
+
+        //send email
+        //Mail::to($user->email)->send(new ConfirmRegistration($user, $generatedPassword));
+
+        AuditReportsController::store('Contacts', 'Contact Password Updated', "Password Updated", 0);
+
+        return back()->with(['success_pw_updated' => "The client's password has been successfully reset. the client will receive an email with the new password."]);
+    }*/
 }

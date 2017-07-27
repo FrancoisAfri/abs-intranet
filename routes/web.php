@@ -55,10 +55,13 @@ Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
 Route::get('contacts/{person}/edit', 'ContactsController@edit');
+Route::get('contacts/{person}/activate', 'ContactsController@activateContact');
+Route::get('contacts/{person}/create-login', 'ContactsController@createLoginDetails');
 Route::get('contacts/profile', 'ContactsController@profile');
 Route::post('contacts', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
+//Route::post('contacts/{user}/reset-random-pw', 'ContactsController@resetRandomPassword');
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 //Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
@@ -136,7 +139,7 @@ Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAc
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
 
 //Contacts related requests
-Route::get('contacts', 'ContactsController@index');
+//Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
 Route::get('contacts/public', 'PublicRegistrationController@create');
 

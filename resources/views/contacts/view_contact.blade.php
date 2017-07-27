@@ -26,6 +26,8 @@
                     {{ method_field('PATCH') }}
 
                     <div class="box-body">
+
+                        <!-- Contact's company details -->
                         @if($contactPerson->company)
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                 <strong class="lead">Client's Company Details</strong>
@@ -52,6 +54,15 @@
                                 @endif
                             </p>
                         @endif
+                        <!-- /. Contact's company details -->
+
+                        <!-- Contact status -->
+                        <div class="callout {{ ($contactPerson->status == 1) ? 'callout-success' : 'callout-danger' }}">
+                            <h4>Client Status</h4>
+
+                            <p>This profile is {{ ($contactPerson->status == 1) ? 'active' : 'deactivated' }}.</p>
+                        </div>
+                        <!-- /. Contact status -->
 
                         <div class="form-group">
                             <label for="first_name" class="col-sm-2 control-label">First Name</label>
@@ -86,7 +97,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-building"></i>
                                         </div>
-                                        <select id="company_id" name="company_id" class="form-control">
+                                        <select id="company_id" name="company_id" class="form-control select2">
                                             <option value="">*** Select a Company ***</option>
                                             @foreach($companies as $company)
                                                 <option value="{{ $company->id }}" {{ ($contactPerson->company_id == $company->id) ? ' selected' : '' }}>{{ $company->name }}</option>
@@ -176,7 +187,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <select name="res_province_id" class="form-control">
+                                    <select name="res_province_id" class="form-control select2">
                                         <option value="">*** Select Your Province ***</option>
                                         @foreach($provinces as $province)
                                             <option value="{{ $province->id }}" {{ ($contactPerson->res_province_id == $province->id) ? ' selected' : '' }}>{{ $province->name }}</option>
@@ -205,7 +216,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-venus-mars"></i>
                                     </div>
-                                    <select name="gender" class="form-control">
+                                    <select name="gender" class="form-control select2">
                                         <option value="">*** Select Your gender ***</option>
                                         <option value="1" {{ ($contactPerson->gender === 1) ? ' selected' : '' }}>Male</option>
                                         <option value="0" {{ ($contactPerson->gender === 0) ? ' selected' : '' }}>Female</option>
@@ -245,7 +256,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-venus-mars"></i>
                                     </div>
-                                    <select name="marital_status" class="form-control">
+                                    <select name="marital_status" class="form-control select2">
                                         <option value="">*** Select Your Marital Status ***</option>
                                         @foreach($marital_statuses as $marital_status)
                                             <option value="{{ $marital_status->id }}" {{ ($contactPerson->marital_status == $marital_status->id) ? ' selected' : '' }}>{{ $marital_status->value }}</option>
@@ -262,7 +273,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-bar-chart"></i>
                                     </div>
-                                    <select name="ethnicity" class="form-control">
+                                    <select name="ethnicity" class="form-control select2">
                                         <option value="">*** Select Your Ethnic Group ***</option>
                                         @foreach($ethnicities as $ethnicity)
                                             <option value="{{ $ethnicity->id }}" {{ ($contactPerson->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option>
@@ -283,20 +294,40 @@
                                 <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                             </div>
                         </div>
-                        <hr>
-                        <!--<div class="form-group">
-                            <label for="change_password" class="col-sm-2 control-label">Password</label>
+                        <hr class="hr-text no-border" data-content="SECURITY OPTION">
+                        @if($contactPerson->user)
+                            {{--reset password--}}
+                            <div class="form-group">
+                                <label for="change_password" class="col-sm-2 control-label">Password</label>
 
-                            <div class="col-sm-10">
-                                <button type="button" id="change_password" class="btn btn-link" data-toggle="modal" data-target="#myPasswordModal"><font data-toggle="tooltip" title="Click here to change password.">Change Password</font></button>
+                                <div class="col-sm-10">
+                                    <button type="button" id="change_password" class="btn btn-default btn-block btn-flat" data-toggle="modal" data-target="#myPasswordModal"><font data-toggle="tooltip" title="Click here to change password."><i class="fa fa-unlock-alt"></i> Change Password</font></button>
+                                </div>
                             </div>
-                        </div>-->
+                            <!--<p class="text-muted well well-sm no-shadow lead">
+                                <a href="/contacts/{{ $contactPerson->user_id }}/reset-random-pw" class="btn btn-default btn-block btn-flat"><i class="fa fa-shield"></i> Reset Client's Password</a><br>
+                                <i>This will generate a new random password for this person. The new password will be emailed to the client.</i>
+                            </p>-->
+                        @else
+                            {{--create login details with the person's email--}}
+                            <div class="callout callout-info">
+                                <h4><i class="fa fa-info-circle"></i> Login details</h4>
+
+                                @if(!empty($contactPerson->email))
+                                    <a href="/contacts/{{ $contactPerson->id }}/create-login" class="btn btn-outline btn-block btn-flat"><i class="fa fa-unlock"></i> Create Login Details</a><br>
+                                    <p>This will generate login credentials with which this person will be able to login to the system. The login credentials will be sent to the email address specified above.</p>
+                                @else
+                                    <p>To create login details for this person, you need to start by updating their email address first.</p>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                     <!-- /.box-body -->
 
-                    <div class="box-footer">
-                        <button type="button" id="cancel" class="btn btn-default">Cancel</button>
-                        <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
+                    <div class="box-footer" style="text-align: center;">
+                        <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
+                        <a href="/contacts/{{ $contactPerson->id }}/activate" class="btn  {{ (!empty($contactPerson->status) && $contactPerson->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($contactPerson->status) && $contactPerson->status == 1) ? "Deactivate" : "Activate"}}</a>
+                        <button type="submit" name="command" id="update" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Update</button>
 					</div>
                     <!-- 
 					
@@ -316,9 +347,9 @@
         <!-- /.Password Modal form-->
 
     </div>
-    @endsection
+@endsection
 
-    @section('page_script')
+@section('page_script')
             <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 
@@ -326,6 +357,9 @@
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+    <!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 
     <!-- Start Bootstrap File input -->
     <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
@@ -345,6 +379,9 @@
 
     <script>
         $(function () {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+
             //Cancel button click event
             document.getElementById("cancel").onclick = function () {
                 location.href = "{{ $back }}";
