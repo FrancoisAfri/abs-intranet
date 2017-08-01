@@ -15,7 +15,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Reports Search criteria</h3>
+                    <h3 class="box-title">Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                 <!-- /.box-header -->
