@@ -92,7 +92,10 @@ class meetingMinutesAdminController extends Controller
 		if ($MeetingData['meeting_type'] && $MeetingData['recurring_id'])
 		{
 			$recurringMeeting = RecurringMeetings::where('id', $MeetingData['recurring_id'])->first();
-			$attendees = RecurringMeetingsAttendees::where('meeting_id', $MeetingData['recurring_id'])->get();
+			$attendees = RecurringMeetingsAttendees::
+			where('meeting_id', $MeetingData['recurring_id'])
+			->where('status', 1)
+			->get();
 			$meeting = new MeetingMinutes();
 			$meeting->meeting_name = $recurringMeeting->meeting_title;
 			$meeting->meeting_date = strtotime(date("Y-m-d"));
@@ -182,13 +185,20 @@ class meetingMinutesAdminController extends Controller
             'meeting_id' => 'bail|required|integer|min:1',        
         ]);
 		unset($request['_token']);
+		$meetingDate = $request->input('meeting_date');
+		if (isset($meetingDate)) {
+            $meetingDate = str_replace('/', '-', $meetingDate);
+			$meetingDate = strtotime($meetingDate);
+        }
 		$meeting->meeting_name = $request->input('meeting_name');
 		$meeting->meeting_location = $request->input('meeting_location');
 		$meeting->meeting_agenda = $request->input('meeting_agenda');
+		$meeting->meeting_date = $meetingDate;
         $meeting->update();
 		$meeting_name = $request->input('meeting_name');
         AuditReportsController::store('Minutes Meeting', 'Meeting Informations Updated', "Updated by User", 0);
-        return response()->json(['new_meeting_name' => $meeting_name], 200);
+		return redirect('/meeting_minutes/view_meeting/' . $meeting->id . '/view')->with('success_add', "The Meeting has been updated successfully.");
+	  // return response()->json(['new_meeting_name' => $meeting_name], 200);
     }
 	public function updateAttendee(Request $request, MeetingAttendees $attendee)
     {
@@ -299,7 +309,9 @@ class meetingMinutesAdminController extends Controller
 		$meetingDate = $request->meeting_date;
 		$companyID = $request->company_id;
 		$meetingTitle = $request->meeting_title;
+		//die('do you come ehereddd');
 		$createdBy = $request->created_by;
+
 		if (!empty($meetingDate))
 		{
 			$dateExplode = explode('-', $meetingDate);
@@ -314,8 +326,8 @@ class meetingMinutesAdminController extends Controller
 		}
 		})
 		->where(function ($query) use ($meetingTitle) {
-			if (!empty($inductionTitle)) {
-				$query->where('meeting_minutes.meeting_title', 'ILIKE', "%$meetingTitle%");
+			if (!empty($meetingTitle)) {
+				$query->where('meeting_minutes.meeting_name', 'ILIKE', "%$meetingTitle%");
 			}
 		})
 		->orderBy('meeting_minutes.meeting_name')
@@ -339,7 +351,18 @@ class meetingMinutesAdminController extends Controller
 		$minutesMeeting = DB::table('meetings_minutes')
 		->select('meetings_minutes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
 		->leftJoin('hr_people', 'meetings_minutes.employee_id', '=', 'hr_people.id')
+		->where('meetings_minutes.meeting_id', $meeting->id)
 		->orderBy('meetings_minutes.id')
+		->get();
+		
+		$employeesTasks = DB::table('employee_tasks')
+		->select('employee_tasks.*'
+				,'hr_people.first_name as firstname', 'hr_people.surname as surname')
+		->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+		->where('employee_tasks.task_type', '=', 2)
+		->where('employee_tasks.meeting_id', $meeting->id)
+		->orderBy('employee_tasks.employee_id')
+		->orderBy('employee_tasks.order_no')
 		->get();
 		
 		$data['page_title'] = "Meeting Minutes";
@@ -359,6 +382,7 @@ class meetingMinutesAdminController extends Controller
         $data['company_logo'] = url('/') . Storage::disk('local')->url("logos/$logo");
 		$data['date'] = date("d-m-Y");
         $data['minutesMeeting'] = $minutesMeeting;
+        $data['employeesTasks'] = $employeesTasks;
         $data['meeting'] = $meeting;
 		$data['user'] = $user;
 		AuditReportsController::store('Minutes Meeting', 'Minutes Meeting Details Print', "Accessed by User", 0);

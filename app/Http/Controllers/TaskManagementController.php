@@ -216,22 +216,23 @@ class TaskManagementController extends Controller
         }
 		if (!empty($AddData['start_date'])) {
             $AddData['start_date'] = str_replace('/', '-', $AddData['start_date']);
-            $duedate = strtotime($AddData['start_date']);
+            $startDate = strtotime($AddData['start_date']);
         }
 		if (!empty($AddData['due_date'])) {
             $AddData['due_date'] = str_replace('/', '-', $AddData['due_date']);
-            $startDate = strtotime($AddData['due_date']);
+            $duedate = strtotime($AddData['due_date']);
         }
 		//return $AddData;
 		# Add Task 
 		$employeeID = $AddData['employee_id'];
 		$companyID = $AddData['company_id'];
+		$managerDuration = $AddData['manager_duration'];
 		$escalationPerson = HRPerson::where('id', $employeeID)->first();
 		$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;			
 		$description = $AddData['description'];
 		
 		TaskManagementController::store($description,$duedate,$startDate,$managerID,$employeeID,3
-					,0,0,0,0,0,0,0,$companyID);
+					,0,0,0,0,0,0,0,0,$companyID, $managerDuration);
 		AuditReportsController::store('Task Management', "Task Added", "Added By User", 0);
 	return Back();
     }
@@ -242,7 +243,8 @@ class TaskManagementController extends Controller
      * @return \Illuminate\Http\Response
     */
     public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
-	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0,$clientID=0)
+	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0
+	,$checkByID=0,$clientID=0,$managerDuration=0)
     {
 		//convert dates to unix time stamp
         /*if (!empty($duedate)) {
@@ -255,7 +257,8 @@ class TaskManagementController extends Controller
             $intstartDate = strtotime($startDate);
         }
 		else $intstartDate = 0;*/
-
+	//echo $managerDuration;
+	//die();
 		$user = Auth::user();
 		$EmployeeTasks = new EmployeeTasks();
 		$EmployeeTasks->induction_id = $inductionID;
@@ -276,6 +279,7 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->administrator_id = $administratorID;
 		$EmployeeTasks->check_by_id = $checkByID;
 		$EmployeeTasks->client_id = $clientID;
+		$EmployeeTasks->manager_duration = $managerDuration;
 		//Save task
         $EmployeeTasks->save();
 		if (empty($inductionID))
@@ -554,4 +558,32 @@ class TaskManagementController extends Controller
 		AuditReportsController::store('Induction', 'Print with Search Results', "Print with Results", 0);
         return view('tasks.reports.tasks_print')->with($data);
     }
+	function convertsecond($seconds)
+	{
+		$hours = '';
+		$secondsInAMinute = 60;
+		$secondsInAnHour = 60 * $secondsInAMinute;
+		if ($seconds >= $secondsInAnHour)
+		{
+			$hours = floor($seconds / $secondsInAnHour);
+			$minuteSeconds = ($seconds - ($hours * $secondsInAnHour));
+			$minutes = ceil($minuteSeconds / 60);
+		}
+		else $minutes = floor($seconds / $secondsInAMinute);
+
+		// Return the final
+		$time  = !empty($hours) ? str_pad($hours, 2, '0', STR_PAD_LEFT) . 'h' : str_pad($hours, 2, '0', STR_PAD_BOTH). 'h';
+		$time .= !empty($minutes) ? str_pad($minutes, 2, '0', STR_PAD_LEFT) .  '' : str_pad($minutes, 2, '0', STR_PAD_BOTH);
+		return $time;
+	}
+	function convertMinutes($minutes)
+	{
+		$hours = floor($minutes/60);
+		$minute = ($minutes - ($hours * 60));
+		$minute = ceil($minute);
+		
+		// Return the final
+		$time  = !empty($hours) ? str_pad($hours, 2, '0', STR_PAD_LEFT) . 'h' : str_pad($hours, 2, '0', STR_PAD_BOTH). 'h';
+		$time .= !empty($minute) ? str_pad($minute, 2, '0', STR_PAD_LEFT) .  '' : str_pad($minute, 2, '0', STR_PAD_BOTH);
+	}
 }

@@ -62,6 +62,18 @@
 							@endforeach 
 						@endif
 				</table>
+				<table class="table table-striped">
+					<tr><th colspan="2" style="text-align:center">Tasks for Meeting: {{$meeting->meeting_name}}</th></tr>
+					<tr><th>Person Responsible</th><th>Description</th></tr>
+						@if(!empty($employeesTasks))
+							@foreach($employeesTasks as $employeesTask)
+								<tr>
+									<td>{{ $employeesTask->firstname  .' '. $employeesTask->surname }}</td>
+									<td>{{ $employeesTask->description}}</td>
+								</tr>
+							@endforeach 
+						@endif
+				</table>
 			</div>
 		</div>
 
