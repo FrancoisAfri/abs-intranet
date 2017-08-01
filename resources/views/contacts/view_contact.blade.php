@@ -11,7 +11,7 @@
 @section('content')
     <div class="row">
         <!-- User Form -->
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
             <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -327,6 +327,7 @@
                     <div class="box-footer" style="text-align: center;">
                         <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
                         <a href="/contacts/{{ $contactPerson->id }}/activate" class="btn  {{ (!empty($contactPerson->status) && $contactPerson->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($contactPerson->status) && $contactPerson->status == 1) ? "Deactivate" : "Activate"}}</a>
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete Client</button>
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Update</button>
 					</div>
                     <!-- 
@@ -346,6 +347,8 @@
         @endif
         <!-- /.Password Modal form-->
 
+        <!-- Include delete warning Modal form-->
+        @include('contacts.partials.warning_action', ['modal_title' => 'Delete Client', 'modal_content' => 'Are you sure you want to delete this contact? This action cannot be undone.'])
     </div>
 @endsection
 

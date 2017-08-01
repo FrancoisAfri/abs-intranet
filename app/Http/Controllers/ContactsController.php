@@ -452,6 +452,23 @@ class ContactsController extends Controller
         return back();
     }
 
+    //function to delete a contact person and his security user credentials
+    public function deleteContact(ContactPerson $person)
+    {
+        $user = Auth::user();
+        if ($user->type == 1 || $user->type == 3) {
+            $person->load('user');
+            if ($person->user) {
+                $user = $person->user;
+                $user->delete();
+            }
+            $person->delete();
+
+            AuditReportsController::store('Contacts', 'Client Deleted', "Client ID has been deleted", 0);
+            return redirect('/contacts');
+        }
+    }
+
     public function createLoginDetails(ContactPerson $person) {
         //save user details
         $user = new User;

@@ -56,6 +56,7 @@ Route::get('contacts/create', 'ContactsController@create');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
 Route::get('contacts/{person}/edit', 'ContactsController@edit');
 Route::get('contacts/{person}/activate', 'ContactsController@activateContact');
+Route::get('contacts/{person}/delete', 'ContactsController@deleteContact');
 Route::get('contacts/{person}/create-login', 'ContactsController@createLoginDetails');
 Route::get('contacts/profile', 'ContactsController@profile');
 Route::post('contacts', 'ContactsController@store');
