@@ -53,6 +53,18 @@ class emailMinutes extends Mailable
 		->where('meetings_minutes.meeting_id', $this->meeting->id)
 		->orderBy('meetings_minutes.id')
 		->get();
+		
+		$employeesTasks = DB::table('employee_tasks')
+		->select('employee_tasks.*'
+				,'hr_people.first_name as firstname', 'hr_people.surname as surname')
+		->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+		->where('employee_tasks.task_type', '=', 2)
+		->where('employee_tasks.meeting_id', $this->meeting->id)
+		->orderBy('employee_tasks.employee_id')
+		->orderBy('employee_tasks.order_no')
+		->get();
+		
+		$data['employeesTasks'] = $employeesTasks;
 		$data['minutesMeeting'] = $minutesMeeting;
         //$data['meeting'] = $meeting;
         return $this->view('mails.meeting_minutes')

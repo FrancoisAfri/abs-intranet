@@ -297,6 +297,7 @@
 						<tr>
 							<th>Order #</th>
 							<th>Description</th>
+							<th>Duration</th>
 							<th>Due Date</th>
 							<th>Client Name</th>
 							<th></th>
@@ -308,6 +309,7 @@
 						  <tr>
 							<td>{{ (!empty($task->order_no)) ?  $task->order_no : ''}}</td>
 							<td>{{ (!empty($task->description)) ?  $task->description : ''}}</td>
+							<td>{{ (!empty($task->manager_duration)) ?  $task->manager_duration : ''}}</td>
 							<td>{{ (!empty($task->due_date)) ?  date('Y-m-d',$task->due_date) : ''}}</td>
 							<td>{{ (!empty($task->client_name)) ?  $task->client_name : ''}}</td>
 							<td>

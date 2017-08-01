@@ -362,7 +362,7 @@ Route::post('/meeting/add_task/{meeting}', 'MeetingMinutesAdminController@saveTa
 Route::post('/meeting_minutes/add_meeting', 'MeetingMinutesAdminController@store');
 Route::get('/meeting_minutes/view_meeting/{meeting}/view', 'MeetingMinutesAdminController@show');
 Route::get('/meeting_minutes/search', 'MeetingMinutesAdminController@search');
-Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
+Route::patch('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
 Route::post('/meeting/update_attendee/{attendee}', 'MeetingMinutesAdminController@updateAttendee');
 Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');

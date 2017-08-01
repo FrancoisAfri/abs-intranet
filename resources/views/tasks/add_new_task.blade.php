@@ -62,6 +62,15 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="manager_duration" class="col-sm-3 control-label">Duration</label>
+
+							<div class="col-sm-9">
+								<div class="input-group">
+									<input type="number" class="form-control" id="manager_duration" name="manager_duration" value="{{ old('manager_duration') }}" placeholder="Enter Duration in Minutes...">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="employee_id" class="col-sm-3 control-label">Employee Person</label>
 							<div class="col-sm-9">
 								<div class="input-group">
