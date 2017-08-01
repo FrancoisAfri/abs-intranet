@@ -206,6 +206,10 @@ class TaskManagementController extends Controller
 	# Add task
 	public function addNewTask(Request $request) 
 	{
+		$this->validate($request, [
+            'employee_id' => 'bail|required|integer|min:1',       
+            'description' => 'required',     
+        ]);
 		$AddData = $request->all();
         //Exclude empty fields from query
         foreach ($AddData as $key => $value)
@@ -214,6 +218,7 @@ class TaskManagementController extends Controller
                 unset($AddData[$key]);
             }
         }
+		
 		if (!empty($AddData['start_date'])) {
             $AddData['start_date'] = str_replace('/', '-', $AddData['start_date']);
             $startDate = strtotime($AddData['start_date']);
@@ -225,7 +230,7 @@ class TaskManagementController extends Controller
 		//return $AddData;
 		# Add Task 
 		$employeeID = $AddData['employee_id'];
-		$companyID = $AddData['company_id'];
+		$companyID = !empty($AddData['company_id']) ? $AddData['company_id'] : 0;
 		$managerDuration = $AddData['manager_duration'];
 		$escalationPerson = HRPerson::where('id', $employeeID)->first();
 		$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;			

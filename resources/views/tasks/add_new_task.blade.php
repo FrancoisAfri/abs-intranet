@@ -70,14 +70,14 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group {{ $errors->has('employee_id') ? ' has-error' : '' }}">
 							<label for="employee_id" class="col-sm-3 control-label">Employee Person</label>
 							<div class="col-sm-9">
 								<div class="input-group">
 									<select class="form-control select2" style="width:170px;" id="employee_id" name="employee_id">
-									<option selected="selected" value="0">*** Select a Employee ***</option>
+									<option value="0">*** Select a Employee ***</option>
 									@foreach($users as $user)
-										<option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
+										<option value="{{ $user->id }}" {{ ($user->id === old('employee_id')) ? ' selected="selected" ' : '' }}>{{ $user->first_name.' '.$user->surname}}</option>
 									@endforeach
 									</select>
 								</div>
@@ -88,9 +88,9 @@
 							<div class="col-sm-9">
 								<div class="input-group">
 									<select class="form-control select2" style="width:300px;" id="company_id" name="company_id">
-										<option selected="selected" value="0">*** Select a Client ***</option>
+										<option value="0">*** Select a Client ***</option>
 										@foreach($companies as $company)
-											<option value="{{ $company->id }}">{{ $company->name}}</option>
+											<option value="{{ $company->id }}" {{ ($company->id === old('company_id')) ? ' selected="selected"' : '' }}>{{ $company->name}}</option>
 										@endforeach
 									</select>
 								</div>
