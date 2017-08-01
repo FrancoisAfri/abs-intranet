@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\Country;
 use App\public_reg;
 use App\Mail\ConfirmRegistration;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Mail\adminEmail;
 use App\Http\Requests;
@@ -29,6 +31,7 @@ class ContactsController extends Controller
     }
     public function index() {
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+        $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
 
         $data['page_title'] = "Clients";
         $data['page_description'] = "Search Clients";
@@ -39,6 +42,7 @@ class ContactsController extends Controller
         $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'search clients';
         $data['companies'] = $companies;
+        $data['provinces'] = $provinces;
 		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
         return view('contacts.search_contact')->with($data);
     }
@@ -350,12 +354,14 @@ class ContactsController extends Controller
         //return to the edit page
         return back();
     }
-    public function getSearch(Request $request) {
+    public function getSearch(Request $request, $print = false) {
         $personName = trim($request->person_name);
         $personIDNum = trim($request->id_number);
         $personPassportNum = trim($request->passport_number);
         $personCompanyID = $request->company_id;
         $personCompanyName = $request->company_name;
+        $provinceID = $request->res_province_id;
+        $provinceName = $request->res_province_name;
 
 		$persons = ContactPerson::
 		where(function ($query) use ($personName) {
@@ -372,6 +378,11 @@ class ContactsController extends Controller
 		->where(function ($query) use ($personPassportNum) {
 			if (!empty($personPassportNum)) {
 				$query->where('passport_number', 'ILIKE', "%$personPassportNum%");
+			}
+		})
+		->where(function ($query) use ($provinceID) {
+			if (!empty($provinceID)) {
+				$query->where('res_province_id', $provinceID);
 			}
 		})
 		->where(function ($query) use ($personCompanyID) {
@@ -392,6 +403,8 @@ class ContactsController extends Controller
         $data['personPassportNum'] = $personPassportNum;
         $data['personCompanyID'] = $personCompanyID;
         $data['personCompanyName'] = $personCompanyName;
+        $data['provinceID'] = $provinceID;
+        $data['provinceName'] = $provinceName;
         $data['persons'] = $persons;
         $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
         $data['breadcrumb'] = [
@@ -402,7 +415,19 @@ class ContactsController extends Controller
         $data['active_rib'] = 'Search Clients';
 		AuditReportsController::store('Contacts', 'Contact Search Results Accessed', "Search Results Accessed", 0);
 
-        return view('contacts.contacts')->with($data);
+		if ($print) {
+            $data['report_name'] = 'Contacts Search Result';
+            $data['user'] = Auth::user()->load('person');
+            $data['company_logo'] = CompanyIdentity::systemSettings()['company_logo_url'];
+            $data['date'] = Carbon::now()->format('d/m/Y');
+
+		    return view('contacts.print_contacts')->with($data);
+		}
+        else return view('contacts.contacts')->with($data);
+    }
+    public function printSearch(Request $request)
+    {
+        return $this->getSearch($request, true);
     }
 
     public function updatePassword(Request $request, User $user) {

@@ -61,6 +61,7 @@ Route::get('contacts/{person}/create-login', 'ContactsController@createLoginDeta
 Route::get('contacts/profile', 'ContactsController@profile');
 Route::post('contacts', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
+Route::post('contacts/search/print', 'ContactsController@printSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
 //Route::post('contacts/{user}/reset-random-pw', 'ContactsController@resetRandomPassword');
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');

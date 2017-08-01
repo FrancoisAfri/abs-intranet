@@ -53,6 +53,24 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="res_province_id" class="col-sm-2 control-label">Province</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                    </div>
+                                    <select name="res_province_id" id="res_province_id" class="form-control select2">
+                                        <option value="">*** Select Your Province ***</option>
+                                        @foreach($provinces as $province)
+                                            <option value="{{ $province->id }}" {{ (old('res_province_id') == $province->id) ? ' selected' : '' }}>{{ $province->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" value="" name="res_province_name" id="res_province_name">
                         <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
                             <label for="company_id" class="col-sm-2 control-label">Search by Company</label>
 
@@ -99,6 +117,13 @@
                 var selectedValue = $('#company_id').val();
                 if (selectedValue > 0) $('#company_name').val($('#company_id option:selected').text());
                 else $('#company_name').val('');
+            });
+
+            //set the company name hidden input when the name has been selected from the drop-down
+            $('#res_province_id').change(function (e) {
+                var selectedValue = $('#res_province_id').val();
+                if (selectedValue > 0) $('#res_province_name').val($('#res_province_id option:selected').text());
+                else $('#res_province_name').val('');
             });
         });
     </script>
