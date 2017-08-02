@@ -53,6 +53,7 @@ Route::get('/user/delete/{user}', 'UsersController@deleteUser');
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
+Route::get('contacts/add-to-company/{companyID}', 'ContactsController@create');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
 Route::get('contacts/{person}/edit', 'ContactsController@edit');
 Route::get('contacts/{person}/activate', 'ContactsController@activateContact');
@@ -60,6 +61,7 @@ Route::get('contacts/{person}/delete', 'ContactsController@deleteContact');
 Route::get('contacts/{person}/create-login', 'ContactsController@createLoginDetails');
 Route::get('contacts/profile', 'ContactsController@profile');
 Route::post('contacts', 'ContactsController@store');
+//Route::post('contacts/add-to-company/{companyID}', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
 Route::post('contacts/search/print', 'ContactsController@printSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');

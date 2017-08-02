@@ -200,9 +200,11 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">
-                        <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                        <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Deactivate" : "Activate"}}</a>
-                       
+                        @if($canEdit)
+                            <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                            <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Deactivate" : "Activate"}}</a>
+                            <a href="{{ '/contacts/add-to-company/' . $company->id }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add Contact Person</a>
+                        @endif
                     </div>
                     <!-- /.box-footer -->
                 </form>

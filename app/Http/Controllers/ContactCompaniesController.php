@@ -169,11 +169,11 @@ class ContactCompaniesController extends Controller
     public function showCompany(ContactCompany $company)
     {
         $company->load('employees.company');
-        $user = Auth::user();
+        $user = Auth::user()->load('person');
         $beeCertDoc = $company->bee_certificate_doc;
         $compRegDoc = $company->comp_reg_doc;
         $provinces = Province::where('country_id', 1)->where('id', $company->phys_province)->get()->first();
-        $showEdit = (in_array($user->type, [1, 3])) ? true : false;
+        $canEdit = (in_array($user->type, [1, 3]) || ($user->type == 2 && ($user->person->company_id && $user->person->company_id == $company->id))) ? true : false;
 
         $data['page_title'] = "Clients";
         $data['page_description'] = "View Company Details";
@@ -187,7 +187,7 @@ class ContactCompaniesController extends Controller
         $data['bee_certificate_doc'] = (!empty($beeCertDoc)) ? Storage::disk('local')->url("company_docs/$beeCertDoc") : '';
         $data['comp_reg_doc'] = (!empty($compRegDoc)) ? Storage::disk('local')->url("company_docs/$compRegDoc") : '';
         $data['provinces'] = $provinces;
-        $data['show_edit'] = $showEdit;
+        $data['canEdit'] = $canEdit;
         return view('contacts.view_company')->with($data);
     }
 

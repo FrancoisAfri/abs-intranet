@@ -46,11 +46,15 @@ class ContactsController extends Controller
 		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
         return view('contacts.search_contact')->with($data);
     }
-    public function create() {
+    public function create($companyID = null) {
 
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
         $orgTypes = [1 => 'Private Company', 2 => 'Parastatal', 3 => 'School', 4 => 'Government', 5 => 'Other'];
-        $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+        $companies = ContactCompany::where('status', 1)
+            ->where(function ($query) use($companyID) {
+                if ($companyID) $query->where('id', $companyID);
+            })
+            ->orderBy('name')->get();
         $data['companies'] = $companies;
 		$data['page_title'] = "Contacts";
         $data['page_description'] = "Add a New Contact";
@@ -60,6 +64,7 @@ class ContactsController extends Controller
         ];
         $data['contact_types'] = $contactTypes;
         $data['org_types'] = $orgTypes;
+        $data['companyID'] = $companyID;
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Add Client';
 		//die('what');
@@ -160,6 +165,9 @@ class ContactsController extends Controller
 		AuditReportsController::store('Contacts', 'New Contact Added', "Contact Successfully added", 0);
         return redirect("/contacts/$person->id/edit")->with('success_add', "The contact has been added successfully.");
     }
+    /*public function addToCompany(Request $request, $companyID) {
+        return $this->store($request, $companyID);
+    }*/
 	
     /*public function edit(ContactPerson $contact) {
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
@@ -180,11 +188,14 @@ class ContactsController extends Controller
         return view('contacts.view_contact')->with($data);
     }*/
 	public function edit(ContactPerson $person) {
+	    $loggedInUser = Auth::user();
         $person->load('user', 'company');
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+        $canDeleteAndActivate = false;
+        if ($loggedInUser->type == 1 || $loggedInUser->type == 3) $canDeleteAndActivate = true;
         $data['page_title'] = "Clients";
         $data['page_description'] = "View/Update client details";
         $data['back'] = "/contacts";
@@ -202,11 +213,18 @@ class ContactsController extends Controller
 		$data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'search clients';
         $data['companies'] = $companies;
+        $data['canDeleteAndActivate'] = $canDeleteAndActivate;
         $data['view_by_admin'] = 1;
 		AuditReportsController::store('Contacts', 'Contact Edited', "Contact On Edit Mode", 0);
         return view('contacts.view_contact')->with($data);
     }
     
+    public function profile() {
+        $user = Auth::user()->load('person');
+        $person = $user->person;
+        return $this->edit($person);
+    }
+    /*
     public function profile() {
         $user = Auth::user()->load('person');
         $avatar = $user->person->profile_pic;
@@ -229,6 +247,7 @@ class ContactsController extends Controller
 		AuditReportsController::store('Contacts', 'Contact Profile Accessed', "Accessed By User", 0);
         return view('contacts.view_contact')->with($data);
     }
+    */
 	public function emailAdmin(Request $request) {
 		$emails = $request->all();
 		$message  = $emails['message'];

@@ -326,8 +326,10 @@
 
                     <div class="box-footer" style="text-align: center;">
                         <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
-                        <a href="/contacts/{{ $contactPerson->id }}/activate" class="btn  {{ (!empty($contactPerson->status) && $contactPerson->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($contactPerson->status) && $contactPerson->status == 1) ? "Deactivate" : "Activate"}}</a>
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete Client</button>
+                        @if($canDeleteAndActivate)
+                            <a href="/contacts/{{ $contactPerson->id }}/activate" class="btn  {{ (!empty($contactPerson->status) && $contactPerson->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($contactPerson->status) && $contactPerson->status == 1) ? "Deactivate" : "Activate"}}</a>
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete Client</button>
+                        @endif
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Update</button>
 					</div>
                     <!-- 
