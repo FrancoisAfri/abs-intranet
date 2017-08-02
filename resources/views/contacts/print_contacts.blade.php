@@ -1,4 +1,4 @@
-@extends('layouts.main_layout')
+@extends('layouts.printables.report_print_layout')
 
 @section('content')
     @include('contacts.partials.contact_search_result')

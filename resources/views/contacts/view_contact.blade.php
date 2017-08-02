@@ -11,7 +11,7 @@
 @section('content')
     <div class="row">
         <!-- User Form -->
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
             <!-- Horizontal Form -->
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -21,48 +21,86 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" method="POST" action="/contacts/{{ $user->id }}" enctype="multipart/form-data">
+                <form class="form-horizontal" method="POST" action="/contacts/{{ $contactPerson->id }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
 
                     <div class="box-body">
-                        <div class="form-group">
-                            <label for="first_name" class="col-sm-3 control-label">First Name</label>
 
-                            <div class="col-sm-9">
+                        <!-- Contact's company details -->
+                        @if($contactPerson->company)
+                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                <strong class="lead">Client's Company Details</strong>
+                                <span class="pull-right">
+                                    <a href="{{ "/contacts/company/$contactPerson->company_id/view" }}" class="btn btn-sm btn-primary no-print"><i class="fa fa-eye"></i> View Company</a>
+                                </span><br>
+                                @if(!empty($contactPerson->company->name))
+                                    <strong>Company Name:</strong> <em>{{ $contactPerson->company->name }}</em> &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($contactPerson->company->registration_number))
+                                    | &nbsp; &nbsp; <strong>Registration Number:</strong> <em>{{ $contactPerson->company->registration_number }}</em> &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($contactPerson->company->vat_number))
+                                    | &nbsp; &nbsp; <strong>VAT Number:</strong> <em>{{ $contactPerson->company->vat_number }}</em> &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($contactPerson->company->phone_number))
+                                    | &nbsp; &nbsp; <strong>Telephone:</strong> <em>{{ $contactPerson->company->phone_number }}</em> &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($contactPerson->company->email))
+                                    | &nbsp; &nbsp; <strong>Email:</strong> <em>{{ $contactPerson->company->email }}</em> &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($contactPerson->company->full_phys_address))
+                                    | &nbsp; &nbsp; <strong>Physical Address:</strong> <em>{{ $contactPerson->company->full_phys_address }}</em> &nbsp; &nbsp;
+                                @endif
+                            </p>
+                        @endif
+                        <!-- /. Contact's company details -->
+
+                        <!-- Contact status -->
+                        <div class="callout {{ ($contactPerson->status == 1) ? 'callout-success' : 'callout-danger' }}">
+                            <h4>Client Status</h4>
+
+                            <p>This profile is {{ ($contactPerson->status == 1) ? 'active' : 'deactivated' }}.</p>
+                        </div>
+                        <!-- /. Contact status -->
+
+                        <div class="form-group">
+                            <label for="first_name" class="col-sm-2 control-label">First Name</label>
+
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $user->person->first_name }}" placeholder="First Name" required>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $contactPerson->first_name }}" placeholder="First Name" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="surname" class="col-sm-3 control-label">Surname</label>
+                            <label for="surname" class="col-sm-2 control-label">Surname</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ $user->person->surname }}" placeholder="Surname" required>
+                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ $contactPerson->surname }}" placeholder="Surname" required>
                                 </div>
                             </div>
                         </div>
                         @if (isset($view_by_admin) && $view_by_admin === 1)
                             <div class="form-group">
-                                <label for="company_id" class="col-sm-3 control-label">Company</label>
+                                <label for="company_id" class="col-sm-2 control-label">Company</label>
 
-                                <div class="col-sm-9">
+                                <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-building"></i>
                                         </div>
-                                        <select id="company_id" name="company_id" class="form-control">
+                                        <select id="company_id" name="company_id" class="form-control select2">
                                             <option value="">*** Select a Company ***</option>
                                             @foreach($companies as $company)
-                                                <option value="{{ $company->id }}" {{ ($user->person->company_id == $company->id) ? ' selected' : '' }}>{{ $company->name }}</option>
+                                                <option value="{{ $company->id }}" {{ ($contactPerson->company_id == $company->id) ? ' selected' : '' }}>{{ $company->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -70,184 +108,184 @@
                             </div>
                         @endif
                         <div class="form-group">
-                            <label for="cell_number" class="col-sm-3 control-label">Cell Number</label>
+                            <label for="cell_number" class="col-sm-2 control-label">Cell Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-phone"></i>
                                     </div>
-                                    <input type="text" class="form-control" name="cell_number" value="{{ $user->person->cell_number }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
+                                    <input type="text" class="form-control" name="cell_number" value="{{ $contactPerson->cell_number }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="email" class="col-sm-3 control-label">Email</label>
+                            <label for="email" class="col-sm-2 control-label">Email</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-envelope"></i>
                                     </div>
-                                    <input type="email" class="form-control" id="email" name="email" value="{{ $user->person->email }}" placeholder="Email" required>
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ $contactPerson->email }}" placeholder="Email" required>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_address" class="col-sm-3 control-label">Address</label>
+                            <label for="res_address" class="col-sm-2 control-label">Address</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <textarea name="res_address" class="form-control" placeholder="Address">{{ $user->person->res_address }}</textarea>
+                                    <textarea name="res_address" class="form-control" placeholder="Address">{{ $contactPerson->res_address }}</textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_suburb" class="col-sm-3 control-label">Suburb</label>
+                            <label for="res_suburb" class="col-sm-2 control-label">Suburb</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="res_suburb" name="res_suburb" value="{{ $user->person->res_suburb }}" placeholder="Suburb">
+                                    <input type="text" class="form-control" id="res_suburb" name="res_suburb" value="{{ $contactPerson->res_suburb }}" placeholder="Suburb">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_city" class="col-sm-3 control-label">City</label>
+                            <label for="res_city" class="col-sm-2 control-label">City</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="res_city" name="res_city" value="{{ $user->person->res_city }}" placeholder="City">
+                                    <input type="text" class="form-control" id="res_city" name="res_city" value="{{ $contactPerson->res_city }}" placeholder="City">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_postal_code" class="col-sm-3 control-label">Postal Code</label>
+                            <label for="res_postal_code" class="col-sm-2 control-label">Postal Code</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <input type="number" class="form-control" id="res_postal_code" name="res_postal_code" value="{{ $user->person->res_postal_code }}" placeholder="Postal Code">
+                                    <input type="number" class="form-control" id="res_postal_code" name="res_postal_code" value="{{ $contactPerson->res_postal_code }}" placeholder="Postal Code">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="res_province_id" class="col-sm-3 control-label">Province</label>
+                            <label for="res_province_id" class="col-sm-2 control-label">Province</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
-                                    <select name="res_province_id" class="form-control">
+                                    <select name="res_province_id" class="form-control select2">
                                         <option value="">*** Select Your Province ***</option>
                                         @foreach($provinces as $province)
-                                            <option value="{{ $province->id }}" {{ ($user->person->res_province_id == $province->id) ? ' selected' : '' }}>{{ $province->name }}</option>
+                                            <option value="{{ $province->id }}" {{ ($contactPerson->res_province_id == $province->id) ? ' selected' : '' }}>{{ $province->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="date_of_birth" class="col-sm-3 control-label">Date of Birth</label>
+                            <label for="date_of_birth" class="col-sm-2 control-label">Date of Birth</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group date">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" name="date_of_birth" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_of_birth) ? date('d/m/Y',$user->person->date_of_birth) : '' }}">
+                                    <input type="text" class="form-control datepicker" name="date_of_birth" placeholder="  dd/mm/yyyy" value="{{ ($contactPerson->date_of_birth) ? date('d/m/Y',$contactPerson->date_of_birth) : '' }}">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="gender" class="col-sm-3 control-label">Gender</label>
+                            <label for="gender" class="col-sm-2 control-label">Gender</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-venus-mars"></i>
                                     </div>
-                                    <select name="gender" class="form-control">
+                                    <select name="gender" class="form-control select2">
                                         <option value="">*** Select Your gender ***</option>
-                                        <option value="1" {{ ($user->person->gender === 1) ? ' selected' : '' }}>Male</option>
-                                        <option value="0" {{ ($user->person->gender === 0) ? ' selected' : '' }}>Female</option>
+                                        <option value="1" {{ ($contactPerson->gender === 1) ? ' selected' : '' }}>Male</option>
+                                        <option value="0" {{ ($contactPerson->gender === 0) ? ' selected' : '' }}>Female</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="id_number" class="col-sm-3 control-label">ID Number</label>
+                            <label for="id_number" class="col-sm-2 control-label">ID Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="number" class="form-control" id="id_number" name="id_number" value="{{ $user->person->id_number }}" placeholder="ID Number">
+                                    <input type="number" class="form-control" id="id_number" name="id_number" value="{{ $contactPerson->id_number }}" placeholder="ID Number">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="passport_number" class="col-sm-3 control-label">Passport Number</label>
+                            <label for="passport_number" class="col-sm-2 control-label">Passport Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ $user->person->passport_number }}" placeholder="Passport Number">
+                                    <input type="text" class="form-control" id="passport_number" name="passport_number" value="{{ $contactPerson->passport_number }}" placeholder="Passport Number">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="marital_status" class="col-sm-3 control-label">Marital Status</label>
+                            <label for="marital_status" class="col-sm-2 control-label">Marital Status</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-venus-mars"></i>
                                     </div>
-                                    <select name="marital_status" class="form-control">
+                                    <select name="marital_status" class="form-control select2">
                                         <option value="">*** Select Your Marital Status ***</option>
                                         @foreach($marital_statuses as $marital_status)
-                                            <option value="{{ $marital_status->id }}" {{ ($user->person->marital_status == $marital_status->id) ? ' selected' : '' }}>{{ $marital_status->value }}</option>
+                                            <option value="{{ $marital_status->id }}" {{ ($contactPerson->marital_status == $marital_status->id) ? ' selected' : '' }}>{{ $marital_status->value }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="ethnicity" class="col-sm-3 control-label">Ethnicity</label>
+                            <label for="ethnicity" class="col-sm-2 control-label">Ethnicity</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-bar-chart"></i>
                                     </div>
-                                    <select name="ethnicity" class="form-control">
+                                    <select name="ethnicity" class="form-control select2">
                                         <option value="">*** Select Your Ethnic Group ***</option>
                                         @foreach($ethnicities as $ethnicity)
-                                            <option value="{{ $ethnicity->id }}" {{ ($user->person->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option>
+                                            <option value="{{ $ethnicity->id }}" {{ ($contactPerson->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="profile_pic" class="col-sm-3 control-label">Profile Picture</label>
+                            <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 @if(!empty($avatar))
                                     <div style="margin-bottom: 10px;">
                                         <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
@@ -256,24 +294,47 @@
                                 <input type="file" id="profile_pic" name="profile_pic" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                             </div>
                         </div>
-                        <hr>
-                        <!--<div class="form-group">
-                            <label for="change_password" class="col-sm-3 control-label">Password</label>
+                        <hr class="hr-text no-border" data-content="SECURITY OPTION">
+                        @if($contactPerson->user)
+                            {{--reset password--}}
+                            <div class="form-group">
+                                <label for="change_password" class="col-sm-2 control-label">Password</label>
 
-                            <div class="col-sm-9">
-                                <button type="button" id="change_password" class="btn btn-link" data-toggle="modal" data-target="#myPasswordModal"><font data-toggle="tooltip" title="Click here to change password.">Change Password</font></button>
+                                <div class="col-sm-10">
+                                    <button type="button" id="change_password" class="btn btn-default btn-block btn-flat" data-toggle="modal" data-target="#myPasswordModal"><font data-toggle="tooltip" title="Click here to change password."><i class="fa fa-unlock-alt"></i> Change Password</font></button>
+                                </div>
                             </div>
-                        </div>-->
+                            <!--<p class="text-muted well well-sm no-shadow lead">
+                                <a href="/contacts/{{ $contactPerson->user_id }}/reset-random-pw" class="btn btn-default btn-block btn-flat"><i class="fa fa-shield"></i> Reset Client's Password</a><br>
+                                <i>This will generate a new random password for this person. The new password will be emailed to the client.</i>
+                            </p>-->
+                        @else
+                            {{--create login details with the person's email--}}
+                            <div class="callout callout-info">
+                                <h4><i class="fa fa-info-circle"></i> Login details</h4>
+
+                                @if(!empty($contactPerson->email))
+                                    <a href="/contacts/{{ $contactPerson->id }}/create-login" class="btn btn-outline btn-block btn-flat"><i class="fa fa-unlock"></i> Create Login Details</a><br>
+                                    <p>This will generate login credentials with which this person will be able to login to the system. The login credentials will be sent to the email address specified above.</p>
+                                @else
+                                    <p>To create login details for this person, you need to start by updating their email address first.</p>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                     <!-- /.box-body -->
 
-                    <div class="box-footer">
-                        <button type="button" id="cancel" class="btn btn-default">Cancel</button>
-                        <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
+                    <div class="box-footer" style="text-align: center;">
+                        <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
+                        @if($canDeleteAndActivate)
+                            <a href="/contacts/{{ $contactPerson->id }}/activate" class="btn  {{ (!empty($contactPerson->status) && $contactPerson->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($contactPerson->status) && $contactPerson->status == 1) ? "Deactivate" : "Activate"}}</a>
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete Client</button>
+                        @endif
+                        <button type="submit" name="command" id="update" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Update</button>
 					</div>
                     <!-- 
 					
-						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$user->person->user_id}}, 'access');">Modules Access</button>/.box-footer -->
+						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$contactPerson->user_id}}, 'access');">Modules Access</button>/.box-footer -->
                 </form>
             </div>
             <!-- /.box -->
@@ -288,10 +349,12 @@
         @endif
         <!-- /.Password Modal form-->
 
+        <!-- Include delete warning Modal form-->
+        @include('contacts.partials.warning_action', ['modal_title' => 'Delete Client', 'modal_content' => 'Are you sure you want to delete this contact? This action cannot be undone.'])
     </div>
-    @endsection
+@endsection
 
-    @section('page_script')
+@section('page_script')
             <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 
@@ -299,6 +362,9 @@
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+    <!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 
     <!-- Start Bootstrap File input -->
     <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
@@ -318,6 +384,9 @@
 
     <script>
         $(function () {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+
             //Cancel button click event
             document.getElementById("cancel").onclick = function () {
                 location.href = "{{ $back }}";
@@ -362,7 +431,7 @@
             $('#my-password').on('click', function() {
                 $.ajax({
                     method: 'POST',
-                    url: '{{ '/contacts/' . $user->id . '/pw' }}',
+                    url: '{{ '/contacts/' . $contactPerson->user_id . '/pw' }}',
                     data: {
                         current_password: $('#current_password').val(),
                         new_password: $('#new_password').val(),
@@ -427,7 +496,7 @@
             $('#user-password').on('click', function() {
                 $.ajax({
                     method: 'POST',
-                    url: '{{ '/users/' . $user->id . '/upw' }}',
+                    url: '{{ '/users/' . $contactPerson->user_id . '/upw' }}',
                     data: {
                         new_password: $('#new_password').val(),
                         _token: $('input[name=_token]').val()

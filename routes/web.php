@@ -53,13 +53,20 @@ Route::get('/user/delete/{user}', 'UsersController@deleteUser');
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
+Route::get('contacts/add-to-company/{companyID}', 'ContactsController@create');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
-Route::get('contacts/{user}/edit', 'ContactsController@edit');
+Route::get('contacts/{person}/edit', 'ContactsController@edit');
+Route::get('contacts/{person}/activate', 'ContactsController@activateContact');
+Route::get('contacts/{person}/delete', 'ContactsController@deleteContact');
+Route::get('contacts/{person}/create-login', 'ContactsController@createLoginDetails');
 Route::get('contacts/profile', 'ContactsController@profile');
 Route::post('contacts', 'ContactsController@store');
+//Route::post('contacts/add-to-company/{companyID}', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
+Route::post('contacts/search/print', 'ContactsController@printSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
-Route::patch('contacts/{user}', 'ContactsController@update');
+//Route::post('contacts/{user}/reset-random-pw', 'ContactsController@resetRandomPassword');
+Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 //Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
@@ -136,13 +143,10 @@ Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAc
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
 
 //Contacts related requests
-Route::get('contacts', 'ContactsController@index');
+//Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
 Route::get('contacts/public', 'PublicRegistrationController@create');
 
-Route::get('contacts/{contact}/edit', 'ContactsController@edit');
-Route::post('contacts', 'ContactsController@store');
-Route::post('contacts/search', 'ContactsController@getSearch');
 Route::get('contacts/general_search', 'ClientSearchController@index');
 //Route::post('educator/search', 'ClientSearchController@educatorSearch');
 //Route::post('public_search', 'ClientSearchController@publicSearch');
@@ -152,8 +156,6 @@ Route::get('contacts/general_search', 'ClientSearchController@index');
 //Route::post('partners/search_results', 'PartnersSearchController@companySearch');
 //Route::get('partners/search', 'PartnersSearchController@index');
 
-Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
-Route::patch('contacts/{contact}', 'ContactsController@update');
 //Route::get('contacts/provider/create', 'ContactCompaniesController@createServiceProvider');
 //Route::get('contacts/sponsor/create', 'ContactCompaniesController@createSponsor');
 //Route::get('contacts/school/create', 'ContactCompaniesController@createSchool');

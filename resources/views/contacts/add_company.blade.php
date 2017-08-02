@@ -228,6 +228,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!--
                         <hr>
                         <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
                             <label for="name" class="col-sm-2 control-label">Contact Person</label>
@@ -237,7 +238,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="contact_person" name="contact_person" value="{{ old('contact_person') }}" placeholder="Contact Person" required>
+                                    <input type="text" class="form-control" id="contact_person" name="contact_person" value="{{ old('contact_person') }}" placeholder="Contact Person">
                                 </div>
                             </div>
                         </div>
@@ -277,6 +278,7 @@
                                 </div>
                             </div>
                         </div>
+                        -->
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

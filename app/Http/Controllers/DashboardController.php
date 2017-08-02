@@ -179,10 +179,9 @@ class DashboardController extends Controller
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         }
         else {
-			# Get loan status
-            //$data['page_title'] = "Dashboard";
-			//$data['page_description'] = "Main Dashboard";
-            //return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
+			$data['page_title'] = "Dashboard";
+			$data['page_description'] = "Main Dashboard";
+            return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }
 }

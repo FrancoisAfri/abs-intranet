@@ -18,7 +18,7 @@ class ContactCompany extends Model
 		, 'postal_address', 'account_number'];
 
     //relationship between contact_company and contact person (contacts_contacts)
-    public function employee() {
+    public function employees() {
         return $this->hasMany(ContactPerson::class, 'company_id');
     }
 
