@@ -29,7 +29,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-user"></i>
 									</div>
-									<input type="text" class="form-control" id="meeting_title" name="induction_title" placeholder="Enter Title...">
+									<input type="text" class="form-control" id="meeting_title" name="meeting_title" placeholder="Enter Title...">
 								</div>
                             </div>
                         </div>

@@ -29,13 +29,17 @@
 								</div>
 							</div>
 							<!-- /.box-header -->
+							<form class="form-horizontal" method="POST"  action="/meeting/update/{{$meeting->id}}">
+							<input type="hidden" name="meeting_id" id="meeting_id" value="{{$meeting->id}}">
+							{{ csrf_field() }}
+							 {{ method_field('PATCH') }}
 							<div class="box-body">
 								<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
 									<div class="form-group">
 										<label for="Meeting Name" class="col-sm-2 control-label">Title</label>
 										<div class="col-sm-10">
 											<div>
-												<input type="text" class="form-control" id="meeting_name" name="meeting_name" value="{{ $meeting->meeting_name }}" readonly>
+												<input type="text" class="form-control" id="meeting_name" name="meeting_name" value="{{ $meeting->meeting_name }}">
 											</div>
 										</div>
 									</div>
@@ -43,7 +47,7 @@
 										<label for="Meeting Date" class="col-sm-2 control-label">Date</label>
 										<div class="col-sm-10">
 											<div>
-											<input type="text" class="form-control datepicker" name="meeting_date" placeholder="  dd/mm/yyyy" value="{{ date('d F Y', $meeting->meeting_date) }}" readonly>
+											<input type="text" class="form-control datepicker" name="meeting_date" placeholder="  dd/mm/yyyy" value="{{ date('d F Y', $meeting->meeting_date) }}">
 											</div>
 										</div>
 									</div>
@@ -51,7 +55,7 @@
 										<label for="Meeting Location" class="col-sm-2 control-label">Location</label>
 										<div class="col-sm-10">
 											<div>
-												<input type="text" class="form-control" id="meeting_location" name="meeting_location" value="{{$meeting->meeting_location}}" readonly>
+												<input type="text" class="form-control" id="meeting_location" name="meeting_location" value="{{$meeting->meeting_location}}">
 											</div>
 										</div>
 									</div>
@@ -59,22 +63,20 @@
 										<label for="Meeting Agenda" class="col-sm-2 control-label">Agenda</label>
 										<div class="col-sm-10">
 											<div>
-											<textarea rows="4" cols="50" class="form-control" id="meeting_agenda" name="meeting_agenda" readonly>{{$meeting->meeting_agenda}}</textarea>
+											<textarea rows="4" cols="50" class="form-control" id="meeting_agenda" name="meeting_agenda">{{$meeting->meeting_agenda}}</textarea>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
+							
 						<!-- /.box-body -->
 							<div class="box-footer">
-								<button type="button" id="add-expenditure" class="btn btn-success pull-right"
-										data-toggle="modal" data-target="#edit-meeting-modal"
-										data-meeting_id="{{ $meeting->id }}" 
-										data-meeting_name="{{ $meeting->meeting_name }}" 
-										data-meeting_location="{{ $meeting->meeting_location }}" 
-										data-meeting_agenda="{{ $meeting->meeting_agenda }}">Edit Details
+								<button type="submit"  class="btn btn-success pull-right"
+										>Update
 								</button>
 							</div>
+						</form>
 						</div>
 					</div>
 					<!-- /.col -->
