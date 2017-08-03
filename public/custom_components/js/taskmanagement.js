@@ -54,3 +54,62 @@ function startTask(taslIDppraisedMonthList) {
 		}
 	});
 }
+
+/* function to load child [Division] and employees Tasks */
+function divDDEmpTasksOnChange(dropDownObj, meetingList, inductionList, prtContainer, loadingWheel) {
+    
+    loadingWheel = loadingWheel || null;
+	var postTo = ''; var selectedOption = '';
+    var ddID = dropDownObj.id;
+    var parentDDVal = dropDownObj.value;
+    var incInactive = -1; var loadAll = -1;
+    var childDDID = ''; var childDDLabel = '';
+	prtContainer = prtContainer || $(document);
+	//show loading wheel
+    if (loadingWheel != null) loadingWheel.show();
+	
+    if (parentDDVal > 0) {
+        switch(ddID) {
+            case 'division_level_5':
+                childDDID = 'division_level_4';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 5, parentDDVal, true);
+                loadEmpListTasks(inductionList, 5, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_4':
+                childDDID = 'division_level_3';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 4, parentDDVal, true);
+                loadEmpListTasks(inductionList, 4, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_3':
+                childDDID = 'division_level_2';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 3, parentDDVal, true);
+                loadEmpListTasks(inductionList, 3, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_2':
+                childDDID = 'division_level_1';
+                childDDLabel = $('label[for="' + childDDID + '"]').html();
+                loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, prtContainer);
+                loadEmpListTasks(meetingList, 2, parentDDVal, true);
+                loadEmpListTasks(inductionList, 2, parentDDVal, false, true, loadingWheel);
+                break;
+            case 'division_level_1':
+                loadEmpListTasks(meetingList, 1, parentDDVal, true);
+                loadEmpListTasks(inductionList, 1, parentDDVal, false, true, loadingWheel);
+                break;
+            default:
+                return null;
+                break;
+        }
+    } else {
+        meetingList.empty();
+        inductionList.empty();
+		//hide loading wheel
+        if (loadingWheel != null) loadingWheel.hide();
+    }
+}

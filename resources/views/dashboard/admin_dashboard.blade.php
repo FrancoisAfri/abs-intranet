@@ -319,9 +319,9 @@
 							{{ $managedDivsLevel->plural_name }}
 							@endif -->
 							@if(!empty($task->status) && ($task->status == 1 || $task->status == 3))
-							  <button type="button" id="startPause" class="btn btn-sm btn-default btn-flat pull-right" onclick="startPause(); postData({{$task->task_id}}, 'start');">Start</button>
+							  <button type="button" id="startPause" class="btn btn-sm btn-default btn-flat pull-right" onclick="startPause({{$task->task_id}},);">Start</button>
 							@elseif(!empty($task->status) && $task->status == 2)                     
-							  <button type="button" id="end-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
+							  <button type="button" id="end-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
 							  data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}" 
 							  data-upload_required="{{ $task->upload_required }}" >End</button>
 							  <button type="button" id="pause-task" class="btn btn-sm btn-default btn-flat pull-right" onclick="postData({{$task->task_id}}, 'pause');">Pause</button>
@@ -573,13 +573,18 @@
 		var running = 0;
 		 
 		function startPause() {
-			if (running == 0) {
+			if (running == 0) 
+			{
 				running = 1;
 				increment();
 				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-pause'></i> Pause";
-			} else {
+				$("#end-button").show();
+			} 
+			else 
+			{
 				running = 0;
 				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-repeat'></i> Resume";
+				$("#end-button").show();
 			}
 		}
 		 
@@ -604,6 +609,8 @@
 		}
 		//
         $(function () {
+			// hide end button when page load
+			//$("#end-button").show();
             //Initialize Select2 Elements
             $(".select2").select2();
 
