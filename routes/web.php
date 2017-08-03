@@ -50,6 +50,7 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
@@ -61,13 +62,16 @@ Route::get('contacts/{person}/delete', 'ContactsController@deleteContact');
 Route::get('contacts/{person}/create-login', 'ContactsController@createLoginDetails');
 Route::get('contacts/profile', 'ContactsController@profile');
 Route::post('contacts', 'ContactsController@store');
-//Route::post('contacts/add-to-company/{companyID}', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
 Route::post('contacts/search/print', 'ContactsController@printSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
 //Route::post('contacts/{user}/reset-random-pw', 'ContactsController@resetRandomPassword');
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
-//Company Identity (company details: logo, theme color, etc)
+Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');
+Route::post('contacts/send-message', 'ContactsController@sendMessage');
+Route::get('contacts/setup', 'ContactsController@setup');
+
+//#Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
 

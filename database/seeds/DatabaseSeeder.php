@@ -355,6 +355,24 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'contacts/company_search';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Send Message';
+        $ribbon->description = 'Send SMS or email to Contacts';
+        $ribbon->ribbon_path = 'contacts/send-message';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Contacts Related Settings';
+        $ribbon->ribbon_path = 'contacts/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
 		
 		
         $module = new modules(); // Security

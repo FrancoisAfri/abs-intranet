@@ -547,4 +547,38 @@ class ContactsController extends Controller
 
         return back()->with(['success_pw_updated' => "The client's password has been successfully reset. the client will receive an email with the new password."]);
     }*/
+
+    public function sendMessageIndex()
+    {
+        //$companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+        $contactPersons = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+
+        $data['page_title'] = "Clients";
+        $data['page_description'] = "Send a Message To Your Clients";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Send Message', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'contacts';
+        $data['active_rib'] = 'send message';
+        //$data['companies'] = $companies;
+        $data['contactPersons'] = $contactPersons;
+        AuditReportsController::store('Clients', 'Send Message Page Accessed', "Actioned By User", 0);
+        return view('contacts.send_message')->with($data);
+    }
+
+    public function sendMessage(Request $request)
+    {
+        $this->validate($request, [
+            'clients.*' => 'required',
+            'sms_content' => 'bail|required|max:180',
+        ]);
+
+        //get bulk sms credentials [this should be loaded from setup]
+
+
+        return $request->all();
+    }
+
+    public function setup() {}
 }
