@@ -16,36 +16,22 @@ class AppraisalSurvey extends Model
     ];
 
     /**
-     * Accessor function to return a surveys average rating.
+     * Accessor function to return a survey's average rating.
      *
      * @return double $avgRating
      */
     public function getAvgRatingAttribute() {
-    	$avgRating = null;
-    	$totalRating = 0;
-    	$ratingAreas = 0;
-    	if ($this->attitude_enthusiasm) {
-    		$totalRating += $this->attitude_enthusiasm;
-    		$ratingAreas += 1;
-    	}
-    	if ($this->expertise) {
-    		$totalRating += $this->expertise;
-    		$ratingAreas += 1;
-    	}
-    	if ($this->efficiency) {
-    		$totalRating += $this->efficiency;
-    		$ratingAreas += 1;
-    	}
-    	if ($this->attentive_listening) {
-    		$totalRating += $this->attentive_listening;
-    		$ratingAreas += 1;
-    	}
-    	if ($this->attitude_enthusiasm) {
-    		$totalRating += $this->general_overall_assistance;
-    		$ratingAreas += 1;
-    	}
-    	$avgRating = ($ratingAreas > 0) ? $totalRating / $ratingAreas : null;
+        return $this->surveyQuestions->avg('pivot.result');
+    }
 
-    	return $avgRating;
+    /**
+     * Relationship with SurveyQuestions [Many to Many].
+     *
+     * @return
+     */
+    public function surveyQuestions() {
+        return $this->belongsToMany(SurveyQuestions::class, 'appraisal_survey_questions', 'survey_id', 'question_id')
+            ->withPivot('result')
+            ->withTimestamps();
     }
 }

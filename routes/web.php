@@ -50,17 +50,28 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
+Route::get('contacts/add-to-company/{companyID}', 'ContactsController@create');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
-Route::get('contacts/{user}/edit', 'ContactsController@edit');
+Route::get('contacts/{person}/edit', 'ContactsController@edit');
+Route::get('contacts/{person}/activate', 'ContactsController@activateContact');
+Route::get('contacts/{person}/delete', 'ContactsController@deleteContact');
+Route::get('contacts/{person}/create-login', 'ContactsController@createLoginDetails');
 Route::get('contacts/profile', 'ContactsController@profile');
 Route::post('contacts', 'ContactsController@store');
 Route::post('contacts/search', 'ContactsController@getSearch');
+Route::post('contacts/search/print', 'ContactsController@printSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
-Route::patch('contacts/{user}', 'ContactsController@update');
-//Company Identity (company details: logo, theme color, etc)
+//Route::post('contacts/{user}/reset-random-pw', 'ContactsController@resetRandomPassword');
+Route::patch('contacts/{contactPerson}', 'ContactsController@update');
+Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');
+Route::post('contacts/send-message', 'ContactsController@sendMessage');
+Route::get('contacts/setup', 'ContactsController@setup');
+
+//#Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
 
@@ -138,13 +149,10 @@ Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAc
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
 
 //Contacts related requests
-Route::get('contacts', 'ContactsController@index');
+//Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
 Route::get('contacts/public', 'PublicRegistrationController@create');
 
-Route::get('contacts/{contact}/edit', 'ContactsController@edit');
-Route::post('contacts', 'ContactsController@store');
-Route::post('contacts/search', 'ContactsController@getSearch');
 Route::get('contacts/general_search', 'ClientSearchController@index');
 //Route::post('educator/search', 'ClientSearchController@educatorSearch');
 //Route::post('public_search', 'ClientSearchController@publicSearch');
@@ -154,8 +162,6 @@ Route::get('contacts/general_search', 'ClientSearchController@index');
 //Route::post('partners/search_results', 'PartnersSearchController@companySearch');
 //Route::get('partners/search', 'PartnersSearchController@index');
 
-Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
-Route::patch('contacts/{contact}', 'ContactsController@update');
 //Route::get('contacts/provider/create', 'ContactCompaniesController@createServiceProvider');
 //Route::get('contacts/sponsor/create', 'ContactCompaniesController@createSponsor');
 //Route::get('contacts/school/create', 'ContactCompaniesController@createSchool');
@@ -320,6 +326,7 @@ Route::get('appraisal/{empID}/viewappraisal', 'AppraisalSearchController@viewApp
 Route::get('appraisal/{emp}/{monthYear}/kpas', 'AppraisalSearchController@kpasView');
 Route::get('appraisal/{emp}/{kpaID}/{dateUploaded}/kpis', 'AppraisalSearchController@kpisView');
 Route::post('appraisal/search_results', 'AppraisalSearchController@searchResults');
+Route::get('appraisal/search_results/{empID}/{monthName}', 'AppraisalSearchController@searchResultsWithParameter');
 Route::get('appraisal/kpi_view_more/{emp}/{monthYear}/{kpi}', 'AppraisalSearchController@queryReport');
 
 //  Emp appraisal and 360 appraisal
@@ -426,10 +433,19 @@ Route::post('/meeting/add_task/{meeting}', 'MeetingMinutesAdminController@saveTa
 Route::post('/meeting_minutes/add_meeting', 'MeetingMinutesAdminController@store');
 Route::get('/meeting_minutes/view_meeting/{meeting}/view', 'MeetingMinutesAdminController@show');
 Route::get('/meeting_minutes/search', 'MeetingMinutesAdminController@search');
-Route::post('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
+Route::patch('/meeting/update/{meeting}', 'MeetingMinutesAdminController@update');
 Route::post('/meeting/update_attendee/{attendee}', 'MeetingMinutesAdminController@updateAttendee');
 Route::get('/meeting/prnt_meeting/{meeting}', 'MeetingMinutesAdminController@printMinutes');
 Route::get('/meeting/email_meeting/{meeting}', 'MeetingMinutesAdminController@emailMinutes');
+// Task Management
+Route::get('/tasks/add_task', 'TaskManagementController@addTask');
+Route::get('/tasks/search_task', 'TaskManagementController@index');
+Route::post('/tasks/add_new_task', 'TaskManagementController@addNewTask');
+Route::post('/task/search_results', 'TaskManagementController@searchResults');
+Route::get('/tasks/task_report', 'TaskManagementController@report');
+Route::post('/task/indtuction_report', 'InductionAdminController@getReport');
+Route::post('/task/meeting_report', 'TaskManagementController@getReport');
+Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');

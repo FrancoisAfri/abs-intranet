@@ -107,7 +107,7 @@ class DashboardController extends Controller
 			$today = strtotime(date('Y-m-d'));
 			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 			$tasks = DB::table('employee_tasks')
-			->select('employee_tasks.description','employee_tasks.start_date'
+			->select('employee_tasks.description','employee_tasks.start_date','employee_tasks.manager_duration'
 			,'employee_tasks.employee_id','employee_tasks.upload_required'
 			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date'
 			,'employee_tasks.id as task_id','contact_companies.name as client_name')
@@ -179,10 +179,9 @@ class DashboardController extends Controller
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         }
         else {
-			# Get loan status
-            //$data['page_title'] = "Dashboard";
-			//$data['page_description'] = "Main Dashboard";
-            //return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
+			$data['page_title'] = "Dashboard";
+			$data['page_description'] = "Main Dashboard";
+            return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }
 }

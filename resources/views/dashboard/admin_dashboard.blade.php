@@ -23,7 +23,7 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <p class="text-center">
                                 <strong>My Performance For {{ date('Y') }}</strong>
                             </p>
@@ -33,6 +33,15 @@
                                 <canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>
                             </div>
                             <!-- /.chart-responsive -->
+                        </div>
+                        <!-- Appraised months list col -->
+                        <div class="col-md-4">
+                            <p class="text-center">
+                                <strong>Appraised Months List</strong>
+                            </p>
+                            <div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
+                                <ul class="nav nav-pills nav-stacked" id="emp-appraised-month-list"></ul>
+                            </div>
                         </div>
                     </div>
                     <!-- /.row -->
@@ -272,7 +281,7 @@
 		  <div class="box box-info">
             <div class="box-header with-border">
 			 <i class="ion ion-clipboard"></i>
-              <h3 class="box-title">Tasks List</h3>
+              <h3 class="box-title">Tasks List <p id="stopWatchDisplay" style="font-size:18px; font-weight:bold; font-family:cursive;"></p></h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -288,6 +297,7 @@
 						<tr>
 							<th>Order #</th>
 							<th>Description</th>
+							<th>Duration</th>
 							<th>Due Date</th>
 							<th>Client Name</th>
 							<th></th>
@@ -299,6 +309,7 @@
 						  <tr>
 							<td>{{ (!empty($task->order_no)) ?  $task->order_no : ''}}</td>
 							<td>{{ (!empty($task->description)) ?  $task->description : ''}}</td>
+							<td>{{ (!empty($task->manager_duration)) ?  $task->manager_duration : ''}}</td>
 							<td>{{ (!empty($task->due_date)) ?  date('Y-m-d',$task->due_date) : ''}}</td>
 							<td>{{ (!empty($task->client_name)) ?  $task->client_name : ''}}</td>
 							<td>
@@ -308,9 +319,9 @@
 							{{ $managedDivsLevel->plural_name }}
 							@endif -->
 							@if(!empty($task->status) && ($task->status == 1 || $task->status == 3))
-							  <button type="button" id="start-task" class="btn btn-sm btn-default btn-flat pull-right" onclick="postData({{$task->task_id}}, 'start');">Start</button>
+							  <button type="button" id="startPause" class="btn btn-sm btn-default btn-flat pull-right" onclick="startPause({{$task->task_id}},);">Start</button>
 							@elseif(!empty($task->status) && $task->status == 2)                     
-							  <button type="button" id="end-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
+							  <button type="button" id="end-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
 							  data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}" 
 							  data-upload_required="{{ $task->upload_required }}" >End</button>
 							  <button type="button" id="pause-task" class="btn btn-sm btn-default btn-flat pull-right" onclick="postData({{$task->task_id}}, 'pause');">Pause</button>
@@ -559,11 +570,53 @@
 			else if (data == 'end')
 				location.href = "/task/end/" + id;
 		}
+		///
+		var time = 0;
+		var running = 0;
+		 
+		function startPause() {
+			if (running == 0) 
+			{
+				running = 1;
+				increment();
+				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-pause'></i> Pause";
+				$("#end-button").show();
+			} 
+			else 
+			{
+				running = 0;
+				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-repeat'></i> Resume";
+				$("#end-button").show();
+			}
+		}
+		 
+		function increment() {
+			if (running == 1) {
+				setTimeout(function() {
+					time++;
+					var mins = Math.floor(time / 10 / 60) % 60;
+					var secs = Math.floor(time / 10) % 60;
+					var tenths = time % 10;
+		 
+					if (mins < 10) {
+						mins = "0" + mins;
+					}
+					if (secs < 10) {
+						secs = "0" + secs;
+					}
+					document.getElementById("stopWatchDisplay").innerHTML = mins + ":" + secs + ":" + "0" + tenths;
+					increment();
+				}, 100);
+			}
+		}
+		//
         $(function () {
+			// hide end button when page load
+			//$("#end-button").show();
             //Initialize Select2 Elements
             $(".select2").select2();
 
-             $('#Apply').click(function () {
+            $('#Apply').click(function () {
                 location.href = '/leave/application';
             });
             //initialise matchHeight on widgets
@@ -668,7 +721,8 @@
             var empID = parseInt('{{ $user->person->id }}');
             var empChartCanvas = $('#empMonthlyPerformanceChart');
             var loadingWheel = $('#loading_overlay_emp_monthly_appraisal');
-            loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
+            var empAppraisedMonthList = $('#emp-appraised-month-list');
+            loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
 
             //Company appraisal
             if (canViewCPWidget == 1) {
@@ -724,9 +778,10 @@
                     var empName = linkDiv.data('emp_name');
                     var empChartCanvas = $('#empMonthlyPerformanceModalChart');
                     var loadingWheel = $('#lo-emp-year-performance-modal');
+                    var empAppraisedMonthList = $('#emp-appraised-month-modal-list');
                     var modalWin = $(this);
                     modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
-                    loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel);
+                    loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
                 });
                 $('#emp-year-performance-modal').on('hidden.bs.modal', function (e) {
                     $('#lo-emp-year-performance-modal').show();

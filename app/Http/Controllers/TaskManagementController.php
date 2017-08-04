@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\activity;
 use App\contacts_company;
+use App\CompanyIdentity;
 use App\HRPerson;
 use App\programme;
 use App\projects;
 use App\User;
 use App\AuditTrail;
+use App\ContactCompany;
 use App\EmployeeTasks;
 use App\EmployeeTasksDocuments;
 use App\Mail\EmployeesTasksMail;
@@ -37,21 +39,40 @@ class TaskManagementController extends Controller
     	
 	public function index()
     {
-        $data['page_title'] = "Audit Report";
-        $data['page_description'] = "Audit Report";
-        $data['breadcrumb'] = [
-            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Audit';
-        $data['active_rib'] = 'Audit Report';
-		
+        $companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+        $data['page_title'] = "Task Search";
+        $data['page_description'] = "Task Search";
+        $data['breadcrumb'] = [
+            ['title' => 'Task Management', 'path' => '/tasks/search_task', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Tasks Search', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Task Management';
+        $data['active_rib'] = 'Search Task';
 		
 		$data['users'] = $users;
-		AuditReportsController::store('Task Management', 'Add Task Page Accessed', "By User", 0);
-        return view('audit.audit_search')->with($data);
+		$data['companies'] = $companies;
+		AuditReportsController::store('Task Management', 'View Search Search Page', "Accessed By User", 0);
+        return view('tasks.search')->with($data);
+    }
+	// Add task
+	public function addTask()
+    {
+        $companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
+		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+                $data['page_title'] = "Add Task";
+        $data['page_description'] = "Add Task";
+        $data['breadcrumb'] = [
+            ['title' => 'Task Management', 'path' => '/tasks/search_task', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Add Task', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Task Management';
+        $data['active_rib'] = 'Add Task';
+		
+		$data['users'] = $users;
+		$data['companies'] = $companies;
+		AuditReportsController::store('Task Management', 'Add Task Page', "Accessed By User", 0);
+        return view('tasks.add_new_task')->with($data);
     }
 	# Start task
 	public function startTask(EmployeeTasks $task) 
@@ -182,6 +203,44 @@ class TaskManagementController extends Controller
 		AuditReportsController::store('Task Management', "Task Checked", "Checked by User", 0);
 	return response()->json(['employee_id' => $checkData['task_id']], 200);
     }
+	# Add task
+	public function addNewTask(Request $request) 
+	{
+		$this->validate($request, [
+            'employee_id' => 'bail|required|integer|min:1',       
+            'description' => 'required',     
+        ]);
+		$AddData = $request->all();
+        //Exclude empty fields from query
+        foreach ($AddData as $key => $value)
+        {
+            if (empty($AddData[$key])) {
+                unset($AddData[$key]);
+            }
+        }
+		
+		if (!empty($AddData['start_date'])) {
+            $AddData['start_date'] = str_replace('/', '-', $AddData['start_date']);
+            $startDate = strtotime($AddData['start_date']);
+        }
+		if (!empty($AddData['due_date'])) {
+            $AddData['due_date'] = str_replace('/', '-', $AddData['due_date']);
+            $duedate = strtotime($AddData['due_date']);
+        }
+		//return $AddData;
+		# Add Task 
+		$employeeID = $AddData['employee_id'];
+		$companyID = !empty($AddData['company_id']) ? $AddData['company_id'] : 0;
+		$managerDuration = $AddData['manager_duration'];
+		$escalationPerson = HRPerson::where('id', $employeeID)->first();
+		$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;			
+		$description = $AddData['description'];
+		
+		TaskManagementController::store($description,$duedate,$startDate,$managerID,$employeeID,3
+					,0,0,0,0,0,0,0,0,$companyID, $managerDuration);
+		AuditReportsController::store('Task Management', "Task Added", "Added By User", 0);
+	return Back();
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -189,7 +248,8 @@ class TaskManagementController extends Controller
      * @return \Illuminate\Http\Response
     */
     public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
-	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0,$checkByID=0)
+	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0
+	,$checkByID=0,$clientID=0,$managerDuration=0)
     {
 		//convert dates to unix time stamp
         /*if (!empty($duedate)) {
@@ -202,7 +262,8 @@ class TaskManagementController extends Controller
             $intstartDate = strtotime($startDate);
         }
 		else $intstartDate = 0;*/
-
+	//echo $managerDuration;
+	//die();
 		$user = Auth::user();
 		$EmployeeTasks = new EmployeeTasks();
 		$EmployeeTasks->induction_id = $inductionID;
@@ -222,7 +283,9 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->start_date = $startDate;
 		$EmployeeTasks->administrator_id = $administratorID;
 		$EmployeeTasks->check_by_id = $checkByID;
-		// Save task
+		$EmployeeTasks->client_id = $clientID;
+		$EmployeeTasks->manager_duration = $managerDuration;
+		//Save task
         $EmployeeTasks->save();
 		if (empty($inductionID))
 		{
@@ -257,120 +320,275 @@ class TaskManagementController extends Controller
         AuditReportsController::store('Task Management', 'task Informations Updated', "Updated by User", 0);
         return response()->json(['new_description' => $description], 200);
     }
-	// draw audit report acccording to search criteria
-	public function getReport(Request $request)
+	
+	// Search results
+	public function searchResults(Request $request)
     {
-		$actionFrom = $actionTo = 0;
-		$actionDate = $request->action_date;
-		$userID = $request->user_id;
-		$action = $request->action;
-		$moduleName = $request->module_name;
-		if (!empty($actionDate))
+		$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+		$completionFrom = $completionTo = $creationFrom = $creationTo = 0;
+		$completionDate = $request->completion_date;
+		$dueDate = $request->due_date;
+		$employeeID = $request->employee_id;
+		$taskNumber = $request->task_number;
+		$status = $request->status;
+		if (!empty($completionDate))
 		{
-			$startExplode = explode('-', $actionDate);
-			$actionFrom = strtotime($startExplode[0]);
-			$actionTo = strtotime($startExplode[1]);
+			$completionExplode = explode('-', $completionDate);
+			$completionFrom = strtotime($completionExplode[0]);
+			$completionTo = strtotime($completionExplode[1]);
 		}
-		$audits = DB::table('audit_trail')
-		->select('audit_trail.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
-		->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.user_id')
-		->where(function ($query) use ($actionFrom, $actionTo) {
-		if ($actionFrom > 0 && $actionTo  > 0) {
-			$query->whereBetween('audit_trail.action_date', [$actionFrom, $actionTo]);
-		}
-		})
-		->where(function ($query) use ($userID) {
-		if (!empty($userID)) {
-			$query->where('audit_trail.user_id', $userID);
-		}
-		})
-		->where(function ($query) use ($moduleName) {
-			if (!empty($moduleName)) {
-				$query->where('audit_trail.module_name', 'ILIKE', "%$moduleName%");
-			}
-		})
-		->where(function ($query) use ($action) {
-			if (!empty($action)) {
-				$query->where('audit_trail.action', 'ILIKE', "%$action%");
-			}
-		})
-		->orderBy('audit_trail.module_name')
-		->get();
-        $data['action'] = $request->action;
-        $data['module_name'] = $request->module_name;
-        $data['user_id'] = $request->user_id;
-        $data['action_date'] = $request->action_date;
-        $data['audits'] = $audits;
-		$data['page_title'] = "Audit Report";
-        $data['page_description'] = "Audit Report";
-        $data['breadcrumb'] = [
-            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Audit';
-        $data['active_rib'] = 'Audit Report';
-		AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
-        return view('audit.audit_results')->with($data);
-    }
-	// Print audit report acccording to sent criteria
-	public function printreport(Request $request)
-    {
-		$actionFrom = $actionTo = 0;
-		$actionDate = $request->action_date;
-		$userID = $request->user_id;
-		$action = $request->action;
-		$moduleName = $request->module_name;
-		if (!empty($actionDate))
+		if (!empty($dueDate))
 		{
-			$startExplode = explode('-', $actionDate);
-			$actionFrom = strtotime($startExplode[0]);
-			$actionTo = strtotime($startExplode[1]);
+			$creationExplode = explode('-', $dueDate);
+			$creationFrom = strtotime($creationExplode[0]);
+			$creationTo = strtotime($creationExplode[1]);
 		}
-		$audits = DB::table('audit_trail')
-		->select('audit_trail.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
-		->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.user_id')
-		->where(function ($query) use ($actionFrom, $actionTo) {
-		if ($actionFrom > 0 && $actionTo  > 0) {
-			$query->whereBetween('audit_trail.action_date', [$actionFrom, $actionTo]);
-		}
-		})
-		->where(function ($query) use ($userID) {
-		if (!empty($userID)) {
-			$query->where('audit_trail.user_id', $userID);
+		$employeesTasks = DB::table('employee_tasks')
+		->select('employee_tasks.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+		->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+		->where(function ($query) use ($completionFrom, $completionTo) {
+		if ($completionFrom > 0 && $completionTo  > 0) {
+			$query->whereBetween('employee_tasks.date_completed', [$completionFrom, $completionTo]);
 		}
 		})
-		->where(function ($query) use ($moduleName) {
-			if (!empty($moduleName)) {
-				$query->where('audit_trail.module_name', 'ILIKE', "%$moduleName%");
-			}
+		->where(function ($query) use ($creationFrom, $creationTo) {
+		if ($creationFrom > 0 && $creationTo  > 0) {
+			$query->whereBetween('employee_tasks.due_date', [$creationFrom, $creationTo]);
+		}
 		})
-		->where(function ($query) use ($action) {
-			if (!empty($action)) {
-				$query->where('audit_trail.action', 'ILIKE', "%$action%");
-			}
+		->where(function ($query) use ($status) {
+		if (!empty($status)) {
+			$query->where('employee_tasks.status', $status);
+		}
 		})
-		->orderBy('audit_trail.module_name')
+		->where(function ($query) use ($employeeID) {
+		if (!empty($employeeID)) {
+			$query->where('employee_tasks.employee_id', $employeeID);
+		}
+		})
+		->orderBy('employee_tasks.employee_id')
+		->orderBy('employee_tasks.order_no')
 		->get();
 		
-        $data['audits'] = $audits;   
-        $data['page_title'] = "Audit Report";
-        $data['page_description'] = "Audit Report";
+        $data['employeesTasks'] = $employeesTasks;
+        $data['taskStatus'] = $taskStatus;
+		$data['page_title'] = "Tasks Search Results";
+        $data['page_description'] = "Show Search Results";
         $data['breadcrumb'] = [
-            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Audit', 'path' => '/audit/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Audit Report', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Task Management', 'path' => '/tasks/search_task', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Task Management', 'path' => '/tasks/search_task', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Task Management', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Audit';
-        $data['active_rib'] = 'Audit Report';
+        $data['active_mod'] = 'Task Management';
+        $data['active_rib'] = 'Search Task';
+		AuditReportsController::store('Task Management', 'View Task Search Results', "view Task Results", 0);
+        return view('tasks.tasks_search_results')->with($data);
+    }
+	// Report Search
+	public function report()
+    {
+		$companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
+		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+        $data['page_title'] = "Task Report";
+        $data['page_description'] = "Task Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Task Management', 'path' => '/tasks/task_report', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            //['title' => 'Induction', 'path' => '/induction/search', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Tasks Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Task Management';
+        $data['active_rib'] = 'Report';
+		
+		$data['users'] = $users;
+		$data['companies'] = $companies;
+		AuditReportsController::store('Task Management', 'View Report Search Page', "Accessed By User", 0);
+        return view('tasks.reports.reports')->with($data);
+    }
+	
+	// draw tasks report acccording to search criteria
+	public function getReport(Request $request)
+    {
+		$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+		$completionFrom = $completionTo = $creationFrom = $creationTo = 0;
+		$completionDate = $request->completion_date;
+		$creationDate = $request->creation_date;
+		$companyID = $request->company_id;
+		$employeeID = $request->employee_id;
+		$meetingName = $request->meeting_name;
+		$status = $request->status;
+		if (!empty($completionDate))
+		{
+			$completionExplode = explode('-', $completionDate);
+			$completionFrom = strtotime($completionExplode[0]);
+			$completionTo = strtotime($completionExplode[1]);
+		}
+		if (!empty($creationDate))
+		{
+			$creationExplode = explode('-', $creationDate);
+			$creationFrom = strtotime($creationExplode[0]);
+			$creationTo = strtotime($creationExplode[1]);
+		}
+		$employeesTasks = DB::table('employee_tasks')
+		->select('employee_tasks.*','meeting_minutes.meeting_name'
+				,'hr_people.first_name as firstname', 'hr_people.surname as surname')
+		->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+		->leftJoin('meeting_minutes', 'employee_tasks.meeting_id', '=', 'meeting_minutes.id')
+		->where(function ($query) use ($completionFrom, $completionTo) {
+		if ($completionFrom > 0 && $completionTo  > 0) {
+			$query->whereBetween('employee_tasks.date_completed', [$completionFrom, $completionTo]);
+		}
+		})
+		->where(function ($query) use ($creationFrom, $creationTo) {
+		if ($creationFrom > 0 && $creationTo  > 0) {
+			$query->whereBetween('employee_tasks.due_date', [$creationFrom, $creationTo]);
+		}
+		})
+		->where(function ($query) use ($status) {
+		if (!empty($status)) {
+			$query->where('employee_tasks.status', $status);
+		}
+		})
+		->where(function ($query) use ($employeeID) {
+		if (!empty($employeeID)) {
+			$query->where('employee_tasks.employee_id', $employeeID);
+		}
+		})
+		->where(function ($query) use ($meetingName) {
+			if (!empty($meetingName)) {
+				$query->where('meeting_minutes.meeting_name', 'ILIKE', "%$meetingName%");
+			}
+		})
+		->where('employee_tasks.task_type', '=', 2)
+		->orderBy('employee_tasks.employee_id')
+		->orderBy('employee_tasks.order_no')
+		->get();
+		
+        $data['meeting_name'] = $request->meeting_name;
+        $data['completion_date'] = $request->completion_date;
+        $data['creation_date'] = $request->creation_date;
+        $data['employee_id'] = $request->employee_id;
+        $data['status'] = $request->status;
+        $data['employeesTasks'] = $employeesTasks;
+        $data['taskStatus'] = $taskStatus;
+		$data['page_title'] = "Tasks Report";
+        $data['page_description'] = "Tasks Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Task Management', 'path' => '/tasks/task_report', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Task Management', 'path' => '/tasks/task_report', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Task Management Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Task Management';
+        $data['active_rib'] = 'Report';
+		AuditReportsController::store('Task Management', 'View Task Search Results', "view Task Results", 0);
+        return view('tasks.reports.tasks_results')->with($data);
+    }
+	
+	// Print tasks report acccording to sent criteria
+	public function printreport(Request $request)
+    {
+		$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+		$completionFrom = $completionTo = $creationFrom = $creationTo = 0;
+		$completionDate = $request->completion_date;
+		$creationDate = $request->creation_date;
+		$companyID = $request->company_id;
+		$employeeID = $request->employee_id;
+		$meetingName = $request->meeting_name;
+		$status = $request->status;
+		if (!empty($completionDate))
+		{
+			$completionExplode = explode('-', $completionDate);
+			$completionFrom = strtotime($completionExplode[0]);
+			$completionTo = strtotime($completionExplode[1]);
+		}
+		if (!empty($creationDate))
+		{
+			$creationExplode = explode('-', $creationDate);
+			$creationFrom = strtotime($creationExplode[0]);
+			$creationTo = strtotime($creationExplode[1]);
+		}
+		$employeesTasks = DB::table('employee_tasks')
+		->select('employee_tasks.*','meeting_minutes.meeting_name'
+				,'hr_people.first_name as firstname', 'hr_people.surname as surname')
+		->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+		->leftJoin('meeting_minutes', 'employee_tasks.meeting_id', '=', 'meeting_minutes.id')
+		->where(function ($query) use ($completionFrom, $completionTo) {
+		if ($completionFrom > 0 && $completionTo  > 0) {
+			$query->whereBetween('employee_tasks.date_completed', [$completionFrom, $completionTo]);
+		}
+		})
+		->where(function ($query) use ($creationFrom, $creationTo) {
+		if ($creationFrom > 0 && $creationTo  > 0) {
+			$query->whereBetween('employee_tasks.due_date', [$creationFrom, $creationTo]);
+		}
+		})
+		->where(function ($query) use ($status) {
+		if (!empty($status)) {
+			$query->where('employee_tasks.status', $status);
+		}
+		})
+		->where(function ($query) use ($employeeID) {
+		if (!empty($employeeID)) {
+			$query->where('employee_tasks.employee_id', $employeeID);
+		}
+		})
+		->where(function ($query) use ($meetingName) {
+			if (!empty($meetingName)) {
+				$query->where('meeting_minutes.meeting_name', 'ILIKE', "%$meetingName%");
+			}
+		})
+		->where('employee_tasks.task_type', '=', 2)
+		->orderBy('employee_tasks.employee_id')
+		->orderBy('employee_tasks.order_no')
+		->get();
+		
+        $data['employeesTasks'] = $employeesTasks;
+        $data['taskStatus'] = $taskStatus;
+		$data['page_title'] = "Tasks Report";
+        $data['page_description'] = "Tasks Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Task Management', 'path' => '/tasks/task_report', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Task Management', 'path' => '/tasks/task_report', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Task Management Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Task Management';
+        $data['active_rib'] = 'Report';
+		
 		$user = Auth::user()->load('person');
-		$data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'OSIZWENI EDUCATIONAL AND DEVELOPMENT \TRUST';
-        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+		$companyDetails = CompanyIdentity::first();
+        $data['company_name'] = $companyDetails->full_company_name;
+        $logo = $companyDetails->company_logo;
+        $data['company_logo'] = url('/') . Storage::disk('local')->url("logos/$logo");
 		$data['date'] = date("d-m-Y");
 		$data['user'] = $user;
-		//return $data;
-		AuditReportsController::store('Audit', 'Print Audit Search Results', "Print Audit Results", 0);
-        return view('audit.audit_print')->with($data);
+		AuditReportsController::store('Induction', 'Print with Search Results', "Print with Results", 0);
+        return view('tasks.reports.tasks_print')->with($data);
     }
+	function convertsecond($seconds)
+	{
+		$hours = '';
+		$secondsInAMinute = 60;
+		$secondsInAnHour = 60 * $secondsInAMinute;
+		if ($seconds >= $secondsInAnHour)
+		{
+			$hours = floor($seconds / $secondsInAnHour);
+			$minuteSeconds = ($seconds - ($hours * $secondsInAnHour));
+			$minutes = ceil($minuteSeconds / 60);
+		}
+		else $minutes = floor($seconds / $secondsInAMinute);
+
+		// Return the final
+		$time  = !empty($hours) ? str_pad($hours, 2, '0', STR_PAD_LEFT) . 'h' : str_pad($hours, 2, '0', STR_PAD_BOTH). 'h';
+		$time .= !empty($minutes) ? str_pad($minutes, 2, '0', STR_PAD_LEFT) .  '' : str_pad($minutes, 2, '0', STR_PAD_BOTH);
+		return $time;
+	}
+	function convertMinutes($minutes)
+	{
+		$hours = floor($minutes/60);
+		$minute = ($minutes - ($hours * 60));
+		$minute = ceil($minute);
+		
+		// Return the final
+		$time  = !empty($hours) ? str_pad($hours, 2, '0', STR_PAD_LEFT) . 'h' : str_pad($hours, 2, '0', STR_PAD_BOTH). 'h';
+		$time .= !empty($minute) ? str_pad($minute, 2, '0', STR_PAD_LEFT) .  '' : str_pad($minute, 2, '0', STR_PAD_BOTH);
+	}
 }

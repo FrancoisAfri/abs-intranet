@@ -285,16 +285,12 @@ class DatabaseSeeder extends Seeder
         //insert the employees group levels (division departments)
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 1;
-        $groupLevel->name = "Department";
-        $groupLevel->plural_name = "Departments";
-        $groupLevel->active = 1;
+        $groupLevel->active = 0;
         $groupLevel->save();
         
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 2;
-        $groupLevel->name = "Division";
-        $groupLevel->plural_name = "Divisions";
-        $groupLevel->active = 1;
+        $groupLevel->active = 0;
         $groupLevel->save();
 
         $groupLevel = new DivisionLevel();
@@ -304,12 +300,16 @@ class DatabaseSeeder extends Seeder
 
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 4;
-        $groupLevel->active = 0;
+        $groupLevel->name = "Department";
+        $groupLevel->plural_name = "Departments";
+        $groupLevel->active = 1;
         $groupLevel->save();
 
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 5;
-        $groupLevel->active = 0;
+        $groupLevel->name = "Division";
+        $groupLevel->plural_name = "Divisions";
+        $groupLevel->active = 1;
         $groupLevel->save();
 
         //Insert navigation menus
@@ -354,6 +354,24 @@ class DatabaseSeeder extends Seeder
         $ribbon->description = 'Search Company';
         $ribbon->ribbon_path = 'contacts/company_search';
         $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Send Message';
+        $ribbon->description = 'Send SMS or email to Contacts';
+        $ribbon->ribbon_path = 'contacts/send-message';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Contacts Related Settings';
+        $ribbon->ribbon_path = 'contacts/setup';
+        $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 		
 		

@@ -18,9 +18,9 @@
 
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="person_name" class="col-sm-3 control-label">Name</label>
+                            <label for="person_name" class="col-sm-2 control-label">Name</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -30,9 +30,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="id_number" class="col-sm-3 control-label">ID Number</label>
+                            <label for="id_number" class="col-sm-2 control-label">ID Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
@@ -42,9 +42,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="passport_number" class="col-sm-3 control-label">Passport Number</label>
+                            <label for="passport_number" class="col-sm-2 control-label">Passport Number</label>
 
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
@@ -53,6 +53,42 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="res_province_id" class="col-sm-2 control-label">Province</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                    </div>
+                                    <select name="res_province_id" id="res_province_id" class="form-control select2">
+                                        <option value="">*** Select Your Province ***</option>
+                                        @foreach($provinces as $province)
+                                            <option value="{{ $province->id }}" {{ (old('res_province_id') == $province->id) ? ' selected' : '' }}>{{ $province->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" value="" name="res_province_name" id="res_province_name">
+                        <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
+                            <label for="company_id" class="col-sm-2 control-label">Search by Company</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-building"></i>
+                                    </div>
+                                    <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;">
+                                        <option value="">*** Select a Company ***</option>
+                                        @foreach($companies as $company)
+                                            <option value="{{ $company->id }}" {{ (old('company_id') == $company->id) ? ' selected' : '' }}>{{ $company->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" value="" name="company_name" id="company_name">
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -65,4 +101,30 @@
         </div>
         <!-- End new User Form-->
     </div>
+@endsection
+
+@section('page_script')
+    <!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+
+            //set the company name hidden input when the name has been selected from the drop-down
+            $('#company_id').change(function (e) {
+                var selectedValue = $('#company_id').val();
+                if (selectedValue > 0) $('#company_name').val($('#company_id option:selected').text());
+                else $('#company_name').val('');
+            });
+
+            //set the company name hidden input when the name has been selected from the drop-down
+            $('#res_province_id').change(function (e) {
+                var selectedValue = $('#res_province_id').val();
+                if (selectedValue > 0) $('#res_province_name').val($('#res_province_id option:selected').text());
+                else $('#res_province_name').val('');
+            });
+        });
+    </script>
 @endsection

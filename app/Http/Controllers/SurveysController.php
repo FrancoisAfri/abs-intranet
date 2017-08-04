@@ -195,7 +195,8 @@ class SurveysController extends Controller
                             if ($dateTo) $query->whereRaw('feedback_date <= ' . $dateTo);
                         })
                         ->orderBy('feedback_date', 'asc')
-                        ->get();
+                        ->get()->load('surveyQuestions');
+        //return $empRatings;
 
         $data['empRatings'] = $empRatings;
         $data['empID'] = $empID;

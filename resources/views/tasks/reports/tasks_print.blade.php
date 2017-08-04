@@ -51,28 +51,31 @@
 		<div class="panel box box-primary">
 			<div class="box-body">
 				<table class="table table-striped">
-					<tr><th colspan="2" style="text-align:center">Minutes for Meeting: {{$meeting->meeting_name}}</th></tr>
-					<tr><th>Person</th><th>Minute</th></tr>
-						@if(!empty($minutesMeeting))
-							@foreach($minutesMeeting as $minuteMeeting)
-								<tr>
-									<td>{{ $minuteMeeting->firstname  .' '. $minuteMeeting->surname }}</td>
-									<td>{{ $minuteMeeting->minutes}}</td>
-								</tr>
-							@endforeach 
-						@endif
-				</table>
-				<table class="table table-striped">
-					<tr><th colspan="2" style="text-align:center">Tasks for Meeting: {{$meeting->meeting_name}}</th></tr>
-					<tr><th>Person Responsible</th><th>Description</th></tr>
-						@if(!empty($employeesTasks))
-							@foreach($employeesTasks as $employeesTask)
-								<tr>
-									<td>{{ $employeesTask->firstname  .' '. $employeesTask->surname }}</td>
-									<td>{{ $employeesTask->description}}</td>
-								</tr>
-							@endforeach 
-						@endif
+					<tr>
+						<th>Meeting Title</th>
+						<th>Task Description</th>
+						<th>Person Responsible</th>
+						<th>Status</th>
+						<th>Expected Start Date</th>
+						<th>Actual Start Date</th>
+						<th>Due Date</th>
+						<th>Date Completed</th>
+					</tr>
+					@if(count($employeesTasks) > 0)
+						@foreach($employeesTasks as $employeesTask)
+							<tr>
+								<td>{{ !empty($employeesTask->meeting_name) ? $employeesTask->meeting_name : '' }}</td>
+								<td style="width:200px;">{{ !empty($employeesTask->description) ? $employeesTask->description : '' }}</td>
+								<td>{{ !empty($employeesTask->firstname) && !empty($employeesTask->surname) ? $employeesTask->firstname.' '.$employeesTask->surname : '' }}</td>
+								<td>{{ (!empty($employeesTask->status)) ?  $taskStatus[$employeesTask->status] : ''}} </td>
+								<td>{{ !empty($employeesTask->start_date) ? date('Y M d', $employeesTask->start_date) : '' }}</td>
+								<td>{{ !empty($employeesTask->date_started) ? date('Y M d', $employeesTask->date_started) : '' }}</td>
+								<td>{{ !empty($employeesTask->due_date) ? date('Y M d', $employeesTask->due_date) : '' }}</td>
+								<td>{{ !empty($employeesTask->date_completed) ? date('Y M d', $employeesTask->date_completed) : '' }}</td>
+								
+							</tr>
+						@endforeach
+					@endif
 				</table>
 			</div>
 		</div>

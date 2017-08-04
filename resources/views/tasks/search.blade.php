@@ -2,7 +2,9 @@
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap file input -->
+    <!-- iCheck -->
+	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
+	<!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
@@ -13,12 +15,12 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Reports Search criteria</h3>
+                    <h3 class="box-title">Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST" action="/induction/reports">
+                <form class="form-horizontal"  id="search_form" method="POST">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -39,36 +41,41 @@
                             </div>
                         </div>
 						<div class="form-group">
-                            <label for="induction_date" class="col-sm-3 control-label">Due Date</label>
+                            <label for="due_date" class="col-sm-3 control-label">Due Date</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
 								<div class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</div>
-								<input type="text" class="form-control daterangepicker" id="creation_date" name="creation_date" value="" placeholder="Select Due Date...">
+								<input type="text" class="form-control daterangepicker" id="due_date" name="due_date" value="" placeholder="Select Due Date...">
                                 </div>
                             </div>
                         </div>
 						<div class="form-group">
-                            <label for="induction_date" class="col-sm-3 control-label">Completion Date</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-user"></i>
-								</div>
-								<input type="text" class="form-control daterangepicker" id="completion_date" name="completion_date" value="" placeholder="Select Completion Date...">
-                                </div>
-                            </div>
-                        </div>
-						<div class="form-group">
-                            <label for="induction_title" class="col-sm-3 control-label">Induction Title</label>
+                            <label for="task_number" class="col-sm-3 control-label">Task Number</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
 									<div class="input-group-addon">
 										<i class="fa fa-user"></i>
 									</div>
-									<input type="text" class="form-control" id="induction_title" name="induction_title" placeholder="Enter an Title...">
+									<input type="text" class="form-control" id="task_number" name="task_number" placeholder="Enter Task Number...">
 								</div>
+                            </div>
+                        </div>
+						<div class="form-group groups">
+                            <label for="employee_id" class="col-sm-3 control-label">Employees</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+									<div class="input-group-addon">
+                              			<i class="fa fa-user"></i>
+                            		</div>
+									<select class="form-control select2" style="width: 100%;" id="employee_id" name="employee_id">
+                                        <option selected="selected" value="0">*** Select an Employee ***</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 						<div class="form-group groups">
@@ -88,26 +95,10 @@
                                 </div>
                             </div>
                         </div>
-						<div class="form-group groups">
-                            <label for="employee_id" class="col-sm-3 control-label">Employees</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-									<div class="input-group-addon">
-                              			<i class="fa fa-user"></i>
-                            		</div>
-									<select class="form-control select2" style="width: 100%;" id="employee_id" name="employee_id">
-                                        <option selected="selected" value="0">*** Select an Employee ***</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->first_name.' '.$user->surname}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                      </div>   
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Generate</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Search</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -143,7 +134,9 @@
     <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
     <!-- optionally if you need translation for your language then include locale file as mentioned below -->
     <!--<script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
-    <!-- 		//Date picker
+    <!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>	
+	<!-- 		//Date picker
 		$('.datepicker').datepicker({
 			format: 'dd/mm/yyyy',
 			endDate: '-1d',
@@ -159,14 +152,51 @@
 		 $(function () {
 			//Initialize Select2 Elements
             $(".select2").select2();
-		//Date Range picker
-		$('.daterangepicker').daterangepicker({
-			format: 'dd/mm/yyyy',
-			endDate: '-1d',
-			autoclose: true
-		});
+			//Date Range picker
+			$('.daterangepicker').daterangepicker({
+				format: 'dd/mm/yyyy',
+				endDate: '-1d',
+				autoclose: true
+			});
+			//Initialize iCheck/iRadio Elements
+			$('input').iCheck({
+				checkboxClass: 'icheckbox_square-green',
+				radioClass: 'iradio_square-green',
+				increaseArea: '20%' // optional
+			});
+			$('#search_form').attr('action', '/task/search_results');
+			$('.meetingTasks').hide();
+			$('.heldeskTasks').hide();
         });
         //Phone mask
         $("[data-mask]").inputmask();
+		function changetype(type)
+		{
+			if (type == 1)
+			{
+				$('.inductionTasks').show();
+				$('.meetingTasks').hide();
+				$('.heldeskTasks').hide();
+			}
+			else if (type == 2)
+			{
+				$('.inductionTasks').hide();
+				$('.meetingTasks').show();
+				$('.heldeskTasks').hide();
+			}
+			else if (type == 3)
+			{
+				$('.inductionTasks').hide();
+				$('.meetingTasks').hide();
+				$('.heldeskTasks').hide();
+			}
+			else if (type == 4)
+			{
+				$('.inductionTasks').hide();
+				$('.meetingTasks').hide();
+				$('.heldeskTasks').show();
+			}
+				
+		}
     </script>
 @endsection
