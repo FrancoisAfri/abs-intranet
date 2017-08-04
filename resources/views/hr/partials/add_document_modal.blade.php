@@ -30,8 +30,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <input type="hidden" name="doc_type" value="{{!empty($userID) ? $userID : ''}}"> -->
-
                          <div class="form-group supDoc-field{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Supporting Document</label>
                             <div class="col-sm-8">
@@ -43,8 +41,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <div class="form-group">
                         <label for="date_from" class="col-sm-2 control-label">Date From</label>

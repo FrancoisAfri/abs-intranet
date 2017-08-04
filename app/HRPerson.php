@@ -55,7 +55,11 @@ class HRPerson extends Model
     public function divisionLevelGroup() {
         return $this->hasOne(DivisionLevelGroup::class, 'manager_id');
     }
-
+    // 
+    public function tickets(){
+        # code...
+         return $this->belongsTo(ticket::class, 'operator_id');
+    }
 
     //Relationship hr person and job title
     public function jobTitle() {

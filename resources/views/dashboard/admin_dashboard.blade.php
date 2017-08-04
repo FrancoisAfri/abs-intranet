@@ -481,6 +481,7 @@
           </div>
           <!-- /Tasks List End -->
         </div>
+
         <div class="col-md-6">
          <!-- /Tasks List -->
           <div class="box box-info">
@@ -528,6 +529,7 @@
             </div>
           </div>
         </div>
+        
      </div>
     <!--  -->
 @endsection

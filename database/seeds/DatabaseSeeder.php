@@ -461,14 +461,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 7;
-        // $ribbon->ribbon_name = 'Employee Search';
-        // $ribbon->description = 'Employee Search';
-        // $ribbon->ribbon_path = 'hr/emp_search';
-        // $ribbon->access_level = 4;
-        // $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Hr Admin';
+        $ribbon->description = 'Hr Admin';
+        $ribbon->ribbon_path = 'hr/Admin';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
@@ -550,7 +550,51 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
+
+        #
+        $module = new modules(); 
+        $module->active = 1;
+        $module->name = 'Product';
+        $module->path = 'Product';
+        $module->font_awesome = 'fa fa-product-hunt';
+        $module->save();
+
+        //Insert navigation menus
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Categories';
+        $ribbon->description = 'Categories';
+        $ribbon->ribbon_path = 'product/Categories';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
         
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
+        $ribbon->ribbon_path = 'product/Search';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Packages';
+        $ribbon->description = 'Packages';
+        $ribbon->ribbon_path = 'product/Packages';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+          $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Promotions';
+        $ribbon->description = 'Promotions';
+        $ribbon->ribbon_path = 'product/Promotions';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
         //  $ribbon = new module_ribbons();
         // $ribbon->active = 1;
         // $ribbon->sort_order = 4;
@@ -559,6 +603,65 @@ class DatabaseSeeder extends Seeder
         // $ribbon->ribbon_path = 'leave/Leave_History_Audit';
         // $ribbon->access_level = 5;
         // $module->addRibbon($ribbon);
+
+        #Help Desk
+        $module = new modules(); 
+        $module->active = 1;
+        $module->name = 'Help Desk';
+        $module->path = 'Help Desk';
+        $module->font_awesome = ' fa-info-circle';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'View Tickets';
+        $ribbon->description = 'Create Request';
+        $ribbon->ribbon_path = 'helpdesk/view_ticket';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+        
+        // 
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Create Ticket';
+        $ribbon->description = 'Create Ticket';
+        $ribbon->ribbon_path = 'helpdesk/ticket';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Assign Tickets';
+        $ribbon->description = 'Assign Tickets';
+        $ribbon->ribbon_path = 'helpdesk/assign_ticket';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
+        $ribbon->ribbon_path = 'helpdesk/search';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+        
+
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'helpdesk/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+
+        #end
 		
 		$module = new modules(); //Audit Management
         $module->active = 1;
