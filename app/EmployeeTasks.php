@@ -46,4 +46,12 @@ class EmployeeTasks extends Model
     public function clientTasksName() {
         return $this->belongsTo(ContactCompany::class, 'client_id');       
     }
+
+    //human friendly duration accessor
+    public function getHumanDurationAttribute()
+    {
+        $duration = ($this->duration > 0) ? $this->duration : 0;
+        $humanDuration = gmdate('H:i:s.0', $duration);
+        return $humanDuration;
+    }
 }

@@ -276,130 +276,13 @@
 @endif
 <!-- /Check if induction is active before showing this  And Meeting-->
 	<div class="row">
-        <div class="col-md-6">
-		 <!-- /Tasks List -->
-		  <div class="box box-info">
-            <div class="box-header with-border">
-			 <i class="ion ion-clipboard"></i>
-              <h3 class="box-title">Tasks List <p id="stopWatchDisplay" style="font-size:18px; font-weight:bold; font-family:cursive;"></p></h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-					<thead>
-						<tr>
-							<th>Order #</th>
-							<th>Description</th>
-							<th>Duration</th>
-							<th>Due Date</th>
-							<th>Client Name</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-					@if (!empty($tasks))
-						@foreach($tasks as $task)
-						  <tr>
-							<td>{{ (!empty($task->order_no)) ?  $task->order_no : ''}}</td>
-							<td>{{ (!empty($task->description)) ?  $task->description : ''}}</td>
-							<td>{{ (!empty($task->manager_duration)) ?  $task->manager_duration : ''}}</td>
-							<td>{{ (!empty($task->due_date)) ?  date('Y-m-d',$task->due_date) : ''}}</td>
-							<td>{{ (!empty($task->client_name)) ?  $task->client_name : ''}}</td>
-							<td>
-							<!-- @if($isSuperuser)
-							{{ $topGroupLvl->plural_name }}
-							@elseif($isDivHead)
-							{{ $managedDivsLevel->plural_name }}
-							@endif -->
-							@if(!empty($task->status) && ($task->status == 1 || $task->status == 3))
-							  <button type="button" id="startPause" class="btn btn-sm btn-default btn-flat pull-right" onclick="startPause({{$task->task_id}},);">Start</button>
-							@elseif(!empty($task->status) && $task->status == 2)                     
-							  <button type="button" id="end-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
-							  data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}" 
-							  data-upload_required="{{ $task->upload_required }}" >End</button>
-							  <button type="button" id="pause-task" class="btn btn-sm btn-default btn-flat pull-right" onclick="postData({{$task->task_id}}, 'pause');">Pause</button>
-							@endif
-							</td>
-						  </tr>
-						@endforeach
-					@endif
-                  </tbody>
-                </table>
-              </div>
-				@if(Session('error_starting'))
-					@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
-				@endif
-				@include('tasks.partials.end_task')
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix">
-            </div>
-            <!-- /.box-footer -->
-          </div>
-		  <!-- /Tasks List End -->
+        <div class="col-md-7">
+            <!-- Include tasks widget -->
+            @include('dashboard.partials.widgets.tasks_widget')
         </div>
-		<div class="col-md-6">
-		 <!-- /Tasks List -->
-		  <div class="box box-info">
-            <div class="box-header with-border">
-			 <i class="ion ion-clipboard"></i>
-              <h3 class="box-title">Tasks To Check</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-					<thead>
-						<tr>
-							<th>Employee</th>
-							<th>Description</th>
-							<th>Status</th>
-						</tr>
-					</thead>
-					<tbody>
-					@if (!empty($checkTasks))
-						@foreach($checkTasks as $checkTask)
-						  <tr>
-							<td>{{ (!empty($checkTask->description)) ?  $checkTask->firstname." ".$checkTask->surname : ''}}</td>
-							<td>{{ (!empty($checkTask->description)) ?  $checkTask->description : ''}}</td>
-							<td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td>
-							<td>
-							@if(!empty($checkTask->status) && ($checkTask->status == 1 || $checkTask->status == 3))                    
-							  <button type="button" id="close-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#close-task-modal"
-							  data-task_id="{{ $checkTask->task_id }}"">Close</button>
-							@endif
-							</td>
-						  </tr>
-						@endforeach
-					@endif
-                  </tbody>
-                </table>
-              </div>
-				@if(Session('error_starting'))
-					@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
-				@endif
-				@include('tasks.partials.end_task')
-				@include('tasks.partials.check_task')
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix">
-            </div>
-            <!-- /.box-footer -->
-          </div>
-		  <!-- /Tasks List End -->
+		<div class="col-md-5">
+            <!-- Include tasks to check widget -->
+            @include('dashboard.partials.widgets.tasks_to_check_widget')
         </div>
     </div>
 	<div class="row">
@@ -558,6 +441,9 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
+    <!-- Task timer -->
+    <script src="/custom_components/js/tasktimer.js"></script>
+
     <script>
 		function postData(id, data)
 		{
@@ -568,26 +454,26 @@
 			else if (data == 'end')
 				location.href = "/task/end/" + id;
 		}
-		///
-		var time = 0;
+		///delete this
+		/*var time = 0;
 		var running = 0;
-		 
+
 		function startPause() {
-			if (running == 0) 
+			if (running == 0)
 			{
 				running = 1;
 				increment();
 				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-pause'></i> Pause";
 				$("#end-button").show();
-			} 
-			else 
+			}
+			else
 			{
 				running = 0;
 				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-repeat'></i> Resume";
 				$("#end-button").show();
 			}
 		}
-		 
+
 		function increment() {
 			if (running == 1) {
 				setTimeout(function() {
@@ -595,7 +481,7 @@
 					var mins = Math.floor(time / 10 / 60) % 60;
 					var secs = Math.floor(time / 10) % 60;
 					var tenths = time % 10;
-		 
+
 					if (mins < 10) {
 						mins = "0" + mins;
 					}
@@ -607,7 +493,7 @@
 				}, 100);
 			}
 		}
-		//
+		*/
         $(function () {
 			// hide end button when page load
 			//$("#end-button").show();
@@ -820,6 +706,8 @@
             });
 			
             $('#end-task').on('click', function() {
+                endTask(taskID);
+                /*
                 var strUrl = '/task/end';
                 var formName = 'end-task-form';
                 var modalID = 'end-task-modal';
@@ -827,7 +715,9 @@
                 var redirectUrl = '/';
                 var successMsgTitle = 'Task Ended!';
                 var successMsg = 'Task has been Successfully ended!';
+
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                */
             });
 			$('#close-task-modal').on('show.bs.modal', function (e) {
                 var btnEnd = $(e.relatedTarget);
