@@ -738,6 +738,11 @@
                 var successMsg = 'Task has been Successfully checked!';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+            //Launch counter for running tasks
+            @foreach($tasks as $task)
+                increment({{ $task->task_id }});
+            @endforeach
         });
     </script>
 @endsection

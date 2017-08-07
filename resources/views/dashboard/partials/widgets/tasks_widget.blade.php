@@ -27,7 +27,16 @@
                 </thead>
                 <tbody>
                 @if (!empty($tasks))
+                    <script>
+                        var time = [];
+                        var running = [];
+                    </script>
                     @foreach($tasks as $task)
+                        <script>
+                            running[{{ $task->task_id }}] = {{ ($task->status == 2) ? 1 : 0 }};
+                            time[{{ $task->task_id }}] = {{ ($task->status == 2) ? (($task->date_paused) ? (time() - $task->date_paused) * 10 : (time() - $task->date_started) * 10) : $task->duration * 10 }};
+                            console.log('Assigned time: ' + 'taskID = ' + {{$task->task_id}} + ', running = ' + running[{{ $task->task_id }}] + ', time = ' + time[{{ $task->task_id }}]);
+                        </script>
                         <tr>
                             <td>{{ (!empty($task->order_no)) ?  $task->order_no : ''}}</td>
                             <td>{{ (!empty($task->description)) ?  $task->description : ''}}</td>

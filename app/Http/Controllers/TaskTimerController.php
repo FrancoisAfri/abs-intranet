@@ -29,14 +29,14 @@ class TaskTimerController extends Controller
         if ($status == 1) //task is new
         {
             $status = 2;
-            $task->date_started = strtotime(date('Y-m-d'));
+            $task->date_started = time();
         } elseif ($status == 3) //task paused
         {
             $status = 2;
         } elseif ($status == 2) //task is running
         {
             $status = 3;
-            $task->date_paused =  strtotime(date('Y-m-d'));
+            $task->date_paused =  time();
         }
         $task->status = $status;
 //
