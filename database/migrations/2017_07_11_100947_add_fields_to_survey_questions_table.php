@@ -13,13 +13,17 @@ class AddFieldsToSurveyQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('survey_questions', function($table) {
-             $table->integer('division_level_1')->unsigned()->index()->nullable();
-             $table->integer('division_level_2')->unsigned()->index()->nullable();
-             $table->integer('division_level_3')->unsigned()->index()->nullable();
-             $table->integer('division_level_4')->unsigned()->index()->nullable();
-             $table->integer('division_level_5')->unsigned()->index()->nullable();
-          });
+          Schema::create('survey_questions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('division_level_1')->unsigned()->index()->nullable();
+            $table->integer('division_level_2')->unsigned()->index()->nullable();
+            $table->integer('division_level_3')->unsigned()->index()->nullable();
+            $table->integer('division_level_4')->unsigned()->index()->nullable();
+            $table->integer('division_level_5')->unsigned()->index()->nullable();
+            $table->smallInteger('status')->nullable();
+            $table->string('description')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -29,10 +33,9 @@ class AddFieldsToSurveyQuestionsTable extends Migration
      */
     public function down()
     {
-         $table->dropColumn('division_level_1');
-		 $table->dropColumn('division_level_2');
-		 $table->dropColumn('division_level_3');
-		 $table->dropColumn('division_level_4');
-		 $table->dropColumn('division_level_5');
+
+Schema::dropIfExists('survey_questions');
+
+           
     }
 }

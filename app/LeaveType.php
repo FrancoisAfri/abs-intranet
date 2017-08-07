@@ -18,7 +18,6 @@ class LeaveType extends Model
     public function hr_person()
     {
         ////Many to many Relationship Between leavetype and Hr person
-
         return $this->belongsToMany('App\HRPerson', 'leave_credit' ,'leave_type_id','hr_id')->withPivot('leave_balance');
             
     }

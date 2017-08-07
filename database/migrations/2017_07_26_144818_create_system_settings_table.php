@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCompanyWebsiteToCompanyIdentitiesTable extends Migration
+class CreateSystemSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class AddCompanyWebsiteToCompanyIdentitiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('company_identities', function($table) {
-			$table->string('company_website')->nullable();
-		});
+        Schema::create('system_settings', function (Blueprint $table) {
+            $table->increments('id');
+           $table->integer('system_id')->index()->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -25,8 +27,6 @@ class AddCompanyWebsiteToCompanyIdentitiesTable extends Migration
      */
     public function down()
     {
-        Schema::table('company_identities', function($table) {
-            $table->dropColumn('company_website');
-        });
+        Schema::dropIfExists('system_settings');
     }
 }

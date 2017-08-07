@@ -54,9 +54,9 @@ class EmployeeDocumentsController extends Controller
     	//$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
      
      
-       $data['doc_type'] = $doc_type; 
-         $data['active_mod'] = 'Employee Records';
-         $data['DocType'] = $DocType;
+        $data['doc_type'] = $doc_type; 
+        $data['active_mod'] = 'Employee Records';
+        $data['DocType'] = $DocType;
         $data['active_rib'] = 'Employees Documents';
         $data['employees'] = $employees;
         $data['category'] = $category;

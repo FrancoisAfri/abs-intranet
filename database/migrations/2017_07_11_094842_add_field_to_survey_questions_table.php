@@ -26,9 +26,6 @@ class AddFieldToSurveyQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('survey_questions', function($table) {
-             $table->dropColumn('division_id');
-             $table->dropColumn('division_level');
-          });
+                Schema::dropIfExists('survey_questions');
     }
 }
