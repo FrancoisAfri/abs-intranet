@@ -66,6 +66,7 @@ function updateTaskDuration(taskID, timeInSeconds) {
                 $.each(errors, function (key, value) {
                     console.log('error thrown: ' + value);
                     //TODO: show the error in a modal
+                    alert(value);
                 });
             }
         }
@@ -90,6 +91,7 @@ function getTaskDurationAndIncrement(taskID) {
                 $.each(errors, function (key, value) {
                     console.log('error thrown: ' + value);
                     //TODO: show the error in a modal
+                    alert(value);
                 });
             }
         }
