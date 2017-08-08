@@ -408,10 +408,19 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'users/modules';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Users Access';
+        $ribbon->description = 'Users Access';
+        $ribbon->ribbon_path = 'users/users-access';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'users/setup';

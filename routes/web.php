@@ -50,6 +50,9 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+Route::get('users/users-access', 'SecurityController@usersAccess');
+Route::post('users/users-access', 'SecurityController@getEmployees');
+Route::post('users/update-users-access', 'SecurityController@updateRights');
 
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
