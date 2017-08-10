@@ -18,7 +18,7 @@
                      <th>User Name</th>
                      <th>Email</th>
                      <th>Help Desk</th>
-                     <th>Subject {{ $surname}}</th>
+                     <th>Subject </th>
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($tickets) > 0)

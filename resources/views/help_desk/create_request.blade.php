@@ -13,7 +13,8 @@
                 <!-- /.box-header -->
                 <div class="box-body">
 
-                <table class="table table-bordered">
+               <table class="table no-margin">
+                    <thead>
                      <tr><th style="width: 10px"></th>
                      <th>Help Desk Name</th>
                      <th>Ticket(s)</th>
@@ -21,21 +22,17 @@
                      <th>Out Standing</th>
                      <th>Status</th>
                      <th style="width: 40px"></th>
-                     </tr>
-                    @if (count($helpdeskTickets) > 0)
-                        @foreach($helpdeskTickets as $jobTitle)
+                    </thead>
+                    <tbody>
+                      @if (count($helpdeskTickets) > 0)
+                        @foreach($helpdeskTickets as $ticket)
                          <tr id="jobtitles-list">
-                           <td nowrap>
-                              <td> <a href="{{ '/help_desk/assign_ticket/' . $jobTitle->id }}" id="edit_compan"  data-id="{{ $jobTitle->id }}" > {{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}}</a></td>
-                             <td style="text-align: center;">{{ $jobTitle->ticket->count() }} </td>
-                          <td></td>
-                           <td></td>
-                         <!--  <td>{{ (!empty($jobTitle->helpdesk->status)) ?  $jobTitle->helpdesk->status : ''}} </td> -->
-                           <td style="text-align: right;"><span class="label {{ $statusLabels[$jobTitle->status] }} pull-right">{{ ($jobTitle->status) ? $statusLabels[$jobTitle->status] : '' }}</span></td>
-                       
-                        <!--   <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
-                          </td> -->
+                            <td nowrap></td>
+                            <td> <a href="{{ '/help_desk/assign_ticket/' . $ticket->id }}" id="edit_compan"  data-id="{{ $ticket->id }}" > {{ (!empty($ticket->name)) ?  $ticket->name : ''}}</a></td>
+                             <td ><span class="label label-primary ">{{ $ticket->ticket->count() }}</span></td>
+                            <td ><span class="label label-primary ">{{ $ticket->ticket->where('status', 5)->count() }}</span></td>
+                            <td ><span class="label label-primary ">{{ $ticket->ticket->where('status', '!=' , 5)->count() }}</span></td>
+                            <td>{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
                         </tr>
                         @endforeach
                     @else
@@ -48,7 +45,8 @@
                         </td>
                         </tr>
                     @endif
-                    </table>
+                  </tbody>
+                </table>
                 </div>
                 <!-- /.box-body -->
                 <!-- <div class="box-footer">

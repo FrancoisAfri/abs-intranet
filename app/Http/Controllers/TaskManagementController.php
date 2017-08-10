@@ -249,7 +249,7 @@ class TaskManagementController extends Controller
     */
     public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
 	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0
-	,$checkByID=0,$clientID=0,$managerDuration=0)
+	,$checkByID=0,$clientID=0,$managerDuration=0 , $helpDeskID = 0)
     {
 		//convert dates to unix time stamp
         /*if (!empty($duedate)) {
@@ -285,6 +285,7 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->check_by_id = $checkByID;
 		$EmployeeTasks->client_id = $clientID;
 		$EmployeeTasks->manager_duration = $managerDuration;
+		$EmployeeTasks->helpdesk_id = $helpDeskID;
 		//Save task
         $EmployeeTasks->save();
 		if (empty($inductionID))

@@ -15,10 +15,10 @@ class CreateTicketTable extends Migration
     {
         Schema::create('ticket', function (Blueprint $table) {
             $table->increments('id');
-            //$table->integer('user_id')->nullable();
+            $table->integer('user_id')->unsigned()->index()->nullable();
             $table->string('name')->nullable();
             $table->string('email')->nullable();
-            //$table->integer('helpdesk_id')->nullable();
+			$table->string('ticket_number')->nullable();
             $table->integer('helpdesk_id')->unsigned()->index()->nullable();
             $table->string('subject')->nullable();
             $table->string('message')->nullable();

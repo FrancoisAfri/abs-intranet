@@ -649,14 +649,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-         $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Assign Tickets';
-        $ribbon->description = 'Assign Tickets';
-        $ribbon->ribbon_path = 'helpdesk/assign_ticket';
-        $ribbon->access_level = 5;
-        $module->addRibbon($ribbon);
+        //  $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Assign Tickets';
+        // $ribbon->description = 'Assign Tickets';
+        // $ribbon->ribbon_path = 'helpdesk/assign_ticket';
+        // $ribbon->access_level = 5;
+        // $module->addRibbon($ribbon);
 
          $ribbon = new module_ribbons();
         $ribbon->active = 1;

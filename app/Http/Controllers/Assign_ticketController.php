@@ -14,6 +14,7 @@ use App\System;
 use App\ticket;
 use App\helpdesk_Admin;
 use App\AuditTrail;
+use App\Mail\assignOperatorEmail;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class Assign_ticketController extends Controller
 {
@@ -43,11 +45,11 @@ class Assign_ticketController extends Controller
                   ->select('name' ) 
                        ->where('id', $ID)
                         ->get();
-           $Names = $names->first()->name;
+          $Names = $names->first()->name;
 
 
     
-     	$tickets = DB::table('ticket')
+     	  $tickets = DB::table('ticket')
                 ->where('helpdesk_id', $ID)
                 ->orderBy('id', 'asc')
                 ->get();
@@ -60,6 +62,10 @@ class Assign_ticketController extends Controller
 				        ->get();
 
 				      //  return $operators;
+
+				        // $operators = HRPerson::where('id', 1)->first();
+
+       				 //    return $operators;
 
 		$data['ID'] = $ID;
 		$data['Names'] = $Names;		      // return $operators;
@@ -89,14 +95,27 @@ class Assign_ticketController extends Controller
 
         ]);
     	
+    	$helpdeskId = $operatorID->helpdesk_id;
+    	 $currentDate = $currentDate = time();
         $docData = $request->all();
         unset($docData['_token']);
         //$help_desk = $serviceID->id;
-        //$operator  =  new operator();
-        $operatorID->operator_id = $request->input('operator_id');
+        $AssignOperator  = 'Assign task to Operator';
+        $operator = $request->input('operator_id');
+        $operatorID->operator_id = $operator;
         $operatorID->status = 2;
         $operatorID->update();
-        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+
+        #send email to operator
+        $operators = HRPerson::where('id', $operator)->first();
+        Mail::to($operators->email)->send(new assignOperatorEmail($operators));
+
+        #assign Operator to Task
+        TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,2
+					,0,0,0,0,0,0,0,$helpdeskId);
+
+        
+        AuditReportsController::store('Assign operators', 'Assigned Operator to a atask', "Actioned By User", 0);
         return response()->json();
 
     }

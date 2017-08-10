@@ -29,6 +29,9 @@ class DashboardController extends Controller
     }
 
     public function index() {
+
+        $loggedInEmplID = Auth::user()->person->id;
+
         $data['breadcrumb'] = [
             ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
         ];
@@ -104,21 +107,21 @@ class DashboardController extends Controller
             $statusLabels = [10 => "label-danger", 50 => "label-warning", 80 => 'label-success', 100 => 'label-info'];
 			
 			// Get tasks for logged user
-			$today = strtotime(date('Y-m-d'));
-			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
-			$tasks = DB::table('employee_tasks')
-			->select('employee_tasks.description','employee_tasks.start_date','employee_tasks.manager_duration'
-			,'employee_tasks.employee_id','employee_tasks.upload_required'
-			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date'
-			,'employee_tasks.id as task_id','contact_companies.name as client_name')
-			->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
-			->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
-			->where('employee_tasks.employee_id', $user->person->id)
-			->where('employee_tasks.start_date', '<=', $today)
-			->where('employee_tasks.status', '<', 4)
-			->orderBy('client_name')
-			->orderBy('employee_tasks.order_no')
-			->get();
+			// $today = strtotime(date('Y-m-d'));
+			// $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+			// $tasks = DB::table('employee_tasks')
+			// ->select('employee_tasks.description','employee_tasks.start_date','employee_tasks.manager_duration'
+			// ,'employee_tasks.employee_id','employee_tasks.upload_required'
+			// ,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date'
+			// ,'employee_tasks.id as task_id','contact_companies.name as client_name')
+			// ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
+			// ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
+			// ->where('employee_tasks.employee_id', $user->person->id)
+			// ->where('employee_tasks.start_date', '<=', $today)
+			// ->where('employee_tasks.status', '<', 4)
+			// ->orderBy('client_name')
+			// ->orderBy('employee_tasks.order_no')
+			// ->get();
 
 
               #leave Balance
@@ -154,17 +157,29 @@ class DashboardController extends Controller
 			->get();
 			//return $checkTasks;
 
+            #View Tickets 
+              
+            $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
+            $tickets = DB::table('ticket')
+                ->where('user_id', $loggedInEmplID)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            
+                //return $tickets;
+            $data['ticketStatus'] = $ticketStatus;    
+            $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;
             $data['balance'] = $balance;
             $data['application'] = $application;
-            $data['taskStatus'] = $taskStatus;
-			$data['taskStatus'] = $taskStatus;
+            //$data['taskStatus'] = $taskStatus;
+			//$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
             $data['topGroupLvl'] = $topGroupLvl;
             $data['isSuperuser'] = $isSuperuser;
             $data['isDivHead'] = $isDivHead;
-            $data['tasks'] = $tasks;
+            //$data['tasks'] = $tasks;
             $data['checkTasks'] = $checkTasks;
             //$data['managedDivsIDs'] = json_encode($managedDivsIDs);
             $data['managedDivsLevel'] = $managedDivsLevel;

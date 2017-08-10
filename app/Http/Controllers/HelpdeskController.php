@@ -63,6 +63,96 @@ class HelpdeskController extends Controller
         return view('help_desk.add_system')->with($data);
     }
 
+    	public function searhTickets()
+    	{
+
+    	$helpdesk =  System::orderBy('name', 'asc')->get();
+
+
+    	$data['page_title'] = "Help Desk";
+        $data['page_description'] = "Help Desk Page";
+        $data['breadcrumb'] = [
+            ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Help Search Page', 'active' => 1, 'is_module' => 0]
+        ];	
+        // 
+        $data['helpdesk'] = $helpdesk;
+        $data['active_mod'] = 'Help Desk';
+        $data['active_rib'] = 'Search';
+		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        return view('help_desk.helpdesk_search')->with($data);
+    	}
+
+    	public function searchResults(Request $request){
+
+    	$this->validate($request, [
+           
+
+        ]);	
+
+        $SysData = $request->all();
+		unset($SysData['_token']);
+
+		$status = $request->status;
+		$TicketNumber = $request->ticket_no;
+		$HelpdeskID = $request->helpdesk_id;
+		$actionFrom = $actionTo = 0;
+        $actionDate = $request['ticket_date'];  
+
+	    if (!empty($actionDate))
+	    {
+	      $startExplode = explode('-', $actionDate);
+	      $actionFrom = strtotime($startExplode[0]);
+	      $actionTo = strtotime($startExplode[1]);
+	    }
+
+	    #
+	     $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review' , 5 => 'resolved');
+
+	     $tickets  = DB::table('ticket')
+		     ->select('ticket.*','help_desk.name as helpdeskName')
+	    	 ->leftJoin('help_desk', 'ticket.helpdesk_id', '=', 'help_desk.id')
+		     ->where(function ($query) use ($actionFrom, $actionTo) {
+		    if ($actionFrom > 0 && $actionTo  > 0) {
+		      $query->whereBetween('ticket_date', [$actionFrom, $actionTo]);
+		    }
+		    })
+		     ->where(function ($query) use ($HelpdeskID) {
+		    if (!empty($HelpdeskID)) {
+		      $query->where('helpdesk_id', $HelpdeskID);
+		    }
+		    })
+		    ->where(function ($query) use ($status) {
+		      if (!empty($status)) {
+		        $query->where('status', 'ILIKE', "%$status%");
+		      }
+		    })
+		     ->where(function ($query) use ($TicketNumber) {
+		      if (!empty($TicketNumber)) {
+		        $query->where('ticket_number', 'ILIKE', "%$TicketNumber%");
+		      }
+		    })
+		    ->orderBy('id')
+		    ->get();
+
+		 //   return $tickets;
+		    
+
+		$data['ticketStatus'] = $ticketStatus;
+		$data['page_title'] = "Help Desk";
+        $data['page_description'] = "Help Desk Page";
+        $data['breadcrumb'] = [
+            ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Help Search Page', 'active' => 1, 'is_module' => 0]
+        ];	
+        // 
+        $data['tickets'] = $tickets;
+        $data['active_mod'] = 'Help Desk';
+        $data['active_rib'] = 'Search';
+		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        return view('help_desk.helpdesk_results')->with($data);
+
+    	}
 
        public function systemAdd(Request $request ){
 		$this->validate($request, [
@@ -245,8 +335,16 @@ class HelpdeskController extends Controller
         $docData = $request->all();
         unset($docData['_token']);
       
+        $loggedInEmplID = Auth::user()->person->id;
+        $acroym = DB::table('company_identities')->select('header_acronym_bold')->get();
+                   
+        $negannualDays = $acroym->first()->header_acronym_bold;
+        $firstname = substr($negannualDays, 0,1);
+
+
         $tick->name = $request->input('name');
         $tick->email = $request->input('email');
+        $tick->user_id = $loggedInEmplID;
         $tick->helpdesk_id = $request->input('helpdesk_id');
         $tick->subject = $request->input('subject');
         $tick->message = $request->input('message');
@@ -265,32 +363,37 @@ class HelpdeskController extends Controller
         $data['page_description'] = "View Tickets Page";
         $data['breadcrumb'] = [
             ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-info', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Help Desk Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Help Desk viewTicket Page', 'active' => 1, 'is_module' => 0]
         ];
 
 
        $helpdeskTickets = system::orderBy('id', 'asc')->distinct()->get();
 		if (!empty($helpdeskTickets)) $helpdeskTickets->load('ticket');
 
-			
+		//return $helpdeskTickets;
 
-	// 	$attendees = DB::table('ticket')
-	// 				->distinct()
-	// 				->get(['helpdesk_id']);
+	
 
-					//return $helpdeskTickets;
+	// $id = DB::table('ticket')
+	// 		  ->select('id')
+	// 	      ->where('id', (SELECT MAX(id))
+	// 	      ->get();	
 
-		// SELECT COUNT(DISTINCT Country) FROM Customers;
+	// 	      return $id;
+
+
 		 
   	   $systems = System::orderBy('name', 'asc')->get();
+
+  	    $CompletedTickets = DB::table('ticket')->pluck('status');
+
   	 
-  	   $ticketStatus = ['' => '', -1 => "Rejected", 1 => "Pending Assignment", 2 => 'Assigned to operator', 3 => 'Completed'];
+  	  // $ticketStatus = ['' => '', -1 => "Rejected", 1 => "Pending Assignment", 2 => 'Assigned to operator', 3 => 'Completed'];
+  	   $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review' , 5 => 'resolved');
 
   	     $statusLabels = [-1 => "Rejected", 1 => "label-warning", 2 => 'label-success', 3 => 'label-info'];
 		//return $helpdeskTickets;
-  	    $programmeStatus = ['' => '', -1 => "Rejected", 1 => "Pending General Manager's Approval", 2 => 'Approved', 3 => 'Completed'];
-  	    
-		$data['status_strings'] = $programmeStatus; 
+  	  
  		$data['statusLabels'] = $statusLabels;			
  	 	$data['ticketStatus'] = $ticketStatus;
  		$data['helpdeskTickets'] = $helpdeskTickets;
