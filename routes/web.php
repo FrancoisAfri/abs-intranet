@@ -69,8 +69,9 @@ Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');
 Route::post('contacts/send-message', 'ContactsController@sendMessage');
+Route::post('contacts/sms_settings', 'ContactsController@saveSetup');
 Route::get('contacts/setup', 'ContactsController@setup');
-
+Route::patch('contacts/update_sms/{smsConfiguration}', 'ContactsController@updateSMS');
 //#Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
