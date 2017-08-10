@@ -19,6 +19,7 @@ USE App\module_ribbons;
 use App\doc_type_category;
 use App\DivisionLevelTwo;
 use App\companyidentity;
+use App\product_products;
 // use App\Http\Controllers\modules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -57,7 +58,8 @@ class BusinessCardsController extends Controller
         $division=DivisionLevelTwo::where('active', 1)->get();
         // return $divisionLevels;
     	//$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
-     
+        $Product = product_products::orderBy('name', 'asc')->get();
+        $data['Product'] = $Product;
      
        
         $data['active_mod'] = 'Employee Records';
@@ -233,7 +235,7 @@ class BusinessCardsController extends Controller
 					->get();
 
         $data['active_mod'] = 'Employee Records';
-        $data['active_rib'] = 'Business card';
+        $data['active_rib'] = 'Hr Admin';
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
         $data['persons'] = $persons;
@@ -244,7 +246,7 @@ class BusinessCardsController extends Controller
         $data['hr_people'] = $hr_people;
         $data['division_levels'] = $divisionLevels;
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        return view('hr.cards')->with($data);
+        return view('hr.usersAdmin')->with($data);
     }
 
     public function getEmail(Request $request) 

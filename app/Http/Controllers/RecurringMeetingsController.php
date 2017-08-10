@@ -33,6 +33,7 @@ class RecurringMeetingsController extends Controller
 		$recurringMeetings = RecurringMeetings::orderBy('meeting_title', 'asc')->get();
 		if (!empty($recurringMeetings)) $recurringMeetings->load('recurringAttendees');
 		
+        // 
         $data['page_title'] = "Recurring Meeting";
         $data['page_description'] = "Recurring Meeting";
         $data['breadcrumb'] = [

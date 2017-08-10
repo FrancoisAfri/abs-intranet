@@ -14,7 +14,7 @@ class CreateCompanyIdentitiesTable extends Migration
     public function up()
     {
         Schema::create('company_identities', function (Blueprint $table) {
-            $table->increments('id');
+           $table->increments('id');
             $table->string('company_name')->nullable();
             $table->string('full_company_name')->nullable();
             $table->string('header_name_bold')->nullable();

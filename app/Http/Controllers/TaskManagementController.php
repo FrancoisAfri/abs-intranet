@@ -100,7 +100,7 @@ class TaskManagementController extends Controller
 			return redirect('/')->with('error_starting', "You can not start this task, You have another task in progess.");
 		$stastus = 2;
 		$task->status = $stastus;	
-		$task->date_started = strtotime(date('Y-m-d'));	
+		$task->date_started = time();
 		$task->update();
 		AuditReportsController::store('Task Management', "Task Started", "Edited by User", 0);
 		return back();
@@ -110,7 +110,7 @@ class TaskManagementController extends Controller
 	{
 		$stastus = 3;
 		$task->status = $stastus;	
-		$task->date_paused =  strtotime(date('Y-m-d'));	
+		$task->date_paused =  time();
 		$task->update();
 		AuditReportsController::store('Task Management', "Task Paused", "Edited by User", 0);
 		return back();

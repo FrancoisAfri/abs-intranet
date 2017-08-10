@@ -68,7 +68,7 @@
 
                                 </div>
                             </div>
-
+                                    
 <!--                        <div class="form-group ">-->
                            <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                                 <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>

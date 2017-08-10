@@ -99,6 +99,8 @@ class EmployeeJobTitleController extends Controller
 		AuditReportsController::store('Employee Records', 'Job Title Category Added', "Category Name: $categoryData[name]", 0);
 		return response()->json(['new_name' => $newName, 'new_description' => $newDescription], 200);
     }
+    
+
 	public function addJobTitle(Request $request, JobCategory $jobCategory) {
 	
 		$this->validate($request, [
@@ -145,4 +147,8 @@ class EmployeeJobTitleController extends Controller
 		AuditReportsController::store('Employee Records', 'Job Title Informations Edited', "Edited by User", 0);
         return response()->json(['new_name' => $jobTitle->name, 'new_path' => $jobTitle->description], 200);
     }
+
+    #
+   
+    #
 }

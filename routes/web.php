@@ -50,6 +50,9 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+Route::get('users/users-access', 'SecurityController@usersAccess');
+Route::post('users/users-access', 'SecurityController@getEmployees');
+Route::post('users/update-users-access', 'SecurityController@updateRights');
 
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
@@ -119,6 +122,8 @@ Route::post('leave/application/day', 'LeaveApplicationController@day');
 Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
 #Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 
+
+
 #leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
 //Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -178,7 +183,13 @@ Route::post('contacts/company_search_results', 'CompanySearchController@companyS
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');
 # Employee Records Module
-Route::get('hr/job_title', 'EmployeeJobTitleController@index');
+Route::get('hr/Admin', 'Hr_Admin@view');
+Route::post('hr/searchemployees', 'Hr_Admin@search_employees');
+Route::post('hr/user_active', 'Hr_Admin@activeEmployee');
+Route::get('hr/active_user', 'Hr_Admin@cards');
+
+
+Route::get('hr/job_title', 'Product_categoryController@index');
 Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
 Route::patch('hr/category_edit/{jobCategory}', 'EmployeeJobTitleController@editCategory');
 Route::get('hr/jobtitles/{jobCategory}', 'EmployeeJobTitleController@jobView');
@@ -191,6 +202,63 @@ Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
 Route::post('audits/print', 'AuditReportsController@printreport');
+
+#PRODUCTS
+Route::get('product/Categories', 'Product_categoryController@index');
+Route::get('Product/Product/{Category}', 'Product_categoryController@productView');
+Route::post('Product/categories', 'Product_categoryController@categorySave');
+Route::post('/Product/Product/add/{products}', 'Product_categoryController@addProductType');
+Route::patch('Product/product_edit/{product}', 'Product_categoryController@editProduct');
+Route::patch('Product/category_edit/{Category}', 'Product_categoryController@editCategory');
+#
+//----packages ---
+Route::get('product/Packages', 'Product_categoryController@view_packages');
+Route::post('Product/packages/add', 'Product_categoryController@packageSave');
+Route::patch('Product/packages_edit/{package}', 'Product_categoryController@editPackage');
+
+
+//----Promotions ---
+Route::get('product/Promotions', 'Product_categoryController@view_promotions');
+Route::post('Product/promotions/add', 'Product_categoryController@promotionSave');
+
+#----price -----
+// Route::get('product/price', 'Product_categoryController@index');
+Route::get('Product/price/{price}', 'Product_categoryController@view_prices');
+Route::post('/Product/price/add/{products}', 'Product_categoryController@priceSave');
+
+
+#search
+Route::get('product/Search', 'Product_categoryController@Search');
+
+#Help Desk
+Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
+Route::post('help_desk/system/add', 'HelpdeskController@systemAdd');
+Route::patch('help_desk/system/adit/{service}', 'HelpdeskController@editService');
+Route::get('help_desk/service/{service}', 'HelpdeskController@view_service');
+//--------------------#---------
+Route::get('helpdesk/view_ticket', 'HelpdeskController@viewTicket');
+
+#
+
+// ------ Assign Tickets -------
+Route::get('help_desk/assign_ticket/{ticket}', 'Assign_ticketController@assign_tickets');
+Route::post('help_desk/operator/assign/{operatorID}', 'Assign_ticketController@assign_operator');
+
+
+Route::get('helpdesk/ticket', 'HelpdeskController@createTicket');
+Route::post('help_desk/operator/add/{serviceID}', 'HelpdeskController@Addoperator');
+Route::post('help_desk/admin/add/{adminID}', 'HelpdeskController@addAdmin');
+Route::post('help_desk/ticket/add', 'HelpdeskController@addTicket');
+
+
+//   ----------------- Help Desk Settings ------------------   //
+Route::post('help_desk/setup', 'HelpdeskController@setup');
+Route::post('help_desk/notify_managers', 'HelpdeskController@notify_managers');
+Route::post('help_desk/auto_escalations', 'HelpdeskController@auto_escalations');
+Route::post('help_desk/unresolved_tickets', 'HelpdeskController@unresolved_tickets');
+Route::post('help_desk/auto_responder_messages', 'HelpdeskController@auto_responder_messages');
+Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
+
 
 # Performance Appraisals Module
 
@@ -422,6 +490,7 @@ Route::post('hr/addDoctype/{category}', 'HrController@addDocType');
 Route::post('/hr/Doc_type_edit/{edit_DocID}', 'HrController@editDocType');
 Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 // /hr/category/' . $type->id
+
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
@@ -440,6 +509,8 @@ Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController
 
 Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getMeetingEmployees')->name('meetingTasksEmployee');
 Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
+Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@updateDuration');
+Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
 
 //Email Test
 Route::get('testemail', function () {
