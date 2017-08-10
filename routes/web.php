@@ -34,6 +34,7 @@ Route::get('users/{user}/edit', 'UsersController@edit');
 Route::get('users/profile', 'UsersController@profile');
 Route::post('users', 'UsersController@store');
 Route::post('users/search', 'UsersController@getSearch');
+Route::post('users/search/activate', 'UsersController@activateUsers');
 Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
