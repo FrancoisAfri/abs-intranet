@@ -494,6 +494,8 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
+Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
