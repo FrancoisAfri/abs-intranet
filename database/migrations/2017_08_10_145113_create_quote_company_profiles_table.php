@@ -10,7 +10,7 @@ class CreateQuoteCompanyProfilesTable extends Migration
      * Run the migrations.
      *
      * @return void
-     */
+    */
     public function up()
     {
         Schema::create('quote_company_profiles', function (Blueprint $table) {

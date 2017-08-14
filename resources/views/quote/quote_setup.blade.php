@@ -3,6 +3,9 @@
 @section('page_dependencies')
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+	<!-- bootstrap wysihtml5 - text editor -->
+	<link rel="stylesheet" href="../../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
 @endsection
 
 @section('content')
@@ -93,15 +96,40 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-
+						<div id="quote-profile-list" style="max-height: 250px;">
+							<table class="table table-bordered table-striped">
+								<tr>
+									<th style="text-align: center; width: 5px;">#</th>
+									<th>{{ $highestLvl->name }}</th>
+									<th style="text-align: center;">Quote Val. Period</th>
+								</tr>
+								@foreach($quoteProfiles as $quoteProfile)
+									<tr>
+										<td style="text-align: center;">
+											<button type="button" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-profile-modal"
+													data-id="{{ $quoteProfile->id }}"
+													data-division_id="{{ $quoteProfile->division_id }}"
+													data-letterhead_url="{{ $quoteProfile->letterhead_url }}">
+												<i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										</td>
+										<td>{{ $loop->iteration }}</td>
+										<td>{{ $quoteProfile->divisionLevelGroup->name }}</td>
+										<td style="text-align: center;"> <button type="button" id="view_kpi" class="btn {{ (!empty($loop->status) && $loop->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($loop->status) && $loop->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($loop->status) && $loop->status == 1) ? "De-Activate" : "Activate"}}</button></td>
+									</tr>
+								@endforeach
+							</table>
+						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" id="add-new-term-type" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-term-type-modal">Add New Type</button>
+                        <button type="button" id="add-new-term-type" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-terms-modal">Add New Term & Conditions</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
             </div>
+			@include('quote.partials.add_quote_terms_modal')
+			@include('quote.partials.edit_quote_terms_modal')
         </div>
         <!-- Include modal -->
         @if(Session('changes_saved'))
