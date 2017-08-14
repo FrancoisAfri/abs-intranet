@@ -30,7 +30,31 @@
                 </form>
             </div>
         </div>
+		<!-- terms And Conditions types -->
+		
+		<div class="col-md-12">
+            <div class="box box-primary collapsed-box">
+                <form class="form-horizontal" method="POST" action="">
+                    {{ csrf_field() }}
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Terms and Conditions Type</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
 
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" id="add-new-term-type" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-term-type-modal">Add New Type</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
         <!-- Include modal -->
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])

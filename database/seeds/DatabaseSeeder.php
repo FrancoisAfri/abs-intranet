@@ -598,7 +598,7 @@ class DatabaseSeeder extends Seeder
         #
         $module = new modules(); 
         $module->active = 1;
-        $module->name = 'Product';
+        $module->name = 'Products';
         $module->path = 'Product';
         $module->font_awesome = 'fa fa-product-hunt';
         $module->save();
@@ -610,7 +610,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_name = 'Categories';
         $ribbon->description = 'Categories';
         $ribbon->ribbon_path = 'product/Categories';
-        $ribbon->access_level = 5;
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
         
          $ribbon = new module_ribbons();
@@ -619,7 +619,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_name = 'Search';
         $ribbon->description = 'Search';
         $ribbon->ribbon_path = 'product/Search';
-        $ribbon->access_level = 5;
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
          $ribbon = new module_ribbons();
