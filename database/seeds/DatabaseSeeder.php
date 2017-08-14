@@ -373,6 +373,23 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'contacts/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+
+        //Insert navigation menus
+        $module = new modules(); //Quote
+        $module->active = 1;
+        $module->name = 'Quote';
+        $module->path = 'Quotation';
+        $module->font_awesome = 'fa-file-text-o';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Quotes Setup';
+        $ribbon->ribbon_path = 'quote/setup';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 		
 		
         $module = new modules(); // Security

@@ -29,6 +29,11 @@ class DivisionLevelOne extends Model
         return $this->belongsTo(DivisionLevelTwo::class, 'parent_id');
     }
 
+    //Relationship Division level 1 and Quote Company Profile
+    public function quoteProfile() {
+        return $this->hasOne(QuoteCompanyProfile::class, 'division_id');
+    }
+
     //public function childDiv() {
         //return false;
    // }

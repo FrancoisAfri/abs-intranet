@@ -34,6 +34,7 @@ Route::get('users/{user}/edit', 'UsersController@edit');
 Route::get('users/profile', 'UsersController@profile');
 Route::post('users', 'UsersController@store');
 Route::post('users/search', 'UsersController@getSearch');
+Route::post('users/search/activate', 'UsersController@activateUsers');
 Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
@@ -492,6 +493,11 @@ Route::post('hr/addDoctype/{category}', 'HrController@addDocType');
 Route::post('/hr/Doc_type_edit/{edit_DocID}', 'HrController@editDocType');
 Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 // /hr/category/' . $type->id
+
+//quote
+Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
+Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');

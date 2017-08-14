@@ -34,6 +34,11 @@ class DivisionLevelTwo extends Model
         return $this->hasMany(DivisionLevelOne::class, 'parent_id');
     }
 
+    //Relationship Division level 2 and Quote Company Profile
+    public function quoteProfile() {
+        return $this->hasOne(QuoteCompanyProfile::class, 'division_id');
+    }
+
     //Function to a div level 1
     public function addChildDiv($divLvlOne) {
         $divLvlID = DivisionLevel::where('level', 1)->get()->first()->id;

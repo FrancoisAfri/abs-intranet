@@ -119,9 +119,16 @@ class SecurityController extends Controller
 
         $moduleID = $request->input('module_id');
         $accessLevels = $request->input('access_level');
+        //return $accessLevels;
         if (count($accessLevels) > 0) {
             foreach ($accessLevels as $userID => $accessLevel) {
-                module_access::where('module_id', $moduleID)->where('user_id', $userID)->update(['access_level' => $accessLevel]);
+                module_access::where('module_id', $moduleID)->where('user_id', $userID)->delete();
+                $userRights = new module_access();
+                $userRights->user_id = $userID;
+                $userRights->module_id = $moduleID;
+                $userRights->access_level = $accessLevel;
+                $userRights->save();
+                //module_access::where('module_id', $moduleID)->where('user_id', $userID)->update(['access_level' => $accessLevel]);
             }
         }
         return back()->with('changes_saved', "Your changes have been saved successfully.");
