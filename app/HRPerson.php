@@ -92,7 +92,7 @@ class HRPerson extends Model
         return (!empty($this->profile_pic)) ? Storage::disk('local')->url("avatars/$this->profile_pic") : (($this->gender === 0) ? $f_silhouette : $m_silhouette);
     }
 
-    //function ro get people from a specific div level
+    //function to get people from a specific div level
     public static function peopleFronDivLvl($whereField, $divValue, $incInactive) {
         $hrPeople = HRPerson::where($whereField, $divValue)
             ->where(function ($query) use($incInactive) {

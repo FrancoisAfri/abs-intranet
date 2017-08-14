@@ -22,9 +22,10 @@
                             <div class="col-sm-10">
                                 <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;">
                                     <option value="">*** Please Select a Company ***</option>
-                                    <option value="">*** Please Select a Company ***</option>
+                                    <option value="0">[Individual Clients]</option>
                                     @foreach($companies as $company)
-                                        <option value="{{ $company->id }}" {{ ($company->id == old('company_id')) ? 'selected' : '' }}>{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}" {{ ($company->id == old('company_id')) ? 'selected' : '' }}
+                                        onclick="contactCompanyDDOnChange()">{{ $company->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -35,10 +36,7 @@
 
                             <div class="col-sm-10">
                                 <select id="contact_person_id" name="contact_person_id" class="form-control select2" style="width: 100%;">
-                                    <option value="">*** Please Select a Person ***</option>
-                                    @foreach($contactPeople as $contactPerson)
-                                        <option value="{{ $contactPerson->id }}" {{ ($contactPerson->id == old('contact_person_id')) ? 'selected' : '' }}>{{ $contactPerson->full_name }}</option>
-                                    @endforeach
+                                    <option value="">*** Please Select a Company First ***</option>
                                 </select>
                             </div>
                         </div>

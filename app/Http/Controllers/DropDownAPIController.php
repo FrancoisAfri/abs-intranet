@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ContactPerson;
 use App\DivisionLevelFive;
 use App\DivisionLevelFour;
 use App\DivisionLevelOne;
@@ -143,5 +144,25 @@ class DropDownAPIController extends Controller
         }
 
         return $kpas;
+    }
+
+    //Load HR People from specific division level
+    public function contactPeopleDD(Request $request) {
+        $companyID = (int) $request->input('company_id');
+        $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
+        $loadAll = $request->input('load_all');
+        $contactPeople = [];
+        if ($loadAll == -1) $contactPeople = ContactPerson::peopleFromCompany('company_id', $companyID, $incInactive);
+        elseif ($loadAll == 1) {
+            $contactPeople = ContactPerson::where(function ($query) use($incInactive) {
+                if ($incInactive == -1) {
+                    $query->where('status', 1);
+                }
+            })->get()
+                ->sortBy('full_name')
+                ->pluck('id', 'full_name');
+        }
+
+        return $contactPeople;
     }
 }

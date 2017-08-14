@@ -524,6 +524,8 @@ Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetC
 Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@updateDuration');
 Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
 
+Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleDD')->name('contactsdropdown');
+
 //Email Test
 Route::get('testemail', function () {
     //Mail::to('smalto@afrixcel.co.za')->send(new UserCreated);
