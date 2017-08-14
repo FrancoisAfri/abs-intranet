@@ -53,7 +53,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Categories', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
@@ -75,7 +75,7 @@ class Product_categoryController extends Controller
             ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
         ];
 			$data['products'] = $Category;
-			$data['active_mod'] = 'Product';
+			$data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
 			AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
 			return view('products.products')->with($data);
@@ -124,7 +124,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Packages', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Packages', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Packages';
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
@@ -179,7 +179,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Promotions', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Promotions', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Promotions';
        // $data['jobCategories'] = $jobCategories;
         // $data['ProductCategory'] = $ProductCategory;
@@ -209,7 +209,7 @@ class Product_categoryController extends Controller
 
 			$data['products'] = $price;
 			$data['Productprice'] = $Productprice;
-			$data['active_mod'] = 'Product';
+			$data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
 			AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
 			return view('products.prices')->with($data);
@@ -237,7 +237,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Search', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Search';
         $data['doc_type'] ='doc_type';  
         $data['qualifications'] = $qualifications;
