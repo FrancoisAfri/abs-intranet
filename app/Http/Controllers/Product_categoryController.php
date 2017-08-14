@@ -9,7 +9,7 @@ use App\User;
 use App\JobTitle;
 use App\JobCategory;
 use App\doc_type;
-use App\Product_category;
+use App\product_category;
 use App\product_products;
 use App\product_packages;
 use App\product_price;
@@ -31,10 +31,10 @@ class Product_categoryController extends Controller
 		if (!empty($jobCategories))
 			$jobCategories = $jobCategories->load('catJobTitle');
 
-		$ProductCategory = Product_category::orderBy('name', 'asc')->get();
+		$ProductCategory = product_category::orderBy('name', 'asc')->get();
 		if (!empty($ProductCategory))
 			$ProductCategory = $ProductCategory->load('productCategory');
-		$row = Product_category::count();
+		$row = product_category::count();
 		if($row < 1)
      	 {
 
@@ -53,7 +53,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Categories', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
@@ -75,7 +75,7 @@ class Product_categoryController extends Controller
             ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
         ];
 			$data['products'] = $Category;
-			$data['active_mod'] = 'Product';
+			$data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
 			AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
 			return view('products.products')->with($data);
@@ -92,7 +92,7 @@ class Product_categoryController extends Controller
 		if (!empty($jobCategories))
 			$jobCategories = $jobCategories->load('catJobTitle');
 
-		$ProductCategory = Product_category::orderBy('name', 'asc')->get();
+		$ProductCategory = product_category::orderBy('name', 'asc')->get();
 		if (!empty($ProductCategory))
 			$ProductCategory = $ProductCategory->load('productCategory');
 
@@ -103,7 +103,7 @@ class Product_categoryController extends Controller
 		$Product = product_products::orderBy('name', 'asc')->get();
 		//return $Product;
 
-		$row = Product_category::count();
+		$row = product_category::count();
 		if($row < 1)
      	 {
 
@@ -124,7 +124,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Packages', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Packages', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Packages';
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
@@ -148,7 +148,7 @@ class Product_categoryController extends Controller
 
 		 //return $productsPromotions;
 
-		 	$ProductCategory = Product_category::orderBy('name', 'asc')->get();
+		 	$ProductCategory = product_category::orderBy('name', 'asc')->get();
 		if (!empty($ProductCategory))
 			$ProductCategory = $ProductCategory->load('productCategory');
 	
@@ -157,7 +157,7 @@ class Product_categoryController extends Controller
 	    $package = product_packages::orderBy('name', 'asc')->get();
 		//return $package;
 
-		$row = Product_category::count();
+		$row = product_category::count();
 		if($row < 1)
      	 {
 
@@ -179,7 +179,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Promotions', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Promotions', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Promotions';
        // $data['jobCategories'] = $jobCategories;
         // $data['ProductCategory'] = $ProductCategory;
@@ -209,7 +209,7 @@ class Product_categoryController extends Controller
 
 			$data['products'] = $price;
 			$data['Productprice'] = $Productprice;
-			$data['active_mod'] = 'Product';
+			$data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
 			AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
 			return view('products.prices')->with($data);
@@ -237,7 +237,7 @@ class Product_categoryController extends Controller
             ['title' => 'Employee Records', 'path' => '/Product/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Search', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Search';
         $data['doc_type'] ='doc_type';  
         $data['qualifications'] = $qualifications;
@@ -252,7 +252,7 @@ class Product_categoryController extends Controller
 
     }
 
-    public function editCategory(Request $request, Product_category $Category)
+    public function editCategory(Request $request, product_category $Category)
 	{
         $this->validate($request, [
             'name' => 'required',
@@ -267,7 +267,7 @@ class Product_categoryController extends Controller
     }
 
 
-    public function categoryAct(Product_category $Category) 
+    public function categoryAct(product_category $Category) 
 	{
 		if ($Category->status == 1) $stastus = 0;
 		else $stastus = 1;
@@ -279,7 +279,7 @@ class Product_categoryController extends Controller
 
 
 
-       public function categorySave(Request $request, Product_category $cat) {
+       public function categorySave(Request $request, product_category $cat) {
         $this->validate($request, [
             'name' => 'required',
             'description'=> 'required',

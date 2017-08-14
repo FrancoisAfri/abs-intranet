@@ -426,6 +426,72 @@
         
      </div>
     <!--  -->
+    <!-- Ticket Widget -->
+      <div class="row">
+        <div class="col-md-6">
+         <!-- /Tasks List -->
+          <!-- <div class="box box-info"> -->
+          <div>
+             <div class="box box-danger same-height-widget">
+                <div class="box-header with-border">
+                <i class="fa fa-ticket"></i>
+                    <h3 class="box-title">view Tickets</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                    <thead>
+                        <tr>
+                            <th>Ticket #</th>
+                           <!--  <th>Email</th> -->
+                            <th>Subject</th>
+                            <th>Ticket Date</th>
+                            <th style="text-align: right;">Status</th>
+                          <!--   <th>Due Date</th>
+                            <th>Client Name</th> -->
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    @if (!empty($tickets))
+                        @foreach($tickets as $ticket)
+                          <tr>
+                        <td>TICK{{ (!empty($ticket->id)) ?  $ticket->id : ''}}</td>
+                        <!-- <td>{{ (!empty($ticket->email)) ?  $ticket->email : ''}}</td> -->
+                        <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}}</td> 
+                         <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
+                         <td style="text-align: right;">{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
+
+                          </tr>
+                        @endforeach
+                    @endif
+                  </tbody>
+                </table>
+                <div class="box-footer">
+                   <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
+                     <button id="ticket"class="btn btn-primary pull-right"><i class="fa fa-ticket"></i> Create Ticket</button>
+                </div>
+              </div>
+             
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer clearfix">
+            </div>
+            <!-- /.box-footer -->
+          </div>
+         
+        </div>
+
+       
+     </div>
 @endsection
 
 @section('page_script')
@@ -505,6 +571,12 @@
             $('#Apply').click(function () {
                 location.href = '/leave/application';
             });
+
+             $('#ticket').click(function () {
+                location.href = '/helpdesk/ticket';
+            });
+
+            
             //initialise matchHeight on widgets
             //$('.same-height-widget').matchHeight();
 

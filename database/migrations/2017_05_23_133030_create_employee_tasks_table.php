@@ -24,6 +24,8 @@ class CreateEmployeeTasksTable extends Migration
 			$table->integer('library_id')->nullable();
 			$table->integer('added_by')->nullable();
 			$table->integer('duration')->nullable();
+			$table->integer('helpdesk_id')->nullable();
+			$table->integer('ticket_id')->nullable();
             $table->string('description')->nullable();
             $table->string('notes')->nullable();
 			$table->smallInteger('priority')->nullable();
