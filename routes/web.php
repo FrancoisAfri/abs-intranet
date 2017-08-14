@@ -50,6 +50,9 @@ Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
+Route::get('users/users-access', 'SecurityController@usersAccess');
+Route::post('users/users-access', 'SecurityController@getEmployees');
+Route::post('users/update-users-access', 'SecurityController@updateRights');
 
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
@@ -69,8 +72,9 @@ Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');
 Route::post('contacts/send-message', 'ContactsController@sendMessage');
+Route::post('contacts/sms_settings', 'ContactsController@saveSetup');
 Route::get('contacts/setup', 'ContactsController@setup');
-
+Route::patch('contacts/update_sms/{smsConfiguration}', 'ContactsController@updateSMS');
 //#Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
@@ -488,6 +492,7 @@ Route::post('hr/addDoctype/{category}', 'HrController@addDocType');
 Route::post('/hr/Doc_type_edit/{edit_DocID}', 'HrController@editDocType');
 Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 // /hr/category/' . $type->id
+
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
@@ -506,6 +511,8 @@ Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController
 
 Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getMeetingEmployees')->name('meetingTasksEmployee');
 Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
+Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@updateDuration');
+Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
 
 //Email Test
 Route::get('testemail', function () {

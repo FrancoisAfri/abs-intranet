@@ -29,7 +29,7 @@
 											    <td>{{ (!empty($helpdsk->ticket_number)) ?  $helpdsk->ticket_number : ''}} </td>
 											    <td>{{ !empty($helpdsk->ticket_date) ? date('d M Y ', $helpdsk->ticket_date) : '' }}</td>
 						                        <td>{{ (!empty($helpdsk->subject)) ?  $helpdsk->subject : ''}} </td>
-						                         <td>{{ (!empty($helpdsk->status)) ?  $ticketStatus[$helpdsk->status] : ''}} </td>	
+						                        <td>{{ (!empty($helpdsk->status)) ?  $ticketStatus[$helpdsk->status] : ''}} </td>	
 											</tr>
 										@endforeach
 									<tr>

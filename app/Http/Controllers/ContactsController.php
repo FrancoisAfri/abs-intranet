@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
+use App\ContactsCommunication;
 use App\Country;
 use App\public_reg;
 use App\Mail\ConfirmRegistration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Mail\adminEmail;
+use App\Mail\ClientCommunication;
 use App\Http\Requests;
 use App\HRPerson;
+use App\SmS_Configuration;
 use App\User;
 use App\Province;
 use App\Http\Controllers\AuditReportsController;
@@ -25,10 +28,10 @@ use Illuminate\Support\Facades\Hash;
 
 class ContactsController extends Controller
 {
-    public function __construct()
+	public function __construct()
     {
         $this->middleware('auth');
-    }
+	}
     public function index() {
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
@@ -550,10 +553,8 @@ class ContactsController extends Controller
 
     public function sendMessageIndex()
     {
-        //$companies = ContactCompany::where('status', 1)->orderBy('name')->get();
         $contactPersons = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-
-        $data['page_title'] = "Clients";
+        $data['page_title'] = "Client Communication";
         $data['page_description'] = "Send a Message To Your Clients";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
@@ -563,7 +564,7 @@ class ContactsController extends Controller
         $data['active_rib'] = 'send message';
         //$data['companies'] = $companies;
         $data['contactPersons'] = $contactPersons;
-        AuditReportsController::store('Clients', 'Send Message Page Accessed', "Actioned By User", 0);
+        AuditReportsController::store('Contacts', 'Send Message Page Accessed', "Actioned By User", 0);
         return view('contacts.send_message')->with($data);
     }
 
@@ -571,14 +572,109 @@ class ContactsController extends Controller
     {
         $this->validate($request, [
             'clients.*' => 'required',
-            'sms_content' => 'bail|required|max:180',
+			'message_type' => 'required',  
+			'email_content' => 'bail|required_if:message_type,1',
+            'sms_content' => 'bail|required_if:message_type,2|max:180',
         ]);
+		
+		$CommunicationData = $request->all();
+        unset($CommunicationData['_token']);
+		//return $CommunicationData;
+		# Save email
+		$user = Auth::user();
+		
+		foreach ($CommunicationData['clients'] as $clientID) {
+			$ContactsCommunication = new ContactsCommunication;
+			$ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
+			$ContactsCommunication->communication_type = $CommunicationData['message_type'];
+			$ContactsCommunication->contact_id = $clientID;
+			$ContactsCommunication->status = 1;
+			$ContactsCommunication->sent_by = $user->id;
+			$ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
+			$ContactsCommunication->save();
+			$client = ContactPerson::where('id', $clientID)->first();
+			if ($CommunicationData['message_type'] == 1 && !empty($client->email))
+				# Send Email to Client
+				Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication));
+		}
+		if ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
+		{
+			foreach ($CommunicationData['clients'] as $clientID) {
+				$mobileArray[] = $this->formatCellNo($client->cell_number);;
+			}
+			#format cell numbers
+			# send out the message
+			$CommunicationData['sms_content'] = str_replace("<br>","",$CommunicationData['sms_content']);
+			$CommunicationData['sms_content'] = str_replace(">","-",$CommunicationData['sms_content']);
+			$CommunicationData['sms_content'] = str_replace("<","-",$CommunicationData['sms_content']);
+			BulkSMSController::send($mobileArray, $CommunicationData['sms_content']);
+		}
+		AuditReportsController::store('Contacts', 'Client Communication Set', "Message: $ContactsCommunication->message", 0);
+		return redirect("/contacts/send-message")->with('success_sent', "Communication Successfully Sent to Client");
+	}
 
-        //get bulk sms credentials [this should be loaded from setup]
+    public function setup() {
+		$data['page_title'] = "Contacts Setup";
+        $data['page_description'] = "Contacts set up ";
+        $data['breadcrumb'] = [
+            ['title' => 'Contacts', 'path' => '/contacts/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		$SmSConfiguration = SmS_Configuration::first();
+		$data['active_mod'] = 'contacts';
+        $data['active_rib'] = 'setup';
+        $data['SmSConfiguration'] = $SmSConfiguration;
+		//return $SmSConfiguration;
+        AuditReportsController::store('Contacts', 'Setup Search Page Accessed', "Actioned By User", 0);
+        return view('contacts.setup')->with($data);
+	}
+	
+	public function saveSetup(Request $request)
+    {
+        $this->validate($request, [
+            'sms_provider' => 'required',
+            'sms_username' => 'required',
+            'sms_password' => 'required',
+        ]);
+		
+		$smsData = $request->all();
+        unset($smsData['_token']);
 
-
-        return $request->all();
+		$SmSConfiguration = new SmS_Configuration;
+        $SmSConfiguration->sms_provider = $smsData['sms_provider'];
+		$SmSConfiguration->sms_username = $smsData['sms_username'];
+        $SmSConfiguration->sms_password = $smsData['sms_password'];
+        $SmSConfiguration->save();
+		AuditReportsController::store('Contacts', 'SMS Setup Saved', "Actioned By User", 0);
+        return redirect('/contacts/setup');
     }
+	public function updateSMS(Request $request, SmS_Configuration $smsConfiguration)
+    {
+        $this->validate($request, [
+            'sms_provider' => 'required',
+            'sms_username' => 'required',
+            'sms_password' => 'required',
+        ]);
+		$smsData = $request->all();
+        unset($smsData['_token']);
 
-    public function setup() {}
+        $smsConfiguration->sms_provider = $smsData['sms_provider'];
+		$smsConfiguration->sms_username = $smsData['sms_username'];
+        $smsConfiguration->sms_password = $smsData['sms_password'];
+        $smsConfiguration->update();
+		AuditReportsController::store('Contacts', 'SMS Setup Updated', "Actioned By User", 0);
+        return redirect('/contacts/setup');
+    }
+	function formatCellNo($sCellNo)
+	{
+		# Remove the following characters from the phone number
+		$cleanup_chr = array ("+", " ", "(", ")", "\r", "\n", "\r\n");
+
+		# clean phone number
+		$sCellNo = str_replace($cleanup_chr, '', $sCellNo);
+
+		#Internationalise  the number
+		if($sCellNo{0} == "0" ) $sCellNo = "27" . substr($sCellNo, 1);
+
+		return $sCellNo;
+	}
 }

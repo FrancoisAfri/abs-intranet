@@ -135,6 +135,8 @@ class HelpdeskController extends Controller
 		    ->orderBy('id')
 		    ->get();
 
+		   
+
 		 //   return $tickets;
 		    
 
@@ -336,11 +338,11 @@ class HelpdeskController extends Controller
         unset($docData['_token']);
       
         $loggedInEmplID = Auth::user()->person->id;
-        $acroym = DB::table('company_identities')->select('header_acronym_bold')->get();
-                   
-        $negannualDays = $acroym->first()->header_acronym_bold;
-        $firstname = substr($negannualDays, 0,1);
 
+        // $acroym = DB::table('company_identities')->select('header_acronym_bold')->get();
+                   
+        // $negannualDays = $acroym->first()->header_acronym_bold;
+        // $firstname = substr($negannualDays, 0,1);
 
         $tick->name = $request->input('name');
         $tick->email = $request->input('email');
@@ -383,13 +385,11 @@ class HelpdeskController extends Controller
 
 
 		 
-  	   $systems = System::orderBy('name', 'asc')->get();
+  	     $systems = System::orderBy('name', 'asc')->get();
 
-  	    $CompletedTickets = DB::table('ticket')->pluck('status');
+  	     $CompletedTickets = DB::table('ticket')->pluck('status');
 
-  	 
-  	  // $ticketStatus = ['' => '', -1 => "Rejected", 1 => "Pending Assignment", 2 => 'Assigned to operator', 3 => 'Completed'];
-  	   $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review' , 5 => 'resolved');
+  	     $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review' , 5 => 'resolved');
 
   	     $statusLabels = [-1 => "Rejected", 1 => "label-warning", 2 => 'label-success', 3 => 'label-info'];
 		//return $helpdeskTickets;

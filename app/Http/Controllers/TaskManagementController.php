@@ -12,6 +12,7 @@ use App\User;
 use App\AuditTrail;
 use App\ContactCompany;
 use App\EmployeeTasks;
+use App\System;
 use App\EmployeeTasksDocuments;
 use App\Mail\EmployeesTasksMail;
 use App\Mail\NextTaskNotifications;
@@ -100,7 +101,7 @@ class TaskManagementController extends Controller
 			return redirect('/')->with('error_starting', "You can not start this task, You have another task in progess.");
 		$stastus = 2;
 		$task->status = $stastus;	
-		$task->date_started = strtotime(date('Y-m-d'));	
+		$task->date_started = time();
 		$task->update();
 		AuditReportsController::store('Task Management', "Task Started", "Edited by User", 0);
 		return back();
@@ -110,7 +111,7 @@ class TaskManagementController extends Controller
 	{
 		$stastus = 3;
 		$task->status = $stastus;	
-		$task->date_paused =  strtotime(date('Y-m-d'));	
+		$task->date_paused =  time();
 		$task->update();
 		AuditReportsController::store('Task Management', "Task Paused", "Edited by User", 0);
 		return back();
@@ -249,7 +250,7 @@ class TaskManagementController extends Controller
     */
     public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
 	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0
-	,$checkByID=0,$clientID=0,$managerDuration=0 , $helpDeskID = 0)
+	,$checkByID=0,$clientID=0,$managerDuration=0 , $helpDeskID = 0 , $ticketID = 0)
     {
 		//convert dates to unix time stamp
         /*if (!empty($duedate)) {
@@ -275,6 +276,7 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->upload_required = $uploadRequired;
 		$EmployeeTasks->priority = $priority;
 		$EmployeeTasks->status = 1;
+		$EmployeeTasks->ticket_id = $ticketID;
 		$EmployeeTasks->task_type = $taskType;
 		$EmployeeTasks->employee_id = $employeeID;
 		$EmployeeTasks->library_id = $libraryID;
@@ -295,6 +297,13 @@ class TaskManagementController extends Controller
 			Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
 		}
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
+
+		#send email to manager
+		$helpDeskManager = System::where('helpdesk_id', $helpDeskID)->first();
+			//Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
+
+
+
 		//if ($taskType == 3)
 			//return redirect('/education/activity/' . $activity->id . '/view')->with('success_add', "The task has been added successfully");
     }

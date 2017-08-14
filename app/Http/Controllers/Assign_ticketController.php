@@ -34,7 +34,10 @@ class Assign_ticketController extends Controller
      public function assign_tickets(ticket $ticket) {
 
      	$ID = $ticket->id;
+     	//return $ID;
      	$helpdeskId = $ticket->helpdesk_id;
+
+     	//return $helpdeskId;
 
   //    	$helpdeskTickets = ticket::orderBy('id', 'asc')->get();
 		// if (!empty($helpdeskTickets)) $helpdeskTickets->load('hrPeople');
@@ -57,9 +60,12 @@ class Assign_ticketController extends Controller
  		  $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
-				        ->where('operator.helpdesk_id', $helpdeskId)
+				        ->where('operator.helpdesk_id', $ID)
 				        ->orderBy('operator.helpdesk_id')
 				        ->get();
+
+				       // return $operators;
+
 
 				      //  return $operators;
 
@@ -95,7 +101,8 @@ class Assign_ticketController extends Controller
 
         ]);
     	
-    	$helpdeskId = $operatorID->helpdesk_id;
+    	 $helpdeskId = $operatorID->helpdesk_id;
+    	 $ticketID = $operatorID->id;
     	 $currentDate = $currentDate = time();
         $docData = $request->all();
         unset($docData['_token']);
@@ -111,8 +118,11 @@ class Assign_ticketController extends Controller
         Mail::to($operators->email)->send(new assignOperatorEmail($operators));
 
         #assign Operator to Task
-        TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,2
-					,0,0,0,0,0,0,0,$helpdeskId);
+     //    TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,
+					// ,0,0,0,0,0,0,0,$helpdeskId,$ticketID);
+
+        TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,0
+	,0,0,0,0,0,0,0,0,0,0 ,$helpdeskId,$ticketID);
 
         
         AuditReportsController::store('Assign operators', 'Assigned Operator to a atask', "Actioned By User", 0);
