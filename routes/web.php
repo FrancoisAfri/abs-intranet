@@ -239,7 +239,9 @@ Route::get('help_desk/service/{service}', 'HelpdeskController@view_service');
 //--------------------#---------
 Route::get('helpdesk/view_ticket', 'HelpdeskController@viewTicket');
 
-#
+#search
+Route::get('helpdesk/search', 'HelpdeskController@searhTickets');
+Route::post('helpdesk/search_results' , 'HelpdeskController@searchResults');
 
 // ------ Assign Tickets -------
 Route::get('help_desk/assign_ticket/{ticket}', 'Assign_ticketController@assign_tickets');
@@ -494,6 +496,8 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
+Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');

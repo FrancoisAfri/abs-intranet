@@ -121,51 +121,51 @@ class DatabaseSeeder extends Seeder
         $country->addProvince($province);
         #
         
-         //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Approved',
-            'description' => 'Approved',
-        ]);
-         //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Require managers approval',
-            'description' => 'Require managers approval',
-        ]);
-         //insert leave statuses
-         DB::table('leave_status')->insert([
-            'name' => 'Require department head approval',
-            'description' => 'Require department head approval',
-        ]);
-         //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Require hr approval',
-            'description' => 'Require hr approval',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Require payroll approval',
-            'description' => 'Require payroll approval',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by managers',
-            'description' => 'Rejectd by managers',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by department head',
-            'description' => 'Rejectd by department head',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by hr',
-            'description' => 'rejectd_by_hr',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by payroll',
-            'description' => 'rejectd_by_payroll',
-        ]);
+        //  //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Approved',
+        //     'description' => 'Approved',
+        // ]);
+        //  //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Require managers approval',
+        //     'description' => 'Require managers approval',
+        // ]);
+        //  //insert leave statuses
+        //  DB::table('leave_status')->insert([
+        //     'name' => 'Require department head approval',
+        //     'description' => 'Require department head approval',
+        // ]);
+        //  //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Require hr approval',
+        //     'description' => 'Require hr approval',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Require payroll approval',
+        //     'description' => 'Require payroll approval',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by managers',
+        //     'description' => 'Rejectd by managers',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by department head',
+        //     'description' => 'Rejectd by department head',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by hr',
+        //     'description' => 'rejectd_by_hr',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by payroll',
+        //     'description' => 'rejectd_by_payroll',
+        // ]);
 
 
 
@@ -675,14 +675,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-         $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Assign Tickets';
-        $ribbon->description = 'Assign Tickets';
-        $ribbon->ribbon_path = 'helpdesk/assign_ticket';
-        $ribbon->access_level = 5;
-        $module->addRibbon($ribbon);
+        //  $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Assign Tickets';
+        // $ribbon->description = 'Assign Tickets';
+        // $ribbon->ribbon_path = 'helpdesk/assign_ticket';
+        // $ribbon->access_level = 5;
+        // $module->addRibbon($ribbon);
 
          $ribbon = new module_ribbons();
         $ribbon->active = 1;

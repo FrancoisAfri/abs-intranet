@@ -134,7 +134,7 @@
                 var submitBtnID = 'add-operators';
                 var redirectUrl = '/help_desk/assign_ticket/{{ $ID }}';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Operatorwww has been Added successfully.';
+                var successMsg = 'The Operator has been Added successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });

@@ -8,7 +8,6 @@ use App\DivisionLevelFour;
 use App\DivisionLevelOne;
 use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
-use App\EmployeeTasks;
 use App\HRPerson;
 use App\leave_application;
 use App\module_access;
@@ -30,6 +29,9 @@ class DashboardController extends Controller
     }
 
     public function index() {
+
+        $loggedInEmplID = Auth::user()->person->id;
+
         $data['breadcrumb'] = [
             ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
         ];
@@ -107,12 +109,11 @@ class DashboardController extends Controller
 			// Get tasks for logged user
 			$today = strtotime(date('Y-m-d'));
 			$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
-			$tasks = EmployeeTasks::
-			select('employee_tasks.description','employee_tasks.start_date','employee_tasks.manager_duration'
+			$tasks = DB::table('employee_tasks')
+			->select('employee_tasks.description','employee_tasks.start_date','employee_tasks.manager_duration'
 			,'employee_tasks.employee_id','employee_tasks.upload_required'
 			,'employee_tasks.order_no','employee_tasks.status','employee_tasks.due_date'
-			,'employee_tasks.id as task_id','contact_companies.name as client_name', 'employee_tasks.duration'
-            , 'employee_tasks.date_paused', 'employee_tasks.date_started')
+			,'employee_tasks.id as task_id','contact_companies.name as client_name')
 			->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
 			->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
 			->where('employee_tasks.employee_id', $user->person->id)
@@ -156,11 +157,23 @@ class DashboardController extends Controller
 			->get();
 			//return $checkTasks;
 
+            #View Tickets 
+              
+            $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
+            $tickets = DB::table('ticket')
+                ->where('user_id', $loggedInEmplID)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            
+                //return $tickets;
+            $data['ticketStatus'] = $ticketStatus;    
+            $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;
             $data['balance'] = $balance;
             $data['application'] = $application;
-            $data['taskStatus'] = $taskStatus;
-			$data['taskStatus'] = $taskStatus;
+            //$data['taskStatus'] = $taskStatus;
+			//$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
             $data['topGroupLvl'] = $topGroupLvl;

@@ -14,6 +14,7 @@ use App\System;
 use App\ticket;
 use App\helpdesk_Admin;
 use App\AuditTrail;
+use App\Mail\assignOperatorEmail;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class Assign_ticketController extends Controller
 {
@@ -32,7 +34,10 @@ class Assign_ticketController extends Controller
      public function assign_tickets(ticket $ticket) {
 
      	$ID = $ticket->id;
+     	//return $ID;
      	$helpdeskId = $ticket->helpdesk_id;
+
+     	//return $helpdeskId;
 
   //    	$helpdeskTickets = ticket::orderBy('id', 'asc')->get();
 		// if (!empty($helpdeskTickets)) $helpdeskTickets->load('hrPeople');
@@ -43,11 +48,11 @@ class Assign_ticketController extends Controller
                   ->select('name' ) 
                        ->where('id', $ID)
                         ->get();
-           $Names = $names->first()->name;
+          $Names = $names->first()->name;
 
 
     
-     	$tickets = DB::table('ticket')
+     	  $tickets = DB::table('ticket')
                 ->where('helpdesk_id', $ID)
                 ->orderBy('id', 'asc')
                 ->get();
@@ -55,11 +60,18 @@ class Assign_ticketController extends Controller
  		  $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
-				        ->where('operator.helpdesk_id', $helpdeskId)
+				        ->where('operator.helpdesk_id', $ID)
 				        ->orderBy('operator.helpdesk_id')
 				        ->get();
 
+				       // return $operators;
+
+
 				      //  return $operators;
+
+				        // $operators = HRPerson::where('id', 1)->first();
+
+       				 //    return $operators;
 
 		$data['ID'] = $ID;
 		$data['Names'] = $Names;		      // return $operators;
@@ -89,14 +101,31 @@ class Assign_ticketController extends Controller
 
         ]);
     	
+    	 $helpdeskId = $operatorID->helpdesk_id;
+    	 $ticketID = $operatorID->id;
+    	 $currentDate = $currentDate = time();
         $docData = $request->all();
         unset($docData['_token']);
         //$help_desk = $serviceID->id;
-        //$operator  =  new operator();
-        $operatorID->operator_id = $request->input('operator_id');
+        $AssignOperator  = 'Assign task to Operator';
+        $operator = $request->input('operator_id');
+        $operatorID->operator_id = $operator;
         $operatorID->status = 2;
         $operatorID->update();
-        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+
+        #send email to operator
+        $operators = HRPerson::where('id', $operator)->first();
+        Mail::to($operators->email)->send(new assignOperatorEmail($operators));
+
+        #assign Operator to Task
+     //    TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,
+					// ,0,0,0,0,0,0,0,$helpdeskId,$ticketID);
+
+        TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,0
+	,0,0,0,0,0,0,0,0,0,0 ,$helpdeskId,$ticketID);
+
+        
+        AuditReportsController::store('Assign operators', 'Assigned Operator to a atask', "Actioned By User", 0);
         return response()->json();
 
     }
