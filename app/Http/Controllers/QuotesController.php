@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\ContactCompany;
+use App\ContactPerson;
 use App\DivisionLevel;
+use App\EmailTemplate;
+use App\product_packages;
+use App\product_products;
 use App\QuoteCompanyProfile;
 use Illuminate\Http\Request;
 
@@ -30,7 +35,8 @@ class QuotesController extends Controller
         $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup');
         $validityPeriods = [7, 14, 30, 60, 90, 120];
         $quoteProfiles = QuoteCompanyProfile::where('status', 1)->where('division_level', $highestLvl->level)->get()->load('divisionLevelGroup');
-        //return $quoteProfiles;
+        $sendQuoteTemplate = EmailTemplate::where('template_key', 'send_quote')->get()->first();
+        $approvedQuoteTemplate = EmailTemplate::where('template_key', 'approved_quote')->get()->first();
 
         $data['page_title'] = "Quotes";
         $data['page_description'] = "Quotation Settings";
@@ -43,6 +49,8 @@ class QuotesController extends Controller
         $data['highestLvl'] = $highestLvl;
         $data['validityPeriods'] = $validityPeriods;
         $data['quoteProfiles'] = $quoteProfiles;
+        $data['sendQuoteTemplate'] = $sendQuoteTemplate;
+        $data['approvedQuoteTemplate'] = $approvedQuoteTemplate;
         AuditReportsController::store('Quote', 'Quote Setup Page Accessed', "Accessed By User", 0);
 
         return view('quote.quote_setup')->with($data);
@@ -88,7 +96,7 @@ class QuotesController extends Controller
     }
 
     /**
-     * Save the quote profile for a specific division.
+     * Edit the quote profile for a specific division.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\QuoteCompanyProfile $quoteProfile
@@ -121,5 +129,34 @@ class QuotesController extends Controller
 
         AuditReportsController::store('Quote', 'Quote Profile Edited. (ID: )' . $quoteProfile->id, "Edited By User", 0);
         return response()->json(['profile_id' => $quoteProfile->id], 200);
+    }
+
+    /**
+     * Show the create quote page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createIndex()
+    {
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+        $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
+        $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
+
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "Create a quotation";
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'create quote';
+        $data['companies'] = $companies;
+        $data['contactPeople'] = $contactPeople;
+        $data['products'] = $products;
+        $data['packages'] = $packages;
+        AuditReportsController::store('Quote', 'Create Quote Page Accessed', "Accessed By User", 0);
+
+        return view('quote.create_quote')->with($data);
     }
 }

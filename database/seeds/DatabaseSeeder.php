@@ -385,6 +385,15 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Create Quote';
+        $ribbon->description = 'Create Quote';
+        $ribbon->ribbon_path = 'quote/create';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Quotes Setup';
         $ribbon->ribbon_path = 'quote/setup';
@@ -600,7 +609,7 @@ class DatabaseSeeder extends Seeder
         $module->active = 1;
         $module->name = 'Product';
         $module->path = 'Product';
-        $module->font_awesome = 'fa fa-product-hunt';
+        $module->font_awesome = 'fa-product-hunt';
         $module->save();
 
         //Insert navigation menus
