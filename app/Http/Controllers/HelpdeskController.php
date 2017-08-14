@@ -12,6 +12,7 @@ use App\User;
 use App\leave_custom;
 use App\ticket;
 use App\business_card;
+use App\helpDesk_setup;
 use App\Province;
 use App\modules;
 use App\module_access;
@@ -383,7 +384,6 @@ class HelpdeskController extends Controller
 
 	// 	      return $id;
 
-
 		 
   	     $systems = System::orderBy('name', 'asc')->get();
 
@@ -405,7 +405,7 @@ class HelpdeskController extends Controller
 
 }
 
-    public function setup(Request $request, System $service){
+    public function setup(Request $request, helpDesk_setup $setup){
     		$this->validate($request, [
             // 'maximum_priority' => 'required',
             // 'description' => 'required',        
@@ -413,14 +413,15 @@ class HelpdeskController extends Controller
 		$SysData = $request->all();
 		unset($SysData['_token']);
 
-		return $SysData;
-	//	$service->maximum_priority = $request->input('maximum_priority');
-		//$service->save();
+		//return $SysData;
+		$setup->description = $request->input('description');
+		$setup->maximum_priority = $request->input('maximum_priority');
+		$setup->save();
 		return back();
 
     }
 
-    public function notify_managers(Request $request, System $service){
+    public function notify_managers(Request $request, helpDesk_setup $service){
     		$this->validate($request, [
             // 'maximum_priority' => 'required',
             // 'description' => 'required',        
@@ -428,9 +429,20 @@ class HelpdeskController extends Controller
 		$SysData = $request->all();
 		unset($SysData['_token']);
 
-		return $SysData;
-	//	$service->maximum_priority = $request->input('maximum_priority');
-		//$service->save();
+		$time_from =$SysData['time_from'];
+        $time_to =$SysData['time_to'];
+
+        //convert time to unix timestamp
+        $start_time = strtotime($time_from);
+        $end_time = strtotime($time_to);
+
+        $service->start_time = $start_time;
+        $service->time_to =$time_to;
+		$service->notify_hr_email = $request->input('notify_hr_email');
+		$service->notify_hr_sms_sms = $request->input('notify_hr_sms_sms');
+		$service->notify_manager_email = $request->input('notify_manager_email');
+		$service->notify_manager_sms = $request->input('notify_manager_sms');
+		$service->save();
 		return back();
 
     }

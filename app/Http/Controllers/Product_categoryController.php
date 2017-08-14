@@ -9,7 +9,7 @@ use App\User;
 use App\JobTitle;
 use App\JobCategory;
 use App\doc_type;
-use App\Product_category;
+use App\product_category;
 use App\product_products;
 use App\product_packages;
 use App\product_price;
@@ -31,10 +31,10 @@ class Product_categoryController extends Controller
 		if (!empty($jobCategories))
 			$jobCategories = $jobCategories->load('catJobTitle');
 
-		$ProductCategory = Product_category::orderBy('name', 'asc')->get();
+		$ProductCategory = product_category::orderBy('name', 'asc')->get();
 		if (!empty($ProductCategory))
 			$ProductCategory = $ProductCategory->load('productCategory');
-		$row = Product_category::count();
+		$row = product_category::count();
 		if($row < 1)
      	 {
 
@@ -92,7 +92,7 @@ class Product_categoryController extends Controller
 		if (!empty($jobCategories))
 			$jobCategories = $jobCategories->load('catJobTitle');
 
-		$ProductCategory = Product_category::orderBy('name', 'asc')->get();
+		$ProductCategory = product_category::orderBy('name', 'asc')->get();
 		if (!empty($ProductCategory))
 			$ProductCategory = $ProductCategory->load('productCategory');
 
@@ -103,7 +103,7 @@ class Product_categoryController extends Controller
 		$Product = product_products::orderBy('name', 'asc')->get();
 		//return $Product;
 
-		$row = Product_category::count();
+		$row = product_category::count();
 		if($row < 1)
      	 {
 
@@ -148,7 +148,7 @@ class Product_categoryController extends Controller
 
 		 //return $productsPromotions;
 
-		 	$ProductCategory = Product_category::orderBy('name', 'asc')->get();
+		 	$ProductCategory = product_category::orderBy('name', 'asc')->get();
 		if (!empty($ProductCategory))
 			$ProductCategory = $ProductCategory->load('productCategory');
 	
@@ -157,7 +157,7 @@ class Product_categoryController extends Controller
 	    $package = product_packages::orderBy('name', 'asc')->get();
 		//return $package;
 
-		$row = Product_category::count();
+		$row = product_category::count();
 		if($row < 1)
      	 {
 
@@ -252,7 +252,7 @@ class Product_categoryController extends Controller
 
     }
 
-    public function editCategory(Request $request, Product_category $Category)
+    public function editCategory(Request $request, product_category $Category)
 	{
         $this->validate($request, [
             'name' => 'required',
@@ -267,7 +267,7 @@ class Product_categoryController extends Controller
     }
 
 
-    public function categoryAct(Product_category $Category) 
+    public function categoryAct(product_category $Category) 
 	{
 		if ($Category->status == 1) $stastus = 0;
 		else $stastus = 1;
@@ -279,7 +279,7 @@ class Product_categoryController extends Controller
 
 
 
-       public function categorySave(Request $request, Product_category $cat) {
+       public function categorySave(Request $request, product_category $cat) {
         $this->validate($request, [
             'name' => 'required',
             'description'=> 'required',

@@ -315,3 +315,51 @@ function categoryOnChange(dropDownObj, hrPeopleDDID) {
     childDDLabel = $('label[for="' + childDDID + '"]').html();
 	loadkpaOptions(ddID,selectedOption, incInactive, loadAll, postTo);
 }
+
+/* function to load contact people drop down options */
+function contactCompanyDDOnChange(dropDownObj, contactPeopleDDID, selectedOption) {
+    contactPeopleDDID = contactPeopleDDID || 'contact_person_id';
+    selectedOption = selectedOption || '';
+
+    var postTo = '';
+    //var ddID = dropDownObj.id;
+    var companyID = dropDownObj.value;
+    var incInactive = -1;
+    var loadAll = -1;
+    //var childDDID = '';
+    //var childDDLabel = '';
+    //var hrPeopleDDLabel = $('label[for="' + hrPeopleDDID + '"]').html();
+    //console.log("function called by dd changed event: " + "ddID = " + ddID + ", parentDDVal = " + parentDDVal + ", parentDDLabel = " + parentDDLabel);
+
+    loadContactPeopleOptions(contactPeopleDDID, selectedOption, companyID);
+}
+
+/* function to load Contact People drop down options */
+function loadContactPeopleOptions(ddID, selectedOption, companyID, incInactive, loadAll, postTo) {
+    loadAll = loadAll || -1;
+    incInactive = incInactive || -1;
+    postTo = postTo || '/api/contact-people-dropdown';
+
+    //var parentDDVal = $('#'+parentDDID).val();
+    //var ddLabel = 'a Company';
+    //var divLvl = parseInt(parentDDID.substr(parentDDID.lastIndexOf("_") + 1));
+    $.post(postTo, { company_id: companyID, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
+        function(data) {
+            var dropdown = $('#'+ddID);
+            var firstDDOption = "*** Select a Person ***";
+            if (companyID == '') firstDDOption = "*** Select a Company First ***";
+            dropdown.empty();
+            dropdown
+                .append($("<option></option>")
+                    .attr("value",'')
+                    .text(firstDDOption));
+            $.each(data, function(key, value) {
+                var ddOption = $("<option></option>")
+                    .attr("value",value)
+                    .text(key);
+                if (selectedOption == value) ddOption.attr("selected", "selected");
+                dropdown
+                    .append(ddOption);
+            });
+        });
+}

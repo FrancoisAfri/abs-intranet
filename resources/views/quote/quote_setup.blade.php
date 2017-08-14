@@ -135,6 +135,56 @@
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
         @endif
+
+        <div class="col-md-12">
+            <div class="box box-success collapsed-box">
+                <form class="form-horizontal" method="POST" action="/email-template/save">
+                    {{ csrf_field() }}
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Send Quote Email Template</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <textarea id="send_quote_message" name="template_content" rows="10" cols="80">{{ ($sendQuoteTemplate) ? $sendQuoteTemplate->template_content : '' }}</textarea>
+                        <input type="hidden" name="template_key" value="send_quote">
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="box box-success collapsed-box">
+                <form class="form-horizontal" method="POST" action="/email-template/save">
+                    {{ csrf_field() }}
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Approved Quote Email Template</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <textarea id="approved_quote_message" name="template_content" rows="10" cols="80">{{ ($approvedQuoteTemplate) ? $approvedQuoteTemplate->template_content : '' }}</textarea>
+                        <input type="hidden" name="template_key" value="approved_quote">
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -158,6 +208,9 @@
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 
+    <!-- CK Editor -->
+    <script src="https://cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
+
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
@@ -180,6 +233,11 @@
             $("#letter_head").fileinput();
             // with plugin options
             //$("#input-id").fileinput({'showUpload':false, 'previewFileType':'any'});
+
+            // Replace the <textarea id="send_quote_message"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('send_quote_message');
+            CKEDITOR.replace('approved_quote_message');
 
             //Vertically center modals on page
             function reposition() {
