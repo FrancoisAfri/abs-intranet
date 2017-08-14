@@ -182,12 +182,12 @@
                               <tr>
                                 <td>Notify Managers of New Tickets (After Hours)</td>
                                   <td>
-                                    <input type="hidden" class="checkbox selectall"  name="notify_manager_sms_email" value="0">
-                                        <div class="sms"><input type="checkbox" name="notify_manager_sms_email" value="1"> Email</div>
+                                    <input type="hidden" class="checkbox selectall"  name="notify_manager_email" value="0">
+                                        <div class="sms"><input type="checkbox" name="notify_manager_email" value="1"> Email</div>
 
                                    <!--  <div class="sms"><input type="checkbox" name="notify_manager_sms_sms"> SMS</div> -->
-                                     <input type="hidden" class="checkbox selectall"  name="notify_manager_sms_sms" value="0">
-                                        <div class="sms"><input type="checkbox" name="notify_manager_sms_sms" value="1"> SMS</div>
+                                     <input type="hidden" class="checkbox selectall"  name="notify_manager_sms" value="0">
+                                        <div class="sms"><input type="checkbox" name="notify_manager_sms" value="1"> SMS</div>
 
                                   </td>
                                </tr>
@@ -242,15 +242,33 @@
                       
                         <td>Low </td>
                         <td><input type="text" size="2" name="auto_low" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="office_hrs_low"></td>
+                        <!--  -->
+                         <!-- <td style="text-align:center;"><input type="checkbox" name="office_hrs_low"></td> -->
+                        <input type="hidden" class="checkbox selectall"  name="office_hrs_low" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_low" value="1"></div></td>
+                         <!--  -->
                         <td style="text-align:center;"><select name="notify_level_low"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
                                  <td>
-                                    <div ><input type="checkbox" name="office_hrs_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_low_sms"> SMS</div>
+                                 <!--  -->
+                                 <input type="hidden" class="checkbox selectall"  name="office_hrs_low_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="office_hrs_low_email" value="1"> Email</div>
+
+                                 <input type="hidden" class="checkbox selectall"  name="office_hrs_low_sms" value="0">
+                                 <div class="sms"><input type="checkbox" name="office_hrs_low_sms" value="1"> SMS</div>
+                                 <!--  -->
+                                    <!-- <div ><input type="checkbox" name="office_hrs_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="office_hrs_low_sms"> SMS</div> -->
                                   </td>
                                   <td>
-                                    <div ><input type="checkbox" name="aftoffice_hrs_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms"> SMS</div>
+                                  <!--  -->
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_email" value="1"> Email</div>
+
+                                 <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_sms" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms" value="1"> SMS</div>
+                                  <!--  -->
+                                   <!--  <div ><input type="checkbox" name="aftoffice_hrs_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms"> SMS</div> -->
                                   </td>
                       
                         </tr>
@@ -258,15 +276,31 @@
                       
                         <td>Normal </td>
                         <td><input type="text" size="2" name="auto_mormal" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="office_hrs_normal"></td>
+                        <!--  -->
+                         <input type="hidden" class="checkbox selectall"  name="office_hrs_normal" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_normal" value="1"></div></td>
                         <td style="text-align:center;"><select name="notify_level_normal"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
                          <td>
+                                <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="office_hrs_normal_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_sms" value="0">
+                                 <div class="sms"><input type="checkbox" name="office_hrs_normal_sms" value="1"> SMS</div>
+<!-- 
                                     <div ><input type="checkbox" name="office_hrs_normal_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_normal_sms"> SMS</div>
+                                    <div class="sms"><input type="checkbox" name="office_hrs_normal_sms"> SMS</div> -->
                                   </td>
                                   <td>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_normal_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_normal_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_normal_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_normal_sms" value="1"> SMS</div>
+<!-- 
+
                                     <div ><input type="checkbox" name="aftoffice_hrs_normal_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_normal_sms"> SMS</div>
+                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_normal_sms"> SMS</div> -->
                                   </td>
                     </tr>
 
