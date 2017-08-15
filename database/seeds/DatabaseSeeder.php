@@ -121,51 +121,51 @@ class DatabaseSeeder extends Seeder
         $country->addProvince($province);
         #
         
-         //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Approved',
-            'description' => 'Approved',
-        ]);
-         //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Require managers approval',
-            'description' => 'Require managers approval',
-        ]);
-         //insert leave statuses
-         DB::table('leave_status')->insert([
-            'name' => 'Require department head approval',
-            'description' => 'Require department head approval',
-        ]);
-         //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Require hr approval',
-            'description' => 'Require hr approval',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Require payroll approval',
-            'description' => 'Require payroll approval',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by managers',
-            'description' => 'Rejectd by managers',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by department head',
-            'description' => 'Rejectd by department head',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by hr',
-            'description' => 'rejectd_by_hr',
-        ]);
-          //insert leave statuses
-        DB::table('leave_status')->insert([
-            'name' => 'Rejectd by payroll',
-            'description' => 'rejectd_by_payroll',
-        ]);
+        //  //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Approved',
+        //     'description' => 'Approved',
+        // ]);
+        //  //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Require managers approval',
+        //     'description' => 'Require managers approval',
+        // ]);
+        //  //insert leave statuses
+        //  DB::table('leave_status')->insert([
+        //     'name' => 'Require department head approval',
+        //     'description' => 'Require department head approval',
+        // ]);
+        //  //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Require hr approval',
+        //     'description' => 'Require hr approval',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Require payroll approval',
+        //     'description' => 'Require payroll approval',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by managers',
+        //     'description' => 'Rejectd by managers',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by department head',
+        //     'description' => 'Rejectd by department head',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by hr',
+        //     'description' => 'rejectd_by_hr',
+        // ]);
+        //   //insert leave statuses
+        // DB::table('leave_status')->insert([
+        //     'name' => 'Rejectd by payroll',
+        //     'description' => 'rejectd_by_payroll',
+        // ]);
 
 
 
@@ -355,6 +355,50 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'contacts/company_search';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Send Message';
+        $ribbon->description = 'Send SMS or email to Contacts';
+        $ribbon->ribbon_path = 'contacts/send-message';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Contacts Related Settings';
+        $ribbon->ribbon_path = 'contacts/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+        //Insert navigation menus
+        $module = new modules(); //Quote
+        $module->active = 1;
+        $module->name = 'Quote';
+        $module->path = 'Quotation';
+        $module->font_awesome = 'fa-file-text-o';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Create Quote';
+        $ribbon->description = 'Create Quote';
+        $ribbon->ribbon_path = 'quote/create';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Quotes Setup';
+        $ribbon->ribbon_path = 'quote/setup';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 		
 		
         $module = new modules(); // Security
@@ -390,10 +434,19 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'users/modules';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Users Access';
+        $ribbon->description = 'Users Access';
+        $ribbon->ribbon_path = 'users/users-access';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'users/setup';
@@ -461,14 +514,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 7;
-        // $ribbon->ribbon_name = 'Employee Search';
-        // $ribbon->description = 'Employee Search';
-        // $ribbon->ribbon_path = 'hr/emp_search';
-        // $ribbon->access_level = 4;
-        // $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Hr Admin';
+        $ribbon->description = 'Hr Admin';
+        $ribbon->ribbon_path = 'hr/Admin';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
@@ -550,7 +603,51 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
+
+        #
+        $module = new modules(); 
+        $module->active = 1;
+        $module->name = 'Products';
+        $module->path = 'Product';
+        $module->font_awesome = 'fa-product-hunt';
+        $module->save();
+
+        //Insert navigation menus
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Categories';
+        $ribbon->description = 'Categories';
+        $ribbon->ribbon_path = 'product/Categories';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
         
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
+        $ribbon->ribbon_path = 'product/Search';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Packages';
+        $ribbon->description = 'Packages';
+        $ribbon->ribbon_path = 'product/Packages';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+          $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Promotions';
+        $ribbon->description = 'Promotions';
+        $ribbon->ribbon_path = 'product/Promotions';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
         //  $ribbon = new module_ribbons();
         // $ribbon->active = 1;
         // $ribbon->sort_order = 4;
@@ -559,6 +656,65 @@ class DatabaseSeeder extends Seeder
         // $ribbon->ribbon_path = 'leave/Leave_History_Audit';
         // $ribbon->access_level = 5;
         // $module->addRibbon($ribbon);
+
+        #Help Desk
+        $module = new modules(); 
+        $module->active = 1;
+        $module->name = 'Help Desk';
+        $module->path = 'Help Desk';
+        $module->font_awesome = ' fa-info-circle';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'View Tickets';
+        $ribbon->description = 'Create Request';
+        $ribbon->ribbon_path = 'helpdesk/view_ticket';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+        
+        // 
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Create Ticket';
+        $ribbon->description = 'Create Ticket';
+        $ribbon->ribbon_path = 'helpdesk/ticket';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+        //  $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Assign Tickets';
+        // $ribbon->description = 'Assign Tickets';
+        // $ribbon->ribbon_path = 'helpdesk/assign_ticket';
+        // $ribbon->access_level = 5;
+        // $module->addRibbon($ribbon);
+
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
+        $ribbon->ribbon_path = 'helpdesk/search';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+        
+
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'helpdesk/setup';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+
+        #end
 		
 		$module = new modules(); //Audit Management
         $module->active = 1;

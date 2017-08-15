@@ -24,6 +24,11 @@ class DivisionLevelFive extends Model
         return $this->belongsTo(DivisionLevel::class, 'division_level_id');
     }
 
+    //Relationship Division level 5 and Quote Company Profile
+    public function quoteProfile() {
+        return $this->hasOne(QuoteCompanyProfile::class, 'division_id');
+    }
+
     //Relationship Division level 5 and Division level 4
     public function childDiv() {
         return $this->hasMany(DivisionLevelFour::class, 'parent_id');

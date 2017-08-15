@@ -57,6 +57,39 @@
                             </div>
                         </div>
                     </div>
+                    <!--  -->
+                      <!-- <div class="form-group user-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                            <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="employe" name="employe">
+                                        <option value="">***Select an Product ***</option>
+                                       @foreach($Product as $product)
+                                            <option value="{{ $product->id }}">{{ $product->name . ' '. '_' . ' ' . $product->price }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!--  <div class="form-group ">
+                            <label for="product_id" class="col-sm-2 control-label">Product Type</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <select class="form-control select2" style="width: 100%; id="product_id" name="product_id">
+                                        <option value="">*** Select an Product ***</option>
+                                        @foreach($Product as $product)
+                                            <option value="{{ $product->id }}">{{ $product->name . ' '. '_' . ' ' . $product->price }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div> -->
+                    <!--  -->
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-search"></i> Search</button>

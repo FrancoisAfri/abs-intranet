@@ -32,7 +32,7 @@
 							<form class="form-horizontal" method="POST"  action="/meeting/update/{{$meeting->id}}">
 							<input type="hidden" name="meeting_id" id="meeting_id" value="{{$meeting->id}}">
 							{{ csrf_field() }}
-							 {{ method_field('PATCH') }}
+							{{ method_field('PATCH') }}
 							<div class="box-body">
 								<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
 									<div class="form-group">

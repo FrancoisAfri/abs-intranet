@@ -46,9 +46,9 @@
                                     <!-- <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span> -->
 
                                      <span class="chkCheckbox pull-right ">
-                                        <input type="hidden" class="checkbox selectall" id="selected_{{ $person->id }}_{{ $person->user_id }}" name="selected_{{ $person->id }}_{{ $person->user_id }}_check[0]" value="0">
+        <input type="hidden" class="checkbox selectall" id="selected_{{ $person->id }}_{{ $person->user_id }}" name="selected_{{ $person->id }}_{{ $person->user_id }}_check[0]" value="0">
 
-                                        <input type="checkbox" class="checkbox selectall" id="selected_{{ $person->id }}_{{ $person->user_id }}" name="selected_{{ $person->id }}_{{ $person->user_id }}_check[]" value="1"  {{ $person->card_status === 1 ? 'checked ="checked"' : 0 }}> 
+        <input type="checkbox" class="checkbox selectall" id="selected_{{ $person->id }}_{{ $person->user_id }}" name="selected_{{ $person->id }}_{{ $person->user_id }}_check[]" value="1"  {{ $person->card_status === 1 ? 'checked ="checked"' : 0 }}> 
                                     </span> 
 
                             <span class="product-description">
@@ -71,7 +71,9 @@
                
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
+                     <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
+
+
                     <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Submit</button>
                 </div>
                 <!-- /.box-footer -->
@@ -97,8 +99,8 @@
             location.href = "/hr/card_active/" + id; 
     }
    
-    //Cancel button click event
-    document.getElementById("back_to_user_search").onclick = function () {
+
+     document.getElementById("cancel").onclick = function () {
         location.href = "/hr/business_card";
     };
 

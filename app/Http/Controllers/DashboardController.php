@@ -29,6 +29,9 @@ class DashboardController extends Controller
     }
 
     public function index() {
+
+        $loggedInEmplID = Auth::user()->person->id;
+
         $data['breadcrumb'] = [
             ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
         ];
@@ -154,11 +157,23 @@ class DashboardController extends Controller
 			->get();
 			//return $checkTasks;
 
+            #View Tickets 
+              
+            $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
+            $tickets = DB::table('ticket')
+                ->where('user_id', $loggedInEmplID)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            
+                //return $tickets;
+            $data['ticketStatus'] = $ticketStatus;    
+            $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;
             $data['balance'] = $balance;
             $data['application'] = $application;
-            $data['taskStatus'] = $taskStatus;
-			$data['taskStatus'] = $taskStatus;
+            //$data['taskStatus'] = $taskStatus;
+			//$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
             $data['topGroupLvl'] = $topGroupLvl;
@@ -179,10 +194,9 @@ class DashboardController extends Controller
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         }
         else {
-			# Get loan status
-            //$data['page_title'] = "Dashboard";
-			//$data['page_description'] = "Main Dashboard";
-            //return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
+			$data['page_title'] = "Dashboard";
+			$data['page_description'] = "Main Dashboard";
+            return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }
 }

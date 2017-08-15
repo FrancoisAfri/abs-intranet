@@ -68,7 +68,7 @@
 
                                 </div>
                             </div>
-
+                                    
 <!--                        <div class="form-group ">-->
                            <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                                 <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>
@@ -150,9 +150,54 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- time from -->
+                          <div class="form-group hours-field" style="display: block;">
+
+                                <div class="col-xs-4">
+                                    <div class="form-group from-field {{ $errors->has('time_from') ? ' has-error' : '' }}">
+                                        <label for="time_from" class="col-sm-6 control-label">Date</label>
+                                        <div class="col-sm-6">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                     <i class="fa fa-calendar"></i>
+                                                </div>
+                                                  <input type="text" class="form-control" id="date" name="date" value="05/24/2017"  placeholder="" data-mask>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group from-field {{ $errors->has('time_from') ? ' has-error' : '' }}">
+                                        <label for="time_from" class="col-sm-4 control-label">Time From</label>
+                                        <div class="col-sm-">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                                <input type="text" class="form-control" id="time_from" name="time_from" value="{{ old('time_from') }}" placeholder="Select Start time...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4">
+                                    <div class="form-group to-field {{ $errors->has('time_to') ? ' has-error' : '' }}">
+                                        <label for="time_to" class="col-sm-4 control-label"> To</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-clock-o"></i>
+                                                </div>
+                                                <input type="text" class="form-control" id="time_to" name="time_to" value="{{ old('time_to') }}" placeholder="Select End time...">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!--  -->
                         
                        
-                            <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                        <!--     <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Hours</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -164,7 +209,7 @@
                                     
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
               
                         <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Notes</label>
@@ -227,11 +272,7 @@
     <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
     <!-- the main fileinput plugin file -->
     <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-    <!-- optionally if you need translation for your language then include locale file as mentioned below
-    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
-    <!-- End Bootstrap File input -->
+
 
     <!-- Date rane picker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
@@ -245,7 +286,7 @@
             <!-- Date picker -->
     <script src="/cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
         <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script> 
 
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
@@ -279,7 +320,21 @@
             var Sick = bal + negDays;
             var Annual = bal + negannual;
              // alert (bal)
+             // 
+              $('input[name="date"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: false,
+                
+                 });
 
+
+              $('#time_from').datetimepicker({
+                    format: 'HH:mm:ss'
+                });
+
+                $('#time_to').datetimepicker({
+                    format: 'HH:mm:ss'
+                 });
 
             //Initialise date range picker elements
             $('input[name="day"]').daterangepicker({

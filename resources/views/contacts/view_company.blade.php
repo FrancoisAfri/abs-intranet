@@ -200,16 +200,38 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">
-                        <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                        <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-success " : " btn-danger" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Activate" : "De-Activate"}}</a>
-                       
+                        @if($canEdit)
+                            <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                            <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Deactivate" : "Activate"}}</a>
+                            <a href="{{ '/contacts/add-to-company/' . $company->id }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add Contact Person</a>
+                        @endif
                     </div>
                     <!-- /.box-footer -->
                 </form>
             </div>
             <!-- /.box -->
+
+            <!-- Company's contacts box -->
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Contacts From The Company</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding no-margin">
+                    <div id="company-contacts" style="margin-right: 10px; max-height: 250px;">
+                        <!-- Include the contacts list -->
+                        @include('contacts.partials.contacts_result_list', ['persons' => $company->employees])
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
         </div>
-        <!-- End new User Form-->
+        <!-- End Column -->
 
         <!-- Confirmation Modal -->
         @if(Session('success_add'))
@@ -240,13 +262,20 @@
 
     <script type="text/javascript">
         //Cancel button click event
-        document.getElementById("cancel").onclick = function () {
+        /*document.getElementById("cancel").onclick = function () {
             location.href = "/contacts";
-        };
+        };*/
 
         $(function () {
             //Phone mask
             $("[data-mask]").inputmask();
+
+            //slimScroll
+            $('#company-contacts').slimScroll({
+                height: '',
+                railVisible: true,
+                alwaysVisible: true
+            });
 
             //Vertically center modals on page
             function reposition() {

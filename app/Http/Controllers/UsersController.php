@@ -509,4 +509,20 @@ class UsersController extends Controller
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
 
+    public function activateUsers(Request $request)
+    {
+        $statuses = $request->input('status');
+        foreach ($statuses as $userID => $status) {
+            $user = User::find($userID)->load('person');
+            $user->status = $status;
+            $user->update();
+            if ($user->person) {
+                $user->person->status = $status;
+                $user->person->update();
+            }
+        }
+
+        return redirect('/users')->with('changes_saved', "Your changes have been saved successfully.");
+    }
+
 }
