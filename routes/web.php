@@ -230,6 +230,12 @@ Route::post('/Product/price/add/{products}', 'Product_categoryController@priceSa
 
 #search
 Route::get('product/Search', 'Product_categoryController@Search');
+Route::post('product/product/Search', 'Product_categoryController@productSearch');
+Route::post('product/category/Search', 'Product_categoryController@categorySearch');
+Route::post('product/package/Search', 'Product_categoryController@packageSearch');
+Route::post('product/promotion/Search', 'Product_categoryController@promotionSearch');
+
+#
 
 #Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');

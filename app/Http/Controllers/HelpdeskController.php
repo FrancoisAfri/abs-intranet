@@ -24,6 +24,9 @@ use App\product_products;
 use App\System;
 use App\helpdesk_Admin;
 use App\operator;
+use App\auto_escalation_settings ;
+use App\unresolved_tickets_settings;
+use App\system_email_setup;
 // use App\Http\Controllers\modules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -249,6 +252,9 @@ class HelpdeskController extends Controller
 		    $employees = HRPerson::where('status', 1)->get();
 		     //return $employees;
 
+		    // $settings = system_email_setup::orderBy('id', 'asc')->get();
+		    // return $settings;
+
 		    $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
@@ -436,8 +442,8 @@ class HelpdeskController extends Controller
         $start_time = strtotime($time_from);
         $end_time = strtotime($time_to);
 
-        $service->start_time = $start_time;
-        $service->time_to =$time_to;
+        $service->time_from = $start_time;
+        $service->time_to =$end_time;
 		$service->notify_hr_email = $request->input('notify_hr_email');
 		$service->notify_hr_sms_sms = $request->input('notify_hr_sms_sms');
 		$service->notify_manager_email = $request->input('notify_manager_email');
@@ -446,7 +452,49 @@ class HelpdeskController extends Controller
 		return back();
 
     }
-    public function auto_escalations(Request $request, System $service){
+    public function auto_escalations(Request $request, auto_escalation_settings $settings){
+    		$this->validate($request, [
+            // 'maximum_priority' => 'required',
+            // 'description' => 'required',        
+        	]);
+
+		$SysData = $request->all();
+		unset($SysData['_token']);
+
+		//return $SysData;
+			$settings->auto_low = $request->input('auto_low');
+			$settings->office_hrs_low = $request->input('office_hrs_low');
+			$settings->notify_level_low = $request->input('notify_level_low');
+			$settings->office_hrs_low_email = $request->input('office_hrs_low_email');
+			$settings->office_hrs_low_sms = $request->input('office_hrs_low_sms');
+			$settings->aftoffice_hrs_low_email = $request->input('aftoffice_hrs_low_email');
+			$settings->aftoffice_hrs_low_sms = $request->input('aftoffice_hrs_low_sms');
+			$settings->auto_mormal = $request->input('auto_mormal');
+			$settings->office_hrs_normal = $request->input('office_hrs_normal');
+			$settings->notify_level_normal = $request->input('notify_level_normal');
+			$settings->office_hrs_normal_email = $request->input('office_hrs_normal_email');
+			$settings->office_hrs_normal_sms = $request->input('office_hrs_normal_sms');
+			$settings->aftoffice_hrs_normal_email = $request->input('aftoffice_hrs_normal_email');
+			$settings->aftoffice_hrs_normal_sms = $request->input('aftoffice_hrs_normal_sms');
+			$settings->auto_high = $request->input('auto_high');
+			$settings->office_hrs_hihg = $request->input('office_hrs_hihg');
+			$settings->notify_level_high = $request->input('notify_level_high');
+			$settings->office_hrs_high_email = $request->input('office_hrs_high_email');
+			$settings->office_hrs_high_sms = $request->input('office_hrs_high_sms');
+			$settings->aftoffice_hrs_high_email = $request->input('aftoffice_hrs_high_email');
+			$settings->aftoffice_hrs_high_sms = $request->input('aftoffice_hrs_high_sms');
+			$settings->auto_critical = $request->input('auto_critical');
+			$settings->office_hrs_critical = $request->input('office_hrs_critical');
+			$settings->notify_level_critical = $request->input('notify_level_critical');
+			$settings->office_hrs_critical_email = $request->input('office_hrs_critical_email');
+			$settings->office_hrs_critical_sms = $request->input('office_hrs_critical_sms');
+			$settings->aftoffice_hrs_critical_email = $request->input('aftoffice_hrs_critical_email');
+			$settings->aftoffice_hrs_critical_sms = $request->input('aftoffice_hrs_critical_sms');
+		    $settings->save();
+		 return back();
+
+    }
+     public function unresolved_tickets(Request $request, unresolved_tickets_settings $service){
     		$this->validate($request, [
             // 'maximum_priority' => 'required',
             // 'description' => 'required',        
@@ -454,13 +502,40 @@ class HelpdeskController extends Controller
 		$SysData = $request->all();
 		unset($SysData['_token']);
 
-		return $SysData;
-	//	$service->maximum_priority = $request->input('maximum_priority');
-		//$service->save();
+		//return $SysData;
+	        $service->tickets_low = $request->input('tickets_low');
+			$service->low_ah = $request->input('low_ah');
+			$service->esc_low_email = $request->input('esc_low_email');
+			$service->esc_low_sms = $request->input('esc_low_sms');
+			$service->aftoffice_hrs_low_email = $request->input('aftoffice_hrs_low_email');
+			$service->aftoffice_hrs_low_sms = $request->input('aftoffice_hrs_low_sms');
+			$service->tickets_normal = $request->input('tickets_normal');
+			$service->normal_oficehrs = $request->input('normal_oficehrs');
+			$service->office_hrs_normal_email = $request->input('office_hrs_normal_email');
+			$service->office_hrs_normal_sms = $request->input('office_hrs_normal_sms');
+			$service->aftoffice_hrs_nomal_email = $request->input('aftoffice_hrs_nomal_email');
+			$service->aftoffice_hrs_nomal_sms = $request->input('aftoffice_hrs_nomal_sms');
+			$service->tickets_high = $request->input('tickets_high');
+			$service->high_oficehrs = $request->input('high_oficehrs');
+			$service->office_hrs_high_email = $request->input('office_hrs_high_email');
+			$service->office_hrs_high_sms = $request->input('office_hrs_high_sms');
+			$service->aftoffice_hrs_high_email = $request->input('aftoffice_hrs_high_email');
+			$service->aftoffice_hrs_high_sms = $request->input('aftoffice_hrs_high_sms');
+			$service->auto_critical = $request->input('auto_critical');
+			$service->office_hrs_critical = $request->input('office_hrs_critical');
+			$service->notify_level_critical = $request->input('notify_level_critical');
+			$service->office_hrs_critical_email = $request->input('office_hrs_critical_email');
+			$service->office_hrs_critical_sms = $request->input('office_hrs_critical_sms');
+			$service->aftoffice_hrs_critical_email = $request->input('aftoffice_hrs_critical_email');
+			$service->aftoffice_hrs_critical_sms = $request->input('aftoffice_hrs_critical_sms');
+		    $service->save();
+
+
 		return back();
 
     }
-     public function unresolved_tickets(Request $request, System $service){
+
+     public function auto_responder_messages(Request $request, system_email_setup $service){
     		$this->validate($request, [
             // 'maximum_priority' => 'required',
             // 'description' => 'required',        
@@ -468,14 +543,16 @@ class HelpdeskController extends Controller
 		$SysData = $request->all();
 		unset($SysData['_token']);
 
-		return $SysData;
-	//	$service->maximum_priority = $request->input('maximum_priority');
-		//$service->save();
+		$service->responder_messages = $request->input('responder_messages');
+		$service->response_emails = $request->input('response_emails');
+		$service->ticket_completion_req = $request->input('ticket_completion_req');
+		$service->ticket_completed = $request->input('ticket_completed');
+		$service->save();
 		return back();
 
     }
 
-     public function auto_responder_messages(Request $request, System $service){
+     public function email_setup(Request $request, system_email_setup $service){
     		$this->validate($request, [
             // 'maximum_priority' => 'required',
             // 'description' => 'required',        
@@ -483,24 +560,16 @@ class HelpdeskController extends Controller
 		$SysData = $request->all();
 		unset($SysData['_token']);
 
-		return $SysData;
-	//	$service->maximum_priority = $request->input('maximum_priority');
-		//$service->save();
-		return back();
-
-    }
-
-     public function email_setup(Request $request, System $service){
-    		$this->validate($request, [
-            // 'maximum_priority' => 'required',
-            // 'description' => 'required',        
-        ]);
-		$SysData = $request->all();
-		unset($SysData['_token']);
-
-		return $SysData;
-	//	$service->maximum_priority = $request->input('maximum_priority');
-		//$service->save();
+		$service->auto_processemails = $request->input('auto_processemails');
+		$service->anly_processreplies = $request->input('anly_processreplies');
+		$service->email_address = $request->input('email_address');
+		$service->server_name = $request->input('server_name');
+		$service->preferred_communication_method = $request->input('preferred_communication_method');
+		$service->server_port = $request->input('server_port');
+		$service->username = $request->input('username');
+		$service->password = $request->input('password');
+		$service->Signature_start = $request->input('Signature_start');
+		$service->save();
 		return back();
 
     }

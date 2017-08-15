@@ -308,15 +308,29 @@
                       
                         <td>High </td>
                         <td><input type="text" size="2" name="auto_high" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="office_hrs_hihg"></td>
+                         <!-- <td style="text-align:center;"><input type="checkbox" name="office_hrs_hihg"></td> -->
+                         <!--  -->
+                         <input type="hidden" class="checkbox selectall"  name="office_hrs_hihg" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_hihg" value="1"></div></td>  
                         <td style="text-align:center;"><select name="notify_level_high"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
                           <td>
-                                    <div ><input type="checkbox" name="office_hrs_high_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_high_sms"> SMS</div>
+                                <input type="hidden" class="checkbox selectall"  name="office_hrs_high_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="office_hrs_high_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_high_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="office_hrs_high_sms" value="1"> SMS</div>
+
+                                 <!--    <div ><input type="checkbox" name="office_hrs_high_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="office_hrs_high_sms"> SMS</div> -->
                                   </td>
                                   <td>
-                                    <div ><input type="checkbox" name="aftoffice_hrs_high_sms">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms"> SMS</div>
+                                    <!-- <div ><input type="checkbox" name="aftoffice_hrs_high_sms">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms"> SMS</div> -->
+                                    <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms" value="1"> SMS</div>
                                   </td>
                     </tr>
 
@@ -324,15 +338,29 @@
                       
                         <td>Critical </td>
                         <td><input type="text" size="2" name="auto_critical" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="office_hrs_critical"></td>
+                        <!--  <td style="text-align:center;"><input type="checkbox" name="office_hrs_critical"></td> -->
+                         <input type="hidden" class="checkbox selectall"  name="office_hrs_critical" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_critical" value="1"></div></td> 
                         <td style="text-align:center;"><select name="notify_level_critical"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
-                         <td>
-                                    <div ><input type="checkbox" name="office_hrs_critical_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_critical_sms"> SMS</div>
+                         <td>   
+                                    <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="office_hrs_critical_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="office_hrs_critical_sms" value="1"> SMS</div>
+
+                                   <!--  <div ><input type="checkbox" name="office_hrs_critical_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="office_hrs_critical_sms"> SMS</div> -->
                                   </td>
                                   <td>
-                                    <div ><input type="checkbox" name="aftoffice_hrs_critical_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_sms"> SMS</div>
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_sms" value="1"> SMS</div>
+
+                                  <!--   <div ><input type="checkbox" name="aftoffice_hrs_critical_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_sms"> SMS</div> -->
                                   </td>
                     </tr>
                     
@@ -359,7 +387,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-body">
-                        @if (count($errors) > 0)
+                      <!--   @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
@@ -369,7 +397,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                        @endif
+                        @endif -->
                         <table class="table table-bordered">
                     <tr>
                         <th style="width: 10px"></th>
@@ -383,64 +411,130 @@
                     <tr id="modules-list">
                       
                         <td>Low </td>
-                        <td><input type="text" size="2" name="auto_low" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="low_ah"></td>
+                        <td><input type="text" size="2" name="tickets_low" value=""></td>
+                        <!--  <td style="text-align:center;"><input type="checkbox" name="low_ah"></td> -->
+
+                         <input type="hidden" class="checkbox selectall"  name="low_ah" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="low_ah" value="1"></div></td>
                     
                                  <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_low_sms"> SMS</div>
+                                  <input type="hidden" class="checkbox selectall"  name="esc_low_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="esc_low_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="esc_low_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="esc_low_sms" value="1"> SMS</div>
+                                    <!--  -->
+                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="esc_low_sms"> SMS</div> -->
                                   </td>
                                   <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_low_sms"> SMS</div>
+                                 <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms" value="1"> SMS</div>
+                                 <!--  -->
+                                    <!-- <div ><input type="checkbox" name="aftoffice_hrs_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms"> SMS</div> -->
                                   </td>
                       
                         </tr>
                     <tr id="modules-list">
                       
                         <td>Normal </td>
-                        <td><input type="text" size="2" name="auto_low" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="low_ah"></td>
+                        <td><input type="text" size="2" name="tickets_normal" value=""></td>
+                         <!-- <td style="text-align:center;"><input type="checkbox" name="normal_oficehrs"></td> -->
+
+                          <input type="hidden" class="checkbox selectall"  name="normal_oficehrs" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="normal_oficehrs" value="1"></div></td>
                        
-                         <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_normal_email"> SMS</div>
+                         <td>       
+                                 <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="office_hrs_normal_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="office_hrs_normal_sms" value="1"> SMS</div>
+
+                                    <!--  -->
+                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="esc_normal_email"> SMS</div> -->
                                   </td>
                                   <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_normal_email"> SMS</div>
+                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="esc_normal_email"> SMS</div> -->
+                                    <!--  -->
+                                 <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_nomal_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_nomal_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_nomal_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_nomal_sms" value="1"> SMS</div>
                                   </td>
                     </tr>
 
                      <tr id="modules-list">
                       
                         <td>High </td>
-                        <td><input type="text" size="2" name="auto_low" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="low_ah"></td>
+                        <td><input type="text" size="2" name="tickets_high" value=""></td>
+                        <!--  -->
+                         <input type="hidden" class="checkbox selectall"  name="high_oficehrs" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="high_oficehrs" value="1"></div></td>
+
+                         <!-- <td style="text-align:center;"><input type="checkbox" name="low_ah"></td> -->
                       
                           <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div>
+                                   <!--  <div ><input type="checkbox" name="esc_high_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
+                                    <!--  -->
+                                     <input type="hidden" class="checkbox selectall"  name="office_hrs_high_email" value="0">
+                                     <div class="sms"><input type="checkbox" name="office_hrs_high_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_high_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="office_hrs_high_sms" value="1"> SMS</div>
+
                                   </td>
                                   <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div>
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms" value="1"> SMS</div>
+                                    <!--  -->
+                                   <!--  <div ><input type="checkbox" name="esc_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
                                   </td>
                     </tr>
 
                      <tr id="modules-list">
                       
                         <td>Critical </td>
-                        <td><input type="text" size="2" name="auto_low" value=""></td>
-                         <td style="text-align:center;"><input type="checkbox" name="low_ah"></td>
+                        <td><input type="text" size="2" name="tickets_critical" value=""></td>
+                        <!--  <input type="hidden" class="checkbox selectall"  name="critical_oficehrs" value="0"> -->
+
+                          <input type="hidden" class="checkbox selectall"  name="critical_oficehrs" value="0">
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="critical_oficehrs" value="1"></div></td>
+                        <!--  <td style="text-align:center;"><input type="checkbox" name="low_ah"></td> -->
                         
                          <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_critical_email"> SMS</div>
+                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="esc_critical_email"> SMS</div> -->
+                                    <!--  -->
+                                     <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_email" value="0">
+                                     <div class="sms"><input type="checkbox" name="office_hrs_critical_email" value="1"> Email</div>
+
+                                      <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_sms" value="0">
+                                     <div class="sms"><input type="checkbox" name="office_hrs_critical_sms" value="1"> SMS</div>
+
                                   </td>
                                   <td>
-                                    <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_critical_email"> SMS</div>
+                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
+                                    <div class="sms"><input type="checkbox" name="esc_critical_email"> SMS</div> -->
+                                    <!--  -->
+                                    <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_email" value="0">
+                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_email" value="1"> Email</div>
+
+                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_sms" value="0">
+                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_sms" value="1"> SMS</div>
+
                                   </td>
                     </tr>
                     
@@ -558,7 +652,11 @@
                                 <td>Auto-process Emails:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                        <div><input type="checkbox" name="esc_low_email"></div>
+                                        <!-- <div><input type="checkbox" name="esc_low_email"></div> -->
+
+                                        <input type="hidden" class="checkbox selectall"  name="auto_processemails" value="0">
+                                     <div class="sms"><input type="checkbox" name="auto_processemails" value="1"> </div>
+
                                       
                                     </td> 
                                 </td>
@@ -570,17 +668,19 @@
                                 <td>Only process replies:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                        <div><input type="checkbox" name="esc_low_email"></div>
+                                         <input type="hidden" class="checkbox selectall"  name="anly_processreplies" value="0">
+                                     <div class="sms"><input type="checkbox" name="anly_processreplies" value="1"> </div>
+
                                     </td> 
                                 </td>
                               </tr>
                             
 
                             <tr>
-                                <td>Only process replies:</td>
+                                <td>Email address:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="negannual" class="form-control pull-left" name="val" value=" " >
+                                       <input type="email" id ="email_address" class="form-control pull-left" name="email_address:" value=" " >
                                     </td> 
                                 </td>
                               </tr>
@@ -591,7 +691,7 @@
                                 <td>Server Name:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="negannual" class="form-control pull-left" name="val" value=" " >
+                                       <input type="text" id ="server_name" class="form-control pull-left" name="server_name" value=" " >
                                     </td> 
                                 </td>
                               </tr>
@@ -614,7 +714,7 @@
                                 <td>Server Port:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="negannual" class="form-control pull-left" name="val" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="server_port" class="form-control pull-left" name="server_port" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
@@ -625,7 +725,7 @@
                                 <td>Username:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="negannual" class="form-control pull-left" name="val" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="username" class="form-control pull-left" name="username" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
@@ -636,7 +736,7 @@
                                 <td>Password:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="negannual" class="form-control pull-left" name="val" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="password" class="form-control pull-left" name="password" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
@@ -645,7 +745,7 @@
                                 <td>Signature Start String:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="negannual" class="form-control pull-left" name="val" value=" " placeholder="Everything below & including this string will be removed.">
+                                       <input type="text" id ="Signature_start" class="form-control pull-left" name="Signature_start" value=" " placeholder="Everything below & including this string will be removed.">
                                     </td> 
                                 </td>
                               </tr>

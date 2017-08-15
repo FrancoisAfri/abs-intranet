@@ -179,7 +179,7 @@
             
 
             //Post module form to server using ajax (ADD)
-            $('#save_promotion').on('click', function() {
+            $('#add_promotion').on('click', function() {
                 //console.log('strUrl');
                 var strUrl = '/Product/promotions/add';
                 var modalID = 'add-promotion-modal';

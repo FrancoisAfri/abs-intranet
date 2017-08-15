@@ -1,6 +1,10 @@
 @extends('layouts.main_layout')
 
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+     <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap file input -->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <!--  -->
 @section('page_dependencies')
 @endsection
@@ -12,7 +16,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-cart-arrow-down pull-right"></i>
-                    <h3 class="box-title"> Product Search criteria</h3>
+                    <h3 class="box-title">  Search criteria</h3>
                     <p>Enter search Criteria:</p>
                 </div>
                          <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
@@ -33,15 +37,11 @@
                           <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Product Type</label>
 
-                              <!--   <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Product Type </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2"> Package Type</label>
-                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Category</label> -->
-                                     <!--  -->
+                             
                                        <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Product Type </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Package Type</label>
-                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Category Type</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2"> Category Type </label>
+                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Package Type</label>
                                       <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Promotion Type</label>
 
                                 </div>
@@ -54,45 +54,112 @@
                        <div class="form-group">
                         
                            
-                          <div class="form-group user-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                            <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
+                          <!--  -->
+                     <!--    <div class="form-group prod-field">
+                            <label for="product_name" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="product_name" name="product_name" value="{{ old('product_name') }}" placeholder="Search by name...">
+                                </div>
+                            </div>
+                        </div> -->
+
+                         <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
+                            <label for="product_name" class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="employe_name" name="employe_name">
-                                        <option value="">*** Select an Employee ***</option>
-                                        @foreach($employees as $employee)
-                                            <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    <select class="form-control select2" style="width: 100%;" id="product_name" name="product_name">
+                                        <option value="">*** Select a product name ***</option>
+                                        @foreach($products as $documentType)
+                                            <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
+
+                         <div class="form-group prod-field">
+                            <label for="product_description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="product_description" name="product_description" value="{{ old('product_description') }}" placeholder="Search by Description...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--  -->
+                         <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
+                            <label for="product_price" class="col-sm-2 control-label">Price</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-money"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="product_price" name="product_price">
+                                        <option value="">*** Select a product Price ***</option>
+                                        @foreach($products as $documentType)
+                                            <option value="{{ $documentType->price }}">{{ $documentType->price  }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
+                            <label for="cat_name" class="col-sm-2 control-label">CategoryType</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                <select class="form-control select2" style="width: 100%;" id="cat_name" name="cat_name">
+                                        <option value="">*** Select a product name ***</option>
+                                        @foreach($productss as $documentType)
+                                            <option value="{{ $documentType->catName }}">{{ $documentType->catName  }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <!--  -->
                
-                        <!--  -->
-                        <div class="form-group emp-field">
-                            <label for="person_name" class="col-sm-2 control-label">Name</label>
+                       
+
+                         <div class="form-group cat-field {{ $errors->has('category_name') ? ' has-error' : '' }}">
+                            <label for="category_name" class="col-sm-2 control-label">Name</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="category_name" name="category_name">
+                                        <option value="">*** Select a category name ***</option>
+                                        @foreach($category as $documentType)
+                                            <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="form-group cat-field">
+                            <label for="category_description" class="col-sm-2 control-label">Description</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="user_name" name="user_name" value="{{ old('user_name') }}" placeholder="Search by name...">
-                                </div>
-                            </div>
-                        </div>
-
-                         <div class="form-group emp-field">
-                            <label for="person_name" class="col-sm-2 control-label">Description</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="user_name" name="user_name" value="{{ old('user_name') }}" placeholder="Search by name...">
+                                    <input type="text" class="form-control" id="category_description" name="category_description" value="{{ old('category_description') }}" placeholder="Search by name...">
                                 </div>
                             </div>
                         </div>
@@ -101,16 +168,18 @@
                         <!--  -->
 
 
-                          <div class="form-group doc-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
-                            <label for="document_id" class="col-sm-2 control-label">Product Type</label>
+                         
+
+                         <div class="form-group pack-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
+                            <label for="package_name" class="col-sm-2 control-label"> Name</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="document_id" name="document_type">
-                                        <option value="">*** Select a Document Type ***</option>
-                                        @foreach($DocType as $documentType)
+                                    <select class="form-control select2" style="width: 100%;" id="package_name" name="package_name">
+                                        <option value="">*** Select a package name  ***</option>
+                                        @foreach($packages as $documentType)
                                             <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
                                         @endforeach
                                     </select>
@@ -118,55 +187,112 @@
                             </div>
                         </div>
 
-                         <div class="form-group doc-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
-                            <label for="document_id" class="col-sm-2 control-label">Package Type</label>
+                        <div class="form-group pack-field">
+                            <label for="package_description" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="package_description" name="package_description" value="{{ old('package_description') }}" placeholder="Search by package description...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group pack-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
+                            <label for="product_type" class="col-sm-2 control-label"> Product Type</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="document_id" name="document_type">
-                                        <option value="">*** Select a Document Type ***</option>
-                                        @foreach($DocType as $documentType)
+                                    <select class="form-control select2" style="width: 100%;" id="product_type" name="product_type">
+                                        <option value="">*** Select a Product Type  ***</option>
+                                        @foreach($products as $documentType)
                                             <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                     <div class="form-group doc-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
-                            <label for="document_id" class="col-sm-2 control-label">Category Type</label>
+
+                          <div class="form-group pack-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
+                            <label for="package_discount" class="col-sm-2 control-label">Discount</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-money"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="package_discount" name="package_discount">
+                                        <option value="">*** Select a product Price ***</option>
+                                        @foreach($packages as $documentType)
+                                            <option value="{{ $documentType->discount }}">{{ $documentType->discount  }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-group pack-field">
+                            <label for="package_discount" class="col-sm-2 control-label">Discount</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="number" class="form-control" id="package_discount" name="package_discount" value="{{ old('package_discount') }}" placeholder="Search by package discount...">
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <!-- promotion -->
+                        <div class="form-group prom-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
+                            <label for="promotion_name" class="col-sm-2 control-label"> Name</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="document_id" name="document_type">
-                                        <option value="">*** Select a Document Type ***</option>
-                                        @foreach($DocType as $documentType)
+                                    <select class="form-control select2" style="width: 100%;" id="promotion_name" name="promotion_name">
+                                        <option value="">*** Select a Product Type  ***</option>
+                                        @foreach($promotions as $documentType)
                                             <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-                         <div class="form-group doc-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
-                            <label for="document_id" class="col-sm-2 control-label">Promotion Type</label>
+
+                        <div class="form-group prom-field">
+                            <label for="promotion_discription" class="col-sm-2 control-label">Discription</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-user-circle"></i>
+                                        <i class="fa fa-user"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="document_id" name="document_type">
-                                        <option value="">*** Select a Document Type ***</option>
-                                        @foreach($DocType as $documentType)
-                                            <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="number" class="form-control" id="promotion_discription" name="promotion_discription" value="{{ old('promotion_discription') }}" placeholder="Search by promotion discriptiont...">
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group prom-field">
+                            <label for="promo_date" class="col-sm-2 control-label">Promotion Date</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control daterangepicker" id="promo_date" name="promo_date" value="" placeholder="Select promo_date Date...">
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    
+                     
                       
                         
                    <!--  -->
@@ -249,11 +375,11 @@
         });
             //show/hide fields on radio button toggles (depending on registration type)
 
-            $('#rdo_levTkn, #rdo_bal ,#rdo_po').on('ifChecked', function(){      
+            $('#rdo_levTkn, #rdo_bal ,#rdo_po,#rdo_all').on('ifChecked', function(){      
                 var allType = hideFields();
-                if (allType == 1) $('#box-subtitle').html('Employee Document ');
-                else if (allType == 2) $('#box-subtitle').html('Employee Qualification ');
-                else if (allType == 3) $('#box-subtitle').html('Employee Search');
+                // if (allType == 1) $('#box-subtitle').html('Employee Document ');
+                // else if (allType == 2) $('#box-subtitle').html('Employee Qualification ');
+                // else if (allType == 3) $('#box-subtitle').html('Employee Search');
                
             });
          
@@ -281,28 +407,39 @@
             var allType = $("input[name='application_type']:checked").val();
             if (allType == 1) { //adjsut leave
                  //$('.hours-field').hide();
-                 $('.doc-field').show();
-                 $('.qul-field').hide();
-                 $('.emp-field').hide();     
-                 $('form[name="leave-application-form"]').attr('action', '/hr/emp_doc/Search');
+                 $('.prod-field').show();
+                 $('.pack-field').hide();
+                 $('.cat-field').hide(); 
+                 $('.prom-field').hide();   
+                     
+                 $('form[name="leave-application-form"]').attr('action', '/product/product/Search');
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
-                 $('.doc-field').hide();
-                 $('.qul-field').show();
-                 $('.emp-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/hr/emp_qual/Search');
+                 $('.prod-field').hide();
+                 $('.cat-field').show();
+                 $('.pack-field').hide();
+                 $('.user-field').hide();   
+                $('form[name="leave-application-form"]').attr('action', '/product/category/Search');
                  //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
                  $('#gen-report').val("Submit"); 
             }
              else if(allType == 3){
-                  $('.doc-field').hide();
-                  $('.qul-field').hide();
-                  $('.emp-field').show();
-                  $('.user-field').hide();                
-                  $('form[name="leave-application-form"]').attr('action', '/hr/emp_search/Search');
+                  $('.cat-field').hide();
+                  $('.prod-field').hide();
+                  $('.pack-field').show();
+                 $('.prom-field').hide();                
+                 $('form[name="leave-application-form"]').attr('action', '/product/package/Search');
                    $('#gen-report').val("Submit"); 
-            }
+
+            }else if(allType == 4){
+                  $('.cat-field').hide();
+                  $('.prod-field').hide();
+                  $('.pack-field').hide();
+                 $('.prom-field').show();                
+                  $('form[name="leave-application-form"]').attr('action', '/product/promotion/Search');
+                   $('#gen-report').val("Submit"); 
+                }
 
             return allType;      
             }
