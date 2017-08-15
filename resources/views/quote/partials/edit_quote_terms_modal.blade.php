@@ -1,13 +1,13 @@
-<div id="edit-profile-modal" class="modal modal-default fade">
+<div id="edit-quotes-term-modal" class="modal modal-default fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-profile-form">
+            <form class="form-horizontal" method="POST" name="edit-term-form">
                 {{ csrf_field() }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Quotation Profile</h4>
+                    <h4 class="modal-title">Edit Quotation Term</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -15,20 +15,7 @@
 
                     <hr class="hr-text" data-content="PROFILE DETAILS" style="margin-top: 0;">
 
-                    <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
-                        <label for="{{ 'division_id' }}" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
-
-                        <div class="col-sm-10">
-                            <select id="division_id" name="division_id" class="form-control select2" style="width: 100%;">
-                                <option value="">*** Please Select a {{ $highestLvl->name }} ***</option>
-                                @if($highestLvl->divisionLevelGroup)
-                                    @foreach($highestLvl->divisionLevelGroup as $division)
-                                        <option value="{{ $division->id }}" {{ ($division->id == old('division_id')) ? 'selected' : '' }}>{{ $division->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                    </div>
+                    
 
                     <div class="form-group{{ $errors->has('registration_number') ? ' has-error' : '' }}">
                         <label for="{{ 'registration_number' }}" class="col-sm-2 control-label">Registration Number</label>
@@ -87,18 +74,7 @@
 
                     <hr class="hr-text" data-content="QUOTE SETTINGS">
 
-                    <div class="form-group{{ $errors->has('validity_period') ? ' has-error' : '' }}">
-                        <label for="{{ 'validity_period' }}" class="col-sm-2 control-label">Validity Period</label>
-
-                        <div class="col-sm-10">
-                            <select id="validity_period" name="validity_period" class="form-control select2" style="width: 100%;">
-                                <option value="">*** Please Select a Validity Period ***</option>
-                                @foreach($validityPeriods as $validityPeriod)
-                                    <option value="{{ $validityPeriod }}" {{ ($validityPeriod == old('validity_period')) ? 'selected' : '' }}>{{ $validityPeriod . ' days' }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    
 
                     <div class="form-group">
                         <label for="letter_head" class="col-sm-2 control-label">Letter Head</label>
@@ -111,7 +87,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Cancel</button>
-                    <button type="button" id="update-quote-profile" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save Changes</button>
+                    <button type="button" id="update-quote-term" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save Changes</button>
                 </div>
             </form>
         </div>

@@ -26,6 +26,6 @@ class AddFieldToSurveyQuestionsTable extends Migration
      */
     public function down()
     {
-                Schema::dropIfExists('survey_questions');
+        Schema::dropIfExists('survey_questions');
     }
 }
