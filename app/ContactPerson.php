@@ -44,4 +44,21 @@ class ContactPerson extends Model
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
         return (!empty($this->profile_pic)) ? Storage::disk('local')->url("avatars/$this->profile_pic") : (($this->gender === 0) ? $f_silhouette : $m_silhouette);
     }
+
+    //function to get contact people from a specific company
+    public static function peopleFromCompany($whereField, $whereValue, $incInactive) {
+        $contactPeople = ContactPerson::where(function ($query) use ($whereValue, $whereField) {
+            if ($whereValue == 0) $query->whereNull($whereField);
+            else $query->where($whereField, $whereValue);
+            //$query->where();
+        })
+            ->where(function ($query) use($incInactive) {
+                if ($incInactive == -1) {
+                    $query->where('status', 1);
+                }
+            })->get()
+            ->sortBy('full_name')
+            ->pluck('id', 'full_name');
+        return $contactPeople;
+    }
 }

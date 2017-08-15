@@ -3,6 +3,9 @@
 @section('page_dependencies')
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+	<!-- bootstrap wysihtml5 - text editor -->
+	<link rel="stylesheet" href="../../plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
 @endsection
 
 @section('content')
@@ -93,20 +96,95 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-
+						<div id="quote-profile-list" style="max-height: 250px;">
+							<table class="table table-bordered table-striped">
+								<tr>
+									<th style="text-align: center; width: 5px;">#</th>
+									<th>{{ $highestLvl->name }}</th>
+									<th style="text-align: center;">Quote Val. Period</th>
+								</tr>
+								@foreach($quoteProfiles as $quoteProfile)
+									<tr>
+										<td style="text-align: center;">
+											<button type="button" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-profile-modal"
+													data-id="{{ $quoteProfile->id }}"
+													data-division_id="{{ $quoteProfile->division_id }}"
+													data-letterhead_url="{{ $quoteProfile->letterhead_url }}">
+												<i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										</td>
+										<td>{{ $loop->iteration }}</td>
+										<td>{{ $quoteProfile->divisionLevelGroup->name }}</td>
+										<td style="text-align: center;"> <button type="button" id="view_kpi" class="btn {{ (!empty($loop->status) && $loop->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($loop->status) && $loop->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($loop->status) && $loop->status == 1) ? "De-Activate" : "Activate"}}</button></td>
+									</tr>
+								@endforeach
+							</table>
+						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" id="add-new-term-type" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-term-type-modal">Add New Type</button>
+                        <button type="button" id="add-new-term-type" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-terms-modal">Add New Term & Conditions</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
             </div>
+			@include('quote.partials.add_quote_terms_modal')
+			@include('quote.partials.edit_quote_terms_modal')
         </div>
         <!-- Include modal -->
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
         @endif
+
+        <div class="col-md-12">
+            <div class="box box-success collapsed-box">
+                <form class="form-horizontal" method="POST" action="/email-template/save">
+                    {{ csrf_field() }}
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Send Quote Email Template</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <textarea id="send_quote_message" name="template_content" rows="10" cols="80">{{ ($sendQuoteTemplate) ? $sendQuoteTemplate->template_content : '' }}</textarea>
+                        <input type="hidden" name="template_key" value="send_quote">
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="box box-success collapsed-box">
+                <form class="form-horizontal" method="POST" action="/email-template/save">
+                    {{ csrf_field() }}
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Approved Quote Email Template</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <textarea id="approved_quote_message" name="template_content" rows="10" cols="80">{{ ($approvedQuoteTemplate) ? $approvedQuoteTemplate->template_content : '' }}</textarea>
+                        <input type="hidden" name="template_key" value="approved_quote">
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save</button>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -130,6 +208,9 @@
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 
+    <!-- CK Editor -->
+    <script src="https://cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
+
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
@@ -152,6 +233,11 @@
             $("#letter_head").fileinput();
             // with plugin options
             //$("#input-id").fileinput({'showUpload':false, 'previewFileType':'any'});
+
+            // Replace the <textarea id="send_quote_message"> with a CKEditor
+            // instance, using default configuration.
+            CKEDITOR.replace('send_quote_message');
+            CKEDITOR.replace('approved_quote_message');
 
             //Vertically center modals on page
             function reposition() {

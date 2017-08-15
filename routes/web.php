@@ -504,6 +504,10 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 Route::get('quote/setup', 'QuotesController@setupIndex');
 Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
 Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
+Route::get('quote/create', 'QuotesController@createIndex');
+
+//Email Template
+Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
 //General Use (API)
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
@@ -525,6 +529,8 @@ Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetCon
 Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
 Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@updateDuration');
 Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
+
+Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleDD')->name('contactsdropdown');
 
 //Email Test
 Route::get('testemail', function () {
