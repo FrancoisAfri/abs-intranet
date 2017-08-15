@@ -298,11 +298,13 @@ class TaskManagementController extends Controller
 		}
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
 
-		#send email to manager
-		$helpDeskManager = System::where('helpdesk_id', $helpDeskID)->first();
+		#send email to manager if its an helpdesk task
+		if (!empty($helpDeskID))
+		{
+			$helpDeskManager = System::where('id', $helpDeskID)->first();
 			//Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
 
-
+		}
 
 		//if ($taskType == 3)
 			//return redirect('/education/activity/' . $activity->id . '/view')->with('success_add', "The task has been added successfully");

@@ -502,6 +502,8 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::get('quote/term-conditions', 'QuotesTermConditionsController@index');
+Route::post('quote/add-quote-term', 'QuotesTermConditionsController@');
 Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
 Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 Route::get('quote/create', 'QuotesController@createIndex');
