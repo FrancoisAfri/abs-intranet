@@ -10,8 +10,12 @@ class product_price extends Model
     protected $table = 'product_price';
     protected $fillable = ['price', 'start_date', 'end_date'];
 
-     public function productPrice() {
-        return $this->hasMany(product_products::class, 'productPrice');
+    /**
+     * The relationships between product and price.
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product() {
+        return $this->belongsTo(product_products::class, 'product_product_id');
     }
-      
 }
