@@ -21,7 +21,7 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-						<div id="quote-profile-list" style="max-height: 250px;">
+						<div id="quote-profile-list">
 							<table class="table table-bordered table-striped">
 								<tr>
 									<th style="text-align: center; width: 5px;">#</th>
@@ -37,8 +37,8 @@
 												<i class="fa fa-pencil-square-o"></i> Edit
 											</button>
 										</td>
-										<td>{{ $termCondition->term_name }}</td>
-										<td style="text-align: center;"> <button type="button" id="view_kpi" class="btn {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($termCondition->status) && $termCondition->status == 1) ? "De-Activate" : "Activate"}}</button></td>
+										<td>{!!$termCondition->term_name!!}</td>
+										<td style="text-align: center;"> <button type="button" id="act_deact" class="btn {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($termCondition->status) && $termCondition->status == 1) ? "De-Activate" : "Activate"}}</button></td>
 									</tr>
 								@endforeach
 							</table>
@@ -110,13 +110,17 @@
 			//Post term & conditions form to server using ajax (add)
             $('#save-quote-term').on('click', function() {
                 var strUrl = '/quote/add-quote-term';
-                var formName = 'add-new-term-form';
-                var modalID = 'add-new-term-modal';
+                var formName = 'quotes-term-form';
+                var modalID = 'add-quotes-terms-modal';
                 var submitBtnID = 'save-quote-term';
                 var redirectUrl = '/quote/term-conditions';
                 var successMsgTitle = 'Quotation term Added!';
                 var successMsg = 'The quotation term has been added successfully!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+               for (instance in CKEDITOR.instances) {
+					CKEDITOR.instances[instance].updateElement();
+				}
+				$("#term_name").serialize()
+			   modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
             var termConditionID;

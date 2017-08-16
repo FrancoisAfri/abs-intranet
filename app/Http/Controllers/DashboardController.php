@@ -174,8 +174,7 @@ class DashboardController extends Controller
             $data['statusLabels'] = $statusLabels;
             $data['balance'] = $balance;
             $data['application'] = $application;
-            //$data['taskStatus'] = $taskStatus;
-			//$data['taskStatus'] = $taskStatus;
+			$data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
             $data['topGroupLvl'] = $topGroupLvl;

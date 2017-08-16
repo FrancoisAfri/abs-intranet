@@ -26,7 +26,7 @@ class QuotesTermConditionsController extends Controller
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Quote';
-        $data['active_rib'] = 'Term & Condition';
+        $data['active_rib'] = 'Term & Conditions';
         $data['termConditions'] = $termConditions;
         AuditReportsController::store('Quote', 'Quote Setup Page Accessed', "Accessed By User", 0);
 
@@ -50,12 +50,12 @@ class QuotesTermConditionsController extends Controller
      * @return \Illuminate\Http\Response
      */
 	
-	public function stores(Request $request)
+	public function store(Request $request)
     {
 		 $this->validate($request, [
             'term_name' => 'required',
         ]);
-		unset($templateData['_token']);
+		unset($request['_token']);
         $quoteTerm = new QuotesTermAndConditions($request->all());
         $quoteTerm->status = 1;
         $quoteTerm->save();
