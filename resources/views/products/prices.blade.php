@@ -26,9 +26,9 @@
                           <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-new-price-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
                               
 						  <td>{{ (!empty($jobTitle->price)) ?  $jobTitle->price : ''}} </td>
-                            <td>{{ !empty($jobTitle->start_date) ? date('d M Y ', $jobTitle->start_date) : '' }}</td>
+                            <td>{{ !empty($jobTitle->start_date) ? date('d M Y - H:m:s', $jobTitle->start_date) : '' }}</td>
 						 <!--  <td>{{ (!empty( $jobTitle->start_date)) ?  $jobTitle->start_date : ''}} </td> -->
-                          <td>{{ (!empty( $jobTitle->end_date)) ?  $jobTitle->end_date : ''}} </td>
+                          <td>{{ (!empty( $jobTitle->end_date)) ?  date('d M Y - H:m:s', $jobTitle->end_date) : ''}} </td>
 						  <td nowrap>
                               <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
