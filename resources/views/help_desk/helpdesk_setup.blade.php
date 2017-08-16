@@ -767,7 +767,7 @@
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Operators for ADM</h3>
+                    <h3 class="box-title"> Help Desk Operators</h3>
 
                 </div>
                  {{ csrf_field() }}

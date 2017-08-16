@@ -218,6 +218,61 @@ class Product_categoryController extends Controller
 		else return back();
     } 
 #
+        //add product to packages
+     public function viewProducts(product_packages $products) 
+    {
+        if ($products->status == 1) 
+        {
+            $packageID = $products->id;
+            
+        //$op = $price->load('productPrice');
+        //$Productprice = product_price::where('product_product_id', $priceID)->get();
+
+          $products = product_packages::where('id', $packageID)->get()->first();
+      // return $products;
+        //return $Productprice;
+            $data['page_title'] = "Manage Products Price";
+            $data['page_description'] = "Products page";
+             $data['breadcrumb'] = [
+            ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Product Prices', 'active' => 1, 'is_module' => 0]
+        ];
+            
+
+            $data['products'] = $products;
+            //$data['Productprice'] = $Productprice;
+            $data['active_mod'] = 'Products';
+        $data['active_rib'] = 'Categories';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            return view('products.packages_product')->with($data);
+        }
+        else return back();
+    } 
+
+
+     public function product_packageSave(Request $request ,product_packages $package) 
+    {
+        $this->validate($request, [
+            // 'name' => 'required',
+            // 'description' => 'required',
+        ]);
+
+           $docData = $request->all();
+        unset($docData['_token']);
+       $packageID = $package->id;
+
+       $package->name = $docData['name'];
+       $package->description = $docData['description'];
+       $package->price = $docData['price'];
+       $package->product_packages_id = $packageID;
+       $package->status = 1;
+
+        AuditReportsController::store('Employee Records', 'Category Informations Edited', "Edited by User", 0);
+        return response()->json(['new_name' => $Category->name, 'new_description' => $Category->description], 200);
+    }
+
+
+
 		 public function Search() {
         //$user->load('person');
         //$avatar = $user->person->profile_pic;

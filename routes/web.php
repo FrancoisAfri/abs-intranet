@@ -226,6 +226,8 @@ Route::post('Product/promotions/add', 'Product_categoryController@promotionSave'
 // Route::get('product/price', 'Product_categoryController@index');
 Route::get('Product/price/{price}', 'Product_categoryController@view_prices');
 Route::post('/Product/price/add/{products}', 'Product_categoryController@priceSave');
+Route::get('/Product/packages/{products}', 'Product_categoryController@viewProducts');
+Route::post('/product_packages/prpoduct/add/{package}', 'Product_categoryController@product_packageSave');
 
 
 #search
