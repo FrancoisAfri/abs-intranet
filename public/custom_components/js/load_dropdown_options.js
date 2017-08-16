@@ -318,6 +318,7 @@ function categoryOnChange(dropDownObj, hrPeopleDDID) {
 
 /* function to load contact people drop down options */
 function contactCompanyDDOnChange(dropDownObj, contactPeopleDDID, selectedOption) {
+    console.log('gets here');
     contactPeopleDDID = contactPeopleDDID || 'contact_person_id';
     selectedOption = selectedOption || '';
 
@@ -353,13 +354,15 @@ function loadContactPeopleOptions(ddID, selectedOption, companyID, incInactive, 
                 .append($("<option></option>")
                     .attr("value",'')
                     .text(firstDDOption));
-            $.each(data, function(key, value) {
-                var ddOption = $("<option></option>")
-                    .attr("value",value)
-                    .text(key);
-                if (selectedOption == value) ddOption.attr("selected", "selected");
-                dropdown
-                    .append(ddOption);
-            });
+            if (companyID != '') {
+                $.each(data, function(key, value) {
+                    var ddOption = $("<option></option>")
+                        .attr("value",value)
+                        .text(key);
+                    if (selectedOption == value) ddOption.attr("selected", "selected");
+                    dropdown
+                        .append(ddOption);
+                });
+            }
         });
 }

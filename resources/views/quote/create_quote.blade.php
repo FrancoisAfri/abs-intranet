@@ -9,23 +9,34 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="">
+                <form class="form-horizontal" method="POST" action="/quote/adjust">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
                         <h3 class="box-title">New Quote</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
                             <label for="{{ 'company_id' }}" class="col-sm-2 control-label">Client Company</label>
 
                             <div class="col-sm-10">
-                                <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;">
+                                <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;" onchange="contactCompanyDDOnChange(this)">
                                     <option value="">*** Please Select a Company ***</option>
                                     <option value="0">[Individual Clients]</option>
                                     @foreach($companies as $company)
-                                        <option value="{{ $company->id }}" {{ ($company->id == old('company_id')) ? 'selected' : '' }}
-                                        onclick="contactCompanyDDOnChange()">{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}" {{ ($company->id == old('company_id')) ? 'selected' : '' }}>{{ $company->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -90,6 +101,9 @@
 @section('page_script')
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
         $(function () {
