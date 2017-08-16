@@ -9,6 +9,7 @@ use App\EmailTemplate;
 use App\product_packages;
 use App\product_products;
 use App\QuoteCompanyProfile;
+use App\QuotesTermAndConditions;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -36,6 +37,7 @@ class QuotesController extends Controller
         $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup');
         $validityPeriods = [7, 14, 30, 60, 90, 120];
         $quoteProfiles = QuoteCompanyProfile::where('status', 1)->where('division_level', $highestLvl->level)->get()->load('divisionLevelGroup');
+        $termConditions = QuotesTermAndConditions::where('status', 1)->get();
         $sendQuoteTemplate = EmailTemplate::where('template_key', 'send_quote')->get()->first();
         $approvedQuoteTemplate = EmailTemplate::where('template_key', 'approved_quote')->get()->first();
 
@@ -50,6 +52,7 @@ class QuotesController extends Controller
         $data['highestLvl'] = $highestLvl;
         $data['validityPeriods'] = $validityPeriods;
         $data['quoteProfiles'] = $quoteProfiles;
+        $data['termConditions'] = $termConditions;
         $data['sendQuoteTemplate'] = $sendQuoteTemplate;
         $data['approvedQuoteTemplate'] = $approvedQuoteTemplate;
         AuditReportsController::store('Quote', 'Quote Setup Page Accessed', "Accessed By User", 0);

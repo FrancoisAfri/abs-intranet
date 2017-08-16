@@ -230,6 +230,12 @@ Route::post('/Product/price/add/{product}', 'Product_categoryController@priceSav
 
 #search
 Route::get('product/Search', 'Product_categoryController@Search');
+Route::post('product/product/Search', 'Product_categoryController@productSearch');
+Route::post('product/category/Search', 'Product_categoryController@categorySearch');
+Route::post('product/package/Search', 'Product_categoryController@packageSearch');
+Route::post('product/promotion/Search', 'Product_categoryController@promotionSearch');
+
+#
 
 #Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
@@ -496,6 +502,8 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::get('quote/term-conditions', 'QuotesTermConditionsController@index');
+Route::post('quote/add-quote-term', 'QuotesTermConditionsController@');
 Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
 Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 Route::get('quote/create', 'QuotesController@createIndex');

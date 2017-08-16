@@ -104,13 +104,10 @@
                              <input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Price" >
                         </div>
                     </div>
-					
-                  
-				
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_site" class="btn btn-primary">Add Site</button>
+                    <button type="button" id="add_promotion" class="btn btn-primary">Add Site</button>
                 </div>
             </form>
         </div>
