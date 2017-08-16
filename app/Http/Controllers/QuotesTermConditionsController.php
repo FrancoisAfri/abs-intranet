@@ -50,7 +50,7 @@ class QuotesTermConditionsController extends Controller
      * @return \Illuminate\Http\Response
      */
 	
-	public function stofffffres(Request $request)
+	public function stores(Request $request)
     {
 		 $this->validate($request, [
             'term_name' => 'required',

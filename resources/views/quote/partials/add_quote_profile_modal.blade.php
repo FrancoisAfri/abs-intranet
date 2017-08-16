@@ -98,6 +98,16 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div> 
+					<div class="form-group{{ $errors->has('authorisation_required') ? ' has-error' : '' }}">
+                        <label for="{{ 'authorisation_required' }}" class="col-sm-2 control-label">Authorisation Required</label>
+
+                        <div class="col-sm-10">
+                            <select id="authorisation_required" name="authorisation_required" class="form-control select2" style="width: 100%;">
+                                <option value="1">No</option>
+                                <option value="2">Yes</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="form-group">

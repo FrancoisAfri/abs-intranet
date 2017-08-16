@@ -13,7 +13,7 @@ class QuoteCompanyProfile extends Model
     // Mass assignable fields
     protected $fillable = [
         'division_id', 'division_level', 'registration_number', 'vat_number', 'bank_name', 'bank_branch_code',
-        'bank_account_name', 'bank_account_number', 'validity_period', 'letter_head', 'status'
+        'bank_account_name', 'bank_account_number', 'validity_period', 'letter_head', 'status', 'authorisation_required'
     ];
 
     //relationship quote company profile and each specific division level(one to many)
