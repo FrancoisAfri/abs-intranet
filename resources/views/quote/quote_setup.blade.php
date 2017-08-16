@@ -33,6 +33,7 @@
                                     <th>Acc. Name</th>
                                     <th>Acc. Number</th>
                                     <th style="text-align: center;">Quote Val. Period</th>
+                                    <th>Authorisation Required</th>
                                 </tr>
                                 @foreach($quoteProfiles as $quoteProfile)
                                     <tr>
@@ -47,6 +48,7 @@
                                                     data-bank_account_name="{{ $quoteProfile->bank_account_name }}"
                                                     data-bank_account_number="{{ $quoteProfile->bank_account_number }}"
                                                     data-validity_period="{{ $quoteProfile->validity_period }}"
+                                                    data-authorisation_required="{{ $quoteProfile->authorisation_required }}"
                                                     data-letterhead_url="{{ $quoteProfile->letterhead_url }}">
                                                 <i class="fa fa-pencil-square-o"></i> Edit
                                             </button>
@@ -60,6 +62,7 @@
                                         <td>{{ $quoteProfile->bank_account_name }}</td>
                                         <td>{{ $quoteProfile->bank_account_number }}</td>
                                         <td style="text-align: center;">{{ $quoteProfile->validity_period . ' days' }}</td>
+                                        <td style="text-align: center;">{{ !empty($quoteProfile->authorisation_required) && $quoteProfile->authorisation_required == 2 ? 'Yes' : 'No'}}</td>
                                     </tr>
                                 @endforeach
                             </table>
@@ -233,6 +236,7 @@
                 var accName = btnEdit.data('bank_account_name');
                 var accNumber = btnEdit.data('bank_account_number');
                 var valPeriod = btnEdit.data('validity_period');
+                var AuthorisationRequired = btnEdit.data('authorisation_required');
                 var letterHead = btnEdit.data('letterhead_url');
                 var modal = $(this);
                 modal.find('#division_id').val(divID).trigger('change');
@@ -243,6 +247,7 @@
                 modal.find('#bank_account_name').val(accName);
                 modal.find('#bank_account_number').val(accNumber);
                 modal.find('#validity_period').val(valPeriod).trigger('change');
+                modal.find('#authorisation_required').val(AuthorisationRequired).trigger('change');
                 //show letter head image if any
                 var imgDiv = modal.find('#letterhead-img');
                 imgDiv.empty();
