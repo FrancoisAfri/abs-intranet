@@ -200,7 +200,7 @@ class Product_categoryController extends Controller
 		$Productprice = product_price::where('product_product_id', $priceID)->get();
 		//return $Productprice;
 		//return $Productprice;
-			$data['page_title'] = "Manage Products Price";
+			$data['page_title'] = "Manage Package_Products Price";
 			$data['page_description'] = "Products page";
 			 $data['breadcrumb'] = [
             ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
@@ -229,28 +229,50 @@ class Product_categoryController extends Controller
         //$Productprice = product_price::where('product_product_id', $priceID)->get();
 
           $products = product_packages::where('id', $packageID)->get()->first();
-      // return $products;
+
+            $product_packages = product_products::orderBy('id', 'asc')->get();
+            //return $product_packages;
+
+            $ProductPackages = product_products::orderBy('name', 'asc')->get()->first();
+
+             $productss  = DB::table('packages_product_table')
+             ->select('packages_product_table.*','Product_products.name as name','Product_products.description as description','Product_products.price as price')
+            ->leftJoin('Product_products', 'packages_product_table.product_product_id', '=', 'Product_products.id')
+            ->where( 'packages_product_table.product_packages_id', $packageID)
+            ->orderBy('packages_product_table.id')
+            ->get();
+
+           // return $productss;
+
+
+            //return $productss;
+       
+          
+    
+       //return $ProductPackages;
+
         //return $Productprice;
-            $data['page_title'] = "Manage Products Price";
+            $data['page_title'] = "Manage Products packages";
             $data['page_description'] = "Products page";
              $data['breadcrumb'] = [
-            ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Product Prices', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Products package', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Product package', 'active' => 1, 'is_module' => 0]
         ];
-            
-
+            $data['productss'] = $productss;
+            $data['ProductPackages'] = $ProductPackages;
+            $data['product_packages'] = $product_packages;
             $data['products'] = $products;
             //$data['Productprice'] = $Productprice;
             $data['active_mod'] = 'Products';
-        $data['active_rib'] = 'Categories';
-            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            $data['active_rib'] = 'Packages';
+            AuditReportsController::store('Package_p Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             return view('products.packages_product')->with($data);
         }
         else return back();
     } 
 
 
-     public function product_packageSave(Request $request ,product_packages $package) 
+     public function product_packageSave(Request $request ,product_packages $package ,packages_product_table $associative) 
     {
         $this->validate($request, [
             // 'name' => 'required',
@@ -261,14 +283,11 @@ class Product_categoryController extends Controller
         unset($docData['_token']);
        $packageID = $package->id;
 
-       $package->name = $docData['name'];
-       $package->description = $docData['description'];
-       $package->price = $docData['price'];
-       $package->product_packages_id = $packageID;
-       $package->status = 1;
+       $product_id = $request->input('product_id');
 
+    $associative->updateOrCreate(['product_product_id' => $request->input('product_id')], ['product_packages_id' => $packageID]);
         AuditReportsController::store('Employee Records', 'Category Informations Edited', "Edited by User", 0);
-        return response()->json(['new_name' => $Category->name, 'new_description' => $Category->description], 200);
+       return response()->json();
     }
 
 
@@ -288,15 +307,15 @@ class Product_categoryController extends Controller
         //$HRPerson = DB::table('HRPerson')->orderBy('first_name', 'surname')->get();
          $productss  = DB::table('Product_products')
              ->select('Product_products.*','product_Category.name as catName')
-            ->leftJoin('product_Category', 'Product_products.id', '=', 'Product_products.category_id')
-            ->where('Product_products.status', 1)->get();
+            ->leftJoin('product_Category', 'Product_products.id', '=', 'product_Category.id')
+            ->get();
 
-          //return  $productss;
+         // return  $productss;
       
        $data['page_title'] = "Search";
         $data['page_description'] = "Manage Product(s) Search";
         $data['breadcrumb'] = [
-            ['title' => 'Employee Records', 'path' => '/Product/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Products search', 'path' => '/Product/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Search', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Products';
@@ -572,19 +591,19 @@ class Product_categoryController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-       return $SysData;
+      //return $SysData;
 
         $productName = $request->product_name;
         $productDescription = $request->product_description;
         $productPrice = $request->product_price;
-        $category_name = $request->cat_name;
+        $categoryID = $request->cat_id;
 
          $tickets  = DB::table('Product_products')
-             ->select('Product_products.*','product_Category as catName')
+             ->select('Product_products.*','product_Category.name as catName')
             ->leftJoin('product_Category', 'Product_products.id', '=', 'Product_products.category_id')
              ->where(function ($query) use ($productName) {
             if (!empty($productName)) {
-              $query->where('id', $productName);
+              $query->where('Product_products.id', $productName);
             }
             })
             ->where(function ($query) use ($productDescription) {
@@ -597,9 +616,9 @@ class Product_categoryController extends Controller
               $query->where('price', $productPrice);
             }
             })
-             ->where(function ($query) use ($category_name) {
-            if (!empty($category_name)) {
-              $query->where('catName', $category_name);
+             ->where(function ($query) use ($categoryID) {
+            if (!empty($categoryID)) {
+              $query->where('product_Category.id', $categoryID);
             }
             })
             ->orderBy('id')
@@ -607,22 +626,22 @@ class Product_categoryController extends Controller
 
            
 
-           return $tickets;
+           //return $tickets;
             
 
-        $data['ticketStatus'] = $ticketStatus;
-        $data['page_title'] = "Help Desk";
-        $data['page_description'] = "Help Desk Page";
+        //$data['ticketStatus'] = $ticketStatus;
+        $data['page_title'] = "Product Search ";
+        $data['page_description'] = "Product Search Page";
         $data['breadcrumb'] = [
-            ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Help Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Product Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Product Search Page', 'active' => 1, 'is_module' => 0]
         ];  
         // 
         $data['tickets'] = $tickets;
-        $data['active_mod'] = 'Help Desk';
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Search';
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        return view('help_desk.helpdesk_results')->with($data);
+        return view('products.product_results')->with($data);
 
         }
 
@@ -659,23 +678,22 @@ class Product_categoryController extends Controller
 
            
 
-           return $category;
+          // return $category;
             
 
-        $data['ticketStatus'] = $ticketStatus;
-        $data['page_title'] = "Help Desk";
-        $data['page_description'] = "Help Desk Page";
+       //$data['ticketStatus'] = $ticketStatus;
+        $data['page_title'] = "Category Search";
+        $data['page_description'] = "Category Search Page";
         $data['breadcrumb'] = [
-            ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Help Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Category Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Category Search Page', 'active' => 1, 'is_module' => 0]
         ];  
         // 
-        $data['tickets'] = $tickets;
-        $data['active_mod'] = 'Help Desk';
+        $data['category'] = $category;
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Search';
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        return view('help_desk.helpdesk_results')->with($data);
-
+        return view('products.category_results')->with($data);
         }
 
         // 
@@ -695,9 +713,10 @@ class Product_categoryController extends Controller
         $product_type = $request->product_type;
         $package_discount = $request->package_discount;
 
-         $packageSearch  = DB::table('product_packages')
-           
-            
+            $packageSearch  = DB::table('product_packages')
+               ->select('product_packages.*','Product_products.name as product_name')
+               ->leftJoin('Product_products', 'product_packages.products_id', '=', 'Product_products.id')
+
              ->where(function ($query) use ($package_name) {
             if (!empty($package_name)) {
               $query->where('id', $package_name);
@@ -721,25 +740,27 @@ class Product_categoryController extends Controller
             ->orderBy('id')
             ->get();
 
-           
+        //    $ProductPackages = product_products::orderBy('id', 'asc')->get(); 
+        // if (!empty($ProductPackages))
+        //     $ProductPackages = $ProductPackages->load('PackadgesTypes');
 
-           return $packageSearch;
+
+          
             
 
-        $data['ticketStatus'] = $ticketStatus;
-        $data['page_title'] = "Help Desk";
-        $data['page_description'] = "Help Desk Page";
+       //$data['ticketStatus'] = $ticketStatus;
+        $data['page_title'] = "Package Search";
+        $data['page_description'] = "Package Search Results Page";
         $data['breadcrumb'] = [
-            ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Help Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Package Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Package Search Page', 'active' => 1, 'is_module' => 0]
         ];  
         // 
-        $data['tickets'] = $tickets;
-        $data['active_mod'] = 'Help Desk';
+        $data['packageSearch'] = $packageSearch;
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Search';
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        return view('help_desk.helpdesk_results')->with($data);
-
+        return view('products.packages_results')->with($data);
         }
 
         // 
@@ -754,6 +775,8 @@ class Product_categoryController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
+ //return $SysData;
+
         $promotion_name = $request->promotion_name;
         $promotion_discription = $request->promotion_discription;
         $actionFrom = $actionTo = 0;
@@ -764,56 +787,58 @@ class Product_categoryController extends Controller
           $startExplode = explode('-', $actionDate);
           $actionFrom = strtotime($startExplode[0]);
           $actionTo = strtotime($startExplode[1]);
+          //return $actionFrom;
         }
 
         #
          
 
-         $tickets  = DB::table('ticket')
-             ->select('ticket.*','help_desk.name as helpdeskName')
-             ->leftJoin('help_desk', 'ticket.helpdesk_id', '=', 'help_desk.id')
-             ->where(function ($query) use ($actionFrom, $actionTo) {
-            if ($actionFrom > 0 && $actionTo  > 0) {
-              $query->whereBetween('ticket_date', [$actionFrom, $actionTo]);
+         $Promotions  = DB::table('product_promotions')
+                ->select('product_promotions.*','Product_products.name as product_name')
+                ->leftJoin('Product_products', 'product_promotions.product_product_id', '=', 'Product_products.id')
+            //     ->where(function ($query) use ($actionFrom, $actionTo) {
+            // if ($actionFrom > 0 && $actionTo  > 0) {
+            //   $query->whereBetween('ticket_date', [$actionFrom, $actionTo]);
+            // }
+            // })
+                 ->where(function ($query) use ($actionFrom) {
+            if (!empty($actionFrom)) {
+              $query->where('product_promotions.start_date', $actionFrom);
             }
             })
-             ->where(function ($query) use ($HelpdeskID) {
-            if (!empty($HelpdeskID)) {
-              $query->where('helpdesk_id', $HelpdeskID);
+
+                  ->where(function ($query) use ($actionTo) {
+            if (!empty($actionTo)) {
+              $query->where('product_promotions.end_date', $actionTo);
             }
             })
-            ->where(function ($query) use ($status) {
-              if (!empty($status)) {
-                $query->where('status', 'ILIKE', "%$status%");
-              }
+
+             ->where(function ($query) use ($promotion_name) {
+            if (!empty($promotion_name)) {
+              $query->where('product_promotions.id', $promotion_name);
+            }
             })
-             ->where(function ($query) use ($TicketNumber) {
-              if (!empty($TicketNumber)) {
-                $query->where('ticket_number', 'ILIKE', "%$TicketNumber%");
-              }
-            })
+           
             ->orderBy('id')
             ->get();
 
            
 
-         //   return $tickets;
+           // return $Promotions;
             
 
-        $data['ticketStatus'] = $ticketStatus;
-        $data['page_title'] = "Help Desk";
-        $data['page_description'] = "Help Desk Page";
+       $data['page_title'] = "Promotions Search";
+        $data['page_description'] = "Promotions Search Results Page";
         $data['breadcrumb'] = [
-            ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Help Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Promotions Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Promotions Search Page', 'active' => 1, 'is_module' => 0]
         ];  
         // 
-        $data['tickets'] = $tickets;
-        $data['active_mod'] = 'Help Desk';
+        $data['Promotions'] = $Promotions;
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Search';
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        return view('help_desk.helpdesk_results')->with($data);
-
+        return view('products.promotions_results')->with($data);
         }
 
 

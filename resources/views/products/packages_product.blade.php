@@ -14,18 +14,18 @@
                 <div class="box-body">
 
                 <table class="table table-bordered">
-                     <tr><th style="width: 10px">#</th>
+                     <tr><th style="width: 10px"></th>
                      <th>Name</th>
                      <th>Description</th>
                      <th>Price</th>
                      <th style="width: 40px"></th>
                      </tr>
-                    @if (count($products->productCategory) > 0)
-                        @foreach($products->productCategory as $jobTitle)
+                    @if (count($productss) > 0)
+                        @foreach($productss as $jobTitle)
                          <tr id="jobtitles-list">
                            <td nowrap>
-                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                               <a href="{{ '/Product/price/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-money"></i> Prices</a></td>
+                         <!--  <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button> -->
+                               <!-- <a href="{{ '/Product/price/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-money"></i> Prices</a></td> -->
                           <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td>
                           <td>{{ (!empty( $jobTitle->description)) ?  $jobTitle->description : ''}} </td>
                           <td>{{ (!empty( $jobTitle->price)) ?  $jobTitle->price : ''}} </td>
@@ -49,13 +49,13 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                    <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-product_title-modal">Add Product</button>
+                    <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-product_package_title-modal">Add Product</button>
                 </div>
             </div>
         </div>
 
         <!-- Include add new prime rate modal -->
-        @include('products.partials.add_position')
+        @include('products.partials.add_product_position')
         @include('products.partials.edit_position')
     </div>
 @endsection
@@ -70,7 +70,7 @@
             //product/Categories
         }
          $('#back_button').click(function () {
-                location.href = '/product/Categories';
+                location.href = '/product/Packages';
             });
         $(function () {
             var jobId;
@@ -106,16 +106,15 @@
               //Post module form to server using ajax (ADD)
             $('#add-product_title').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = 'product_packages/add/{{$products->id}}';          
-                var modalID = 'add-new-product_title-modal';
+                var strUrl = '/product_packages/product/add/{{$products->id}}';          
+                var modalID = 'add-new-product_package_title-modal';
                 var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                     price: $('#'+modalID).find('#price').val(),
+                  
+                     product_id: $('#'+modalID).find('#product_id').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add_products_title';
-                var redirectUrl = '/Product/Product/{{ $products->id }}';
+                var redirectUrl = '/Product/packages/{{ $products->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group has been updated successfully.';
                 //var formMethod = 'PATCH';
@@ -127,9 +126,9 @@
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
                 Product_ID = btnEdit.data('id');
-                var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
-                var price = btnEdit.data('price');
+                // var name = btnEdit.data('name');
+                // var description = btnEdit.data('description');
+                // var price = btnEdit.data('price');
                 
                 //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
@@ -143,9 +142,9 @@
                 // Product/category_edit/{Category}
                 var modalID = 'edit-category-modal';
                 var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    price: $('#'+modalID).find('#price').val(),
+                   // name: $('#'+modalID).find('#name').val(),
+                    // description: $('#'+modalID).find('#description').val(),
+                    // price: $('#'+modalID).find('#price').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'save_category';

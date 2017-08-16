@@ -22,7 +22,6 @@ class EmailTemplatesController extends Controller
         ]);
 
         $templateKey = $request->input('template_key');
-
         $emailTemplate = EmailTemplate::where('template_key', $templateKey)->get()->first();
         if ($emailTemplate) {
             $emailTemplate->template_content = $request->input('template_content');
