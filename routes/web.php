@@ -91,15 +91,9 @@ Route::post('hr/emial', 'LeaveController@getEmail');
 
 
 //#Leave Management
-//Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
-// Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveController@editsetupType');
-//Route::get('/leave/setup', 'LeaveController@showSetup');
-// Route::get('leave/setup/leave_credit', 'LeaveController@store');
-
-// Route::post('/leave/setup', 'LeaveController@store');
 
 //# leavesetup Controller
 Route::get('leave/types', 'LeaveSetupController@setuptypes');
@@ -121,13 +115,9 @@ Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
 Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
-#Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
-
-
 
 #leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
-//Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::post('leave/reject/{levReject}', 'LeaveApplicationController@reject');
 
 #leaveHistory audit
@@ -507,6 +497,7 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::get('quotes/authorisation', 'QuotesController@authorisationIndex');
 Route::get('quote/term-conditions', 'QuotesTermConditionsController@index');
 Route::post('quote/add-quote-term', 'QuotesTermConditionsController@store');
 Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
