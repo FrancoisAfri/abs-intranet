@@ -8,11 +8,14 @@ use App\DivisionLevel;
 use App\EmailTemplate;
 use App\product_packages;
 use App\product_products;
+use App\Quotation;
 use App\QuoteCompanyProfile;
 use App\QuotesTermAndConditions;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class QuotesController extends Controller
@@ -30,11 +33,16 @@ class QuotesController extends Controller
     /**
      * Show the quote setup page.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function setupIndex()
     {
-        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup');
+        $highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first()
+            ->load(['divisionLevelGroup' => function ($query) {
+                $query->doesntHave('quoteProfile');
+            }]);
+        $highestLvlWithAllDivs = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup');
         $validityPeriods = [7, 14, 30, 60, 90, 120];
         $quoteProfiles = QuoteCompanyProfile::where('status', 1)->where('division_level', $highestLvl->level)->get()->load('divisionLevelGroup');
         $termConditions = QuotesTermAndConditions::where('status', 1)->get();
@@ -50,6 +58,7 @@ class QuotesController extends Controller
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'setup';
         $data['highestLvl'] = $highestLvl;
+        $data['highestLvlWithAllDivs'] = $highestLvlWithAllDivs;
         $data['validityPeriods'] = $validityPeriods;
         $data['quoteProfiles'] = $quoteProfiles;
         $data['termConditions'] = $termConditions;
@@ -138,10 +147,15 @@ class QuotesController extends Controller
     /**
      * Show the create quote page
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function createIndex()
     {
+        $highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first()
+            ->load(['divisionLevelGroup' => function ($query) {
+                $query->has('quoteProfile');
+            }]);
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
@@ -155,6 +169,7 @@ class QuotesController extends Controller
         ];
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'create quote';
+        $data['highestLvl'] = $highestLvl;
         $data['companies'] = $companies;
         $data['contactPeople'] = $contactPeople;
         $data['products'] = $products;
@@ -168,11 +183,12 @@ class QuotesController extends Controller
      * Show page to adjust the quote details (such as products quantity, etc.)
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\View
      */
     public function adjustQuote(Request $request)
     {
         $validator = Validator::make($request->all(),[
+            'division_id' => 'bail|required|integer|min:1',
             'contact_person_id' => 'bail|required|integer|min:1',
         ]);
 
@@ -221,11 +237,50 @@ class QuotesController extends Controller
         ];
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'create quote';
+        $data['divisionID'] = $request->input('division_id');
         $data['contactPersonId'] = $request->input('contact_person_id');
         $data['companyID'] = $request->input('company_id');
         $data['products'] = $products;
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', "Accessed By User", 0);
 
         return view('quote.adjust_quote')->with($data);
+    }
+
+    /**
+     * Save the project
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function saveQuote(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'division_id' => 'bail|required|integer|min:1',
+            'contact_person_id' => 'bail|required|integer|min:1',
+            'quantity.*' => 'bail|required|integer|min:1',
+            'price.*' => 'bail|required|integer|min:1',
+        ]);
+        $validator->validate();
+
+        //get the quote profile and determine if the quotation requires approval
+        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first()->level;
+        $divisionID = $request->input('division_id');
+        $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $divisionID)->first();
+
+        //save quote
+        DB::transaction(function () use ($request, $highestLvl) {
+            $quote = new Quotation();
+            $quote->company_id = ($request->input('company_id') > 0) ? $request->input('company_id') : null;
+            $quote->client_id = $request->input('contact_person_id');
+            $quote->division_id = $request->input('division_id');
+            $quote->division_level = $highestLvl;
+            $quote->hr_person_id = Auth::user()->person->id;
+            $quote->status = 1;
+        });
+
+        //if authorization required: email manager for authorization
+        //if authorization not required: email quote to client
+
+        return $request->all();
     }
 }
