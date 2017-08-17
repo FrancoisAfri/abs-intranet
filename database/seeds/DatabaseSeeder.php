@@ -412,6 +412,15 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search Quotes';
+        $ribbon->ribbon_path = 'quote/search';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Quotes Setup';
         $ribbon->ribbon_path = 'quote/setup';
