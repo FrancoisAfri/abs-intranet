@@ -57,7 +57,7 @@
                           <!--  -->
                      <!--    <div class="form-group prod-field">
                             <label for="product_name" class="col-sm-2 control-label">Name</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -69,7 +69,7 @@
 
                          <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
                             <label for="product_name" class="col-sm-2 control-label">Name</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
@@ -86,7 +86,7 @@
 
                          <div class="form-group prod-field">
                             <label for="product_description" class="col-sm-2 control-label">Description</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -99,32 +99,32 @@
                         <!--  -->
                          <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
                             <label for="product_price" class="col-sm-2 control-label">Price</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-money"></i>
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="product_price" name="product_price">
                                         <option value="">*** Select a product Price ***</option>
-                                        @foreach($products as $documentType)
-                                            <option value="{{ $documentType->price }}">{{ $documentType->price  }}</option>
+                                        @foreach($products as $price)
+                                            <option value="{{ $price->price }}">{{ $price->price  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
-                            <label for="cat_name" class="col-sm-2 control-label">CategoryType</label>
-                            <div class="col-sm-10">
+                        <div class="form-group prod-field {{ $errors->has('cat_id') ? ' has-error' : '' }}">
+                            <label for="cat_id" class="col-sm-2 control-label">CategoryType</label>
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                <select class="form-control select2" style="width: 100%;" id="cat_name" name="cat_name">
+                                <select class="form-control select2" style="width: 100%;" id="cat_id" name="cat_id">
                                         <option value="">*** Select a product name ***</option>
                                         @foreach($productss as $documentType)
-                                            <option value="{{ $documentType->catName }}">{{ $documentType->catName  }}</option>
+                                            <option value="{{ $documentType->id }}">{{ $documentType->catName  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -137,7 +137,7 @@
 
                          <div class="form-group cat-field {{ $errors->has('category_name') ? ' has-error' : '' }}">
                             <label for="category_name" class="col-sm-2 control-label">Name</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
@@ -154,7 +154,7 @@
 
                          <div class="form-group cat-field">
                             <label for="category_description" class="col-sm-2 control-label">Description</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -172,7 +172,7 @@
 
                          <div class="form-group pack-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
                             <label for="package_name" class="col-sm-2 control-label"> Name</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
@@ -189,7 +189,7 @@
 
                         <div class="form-group pack-field">
                             <label for="package_description" class="col-sm-2 control-label">Description</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -201,7 +201,7 @@
 
                         <div class="form-group pack-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
                             <label for="product_type" class="col-sm-2 control-label"> Product Type</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
@@ -218,7 +218,7 @@
 
                           <div class="form-group pack-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
                             <label for="package_discount" class="col-sm-2 control-label">Discount</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-money"></i>
@@ -235,7 +235,7 @@
 
                         <!-- <div class="form-group pack-field">
                             <label for="package_discount" class="col-sm-2 control-label">Discount</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
@@ -248,7 +248,7 @@
                         <!-- promotion -->
                         <div class="form-group prom-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
                             <label for="promotion_name" class="col-sm-2 control-label"> Name</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
@@ -265,7 +265,7 @@
 
                         <div class="form-group prom-field">
                             <label for="promotion_discription" class="col-sm-2 control-label">Discription</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>

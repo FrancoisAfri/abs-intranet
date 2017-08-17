@@ -28,6 +28,23 @@
                             </div>
                         @endif
 
+                        <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'division_id' }}" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
+
+                            <div class="col-sm-10">
+                                <select id="division_id" name="division_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">*** Please Select a {{ $highestLvl->name }} ***</option>
+                                    @if($highestLvl->divisionLevelGroup)
+                                        @foreach($highestLvl->divisionLevelGroup as $division)
+                                            <option value="{{ $division->id }}" {{ ($division->id == old('division_id')) ? 'selected' : '' }}>{{ $division->name }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr class="hr-text" data-content="SELECT A CLIENT">
+
                         <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
                             <label for="{{ 'company_id' }}" class="col-sm-2 control-label">Client Company</label>
 

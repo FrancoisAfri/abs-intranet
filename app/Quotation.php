@@ -14,13 +14,26 @@ class Quotation extends Model
         'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id', 'approval_person_id', 'status', 'send_date', 'approval_date'
     ];
 
+    //quotation status
+    protected $quoteStatuses = [1 => 'New Quote'];
+
     /**
      * Relationship between Quotations and Products
      *
-     * @return product_products
+     * @return
      */
     public function products()
     {
-        return $this->belongsToMany('App\product_products', 'quoted_products', 'quotation_id', 'product_id')->withPivot();
+        return $this->belongsToMany('App\product_products', 'quoted_products', 'quotation_id', 'product_id')->withPivot('price', 'quantity');
+    }
+
+    /**
+     * Relationship between Quotations and Packages
+     *
+     * @return
+     */
+    public function packages()
+    {
+        return $this->belongsToMany('App\product_packages', 'quoted_packages', 'quotation_id', 'package_id')->withPivot('price', 'quantity');
     }
 }

@@ -283,8 +283,8 @@ class HelpdeskController extends Controller
 			 $data['page_title'] = "View Help Desk  ($serviceName) " ;
 			 $data['page_description'] = "Help Desk Settings page";
 			 $data['breadcrumb'] = [
-            ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Product Prices', 'active' => 1, 'is_module' => 0]
+            ['title' => 'HelpDesk', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage HelpDesk Settings', 'active' => 1, 'is_module' => 0]
        		];
 
 			  $data['active_mod'] = 'Help Desk';
