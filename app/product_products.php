@@ -46,4 +46,14 @@ class product_products extends Model
     {
         return $this->productPrices()->save($price);
     }
+
+    /**
+     * Relationship between Products and Quotations
+     *
+     * @return
+     */
+    public function quotations()
+    {
+        return $this->belongsToMany('App\Quotation');
+    }
 }

@@ -21,8 +21,8 @@
                         <div class="col-sm-10">
                             <select id="division_id" name="division_id" class="form-control select2" style="width: 100%;">
                                 <option value="">*** Please Select a {{ $highestLvl->name }} ***</option>
-                                @if($highestLvl->divisionLevelGroup)
-                                    @foreach($highestLvl->divisionLevelGroup as $division)
+                                @if($highestLvlWithAllDivs->divisionLevelGroup)
+                                    @foreach($highestLvlWithAllDivs->divisionLevelGroup as $division)
                                         <option value="{{ $division->id }}" {{ ($division->id == old('division_id')) ? 'selected' : '' }}>{{ $division->name }}</option>
                                     @endforeach
                                 @endif

@@ -508,6 +508,7 @@ Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile'
 Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 Route::get('quote/create', 'QuotesController@createIndex');
 Route::post('quote/adjust', 'QuotesController@adjustQuote');
+Route::post('quote/save-quote', 'QuotesController@saveQuote');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
