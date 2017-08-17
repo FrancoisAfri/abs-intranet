@@ -1,7 +1,7 @@
 <div id="add-quotes-terms-modal" class="modal modal-default fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-quotes-term-form">
+            <form class="form-horizontal" method="POST" name="quotes-term-form">
                 {{ csrf_field() }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -12,7 +12,7 @@
                     <div id="kpi-invalid-input-alert"></div>
                     <div id="kpi-success-alert"></div>
                     <div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Term & Condition</label>
+                        <label for="term_name" class="col-sm-3 control-label">Term & Condition</label>
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <textarea class="form-control" rows="3" cols="70" id="term_name" name="term_name"></textarea>

@@ -536,25 +536,33 @@ class Product_categoryController extends Controller
 
     }
     #
-         #
-    public function priceSave(Request $request , product_products $products)
-	{
-		$this->validate($request, [
-            // 'name' => 'required',
-            // 'description' => 'required',        
+    #
+    public function priceSave(Request $request, product_products $product)
+    {
+        $this->validate($request, [
+            'price' => 'bail|required|numeric|min:0',
         ]);
-          $currentDate = time();
-		$priceData = $request->all();
-		unset($priceData['_token']);
-		$price = new product_price($priceData);
-		$price->status = 1;
-		$price->price = $priceData['price'];
-		$price->product_product_id = $products->id;
-		$price->start_date = $currentDate;
-        $price->save();
-		
-		AuditReportsController::store('Employee Records', 'Job Title Category Added', "price: $priceData[price]", 0);
-		return response()->json();
+
+        $currentDate = time();
+        $priceData = $request->all();
+        unset($priceData['_token']);
+        $price = new product_price($priceData);
+        $price->status = 1;
+        $price->start_date = $currentDate;
+
+        //get and update previous price
+        $product->load(['productPrices' => function ($query) {
+            $query->orderBy('id', 'desc');
+            $query->limit(1);
+        }]);
+        $previousPrice = $product->productPrices->first();
+        $previousPrice->end_date = $currentDate;
+        $previousPrice->update();
+
+        $product->addNewPrice($price);
+
+        AuditReportsController::store('Employee Records', 'Job Title Category Added', "price: $priceData[price]", 0);
+        return response()->json();
     }
 
         public function editPRICE(Request $request, product_packages $products)

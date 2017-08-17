@@ -767,7 +767,11 @@
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
+<<<<<<< HEAD
                     <h3 class="box-title"> Help Desk Operators</h3>
+=======
+                    <h3 class="box-title"> Operators for {{ $serviceName }}</h3>
+>>>>>>> cd6523785203f9fb4cbdb4fc6e946351c31e51fd
 
                 </div>
                  {{ csrf_field() }}

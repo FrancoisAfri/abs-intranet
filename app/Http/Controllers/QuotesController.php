@@ -13,6 +13,7 @@ use App\QuotesTermAndConditions;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Validator;
 
 class QuotesController extends Controller
 {
@@ -161,5 +162,70 @@ class QuotesController extends Controller
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', "Accessed By User", 0);
 
         return view('quote.create_quote')->with($data);
+    }
+
+    /**
+     * Show page to adjust the quote details (such as products quantity, etc.)
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function adjustQuote(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'contact_person_id' => 'bail|required|integer|min:1',
+        ]);
+
+        $validator->after(function($validator) use ($request){
+            $products = $request->input('product_id');
+            $packages = $request->input('package_id');
+
+            if (! $products && ! $packages) {
+                $validator->errors()->add('product_id', 'Please make sure you select at least a product or a package.');
+                $validator->errors()->add('package_id', 'Please make sure you select at least a product or a package.');
+            }
+        });
+
+        $validator->validate();
+
+        //Get products
+        $productIDs = $request->input('product_id');
+        $products = [];
+        if (count($productIDs) > 0) {
+            $products = product_products::whereIn('id', $productIDs)
+                ->with(['ProductPackages', 'productPrices' => function ($query) {
+                    $query->orderBy('id', 'desc');
+                    $query->limit(1);
+                }])
+                ->orderBy('category_id')
+                ->get();
+        }
+
+        //Get packages
+        /*
+        $packageIDs = $request->input('package_id');
+        $packages = [];
+        if (count($packageIDs) > 0) {
+            $packages = product_packages::whereIn('id', $packageIDs)
+                ->with('products_type')
+                ->get();
+        }
+        return $packages;
+        */
+
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "Create a quotation";
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'create quote';
+        $data['contactPersonId'] = $request->input('contact_person_id');
+        $data['companyID'] = $request->input('company_id');
+        $data['products'] = $products;
+        AuditReportsController::store('Quote', 'Create Quote Page Accessed', "Accessed By User", 0);
+
+        return view('quote.adjust_quote')->with($data);
     }
 }

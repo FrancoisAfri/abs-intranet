@@ -671,7 +671,7 @@ class DatabaseSeeder extends Seeder
         $module->active = 1;
         $module->name = 'Help Desk';
         $module->path = 'Help Desk';
-        $module->font_awesome = ' fa-info-circle';
+        $module->font_awesome = 'fa-info-circle';
         $module->save();
 
         $ribbon = new module_ribbons();
@@ -680,7 +680,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_name = 'View Tickets';
         $ribbon->description = 'Create Request';
         $ribbon->ribbon_path = 'helpdesk/view_ticket';
-        $ribbon->access_level = 5;
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
         
         // 
@@ -690,7 +690,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_name = 'Create Ticket';
         $ribbon->description = 'Create Ticket';
         $ribbon->ribbon_path = 'helpdesk/ticket';
-        $ribbon->access_level = 5;
+        $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 
         //  $ribbon = new module_ribbons();
@@ -725,7 +725,7 @@ class DatabaseSeeder extends Seeder
 
         #end
 		
-		$module = new modules(); //Audit Management
+		$module = new modules();//Audit Management
         $module->active = 1;
         $module->name = 'Audit';
         $module->path = 'Audit Management';
