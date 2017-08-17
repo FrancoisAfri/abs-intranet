@@ -11,7 +11,8 @@ class Quotation extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id', 'approval_person_id', 'status', 'send_date', 'approval_date'
+        'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id', 'approval_person_id', 'status',
+        'send_date', 'approval_date', 'discount_percent', 'add_vat'
     ];
 
     //quotation status
@@ -24,7 +25,7 @@ class Quotation extends Model
      */
     public function products()
     {
-        return $this->belongsToMany('App\product_products', 'quoted_products', 'quotation_id', 'product_id')->withPivot('price', 'quantity');
+        return $this->belongsToMany('App\product_products', 'quoted_products', 'quotation_id', 'product_id')->withPivot('price', 'quantity')->withTimestamps();
     }
 
     /**
@@ -34,6 +35,6 @@ class Quotation extends Model
      */
     public function packages()
     {
-        return $this->belongsToMany('App\product_packages', 'quoted_packages', 'quotation_id', 'package_id')->withPivot('price', 'quantity');
+        return $this->belongsToMany('App\product_packages', 'quoted_packages', 'quotation_id', 'package_id')->withPivot('price', 'quantity')->withTimestamps();
     }
 }

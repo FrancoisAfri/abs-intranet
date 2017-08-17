@@ -259,6 +259,7 @@ class QuotesController extends Controller
             'contact_person_id' => 'bail|required|integer|min:1',
             'quantity.*' => 'bail|required|integer|min:1',
             'price.*' => 'bail|required|integer|min:1',
+            'discount_percent' => 'numeric',
         ]);
         $validator->validate();
 
@@ -266,6 +267,8 @@ class QuotesController extends Controller
         $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first()->level;
         $divisionID = $request->input('division_id');
         $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $divisionID)->first();
+
+        //return $request->all();
 
         //save quote
         DB::transaction(function () use ($request, $highestLvl) {
@@ -275,12 +278,31 @@ class QuotesController extends Controller
             $quote->division_id = $request->input('division_id');
             $quote->division_level = $highestLvl;
             $quote->hr_person_id = Auth::user()->person->id;
+            $quote->discount_percent = ($request->input('discount_percent')) ? $request->input('discount_percent') : null;
+            $quote->add_vat = ($request->input('add_vat')) ? $request->input('add_vat') : null;
             $quote->status = 1;
+            $quote->save();
+
+            $prices = $request->input('price');
+            $quantities = $request->input('quantity');
+            foreach ($prices as $productID => $price) {
+                $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
+            }
         });
 
         //if authorization required: email manager for authorization
         //if authorization not required: email quote to client
 
-        return $request->all();
+        return redirect('/quote/search')->with(['success_add' => 'The quotation has been successfully added!']);
+    }
+
+    /**
+     * Show the quotation search page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function searchQuote()
+    {
+        return 'Search page';
     }
 }
