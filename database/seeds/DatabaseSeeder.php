@@ -388,12 +388,21 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_name = 'Create Quote';
         $ribbon->description = 'Create Quote';
         $ribbon->ribbon_path = 'quote/create';
-        $ribbon->access_level = 4;
+        $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Authorisation';
+        $ribbon->description = 'Quote Authorisation';
+        $ribbon->ribbon_path = 'quotes/authorisation';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Term & Conditions';
         $ribbon->description = 'Term & Conditions';
         $ribbon->ribbon_path = 'quote/term-conditions';
