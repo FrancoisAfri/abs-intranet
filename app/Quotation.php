@@ -16,7 +16,11 @@ class Quotation extends Model
     ];
 
     //quotation status
-    protected $quoteStatuses = [1 => 'New Quote'];
+    protected $quoteStatuses = [1 => 'Awaiting Manager Approval'
+				,2 => 'Awaiting Client Approval '
+				,3 => 'Declined by Manager',4 => 'Accepted by Client'
+				,5 => 'Declined by Client'
+				,6 => 'Cancelled',7 => 'Authorised'];
 
     /**
      * Relationship between Quotations and Products
@@ -36,5 +40,10 @@ class Quotation extends Model
     public function packages()
     {
         return $this->belongsToMany('App\product_packages', 'quoted_packages', 'quotation_id', 'package_id')->withPivot('price', 'quantity')->withTimestamps();
+    } 
+	
+	public function quoteHistory()
+    {
+        return $this->hasmany(QuoteApprovalHistory::class, 'quotation_id');
     }
 }
