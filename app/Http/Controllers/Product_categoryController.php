@@ -444,7 +444,7 @@ class Product_categoryController extends Controller
     }
     #
     #packages
-        public function packageSave(Request $request, product_packages $packs , packages_product_table $pack_prod) {
+        public function packageSave(Request $request, product_packages $packs ) {
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
@@ -463,9 +463,6 @@ class Product_categoryController extends Controller
         $packs->discount = $request->input('discount');
         $packs->status = 1;
         $packs->products_id = $products;
-        $pack_prod->product_packages_id = $products;
-       // $pack_prod->product_packages_id = $packs->id;
-         $pack_prod->save();
         $packs->save();
       //  AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
     	}
