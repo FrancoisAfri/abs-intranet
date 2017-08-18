@@ -11,6 +11,7 @@ use App\Mail\ApproveQuote;
 use App\product_packages;
 use App\product_products;
 use App\Quotation;
+use App\QuoteApprovalHistory;
 use App\QuoteCompanyProfile;
 use App\QuotesTermAndConditions;
 use Carbon\Carbon;
@@ -191,30 +192,18 @@ class QuotesController extends Controller
             ['title' => 'Quotes', 'path' => 'quotes/authorisation', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
         ];
-
-		$people = DB::table('hr_people')->orderBy('id', 'asc')->get();
-        $leaveTypes = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
-          $query->orderBy('name', 'asc');  
-        }]);
-       
-		$loggedInEmplID = Auth::user()->person->id;
-
-		$quoteStatus = array(1 => 'Approved' , 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 =>          'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejectd', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr' , 9 => 'rejectd_by_payroll');
-
-		$quoteApplications = DB::table('leave_application')
-        ->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager','leave_credit.leave_balance as leave_Days') 
-        ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
-        ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id') 
-        ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id' )
-        ->where('hr_people.manager_id', $loggedInEmplID)
-		->orderBy('leave_application.hr_id')
+		
+		$quoteApplications = Quotation::select('quotations.*') 
+        ->leftJoin('hr_people', 'quotations.hr_person_id', '=', 'hr_people.id')
+        ->where('hr_people.manager_id', Auth::user()->person->id)
+		->orderBy('quotations.id')
         ->get();
 
-        $data['quoteStatus'] = $quoteStatus;
+        //$data['quoteStatus'] = $quoteStatus;
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'Authorisation';
         $data['quoteApplications'] = $quoteApplications;
-
+		return $quoteApplications;
         AuditReportsController::store('Leave', 'Leave Approval Page Accessed', "Accessed By User", 0);
         return view('quote.authorisation')->with($data);  
     }
@@ -361,7 +350,15 @@ class QuotesController extends Controller
                 }
             }
         });
-
+		// Add to quote history
+		$QuoteApprovalHistory = new QuoteApprovalHistory();
+		$QuoteApprovalHistory->quotation_id = $quote->id;
+		$QuoteApprovalHistory->user_id = Auth::user()->person->id;
+		$QuoteApprovalHistory->status = 1;
+		$QuoteApprovalHistory->comment = "New Quote Created";
+		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
+		$QuoteApprovalHistory->save();
+		
         //if authorization required: email manager for authorization
         if($quoteProfile->authorisation_required === 1 && $quote->id) {
             $managerID = $user->person->manager_id;

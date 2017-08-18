@@ -1,7 +1,7 @@
 <div id="add-promotion-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add_new_site-form">
+            <form class="form-horizontal" method="POST" name="add_new_site-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 <div class="modal-header">

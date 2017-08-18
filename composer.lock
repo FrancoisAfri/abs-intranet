@@ -823,7 +823,7 @@
                 "laravel sweet alert",
                 "sweet-alert"
             ],
-            "time": "2016-09-18T15:07:52+00:00"
+            "time": "2016-09-18 15:07:52"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -2992,12 +2992,12 @@
             "version": "0.9.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mockery/mockery.git",
+                "url": "https://github.com/padraic/mockery.git",
                 "reference": "4db079511a283e5aba1b3c2fb19037c645e70fc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/4db079511a283e5aba1b3c2fb19037c645e70fc2",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/4db079511a283e5aba1b3c2fb19037c645e70fc2",
                 "reference": "4db079511a283e5aba1b3c2fb19037c645e70fc2",
                 "shasum": ""
             },
