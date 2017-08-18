@@ -18,6 +18,7 @@
                      <th>Name</th>
                      <th>Description</th>
                      <th>Price</th>
+                     <!-- <th>Discount</th> -->
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($productss) > 0)
@@ -26,9 +27,10 @@
                            <td nowrap>
                          <!--  <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button> -->
                                <!-- <a href="{{ '/Product/price/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-money"></i> Prices</a></td> -->
-                          <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td>
-                          <td>{{ (!empty( $jobTitle->description)) ?  $jobTitle->description : ''}} </td>
+                          <td>{{ (!empty($jobTitle->Prodname)) ?  $jobTitle->Prodname : ''}} </td>
+                          <td>{{ (!empty( $jobTitle->Proddescription)) ?  $jobTitle->Proddescription : ''}} </td>
                           <td>{{ (!empty( $jobTitle->price)) ?  $jobTitle->price : ''}} </td>
+                          <!-- <td>{{ (!empty( $jobTitle->discount)) ?  $jobTitle->discount : ''}} </td> -->
                           <td nowrap>
                               <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
@@ -49,7 +51,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                    <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-product_package_title-modal">Add Product</button>
+                    <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-product_package_title-modal">Add Product(s)</button>
                 </div>
             </div>
         </div>

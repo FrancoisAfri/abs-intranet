@@ -117,6 +117,7 @@
         }
         $(function () {
               $(".select2").select2();
+              $('.temp-field').hide();
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
@@ -161,15 +162,12 @@
             var allType = $("input[name='application_type']:checked").val();
             if (allType == 1) { //adjsut leave
                 $('.temp-field').hide();
-                $('.site-field').show();
-               // $('#load-allocation').val("Submit");        
+                $('.site-field').show(); 
             }
             else if (allType == 2) { //resert leave
 //                
                 $('.site-field').hide();
                 $('.temp-field').show();
-                // $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
-                // $('#load-allocation').val("Submit");
             }
 
 //          
