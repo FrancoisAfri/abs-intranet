@@ -63,7 +63,11 @@
 @endsection
 
 @section('page_script')
-<script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
+
     <script>
         function postData(id, data)
         {
@@ -75,6 +79,7 @@
                 location.href = '/product/Packages';
             });
         $(function () {
+              $(".select2").select2();
             var jobId;
             
             // document.getElementById("back_button").onclick = function () {
