@@ -51,7 +51,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                    <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-product_package_title-modal">Add Product</button>
+                    <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-product_package_title-modal">Add Product(s)</button>
                 </div>
             </div>
         </div>

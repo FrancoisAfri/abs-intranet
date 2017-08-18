@@ -46,4 +46,8 @@ class Quotation extends Model
     {
         return $this->hasmany(QuoteApprovalHistory::class, 'quotation_id');
     }
+	// Get status string
+	public function getQuoteStatusAttribute() {
+        return (!empty($this->status)) ? $this->quoteStatuses[$this->status] : null;
+    }
 }
