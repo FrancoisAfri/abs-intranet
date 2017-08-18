@@ -182,6 +182,7 @@ class QuotesController extends Controller
 
         return view('quote.create_quote')->with($data);
     }
+
 	public function authorisationIndex()
     {
         $data['page_title'] = "Quotes";
@@ -254,6 +255,11 @@ class QuotesController extends Controller
                 }])
                 ->orderBy('category_id')
                 ->get();
+            //get products current prices
+            foreach ($products as $product) {
+                $product->current_price = ($product->productPrices && $product->productPrices->first())
+                    ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+            }
         }
 
         //Get packages
@@ -261,10 +267,27 @@ class QuotesController extends Controller
         $packages = [];
         if (count($packageIDs) > 0) {
             $packages = product_packages::whereIn('id', $packageIDs)
-                ->with('products_type')
+                ->with(['products_type' => function ($query) {
+                    $query->with(['productPrices' => function ($query) {
+                        $query->orderBy('id', 'desc');
+                        $query->limit(1);
+                    }]);
+                }])
                 ->get();
+            //calculate the package price
+            foreach ($packages as $package) {
+                $packageProducts = $package->products_type;
+                $packageCost = 0;
+                foreach ($packageProducts as $packageProduct) {
+                    $packageProduct->current_price = ($packageProduct->productPrices && $packageProduct->productPrices->first())
+                        ? $packageProduct->productPrices->first()->price : (($packageProduct->price) ? $packageProduct->price : 0);
+
+                    $packageCost += $packageProduct->current_price;
+                }
+                $package->price = $packageCost - (($packageCost * $package->discount) /100);
+            }
         }
-        return $packages;
+        //return $packages;
 
         $data['page_title'] = "Quotes";
         $data['page_description'] = "Create a quotation";
@@ -278,6 +301,7 @@ class QuotesController extends Controller
         $data['contactPersonId'] = $request->input('contact_person_id');
         $data['companyID'] = $request->input('company_id');
         $data['products'] = $products;
+        $data['packages'] = $packages;
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', "Accessed By User", 0);
 
         return view('quote.adjust_quote')->with($data);
@@ -323,8 +347,18 @@ class QuotesController extends Controller
 
             $prices = $request->input('price');
             $quantities = $request->input('quantity');
-            foreach ($prices as $productID => $price) {
-                $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
+            if ($prices) {
+                foreach ($prices as $productID => $price) {
+                    $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
+                }
+            }
+
+            $packagePrices = $request->input('package_price');
+            $packageQuantities = $request->input('package_quantity');
+            if ($packagePrices) {
+                foreach ($packagePrices as $packageID => $packagePrice) {
+                    $quote->packages()->attach($packageID, ['price' => $packagePrice, 'quantity' => $packageQuantities[$packageID]]);
+                }
             }
         });
 

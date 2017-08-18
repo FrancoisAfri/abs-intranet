@@ -37,4 +37,14 @@ class Quotation extends Model
     {
         return $this->belongsToMany('App\product_packages', 'quoted_packages', 'quotation_id', 'package_id')->withPivot('price', 'quantity')->withTimestamps();
     }
+
+    /**
+     * Relationship between Quotation and HRPerson
+     *
+     * @return
+     */
+    public function person()
+    {
+        return $this->belongsTo(HRPerson::class, 'hr_person_id');
+    }
 }
