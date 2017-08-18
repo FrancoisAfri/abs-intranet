@@ -244,11 +244,11 @@ class Product_categoryController extends Controller
 
             
 
-                  $ProductPackages = product_packages::orderBy('id', 'asc')->get(); 
-        if (!empty($ProductPackages))
-            $ProductPackages = $ProductPackages->load('products_type');
+        //           $ProductPackages = product_packages::orderBy('id', 'asc')->get(); 
+        // if (!empty($ProductPackages))
+        //     $ProductPackages = $ProductPackages->load('products_type');
 
-        return $ProductPackages;
+        // return $ProductPackages;
 
             $productss = DB::table('product_packages')
                       ->select('product_packages.*','Product_products.name as Prodname','Product_products.description as Proddescription' , 'Product_products.price as price')
@@ -756,29 +756,7 @@ class Product_categoryController extends Controller
             ->orderBy('id')
             ->get();
 
-        //    $ProductPackages = product_products::orderBy('id', 'asc')->get(); 
-        // if (!empty($ProductPackages))
-        //     $ProductPackages = $ProductPackages->load('PackadgesTypes');
 
-                
-
-                // $Product = product_products::orderBy('id', 'desc')->get();
-                //       if (!empty($Product))
-                //       $Product->load(['PackadgesTypes' => function ($query) use($package_name) {
-                //         if (!empty($package_name)) {
-                //             $query->where('packadges_types.id', $package_name);
-                //         }
-                //       }])            
-                  
-                //     //->orderBy('id')
-                //     ->get();
-
-
-                         $Products = product_products::orderBy('id', 'asc')->get(); 
-                        if (!empty($Products))
-                            $Products = $Products->load('PackadgesTypes');
-
-                    // return $Products;
 
             
 
@@ -809,7 +787,6 @@ class Product_categoryController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
- //return $SysData;
 
         $promotion_name = $request->promotion_name;
         $promotion_discription = $request->promotion_discription;
