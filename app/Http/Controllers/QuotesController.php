@@ -317,12 +317,11 @@ class QuotesController extends Controller
             }
         });
 		// Add to quote history
-		
 		$QuoteApprovalHistory = new QuoteApprovalHistory();
 		$QuoteApprovalHistory->quotation_id = $quote->id;
 		$QuoteApprovalHistory->user_id = Auth::user()->person->id;
 		$QuoteApprovalHistory->status = 1;
-		$QuoteApprovalHistory->comment = "";
+		$QuoteApprovalHistory->comment = "New Quote Created";
 		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
 		$QuoteApprovalHistory->save();
 		

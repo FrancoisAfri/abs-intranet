@@ -130,7 +130,7 @@ class ContactCompaniesController extends Controller
 
         //Insert Data
         $company = new ContactCompany($formData);
-        $company->status = 2;
+        $company->status = 1;
         $company->save();
 
         //Upload BEE document
