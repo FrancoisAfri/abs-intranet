@@ -153,7 +153,7 @@ class QuotesController extends Controller
      * Show the create quote page
      *
      * @return \Illuminate\Contracts\View\View
-     */
+    */
     public function createIndex()
     {
         $highestLvl = DivisionLevel::where('active', 1)
@@ -192,13 +192,12 @@ class QuotesController extends Controller
             ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
         ];
 		
-		$quoteApplications = Quotation::select('quotations.*') 
-        ->leftJoin('hr_people', 'quotations.hr_person_id', '=', 'hr_people.id')
-        ->where('hr_people.manager_id', Auth::user()->person->id)
-		->orderBy('quotations.id')
-        ->get();
+		$quoteApplications = Quotation::with(['products','packages', 'person' => function ($query) {
+			$query->where('manager_id', Auth::user()->person->id);
+		}])
+		->orderBy('id')
+		->get();
 
-        //$data['quoteStatus'] = $quoteStatus;
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'Authorisation';
         $data['quoteApplications'] = $quoteApplications;
@@ -212,7 +211,7 @@ class QuotesController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\View
-     */
+    */
     public function adjustQuote(Request $request)
     {
         $validator = Validator::make($request->all(),[
