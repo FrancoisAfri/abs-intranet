@@ -155,7 +155,6 @@ class QuotesController extends Controller
      */
     public function createIndex()
     {
-        return Carbon::createFromFormat('d m Y', '29 04 2016')->addMonths(24);
         $highestLvl = DivisionLevel::where('active', 1)
             ->orderBy('level', 'desc')->limit(1)->get()->first()
             ->load(['divisionLevelGroup' => function ($query) {
