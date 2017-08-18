@@ -221,12 +221,13 @@ Route::post('Product/promotions/add', 'Product_categoryController@promotionSave'
 // Route::get('product/price', 'Product_categoryController@index');
 Route::get('Product/price/{price}', 'Product_categoryController@view_prices');
 
+<<<<<<< HEAD
 //Route::post('/Product/price/add/{products}', 'Product_categoryController@priceSave');
+=======
+>>>>>>> 31a1a0cd695e3692c14327fd5918b8ce159c7290
 Route::get('/Product/packages/{products}', 'Product_categoryController@viewProducts');
 Route::post('product_packages/product/add/{package}', 'Product_categoryController@product_packageSave');
 Route::post('/Product/price/add/{product}', 'Product_categoryController@priceSave');
-#>>>>>>> cd6523785203f9fb4cbdb4fc6e946351c31e51fd
-
 
 #search
 Route::get('product/Search', 'Product_categoryController@Search');
