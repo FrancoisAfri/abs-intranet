@@ -15,6 +15,10 @@ class QuotesTermConditionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $termConditions = QuotesTermAndConditions::where('status', 1)->get();

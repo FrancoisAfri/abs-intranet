@@ -6,16 +6,21 @@ use App\ContactCompany;
 use App\ContactPerson;
 use App\DivisionLevel;
 use App\EmailTemplate;
+use App\HRPerson;
+use App\Mail\ApproveQuote;
 use App\product_packages;
 use App\product_products;
 use App\Quotation;
+use App\QuoteApprovalHistory;
 use App\QuoteCompanyProfile;
 use App\QuotesTermAndConditions;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class QuotesController extends Controller
@@ -178,6 +183,29 @@ class QuotesController extends Controller
 
         return view('quote.create_quote')->with($data);
     }
+	public function authorisationIndex()
+    {
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "Quotes Authorisation";
+        $data['breadcrumb'] = [
+            ['title' => 'Quotes', 'path' => 'quotes/authorisation', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
+        ];
+		
+		$quoteApplications = Quotation::select('quotations.*') 
+        ->leftJoin('hr_people', 'quotations.hr_person_id', '=', 'hr_people.id')
+        ->where('hr_people.manager_id', Auth::user()->person->id)
+		->orderBy('quotations.id')
+        ->get();
+
+        //$data['quoteStatus'] = $quoteStatus;
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Authorisation';
+        $data['quoteApplications'] = $quoteApplications;
+		return $quoteApplications;
+        AuditReportsController::store('Leave', 'Leave Approval Page Accessed', "Accessed By User", 0);
+        return view('quote.authorisation')->with($data);  
+    }
 
     /**
      * Show page to adjust the quote details (such as products quantity, etc.)
@@ -218,7 +246,6 @@ class QuotesController extends Controller
         }
 
         //Get packages
-        /*
         $packageIDs = $request->input('package_id');
         $packages = [];
         if (count($packageIDs) > 0) {
@@ -227,7 +254,6 @@ class QuotesController extends Controller
                 ->get();
         }
         return $packages;
-        */
 
         $data['page_title'] = "Quotes";
         $data['page_description'] = "Create a quotation";
@@ -247,7 +273,7 @@ class QuotesController extends Controller
     }
 
     /**
-     * Save the project
+     * Save the quote
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\View
@@ -259,6 +285,7 @@ class QuotesController extends Controller
             'contact_person_id' => 'bail|required|integer|min:1',
             'quantity.*' => 'bail|required|integer|min:1',
             'price.*' => 'bail|required|integer|min:1',
+            'discount_percent' => 'numeric',
         ]);
         $validator->validate();
 
@@ -267,20 +294,60 @@ class QuotesController extends Controller
         $divisionID = $request->input('division_id');
         $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $divisionID)->first();
 
+        //return $request->all();
+        $user = Auth::user()->load('person');
+
         //save quote
-        DB::transaction(function () use ($request, $highestLvl) {
-            $quote = new Quotation();
+        $quote = new Quotation();
+        DB::transaction(function () use ($quote, $request, $highestLvl, $user) {
             $quote->company_id = ($request->input('company_id') > 0) ? $request->input('company_id') : null;
             $quote->client_id = $request->input('contact_person_id');
             $quote->division_id = $request->input('division_id');
             $quote->division_level = $highestLvl;
-            $quote->hr_person_id = Auth::user()->person->id;
+            $quote->hr_person_id = $user->person->id;
+            $quote->discount_percent = ($request->input('discount_percent')) ? $request->input('discount_percent') : null;
+            $quote->add_vat = ($request->input('add_vat')) ? $request->input('add_vat') : null;
             $quote->status = 1;
+            $quote->save();
+
+            $prices = $request->input('price');
+            $quantities = $request->input('quantity');
+            foreach ($prices as $productID => $price) {
+                $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
+            }
         });
-
+		// Add to quote history
+		$QuoteApprovalHistory = new QuoteApprovalHistory();
+		$QuoteApprovalHistory->quotation_id = $quote->id;
+		$QuoteApprovalHistory->user_id = Auth::user()->person->id;
+		$QuoteApprovalHistory->status = 1;
+		$QuoteApprovalHistory->comment = "New Quote Created";
+		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
+		$QuoteApprovalHistory->save();
+		
         //if authorization required: email manager for authorization
-        //if authorization not required: email quote to client
+        if($quoteProfile->authorisation_required === 1 && $quote->id) {
+            $managerID = $user->person->manager_id;
+            if ($managerID) {
+                $manager = HRPerson::find($managerID);
+                Mail::to($manager->email)->send(new ApproveQuote($manager, $quote->id));
+            }
+        }
+        else {
+            //if authorization not required: email quote to client
+        }
+        AuditReportsController::store('Quote', 'New Quote Created', "Create by user", 0);
 
-        return $request->all();
+        return redirect('/quote/search')->with(['success_add' => 'The quotation has been successfully added!']);
+    }
+
+    /**
+     * Show the quotation search page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function searchQuote()
+    {
+        return 'Search page';
     }
 }

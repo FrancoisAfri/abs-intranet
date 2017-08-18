@@ -31,7 +31,6 @@ class LeaveController extends Controller
 
 
     }
-        
     
     public function editsetupType(Request $request, LeaveType $lev)
     {
@@ -45,15 +44,10 @@ class LeaveController extends Controller
             'shiftmax'=>'numeric|min:2',
         ]);
         
-
         $day5min = (trim($request->input('day5min')) != '') ? (int) $request->input('day5min') : null;
-        // return $day5min;
-
-        $day5max = (trim($request->input('day5max')) != '') ? (int) $request->input('day5max') : null;
-        
+        $day5max = (trim($request->input('day5max')) != '') ? (int) $request->input('day5max') : null;    
         $day6min= (trim($request->input('day6min')) != '') ? (int) $request->input('day6min') : null;
         $day6max = (trim($request->input('day6max')) != '') ? (int) $request->input('day6max') : null;
-        
         $shiftmin = (trim($request->input('shiftmin')) != '') ? (int) $request->input('shiftmin') : null;
         $shiftmax = (trim($request->input('shiftmax')) != '') ? (int) $request->input('shiftmax') : null;
 
@@ -62,28 +56,21 @@ class LeaveController extends Controller
             3 => ['min' => $day6min, 'max' => $day6max],
             4 => ['min' => $shiftmin, 'max' => $shiftmax]
         ]);
-//      
-        //return $lev;
+
         AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json();
     }
-
-
+	
     //#leave types
 	public function editLeaveType(Request $request, LeaveType $lev)
 	{
         $this->validate($request, [
             'name' => 'required',
-            //'description' => 'required',
-            //'font_awesome' => 'required',
-
         ]);
 
         $lev->name = $request->input('name');
         $lev->description = $request->input('description');
-        //$lev->font_awesome = $request->input('font_awesome');
         $lev->update();
-        //return $lev;
         AuditReportsController::store('Leave', 'leavetype Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json(['new_name' => $lev->name, 'description' => $lev->description], 200);
     }
@@ -110,7 +97,6 @@ class LeaveController extends Controller
         return back();
     }
     // custom leave
-
     public function addcustom(Request $request) {
         $this->validate($request, [
             'hr_id' => 'required',
@@ -121,35 +107,25 @@ class LeaveController extends Controller
         $leaveData = $request->all();
         unset($leaveData['_token']);
         $leave_customs = new leave_custom();
-        //$leave_customs->status = 1;
-        // if(){
-
-        // }
         $leave_customs->updateOrCreate(['hr_id' => $leaveData['hr_id']], ['number_of_days' => $leaveData['number_of_days'], 'status' => 1]);
-        //$leave_customs->save();
         AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
         return response()->json();
     }
 //
     public function editcustomLeaveType(Request $request, leave_custom $lev)
     {
-        //$user = Auth::user()->load('person');
-        $this->validate($request, [
-            //'hr_id' => 'required',
+		$this->validate($request, [
             'number_of_days'=>  'numeric|required',
 
         ]);
-        //$lev->hr_id = $request->input('hr_id');
         $lev->number_of_days = $request->input('number_of_days');
         $lev->update();
-        //return $lev;
         AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
         return response()->json();
     }
     //
     public function customleaveAct(leave_custom $lev)
     {
-//        return $lev;
         if ($lev->status == 1) $stastus = 0;
         else $stastus = 1;
 
@@ -157,6 +133,4 @@ class LeaveController extends Controller
         $lev->update();
         return back();
     }
-//
-
 }

@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/quote/save-quote">
+                <form class="form-horizontal" method="POST" action="/quote/save">
                     {{ csrf_field() }}
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
@@ -101,7 +101,7 @@
                                             <tr>
                                                 <td style="vertical-align: middle;">
                                                     <div class="form-group no-margin">
-                                                        <label for="{{ 'discount_percent' }}" class="col-sm-4 control-label"></label>
+                                                        <label for="" class="col-sm-4 control-label"></label>
                                                         <div class="col-sm-8">
                                                             <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1"></label>
                                                         </div>
