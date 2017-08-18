@@ -182,6 +182,41 @@ class QuotesController extends Controller
 
         return view('quote.create_quote')->with($data);
     }
+	public function authorisationIndex()
+    {
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "Quotes Authorisation";
+        $data['breadcrumb'] = [
+            ['title' => 'Quotes', 'path' => 'quotes/authorisation', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
+        ];
+
+		$people = DB::table('hr_people')->orderBy('id', 'asc')->get();
+        $leaveTypes = LeaveType::where('status',1)->get()->load(['leave_profle'=>function($query){
+          $query->orderBy('name', 'asc');  
+        }]);
+       
+		$loggedInEmplID = Auth::user()->person->id;
+
+		$quoteStatus = array(1 => 'Approved' , 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 =>          'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejectd', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr' , 9 => 'rejectd_by_payroll');
+
+		$quoteApplications = DB::table('leave_application')
+        ->select('leave_application.*','hr_people.first_name as firstname','hr_people.surname as surname','leave_types.name as leavetype','hr_people.manager_id as manager','leave_credit.leave_balance as leave_Days') 
+        ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
+        ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id') 
+        ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id' )
+        ->where('hr_people.manager_id', $loggedInEmplID)
+		->orderBy('leave_application.hr_id')
+        ->get();
+
+        $data['quoteStatus'] = $quoteStatus;
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Authorisation';
+        $data['quoteApplications'] = $quoteApplications;
+
+        AuditReportsController::store('Leave', 'Leave Approval Page Accessed', "Accessed By User", 0);
+        return view('quote.authorisation')->with($data);  
+    }
 
     /**
      * Show page to adjust the quote details (such as products quantity, etc.)
