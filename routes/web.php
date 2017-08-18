@@ -211,6 +211,11 @@ Route::post('Product/categories', 'Product_categoryController@categorySave');
 Route::post('/Product/Product/add/{products}', 'Product_categoryController@addProductType');
 Route::patch('Product/product_edit/{product}', 'Product_categoryController@editProduct');
 Route::patch('Product/category_edit/{Category}', 'Product_categoryController@editCategory');
+//>>>status
+Route::get('/Product/category/{cat}', 'Product_categoryController@CategoryAct');
+
+
+
 #
 //----packages ---
 Route::get('product/Packages', 'Product_categoryController@view_packages');

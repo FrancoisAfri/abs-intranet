@@ -235,23 +235,30 @@ class Product_categoryController extends Controller
 
             $ProductPackages = product_products::orderBy('name', 'asc')->get()->first();
 
-             $productss  = DB::table('packages_product_table')
-             ->select('packages_product_table.*','Product_products.name as name','Product_products.description as description','Product_products.price as price')
-            ->leftJoin('Product_products', 'packages_product_table.product_product_id', '=', 'Product_products.id')
-            ->where( 'packages_product_table.product_packages_id', $packageID)
-            ->orderBy('packages_product_table.id')
-            ->get();
+            //  $productss  = DB::table('packages_product_table')
+            //  ->select('packages_product_table.*','Product_products.name as name','Product_products.description as description','Product_products.price as price')
+            // ->leftJoin('Product_products', 'packages_product_table.product_product_id', '=', 'Product_products.id')
+            // ->where( 'packages_product_table.product_packages_id', $packageID)
+            // ->orderBy('packages_product_table.id')
+            // ->get();
 
-           // return $productss;
+            
 
+                  $ProductPackages = product_packages::orderBy('id', 'asc')->get(); 
+        if (!empty($ProductPackages))
+            $ProductPackages = $ProductPackages->load('products_type');
 
-            //return $productss;
-       
-          
-    
-       //return $ProductPackages;
+        return $ProductPackages;
 
-        //return $Productprice;
+            $productss = DB::table('product_packages')
+                      ->select('product_packages.*','Product_products.name as Prodname','Product_products.description as Proddescription' , 'Product_products.price as price')
+                      ->leftJoin('Product_products', 'product_packages.products_id', '=', 'Product_products.id')
+                      ->where( 'product_packages.id', $packageID)
+                      ->orderBy('product_packages.id')
+                      ->get();
+
+                       //return $prodctss;
+
             $data['page_title'] = "Manage Products packages";
             $data['page_description'] = "Products page";
              $data['breadcrumb'] = [
@@ -281,11 +288,16 @@ class Product_categoryController extends Controller
 
            $docData = $request->all();
         unset($docData['_token']);
-       $packageID = $package->id;
+        $packageID = $package->id;
 
-       $product_id = $request->input('product_id');
+        $product_id = $request->input('product_id');
 
-    $associative->updateOrCreate(['product_product_id' => $request->input('product_id')], ['product_packages_id' => $packageID]);
+   // $associative->updateOrCreate(['product_product_id' => $request->input('product_id')], ['product_packages_id' => $packageID]);
+
+        #writting into the associative table, use attach & deattach to avoid duplicates
+        $package->products_type()->detach(['product_product_id' => $request->input('product_id')], ['product_packages_id' => $packageID]);
+        $package->products_type()->attach(['product_product_id' => $request->input('product_id')], ['product_packages_id' => $packageID]);
+
         AuditReportsController::store('Employee Records', 'Category Informations Edited', "Edited by User", 0);
        return response()->json();
     }
@@ -351,15 +363,15 @@ class Product_categoryController extends Controller
     }
 
 
-    public function categoryAct(product_category $Category) 
-	{
-		if ($Category->status == 1) $stastus = 0;
-		else $stastus = 1;
+ //    public function categoryAct(product_category $Category) 
+	// {
+	// 	if ($Category->status == 1) $stastus = 0;
+	// 	else $stastus = 1;
 		
-		$Category->status = $stastus;	
-		$Category->update();
+	// 	$Category->status = $stastus;	
+	// 	$Category->update();
 		
-    }
+ //    }
 
 
 
@@ -498,7 +510,7 @@ class Product_categoryController extends Controller
 			'start_date' => 'required',
 			'end_date' => 'required',
 			'price' => 'required',
-			'product' => 'required',
+			//'product' => 'required',
 
         ]);
     
@@ -516,18 +528,17 @@ class Product_categoryController extends Controller
 
            $EndDate = $promData['end_date'] = str_replace('/', '-', $promData['end_date']);
            $EndDate = $promData['end_date'] = strtotime($promData['end_date']);
-
         
             
-        $prom->name = $request->input('name');
-        $prom->description = $request->input('description');
-        $prom->discount = $request->input('discount');
-        $prom->price = $request->input('price');
-        $prom->product_product_id = $products;
-        $prom->start_date = $StartDate;
-        $prom->end_date =  $EndDate;
-        $prom->status = 1;
-        $prom->save();
+            $prom->name = $request->input('name');
+            $prom->description = $request->input('description');
+            $prom->discount = $request->input('discount');
+            $prom->price = $request->input('price');
+            $prom->product_product_id = $products;
+            $prom->start_date = $StartDate;
+            $prom->end_date =  $EndDate;
+            $prom->status = 1;
+            $prom->save();
     }
       //  AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
     	
@@ -728,7 +739,7 @@ class Product_categoryController extends Controller
              ->where(function ($query) use ($package_name) {
             if (!empty($package_name)) {
               $query->where('id', $package_name);
-            }
+                }
             })
             ->where(function ($query) use ($package_description) {
               if (!empty($package_description)) {
@@ -752,8 +763,26 @@ class Product_categoryController extends Controller
         // if (!empty($ProductPackages))
         //     $ProductPackages = $ProductPackages->load('PackadgesTypes');
 
+                
 
-          
+                // $Product = product_products::orderBy('id', 'desc')->get();
+                //       if (!empty($Product))
+                //       $Product->load(['PackadgesTypes' => function ($query) use($package_name) {
+                //         if (!empty($package_name)) {
+                //             $query->where('packadges_types.id', $package_name);
+                //         }
+                //       }])            
+                  
+                //     //->orderBy('id')
+                //     ->get();
+
+
+                         $Products = product_products::orderBy('id', 'asc')->get(); 
+                        if (!empty($Products))
+                            $Products = $Products->load('PackadgesTypes');
+
+                    // return $Products;
+
             
 
        //$data['ticketStatus'] = $ticketStatus;
@@ -848,6 +877,16 @@ class Product_categoryController extends Controller
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('products.promotions_results')->with($data);
         }
+
+
+          public function CategoryAct(product_category $cat) {
+        if ($cat->status == 1) $stastus = 0;
+        else $stastus = 1;
+
+        $cat->status = $stastus;    
+        $cat->update();
+        return back();
+    }
 
 
 
