@@ -279,15 +279,15 @@ class Product_categoryController extends Controller
             // 'description' => 'required',
         ]);
 
-           $docData = $request->all();
+        $docData = $request->all();
         unset($docData['_token']);
-       $packageID = $package->id;
+		$packageID = $package->id;
 
-       $product_id = $request->input('product_id');
+		$product_id = $request->input('product_id');
 
-    $associative->updateOrCreate(['product_product_id' => $request->input('product_id')], ['product_packages_id' => $packageID]);
+		$associative->updateOrCreate(['product_product_id' => $request->input('product_id')], ['product_packages_id' => $packageID]);
         AuditReportsController::store('Employee Records', 'Category Informations Edited', "Edited by User", 0);
-       return response()->json();
+		return response()->json();
     }
 
 
@@ -432,34 +432,31 @@ class Product_categoryController extends Controller
     }
     #
     #packages
-        public function packageSave(Request $request, product_packages $packs , packages_product_table $pack_prod) {
-        $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
+	public function packageSave(Request $request, product_packages $packs) {
+		$this->validate($request, [
+			'name' => 'required',
+			'description' => 'required',
 			'discount' => 'required',
+		]);
 
-        ]);
-    
-        $docData = $request->all();
-        unset($docData['_token']);
+		$docData = $request->all();
+		unset($docData['_token']);
 
-          $Product = $docData['product_id'];
-        
-            foreach ($Product as $products){
-        $packs->name = $request->input('name');
-        $packs->description = $request->input('description');
-        $packs->discount = $request->input('discount');
-        $packs->status = 1;
-        $packs->products_id = $products;
-        $pack_prod->product_packages_id = $products;
-       // $pack_prod->product_packages_id = $packs->id;
-         $pack_prod->save();
-        $packs->save();
-      //  AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
-    	}
-
-    	return response()->json();
-
+		$Product = $docData['product_id'];
+		// Add Package
+		$packs->name = $request->input('name');
+		$packs->description = $request->input('description');
+		$packs->discount = $request->input('discount');
+		$packs->status = 1;
+		$packs->save();
+		// Save Products linked to package
+		foreach ($Product as $products){
+			$pack_prod =  new packages_product_table(); 
+			$pack_prod->product_packages_id = $packs->id;
+			$pack_prod->product_product_id = $products;
+			$pack_prod->save();
+		}
+		return response()->json();
     }
 
     // 
