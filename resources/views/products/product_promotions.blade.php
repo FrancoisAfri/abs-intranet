@@ -117,6 +117,7 @@
         }
         $(function () {
               $(".select2").select2();
+              $('.temp-field').hide();
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
@@ -151,25 +152,22 @@
                 increaseArea: '20%' // optional
             });
 
-                  $('#rdo_days, #rdo_hours').on('ifChecked', function(){      
+                  $('#rdo_package, #rdo_product').on('ifChecked', function(){      
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Site Address');
                 else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
             });
 
                        function hideFields() {
-            var allType = $("input[name='application_type']:checked").val();
+            var allType = $("input[name='promotion_type']:checked").val();
             if (allType == 1) { //adjsut leave
                 $('.temp-field').hide();
-                $('.site-field').show();
-               // $('#load-allocation').val("Submit");        
+                $('.site-field').show(); 
             }
             else if (allType == 2) { //resert leave
 //                
                 $('.site-field').hide();
                 $('.temp-field').show();
-                // $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
-                // $('#load-allocation').val("Submit");
             }
 
 //          
@@ -189,9 +187,10 @@
                     start_date: $('#'+modalID).find('#start_date').val(),
                     end_date: $('#'+modalID).find('#end_date').val(),
                     discount: $('#'+modalID).find('#discount').val(),
+                    package: $('#'+modalID).find('#package').val(),
                     product: $('#'+modalID).find('#product').val(),
-                    // package_id: $('#'+modalID).find('#package_id').val(),
                     price: $('#'+modalID).find('#price').val(),
+                    promotion_type: $('#'+modalID).find('input[name = promotion_type]').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'cat_module';

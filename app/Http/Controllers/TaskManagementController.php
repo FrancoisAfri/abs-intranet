@@ -202,7 +202,7 @@ class TaskManagementController extends Controller
 			'check_comments' => $notes
 		]);
 		AuditReportsController::store('Task Management', "Task Checked", "Checked by User", 0);
-	return response()->json(['employee_id' => $checkData['task_id']], 200);
+		return response()->json(['employee_id' => $checkData['task_id']], 200);
     }
 	# Add task
 	public function addNewTask(Request $request) 
@@ -240,7 +240,7 @@ class TaskManagementController extends Controller
 		TaskManagementController::store($description,$duedate,$startDate,$managerID,$employeeID,3
 					,0,0,0,0,0,0,0,0,$companyID, $managerDuration);
 		AuditReportsController::store('Task Management', "Task Added", "Added By User", 0);
-	return Back();
+		return Back();
     }
     /**
      * Store a newly created resource in storage.
@@ -252,19 +252,6 @@ class TaskManagementController extends Controller
 	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0
 	,$checkByID=0,$clientID=0,$managerDuration=0 , $helpDeskID = 0 , $ticketID = 0)
     {
-		//convert dates to unix time stamp
-        /*if (!empty($duedate)) {
-            $duedate = str_replace('/', '-', $duedate);
-            $intduedate = strtotime($duedate);
-        }
-		else $intduedate = 0;
-		if (!empty($startDate)) {
-            $startDate = str_replace('/', '-', $startDate);
-            $intstartDate = strtotime($startDate);
-        }
-		else $intstartDate = 0;*/
-	//echo $managerDuration;
-	//die();
 		$user = Auth::user();
 		$EmployeeTasks = new EmployeeTasks();
 		$EmployeeTasks->induction_id = $inductionID;
@@ -297,17 +284,11 @@ class TaskManagementController extends Controller
 			Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
 		}
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
-
-<<<<<<< HEAD
-		
-=======
 		#send email to manager if its an helpdesk task
 		if (!empty($helpDeskID))
 		{
 			$helpDeskManager = System::where('id', $helpDeskID)->first();
 			//Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
->>>>>>> 1c453fdcef813b0889d7da6b88091da65adcd460
-
 		}
 
 		//if ($taskType == 3)

@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Product Type Packages</h3>
+                    <h3 class="box-title"> Product Packages</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -34,7 +34,7 @@
                                <tr id="categories-list">
                                <td nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                            <a href="{{ '/Product/packages/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product </a>
+                                            <a href="{{ '/Product/packages/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product(s)</a>
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }} </td>

@@ -71,6 +71,16 @@ class HRPerson extends Model
         return $this->hasMany(AppraisalThreeSixtyPerson::class, 'hr_id');
     }
 
+    /**
+     * Relationship between HRPerson Quotation
+     *
+     * @return
+     */
+    public function quotations()
+    {
+        return $this->hasMany(Quotation::class, 'hr_person_id');
+    }
+
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;

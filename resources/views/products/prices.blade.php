@@ -114,7 +114,7 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-price_titles';
-                var redirectUrl = '/Product/price/{{ $products->id }}';
+                var redirectUrl = '/Product/price/add/{{ $products->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The price has been updated successfully.';
                 //var formMethod = 'PATCH';

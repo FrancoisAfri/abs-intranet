@@ -5,37 +5,34 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Product Catagories</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                    </div>
+                    <h3 class="box-title">Product Catagories </h3>
+
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-                    {{ csrf_field() }}
+                 {{ csrf_field() }}
                     {{ method_field('PATCH') }}
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th style="width: 10px; text-align: center;"></th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th style="width: 5px; text-align: center;"></th>
-                            </tr>
-                            @if (count($ProductCategory) > 0)
-                              @foreach ($ProductCategory as $type)
-                               <tr id="categories-list">
-                               <td nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                            <a href="{{ '/Product/Product/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Products </a>
-                                    </td>
-                                    <td>{{ $type->name }}</td>
-                                    <td>{{ $type->description }}</td>
-                                    <td>
-                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                <!-- /.box-header -->
+                <div class="box-body">
+
+                <table class="table table-bordered">
+                     <tr><th style="width: 10px"></th>
+                     <th>Name</th>
+                     <th>Description</th>
+                   
+                     <th style="width: 40px"></th>
+                     </tr>
+                    @if (count($ProductCategory) > 0)
+                        @foreach($ProductCategory as $jobTitle)
+                         <tr id="jobtitles-list">
+                           <td nowrap>
+                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                               <a href="{{ '/Product/Product/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-money"></i> Products</a></td>
+                          <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td>
+                          <td>{{ (!empty( $jobTitle->description)) ?  $jobTitle->description : ''}} </td>
+                          
+                          <td nowrap>
+                            <button type="button" id="view_ribbons" class="btn {{ (!empty($jobTitle->active) && $jobTitle->active == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$jobTitle->id}}, 'dactive');"><i class="fa {{ (!empty($jobTitle->active) && $jobTitle->active == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($jobTitle->active) && $jobTitle->active == 1) ? "De-Activate" : "Activate"}}</button>
                                     </td>
                                 </tr>
                                    @endforeach
@@ -74,7 +71,7 @@
         function postData(id , data ){
             if (data == 'qual') location.href = "/hr/addqul/" + id;
             else if (data == 'doc') location.href = "/hr/adddoc/" + id;
-            else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
+            else if (data == 'dactive') location.href = "/Product/category/" + id;
             else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
         }
         $(function () {

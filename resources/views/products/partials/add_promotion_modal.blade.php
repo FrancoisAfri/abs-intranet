@@ -1,7 +1,7 @@
 <div id="add-promotion-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add_new_site-form">
+            <form class="form-horizontal" method="POST" name="add_new_site-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 <div class="modal-header">
@@ -12,12 +12,12 @@
                 <div class="modal-body">
                     <div id="leave-invalid-input-alert"></div>
                     <div id="success-alert"></div>
-                     <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                     <div class="form-group{{ $errors->has('promotion_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
 
                                 <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_days" name="application_type" value="1" checked> Package Type </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_hours" name="application_type" value="2">  Product Type </label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_package" name="promotion_type" value="1" checked> Package Type </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type" value="2">  Product Type </label>
 
                                 </div>
                             </div>  
@@ -58,7 +58,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
-                                        <select class="form-control select2" style="width: 100%;" multiple="multiple" id="package_id" name="package_id[]">
+                                        <select class="form-control select2" style="width: 100%;" multiple="multiple" id="package" name="package_id[]">
                                             <option value="">*** Select a Package Type ***</option>
                                             @foreach($package as $product)
                                             <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -98,16 +98,16 @@
                         </div>
                     </div>
 					
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Price</label>
                              <div class="col-sm-8">
                              <input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Price" >
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_promotion" class="btn btn-primary">Add Site</button>
+                    <button type="button" id="add_promotion" class="btn btn-primary">Add Promotion</button>
                 </div>
             </form>
         </div>

@@ -91,15 +91,9 @@ Route::post('hr/emial', 'LeaveController@getEmail');
 
 
 //#Leave Management
-//Route::get('leave/types', 'LeaveController@types');
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
-// Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveController@editsetupType');
-//Route::get('/leave/setup', 'LeaveController@showSetup');
-// Route::get('leave/setup/leave_credit', 'LeaveController@store');
-
-// Route::post('/leave/setup', 'LeaveController@store');
 
 //# leavesetup Controller
 Route::get('leave/types', 'LeaveSetupController@setuptypes');
@@ -121,13 +115,9 @@ Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
 Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
-#Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
-
-
 
 #leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
-//Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::post('leave/reject/{levReject}', 'LeaveApplicationController@reject');
 
 #leaveHistory audit
@@ -211,6 +201,11 @@ Route::post('Product/categories', 'Product_categoryController@categorySave');
 Route::post('/Product/Product/add/{products}', 'Product_categoryController@addProductType');
 Route::patch('Product/product_edit/{product}', 'Product_categoryController@editProduct');
 Route::patch('Product/category_edit/{Category}', 'Product_categoryController@editCategory');
+//>>>status
+Route::get('/Product/category/{cat}', 'Product_categoryController@CategoryAct');
+
+
+
 #
 //----packages ---
 Route::get('product/Packages', 'Product_categoryController@view_packages');
@@ -223,15 +218,11 @@ Route::get('product/Promotions', 'Product_categoryController@view_promotions');
 Route::post('Product/promotions/add', 'Product_categoryController@promotionSave');
 
 #----price -----
-// Route::get('product/price', 'Product_categoryController@index');
+ Route::get('product/price', 'Product_categoryController@index');
 Route::get('Product/price/{price}', 'Product_categoryController@view_prices');
-
-Route::post('/Product/price/add/{products}', 'Product_categoryController@priceSave');
-Route::get('/Product/packages/{products}', 'Product_categoryController@viewProducts');
+Route::get('/Product/packages/{package}', 'Product_categoryController@viewProducts');
 Route::post('product_packages/product/add/{package}', 'Product_categoryController@product_packageSave');
 Route::post('/Product/price/add/{product}', 'Product_categoryController@priceSave');
-#>>>>>>> cd6523785203f9fb4cbdb4fc6e946351c31e51fd
-
 
 #search
 Route::get('product/Search', 'Product_categoryController@Search');
@@ -507,13 +498,16 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::get('quotes/authorisation', 'QuotesController@authorisationIndex');
 Route::get('quote/term-conditions', 'QuotesTermConditionsController@index');
 Route::post('quote/add-quote-term', 'QuotesTermConditionsController@store');
 Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
 Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 Route::get('quote/create', 'QuotesController@createIndex');
 Route::post('quote/adjust', 'QuotesController@adjustQuote');
-Route::post('quote/save-quote', 'QuotesController@saveQuote');
+Route::post('quote/save', 'QuotesController@saveQuote');
+Route::get('quote/view/{quotation}', 'QuotesController@viewQuote');
+Route::get('quote/search', 'QuotesController@searchQuote');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

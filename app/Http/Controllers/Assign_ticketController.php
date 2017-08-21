@@ -35,9 +35,13 @@ class Assign_ticketController extends Controller
 
      	$ID = $ticket->id;
      	//return $ID;
+      
      	$helpdeskId = $ticket->helpdesk_id;
 
-     	//return $helpdeskId;
+      #
+     
+      #
+     	return $helpdeskId;
 
   //    	$helpdeskTickets = ticket::orderBy('id', 'asc')->get();
 		// if (!empty($helpdeskTickets)) $helpdeskTickets->load('hrPeople');
@@ -64,27 +68,18 @@ class Assign_ticketController extends Controller
 				        ->orderBy('operator.helpdesk_id')
 				        ->get();
 
-				       // return $operators;
-
-
-				      //  return $operators;
-
-				        // $operators = HRPerson::where('id', 1)->first();
-
-       				 //    return $operators;
-
-		$data['ID'] = $ID;
-		$data['Names'] = $Names;		      // return $operators;
-		$data['operators'] = $operators;		        
- 		$data['tickets'] = $tickets; 
-        $data['active_mod'] = 'Help Desk';
-        $data['active_rib'] = '';   
-        $data['page_title'] = "Assign Ticket";
-        $data['page_description'] = "Assign Help Desk  Ticket";
-        $data['breadcrumb'] = [
-            ['title' => 'Assign Ticket ', 'path' => '/Help Desk', 'icon' => 'fa fa-info', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Assign Ticket Page', 'active' => 1, 'is_module' => 0]
-        ];
+          		$data['ID'] = $ID;
+          		$data['Names'] = $Names;		      // return $operators;
+          		$data['operators'] = $operators;		        
+           		$data['tickets'] = $tickets; 
+              $data['active_mod'] = 'Help Desk';
+              $data['active_rib'] = '';   
+              $data['page_title'] = "Assign Ticket";
+              $data['page_description'] = "Assign Help Desk  Ticket";
+              $data['breadcrumb'] = [
+                  ['title' => 'Assign Ticket ', 'path' => '/Help Desk', 'icon' => 'fa fa-info', 'active' => 0, 'is_module' => 1],
+                  ['title' => 'Assign Ticket Page', 'active' => 1, 'is_module' => 0]
+              ];
 
      
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
