@@ -77,7 +77,7 @@ class Product_categoryController extends Controller
         ];
 			$data['products'] = $Category;
 			$data['active_mod'] = 'Products';
-        $data['active_rib'] = 'Categories';
+            $data['active_rib'] = 'Categories';
 			AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
 			return view('products.products')->with($data);
 		}
@@ -234,6 +234,8 @@ class Product_categoryController extends Controller
                       ->where( 'product_packages.id', $packageID)
                       ->orderBy('product_packages.id')
                       ->get();
+
+                    //  return $productss;
 
                        
 
@@ -429,6 +431,7 @@ class Product_categoryController extends Controller
 		$packs->name = $request->input('name');
 		$packs->description = $request->input('description');
 		$packs->discount = $request->input('discount');
+        $packs->products_id = $products;
 		$packs->status = 1;
 		$packs->save();
     }
@@ -443,7 +446,7 @@ class Product_categoryController extends Controller
     }
 
     // 
-    public function editPackage(Request $request, product_packages $package)
+    public function editPackage(Request $request)
 	{
         $this->validate($request, [
    //           'name' => 'required',
@@ -458,12 +461,13 @@ class Product_categoryController extends Controller
         $Product = $docData['product_id'];
         
         foreach ($Product as $products){
-        $package->name = $request->input('name');
-        $package->description = $request->input('description');
-        $package->discount = $request->input('discount');
-        $package->status = 1;
-        $package->products_id = $products;
-        $package->update();
+            $package = new product_packages();
+            $package->name = $request->input('name');
+            $package->description = $request->input('description');
+            $package->discount = $request->input('discount');
+            $package->status = 1;
+            $package->products_id = $products;
+            $package->update();
 		//  AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
     	}
 
@@ -494,9 +498,9 @@ class Product_categoryController extends Controller
        
 
           #Package loop
-             if ($promData['promotion_type'] == 1){
-         foreach ($Packages as $Package){
-
+    if ($promData['promotion_type'] == 1){
+            foreach ($Packages as $Package)
+                {
             $prom = new product_promotions();
             $StartDate = str_replace('/', '-', $promData['start_date']);
             $StartDate = strtotime($promData['start_date']);
@@ -512,12 +516,12 @@ class Product_categoryController extends Controller
             $prom->end_date =  $EndDate;
             $prom->status = 1;
             $prom->save();
-        }
+                 }
     }
-
         #products loop
-        else if ($promData['promotion_type'] == 2){
-        foreach ($Products as $product){
+         if ($promData['promotion_type'] == 2){
+        foreach ($Products as $product)
+             {
             $prom = new product_promotions();
 			$StartDate = str_replace('/', '-', $promData['start_date']);
 			$StartDate = strtotime($promData['start_date']);
@@ -533,7 +537,7 @@ class Product_categoryController extends Controller
             $prom->end_date =  $EndDate;
             $prom->status = 1;
             $prom->save();
-		}
+		      }
     }
     
       

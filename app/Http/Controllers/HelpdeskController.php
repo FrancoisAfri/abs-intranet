@@ -22,6 +22,7 @@ use App\DivisionLevelTwo;
 use App\companyidentity;
 use App\product_products;
 use App\System;
+use App\HelpDesk;
 use App\helpdesk_Admin;
 use App\operator;
 use App\auto_escalation_settings ;
@@ -55,7 +56,7 @@ class HelpdeskController extends Controller
      //    //$user->load('person');
      //    //$avatar = $user->person->profile_pic;
   
-  	 $systems = System::orderBy('name', 'asc')->get();
+  	 $systems = HelpDesk::orderBy('name', 'asc')->get();
 
   	 //return $systems;
      
@@ -70,7 +71,7 @@ class HelpdeskController extends Controller
     	public function searhTickets()
     	{
 
-    	$helpdesk =  System::orderBy('name', 'asc')->get();
+    	$helpdesk =  HelpDesk::orderBy('name', 'asc')->get();
 
 
     	$data['page_title'] = "Help Desk";
@@ -167,7 +168,7 @@ class HelpdeskController extends Controller
         ]);
 		$SysData = $request->all();
 		unset($SysData['_token']);
-		$Sys = new System();	
+		$Sys = new HelpDesk();	
 		$Sys->name = $SysData['name'];
 		$Sys->description =$SysData['description'];
 		$Sys->status = 1;
@@ -185,7 +186,7 @@ class HelpdeskController extends Controller
 		    	->get();
 
   		//$tickets = ticket::orderBy('id', 'asc')->get();
-  	    $systems = System::orderBy('name', 'asc')->get();
+  	    $systems = HelpDesk::orderBy('name', 'asc')->get();
   	   	  $email = $user->first()->email;
   	   	  	// return $email;
   	   	$name = HRPerson::where('id', $loggedInEmplID )
@@ -225,7 +226,7 @@ class HelpdeskController extends Controller
 
     }
 
-     public function editService(Request $request, System $service){
+     public function editService(Request $request, HelpDesk $service){
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
@@ -239,7 +240,7 @@ class HelpdeskController extends Controller
     }
 
 
-     public function view_service(System $service) {
+     public function view_service(HelpDesk $service) {
         if ($service->status == 1) 
 		{
 			$serviceID = $service->id;
@@ -295,7 +296,7 @@ class HelpdeskController extends Controller
 		else return back();
     } 
 
-		 public function Addoperator(Request $request, System $serviceID ) {
+		 public function Addoperator(Request $request, HelpDesk $serviceID ) {
         $this->validate($request, [
             // 'name' => 'required',
             // 'description'=> 'required',
@@ -315,7 +316,7 @@ class HelpdeskController extends Controller
 
     }
 
-    	 public function addAdmin(Request $request, System $adminID ) 
+    	 public function addAdmin(Request $request, HelpDesk $adminID ) 
     	 {
         $this->validate($request, [
 
@@ -376,7 +377,7 @@ class HelpdeskController extends Controller
         ];
 
 
-       $helpdeskTickets = system::orderBy('id', 'asc')->distinct()->get();
+       $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
 		if (!empty($helpdeskTickets)) $helpdeskTickets->load('ticket');
 
 		//return $helpdeskTickets;
@@ -391,7 +392,7 @@ class HelpdeskController extends Controller
 	// 	      return $id;
 
 		 
-  	     $systems = System::orderBy('name', 'asc')->get();
+  	     $systems = HelpDesk::orderBy('name', 'asc')->get();
 
   	     $CompletedTickets = DB::table('ticket')->pluck('status');
 
