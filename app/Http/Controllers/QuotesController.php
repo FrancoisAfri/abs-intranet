@@ -193,9 +193,10 @@ class QuotesController extends Controller
             ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
         ];
 		
-		$quoteApplications = Quotation::with(['products','packages', 'person' => function ($query) {
+		$quoteApplications = Quotation::whereHas('person', function ($query) {
 			$query->where('manager_id', Auth::user()->person->id);
-		}])
+		})
+		->with('products','packages')
 		->orderBy('id')
 		->get();
 
