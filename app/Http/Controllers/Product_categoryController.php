@@ -483,7 +483,6 @@ class Product_categoryController extends Controller
 			'end_date' => 'required',
             'package.*' => 'required_if:promotion_type,1',
             'product.*' => 'required_if:promotion_type,2',
-
         ]);
     
         $promData = $request->all();
@@ -540,8 +539,6 @@ class Product_categoryController extends Controller
 		      }
     }
     
-      
-
 		return response()->json();
     }
     #
