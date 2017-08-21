@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Products({{$products->name}}) </h3>
+                    <h3 class="box-title">Products({{$package->name}}) </h3>
 
                 </div>
                  {{ csrf_field() }}
@@ -21,18 +21,14 @@
                      <!-- <th>Discount</th> -->
                      <th style="width: 40px"></th>
                      </tr>
-                    @if (count($productss) > 0)
-                        @foreach($productss as $jobTitle)
+                    @if (count($products) > 0)
+                        @foreach($products as $product)
                          <tr id="jobtitles-list">
-                           <td nowrap>
-                         <!--  <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button> -->
-                               <!-- <a href="{{ '/Product/price/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-money"></i> Prices</a></td> -->
-                          <td>{{ (!empty($jobTitle->Prodname)) ?  $jobTitle->Prodname : ''}} </td>
-                          <td>{{ (!empty( $jobTitle->Proddescription)) ?  $jobTitle->Proddescription : ''}} </td>
-                          <td>{{ (!empty( $jobTitle->price)) ?  $jobTitle->price : ''}} </td>
-                          <!-- <td>{{ (!empty( $jobTitle->discount)) ?  $jobTitle->discount : ''}} </td> -->
+                           <td nowrap><td>{{ (!empty($product->Prodname)) ?  $product->Prodname : ''}} </td>
+                          <td>{{ (!empty( $product->Proddescription)) ?  $product->Proddescription : ''}} </td>
+                          <td>{{ (!empty( $product->price)) ?  $product->price : ''}} </td>
                           <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_job_title" class="btn {{ (!empty($product->status) && $product->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$product->id}}, 'actdeac');"><i class="fa {{ (!empty($product->status) && $product->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($product->status) && $product->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
                         </tr>
                         @endforeach
@@ -113,7 +109,7 @@
               //Post module form to server using ajax (ADD)
             $('#add-product_title').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/product_packages/product/add/{{$products->id}}';          
+                var strUrl = '/product_packages/product/add/{{$package->id}}';          
                 var modalID = 'add-new-product_package_title-modal';
                 var objData = {
                   
@@ -121,7 +117,7 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add_products_title';
-                var redirectUrl = '/Product/packages/{{ $products->id }}';
+                var redirectUrl = '/Product/packages/{{ $package->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group has been updated successfully.';
                 //var formMethod = 'PATCH';
@@ -155,7 +151,7 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'save_category';
-                var redirectUrl = '/Product/Product/{{ $products->id }}';
+                var redirectUrl = '/Product/Product/{{ $package->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Category modal has been updated successfully.';
                 var Method = 'PATCH';

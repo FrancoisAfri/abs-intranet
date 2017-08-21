@@ -55,6 +55,19 @@ class Quotation extends Model
     {
         return $this->belongsTo(HRPerson::class, 'hr_person_id');
     }
+	public function company()
+    {
+        return $this->belongsTo(ContactCompany::class, 'company_id');
+    }
+	
+	public function client()
+    {
+        return $this->belongsTo(ContactPerson::class, 'client_id');
+    }
+	public function divisionName()
+    {
+        return $this->belongsTo(DivisionLevelFive::class, 'division_id');
+    }
 	
 	public function quoteHistory()
     {

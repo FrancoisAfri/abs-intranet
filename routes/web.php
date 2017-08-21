@@ -220,7 +220,7 @@ Route::post('Product/promotions/add', 'Product_categoryController@promotionSave'
 #----price -----
  Route::get('product/price', 'Product_categoryController@index');
 Route::get('Product/price/{price}', 'Product_categoryController@view_prices');
-Route::get('/Product/packages/{products}', 'Product_categoryController@viewProducts');
+Route::get('/Product/packages/{package}', 'Product_categoryController@viewProducts');
 Route::post('product_packages/product/add/{package}', 'Product_categoryController@product_packageSave');
 Route::post('/Product/price/add/{product}', 'Product_categoryController@priceSave');
 

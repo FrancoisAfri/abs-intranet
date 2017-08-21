@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\DivisionLevel;
+use App\DivisionLevelFive;
 use App\EmailTemplate;
 use App\HRPerson;
 use App\Mail\ApproveQuote;
@@ -186,25 +187,26 @@ class QuotesController extends Controller
 
 	public function authorisationIndex()
     {
+		$highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first();
+		$quoteApplications = Quotation::whereHas('person', function ($query) {
+			$query->where('manager_id', Auth::user()->person->id);
+		})
+		->with('products','packages','person','company','client','divisionName')
+		->orderBy('id')
+		->get();
+		$data['highestLvl'] = $highestLvl;
         $data['page_title'] = "Quotes";
         $data['page_description'] = "Quotes Authorisation";
         $data['breadcrumb'] = [
             ['title' => 'Quotes', 'path' => 'quotes/authorisation', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
         ];
-		
-		$quoteApplications = Quotation::whereHas('person', function ($query) {
-			$query->where('manager_id', Auth::user()->person->id);
-		})
-		->with('products','packages')
-		->orderBy('id')
-		->get();
-
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'Authorisation';
         $data['quoteApplications'] = $quoteApplications;
-		return $quoteApplications;
-        AuditReportsController::store('Leave', 'Leave Approval Page Accessed', "Accessed By User", 0);
+		//return $quoteApplications;
+        AuditReportsController::store('Quote', 'Quote Authorisation Page Accessed', "Accessed By User", 0);
         return view('quote.authorisation')->with($data);  
     }
 
@@ -372,7 +374,7 @@ class QuotesController extends Controller
         }
         AuditReportsController::store('Quote', 'New Quote Created', "Create by user", 0);
 
-        return redirect('/quote/search')->with(['success_add' => 'The quotation has been successfully added!']);
+	return redirect("/quote/view/$quote->id")->with(['success_add' => 'The quotation has been successfully added!']);
     }
 
     /**
