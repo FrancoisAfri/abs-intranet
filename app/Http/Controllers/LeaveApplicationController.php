@@ -213,6 +213,8 @@ class LeaveApplicationController extends Controller
 
         $leaveApp = $request->all();
         unset($leaveApp['_token']);
+
+       return $leaveApp;
        
         $negDays  = leave_configuration::where('id' , 1)->first();
         $study = $negDays->document_compulsory_on_Study_leave_application;
