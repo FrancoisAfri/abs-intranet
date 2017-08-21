@@ -39,10 +39,10 @@
 
                              
                                        <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Product Type </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2"> Category Type </label>
-                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Package Type</label>
-                                      <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Promotion Type</label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Product  </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2"> Category  </label>
+                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Package </label>
+                                      <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Promotion </label>
 
                                 </div>
                                      <!--  -->
