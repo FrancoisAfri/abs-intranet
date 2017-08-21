@@ -259,14 +259,14 @@ class Product_categoryController extends Controller
     public function product_packageSave(Request $request ,product_packages $package) 
     {
         $this->validate($request, [
-            'product_id.*' => 'required',
+            'product.*' => 'required',
         ]);
 
         $docData = $request->all();
         unset($docData['_token']);
 		
 		// Save Products linked to package
-		$Products = $docData['product_id'];
+		$Products = $docData['product'];
 		foreach ($Products as $product){
 			#writting into the associative table, use attach & deattach to avoid duplicates
 			$package->products_type()->detach(['product_product_id' => $product], ['product_packages_id' => $package->id]);
@@ -412,7 +412,7 @@ class Product_categoryController extends Controller
     }
     #
     #packages
-	public function packageSave(Request $request, product_packages $packs) {
+	public function packageSave(Request $request ) {
 		$this->validate($request, [
 			'name' => 'required',
 			'description' => 'required',
@@ -424,11 +424,14 @@ class Product_categoryController extends Controller
 
 		$Product = $docData['product_id'];
 		// Add Package
+        foreach ($Product as $products){
+            $packs = new product_packages();
 		$packs->name = $request->input('name');
 		$packs->description = $request->input('description');
 		$packs->discount = $request->input('discount');
 		$packs->status = 1;
 		$packs->save();
+    }
 		// Save Products linked to package
 		foreach ($Product as $products){
 			$pack_prod =  new packages_product_table(); 
@@ -474,18 +477,46 @@ class Product_categoryController extends Controller
 			'discount' => 'required',
 			'start_date' => 'required',
 			'end_date' => 'required',
-            'package.*' => 'required_if:promotion_type,2',
-            'product.*' => 'required_if:promotion_type,1',
+            'package.*' => 'required_if:promotion_type,1',
+            'product.*' => 'required_if:promotion_type,2',
 
         ]);
     
         $promData = $request->all();
         unset($promData['_token']);
 
-        $Products = $promData['product']; 
+        // $Products = $promData['product']; 
         $Packages = $promData['package']; 
+        $Products = $promData['product'];
+      
+      // $Product = $docData['product_id'];
+       
+       
 
-         if ($promData['promotion_type'] == 2){
+          #Package loop
+             if ($promData['promotion_type'] == 1){
+         foreach ($Packages as $Package){
+
+            $prom = new product_promotions();
+            $StartDate = str_replace('/', '-', $promData['start_date']);
+            $StartDate = strtotime($promData['start_date']);
+
+            $EndDate = str_replace('/', '-', $promData['end_date']);
+            $EndDate = strtotime($promData['end_date']);
+            
+            $prom->name = $request->input('name');
+            $prom->description = $request->input('description');
+            $prom->discount = $request->input('discount');
+            $prom->product_packages_id = $Package;
+            $prom->start_date = $StartDate;
+            $prom->end_date =  $EndDate;
+            $prom->status = 1;
+            $prom->save();
+        }
+    }
+
+        #products loop
+        else if ($promData['promotion_type'] == 2){
         foreach ($Products as $product){
             $prom = new product_promotions();
 			$StartDate = str_replace('/', '-', $promData['start_date']);
@@ -504,26 +535,9 @@ class Product_categoryController extends Controller
             $prom->save();
 		}
     }
-      #
-    else  if ($promData['promotion_type'] == 1){
-         foreach ($Packages as $Package){
-            $prom = new product_promotions();
-            $StartDate = str_replace('/', '-', $promData['start_date']);
-            $StartDate = strtotime($promData['start_date']);
+    
+      
 
-            $EndDate = str_replace('/', '-', $promData['end_date']);
-            $EndDate = strtotime($promData['end_date']);
-            
-            $prom->name = $request->input('name');
-            $prom->description = $request->input('description');
-            $prom->discount = $request->input('discount');
-            $prom->product_packages_id = $Package;
-            $prom->start_date = $StartDate;
-            $prom->end_date =  $EndDate;
-            $prom->status = 1;
-            $prom->save();
-        }
-    }
 		return response()->json();
     }
     #
