@@ -15,7 +15,7 @@ class ticket extends Model
 
      public function helpdesk(){
     	# code...
-    	 return $this->belongsTo(System::class, 'helpdesk_id');
+    	 return $this->belongsTo(HelpDesk::class, 'helpdesk_id');
     }
 
      public function helpdeskAdmin(){

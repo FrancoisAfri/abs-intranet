@@ -117,7 +117,7 @@
                 var modalID = 'add-new-product_package_title-modal';
                 var objData = {
                   
-                     product_id: $('#'+modalID).find('#product_id').val(),
+                     product: $('#'+modalID).find('#product').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add_products_title';
