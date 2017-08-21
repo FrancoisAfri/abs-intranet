@@ -384,4 +384,48 @@ class QuotesController extends Controller
     {
         return 'Search page';
     }
+
+    /**
+     * Show the quotation search page
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function viewQuote(Quotation $quotation)
+    {
+        $quotation->load('products.ProductPackages', 'packages.products_type');
+        $productsSubtotal = 0;
+        $packagesSubtotal = 0;
+        foreach ($quotation->products as $product) {
+            $productsSubtotal += ($product->pivot->price * $product->pivot->quantity);
+        }
+        foreach ($quotation->packages as $package) {
+            $packagesSubtotal += ($package->pivot->price * $package->pivot->quantity);
+        }
+        $subtotal = $productsSubtotal + $packagesSubtotal;
+        $discountPercent = $quotation->discount_percent;
+        $discountAmount = ($discountPercent > 0) ? $subtotal * $discountPercent : 0;
+        $discountedAmount = $subtotal - $discountAmount;
+        $vatAmount = ($quotation->add_vat == 1) ? $discountedAmount * 0.14 : 0;
+        $total = $discountedAmount + $vatAmount;
+
+        //return $quotation;
+
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "View a quotation";
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'View', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'search quote';
+        $data['quotation'] = $quotation;
+        $data['subtotal'] = $subtotal;
+        $data['discountPercent'] = $discountPercent;
+        $data['discountAmount'] = $discountAmount;
+        $data['vatAmount'] = $vatAmount;
+        $data['total'] = $total;
+        AuditReportsController::store('Quote', 'View Quote Page Accessed', "Accessed By User", 0);
+
+        return view('quote.view_quote')->with($data);
+    }
 }
