@@ -209,6 +209,30 @@ class QuotesController extends Controller
         AuditReportsController::store('Quote', 'Quote Authorisation Page Accessed', "Accessed By User", 0);
         return view('quote.authorisation')->with($data);  
     }
+	public function authorise()
+    {
+		$highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first();
+		$quoteApplications = Quotation::whereHas('person', function ($query) {
+			$query->where('manager_id', Auth::user()->person->id);
+		})
+		->with('products','packages','person','company','client','divisionName')
+		->orderBy('id')
+		->get();
+		$data['highestLvl'] = $highestLvl;
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "Quotes Authorisation";
+        $data['breadcrumb'] = [
+            ['title' => 'Quotes', 'path' => 'quotes/authorisation', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Authorisation';
+        $data['quoteApplications'] = $quoteApplications;
+		//return $quoteApplications;
+        AuditReportsController::store('Quote', 'Quote Authorisation Page Accessed', "Accessed By User", 0);
+        return view('quote.authorisation')->with($data);  
+    }
 
     /**
      * Show page to adjust the quote details (such as products quantity, etc.)
@@ -394,7 +418,7 @@ class QuotesController extends Controller
      */
     public function viewQuote(Quotation $quotation)
     {
-        $quotation->load('products.ProductPackages', 'packages.products_type');
+        $quotation->load('products.ProductPackages', 'packages.products_type','person','company','client','divisionName');
         $productsSubtotal = 0;
         $packagesSubtotal = 0;
         foreach ($quotation->products as $product) {
