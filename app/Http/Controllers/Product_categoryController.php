@@ -226,13 +226,16 @@ class Product_categoryController extends Controller
             $packageID = $products->id;
 			$products = product_packages::where('id', $packageID)->get()->first();
             $product_packages = product_products::orderBy('id', 'asc')->get();
-            $ProductPackages = product_products::orderBy('name', 'asc')->get()->first();
+  
+
             $productss = DB::table('product_packages')
                       ->select('product_packages.*','Product_products.name as Prodname','Product_products.description as Proddescription' , 'Product_products.price as price')
                       ->leftJoin('Product_products', 'product_packages.products_id', '=', 'Product_products.id')
                       ->where( 'product_packages.id', $packageID)
                       ->orderBy('product_packages.id')
                       ->get();
+
+                       
 
             $data['page_title'] = "Manage Products packages";
             $data['page_description'] = "Products page";
@@ -241,9 +244,10 @@ class Product_categoryController extends Controller
             ['title' => 'Manage Product package', 'active' => 1, 'is_module' => 0]
 			];
             $data['productss'] = $productss;
-            $data['ProductPackages'] = $ProductPackages;
+           // $data['ProductPackages'] = $ProductPackages;
             $data['product_packages'] = $product_packages;
             $data['products'] = $products;
+          
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Packages';
             AuditReportsController::store('Package_p Records', 'Job Titles Page Accessed', "Accessed by User", 0);
@@ -255,14 +259,14 @@ class Product_categoryController extends Controller
     public function product_packageSave(Request $request ,product_packages $package) 
     {
         $this->validate($request, [
-            'products.*' => 'required',
+            'product_id.*' => 'required',
         ]);
 
         $docData = $request->all();
         unset($docData['_token']);
 		
 		// Save Products linked to package
-		$Products = $docData['products'];
+		$Products = $docData['product_id'];
 		foreach ($Products as $product){
 			#writting into the associative table, use attach & deattach to avoid duplicates
 			$package->products_type()->detach(['product_product_id' => $product], ['product_packages_id' => $package->id]);
@@ -442,6 +446,7 @@ class Product_categoryController extends Controller
    //           'name' => 'required',
    //          'description' => 'required',
 			// 'discount' => 'required',
+
         ]);
 
         $docData = $request->all();
@@ -458,43 +463,67 @@ class Product_categoryController extends Controller
         $package->update();
 		//  AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
     	}
+
     }
 
     #promotions
-     public function promotionSave(Request $request, product_promotions $prom) {
+     public function promotionSave(Request $request ) {
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
 			'discount' => 'required',
 			'start_date' => 'required',
 			'end_date' => 'required',
-			'price' => 'required',
-			'product.*' => 'required',
+            'package.*' => 'required_if:promotion_type,2',
+            'product.*' => 'required_if:promotion_type,1',
 
         ]);
     
         $promData = $request->all();
         unset($promData['_token']);
 
-        $Product = $promData['product'];
-        
-        foreach ($Product as $products){
-			$StartDate = $promData['start_date'] = str_replace('/', '-', $promData['start_date']);
-			$StartDate = $promData['start_date'] = strtotime($promData['start_date']);
+        $Products = $promData['product']; 
+        $Packages = $promData['package']; 
 
-			$EndDate = $promData['end_date'] = str_replace('/', '-', $promData['end_date']);
-			$EndDate = $promData['end_date'] = strtotime($promData['end_date']);
+         if ($promData['promotion_type'] == 2){
+        foreach ($Products as $product){
+            $prom = new product_promotions();
+			$StartDate = str_replace('/', '-', $promData['start_date']);
+			$StartDate = strtotime($promData['start_date']);
 
+			 $EndDate = str_replace('/', '-', $promData['end_date']);
+            $EndDate = strtotime($promData['end_date']);
+            
             $prom->name = $request->input('name');
             $prom->description = $request->input('description');
             $prom->discount = $request->input('discount');
-            $prom->price = $request->input('price');
-            $prom->product_product_id = $products;
+            $prom->product_product_id = $product;
             $prom->start_date = $StartDate;
             $prom->end_date =  $EndDate;
             $prom->status = 1;
             $prom->save();
 		}
+    }
+      #
+    else  if ($promData['promotion_type'] == 1){
+         foreach ($Packages as $Package){
+            $prom = new product_promotions();
+            $StartDate = str_replace('/', '-', $promData['start_date']);
+            $StartDate = strtotime($promData['start_date']);
+
+            $EndDate = str_replace('/', '-', $promData['end_date']);
+            $EndDate = strtotime($promData['end_date']);
+            
+            $prom->name = $request->input('name');
+            $prom->description = $request->input('description');
+            $prom->discount = $request->input('discount');
+            $prom->product_packages_id = $Package;
+            $prom->start_date = $StartDate;
+            $prom->end_date =  $EndDate;
+            $prom->status = 1;
+            $prom->save();
+        }
+    }
 		return response()->json();
     }
     #
@@ -529,6 +558,14 @@ class Product_categoryController extends Controller
 
     public function editPRICE(Request $request, product_packages $products)
 	{
+   
+		$this->validate($request, [
+            // 'name' => 'required',
+            // 'description' => 'required',        
+        ]);
+
+       
+
 		$priceData = $request->all();
 		unset($priceData['_token']);
 		$price = new product_price($priceData);
@@ -545,8 +582,15 @@ class Product_categoryController extends Controller
     #search functions
     public function productSearch(Request $request){
 
+        $this->validate($request, [
+           
+
+        ]); 
+
         $SysData = $request->all();
         unset($SysData['_token']);
+
+
 
         $productName = $request->product_name;
         $productDescription = $request->product_description;
