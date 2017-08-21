@@ -168,8 +168,6 @@ class Product_categoryController extends Controller
 		 $products = $ProductCategory -> first()->id ;
 		}
 
-
-
 		$data['package'] = $package;
 		$data['productsPromotions'] = $productsPromotions;
 		//$data['packagePromotions'] = $packagePromotions;
@@ -190,8 +188,8 @@ class Product_categoryController extends Controller
 
     }
 
-    	#
-     public function view_prices(product_products $price) 
+    #
+    public function view_prices(product_products $price) 
 	{
         if ($price->status == 1) 
 		{
@@ -219,36 +217,31 @@ class Product_categoryController extends Controller
     } 
 #
         //add product to packages
-     public function viewProducts(product_packages $products) 
+    public function viewProducts(product_packages $package) 
     {
-        if ($products->status == 1) 
+		
+        if ($package->status == 1) 
         {
-            $packageID = $products->id;
-			$products = product_packages::where('id', $packageID)->get()->first();
-            $product_packages = product_products::orderBy('id', 'asc')->get();
-  
+            $products = DB::table('packages_product_table')
+			->select('packages_product_table.*','Product_products.name as Prodname','Product_products.description as Proddescription' , 'Product_products.price as price')
+			->leftJoin('Product_products', 'packages_product_table.product_product_id', '=', 'Product_products.id')
+			->where( 'packages_product_table.product_packages_id', $package->id)
+			->orderBy('Product_products.name')
+			->get();
 
-            $productss = DB::table('product_packages')
-                      ->select('product_packages.*','Product_products.name as Prodname','Product_products.description as Proddescription' , 'Product_products.price as price')
-                      ->leftJoin('Product_products', 'product_packages.products_id', '=', 'Product_products.id')
-                      ->where( 'product_packages.id', $packageID)
-                      ->orderBy('product_packages.id')
-                      ->get();
-
-                    //  return $productss;
-
-                       
+			$newProducts = DB::table('Product_products')
+			->orderBy('Product_products.name')
+			->get();
 
             $data['page_title'] = "Manage Products packages";
             $data['page_description'] = "Products page";
-             $data['breadcrumb'] = [
+            $data['breadcrumb'] = [
             ['title' => 'Products package', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product package', 'active' => 1, 'is_module' => 0]
 			];
-            $data['productss'] = $productss;
-           // $data['ProductPackages'] = $ProductPackages;
-            $data['product_packages'] = $product_packages;
             $data['products'] = $products;
+            $data['package'] = $package;
+            $data['newProducts'] = $newProducts;
           
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Packages';
@@ -340,10 +333,7 @@ class Product_categoryController extends Controller
 		
 		$Category->status = $stastus;	
 		$Category->update();
-		
     }
-
-
 
     public function categorySave(Request $request, product_category $cat) {
         $this->validate($request, [
@@ -426,16 +416,14 @@ class Product_categoryController extends Controller
 
 		$Product = $docData['product_id'];
 		// Add Package
-        foreach ($Product as $products){
-            $packs = new product_packages();
+		$packs = new product_packages();
 		$packs->name = $request->input('name');
 		$packs->description = $request->input('description');
 		$packs->discount = $request->input('discount');
-        $packs->products_id = $products;
 		$packs->status = 1;
 		$packs->save();
-    }
-		// Save Products linked to package
+
+		//Save Products linked to package
 		foreach ($Product as $products){
 			$pack_prod =  new packages_product_table(); 
 			$pack_prod->product_packages_id = $packs->id;
