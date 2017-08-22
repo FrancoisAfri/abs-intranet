@@ -112,7 +112,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-
+                        <a href="/quote/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-download"></i> Generate PDF</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>

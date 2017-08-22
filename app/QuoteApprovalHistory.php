@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class QuoteApprovalHistory extends Model
 {
     //Specify the table name
-    public $table = 'quote_company_profiles';
+    public $table = 'quote_approval_history';
 
     // Mass assignable fields
     protected $fillable = [

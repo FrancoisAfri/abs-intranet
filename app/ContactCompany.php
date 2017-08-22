@@ -14,15 +14,34 @@ class ContactCompany extends Model
         'company_type', 'name', 'trading_as', 'registration_number', 'vat_number', 
 		'tax_number', 'contact_person', 'cp_cell_number', 'cp_home_number', 
 		'bee_score', 'bee_certificate_doc', 'comp_reg_doc', 'sector', 'phone_number',
-		'fax_number', 'email', 'phys_address', 'phys_city', 'phys_postal_code', 'phys_province'
-		, 'postal_address', 'account_number'];
+		'fax_number', 'email', 'phys_address', 'phys_city', 'phys_postal_code',
+        'phys_province', 'postal_address', 'account_number'
+    ];
 
-    //relationship between contact_company and contact person (contacts_contacts)
+    /**
+     * Relationship between Contact Company and contact person (contacts_contacts)
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function employees() {
         return $this->hasMany(ContactPerson::class, 'company_id');
     }
 
-    //Accessor to return the company's full  physical address
+    /**
+     * Relationship between Contact Company and Quotations
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function quotations()
+    {
+        return $this->hasMany(Quotation::class, 'company_id');
+    }
+
+    /**
+     * Accessor to return the company's full  physical address
+     *
+     * @return String
+     */
     public function getFullPhysAddressAttribute () {
         $address = "";
         $address .= (!empty($this->phys_address)) ? $this->phys_address : "";

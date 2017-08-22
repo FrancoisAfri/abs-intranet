@@ -28,6 +28,16 @@ class ContactPerson extends Model
         return $this->belongsTo(ContactCompany::class, 'company_id');
     }
 
+    /**
+     * Relationship between Contact Person (contacts_contacts) and Quotations
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function quotations()
+    {
+        return $this->hasMany(Quotation::class, 'client_id');
+    }
+
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;

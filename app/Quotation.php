@@ -27,9 +27,29 @@ class Quotation extends Model
     ];
 
     /**
+     * Relationship between Quotation and Contact Company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(ContactCompany::class, 'company_id');
+    }
+
+    /**
+     * Relationship between Quotation and Contact Person (contacts_contacts)
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function client()
+    {
+        return $this->belongsTo(ContactPerson::class, 'client_id');
+    }
+
+    /**
      * Relationship between Quotations and Products
      *
-     * @return
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function products()
     {
@@ -39,7 +59,7 @@ class Quotation extends Model
     /**
      * Relationship between Quotations and Packages
      *
-     * @return
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function packages()
     {
@@ -49,7 +69,7 @@ class Quotation extends Model
     /**
      * Relationship between Quotation and HRPerson
      *
-     * @return
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function person()
     {

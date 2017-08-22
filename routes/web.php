@@ -508,6 +508,7 @@ Route::post('quote/adjust', 'QuotesController@adjustQuote');
 Route::post('quote/save', 'QuotesController@saveQuote');
 Route::get('quote/view/{quotation}', 'QuotesController@viewQuote');
 Route::get('quote/search', 'QuotesController@searchQuote');
+Route::get('quote/view/{quotation}/pdf', 'QuotesController@viewPDFQuote');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

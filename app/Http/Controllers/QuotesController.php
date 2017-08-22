@@ -2,22 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\DivisionLevel;
 use App\EmailTemplate;
 use App\HRPerson;
 use App\Mail\ApproveQuote;
+use App\Mail\SendQuoteToClient;
 use App\product_packages;
 use App\product_products;
 use App\Quotation;
 use App\QuoteApprovalHistory;
 use App\QuoteCompanyProfile;
 use App\QuotesTermAndConditions;
+use Barryvdh\DomPDF\PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -357,9 +361,9 @@ class QuotesController extends Controller
 		$QuoteApprovalHistory->comment = "New Quote Created";
 		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
 		$QuoteApprovalHistory->save();
-		
+
         //if authorization required: email manager for authorization
-        if($quoteProfile->authorisation_required === 1 && $quote->id) {
+        if($quoteProfile->authorisation_required === 2 && $quote->id) {
             $managerID = $user->person->manager_id;
             if ($managerID) {
                 $manager = HRPerson::find($managerID);
@@ -367,7 +371,14 @@ class QuotesController extends Controller
             }
         }
         else {
-            //if authorization not required: email quote to client
+            //if authorization not required: email quote to client and update status to awaiting client approval
+            $quote->load('client');
+            $messageContent = EmailTemplate::where('template_key', 'send_quote')->first()->template_content;
+            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+            $quoteAttachment = $this->viewQuote($quote, true, false, true);
+            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+            $quote->status = 2;
+            $quote->update();
         }
         AuditReportsController::store('Quote', 'New Quote Created', "Create by user", 0);
 
@@ -389,9 +400,9 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function viewQuote(Quotation $quotation)
+    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false)
     {
-        $quotation->load('products.ProductPackages', 'packages.products_type');
+        $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client');
         $productsSubtotal = 0;
         $packagesSubtotal = 0;
         foreach ($quotation->products as $product) {
@@ -416,7 +427,7 @@ class QuotesController extends Controller
             ['title' => 'View', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Quote';
-        $data['active_rib'] = 'search quote';
+        $data['active_rib'] = 'search';
         $data['quotation'] = $quotation;
         $data['subtotal'] = $subtotal;
         $data['discountPercent'] = $discountPercent;
@@ -425,6 +436,32 @@ class QuotesController extends Controller
         $data['total'] = $total;
         AuditReportsController::store('Quote', 'View Quote Page Accessed', "Accessed By User", 0);
 
-        return view('quote.view_quote')->with($data);
+        if ($isPDF) {
+            $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first()->level;
+            $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $quotation->division_id)
+                ->first()->load('divisionLevelGroup');
+
+            $data['file_name'] = 'Quotation';
+            $data['user'] = Auth::user()->load('person');
+            $data['quoteProfile'] = $quoteProfile;
+            //$data['date'] = Carbon::now()->format('d/m/Y');
+
+            $view = view('quote.pdf_quote', $data)->render();
+            $pdf = resolve('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            if ($printQuote) return $pdf->stream('quotation_' . $quotation->id . '.pdf');
+            elseif ($emailQuote) return $pdf->output();
+        }
+        else return view('quote.view_quote')->with($data);
+    }
+
+    /**
+     * Show the quotation PDF view
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function viewPDFQuote(Quotation $quotation)
+    {
+        return $this->viewQuote($quotation, true, true);
     }
 }

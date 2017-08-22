@@ -101,6 +101,8 @@
                     <div class="box-body">
                         <textarea id="send_quote_message" name="template_content" rows="10" cols="80">{{ ($sendQuoteTemplate) ? $sendQuoteTemplate->template_content : '' }}</textarea>
                         <input type="hidden" name="template_key" value="send_quote">
+                        <br>
+                        <p style="margin-bottom: 0;">Placeholders: [client name]</p>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
