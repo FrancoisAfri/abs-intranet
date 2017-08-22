@@ -29,8 +29,23 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div style="overflow-x:auto;">
+							<table class="table table-striped table-bordered">
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Contact Person</th>
+                                    <th>Creator</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr> 
+								<tr>
+                                    <td>{{$quotation->company->name}}</td>
+                                    <td>{{$quotation->client->first_name." ".$quotation->client->surname}}</td>
+                                    <td>{{$quotation->person->first_name." ".$quotation->person->surname}}</td>
+									<td>{{$quotation->created_at}}</td>
+									<td>{{$quotation->quote_status}}</td>
+                                </tr>
+                            </table>
                             <table class="table table-striped table-bordered">
                                 <tr>
                                     <th style="width: 10px">#</th>
@@ -86,7 +101,6 @@
                                     @endforeach
                                 @endforeach
                             </table>
-
                             <!-- Total cost section -->
                             <div class="col-sm-4 col-sm-offset-8 no-padding">
                                 <table class="table">
@@ -108,35 +122,52 @@
                                     </tr>
                                 </table>
                             </div>
+							<table class="table">
+								<tr>
+									<td>
+										<button type="button" class="btn btn-primary" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');">Modify Quote</button>
+										<button type="button" class="btn btn-primary  pull-right" id="approve_quote" onclick="postData({{$quotation->id}}, 'approve_quote');">Approve Quote</button>
+										<button type="button" class="btn btn-primary pull-left" id="decline_quote" onclick="postData({{$quotation->id}}, 'decline_quote');">Decline Quote</button>
+										<button type="button" class="btn btn-primary" id="print_quote" onclick="postData({{$quotation->id}}, 'print_quote');">Print Quote</button>
+										<button type="button" class="btn btn-primary" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');">Cancel Quote</button>
+									</td>
+								</tr>
+                            </table>
                         </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-
                     </div>
                     <!-- /.box-footer -->
                 </form>
             </div>
         </div>
-
         <!-- Include modal -->
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
         @endif
     </div>
 @endsection
-
 @section('page_script')
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
     <script>
         $(function () {
         });
+	function postData(id, data)
+	{
+		if (data == 'view_quote')
+			location.href = "/quote/view/" + id;
+		else if(data == 'view_quote')
+			location.href = "/quote/view/" + id;
+		else if(data == 'view_quote')
+			location.href = "/quote/view/" + id;
+		else if(data == 'view_quote')
+			location.href = "/quote/view/" + id;
+	}
     </script>
 @endsection

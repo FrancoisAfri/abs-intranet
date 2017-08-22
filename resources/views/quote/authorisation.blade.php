@@ -43,7 +43,7 @@
                             <th>contact Person</th>
                             <th>Creator</th>
                             <th>Date</th>
-                            <th>Price</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -54,7 +54,7 @@
                                 <td>{{$quoteApplication->client->first_name." ".$quoteApplication->client->surname}}</td>
                                 <td>{{$quoteApplication->person->first_name." ".$quoteApplication->person->surname}}</td>
                                 <td>{{$quoteApplication->created_at}}</td>
-								<td></td>
+                                <td>{{$quoteApplication->quote_status}}</td>
                             </tr>
                         @endforeach
                         </tbody>
@@ -65,7 +65,7 @@
                             <th>contact Person</th>
                             <th>Creator</th>
                             <th>Date</th>
-                            <th>Price</th>
+                            <th>Status</th>
                         </tr>
                         </tfoot>
                     </table>
