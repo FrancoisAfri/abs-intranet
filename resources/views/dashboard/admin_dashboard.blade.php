@@ -477,7 +477,8 @@
                 </table>
                 <div class="box-footer">
                    <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
-                     <button id="ticket"class="btn btn-primary pull-right"><i class="fa fa-ticket"></i> Create Ticket</button>
+                   <!--   <button id="ticket"class="btn btn-primary pull-right"><i class="fa fa-ticket"></i> Create Ticket</button> -->
+                      <button type="button" id="new_tickets" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-ticket-modal">Add Ticket</button>
                 </div>
               </div>
              
@@ -493,6 +494,7 @@
        
      </div>
 @endsection
+  @include('dashboard.partials.add_ticket')
 
 @section('page_script')
     <!-- Select2 -->
@@ -562,6 +564,28 @@
 			}
 		}
 		*/
+          //Post module form to server using ajax (ADD)
+            $('#add_tiket').on('click', function() {
+                //console.log('strUrl');
+                var strUrl = '/help_desk/ticket/add';
+                var modalID = 'add-new-ticket-modal';
+                var objData = {
+                    name: $('#'+modalID).find('#name').val(),
+                    email: $('#'+modalID).find('#email').val(),
+                    helpdesk_id: $('#'+modalID).find('#helpdesk_id').val(),
+                    subject: $('#'+modalID).find('#subject').val(),
+                    message: $('#'+modalID).find('#message').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val(),
+                };
+                var submitBtnID = 'new_tickets';
+                var redirectUrl = '/';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The ticket has been Added successfully.';
+                //var formMethod = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+
         $(function () {
 			// hide end button when page load
 			//$("#end-button").show();

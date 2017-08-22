@@ -22,6 +22,7 @@ use App\DivisionLevelTwo;
 use App\companyidentity;
 use App\product_products;
 use App\System;
+use App\autoRensponder;
 use App\HelpDesk;
 use App\helpdesk_Admin;
 use App\operator;
@@ -249,13 +250,28 @@ class HelpdeskController extends Controller
 			//return $serviceName;
 			$description = $service->description;
 		    $systems = operator::orderBy('id', 'asc')->get();
-		    // operator
+		    
 		    $employees = HRPerson::where('status', 1)->get();
-		     //return $employees;
+		     
+           // $autoRensponder = DB::table('auto_rensponder')->orderBy('id', 'asc')->get()->first();
+           
+            $counRow = autoRensponder::count();
+          // return $counRow;
 
-		    // $settings = system_email_setup::orderBy('id', 'asc')->get();
-		    // return $settings;
+           if ($counRow ==  0) {
+            $autRensponder = new autoRensponder();
+            $autRensponder->save();
+            }else{
+                $autoRensponder = autoRensponder::orderBy('id', 'asc')->get()->first();  
+            }
 
+             $autoRensponder = autoRensponder::orderBy('id', 'asc')->get()->first(); 
+
+                
+                $settings = system_email_setup::orderBy('id', 'asc')->get()->first(); 
+
+              
+               
 		    $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
@@ -270,8 +286,10 @@ class HelpdeskController extends Controller
 				  ->orderBy('helpdesk_Admin.helpdesk_id')
 				  ->get();
 
-				         //return $HelpdeskAdmin;
+			
+             $data['autoRensponder'] = $autoRensponder;          
 		     $data['products'] = $service;
+             $data['settings'] = $settings;
      		 $data['HelpdeskAdmin'] = $HelpdeskAdmin;
        		 $data['employees']= $employees;
              $data['systems'] = $systems;
@@ -536,7 +554,7 @@ class HelpdeskController extends Controller
 
     }
 
-     public function auto_responder_messages(Request $request, system_email_setup $service){
+     public function auto_responder_messages(Request $request, autoRensponder $service){
     		$this->validate($request, [
             // 'maximum_priority' => 'required',
             // 'description' => 'required',        
@@ -561,16 +579,32 @@ class HelpdeskController extends Controller
 		$SysData = $request->all();
 		unset($SysData['_token']);
 
-		$service->auto_processemails = $request->input('auto_processemails');
-		$service->anly_processreplies = $request->input('anly_processreplies');
-		$service->email_address = $request->input('email_address');
-		$service->server_name = $request->input('server_name');
-		$service->preferred_communication_method = $request->input('preferred_communication_method');
-		$service->server_port = $request->input('server_port');
-		$service->username = $request->input('username');
-		$service->password = $request->input('password');
-		$service->Signature_start = $request->input('Signature_start');
-		$service->save();
+       // return $SysData;
+
+    // $row = system_email_setup::count();
+    //     if ($row == 0) {
+    //     $service = new system_email_setup($SysData);
+    //     $service->save(); 
+    // }
+    //     else {
+    //      DB::table('system_email_setup')->where('id', 1) ->update($SysData);
+    // }
+
+             $service = new system_email_setup($SysData);
+             $service->helpdesk_id = $request->input('helpdesk_id');
+             $service->save(); 
+
+        //return $SysData;
+		// $service->auto_processemails = $request->input('auto_processemails');
+		// $service->anly_processreplies = $request->input('anly_processreplies');
+		// $service->email_address = $request->input('email_address');
+		// $service->server_name = $request->input('server_name');
+		// $service->preferred_communication_method = $request->input('preferred_communication_method');
+		// $service->server_port = $request->input('server_port');
+		// $service->username = $request->input('username');
+		// $service->password = $request->input('password');
+		// $service->Signature_start = $request->input('Signature_start');
+		// $service->save();
 		return back();
 
     }
