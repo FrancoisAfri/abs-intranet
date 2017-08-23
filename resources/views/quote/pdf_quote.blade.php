@@ -7,10 +7,10 @@
             From
             <address>
                 <strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
-                795 Folsom Ave, Suite 600<br>
-                San Francisco, CA 94107<br>
-                Phone: (804) 123-5432<br>
-                Email: info@almasaeedstudio.com
+                {{ $quoteProfile->phys_address }}<br>
+                {{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
+                Phone: {{ $quoteProfile->phone_number }}<br>
+                Email: {{ $quoteProfile->email }}
             </address>
         </div>
         <!-- /.col -->
