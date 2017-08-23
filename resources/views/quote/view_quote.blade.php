@@ -141,35 +141,28 @@
                                     </tr>
                                 </table>
                             </div>
-							<table class="table">
-								<tr>
-									<td>
-										@if($quotation->status == 1)
-											<button type="button" class="btn btn-primary pull-right" id="approve_quote" onclick="postData({{$quotation->id}}, 'approve_quote');">Approve Quote</button> 
-											<button type="button" class="btn btn-primary pull-left" id="decline_quote" onclick="postData({{$quotation->id}}, 'decline_quote');">Decline Quote</button>
-											<button type="button" class="btn btn-primary pull-left" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');">Cancel Quote</button>
-										@endif
-										@if($quotation->status == 2)
-										<button type="button" class="btn btn-primary pull-right" id="approve_quote"
-												data-toggle="modal" data-target="#client-response-modal"
-                                                data-id="{{$quotation->id}}">Client Approved</button> 
-												<button type="button" class="btn btn-primary pull-left" id="approve_quote"
-												data-toggle="modal" data-target="#client-response-modal"
-                                                data-id="{{$quotation->id}}">Client Rejected</button> 
-										@endif	
-										@if($quotation->status < 2)
-											<button type="button" class="btn btn-primary pull-left" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');">Modify Quote</button> 
-										@endif
-										<button type="button" class="btn btn-primary pull-right" id="print_quote" onclick="postData({{$quotation->id}}, 'print_quote');">Print Quote</button> 	
-										<button type="button" class="btn btn-primary pull-right" id="email_quote" onclick="postData({{$quotation->id}}, 'email_quote');">Email Quote</button> 	
-									</td>
-								</tr>
-                            </table>
                         </div>
                     </div>
                     <!-- /.box-body -->
-                    <div class="box-footer">
-                        <a href="/quote/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-download"></i> Generate PDF</a>
+                    <div class="box-footer text-center">
+                        @if($quotation->status == 1)
+                            <button type="button" class="btn btn-primary btn-success" id="approve_quote" onclick="postData({{$quotation->id}}, 'approve_quote');"><i class="fa fa-check"></i> Approve Quote</button>
+                            <button type="button" class="btn btn-primary btn-danger" id="decline_quote" onclick="postData({{$quotation->id}}, 'decline_quote');"><i class="fa fa-times"></i> Decline Quote</button>
+                            <button type="button" class="btn btn-primary btn-warning" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');"><i class="fa fa-trash"></i> Cancel Quote</button>
+                        @endif
+                        @if($quotation->status == 2)
+                            <button type="button" class="btn btn-primary btn-success" id="approve_quote"
+                                    data-toggle="modal" data-target="#client-response-modal"
+                                    data-id="{{$quotation->id}}"><i class="fa fa-check"></i> Client Approved</button>
+                            <button type="button" class="btn btn-primary btn-danger" id="approve_quote"
+                                    data-toggle="modal" data-target="#client-response-modal"
+                                    data-id="{{$quotation->id}}"><i class="fa fa-times"></i> Client Rejected</button>
+                        @endif
+                        @if($quotation->status < 2)
+                            <button type="button" class="btn btn-primary btn-warning" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');"><i class="fa fa-pencil-square"></i> Modify Quote</button>
+                        @endif
+                        <a href="/quote/email_quote/{{ $quotation->id }}" class="btn btn-primary"><i class="fa fa-send"></i> Email Quote</a>
+                        <a href="/quote/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Quote</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>

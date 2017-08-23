@@ -559,4 +559,20 @@ class QuotesController extends Controller
     {
         return $this->viewQuote($quotation, true, true);
     }
+
+    /**
+     * Email the quotation to the client
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function emailQuote(Quotation $quotation)
+    {
+        $quotation->load('client');
+        $messageContent = EmailTemplate::where('template_key', 'send_quote')->first()->template_content;
+        $messageContent = str_replace('[client name]', $quotation->client->full_name, $messageContent);
+        $quoteAttachment = $this->viewQuote($quotation, true, false, true);
+        Mail::to($quotation->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+
+        return back()->with(['quote_emailed' => 'The quotation has been successfully emailed to the client!']);
+    }
 }
