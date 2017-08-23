@@ -35,7 +35,10 @@ class QuotesController extends Controller
     {
         $this->middleware('auth');
     }
-
+	public $quoteStatuses = [1 => 'Awaiting Manager Approval',2 => 'Awaiting Client Approval',
+        3 => 'Approved by Manager', -3 => 'Declined by Manager',4 => 'Approved by Client',
+        -4 => 'Declined by Client',-1 => 'Cancelled',5 => 'Authorised'];
+		
     /**
      * Show the quote setup page.
      *
@@ -209,31 +212,80 @@ class QuotesController extends Controller
         AuditReportsController::store('Quote', 'Quote Authorisation Page Accessed', "Accessed By User", 0);
         return view('quote.authorisation')->with($data);  
     }
-	public function authorise()
+	# Approve Quote
+	public function approveQuote(Quotation $quote)
     {
-		$highestLvl = DivisionLevel::where('active', 1)
-            ->orderBy('level', 'desc')->limit(1)->get()->first();
-		$quoteApplications = Quotation::whereHas('person', function ($query) {
-			$query->where('manager_id', Auth::user()->person->id);
-		})
-		->with('products','packages','person','company','client','divisionName')
-		->orderBy('id')
-		->get();
-		$data['highestLvl'] = $highestLvl;
-        $data['page_title'] = "Quotes";
-        $data['page_description'] = "Quotes Authorisation";
-        $data['breadcrumb'] = [
-            ['title' => 'Quotes', 'path' => 'quotes/authorisation', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Quote';
-        $data['active_rib'] = 'Authorisation';
-        $data['quoteApplications'] = $quoteApplications;
-		//return $quoteApplications;
-        AuditReportsController::store('Quote', 'Quote Authorisation Page Accessed', "Accessed By User", 0);
-        return view('quote.authorisation')->with($data);  
+		if ($quote->status == 1) $stastus = 2;
+		elseif ($quote->status == 2) $stastus = 5;
+		
+		$changedStatus =  $this->quoteStatuses[$stastus];
+		$quote->status = $stastus;
+		$quote->update();
+		if ($stastus == 5)
+		{
+			//Email Client to confirn success
+		}
+		elseif ($stastus == 2)
+		{
+			//Send Quote to client
+		}
+		// Add to quote history
+		$QuoteApprovalHistory = new QuoteApprovalHistory();
+		$QuoteApprovalHistory->quotation_id = $quote->id;
+		$QuoteApprovalHistory->user_id = Auth::user()->person->id;
+		$QuoteApprovalHistory->status = $stastus;
+		$QuoteApprovalHistory->comment = $changedStatus;
+		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
+		$QuoteApprovalHistory->save();
+		
+		AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", "Edited by User", 0);
+		return back();  
     }
-
+	# Decline Quote
+	public function declineQuote(Quotation $quote)
+    {
+		/*1 => 'Awaiting Manager Approval',
+        2 => 'Awaiting Client Approval',
+        3 => 'Approved by Manager',
+        -3 => 'Declined by Manager',
+        4 => 'Approved by Client',
+        -4 => 'Declined by Client',
+        -1 => 'Cancelled',
+        5 => 'Authorised'*/
+		if ($quote->status == 1) $stastus = 0;
+		else $stastus = 1;	
+		$quote->status = $stastus;
+		$quote->update();
+		$changedStatus =  $this->quoteStatuses[$stastus];
+		
+		// Add to quote history
+		$QuoteApprovalHistory = new QuoteApprovalHistory();
+		$QuoteApprovalHistory->quotation_id = $quote->id;
+		$QuoteApprovalHistory->user_id = Auth::user()->person->id;
+		$QuoteApprovalHistory->status = $stastus;
+		$QuoteApprovalHistory->comment = $changedStatus;
+		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
+		$QuoteApprovalHistory->save();
+		
+		AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", "Edited by User", 0);
+		return back();  
+    }
+	# Cancel quote
+	public function cancelQuote(Quotation $quote) 
+	{
+		$quote->status = -1;	
+		$quote->update();
+		// Add to quote history
+		$QuoteApprovalHistory = new QuoteApprovalHistory();
+		$QuoteApprovalHistory->quotation_id = $quote->id;
+		$QuoteApprovalHistory->user_id = Auth::user()->person->id;
+		$QuoteApprovalHistory->status = -1;
+		$QuoteApprovalHistory->comment = "Cancelled By User";
+		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
+		$QuoteApprovalHistory->save();
+		AuditReportsController::store('Quote', "Quote Status Changed: Cancelled", "Edited by User", 0);
+		return back();
+    }
     /**
      * Show page to adjust the quote details (such as products quantity, etc.)
      *

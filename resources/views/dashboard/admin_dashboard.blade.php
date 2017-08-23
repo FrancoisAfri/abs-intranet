@@ -169,7 +169,6 @@
                         </form>
                     </div>
                     <!-- /.Emp Group Filters (divisions) -->
-
                     <!-- Top ten -->
                     <div class="col-sm-4 border-right">
                         <p class="text-center">
@@ -180,7 +179,6 @@
                             </ul>
                         </div>
                     </div>
-
                     <!-- Bottom ten -->
                     <div class="col-sm-4">
                         <p class="text-center">
@@ -192,7 +190,6 @@
                             </ul>
                         </div>
                     </div>
-
                 </div>
                 <!-- /.box-body -->
                 <!-- Loading wheel overlay -->
@@ -250,7 +247,6 @@
                             </ul>
                         </div>
                     </div>
-
                     <!-- Bottom ten -->
                     <div class="col-sm-4">
                         <p class="text-center">
@@ -262,7 +258,6 @@
                             </ul>
                         </div>
                     </div>
-
                 </div>
                 <!-- /.box-body -->
 				 <!-- Loading wheel overlay -->

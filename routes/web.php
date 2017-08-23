@@ -201,7 +201,6 @@ Route::post('Product/categories', 'Product_categoryController@categorySave');
 Route::post('/Product/Product/add/{products}', 'Product_categoryController@addProductType');
 Route::patch('Product/product_edit/{product}', 'Product_categoryController@editProduct');
 Route::patch('Product/category_edit/{Category}', 'Product_categoryController@editCategory');
-//>>>status
 Route::get('/Product/category/{cat}', 'Product_categoryController@CategoryAct');
 
 
@@ -231,8 +230,6 @@ Route::post('product/category/Search', 'Product_categoryController@categorySearc
 Route::post('product/package/Search', 'Product_categoryController@packageSearch');
 Route::post('product/promotion/Search', 'Product_categoryController@promotionSearch');
 
-#
-
 #Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
 Route::post('help_desk/system/add', 'HelpdeskController@systemAdd');
@@ -254,7 +251,6 @@ Route::get('helpdesk/ticket', 'HelpdeskController@createTicket');
 Route::post('help_desk/operator/add/{serviceID}', 'HelpdeskController@Addoperator');
 Route::post('help_desk/admin/add/{adminID}', 'HelpdeskController@addAdmin');
 Route::post('help_desk/ticket/add', 'HelpdeskController@addTicket');
-
 
 //   ----------------- Help Desk Settings ------------------   //
 Route::post('help_desk/setup', 'HelpdeskController@setup');
@@ -508,6 +504,12 @@ Route::post('quote/adjust', 'QuotesController@adjustQuote');
 Route::post('quote/save', 'QuotesController@saveQuote');
 Route::get('quote/view/{quotation}', 'QuotesController@viewQuote');
 Route::get('quote/search', 'QuotesController@searchQuote');
+Route::get('quote/approve_quote/{quote}', 'QuotesController@approveQuote');
+Route::get('quote/decline_quote/{quote}', 'QuotesController@declineQuote');
+Route::get('quote/modify_quote/{quote}', 'QuotesController@updateQuote');
+Route::get('quote/print_quote/{quote}', 'QuotesController@printQuote');
+Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
+Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

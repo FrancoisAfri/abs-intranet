@@ -19,11 +19,12 @@ class Quotation extends Model
     protected $quoteStatuses = [
         1 => 'Awaiting Manager Approval',
         2 => 'Awaiting Client Approval',
-        3 => 'Declined by Manager',
-        4 => 'Accepted by Client',
-        5 => 'Declined by Client',
-        6 => 'Cancelled',
-        7 => 'Authorised'
+        3 => 'Approved by Manager',
+        -3 => 'Declined by Manager',
+        4 => 'Approved by Client',
+        -4 => 'Declined by Client',
+        -1 => 'Cancelled',
+        5 => 'Authorised'
     ];
 
     /**

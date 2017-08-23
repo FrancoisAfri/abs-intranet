@@ -122,14 +122,44 @@
                                     </tr>
                                 </table>
                             </div>
+							<div>
+                                <table class="table">
+                                    <tr>
+                                        <th style="text-align: center;" colspan="4">Quote History</th>
+									</tr>
+									<tr>
+                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
+                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
+                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
+                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: left; vertical-align: middle;">Discount{{ $discountPercent ? $discountPercent . '%' : '' }}:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="discount-amount" nowrap>{{ 'R ' . number_format($discountAmount, 2) }}</td>
+                                    </tr>
+                                </table>
+                            </div>
 							<table class="table">
 								<tr>
 									<td>
-										<button type="button" class="btn btn-primary" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');">Modify Quote</button>
-										<button type="button" class="btn btn-primary  pull-right" id="approve_quote" onclick="postData({{$quotation->id}}, 'approve_quote');">Approve Quote</button>
-										<button type="button" class="btn btn-primary pull-left" id="decline_quote" onclick="postData({{$quotation->id}}, 'decline_quote');">Decline Quote</button>
-										<button type="button" class="btn btn-primary" id="print_quote" onclick="postData({{$quotation->id}}, 'print_quote');">Print Quote</button>
-										<button type="button" class="btn btn-primary" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');">Cancel Quote</button>
+										@if($quotation->status == 1)
+											<button type="button" class="btn btn-primary pull-right" id="approve_quote" onclick="postData({{$quotation->id}}, 'approve_quote');">Approve Quote</button> 
+											<button type="button" class="btn btn-primary pull-left" id="decline_quote" onclick="postData({{$quotation->id}}, 'decline_quote');">Decline Quote</button>
+											<button type="button" class="btn btn-primary pull-left" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');">Cancel Quote</button>
+										@endif
+										@if($quotation->status == 2)
+										<button type="button" class="btn btn-primary pull-right" id="approve_quote"
+												data-toggle="modal" data-target="#client-response-modal"
+                                                data-id="{{$quotation->id}}">Client Approved</button> 
+												<button type="button" class="btn btn-primary pull-left" id="approve_quote"
+												data-toggle="modal" data-target="#client-response-modal"
+                                                data-id="{{$quotation->id}}">Client Rejected</button> 
+										@endif	
+										@if($quotation->status < 2)
+											<button type="button" class="btn btn-primary pull-left" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');">Modify Quote</button> 
+										@endif
+										<button type="button" class="btn btn-primary pull-right" id="print_quote" onclick="postData({{$quotation->id}}, 'print_quote');">Print Quote</button> 	
+										<button type="button" class="btn btn-primary pull-right" id="email_quote" onclick="postData({{$quotation->id}}, 'email_quote');">Email Quote</button> 	
 									</td>
 								</tr>
                             </table>
@@ -141,6 +171,9 @@
                     <!-- /.box-footer -->
                 </form>
             </div>
+			@if ($quotation->status == 2)
+				 @include('quote.partials.get_client_response')
+			@endif
         </div>
         <!-- Include modal -->
         @if(Session('changes_saved'))
@@ -159,15 +192,19 @@
         $(function () {
         });
 	function postData(id, data)
-	{
-		if (data == 'view_quote')
-			location.href = "/quote/view/" + id;
-		else if(data == 'view_quote')
-			location.href = "/quote/view/" + id;
-		else if(data == 'view_quote')
-			location.href = "/quote/view/" + id;
-		else if(data == 'view_quote')
-			location.href = "/quote/view/" + id;
+	{						
+		if (data == 'approve_quote')
+			location.href = "/quote/approve_quote/" + id;
+		else if(data == 'decline_quote')
+			location.href = "/quote/decline_quote/" + id;
+		else if(data == 'cancel_quote')
+			location.href = "/quote/cancel_quote/" + id;
+		else if(data == 'modify_quote')
+			location.href = "/quote/modify_quote/" + id;
+		else if(data == 'print_quote')
+			location.href = "/quote/print_quote/" + id;
+		else if(data == 'email_quote')
+			location.href = "/quote/email_quote/" + id;
 	}
     </script>
 @endsection
