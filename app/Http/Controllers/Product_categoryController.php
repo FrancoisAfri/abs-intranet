@@ -137,41 +137,36 @@ class Product_categoryController extends Controller
 
  public function view_promotions() {
 
-     $productsPromotions = product_promotions::orderBy('name', 'asc')->get();
-		 if (!empty($productsPromotions))
-		 	// $productsPromotions = $productsPromotions->load('productPromotions');
-		//return $productsPromotions;
-			
-		#
-		// $packagePromotions = product_promotions::orderBy('name', 'asc')->get();
-		// if (!empty($packagePromotions))
-		// 	$packagePromotions = $packagePromotions->load('Promotionspackage');
+     // $productsPromotions = product_promotions::orderBy('id', 'asc')->->get();
+      $productsPromotions = DB::table('product_promotions')
+                                ->distinct()
+                                ->orderBy('id', 'asc')
+                                ->get();
 
-		 //return $productsPromotions;
+            
 
+
+      // return $productsPromotions;
+		 // if (!empty($productsPromotions))
 		 	$ProductCategory = product_category::orderBy('name', 'asc')->get();
+
+        // return $productsPromotions;
+
 		if (!empty($ProductCategory))
 			$ProductCategory = $ProductCategory->load('productCategory');
 	
 	   $Product = product_products::orderBy('name', 'asc')->get();
-
-	    $package = product_packages::orderBy('name', 'asc')->get();
-		//return $package;
-
-		$row = product_category::count();
-		if($row < 1)
-     	 {
-
+	   $package = product_packages::orderBy('name', 'asc')->get();
+	   $row = product_category::count();
+		if($row < 1){
          $products  = 0;  
-                
      	 }else{
 		 $products = $ProductCategory -> first()->id ;
 		}
 
 		$data['package'] = $package;
 		$data['productsPromotions'] = $productsPromotions;
-		//$data['packagePromotions'] = $packagePromotions;
-		 $data['Product'] = $Product;
+		$data['Product'] = $Product;
         $data['page_title'] = "Product Promotions";
         $data['page_description'] = "Manage Product Promotions";
         $data['breadcrumb'] = [
@@ -180,9 +175,7 @@ class Product_categoryController extends Controller
         ];
         $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Promotions';
-       // $data['jobCategories'] = $jobCategories;
-        // $data['ProductCategory'] = $ProductCategory;
-		
+
 		AuditReportsController::store('Employee Records', 'Job titles Page Accessed', "Actioned By User", 0);
         return view('products.product_promotions')->with($data);
 
@@ -263,7 +256,7 @@ class Product_categoryController extends Controller
 		// Save Products linked to package
 		$Products = $docData['product'];
 		foreach ($Products as $product){
-			#writting into the associative table, use attach & deattach to avoid duplicates
+			#writting into the joining table, use attach & deattach to avoid duplicates
 			$package->products_type()->detach(['product_product_id' => $product], ['product_packages_id' => $package->id]);
 			$package->products_type()->attach(['product_product_id' => $product], ['product_packages_id' => $package->id]);
 		}
@@ -416,13 +409,12 @@ class Product_categoryController extends Controller
 
 		$Product = $docData['product_id'];
 		// Add Package
-		$packs = new product_packages();
-		$packs->name = $request->input('name');
-		$packs->description = $request->input('description');
-		$packs->discount = $request->input('discount');
-		$packs->status = 1;
-		$packs->save();
-
+    		$packs = new product_packages();
+    		$packs->name = $request->input('name');
+    		$packs->description = $request->input('description');
+    		$packs->discount = $request->input('discount');
+    		$packs->status = 1;
+    		$packs->save();
 		//Save Products linked to package
 		foreach ($Product as $products){
 			$pack_prod =  new packages_product_table(); 
@@ -566,8 +558,6 @@ class Product_categoryController extends Controller
             // 'name' => 'required',
             // 'description' => 'required',        
         ]);
-
-       
 
 		$priceData = $request->all();
 		unset($priceData['_token']);

@@ -4,22 +4,23 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class PromotionsPackagesEmail extends Command
+class HelpdeskSystemEmailSetup extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'promemails:sent';
-    protected $signature = 'emptask:overdue';
+    //protected $signature = 'command:name';
+    // protected $signature = 'helpDeskemails:settings';
+     protected $signature = 'HelpdesksystemSetup:emails';
+
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'This command will send emails to clents if they is a running promotion';
-
+    protected $description = 'This command will command will check for emails set up';
     /**
      * Create a new command instance.
      *
@@ -37,8 +38,7 @@ class PromotionsPackagesEmail extends Command
      */
     public function handle()
     {
-        //
-         app('App\Http\Controllers\promotionpackageCronController')->execute();
-        // \Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
+         app('App\Http\Controllers\HelpdeskSystemEmailSetupCronController')->execute();
+        //\Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
     }
 }

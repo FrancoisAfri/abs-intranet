@@ -15,7 +15,7 @@ class ContactCompany extends Model
 		'tax_number', 'contact_person', 'cp_cell_number', 'cp_home_number', 
 		'bee_score', 'bee_certificate_doc', 'comp_reg_doc', 'sector', 'phone_number',
 		'fax_number', 'email', 'phys_address', 'phys_city', 'phys_postal_code', 'phys_province'
-		, 'postal_address', 'account_number'];
+		, 'postal_address', 'account_number','domain_name'];
 
     //relationship between contact_company and contact person (contacts_contacts)
     public function employees() {

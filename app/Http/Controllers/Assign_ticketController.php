@@ -35,18 +35,11 @@ class Assign_ticketController extends Controller
 
      	$ID = $ticket->id;
      	//return $ID;
-      
      	$helpdeskId = $ticket->helpdesk_id;
 
-      #
-     
-      #
-     	return $helpdeskId;
-
-  //    	$helpdeskTickets = ticket::orderBy('id', 'asc')->get();
-		// if (!empty($helpdeskTickets)) $helpdeskTickets->load('hrPeople');
-
-
+      $tickets = $ticket->where('helpdesk_id', $ID)
+                ->orderBy('id', 'asc')
+                ->get();
 
           $names = DB::table('help_desk')
                   ->select('name' ) 
@@ -54,13 +47,6 @@ class Assign_ticketController extends Controller
                         ->get();
           $Names = $names->first()->name;
 
-
-    
-     	  $tickets = DB::table('ticket')
-                ->where('helpdesk_id', $ID)
-                ->orderBy('id', 'asc')
-                ->get();
-            // return $tickets;
  		  $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
