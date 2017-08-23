@@ -16,6 +16,9 @@
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
                     <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">
+                    @foreach($tcIDs as $tcID)
+                        <input type="hidden" name="tc_id[]" value="{{ $tcID }}">
+                    @endforeach
                     <div class="box-header with-border">
                         <h3 class="box-title">New Quote</h3>
                     </div>

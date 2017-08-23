@@ -11,5 +11,16 @@ class QuotesTermAndConditions extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'type_id', 'term_name', 'status', 'vat_number'];
+        'type_id', 'term_name', 'status', 'vat_number'
+    ];
+
+    /**
+     * Relationship between Terms & Conditions and Quotations
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function quotations()
+    {
+        return $this->belongsToMany('App\Quotation');
+    }
 }

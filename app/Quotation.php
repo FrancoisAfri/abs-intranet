@@ -67,6 +67,16 @@ class Quotation extends Model
     }
 
     /**
+     * Relationship between Quotations and Terms and Conditions
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function termsAndConditions()
+    {
+        return $this->belongsToMany('App\QuotesTermAndConditions', 'quotation_terms_and_conditions', 'quotation_id', 'term_condition_id')->withTimestamps();
+    }
+
+    /**
      * Relationship between Quotation and HRPerson
      *
      * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo

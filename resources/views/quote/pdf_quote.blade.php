@@ -111,7 +111,7 @@
                             @endforeach
                         </table>
 
-                        <div class="col-sm-12">&nbsp;</div>
+                        <div class="col-xs-12">&nbsp;</div>
 
                         <!-- banking details section -->
                         <div class="col-xs-5 no-padding">
@@ -156,7 +156,13 @@
                     <p class="text-muted text-center">TERMS AND CONDITIONS</p>
                 </div>
                 <!-- /.box-header -->
-                <div class="box-body no-padding"></div>
+                <div class="box-body no-padding">
+                    <ul>
+                        @foreach($quotation->termsAndConditions as $condition)
+                            <li class="text-justify">{!! $condition->term_name !!}</li>
+                        @endforeach
+                    </ul>
+                </div>
                 <!-- /.box-body -->
             </div>
         </div>

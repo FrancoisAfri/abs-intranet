@@ -169,6 +169,7 @@ class QuotesController extends Controller
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
+        $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
 
         $data['page_title'] = "Quotes";
         $data['page_description'] = "Create a quotation";
@@ -183,6 +184,7 @@ class QuotesController extends Controller
         $data['contactPeople'] = $contactPeople;
         $data['products'] = $products;
         $data['packages'] = $packages;
+        $data['termsAndConditions'] = $termsAndConditions;
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', "Accessed By User", 0);
 
         return view('quote.create_quote')->with($data);
@@ -233,7 +235,6 @@ class QuotesController extends Controller
                 $validator->errors()->add('package_id', 'Please make sure you select at least a product or a package.');
             }
         });
-
         $validator->validate();
 
         //Get products
@@ -292,6 +293,7 @@ class QuotesController extends Controller
         $data['divisionID'] = $request->input('division_id');
         $data['contactPersonId'] = $request->input('contact_person_id');
         $data['companyID'] = $request->input('company_id');
+        $data['tcIDs'] = $request->input('tc_id');
         $data['products'] = $products;
         $data['packages'] = $packages;
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', "Accessed By User", 0);
@@ -337,6 +339,7 @@ class QuotesController extends Controller
             $quote->status = 1;
             $quote->save();
 
+            //save quote's products
             $prices = $request->input('price');
             $quantities = $request->input('quantity');
             if ($prices) {
@@ -345,6 +348,7 @@ class QuotesController extends Controller
                 }
             }
 
+            //save quote's packages
             $packagePrices = $request->input('package_price');
             $packageQuantities = $request->input('package_quantity');
             if ($packagePrices) {
@@ -352,6 +356,10 @@ class QuotesController extends Controller
                     $quote->packages()->attach($packageID, ['price' => $packagePrice, 'quantity' => $packageQuantities[$packageID]]);
                 }
             }
+
+            //save quote's T&C's
+            $tcIDs = ($request->input('tc_id')) ? $request->input('tc_id') : [];
+            $quote->termsAndConditions()->sync($tcIDs);
         });
 		// Add to quote history
 		$QuoteApprovalHistory = new QuoteApprovalHistory();
@@ -382,7 +390,7 @@ class QuotesController extends Controller
         }
         AuditReportsController::store('Quote', 'New Quote Created', "Create by user", 0);
 
-        return redirect('/quote/search')->with(['success_add' => 'The quotation has been successfully added!']);
+        return redirect('/quote/view/' . $quote->id)->with(['success_add' => 'The quotation has been successfully added!']);
     }
 
     /**
@@ -402,7 +410,7 @@ class QuotesController extends Controller
      */
     public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false)
     {
-        $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client');
+        $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions');
         $productsSubtotal = 0;
         $packagesSubtotal = 0;
         foreach ($quotation->products as $product) {
@@ -413,7 +421,7 @@ class QuotesController extends Controller
         }
         $subtotal = $productsSubtotal + $packagesSubtotal;
         $discountPercent = $quotation->discount_percent;
-        $discountAmount = ($discountPercent > 0) ? $subtotal * $discountPercent : 0;
+        $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
         $discountedAmount = $subtotal - $discountAmount;
         $vatAmount = ($quotation->add_vat == 1) ? $discountedAmount * 0.14 : 0;
         $total = $discountedAmount + $vatAmount;
