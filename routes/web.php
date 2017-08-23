@@ -509,7 +509,6 @@ Route::get('quote/view/{quotation}/pdf', 'QuotesController@viewPDFQuote');
 Route::get('quote/approve_quote/{quote}', 'QuotesController@approveQuote');
 Route::get('quote/decline_quote/{quote}', 'QuotesController@declineQuote');
 Route::get('quote/modify_quote/{quote}', 'QuotesController@updateQuote');
-Route::get('quote/print_quote/{quote}', 'QuotesController@printQuote');
 Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
 Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
 
