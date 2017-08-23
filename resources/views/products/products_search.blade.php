@@ -39,10 +39,10 @@
 
                              
                                        <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Product Type </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2"> Category Type </label>
-                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Package Type</label>
-                                      <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Promotion Type</label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Product  </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2"> Category  </label>
+                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Package </label>
+                                      <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Promotion </label>
 
                                 </div>
                                      <!--  -->
@@ -62,7 +62,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="product_name" name="product_name" value="{{ old('product_name') }}" placeholder="Search by name...">
+                                    <input ="text" class="form-control" id="product_name" name="product_name" value="{{ old('product_name') }}" placeholder="Search by name...">
                                 </div>
                             </div>
                         </div> -->
@@ -76,8 +76,8 @@
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="product_name" name="product_name">
                                         <option value="">*** Select a product name ***</option>
-                                        @foreach($products as $documentType)
-                                            <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
+                                        @foreach($products as $document)
+                                            <option value="{{ $document->id }}">{{ $document->name  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -91,7 +91,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="product_description" name="product_description" value="{{ old('product_description') }}" placeholder="Search by Description...">
+                                    <input ="text" class="form-control" id="product_description" name="product_description" value="{{ old('product_description') }}" placeholder="Search by Description...">
                                 </div>
                             </div>
                         </div>
@@ -115,7 +115,7 @@
                         </div>
 
                         <div class="form-group prod-field {{ $errors->has('cat_id') ? ' has-error' : '' }}">
-                            <label for="cat_id" class="col-sm-2 control-label">CategoryType</label>
+                            <label for="cat_id" class="col-sm-2 control-label">Category</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -123,7 +123,7 @@
                                     </div>
                                 <select class="form-control select2" style="width: 100%;" id="cat_id" name="cat_id">
                                         <option value="">*** Select a product name ***</option>
-                                        @foreach($productss as $documentType)
+                                        @foreach($productss as $document)
                                             <option value="{{ $documentType->id }}">{{ $documentType->catName  }}</option>
                                         @endforeach
                                     </select>

@@ -64,8 +64,8 @@
                         </div>
                         <!--  -->
 
-                    <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                        <label for="date_to" class="col-sm-2 control-label">Ticket Name (i.e: Ticket, Task, Fault)</label>
+                    <div class="form-group neg-field {{ $errors->has('ticket_name') ? ' has-error' : '' }}">
+                                        <label for="ticket_name" class="col-sm-2 control-label">Ticket Name (i.e: Ticket, Task, Fault)</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
@@ -583,7 +583,9 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-ticket"></i>
                                     </div>
-                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Auto-responder message when receiving incoming emails:..." rows="4">{{ old('responder_messages') }}</textarea>
+                                   
+                                     <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->responder_messages }} </textarea>
+
                                 </div>
                             </div>
                         </div>
@@ -595,11 +597,13 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-ticket"></i>
                                     </div>
-                                    <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Header for response emails sent from the helpdesk:..." rows="4">{{ old('response_emails') }}</textarea>
+                                  
+                                     <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->response_emails }} </textarea>
+
                                 </div>
                             </div>
                         </div>
-
+                               
                            <div class="form-group notes-field{{ $errors->has('ticket_completion_req') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Message sent when ticket completion has been requested:</label>
                             <div class="col-sm-10">
@@ -607,19 +611,21 @@
                                     <div class="input-group-addon">
                                        <i class="fa fa-ticket"></i>
                                     </div>
-                                    <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:..." rows="4">{{ old('ticket_completion_req') }}</textarea>
+                                      <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->ticket_completion_req }} </textarea>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group notes-field{{ $errors->has('ticket_completed') ? ' has-error' : '' }}">
+                        <!-- <!--  -->
+                      
+                    <div class="form-group notes-field{{ $errors->has('ticket_completed') ? ' has-error' : '' }}">
                            <label for="days" class="col-sm-2 control-label">Message sent when ticket has been completed:</label>
                             <div class="col-sm-10">
                                <div class="input-group">
                                     <div class="input-group-addon">
                                       <i class="fa fa-ticket"></i>
                                     </div>
-                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket has been completed:..." rows="4">{{ old('ticket_completed') }}</textarea>
+                                
+                                     <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->ticket_completed }} </textarea>
                                 </div>
                             </div>
                         </div>
@@ -655,8 +661,7 @@
                                         <!-- <div><input type="checkbox" name="esc_low_email"></div> -->
 
                                         <input type="hidden" class="checkbox selectall"  name="auto_processemails" value="0">
-                                     <div class="sms"><input type="checkbox" name="auto_processemails" value="1"> </div>
-
+                                     <div class="sms"><input type="checkbox" name="auto_processemails" value="1" {{ $settings->auto_processemails === 1 ? 'checked ="checked"' : 0 }}> </div>
                                       
                                     </td> 
                                 </td>
@@ -669,7 +674,7 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
                                          <input type="hidden" class="checkbox selectall"  name="anly_processreplies" value="0">
-                                     <div class="sms"><input type="checkbox" name="anly_processreplies" value="1"> </div>
+                                     <div class="sms"><input type="checkbox" name="anly_processreplies" value="1" {{ $settings->anly_processreplies === 1 ? 'checked ="checked"' : 0 }}> </div>
 
                                     </td> 
                                 </td>
@@ -680,7 +685,7 @@
                                 <td>Email address:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="email_address" class="form-control pull-left" name="email_address:" value=" " >
+                                       <input type="email" id ="email_address" class="form-control pull-left" name="email_address" value="{{ $settings->email_address }}" >
                                     </td> 
                                 </td>
                               </tr>
@@ -691,7 +696,7 @@
                                 <td>Server Name:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="server_name" class="form-control pull-left" name="server_name" value=" " >
+                                       <input type="text" id ="server_name" class="form-control pull-left" name="server_name" value="{{ $settings->server_name }}" >
                                     </td> 
                                 </td>
                               </tr>
@@ -714,7 +719,7 @@
                                 <td>Server Port:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="server_port" class="form-control pull-left" name="server_port" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="server_port" class="form-control pull-left" name="server_port" value="{{ $settings->server_port }}" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
@@ -725,7 +730,7 @@
                                 <td>Username:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="username" class="form-control pull-left" name="username" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="username" class="form-control pull-left" name="username" value="{{ $settings->username }}" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
@@ -745,15 +750,18 @@
                                 <td>Signature Start String:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="Signature_start" class="form-control pull-left" name="Signature_start" value=" " placeholder="Everything below & including this string will be removed.">
+                                       <input type="text" id ="Signature_start" class="form-control pull-left" name="Signature_start" value="{{ $settings->Signature_start }}" placeholder="Everything below & including this string will be removed.">
                                     </td> 
                                 </td>
                               </tr>
 
+                            <!--  <input type="hidden" class="checkbox selectall"  name="helpdesk_id" value="{{ $serviceID }}"> -->
+                               <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
+
                         </table>                         
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit" >
+                        <input type="submit" id="load-allocation"  class="btn btn-primary pull-right"  >
                     </div>
                     <!-- /.box-footer -->
                  </div>
@@ -767,11 +775,11 @@
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
-<<<<<<< HEAD
-                    <h3 class="box-title"> Help Desk Operators</h3>
-=======
+
+                   <!--  <h3 class="box-title"> Help Desk Operators</h3> -->
+
                     <h3 class="box-title"> Operators for {{ $serviceName }}</h3>
->>>>>>> cd6523785203f9fb4cbdb4fc6e946351c31e51fd
+
 
                 </div>
                  {{ csrf_field() }}

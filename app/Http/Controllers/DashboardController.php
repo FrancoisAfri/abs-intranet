@@ -10,6 +10,7 @@ use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
 use App\EmployeeTasks;
 use App\HRPerson;
+use App\HelpDesk;
 use App\leave_application;
 use App\module_access;
 use Illuminate\Http\Request;
@@ -40,7 +41,8 @@ class DashboardController extends Controller
         $user = Auth::user()->load('person');
 
 
-		
+		  $email = $user->first()->email;
+
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
             $totNumEmp = HRPerson::count();
@@ -167,8 +169,22 @@ class DashboardController extends Controller
                 ->orderBy('id', 'asc')
                 ->get();
 
+
+             $Helpdesk  = HelpDesk::orderBy('name', 'asc')->get();
+             //return $Helpdesk;
+            $name = HRPerson::where('id', $loggedInEmplID )
+                        ->select('first_name', 'surname')
+                        ->get()
+                        ->first();
+                        $names = $name ->first_name;
+                        $surname =$name ->surname;
             
                 //return $tickets;
+            $data['Helpdesk'] = $Helpdesk;           
+            $data['email'] = $email; 
+            $data['names'] = $names;  
+            $data['surname'] = $surname;         
+            //$data['systems '] = $systems ;
             $data['ticketStatus'] = $ticketStatus;    
             $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;

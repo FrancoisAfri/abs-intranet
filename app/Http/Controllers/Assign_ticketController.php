@@ -37,12 +37,9 @@ class Assign_ticketController extends Controller
      	//return $ID;
      	$helpdeskId = $ticket->helpdesk_id;
 
-     	//return $helpdeskId;
-
-  //    	$helpdeskTickets = ticket::orderBy('id', 'asc')->get();
-		// if (!empty($helpdeskTickets)) $helpdeskTickets->load('hrPeople');
-
-
+      $tickets = $ticket->where('helpdesk_id', $ID)
+                ->orderBy('id', 'asc')
+                ->get();
 
           $names = DB::table('help_desk')
                   ->select('name' ) 
@@ -50,13 +47,6 @@ class Assign_ticketController extends Controller
                         ->get();
           $Names = $names->first()->name;
 
-
-    
-     	  $tickets = DB::table('ticket')
-                ->where('helpdesk_id', $ID)
-                ->orderBy('id', 'asc')
-                ->get();
-            // return $tickets;
  		  $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
@@ -64,27 +54,18 @@ class Assign_ticketController extends Controller
 				        ->orderBy('operator.helpdesk_id')
 				        ->get();
 
-				       // return $operators;
-
-
-				      //  return $operators;
-
-				        // $operators = HRPerson::where('id', 1)->first();
-
-       				 //    return $operators;
-
-		$data['ID'] = $ID;
-		$data['Names'] = $Names;		      // return $operators;
-		$data['operators'] = $operators;		        
- 		$data['tickets'] = $tickets; 
-        $data['active_mod'] = 'Help Desk';
-        $data['active_rib'] = '';   
-        $data['page_title'] = "Assign Ticket";
-        $data['page_description'] = "Assign Help Desk  Ticket";
-        $data['breadcrumb'] = [
-            ['title' => 'Assign Ticket ', 'path' => '/Help Desk', 'icon' => 'fa fa-info', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Assign Ticket Page', 'active' => 1, 'is_module' => 0]
-        ];
+          		$data['ID'] = $ID;
+          		$data['Names'] = $Names;		      // return $operators;
+          		$data['operators'] = $operators;		        
+           		$data['tickets'] = $tickets; 
+              $data['active_mod'] = 'Help Desk';
+              $data['active_rib'] = '';   
+              $data['page_title'] = "Assign Ticket";
+              $data['page_description'] = "Assign Help Desk  Ticket";
+              $data['breadcrumb'] = [
+                  ['title' => 'Assign Ticket ', 'path' => '/Help Desk', 'icon' => 'fa fa-info', 'active' => 0, 'is_module' => 1],
+                  ['title' => 'Assign Ticket Page', 'active' => 1, 'is_module' => 0]
+              ];
 
      
 		AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);

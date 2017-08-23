@@ -187,8 +187,8 @@
                     start_date: $('#'+modalID).find('#start_date').val(),
                     end_date: $('#'+modalID).find('#end_date').val(),
                     discount: $('#'+modalID).find('#discount').val(),
-                    product: $('#'+modalID).find('#product').val(),
                     package: $('#'+modalID).find('#package').val(),
+                    product: $('#'+modalID).find('#product').val(),
                     price: $('#'+modalID).find('#price').val(),
                     promotion_type: $('#'+modalID).find('input[name = promotion_type]').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()

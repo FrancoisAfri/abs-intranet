@@ -22,8 +22,8 @@
                                         </div>
                                         <select class="form-control select2" style="width: 100%;" multiple="multiple" id="product" name="product_id[]">
                                            <option value="leavetyes">*** Select a product  ***</option> 
-                                                @foreach($product_packages as $Desk)
-                                                    <option value="{{ $Desk->id }}">{{ $Desk->name }}</option>
+                                                @foreach($newProducts as $product)
+                                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
                                                 @endforeach
                                         </select>
                                     </div>

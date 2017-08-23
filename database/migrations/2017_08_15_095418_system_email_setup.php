@@ -14,11 +14,7 @@ class SystemEmailSetup extends Migration
     public function up()
     {
        Schema::create('system_email_setup', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('responder_messages')->nullable();
-            $table->string('response_emails')->nullable();
-            $table->string('ticket_completion_req')->nullable();
-            $table->string('ticket_completed')->nullable(); 
+            $table->increments('id'); 
             $table->smallInteger('auto_processemails')->nullable();
             $table->smallInteger('anly_processreplies')->nullable();
             $table->string('email_address')->nullable(); 
