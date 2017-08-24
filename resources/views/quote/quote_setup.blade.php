@@ -48,6 +48,7 @@
                                                     data-phone_number="{{ $quoteProfile->phone_number }}"
                                                     data-email="{{ $quoteProfile->email }}"
                                                     data-phys_postal_code="{{ $quoteProfile->phys_postal_code }}"
+                                                    data-bank_name="{{ $quoteProfile->bank_name }}"
                                                     data-bank_branch_code="{{ $quoteProfile->bank_branch_code }}"
                                                     data-bank_account_name="{{ $quoteProfile->bank_account_name }}"
                                                     data-bank_account_number="{{ $quoteProfile->bank_account_number }}"

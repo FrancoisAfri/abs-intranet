@@ -111,40 +111,48 @@
                             @endforeach
                         </table>
 
+                        <div class="row">
+                            <div class="col-xs-12"><p>&nbsp;</p></div>
+                        </div>
+
+                        <div class="row no-margin">
+                            <!-- banking details section -->
+                            <div class="col-xs-5 no-padding">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    <b>Baning Details</b><br><br>
+                                    Bank Name: {{ $quoteProfile->bank_name }}<br>
+                                    Branch Code: {{ $quoteProfile->bank_branch_code }}<br>
+                                    Account Name: {{ $quoteProfile->bank_account_name }}<br>
+                                    Account Number: {{ $quoteProfile->bank_account_number }}
+                                </p>
+                            </div>
+
+                            <!-- Total cost section -->
+                            <div class="col-xs-2 no-padding"></div>
+                            <div class="col-xs-5 no-padding">
+                                <table class="table">
+                                    <tr>
+                                        <th style="text-align: left;">Subtotal:</th>
+                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: left; vertical-align: middle;">Discount{{ $discountPercent ? $discountPercent . '%' : '' }}:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="discount-amount" nowrap>{{ 'R ' . number_format($discountAmount, 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: left; vertical-align: middle;">VAT:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="vat-amount" nowrap>{{ ($vatAmount > 0) ? 'R ' . number_format($vatAmount, 2) : '&mdash;' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: left; vertical-align: middle;">Total:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap>{{ 'R ' . number_format($total, 2) }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
                         <div class="col-xs-12">&nbsp;</div>
 
-                        <!-- banking details section -->
-                        <div class="col-xs-5 no-padding">
-                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                <b>Baning Details</b><br><br>
-                                Bank Name: {{ $quoteProfile->bank_name }}<br>
-                                Branch Code: {{ $quoteProfile->bank_branch_code }}<br>
-                                Account Name: {{ $quoteProfile->bank_account_name }}<br>
-                                Account Number: {{ $quoteProfile->bank_account_number }}
-                            </p>
-                        </div>
-
-                        <!-- Total cost section -->
-                        <div class="col-xs-4 col-xs-offset-3 no-padding">
-                            <table class="table">
-                                <tr>
-                                    <th style="text-align: left;">Subtotal:</th>
-                                    <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: left; vertical-align: middle;">Discount{{ $discountPercent ? $discountPercent . '%' : '' }}:</th>
-                                    <td style="text-align: right; vertical-align: middle;" id="discount-amount" nowrap>{{ 'R ' . number_format($discountAmount, 2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: left; vertical-align: middle;">VAT:</th>
-                                    <td style="text-align: right; vertical-align: middle;" id="vat-amount" nowrap>{{ ($vatAmount > 0) ? 'R ' . number_format($vatAmount, 2) : '&mdash;' }}</td>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: left; vertical-align: middle;">Total:</th>
-                                    <td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap>{{ 'R ' . number_format($total, 2) }}</td>
-                                </tr>
-                            </table>
-                        </div>
                     </div>
                     <!-- /.box-body -->
                 </form>

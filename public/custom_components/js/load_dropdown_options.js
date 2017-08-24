@@ -318,7 +318,7 @@ function categoryOnChange(dropDownObj, hrPeopleDDID) {
 
 /* function to load contact people drop down options */
 function contactCompanyDDOnChange(dropDownObj, contactPeopleDDID, selectedOption) {
-    console.log('gets here');
+    //console.log('gets here');
     contactPeopleDDID = contactPeopleDDID || 'contact_person_id';
     selectedOption = selectedOption || '';
 
