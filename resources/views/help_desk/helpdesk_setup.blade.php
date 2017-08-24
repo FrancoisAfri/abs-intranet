@@ -192,6 +192,9 @@
                                   </td>
                                </tr>
                              </div>
+
+                              <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
+                              
                         </table>                       
                     <!-- /.box-body -->
                     <div class="box-footer">

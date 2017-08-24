@@ -15,6 +15,7 @@ use App\business_card;
 use App\helpDesk_setup;
 use App\Province;
 use App\modules;
+use App\ContactCompany;
 use App\module_access;
 USE App\module_ribbons;
 use App\doc_type_category;
@@ -269,7 +270,7 @@ class HelpdeskController extends Controller
 
                 
                 $settings = system_email_setup::orderBy('id', 'asc')->get()->first(); 
-
+                
               
                
 		    $operators = DB::table('operator')
@@ -285,6 +286,7 @@ class HelpdeskController extends Controller
 				  ->where('helpdesk_Admin.helpdesk_id', $serviceID)
 				  ->orderBy('helpdesk_Admin.helpdesk_id')
 				  ->get();
+
 
 			
              $data['autoRensponder'] = $autoRensponder;          
@@ -453,6 +455,7 @@ class HelpdeskController extends Controller
         ]);
 		$SysData = $request->all();
 		unset($SysData['_token']);
+        //return $SysData;
 
 		$time_from =$SysData['time_from'];
         $time_to =$SysData['time_to'];
@@ -467,6 +470,7 @@ class HelpdeskController extends Controller
 		$service->notify_hr_sms_sms = $request->input('notify_hr_sms_sms');
 		$service->notify_manager_email = $request->input('notify_manager_email');
 		$service->notify_manager_sms = $request->input('notify_manager_sms');
+        $service->helpdesk_id = $request->input('helpdesk_id');
 		$service->save();
 		return back();
 
@@ -579,32 +583,8 @@ class HelpdeskController extends Controller
 		$SysData = $request->all();
 		unset($SysData['_token']);
 
-       // return $SysData;
+       DB::table('system_email_setup')->where('id', 1) ->update($SysData);
 
-    // $row = system_email_setup::count();
-    //     if ($row == 0) {
-    //     $service = new system_email_setup($SysData);
-    //     $service->save(); 
-    // }
-    //     else {
-    //      DB::table('system_email_setup')->where('id', 1) ->update($SysData);
-    // }
-
-             $service = new system_email_setup($SysData);
-             $service->helpdesk_id = $request->input('helpdesk_id');
-             $service->save(); 
-
-        //return $SysData;
-		// $service->auto_processemails = $request->input('auto_processemails');
-		// $service->anly_processreplies = $request->input('anly_processreplies');
-		// $service->email_address = $request->input('email_address');
-		// $service->server_name = $request->input('server_name');
-		// $service->preferred_communication_method = $request->input('preferred_communication_method');
-		// $service->server_port = $request->input('server_port');
-		// $service->username = $request->input('username');
-		// $service->password = $request->input('password');
-		// $service->Signature_start = $request->input('Signature_start');
-		// $service->save();
 		return back();
 
     }

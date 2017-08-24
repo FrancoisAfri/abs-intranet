@@ -31,7 +31,7 @@
                                 <th>Start Date</th>
                                  <th>End Date</th>
                                  <th>Discount %</th>
-                                 <th>Price</th>
+                                <!--  <th>Price</th> -->
 
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
@@ -47,7 +47,7 @@
                                     <td>{{ !empty($type->start_date) ? date('d M Y ', $type->start_date) : '' }}</td>
                                     <td>{{ !empty($type->end_date) ? date(' d M Y', $type->end_date) : '' }}</td>
                                     <td>{{ $type->discount }} %</td>
-                                    <td>{{ $type->price }}</td>
+                                    
                                     <td>
                                     <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
@@ -190,7 +190,7 @@
                     package: $('#'+modalID).find('#package').val(),
                     product: $('#'+modalID).find('#product').val(),
                     price: $('#'+modalID).find('#price').val(),
-                    promotion_type: $('#'+modalID).find('input[name = promotion_type]').val(),
+                    promotion_type: $('#'+modalID).find('input:checked[name = promotion_type]').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'cat_module';

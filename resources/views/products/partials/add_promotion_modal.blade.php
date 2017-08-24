@@ -7,7 +7,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title">Add New Promotion Type</h4>
+                     <h4 class="modal-title">Add New Promotion </h4>
                 </div>
                 <div class="modal-body">
                     <div id="leave-invalid-input-alert"></div>
@@ -16,8 +16,8 @@
                                 <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
 
                                 <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_package" name="promotion_type" value="1" checked> Package Type </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type" value="2">  Product Type </label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_package" name="promotion_type" value="1" checked> Package  </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type" value="2">  Product  </label>
 
                                 </div>
                             </div>  
@@ -36,14 +36,14 @@
                         </div>
                    </div>	
                       <div class="form-group temp-field">
-                                <label for="product_id" class="col-sm-2 control-label">Product Type</label>
+                                <label for="product_id" class="col-sm-2 control-label">Product </label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
                                         <select class="form-control select2" style="width: 100%;" multiple="multiple" id="product" name="product_id[]">
-                                            <option value="">*** Select a Product Type ***</option>
+                                            <option value="">*** Select a Product  ***</option>
                                             @foreach($Product as $product)
                                             <option value="{{ $product->id }}">{{ $product->name }}</option>
                                         @endforeach
@@ -52,14 +52,14 @@
                                 </div>
                             </div>
 							   <div class="form-group site-field">
-                                <label for="package_id" class="col-sm-2 control-label">Package Type</label>
+                                <label for="package_id" class="col-sm-2 control-label">Package </label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
                                         <select class="form-control select2" style="width: 100%;" multiple="multiple" id="package" name="package_id[]">
-                                            <option value="">*** Select a Package Type ***</option>
+                                            <option value="">*** Select a Package  ***</option>
                                             @foreach($package as $product)
                                             <option value="{{ $product->id }}">{{ $product->name }}</option>
                                         @endforeach

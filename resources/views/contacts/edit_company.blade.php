@@ -205,6 +205,19 @@
                                 </div>
                             </div>
                         </div>
+                         <hr>
+                        <div class="form-group{{ $errors->has('domain_name') ? ' has-error' : '' }}">
+                            <label for="domain_name" class="col-sm-2 control-label">Domain Name</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-internet-explorer"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="domain_name" name="domain_name" value="{{ $company->domain_name }}" placeholder="Domain name">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
