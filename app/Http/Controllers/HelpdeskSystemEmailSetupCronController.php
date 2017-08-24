@@ -36,7 +36,7 @@ class HelpdeskSystemEmailSetupCronController extends Controller
           $rHelpdesks = system_email_setup::where('auto_processemails', 1)->get()->first();
    			
 
-   			$rHelpdesks = Database::query("select id,email,server,username,password,auto_responder,system_type,signature from helpdesk_helpdesks where auto_process = 1 ");
+   			//$rHelpdesks = Database::query("select id,email,server,username,password,auto_responder,system_type,signature from helpdesk_helpdesks where auto_process = 1 ");
 
    			// 
 
@@ -45,7 +45,7 @@ class HelpdeskSystemEmailSetupCronController extends Controller
                $hostname = $aHelpdesk['server_name'];
                $username = $aHelpdesk['username'];
                $password = $aHelpdesk['password'];
-               $iHelpdeskInboxID = $aHelpdesk['id'];
+               $iHelpdeskInboxID = $aHelpdesk['helpdesk_id'];
                
                if (strlen($hostname) > 32)
                {
@@ -72,17 +72,30 @@ class HelpdeskSystemEmailSetupCronController extends Controller
                                              else $sFrom = $overview->from;
                                              $sFrom = str_replace("'",'',$sFrom);
                                              $sFrom = str_replace("\"",'',$sFrom);
-                                             $email = $sFrom;
-                                             
+                                             $email = $sFrom;   
+
+                                             //this part
                                              $aEmailDomain = array();
                                              $aEmailDomain = explode("@",$sFrom);
+
                                              //print "$iHelpdeskInboxID >> ";
-                                             $rDomains = database::query("select helpdesk_id from helpdesk_domains where lower(domain) = lower('$aEmailDomain[1]')");
-                                             if ($aDomain = $rDomains->fetchrow()) $iHelpdeskID = $aDomain['helpdesk_id'];
-                                             else $iHelpdeskID = $iHelpdeskInboxID;
+                                           //  $rDomains = database::query("select helpdesk_id from helpdesk_domains where lower(domain) = lower('$aEmailDomain[1]')");
+
+                                             
+										$rDomainss = system_email_setup::select('helpdesk_id')->where(lower('email_address'), $aEmailDomain[1])->get()->first();
+										                    #convert to lower case 
+										           $rDomains =  strtolower($rDomainss);
+
+										           #compare with array
+										          // $rDomains = $aEmailDomain[1];
+
+                                             // if ($aDomain = $rDomains->fetchrow()) $iHelpdeskID = $aDomain['helpdesk_id'];
+                                             // else $iHelpdeskID = $iHelpdeskInboxID;
                                              
                                              //print "HelpdeskID for $sFrom set to $iHelpdeskID<br>";
                                              $aHelpdesk = database::query("select * from helpdesk_helpdesks where id=$iHelpdeskID ")->fetchrow();
+                                             	 $aHelpdesk = HelpDesk_setup::where('helpdesk_id' , $rDomainss)->get();
+
                                              $sTicketTask = "Ticket";
                                              if (!empty($aHelpdesk['ticket_name'])) $sTicketTask = $aHelpdesk['ticket_name'];
                                              
@@ -137,27 +150,26 @@ class HelpdeskSystemEmailSetupCronController extends Controller
                                              if (empty($sContact)) $sContact = $sFrom;
                                              if (!empty($sContact))
                                              {                                            
-                                                            $sContact = htmlentities($sContact,ENT_QUOTES);
-                                                            $aData = array();
-                                                            preg_match("/\[#[0-9]*\]/",$sSubject,$aData);
+                                                     $sContact = htmlentities($sContact,ENT_QUOTES);
+                                                      $aData = array();
+                                                       preg_match("/\[#[0-9]*\]/",$sSubject,$aData);
                                                             
-                                                            
-                                                            if (!isset($_REQUEST['testing']))
+                                                      if (!isset($_REQUEST['testing']))
                                                             {
-                                                                           if (empty($aData) && $aHelpdesk['only_replies'] == 0)
-                                                                           {
-                                                                                          //-------- Begin: Extract Keywords assigned to operators into $aOperatorKeywords
-                                                                                          if (!empty($iHelpdeskID))
-                                                                                          {
-                                                                                                         $aOperatorKeywords = array();
-                                                                                                         $rKeywords = database::query("select user_id,keyword,notify from helpdesk_operator_keywords where helpdesk_id=$iHelpdeskID");
-                                                                                                         while ($aKeywords = $rKeywords->fetchrow())
-                                                                                                         {
-                                                                                                                        $iUserID = $aKeywords['user_id'];
-                                                                                                                        $aKeywords['keyword'] = str_replace(" ",'',$aKeywords['keyword']);
-                                                                                                                                       $aOperatorKeywords[strtolower($aKeywords['keyword'])] = array();
-                                                                                                                                       $aOperatorKeywords[strtolower($aKeywords['keyword'])][0] = $iUserID;
-                                                                                                                                       $aOperatorKeywords[strtolower($aKeywords['keyword'])][1] = $aKeywords['notify'];
+                                                               if (empty($aData) && $aHelpdesk['only_replies'] == 0)
+                                                                     {
+                                                                        //-------- Begin: Extract Keywords assigned to operators into $aOperatorKeywords
+                                                                         if (!empty($iHelpdeskID))
+                                                                              {
+                                                                               $aOperatorKeywords = array();
+                                                                               $rKeywords = database::query("select user_id,keyword,notify from helpdesk_operator_keywords where helpdesk_id=$iHelpdeskID");
+                                                                                       while ($aKeywords = $rKeywords->fetchrow())
+                                                                                         {
+                                                                                           $iUserID = $aKeywords['user_id'];
+                                                                                           $aKeywords['keyword'] = str_replace(" ",'',$aKeywords['keyword']);
+                                                                                           $aOperatorKeywords[strtolower($aKeywords['keyword'])] = array();
+                                                                                           $aOperatorKeywords[strtolower($aKeywords['keyword'])][0] = $iUserID;
+                                                                                           $aOperatorKeywords[strtolower($aKeywords['keyword'])][1] = $aKeywords['notify'];
                                                                                                          }
                                                                                           }
                                                                                           //-------- End: Extract Keywords assigned to operators into $aOperatorKeywords
@@ -165,36 +177,36 @@ class HelpdeskSystemEmailSetupCronController extends Controller
                                                                                           //-------- Begin: Extract Keywords assigned to categories into $aCategoryKeywords
                                                                                           if (!empty($iHelpdeskID))
                                                                                           {
-                                                                                                         $aCategoryKeywords = array();
-                                                                                                         $rKeywords = database::query("select id,keywords from helpdesk_request_cat where helpdesk_id=$iHelpdeskID");
-                                                                                                         while ($aKeywords = $rKeywords->fetchrow())
-                                                                                                         {
-                                                                                                                        if (!empty($aKeywords['keywords']))
-                                                                                                                        {
-                                                                                                                                       $aKeywords['keywords'] = str_replace(" ",'',$aKeywords['keywords']);
-                                                                                                                                       $x = explode(",",$aKeywords['keywords']);
-                                                                                                                                       foreach ($x as $value)
-                                                                                                                                                      $aCategoryKeywords[strtolower($value)] = $aKeywords['id'];
-                                                                                                                        }
+                                                                                               $aCategoryKeywords = array();
+                                                                                               $rKeywords = database::query("select id,keywords from helpdesk_request_cat where helpdesk_id=$iHelpdeskID");
+                                                                                                 while ($aKeywords = $rKeywords->fetchrow())
+                                                                                                     {
+                                                                                                         if (!empty($aKeywords['keywords']))
+                                                                                                            {
+                                                                                                             $aKeywords['keywords'] = str_replace(" ",'',$aKeywords['keywords']);
+                                                                                                                  $x = explode(",",$aKeywords['keywords']);
+                                                                                                                     foreach ($x as $value)
+                                                                                                                       $aCategoryKeywords[strtolower($value)] = $aKeywords['id'];
+                                                                                                             }
                                                                                                          }
                                                                                           }
                                                                                           //-------- End: Extract Keywords assigned to categories into $aCategoryKeywords
                                                                                           
                                                                                           //-------- Begin: Extract Keywords assigned to Types into $aTypeKeywords
-                                                                                          if (!empty($iHelpdeskID))
-                                                                                          {
-                                                                                                         $aTypeKeywords = array();
-                                                                                                         $rKeywords = database::query("select id,keywords from helpdesk_request_type where helpdesk_id=$iHelpdeskID");
+                                                                                      if (!empty($iHelpdeskID))
+                                                                                        {
+                                                                                            $aTypeKeywords = array();
+                                                                                                $rKeywords = database::query("select id,keywords from helpdesk_request_type where helpdesk_id=$iHelpdeskID");
                                                                                                          while ($aKeywords = $rKeywords->fetchrow())
                                                                                                          {
-                                                                                                                        if (!empty($aKeywords['keywords']))
-                                                                                                                        {
-                                                                                                                                       $aKeywords['keywords'] = str_replace(" ",'',$aKeywords['keywords']);
-                                                                                                                                       $x = explode(",",$aKeywords['keywords']);
-                                                                                                                                       foreach ($x as $value)
-                                                                                                                                                      $aTypeKeywords[strtolower($value)] = $aKeywords['id'];
-                                                                                                                        }
-                                                                                                         }
+                                                                                                            if (!empty($aKeywords['keywords']))
+                                                                                                                 {
+                                                                                                                  $aKeywords['keywords'] = str_replace(" ",'',$aKeywords['keywords']);
+                                                                                                                     $x = explode(",",$aKeywords['keywords']);
+                                                                                                                        foreach ($x as $value)
+                                                                                                                          $aTypeKeywords[strtolower($value)] = $aKeywords['id'];
+                                                                                                              }
+                                                                                                      }
                                                                                           }
                                                                                           //-------- End: Extract Keywords assigned to Types into $aTypeKeywords
                                                                                           

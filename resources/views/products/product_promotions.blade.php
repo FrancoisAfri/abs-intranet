@@ -190,7 +190,7 @@
                     package: $('#'+modalID).find('#package').val(),
                     product: $('#'+modalID).find('#product').val(),
                     price: $('#'+modalID).find('#price').val(),
-                    promotion_type: $('#'+modalID).find('input[name = promotion_type]').val(),
+                    promotion_type: $('#'+modalID).find('input:checked[name = promotion_type]').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'cat_module';

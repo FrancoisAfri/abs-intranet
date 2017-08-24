@@ -41,7 +41,9 @@ class DashboardController extends Controller
         $user = Auth::user()->load('person');
 
 
-		  $email = $user->first()->email;
+
+
+		 
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -169,7 +171,8 @@ class DashboardController extends Controller
                 ->orderBy('id', 'asc')
                 ->get();
 
-
+                $email = $user->email;
+                 
              $Helpdesk  = HelpDesk::orderBy('name', 'asc')->get();
              //return $Helpdesk;
             $name = HRPerson::where('id', $loggedInEmplID )

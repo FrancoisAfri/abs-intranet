@@ -228,20 +228,21 @@
                                 </div>
                             </div>
                         </div>
-                        <!--
+                       
                         <hr>
-                        <div class="form-group{{ $errors->has('contact_person') ? ' has-error' : '' }}">
-                            <label for="name" class="col-sm-2 control-label">Contact Person</label>
+                        <div class="form-group{{ $errors->has('do') ? ' has-error' : '' }}">
+                            <label for="domain_name" class="col-sm-2 control-label">Domain Name</label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                                        <i class="fa fa-internet-explorer"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="contact_person" name="contact_person" value="{{ old('contact_person') }}" placeholder="Contact Person">
+                                    <input type="text" class="form-control" id="domain_name" name="domain_name" value="{{ old('domain_name') }}" placeholder="Domain name">
                                 </div>
                             </div>
                         </div>
+                         <!--
                         <div class="form-group{{ $errors->has('cp_cell_number') ? ' has-error' : '' }}">
                             <label for="phone_number" class="col-sm-2 control-label">Cell Number</label>
 

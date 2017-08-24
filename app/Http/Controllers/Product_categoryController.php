@@ -498,7 +498,7 @@ class Product_categoryController extends Controller
                  }
     }
         #products loop
-         if ($promData['promotion_type'] == 2){
+         elseif ($promData['promotion_type'] == 2){
         foreach ($Products as $product)
              {
             $prom = new product_promotions();
