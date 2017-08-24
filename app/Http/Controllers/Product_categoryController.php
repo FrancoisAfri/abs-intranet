@@ -468,61 +468,50 @@ class Product_categoryController extends Controller
         $promData = $request->all();
         unset($promData['_token']);
 
-        // $Products = $promData['product']; 
-        $Packages = $promData['package']; 
-        $Products = $promData['product'];
-      
-      // $Product = $docData['product_id'];
+                $Packages = $promData['package']; 
+                $Products = $promData['product'];
+                $startdate = $promData['start_date'];
+                $enddate = $promData['end_date'];
        
-       
-
           #Package loop
     if ($promData['promotion_type'] == 1){
             foreach ($Packages as $Package)
                 {
-            $prom = new product_promotions();
-            $StartDate = str_replace('/', '-', $promData['start_date']);
-            $StartDate = strtotime($promData['start_date']);
-
-            $EndDate = str_replace('/', '-', $promData['end_date']);
-            $EndDate = strtotime($promData['end_date']);
-            
-            $prom->name = $request->input('name');
-            $prom->description = $request->input('description');
-            $prom->discount = $request->input('discount');
-            $prom->product_packages_id = $Package;
-            $prom->start_date = $StartDate;
-            $prom->end_date =  $EndDate;
-            $prom->status = 1;
-            $prom->save();
+                    $prom = new product_promotions();
+                    $StartDate = strtotime($startdate);
+                    $EndDate = strtotime($enddate);
+                    $prom->name = $request->input('name');
+                    $prom->description = $request->input('description');
+                    $prom->discount = $request->input('discount');
+                    $prom->product_packages_id = $Package;
+                    $prom->start_date = $StartDate;
+                    $prom->end_date =  $EndDate;
+                    $prom->status = 1;
+                    $prom->save();
                  }
     }
         #products loop
-         elseif ($promData['promotion_type'] == 2){
+    elseif ($promData['promotion_type'] == 2){
         foreach ($Products as $product)
              {
-            $prom = new product_promotions();
-			$StartDate = str_replace('/', '-', $promData['start_date']);
-			$StartDate = strtotime($promData['start_date']);
-
-			 $EndDate = str_replace('/', '-', $promData['end_date']);
-            $EndDate = strtotime($promData['end_date']);
-            
-            $prom->name = $request->input('name');
-            $prom->description = $request->input('description');
-            $prom->discount = $request->input('discount');
-            $prom->product_product_id = $product;
-            $prom->start_date = $StartDate;
-            $prom->end_date =  $EndDate;
-            $prom->status = 1;
-            $prom->save();
+                    $prod = new product_promotions();
+                    $StartDate = strtotime($startdate);
+                    $EndDate = strtotime($enddate);
+                    $prod->name = $request->input('name');
+                    $prod->description = $request->input('description');
+                    $prod->discount = $request->input('discount');
+                    $prod->product_product_id = $product;
+                    $prod->start_date = $StartDate;
+                    $prod->end_date =  $EndDate;
+                    $prod->status = 1;
+                    $prod->save();
 		      }
     }
     
 		return response()->json();
     }
-    #
-    #
+    
+
     public function priceSave(Request $request, product_products $product)
     {
         $this->validate($request, [
