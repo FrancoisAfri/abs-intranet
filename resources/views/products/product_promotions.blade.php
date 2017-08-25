@@ -1,10 +1,6 @@
 @extends('layouts.main_layout')
-<link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
-<!-- bootstrap datepicker -->
+  <!-- bootstrap datepicker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-<link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
-    <!-- table -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
      <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @section('content')
@@ -13,43 +9,36 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title"> Product Type Promotions</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                    </div>
+
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-                    {{ csrf_field() }}
+                 {{ csrf_field() }}
                     {{ method_field('PATCH') }}
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th style="width: 10px; text-align: center;"></th>
+                <!-- /.box-header -->
+                <div class="box-body">
+
+                <table class="table table-bordered">
+                     <tr><th style="width: 10px"></th>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Start Date</th>
                                  <th>End Date</th>
                                  <th>Discount %</th>
-                                <!--  <th>Price</th> -->
-
-                                <th style="width: 5px; text-align: center;"></th>
-                            </tr>
-                            @if (count($productsPromotions) > 0)
-                              @foreach ($productsPromotions as $type)
-                               <tr id="categories-list">
-                               <td nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                         <!--    <a href="{{ '/Product/Promotions/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product Type</a> -->
-                                    </td>
+                   
+                     <th style="width: 40px"></th>
+                     </tr>
+                    @if (count($productsPromotions) > 0)
+                        @foreach($productsPromotions as $type)
+                         <tr id="jobtitles-list">
+                           <td nowrap>
+                       <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button></td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }}</td>
                                     <td>{{ !empty($type->start_date) ? date('d M Y ', $type->start_date) : '' }}</td>
                                     <td>{{ !empty($type->end_date) ? date(' d M Y', $type->end_date) : '' }}</td>
                                     <td>{{ $type->discount }} %</td>
-                                    
-                                    <td>
-                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
+                          
+                          <td nowrap>
+                           <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
                                     </td>
@@ -57,10 +46,10 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="7">
+                        <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No Promotions to display, please start by adding a new Promotions..
+                             No Promotions to display, please start by adding a new Promotions..
                         </div>
                         </td>
                         </tr>
@@ -68,54 +57,36 @@
                             </table>
                         </div>
                                    <!-- /.box-body -->
-                    <div class="box-footer">
+                   <div class="box-footer">
                      <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-promotion-modal">Add new Promotions </button>
                     </div>
              </div>
         </div>
-   <!-- Include add new prime rate modal -->
-        @include('products.partials.add_promotion_modal')
-        @include('hr.partials.edit_category_modal')
-
+   @include('products.partials.add_promotion_modal')
+   @include('hr.partials.edit_category_modal')
 
 </div>
 
-<!-- end section -->
 
 @endsection
 
 @section('page_script')
-<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+ <!-- Ajax form submit -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
-    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
      <!-- InputMask -->
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
 
     <script>
         function postData(id , data ){
             if (data == 'qual') location.href = "/hr/addqul/" + id;
-            // else if (data == 'doc') location.href = "/hr/adddoc/" + id;
-            // else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
-            // else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
+            else if (data == 'doc') location.href = "/hr/adddoc/" + id;
+            else if (data == 'dactive') location.href = "/Product/category/" + id;
+            else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
         }
-        $(function () {
+         $(function () {
               $(".select2").select2();
               $('.temp-field').hide();
             var moduleId;
@@ -234,3 +205,4 @@
         });
     </script>
 @endsection
+

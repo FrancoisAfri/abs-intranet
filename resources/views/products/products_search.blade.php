@@ -123,8 +123,8 @@
                                     </div>
                                 <select class="form-control select2" style="width: 100%;" id="cat_id" name="cat_id">
                                         <option value="">*** Select a product name ***</option>
-                                        @foreach($productss as $document)
-                                            <option value="{{ $documentType->id }}">{{ $documentType->catName  }}</option>
+                                        @foreach($productss as $products)
+                                            <option value="{{ $products->id }}">{{ $products->catName  }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -200,7 +200,7 @@
                         </div>
 
                         <div class="form-group pack-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
-                            <label for="product_type" class="col-sm-2 control-label"> Product Type</label>
+                            <label for="product_type" class="col-sm-2 control-label"> Product </label>
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -208,8 +208,8 @@
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="product_type" name="product_type">
                                         <option value="">*** Select a Product Type  ***</option>
-                                        @foreach($products as $documentType)
-                                            <option value="{{ $documentType->id }}">{{ $documentType->name  }}</option>
+                                        @foreach($productss as $product)
+                                            <option value="{{ $product->id }}">{{ $product->name  }}</option>
                                         @endforeach
                                     </select>
                                 </div>

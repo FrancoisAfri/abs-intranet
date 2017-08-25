@@ -273,12 +273,14 @@ class Product_categoryController extends Controller
         $qualifications = DB::table('qualification')->orderBy('id')->get();
         $packages = product_packages::where('status', 1)->get();
         $products = product_products::where('status', 1)->get();
+        //return $products;
         $category = product_category::where('status', 1)->get();
         $promotions = product_promotions::where('status', 1)->get();
         $productss  = DB::table('Product_products')
         ->select('Product_products.*','product_Category.name as catName')
         ->leftJoin('product_Category', 'Product_products.id', '=', 'product_Category.id')
         ->get();
+        //return $productss;
 
 		$data['page_title'] = "Search";
         $data['page_description'] = "Manage Product(s) Search";

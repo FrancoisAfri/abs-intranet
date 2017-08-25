@@ -254,8 +254,8 @@ class HelpdeskController extends Controller
 		    
 		    $employees = HRPerson::where('status', 1)->get();
 		     
-           // $autoRensponder = DB::table('auto_rensponder')->orderBy('id', 'asc')->get()->first();
-           
+     //$Rensponder = DB::table('auto_rensponder')->select('helpdesk_id', $serviceID)->get()->first();
+         // return $Rensponder; 
             $counRow = autoRensponder::count();
           // return $counRow;
 
@@ -263,24 +263,21 @@ class HelpdeskController extends Controller
             $autRensponder = new autoRensponder();
             $autRensponder->save();
             }else{
-                $autoRensponder = autoRensponder::orderBy('id', 'asc')->get()->first();  
+                $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();  
             }
 
-             $autoRensponder = autoRensponder::orderBy('id', 'asc')->get()->first(); 
-
+            $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();  
+             
+            $settings = system_email_setup::orderBy('id', 'des')->get()->first();  
                 
-                $settings = system_email_setup::orderBy('id', 'asc')->get()->first(); 
-                
-              
-               
 		    $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
 				         ->where('operator.helpdesk_id', $serviceID)
 				        ->orderBy('operator.operator_id')
 				        ->get();
-// return $operators;
-		   $HelpdeskAdmin = DB::table('helpdesk_Admin')
+
+		    $HelpdeskAdmin = DB::table('helpdesk_Admin')
 				  ->select('helpdesk_Admin.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				  ->leftJoin('hr_people', 'helpdesk_Admin.admin_id', '=', 'hr_people.id')
 				  ->where('helpdesk_Admin.helpdesk_id', $serviceID)
@@ -366,11 +363,6 @@ class HelpdeskController extends Controller
         unset($docData['_token']);
       
         $loggedInEmplID = Auth::user()->person->id;
-
-        // $acroym = DB::table('company_identities')->select('header_acronym_bold')->get();
-                   
-        // $negannualDays = $acroym->first()->header_acronym_bold;
-        // $firstname = substr($negannualDays, 0,1);
 
         $tick->name = $request->input('name');
         $tick->email = $request->input('email');
@@ -459,19 +451,37 @@ class HelpdeskController extends Controller
 
 		$time_from =$SysData['time_from'];
         $time_to =$SysData['time_to'];
+        $HelpdeskID = $SysData['helpdesk_id'];
 
         //convert time to unix timestamp
         $start_time = strtotime($time_from);
         $end_time = strtotime($time_to);
 
-        $service->time_from = $start_time;
-        $service->time_to =$end_time;
-		$service->notify_hr_email = $request->input('notify_hr_email');
-		$service->notify_hr_sms_sms = $request->input('notify_hr_sms_sms');
-		$service->notify_manager_email = $request->input('notify_manager_email');
-		$service->notify_manager_sms = $request->input('notify_manager_sms');
-        $service->helpdesk_id = $request->input('helpdesk_id');
-		$service->save();
+        // $counRow = helpDesk_setup::count();
+        // if ($counRow ==  0) {
+
+                $service->time_from = $start_time;
+                $service->time_to =$end_time;
+                $service->notify_hr_email = $request->input('notify_hr_email');
+                $service->notify_hr_sms_sms = $request->input('notify_hr_sms_sms');
+                $service->notify_manager_email = $request->input('notify_manager_email');
+                $service->notify_manager_sms = $request->input('notify_manager_sms');
+                $service->helpdesk_id = $request->input('helpdesk_id');
+                $service->save();
+            // }else{
+            //     //$autoRensponder = autoRensponder::where('helpdesk_id', $serviceID)->get()->first(); 
+            //      DB::table('helpDeskSetup')
+            //        ->where('helpdesk_id', $HelpdeskID) 
+            //        ->update(['time_from' => $start_time] ,
+            //                 ['time_to' => $end_time],
+            //                 ['notify_hr_email' =>$request->input('notify_hr_email')],
+            //                 ['notify_hr_sms_sms' =>$request->input('notify_hr_sms_sms')],
+            //                 ['notify_manager_email' =>$request->input('notify_manager_email')],
+            //                 ['notify_manager_sms' =>$request->input('notify_manager_sms')]); 
+            // }
+ 
+
+        
 		return back();
 
     }
@@ -565,13 +575,19 @@ class HelpdeskController extends Controller
         ]);
 		$SysData = $request->all();
 		unset($SysData['_token']);
+        //return $SysData;
 
 		$service->responder_messages = $request->input('responder_messages');
 		$service->response_emails = $request->input('response_emails');
 		$service->ticket_completion_req = $request->input('ticket_completion_req');
 		$service->ticket_completed = $request->input('ticket_completed');
+        $service->helpdesk_id =  $request->input('helpdesk_id'); 
 		$service->save();
+         // DB::table('auto_rensponder')->where('id', 1) ->save($SysData);
+
 		return back();
+
+
 
     }
 

@@ -55,7 +55,7 @@ class HelpdeskSystemEmailSetupCronController extends Controller
 
                               for ($msgid=$iAmount; $msgid>0; $msgid--)
                               {
-                                             //---- Begin: Fetch Subject, From address & body from email
+                                    //---- Begin: Fetch Subject, From address & body from email
                                              $result = imap_fetch_overview($inbox,$msgid);
 
                                              if (!isset($result[0])) 
@@ -93,21 +93,22 @@ class HelpdeskSystemEmailSetupCronController extends Controller
                                              // else $iHelpdeskID = $iHelpdeskInboxID;
                                              
                                              //print "HelpdeskID for $sFrom set to $iHelpdeskID<br>";
-                                             $aHelpdesk = database::query("select * from helpdesk_helpdesks where id=$iHelpdeskID ")->fetchrow();
-                                             	 $aHelpdesk = HelpDesk_setup::where('helpdesk_id' , $rDomainss)->get();
+                                             // $aHelpdesk = database::query("select * from helpdesk_helpdesks where id=$iHelpdeskID ")->fetchrow();
+                                             	 $aHelpdesk = HelpDesk_setup::where('helpdesk_id' , $rDomainss)->get()->first();
 
-                                             $sTicketTask = "Ticket";
-                                             if (!empty($aHelpdesk['ticket_name'])) $sTicketTask = $aHelpdesk['ticket_name'];
+                                             // $sTicketTask = "Ticket";
+                                             // if (!empty($aHelpdesk['ticket_name'])) $sTicketTask = $aHelpdesk['ticket_name'];
                                              
-                                             $aDayStart = explode(':',$aHelpdesk['officehours_start']);
-                                             if (!isset($aDayStart[1])) $iDayStart = 28800; # 08:00
-                                             else $iDayStart = ($aDayStart[0] + ($aDayStart[1]/60)) * 3600;
-                                             $aDayEnd = explode(':',$aHelpdesk['officehours_end']);
-                                             if (!isset($aDayEnd[1])) $iDayEnd = 61200; # 17:00
-                                             else $iDayEnd = ($aDayEnd[0] + ($aDayEnd[1]/60)) * 3600;
-                                             $iTimeLogged = strtotime(date("1970-01-01 H:i",$iToday)) + 7200; # GMT +2
-                                             if (getWorkingDays(date("Y-m-d",$iToday),date("Y-m-d",$iToday)) == 0 || $iTimeLogged < $iDayStart || $iTimeLogged > $iDayEnd) $iAfterHours = 1;
-                                             else $iAfterHours = 0;
+
+                                             // $aDayStart = explode(':',$aHelpdesk['officehours_start']);
+                                             // if (!isset($aDayStart[1])) $iDayStart = 28800; # 08:00
+                                             // else $iDayStart = ($aDayStart[0] + ($aDayStart[1]/60)) * 3600;
+                                             // $aDayEnd = explode(':',$aHelpdesk['officehours_end']);
+                                             // if (!isset($aDayEnd[1])) $iDayEnd = 61200; # 17:00
+                                             // else $iDayEnd = ($aDayEnd[0] + ($aDayEnd[1]/60)) * 3600;
+                                             // $iTimeLogged = strtotime(date("1970-01-01 H:i",$iToday)) + 7200; # GMT +2
+                                             // if (getWorkingDays(date("Y-m-d",$iToday),date("Y-m-d",$iToday)) == 0 || $iTimeLogged < $iDayStart || $iTimeLogged > $iDayEnd) $iAfterHours = 1;
+                                             // else $iAfterHours = 0;
                                                             
                                              if (isset($overview->subject)) $sSubject = $overview->subject;
                                              else $sSubject = "No Subject";
@@ -130,18 +131,19 @@ class HelpdeskSystemEmailSetupCronController extends Controller
                                              $sContact = '';
                                              $iContactID = $iHrID = 0;
                                              
-                                             $rContactsActive = Database::query("select active from security_modules where title = 'Contacts'");
-                                             if ($aContactsActive = $rContactsActive->fetchrow())
-                                                            if ($aContactsActive['active'] == TRUE)
-                                                            {
-                                                                           $rContact = Database::query("select ccon.id, ccom.name from contacts_contacts ccon left join contacts_company ccom  on (ccon.company_id = ccom.id) where lower(ccon.email) = lower('$email')");
-                                                                           if ($aContact = $rContact->fetchrow())
-                                                                           {
-                                                                                          $sContact = $aContact['name'];
-                                                                                          $iContactID = $aContact['id'];
-                                                                           }
-                                                            }
+                                             // $rContactsActive = Database::query("select active from security_modules where title = 'Contacts'");
+                                             // if ($aContactsActive = $rContactsActive->fetchrow())
+                                             //                if ($aContactsActive['active'] == TRUE)
+                                             //                {
+                                             //                               $rContact = Database::query("select ccon.id, ccom.name from contacts_contacts ccon left join contacts_company ccom  on (ccon.company_id = ccom.id) where lower(ccon.email) = lower('$email')");
+                                             //                               if ($aContact = $rContact->fetchrow())
+                                             //                               {
+                                             //                                              $sContact = $aContact['name'];
+                                             //                                              $iContactID = $aContact['id'];
+                                             //                               }
+                                             //                }
                                              $rContact = Database::query("select id, firstname || ' ' || surname as fullname from hr_person where lower(email)= lower('$email')");
+                                             
                                              if ($aContact = $rContact->fetchrow())
                                              {
                                                             $sContact = $aContact['fullname'];

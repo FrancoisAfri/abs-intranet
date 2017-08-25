@@ -156,6 +156,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                             <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
                            
                     
                             <table class="table table-bordered">
@@ -192,9 +194,6 @@
                                   </td>
                                </tr>
                              </div>
-
-                              <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
-                              
                         </table>                       
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -587,8 +586,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                    
-                                     <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->responder_messages }} </textarea>
-
+                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->responder_messages }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -601,7 +599,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                   
-                                     <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->response_emails }} </textarea>
+                                      <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->response_emails }}</textarea>
 
                                 </div>
                             </div>
@@ -614,7 +612,7 @@
                                     <div class="input-group-addon">
                                        <i class="fa fa-ticket"></i>
                                     </div>
-                                      <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->ticket_completion_req }} </textarea>
+                                      <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->ticket_completion_req }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -627,15 +625,17 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-ticket"></i>
                                     </div>
-                                
-                                     <textarea name="ticket_completion_req" class="form-control" placeholder="Message sent when ticket completion has been requested:..." rows="4" >{{ $autoRensponder->ticket_completed }} </textarea>
+                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->ticket_completed }}</textarea>
+                                    
                                 </div>
                             </div>
                         </div>
+
+                           <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
                        
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
+                        <input type="submit" id="load-allocation"  class="btn btn-primary pull-right" value="Submit">
                     </div>
                     <!-- /.box-footer -->
                  </div>
