@@ -20,10 +20,14 @@ class product_products extends Model
         return $this->belongsToMany('App\product_packages', 'packages_product_table', 'product_product_id', 'product_packages_id')->withPivot('description');
     }
 
-
-    public function Product_Promotions()
+    /**
+     * The relationships between product and promotion.
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function promotions()
     {
-        return $this->belongsTo(product_promotions::class, 'category_id');
+        return $this->hasMany(product_promotions::class, 'product_product_id');
     }
 
     /**
