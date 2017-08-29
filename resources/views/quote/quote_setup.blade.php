@@ -133,6 +133,8 @@
                     <div class="box-body">
                         <textarea id="approved_quote_message" name="template_content" rows="10" cols="80">{{ ($approvedQuoteTemplate) ? $approvedQuoteTemplate->template_content : '' }}</textarea>
                         <input type="hidden" name="template_key" value="approved_quote">
+						<br>
+                        <p style="margin-bottom: 0;">Placeholders: [client name]</p>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

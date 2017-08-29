@@ -201,6 +201,7 @@ class QuotesController extends Controller
 		$quoteApplications = Quotation::whereHas('person', function ($query) {
 			$query->where('manager_id', Auth::user()->person->id);
 		})
+		->whereIn('status', [1,2])
 		->with('products','packages','person','company','client','divisionName')
 		->orderBy('id')
 		->get();
@@ -212,12 +213,12 @@ class QuotesController extends Controller
             ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
         ];
 		
-		$quoteApplications = Quotation::with(['products','packages', 'person' => function ($query) {
+		/*$quoteApplications = Quotation::with(['products','packages', 'person' => function ($query) {
 			$query->where('manager_id', Auth::user()->person->id);
 		}])
 		->orderBy('id')
 		->get();
-
+*/
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'Authorisation';
         $data['quoteApplications'] = $quoteApplications;
@@ -231,16 +232,38 @@ class QuotesController extends Controller
 		if ($quote->status == 1) $stastus = 2;
 		elseif ($quote->status == 2) $stastus = 5;
 		
-		$changedStatus =  $this->quoteStatuses[$stastus];
+		$changedStatus =  "Status Changed To: ".$this->quoteStatuses[$stastus];
 		$quote->status = $stastus;
 		$quote->update();
 		if ($stastus == 5)
 		{
 			//Email Client to confirn success
+			$quote->load('client');
+            $messageContents = EmailTemplate::where('template_key', 'approved_quote')->first();
+            if (!empty($messageContents))
+				$messageContent = $messageContents->template_content;
+			else $messageContent = '';
+            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+            $quoteAttachment = $this->viewQuote($quote, true, false, true);
+            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+			$quote->status = 5;
+            $quote->update();
+			$changedStatus .= ", Email sent to client, to welcome them";
 		}
 		elseif ($stastus == 2)
 		{
-			//Send Quote to client
+			 //if authorization not required: email quote to client and update status to awaiting client approval
+            $quote->load('client');
+            $messageContents = EmailTemplate::where('template_key', 'send_quote')->first();
+            if (!empty($messageContents))
+				$messageContent = $messageContents->template_content;
+			else $messageContent = '';
+            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+            $quoteAttachment = $this->viewQuote($quote, true, false, true);
+            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+            $quote->status = 2;
+            $quote->update();
+			$changedStatus .= ", , Email sent to client, to notify them";
 		}
 		// Add to quote history
 		$QuoteApprovalHistory = new QuoteApprovalHistory();
@@ -250,23 +273,14 @@ class QuotesController extends Controller
 		$QuoteApprovalHistory->comment = $changedStatus;
 		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
 		$QuoteApprovalHistory->save();
-		
 		AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", "Edited by User", 0);
 		return back();  
     }
 	# Decline Quote
 	public function declineQuote(Quotation $quote)
     {
-		/*1 => 'Awaiting Manager Approval',
-        2 => 'Awaiting Client Approval',
-        3 => 'Approved by Manager',
-        -3 => 'Declined by Manager',
-        4 => 'Approved by Client',
-        -4 => 'Declined by Client',
-        -1 => 'Cancelled',
-        5 => 'Authorised'*/
-		if ($quote->status == 1) $stastus = 0;
-		else $stastus = 1;	
+		if ($quote->status == 1) $stastus = -3;
+		else $stastus = -4;	
 		$quote->status = $stastus;
 		$quote->update();
 		$changedStatus =  $this->quoteStatuses[$stastus];
@@ -412,7 +426,7 @@ class QuotesController extends Controller
 
         //return $request->all();
         $user = Auth::user()->load('person');
-
+		$status = 1;
         //save quote
         $quote = new Quotation();
         DB::transaction(function () use ($quote, $request, $highestLvl, $user) {
@@ -448,15 +462,6 @@ class QuotesController extends Controller
             $tcIDs = ($request->input('tc_id')) ? $request->input('tc_id') : [];
             $quote->termsAndConditions()->sync($tcIDs);
         });
-		// Add to quote history
-		$QuoteApprovalHistory = new QuoteApprovalHistory();
-		$QuoteApprovalHistory->quotation_id = $quote->id;
-		$QuoteApprovalHistory->user_id = Auth::user()->person->id;
-		$QuoteApprovalHistory->status = 1;
-		$QuoteApprovalHistory->comment = "New Quote Created";
-		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
-		$QuoteApprovalHistory->save();
-
         //if authorization required: email manager for authorization
         if($quoteProfile->authorisation_required === 2 && $quote->id) {
             $managerID = $user->person->manager_id;
@@ -464,16 +469,36 @@ class QuotesController extends Controller
                 $manager = HRPerson::find($managerID);
                 Mail::to($manager->email)->send(new ApproveQuote($manager, $quote->id));
             }
+			//Add to quote history
+			$QuoteApprovalHistory = new QuoteApprovalHistory();
+			$QuoteApprovalHistory->quotation_id = $quote->id;
+			$QuoteApprovalHistory->user_id = Auth::user()->person->id;
+			$QuoteApprovalHistory->status = $status;
+			$QuoteApprovalHistory->comment = "New Quote Created, Manager Approval";
+			$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
+			$QuoteApprovalHistory->save();
         }
-        else {
+        else 
+		{
+			$status = 2;
             //if authorization not required: email quote to client and update status to awaiting client approval
             $quote->load('client');
-            $messageContent = EmailTemplate::where('template_key', 'send_quote')->first()->template_content;
+            $messageContent = EmailTemplate::where('template_key', 'send_quote')->first();
+            if (!empty($messageContent))
+				$messageContent = $messageContent->template_content;
             $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
             $quoteAttachment = $this->viewQuote($quote, true, false, true);
             Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             $quote->status = 2;
             $quote->update();
+			//Add to quote history
+			$QuoteApprovalHistory = new QuoteApprovalHistory();
+			$QuoteApprovalHistory->quotation_id = $quote->id;
+			$QuoteApprovalHistory->user_id = Auth::user()->person->id;
+			$QuoteApprovalHistory->status = $status;
+			$QuoteApprovalHistory->comment = "New Quote Created, Client Approval";
+			$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
+			$QuoteApprovalHistory->save();
         }
         AuditReportsController::store('Quote', 'New Quote Created', "Create by user", 0);
 
@@ -554,7 +579,8 @@ class QuotesController extends Controller
      * Show the quotation PDF view
      *
      * @return \Illuminate\Contracts\View\View
-     */
+    */
+	
     public function viewPDFQuote(Quotation $quotation)
     {
         return $this->viewQuote($quotation, true, true);
@@ -564,7 +590,7 @@ class QuotesController extends Controller
      * Email the quotation to the client
      *
      * @return \Illuminate\Contracts\View\View
-     */
+    */
     public function emailQuote(Quotation $quotation)
     {
         $quotation->load('client');
@@ -620,7 +646,7 @@ class QuotesController extends Controller
      * Show the quotation second update (adjust) page
      *
      * @return \Illuminate\Contracts\View\View
-     */
+    */
     public function adjustQuoteModification(Request $request, Quotation $quote)
     {
         $quote->load('products', 'packages');

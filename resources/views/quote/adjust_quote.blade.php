@@ -148,7 +148,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Send Quote</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Submit Quote</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
