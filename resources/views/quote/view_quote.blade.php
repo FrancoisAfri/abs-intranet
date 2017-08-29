@@ -151,12 +151,8 @@
                             <button type="button" class="btn btn-primary btn-warning" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');"><i class="fa fa-trash"></i> Cancel Quote</button>
                         @endif
                         @if($quotation->status == 2)
-                            <button type="button" class="btn btn-primary btn-success" id="approve_quote"
-                                    data-toggle="modal" data-target="#client-response-modal"
-                                    data-id="{{$quotation->id}}"><i class="fa fa-check"></i> Client Approved</button>
-                            <button type="button" class="btn btn-primary btn-danger" id="approve_quote"
-                                    data-toggle="modal" data-target="#client-response-modal"
-                                    data-id="{{$quotation->id}}"><i class="fa fa-times"></i> Client Rejected</button>
+                            <button type="button" class="btn btn-primary btn-success" id="client_approve" onclick="postData({{$quotation->id}}, 'client_approve');"><i class="fa fa-check"></i> Client Approved</button>
+                            <button type="button" class="btn btn-primary btn-danger" id="client_declined" onclick="postData({{$quotation->id}}, 'client_declined');"><i class="fa fa-times"></i> Client Rejected</button>
                         @endif
                         @if($quotation->status < 2)
                             <button type="button" class="btn btn-primary btn-warning" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');"><i class="fa fa-pencil-square-o"></i> Modify Quote</button>
@@ -196,6 +192,10 @@
 		if (data == 'approve_quote')
 			location.href = "/quote/approve_quote/" + id;
 		else if(data == 'decline_quote')
+			location.href = "/quote/decline_quote/" + id;
+		else if (data == 'client_approve')
+			location.href = "/quote/approve_quote/" + id;
+		else if(data == 'client_declined')
 			location.href = "/quote/decline_quote/" + id;
 		else if(data == 'cancel_quote')
 			location.href = "/quote/cancel_quote/" + id;
