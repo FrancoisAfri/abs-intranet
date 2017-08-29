@@ -42,7 +42,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
-                                        <select class="form-control select2" style="width: 100%;" multiple="multiple" id="product" name="product_id[]">
+                                        <select class="form-control select2" style="width: 100%;" id="product" name="product_id">
                                             <option value="">*** Select a Product  ***</option>
                                             @foreach($Product as $product)
                                             <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -58,7 +58,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-user"></i>
                                         </div>
-                                        <select class="form-control select2" style="width: 100%;" multiple="multiple" id="package" name="package_id[]">
+                                        <select class="form-control select2" style="width: 100%;" id="package" name="package_id">
                                             <option value="">*** Select a Package  ***</option>
                                             @foreach($package as $product)
                                             <option value="{{ $product->id }}">{{ $product->name }}</option>

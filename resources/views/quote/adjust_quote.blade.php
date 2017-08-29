@@ -53,9 +53,19 @@
                                             </th>
                                         </tr>
                                     @endif
-                                    <tr>
+                                    <tr class="{{ ($product->promotions->first()) ? 'warning' : '' }}"
+                                        @if($promotion = $product->promotions->first())
+                                        data-toggle="tooltip" title="{{ 'This product is on promotion from ' .
+                                        date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
+                                        @endif>
+
                                         <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                        <td style="vertical-align: middle;">{{ $product->name }}</td>
+                                        <td style="vertical-align: middle;">
+                                            {{ $product->name }}
+                                            @if($product->promotions->first())
+                                                &nbsp;<i class="fa fa-info-circle"></i>
+                                            @endif
+                                        </td>
                                         <td style="vertical-align: middle; width: 80px;">
                                             <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
                                                    value="1" data-price="{{ $product->current_price }}" onchange="subtotal()" required>
@@ -69,23 +79,31 @@
                                     <?php $prevCategory = $product->category_id; ?>
                                 @endforeach
                                 @foreach ($packages as $package)
-                                    <tr>
-                                        <td class="success" style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
-                                        <th class="success" style="vertical-align: middle;">
+                                    <tr class="{{ ($package->promotions->first()) ? 'warning' : 'success' }}"
+                                        @if($promotion = $package->promotions->first())
+                                        data-toggle="tooltip" title="{{ 'This product is on promotion from ' .
+                                        date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
+                                        @endif>
+
+                                        <td style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
+                                        <th style="vertical-align: middle;">
                                             Package: {{ $package->name }}
+                                            @if($package->promotions->first())
+                                                &nbsp;<i class="fa fa-info-circle"></i>
+                                            @endif
                                         </th>
-                                        <td class="success" style="vertical-align: middle; width: 80px;">
+                                        <td style="vertical-align: middle; width: 80px;">
                                             <input type="number" class="form-control input-sm item-quantity" name="package_quantity[{{ $package->id }}]"
                                                    value="1" data-price="{{ $package->price }}"
                                                    onchange="subtotal()" required>
                                         </td>
-                                        <td class="success" style="vertical-align: middle; text-align: right;">
+                                        <td style="vertical-align: middle; text-align: right;">
                                             {{ ($package->price) ? 'R ' . number_format($package->price, 2) : '' }}
                                         </td>
                                     </tr>
                                     <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
                                     @foreach($package->products_type as $product)
-                                        <tr>
+                                        <tr class="{{ ($package->promotions->first()) ? 'warning' : '' }}">
                                             <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
                                             <td style="vertical-align: middle;">{{ $product->name }}</td>
                                             <td style="text-align: center; vertical-align: middle; width: 80px;">

@@ -215,6 +215,7 @@ Route::patch('Product/packages_edit/{package}', 'Product_categoryController@edit
 //----Promotions ---
 Route::get('product/Promotions', 'Product_categoryController@view_promotions');
 Route::post('Product/promotions/add', 'Product_categoryController@promotionSave');
+Route::get('product/promotion/end/{promotion}', 'Product_categoryController@endPromotion');
 
 #----price -----
  Route::get('product/price', 'Product_categoryController@index');

@@ -338,6 +338,8 @@ class QuotesController extends Controller
 
         $validator->validate();
 
+        $currentTime = time();
+
         //Get products
         $productIDs = $request->input('product_id');
         $products = [];
@@ -346,13 +348,22 @@ class QuotesController extends Controller
                 ->with(['ProductPackages', 'productPrices' => function ($query) {
                     $query->orderBy('id', 'desc');
                     $query->limit(1);
+                }, 'promotions' => function ($query) use($currentTime) {
+                    $query->where('status', 1)
+                        ->whereRaw("start_date < $currentTime")
+                        ->whereRaw("end_date > $currentTime")
+                        ->orderBy('start_date', 'desc')
+                        ->limit(1);
                 }])
                 ->orderBy('category_id')
                 ->get();
             //get products current prices
             foreach ($products as $product) {
-                $product->current_price = ($product->productPrices && $product->productPrices->first())
+                $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
+                $currentPrice = ($product->productPrices->first())
                     ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+                $currentPrice = $currentPrice - (($currentPrice * $promoDiscount) / 100);
+                $product->current_price = $currentPrice;
             }
         }
 
@@ -366,6 +377,12 @@ class QuotesController extends Controller
                         $query->orderBy('id', 'desc');
                         $query->limit(1);
                     }]);
+                }, 'promotions' => function ($query) use($currentTime) {
+                    $query->where('status', 1)
+                        ->whereRaw("start_date < $currentTime")
+                        ->whereRaw("end_date > $currentTime")
+                        ->orderBy('start_date', 'desc')
+                        ->limit(1);
                 }])
                 ->get();
             //calculate the package price
@@ -378,7 +395,11 @@ class QuotesController extends Controller
 
                     $packageCost += $packageProduct->current_price;
                 }
-                $package->price = $packageCost - (($packageCost * $package->discount) /100);
+                $packageDiscount = ($package->discount) ? $package->discount : 0;
+                $promoDiscount = ($package->promotions->first()) ? $package->promotions->first()->discount : 0;
+                $packagePrice = $packageCost - (($packageCost * $packageDiscount) / 100);
+                $packagePrice = $packagePrice - (($packagePrice * $promoDiscount) / 100);
+                $package->price = $packagePrice;
             }
         }
         //return $packages;
