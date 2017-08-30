@@ -378,7 +378,7 @@ class DatabaseSeeder extends Seeder
         $module = new modules(); //Quote
         $module->active = 1;
         $module->name = 'Quote';
-        $module->path = 'Quotation';
+        $module->path = 'quote';
         $module->font_awesome = 'fa-file-text-o';
         $module->save();
 

@@ -135,7 +135,7 @@
                     <hr class="hr-text" data-content="QUOTE SETTINGS">
 
                     <div class="form-group{{ $errors->has('validity_period') ? ' has-error' : '' }}">
-                        <label for="{{ 'validity_period' }}" class="col-sm-2 control-label">Validity Period</label>
+                        <label for="{{ 'validity_period' }}" class="col-sm-2 control-label">Quote Validity Period</label>
 
                         <div class="col-sm-10">
                             <select id="validity_period" name="validity_period" class="form-control select2" style="width: 100%;">
