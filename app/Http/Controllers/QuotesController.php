@@ -653,7 +653,6 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
     */
-	
     public function viewPDFQuote(Quotation $quotation)
     {
         return $this->viewQuote($quotation, true, true);
