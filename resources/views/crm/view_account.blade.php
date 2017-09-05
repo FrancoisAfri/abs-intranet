@@ -78,7 +78,7 @@
                                         <td>{{ $quotation->created_at }}</td>
                                         <td>{{ $quotation->str_payment_option }}</td>
                                         <td><span class="label label-{{ $labelColors[$quotation->status] }}">{{ $purchaseStatus[$quotation->status] }}</span></td>
-                                        <td class="text-right"></td>
+                                        <td class="text-right">{{ ($quotation->cost) ? 'R ' . number_format($quotation->cost, 2) : '' }}</td>
                                     </tr>
                                     @if($quotation && (count($quotation->products) > 0 || count($quotation->packages) > 0))
                                         <tr>
