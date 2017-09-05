@@ -35,11 +35,16 @@
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered">
                                 <tr>
-                                    <th><i class="fa fa-id-badge"></i> Account Number</th>
-                                    <th><i class="fa fa-building-o"></i> Company</th>
-                                    <th><i class="fa fa-user"></i> Contact Person</th>
-                                    <th><i class="fa fa-calendar-o"></i> Date Created</th>
-                                    <th><i class="fa fa-info-circle"></i> Status</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-id-badge"></i></h1></th>
+                                    <th>Account Number</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-building-o"></i></h1></th>
+                                    <th>Company</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-user"></i></h1></th>
+                                    <th>Contact Person</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-calendar-o"></i></h1></th>
+                                    <th>Date Created</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-info-circle"></i></h1></th>
+                                    <th>Status</th>
                                 </tr>
                                 <tr>
                                     <td>{{ ($account->account_number) ? $account->account_number : '' }}</td>
