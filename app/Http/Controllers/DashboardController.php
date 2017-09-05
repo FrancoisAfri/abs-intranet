@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\projects;
 use App\activity;
+use App\modules;
 use App\programme;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -44,8 +45,8 @@ class DashboardController extends Controller {
 
 
 
-
-
+        //check if Ribbon is active
+        $Ribbon_module =  modules::where('active' , 1)->get();
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -183,40 +184,34 @@ class DashboardController extends Controller {
             if (!empty($ProductCategory))
                 $ProductCategory = $ProductCategory->load('productCategory');
 
-//                $row = product_category::count();
-//                if ($row < 1) {
-//
-//                    $products = 0;
-//
-//                } else {
-//                    $products = $ProductCategory->first()->id;
-//
-//                }
+               $row = product_category::count();
+               if ($row < 1) {
+
+                   $products = 0;
+
+               } else {
+                   $products = $ProductCategory->first()->id;
+
+               }
             #------------------>
             #Package_Product
-            $packages = product_packages::orderBy('id', 'asc')->get();
-            if (!empty($packages))
-                $packages = $packages->load('products_type');
-            //return $packages;
+             $packages = product_packages::orderBy('name', 'asc')->get();
+                if (!empty($packages))
+                    $packages = $packages->load('products_type');
 
+              //  $Product = product_products::orderBy('name', 'asc')->get();
+                //return $Product;
 
-            $Product = product_products::orderBy('name', 'asc')->get();
-            //return $packages;
+                $row = product_packages::count();
+                if ($row < 1) {
 
-            $row = product_category::count();
-            if ($row < 1) {
+                    $package = 0;
+                } else {
+                    $package = $packages->first()->id;
+                }
+               
 
-                $products = 0;
-            } else {
-                $products = $ProductCategory->first()->id;
-            }
-
-//            $userss = HRPerson::where('status', 1)
-//                    ->where('leave_profile', '<>', 1)
-//                    ->get();
-//
-//            return $userss;
-
+            $data['Ribbon_module'] = $Ribbon_module;
             $data['ProductCategory'] = $ProductCategory;
             $data['packages'] = $packages;
             $data['products'] = $products;
