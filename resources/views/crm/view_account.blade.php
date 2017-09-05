@@ -74,7 +74,11 @@
                                 @foreach($account->quotations as $quotation)
                                     <tr>
                                         <td width="5px"><i class="fa fa-caret-down"></i></td>
-                                        <td><a href="/">{{ ($quotation->quote_number) ? $quotation->quote_number : $quotation->id }}</a></td>
+                                        <td>
+                                            <a href="/quote/view/{{ $quotation->id }}" target="_blank">
+                                                {{ ($quotation->quote_number) ? $quotation->quote_number : $quotation->id }}
+                                            </a>
+                                        </td>
                                         <td>{{ $quotation->created_at }}</td>
                                         <td>{{ $quotation->str_payment_option }}</td>
                                         <td><span class="label label-{{ $labelColors[$quotation->status] }}">{{ $purchaseStatus[$quotation->status] }}</span></td>
