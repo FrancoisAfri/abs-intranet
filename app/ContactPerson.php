@@ -38,6 +38,16 @@ class ContactPerson extends Model
         return $this->hasMany(Quotation::class, 'client_id');
     }
 
+    /**
+     * Relationship between Contact Person and Account
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function accounts()
+    {
+        return $this->hasMany(CRMAccount::class, 'client_id');
+    }
+
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;

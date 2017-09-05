@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
+use App\CRMAccount;
 use App\DivisionLevel;
 use App\DivisionLevelFive;
 use App\EmailTemplate;
@@ -226,18 +227,42 @@ class QuotesController extends Controller
         AuditReportsController::store('Quote', 'Quote Authorisation Page Accessed', "Accessed By User", 0);
         return view('quote.authorisation')->with($data);  
     }
+
+    /**
+     * Client approved the quote
+     *
+     * @param $request
+     * @param $quotation
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function clientApproveQuote(Request $request, Quotation $quote)
+    {
+        $this->validate($request, [
+            'payment_option' => 'bail|required|integer|min:1',
+            'payment_term' => 'bail|required_if:payment_option,2|integer',
+            'first_payment_date' => 'bail|required_if:payment_option,2|date_format:d/m/Y',
+        ]);
+
+        $paymentOption = $request->input('payment_option');
+        $paymentTerm = $request->input('payment_term');
+        $firstPaymentDate = str_replace('/', '-', $request->input('first_payment_date'));
+        $firstPaymentDate = strtotime($firstPaymentDate);
+
+        return $this->approveQuote($quote, true, $paymentOption, $paymentTerm, $firstPaymentDate);
+    }
+
 	# Approve Quote
-	public function approveQuote(Quotation $quote)
+	public function approveQuote(Quotation $quote, $isClientApproval = false, $paymentOption = null, $paymentTerm = null, $firstPaymentDate = null)
     {
 		if ($quote->status == 1) $stastus = 2;
 		elseif ($quote->status == 2) $stastus = 5;
 		
 		$changedStatus =  "Status Changed To: ".$this->quoteStatuses[$stastus];
 		$quote->status = $stastus;
-		$quote->update();
+		//$quote->update();
 		if ($stastus == 5)
 		{
-			//Email Client to confirn success
+			//Email Client to confirm success
 			$quote->load('client');
             $messageContents = EmailTemplate::where('template_key', 'approved_quote')->first();
             if (!empty($messageContents))
@@ -247,7 +272,33 @@ class QuotesController extends Controller
             $quoteAttachment = $this->viewQuote($quote, true, false, true);
             Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 			$quote->status = 5;
-            $quote->update();
+
+            //Create an account for the client
+            DB::transaction(function () use ($isClientApproval, $quote, $paymentOption, $paymentTerm, $firstPaymentDate) {
+                if ($isClientApproval)
+                {
+                    $quote->payment_option = $paymentOption;
+                    $quote->payment_term = ($paymentTerm) ? $paymentTerm : null;
+                    $quote->first_payment_date = ($firstPaymentDate) ? $firstPaymentDate : null;
+
+                    $crmAccount = new CRMAccount();
+                    $crmAccount->client_id = $quote->client_id;
+                    $crmAccount->company_id = $quote->company_id;
+                    $crmAccount->start_date = time();
+                    $crmAccount->status = 1;
+                    $crmAccount->save();
+
+                    $companyDetails = CompanyIdentity::systemSettings();
+                    $accountNumber = $companyDetails['header_acronym_bold'] . $companyDetails['header_acronym_regular'];
+                    $accountNumber = !empty($accountNumber) ? strtoupper($accountNumber) : 'SYS';
+                    $accountNumber .= 'ACC' . sprintf('%07d', $crmAccount->id);
+                    $crmAccount->account_number = $accountNumber;
+                    $crmAccount->update();
+
+                    $quote->account_id = $crmAccount->id;
+                }
+                $quote->update();
+            });
 			$changedStatus .= ", Email sent to client, to welcome them";
 		}
 		elseif ($stastus == 2)
@@ -274,7 +325,8 @@ class QuotesController extends Controller
 		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
 		$QuoteApprovalHistory->save();
 		AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", "Edited by User", 0);
-		return back();  
+		if ($isClientApproval) return redirect('/crm/account/quote/' . $quote->id);
+		else return back();
     }
 	# Decline Quote
 	public function declineQuote(Quotation $quote)

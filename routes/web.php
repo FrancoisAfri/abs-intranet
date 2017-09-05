@@ -509,11 +509,16 @@ Route::get('quote/view/{quotation}', 'QuotesController@viewQuote');
 Route::get('quote/search', 'QuotesController@searchQuote');
 Route::get('quote/view/{quotation}/pdf', 'QuotesController@viewPDFQuote');
 Route::get('quote/approve_quote/{quote}', 'QuotesController@approveQuote');
+Route::post('quote/client-approve/{quote}', 'QuotesController@clientApproveQuote');
 Route::get('quote/decline_quote/{quote}', 'QuotesController@declineQuote');
 Route::get('quote/modify_quote/{quote}', 'QuotesController@updateQuoteIndex');
 Route::post('quote/adjust_modification/{quote}', 'QuotesController@adjustQuoteModification');
 Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
 Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
+
+//CRM Accounts
+Route::get('crm/account/{account}', 'CRMAccountController@viewAccount');
+Route::get('crm/account/quote/{quote}', 'CRMAccountController@viewAccountFromQuote');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
