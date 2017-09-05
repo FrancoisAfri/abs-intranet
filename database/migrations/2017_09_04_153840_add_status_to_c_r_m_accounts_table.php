@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdToQuotesApprovalHistoryTable extends Migration
+class AddStatusToCRMAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUserIdToQuotesApprovalHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::table('quote_approval_history', function (Blueprint $table) {
-            $table->integer('user_id')->nullable();
+        Schema::table('c_r_m_accounts', function (Blueprint $table) {
+            $table->smallInteger('status')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddUserIdToQuotesApprovalHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::table('quote_approval_history', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+        Schema::table('c_r_m_accounts', function (Blueprint $table) {
+            $table->dropColumn('status');
         });
     }
 }

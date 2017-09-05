@@ -12,7 +12,7 @@ class Quotation extends Model
     // Mass assignable fields
     protected $fillable = [
         'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id', 'approval_person_id', 'status',
-        'send_date', 'approval_date', 'discount_percent', 'add_vat'
+        'send_date', 'approval_date', 'discount_percent', 'add_vat', 'payment_option', 'payment_term', 'first_payment_date', 'account_id'
     ];
 
     //quotation status
@@ -25,6 +25,12 @@ class Quotation extends Model
         -4 => 'Declined by Client',
         -1 => 'Cancelled',
         5 => 'Authorised'
+    ];
+
+    //Payment opyions
+    protected $paymentOptions = [
+        1 => 'Once-Off',
+        2 => 'Recurring'
     ];
 
     /**
@@ -86,6 +92,16 @@ class Quotation extends Model
     {
         return $this->belongsTo(HRPerson::class, 'hr_person_id');
     }
+
+    /**
+     * Relationship between Quotation and CRMAccount
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function account()
+    {
+        return $this->belongsTo(CRMAccount::class, 'account_id');
+    }
 	
 	public function divisionName()
     {
@@ -104,5 +120,14 @@ class Quotation extends Model
      */
 	public function getQuoteStatusAttribute() {
         return (!empty($this->status)) ? $this->quoteStatuses[$this->status] : null;
+    }
+
+    /**
+     * Quote payment option string accessor
+     *
+     * @return String
+     */
+	public function getStrPaymentOptionAttribute() {
+        return (!empty($this->payment_option)) ? $this->paymentOptions[$this->payment_option] : null;
     }
 }
