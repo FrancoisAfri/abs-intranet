@@ -328,6 +328,35 @@
                                 </div>
                             </div>
                         </div>
+						
+						  <div class="form-group">
+						  @if (isset($view_by_admin) && $view_by_admin === 1)
+                            <label for="date_joined" class="col-sm-2 control-label">Date Joined</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                   <input type="text" class="form-control datepicker" name="date_joined" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_joined) ? date('d/m/Y',$user->person->date_joined) : '' }}">
+                                </div>
+                            </div>
+                        </div>
+						 @endif
+						
+						  <div class="form-group">
+						  @if (isset($view_by_admin) && $view_by_admin === 1)
+                            <label for="date_left" class="col-sm-2 control-label">Date Left Company</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                   <input type="text" class="form-control datepicker" name="date_left" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_left) ? date('d/m/Y',$user->person->date_left) : '' }}">
+                                </div>
+                            </div>
+                        </div>
+						 @endif
+						 
                         <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
