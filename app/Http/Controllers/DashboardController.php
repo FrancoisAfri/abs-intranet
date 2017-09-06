@@ -17,12 +17,15 @@ use App\module_access;
 use App\product_category;
 use App\product_products;
 use App\product_packages;
-use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\projects;
 use App\activity;
 use App\modules;
 use App\programme;
+use App\ContactPerson;
+use App\CRMAccount;
+use App\Quotation;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,18 +38,26 @@ class DashboardController extends Controller {
 
     public function index() {
 
-        $loggedInEmplID = Auth::user()->person->id;
+                     
 
-        $data['breadcrumb'] = [
-                ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
-        ];
-        $data['active_mod'] = 'dashboard';
-        $user = Auth::user()->load('person');
+            $data['breadcrumb'] = [
+                    ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
+            ];
+            $data['active_mod'] = 'dashboard';
+            $user = Auth::user()->load('person');
 
+            //  CRMAccounts
+            $loggedInEmplID = Auth::user()->person->id;
+            
+            $ClientsCompanyId = ContactPerson::where('id', $loggedInEmplID)->pluck('company_id')->first();
+           
+            $Accounts = CRMAccount::where('company_id',$ClientsCompanyId)->get();
+           
+            $account = $Accounts->load('company', 'client','quotations.products.ProductPackages', 'quotations.packages.products_type');
+            return $account;   
 
-
-        //check if Ribbon is active
-        $Ribbon_module =  modules::where('active' , 1)->get();
+            //check if Ribbon is active
+            $Ribbon_module =  modules::where('active' , 1)->get();
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -138,7 +149,6 @@ class DashboardController extends Controller {
                     ->orderBy('leave_credit.id')
                     ->get();
 
-            //return $application;
             #leave Application
             $application = DB::table('leave_application')
                     ->select('leave_application.*', 'leave_types.name as leavetype', 'leave_status.name as leaveStatus')
@@ -147,7 +157,7 @@ class DashboardController extends Controller {
                     ->where('leave_application.hr_id', $user->person->id)
                     ->orderBy('leave_application.id')
                     ->get();
-            // return $application;
+
             // check task
             $checkTasks = DB::table('employee_tasks')
                     ->select('employee_tasks.description', 'employee_tasks.employee_id'
@@ -159,7 +169,6 @@ class DashboardController extends Controller {
                     ->whereNull('checked')
                     ->orderBy('employee_tasks.employee_id')
                     ->get();
-            //return $checkTasks;
             #View Tickets
 
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
@@ -183,6 +192,8 @@ class DashboardController extends Controller {
             $ProductCategory = product_category::orderBy('id', 'asc')->get();
             if (!empty($ProductCategory))
                 $ProductCategory = $ProductCategory->load('productCategory');
+
+                
 
                $row = product_category::count();
                if ($row < 1) {
@@ -210,7 +221,7 @@ class DashboardController extends Controller {
                     $package = $packages->first()->id;
                 }
                
-
+            $data['account'] = $account;
             $data['Ribbon_module'] = $Ribbon_module;
             $data['ProductCategory'] = $ProductCategory;
             $data['packages'] = $packages;
@@ -244,8 +255,51 @@ class DashboardController extends Controller {
 
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         } else {
+             $name = HRPerson::where('id', $loggedInEmplID)
+                    ->select('first_name', 'surname')
+                    ->get()
+                    ->first();
+                     $tickets = DB::table('ticket')
+                    ->where('user_id', $loggedInEmplID)
+                    ->orderBy('id', 'asc')
+                    ->get();
+                     $user = Auth::user()->load('person');
+                      $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
+
+                      // Get tasks for logged user
+            $today = strtotime(date('Y-m-d'));
+            $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+            $tasks = EmployeeTasks::
+                    select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
+                            , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
+                            , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
+                            , 'employee_tasks.id as task_id', 'contact_companies.name as client_name', 'employee_tasks.duration', 'employee_tasks.date_paused', 'employee_tasks.date_started')
+                    ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
+                    ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
+                    ->where('employee_tasks.employee_id', $user->person->id)
+                    ->where('employee_tasks.start_date', '<=', $today)
+                    ->where('employee_tasks.status', '<', 4)
+                    ->orderBy('client_name')
+                    ->orderBy('employee_tasks.order_no')
+                    ->get();
+
+                   //return $account;
+                    $email = $user->email;
+                    $names = $name->first_name;
+                    $surname = $name->surname;
+                   
+            
+            $data['account'] = $account; 
+            $data['Helpdesk'] = $Helpdesk;
+            $data['names'] = $names;
+            $data['email'] = $email;
+            $data['tasks'] = $tasks;
+            $data['surname'] = $surname;
+            //$data['ticketStatus'] = $ticketStatus;
+           // $data['tickets'] = $tickets;
             $data['page_title'] = "Dashboard";
             $data['page_description'] = "Main Dashboard";
+            $data['Ribbon_module'] = $Ribbon_module;
             return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }
