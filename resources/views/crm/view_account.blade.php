@@ -68,6 +68,7 @@
                                     <th>Payment Option</th>
                                     <th>Status</th>
                                     <th class="text-right">Cost</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -79,15 +80,20 @@
                                                 {{ ($quotation->quote_number) ? $quotation->quote_number : $quotation->id }}
                                             </a>
                                         </td>
-                                        <td>{{ $quotation->created_at }}</td>
+                                        <td nowrap>{{ $quotation->created_at }}</td>
                                         <td>{{ $quotation->str_payment_option }}</td>
                                         <td><span class="label label-{{ $labelColors[$quotation->status] }}">{{ $purchaseStatus[$quotation->status] }}</span></td>
-                                        <td class="text-right">{{ ($quotation->cost) ? 'R ' . number_format($quotation->cost, 2) : '' }}</td>
+                                        <td class="text-right" nowrap>{{ ($quotation->cost) ? 'R ' . number_format($quotation->cost, 2) : '' }}</td>
+                                        <td class="text-right" nowrap>
+                                            <a href="" class="btn btn-success btn-flat btn-xs"><i class="fa fa-credit-card"></i> Capture Payment</a>
+                                            <a href="/crm/invoice/mail/{{ $quotation->id }}" class="btn btn-primary btn-flat btn-xs"><i class="fa fa-send"></i> Send Invoice</a>
+                                            <a href="/crm/invoice/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary btn-flat btn-xs"><i class="fa fa-print"></i> Print Invoice</a>
+                                        </td>
                                     </tr>
                                     @if($quotation && (count($quotation->products) > 0 || count($quotation->packages) > 0))
                                         <tr>
                                             <td></td>
-                                            <td class="warning" colspan="5">
+                                            <td class="warning" colspan="6">
                                                 <ul class="list-inline">
                                                     @if(count($quotation->products) > 0)
                                                         @foreach($quotation->products as $product)
@@ -112,9 +118,11 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer text-center">
+                        <!--
                         <a href="" class="btn btn-success"><i class="fa fa-credit-card"></i> Capture Payment</a>
                         <a href="" class="btn btn-primary"><i class="fa fa-print"></i> Send Invoice</a>
                         <a href="" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Invoice</a>
+                        -->
                     </div>
                     <!-- /.box-footer -->
                 </form>

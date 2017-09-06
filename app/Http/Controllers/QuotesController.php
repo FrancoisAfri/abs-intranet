@@ -513,6 +513,13 @@ class QuotesController extends Controller
             $quote->status = 1;
             $quote->save();
 
+            $companyDetails = CompanyIdentity::systemSettings();
+            $quoteNumber = $companyDetails['header_acronym_bold'] . $companyDetails['header_acronym_regular'];
+            $quoteNumber = !empty($quoteNumber) ? strtoupper($quoteNumber) : 'SYS';
+            $quoteNumber .= 'QTE' . sprintf('%07d', $quote->id);
+            $quoteNumber->quote_number = $quoteNumber;
+            $quote->update();
+
             //save quote's products
             $prices = $request->input('price');
             $quantities = $request->input('quantity');
@@ -593,7 +600,7 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false)
+    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false)
     {
         $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions');
         $productsSubtotal = 0;
@@ -637,15 +644,17 @@ class QuotesController extends Controller
             $data['file_name'] = 'Quotation';
             $data['user'] = Auth::user()->load('person');
             $data['quoteProfile'] = $quoteProfile;
-            //$data['date'] = Carbon::now()->format('d/m/Y');
 
-            $view = view('quote.pdf_quote', $data)->render();
+            $view = ($isInvoice) ? view('invoice.pdf_invoice', $data)->render() : view('quote.pdf_quote', $data)->render();
             $pdf = resolve('dompdf.wrapper');
             $pdf->loadHTML($view);
             if ($printQuote) return $pdf->stream('quotation_' . $quotation->id . '.pdf');
             elseif ($emailQuote) return $pdf->output();
         }
-        else return view('quote.view_quote')->with($data);
+        else {
+            if ($isInvoice) return view('invoice.view_invoice')->with($data);
+            else return view('quote.view_quote')->with($data);
+        }
     }
 
     /**
