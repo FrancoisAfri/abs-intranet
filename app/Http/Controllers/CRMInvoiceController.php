@@ -96,8 +96,6 @@ class CRMInvoiceController extends Controller
     {
         $quotation->load('client');
 
-        //update statuses
-
         $messageContent = EmailTemplate::where('template_key', 'send_invoice')->first();
         $messageContent = ($messageContent) ? $messageContent->template_content : '';
         $messageContent = str_replace('[client name]', $quotation->client->full_name, $messageContent);

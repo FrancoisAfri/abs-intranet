@@ -24,7 +24,10 @@ class Quotation extends Model
         4 => 'Approved by Client',
         -4 => 'Declined by Client',
         -1 => 'Cancelled',
-        5 => 'Authorised'
+        5 => 'Authorised (Client Waiting Invoice)',
+        6 => 'Invoice Sent',
+        7 => 'Partially Paid',
+        8 => 'Paid'
     ];
 
     //Payment opyions
