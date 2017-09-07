@@ -47,8 +47,8 @@ class CRMAccountController extends Controller
             $total = $discountedAmount + $vatAmount;
             $quotation->cost = $total;
         }
-        $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Paid'];
-        $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'success'];
+        $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
+        $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
 //        return $account;
         $data['page_title'] = "Account";
         $data['page_description'] = "CRM Account";

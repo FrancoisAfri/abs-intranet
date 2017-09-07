@@ -26,9 +26,14 @@
         </div>
         <!-- /.col -->
         <div class="col-xs-4 invoice-col no-padding">
-            <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
-            <b>Quote #:</b> {{ $quotation->quote_number }}<br>
-            <b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}
+            <b>Invoice #: </b> {{ ($invoice) ? $invoice->invoice_number : '' }}<br>
+            <br>
+            <b>Date: </b> {{ ($invoice && $invoice->invoice_date) ? date('d/m/Y', $invoice->invoice_date) : '' }}<br>
+            <b>Order #:</b> {{ $quotation->quote_number }}<br>
+            @if($invoice->payment_due_date)
+                <b>Payment Due:</b> {{ $invoice->payment_due_date }}
+            @endif
+            <b>Account:</b> {{ ($quotation->account) ? $quotation->account->account_number : '' }}
         </div>
         <!-- /.col -->
     </div>
@@ -39,7 +44,7 @@
                 <form class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
-                        <p class="text-muted text-center">QUOTE DESCRIPTION</p>
+                        <p class="text-muted text-center">INVOICE DESCRIPTION</p>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body no-padding">
@@ -156,22 +161,6 @@
                     </div>
                     <!-- /.box-body -->
                 </form>
-            </div>
-
-            <!-- T&C's box -->
-            <div class="box box-default no-padding">
-                <div class="box-header with-border" style="text-align: center;">
-                    <p class="text-muted text-center">TERMS AND CONDITIONS</p>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                    <ul>
-                        @foreach($quotation->termsAndConditions as $condition)
-                            <li class="text-justify">{!! $condition->term_name !!}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                <!-- /.box-body -->
             </div>
         </div>
     </div>

@@ -603,6 +603,31 @@ class QuotesController extends Controller
     public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false)
     {
         $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions');
+        $invoice = null;
+        if ($isInvoice) {
+            $quotation->load('invoices', 'account');
+            //once-off purchases
+            if ($quotation->payment_option == 1) {
+                //specify invoice
+                $invoice = $quotation->invoices->first();
+                //update statuses if invoice is being emailed to the client
+                if ($emailQuote) {
+                    DB::transaction(function () use ($quotation, $invoice) {
+                        if ($quotation->status < 6) {
+                            $quotation->status = 6;
+                            $quotation->update();
+                        }
+                        if ($invoice->status < 2) {
+                            $invoice->status = 2;
+                            $invoice->update();
+                        }
+                    });
+                }
+            }
+            else {
+                //calculate invoice payment due date $invoice->payment_due_date
+            }
+        }
         $productsSubtotal = 0;
         $packagesSubtotal = 0;
         foreach ($quotation->products as $product) {
@@ -629,6 +654,7 @@ class QuotesController extends Controller
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'search';
         $data['quotation'] = $quotation;
+        $data['invoice'] = $invoice;
         $data['subtotal'] = $subtotal;
         $data['discountPercent'] = $discountPercent;
         $data['discountAmount'] = $discountAmount;
@@ -645,14 +671,14 @@ class QuotesController extends Controller
             $data['user'] = Auth::user()->load('person');
             $data['quoteProfile'] = $quoteProfile;
 
-            $view = ($isInvoice) ? view('invoice.pdf_invoice', $data)->render() : view('quote.pdf_quote', $data)->render();
+            $view = ($isInvoice) ? view('crm.pdf_invoice', $data)->render() : view('quote.pdf_quote', $data)->render();
             $pdf = resolve('dompdf.wrapper');
             $pdf->loadHTML($view);
             if ($printQuote) return $pdf->stream('quotation_' . $quotation->id . '.pdf');
             elseif ($emailQuote) return $pdf->output();
         }
         else {
-            if ($isInvoice) return view('invoice.view_invoice')->with($data);
+            if ($isInvoice) return view('crm.view_invoice')->with($data);
             else return view('quote.view_quote')->with($data);
         }
     }
