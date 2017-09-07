@@ -273,7 +273,7 @@ class QuotesController extends Controller
             Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 			$quote->status = 5;
 
-            //Create an account for the client
+            //Create an account for the client or add quote to his existing account
             DB::transaction(function () use ($isClientApproval, $quote, $paymentOption, $paymentTerm, $firstPaymentDate) {
                 if ($isClientApproval)
                 {
@@ -281,12 +281,18 @@ class QuotesController extends Controller
                     $quote->payment_term = ($paymentTerm) ? $paymentTerm : null;
                     $quote->first_payment_date = ($firstPaymentDate) ? $firstPaymentDate : null;
 
-                    $crmAccount = new CRMAccount();
-                    $crmAccount->client_id = $quote->client_id;
-                    $crmAccount->company_id = $quote->company_id;
-                    $crmAccount->start_date = time();
-                    $crmAccount->status = 1;
-                    $crmAccount->save();
+                    $crmAccount = CRMAccount::where('client_id', $quote->client_id)
+                        ->where(function ($query) use($quote) {
+                            if ($quote->company_id && $quote->company_id > 0) $query->where('company_id', $quote->company_id);
+                        })->first();
+                    if (! ($crmAccount)) {
+                        $crmAccount = new CRMAccount();
+                        $crmAccount->client_id = $quote->client_id;
+                        $crmAccount->company_id = $quote->company_id;
+                        $crmAccount->start_date = time();
+                        $crmAccount->status = 1;
+                        $crmAccount->save();
+                    }
 
                     $companyDetails = CompanyIdentity::systemSettings();
                     $accountNumber = $companyDetails['header_acronym_bold'] . $companyDetails['header_acronym_regular'];
