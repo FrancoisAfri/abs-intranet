@@ -29,6 +29,24 @@ class CRMAccountController extends Controller
     public function viewAccount(CRMAccount $account)
     {
         $account->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type');
+        //calculate quote cost
+        foreach ($account->quotations as $quotation) {
+            $productsSubtotal = 0;
+            $packagesSubtotal = 0;
+            foreach ($quotation->products as $product) {
+                $productsSubtotal += ($product->pivot->price * $product->pivot->quantity);
+            }
+            foreach ($quotation->packages as $package) {
+                $packagesSubtotal += ($package->pivot->price * $package->pivot->quantity);
+            }
+            $subtotal = $productsSubtotal + $packagesSubtotal;
+            $discountPercent = $quotation->discount_percent;
+            $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
+            $discountedAmount = $subtotal - $discountAmount;
+            $vatAmount = ($quotation->add_vat == 1) ? $discountedAmount * 0.14 : 0;
+            $total = $discountedAmount + $vatAmount;
+            $quotation->cost = $total;
+        }
         $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Paid'];
         $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'success'];
 //        return $account;

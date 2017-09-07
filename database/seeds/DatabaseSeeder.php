@@ -426,7 +426,32 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'quote/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
+
+        //Insert CRM menu
+        $module = new modules();
+        $module->active = 1;
+        $module->name = 'CRM';
+        $module->path = 'crm';
+        $module->font_awesome = 'fa-handshake-o';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search Accounts';
+        $ribbon->ribbon_path = 'crm/search';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'CRM Settings';
+        $ribbon->ribbon_path = 'crm/setup';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 		
         $module = new modules(); // Security
         $module->active = 1;

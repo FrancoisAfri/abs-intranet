@@ -35,11 +35,16 @@
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered">
                                 <tr>
-                                    <th><i class="fa fa-id-badge"></i> Account Number</th>
-                                    <th><i class="fa fa-building-o"></i> Company</th>
-                                    <th><i class="fa fa-user"></i> Contact Person</th>
-                                    <th><i class="fa fa-calendar-o"></i> Date Created</th>
-                                    <th><i class="fa fa-info-circle"></i> Status</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-id-badge"></i></h1></th>
+                                    <th>Account Number</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-building-o"></i></h1></th>
+                                    <th>Company</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-user"></i></h1></th>
+                                    <th>Contact Person</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-calendar-o"></i></h1></th>
+                                    <th>Date Created</th>
+                                    <th rowspan="2" width="5px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-info-circle"></i></h1></th>
+                                    <th>Status</th>
                                 </tr>
                                 <tr>
                                     <td>{{ ($account->account_number) ? $account->account_number : '' }}</td>
@@ -63,22 +68,32 @@
                                     <th>Payment Option</th>
                                     <th>Status</th>
                                     <th class="text-right">Cost</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($account->quotations as $quotation)
                                     <tr>
                                         <td width="5px"><i class="fa fa-caret-down"></i></td>
-                                        <td><a href="/">{{ ($quotation->quote_number) ? $quotation->quote_number : $quotation->id }}</a></td>
-                                        <td>{{ $quotation->created_at }}</td>
+                                        <td>
+                                            <a href="/quote/view/{{ $quotation->id }}" target="_blank">
+                                                {{ ($quotation->quote_number) ? $quotation->quote_number : $quotation->id }}
+                                            </a>
+                                        </td>
+                                        <td nowrap>{{ $quotation->created_at }}</td>
                                         <td>{{ $quotation->str_payment_option }}</td>
                                         <td><span class="label label-{{ $labelColors[$quotation->status] }}">{{ $purchaseStatus[$quotation->status] }}</span></td>
-                                        <td class="text-right"></td>
+                                        <td class="text-right" nowrap>{{ ($quotation->cost) ? 'R ' . number_format($quotation->cost, 2) : '' }}</td>
+                                        <td class="text-right" nowrap>
+                                            <a href="" class="btn btn-success btn-flat btn-xs"><i class="fa fa-credit-card"></i> Capture Payment</a>
+                                            <a href="/crm/invoice/mail/{{ $quotation->id }}" class="btn btn-primary btn-flat btn-xs"><i class="fa fa-send"></i> Send Invoice</a>
+                                            <a href="/crm/invoice/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary btn-flat btn-xs"><i class="fa fa-print"></i> Print Invoice</a>
+                                        </td>
                                     </tr>
                                     @if($quotation && (count($quotation->products) > 0 || count($quotation->packages) > 0))
                                         <tr>
                                             <td></td>
-                                            <td class="warning" colspan="5">
+                                            <td class="warning" colspan="6">
                                                 <ul class="list-inline">
                                                     @if(count($quotation->products) > 0)
                                                         @foreach($quotation->products as $product)
@@ -103,9 +118,11 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer text-center">
+                        <!--
                         <a href="" class="btn btn-success"><i class="fa fa-credit-card"></i> Capture Payment</a>
                         <a href="" class="btn btn-primary"><i class="fa fa-print"></i> Send Invoice</a>
                         <a href="" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Invoice</a>
+                        -->
                     </div>
                     <!-- /.box-footer -->
                 </form>
