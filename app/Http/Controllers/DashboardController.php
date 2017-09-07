@@ -54,7 +54,7 @@ class DashboardController extends Controller {
             $Accounts = CRMAccount::where('company_id',$ClientsCompanyId)->get();
            
             $account = $Accounts->load('company', 'client','quotations.products.ProductPackages', 'quotations.packages.products_type');
-            return $account;   
+           // return $account;   
 
             //check if Ribbon is active
             $Ribbon_module =  modules::where('active' , 1)->get();
@@ -266,22 +266,7 @@ class DashboardController extends Controller {
                      $user = Auth::user()->load('person');
                       $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
 
-                      // Get tasks for logged user
-            $today = strtotime(date('Y-m-d'));
-            $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
-            $tasks = EmployeeTasks::
-                    select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
-                            , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
-                            , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
-                            , 'employee_tasks.id as task_id', 'contact_companies.name as client_name', 'employee_tasks.duration', 'employee_tasks.date_paused', 'employee_tasks.date_started')
-                    ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
-                    ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
-                    ->where('employee_tasks.employee_id', $user->person->id)
-                    ->where('employee_tasks.start_date', '<=', $today)
-                    ->where('employee_tasks.status', '<', 4)
-                    ->orderBy('client_name')
-                    ->orderBy('employee_tasks.order_no')
-                    ->get();
+                     
 
                    //return $account;
                     $email = $user->email;
@@ -293,10 +278,8 @@ class DashboardController extends Controller {
             $data['Helpdesk'] = $Helpdesk;
             $data['names'] = $names;
             $data['email'] = $email;
-            $data['tasks'] = $tasks;
             $data['surname'] = $surname;
-            //$data['ticketStatus'] = $ticketStatus;
-           // $data['tickets'] = $tickets;
+            $data['tickets'] = $tickets;
             $data['page_title'] = "Dashboard";
             $data['page_description'] = "Main Dashboard";
             $data['Ribbon_module'] = $Ribbon_module;

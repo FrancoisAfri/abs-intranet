@@ -13,6 +13,7 @@
             <div class="box box-primary">
                 <form class="form-horizontal" method="POST" action="/quote/save">
                     {{ csrf_field() }}
+                    bbbb
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
                     <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">
