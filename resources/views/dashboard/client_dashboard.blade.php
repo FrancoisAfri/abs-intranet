@@ -17,7 +17,7 @@
              <div class="box box-warning same-height-widget">
                 <div class="box-header with-border">
                 <i class="fa fa-product-hunt"></i>
-                    <h3 class="box-title">view Products</h3>
+                    <h3 class="box-title">View My Product(s)</h3>
               <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
@@ -46,8 +46,7 @@
                              <td>{{ ($accounts->client) ? $accounts->client->full_name : '' }}</td>
                              <td>{{ ($accounts->start_date) ? date('d/m/Y', $accounts->start_date) : '' }}</td>
                           </tr>
-                        @endforeach
-                    @endif
+                       
                   </tbody>
                 </table>
                
@@ -56,30 +55,33 @@
                 <div class="table-responsive">
                             <table class="table no-margin">
                                 <thead>
-                                
+
                                 <tr>
                                     <td></td>
                                     <th>Quote # <i class="fa fa-first-order"></th>
                                     <th>Date Ordered <i class="fa fa-calendar-o"></i></th>
                                     <th>Payment Option <i class="fa fa-credit-card-alt"></i></th>
                                     <th>Status <i class="fa fa-info-circle"></i></th>
-                                    <th class="text-right">Cost <i class="fa fa-money"></i></th>
+                                   <!--  <th class="text-right">Cost <i class="fa fa-money"></i></th> -->
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($account as $quotation)
+                                @foreach($accounts->quotations as $quotation)
                                     <tr>
                                         <td width="5px"><i class="fa fa-caret-down"></i></td>
-                                        <td><a href="/">{{ ($quotation->quote_number) ? $quotation->quote_number : $quotation->id }}</a></td>
+                                        <td><a href="/">{{ ($accounts->quote_number) ? $accounts->quote_number : $accounts->id }}</a></td>
                                         <td>{{ $quotation->created_at }}</td>
                                         <td>{{ $quotation->str_payment_option }}</td>
+                                         <td><span class="label label-{{ $labelColors[$quotation->status] }}">{{ $purchaseStatus[$quotation->status] }}</span></td>
+                                         <td class="text-right" nowrap>{{ ($quotation->cost) ? 'R ' . number_format($quotation->cost, 2) : '' }}</td>
                                         <!--  -->
                                         <td class="text-right"></td>
                                     </tr>
-                                    @if($quotation && (count($quotation->products) > 0 || count($quotation->packages) > 0))
+                                    <!--  -->
+                                     @if($quotation && (count($quotation->products) > 0 || count($quotation->packages) > 0))
                                         <tr>
                                             <td></td>
-                                            <td class="warning" colspan="5">
+                                            <td class="warning" colspan="7">
                                                 <ul class="list-inline">
                                                     @if(count($quotation->products) > 0)
                                                         @foreach($quotation->products as $product)
@@ -96,7 +98,10 @@
                                             </td>
                                         </tr>
                                     @endif
+                                
                                 @endforeach
+                                 @endforeach
+                    				@endif
                                 </tbody>
                             </table>
                         </div>

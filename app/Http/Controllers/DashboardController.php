@@ -53,8 +53,11 @@ class DashboardController extends Controller {
            
             $Accounts = CRMAccount::where('company_id',$ClientsCompanyId)->get();
            
-            $account = $Accounts->load('company', 'client','quotations.products.ProductPackages', 'quotations.packages.products_type');
-           // return $account;   
+            $account = $Accounts->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type');
+            $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
+            $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success']; 
+
+          //  return $account;   
 
             //check if Ribbon is active
             $Ribbon_module =  modules::where('active' , 1)->get();
@@ -266,18 +269,20 @@ class DashboardController extends Controller {
                      $user = Auth::user()->load('person');
                       $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
 
-                     
-
-                   //return $account;
+            //return $account;
                     $email = $user->email;
                     $names = $name->first_name;
-                    $surname = $name->surname;
-                   
+                    $surname = $name->surname;   
+                           
+            $purchaseStatus = ['' => '', 5 => ' Waiting For My Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
+            $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];   
             
             $data['account'] = $account; 
             $data['Helpdesk'] = $Helpdesk;
             $data['names'] = $names;
             $data['email'] = $email;
+            $data['labelColors'] = $labelColors;
+            $data['purchaseStatus'] = $purchaseStatus;
             $data['surname'] = $surname;
             $data['tickets'] = $tickets;
             $data['page_title'] = "Dashboard";
