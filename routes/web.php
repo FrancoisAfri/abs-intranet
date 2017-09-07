@@ -180,7 +180,7 @@ Route::post('hr/user_active', 'Hr_Admin@activeEmployee');
 Route::get('hr/active_user', 'Hr_Admin@cards');
 
 
-Route::get('hr/job_title', 'Product_categoryController@index');
+//Route::get('hr/job_title', 'Product_categoryController@index');
 Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
 Route::patch('hr/category_edit/{jobCategory}', 'EmployeeJobTitleController@editCategory');
 Route::get('hr/jobtitles/{jobCategory}', 'EmployeeJobTitleController@jobView');

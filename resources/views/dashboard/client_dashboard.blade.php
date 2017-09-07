@@ -7,121 +7,12 @@
 @endsection
 @section('content') 
     <!--  -->
-     @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 5) && $modules->active === 1)    
-     <div class="row">
-        <div class="col-md-6">
-         <!-- /Tasks List -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-             <i class="fa fa-hourglass"></i>
-              <h3 class="box-title">Leave Balance</h3>
 
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                    <thead>
-                        <tr>
-                            <th>Leave Type</th>
-                            <th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave Balance</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    @if (!empty($balance))
-                        @foreach($balance as $task)
-                          <tr>
-                        <td>{{ (!empty($task->leavetype)) ?  $task->leavetype : ''}}</td>
-            <!-- <td style="text-align: right;"><span class="label {{ $statusLabels[$task->leave_balance] }} pull-right"> -->
-                <td style="text-align: right;">{{ (!empty($task->leave_balance)) ?  $task->leave_balance : ''}}</td>
-                            
-                          
-                          </tr>
-                        @endforeach
-                    @endif
-                  </tbody>
-                </table>
-                <div class="box-footer">
-                   <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
-                     <button id="Apply"class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Apply For Leave</button>
-                </div>
-              </div>
-                @if(Session('error_starting'))
-                    @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
-                @endif
-                @include('tasks.partials.end_task')
-            </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix">
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!-- /Tasks List End -->
-        </div>
-
-        <div class="col-md-6">
-         <!-- /Tasks List -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-             <i class="fa fa-hourglass"></i>
-              <h3 class="box-title">Leave Applied For Status</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                    <thead>
-                        <tr>
-                            <th><i class="material-icons">shop_two</i>Leave Type</th>
-                              <th><i class="fa fa-calendar-o"></i>Date From</th>
-                             <th><i class="fa fa-calendar-o"></i>Date To</th>
-                            <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @if (!empty($application))
-                        @foreach($application as $checkTask)
-                          <tr>
-                            <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
-                           <!--  <td>{{ (!empty($checkTask->start_date)) ?  $checkTask->start_date : ''}}</td> -->
-                             <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
-                             <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
-                           <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
-                            <!-- <td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td> -->
-                            <td>
-                           
-                            </td>
-                          </tr>
-                        @endforeach
-                    @endif
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-     </div>
-     @endif
-    @endforeach
     <!-- Ticket Widget -->
     
      <!--  -->
      <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div>
              <div class="box box-warning same-height-widget">
                 <div class="box-header with-border">
@@ -141,7 +32,8 @@
                            <th><i class="fa fa-id-badge"></i> Account Number</th>
                            <th><i class="fa fa-building-o"></i> Company</th>
                            <th><i class="fa fa-user"></i> Contact Person</th>
-                           <th><i class="fa fa-calendar-o"></i> Date Created</th>      
+                           <th><i class="fa fa-calendar-o"></i> Date Created</th>
+                           <th></th>     
                         </tr>
                     </thead>
 
@@ -164,13 +56,14 @@
                 <div class="table-responsive">
                             <table class="table no-margin">
                                 <thead>
+                                
                                 <tr>
                                     <td></td>
-                                    <th>Quote #</th>
-                                    <th>Date Ordered</th>
-                                    <th>Payment Option</th>
-                                    <th>Status</th>
-                                    <th class="text-right">Cost</th>
+                                    <th>Quote # <i class="fa fa-first-order"></th>
+                                    <th>Date Ordered <i class="fa fa-calendar-o"></i></th>
+                                    <th>Payment Option <i class="fa fa-credit-card-alt"></i></th>
+                                    <th>Status <i class="fa fa-info-circle"></i></th>
+                                    <th class="text-right">Cost <i class="fa fa-money"></i></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -248,46 +141,6 @@
             else if (data == 'end')
                 location.href = "/task/end/" + id;
         }
-        ///delete this
-        /*var time = 0;
-        var running = 0;
-
-        function startPause() {
-            if (running == 0)
-            {
-                running = 1;
-                increment();
-                document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-pause'></i> Pause";
-                $("#end-button").show();
-            }
-            else
-            {
-                running = 0;
-                document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-repeat'></i> Resume";
-                $("#end-button").show();
-            }
-        }
-
-        function increment() {
-            if (running == 1) {
-                setTimeout(function() {
-                    time++;
-                    var mins = Math.floor(time / 10 / 60) % 60;
-                    var secs = Math.floor(time / 10) % 60;
-                    var tenths = time % 10;
-
-                    if (mins < 10) {
-                        mins = "0" + mins;
-                    }
-                    if (secs < 10) {
-                        secs = "0" + secs;
-                    }
-                    document.getElementById("stopWatchDisplay").innerHTML = mins + ":" + secs + ":" + "0" + tenths;
-                    increment();
-                }, 100);
-            }
-        }
-        */
           //Post module form to server using ajax (ADD)
             $('#add_tiket').on('click', function() {
                 //console.log('strUrl');
@@ -344,107 +197,7 @@
             $(window).on('resize', function () {
                 $('.modal:visible').each(reposition);
             });
-
-       
-         
            
-                //show performance of employees on modals [Comp Appraisal Widget]
-                $('#emp-list-performance-modal').on('show.bs.modal', function (e) {
-                    var linkDiv = $(e.relatedTarget);
-                    var modalWin = $(this);
-                    var loadingWheelEmpList = $('#lo-emp-list-performance-modal');
-                    empPerOnShow(linkDiv, modalWin);
-                });
-                $('#emp-list-performance-modal').on('hidden.bs.modal', function (e) {
-                    $('#lo-emp-list-performance-modal').show();
-                });
-
-                //show employee monthly performance on modal [Comp Appraisal Widget]
-                $('#emp-year-performance-modal').on('show.bs.modal', function (e) {
-                    var linkDiv = $(e.relatedTarget);
-                    var empID = parseInt(linkDiv.data('emp_id'));
-                    var empName = linkDiv.data('emp_name');
-                    var empChartCanvas = $('#empMonthlyPerformanceModalChart');
-                    var loadingWheel = $('#lo-emp-year-performance-modal');
-                    var empAppraisedMonthList = $('#emp-appraised-month-modal-list');
-                    var modalWin = $(this);
-                    modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
-                    loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
-                });
-                $('#emp-year-performance-modal').on('hidden.bs.modal', function (e) {
-                    $('#lo-emp-year-performance-modal').show();
-                });
-            }
-
-            //Show available perks on the perks widget
-            var perksWidgetList = $('#perks-widget-list');
-            loadAvailablePerks(perksWidgetList);
-
-            //leave status (widget)
-            var LeaveStatus = $('#leave-status-list');
-            //loadLeaveStatus();
-
-            //Show perk details
-            $('#edit-perk-modal').on('show.bs.modal', function (e) {
-                var perkLink = $(e.relatedTarget);
-                var modal = $(this);
-                perkDetailsOnShow(perkLink, modal);
-            });
-            //Show success action modal
-            $('#success-action-modal').modal('show');
-            document.getElementById("notes").placeholder = "Enter Task Note or Summary";
-            //Post end task form to server using ajax (add)
-            var taskID;
-            var employeeID;
-            var uploadRequired;
-            
-             $('#end-task-modal').on('show.bs.modal', function (e) {
-                var btnEnd = $(e.relatedTarget);
-                taskID = btnEnd.data('task_id');
-                employeeID = btnEnd.data('employee_id');
-                uploadRequired = btnEnd.data('upload_required');
-                var modal = $(this);
-                modal.find('#task_id').val(taskID);
-                modal.find('#employee_id').val(employeeID);
-                modal.find('#upload_required').val(uploadRequired);
-            });
-            
-            $('#end-task').on('click', function() {
-                endTask(taskID);
-                /*
-                var strUrl = '/task/end';
-                var formName = 'end-task-form';
-                var modalID = 'end-task-modal';
-                var submitBtnID = 'end-task';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Task Ended!';
-                var successMsg = 'Task has been Successfully ended!';
-
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                */
-            });
-            $('#close-task-modal').on('show.bs.modal', function (e) {
-                var btnEnd = $(e.relatedTarget);
-                taskID = btnEnd.data('task_id');
-                var modal = $(this);
-                modal.find('#task_id').val(taskID);
-            });
-            
-            $('#close-task').on('click', function() {
-                var strUrl = '/task/check';
-                var formName = 'close-task-form';
-                var modalID = 'close-task-modal';
-                var submitBtnID = 'close-task';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Task Checked!';
-                var successMsg = 'Task has been Successfully checked!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
-
-            //Launch counter for running tasks
-            @foreach($tasks as $task)
-                increment({{ $task->task_id }});
-            @endforeach
-        });
+          
     </script>
 @endsection
