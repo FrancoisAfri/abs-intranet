@@ -3,6 +3,8 @@
 @section('page_dependencies')
     <!-- iCheck -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
@@ -40,7 +42,7 @@
                                     <th>Status</th>
                                 </tr> 
 								<tr>
-                                    <td>{{$quotation->company->name}}</td>
+                                    <td>{{ ($quotation->company) ? $quotation->company->name : '[Individual]' }}</td>
                                     <td>{{$quotation->client->first_name." ".$quotation->client->surname}}</td>
                                     <td>{{$quotation->person->first_name." ".$quotation->person->surname}}</td>
 									<td>{{$quotation->created_at}}</td>
@@ -151,7 +153,8 @@
                             <button type="button" class="btn btn-primary btn-warning" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');"><i class="fa fa-trash"></i> Cancel Quote</button>
                         @endif
                         @if($quotation->status == 2)
-                            <button type="button" class="btn btn-primary btn-success" id="client_approve" onclick="postData({{$quotation->id}}, 'client_approve');"><i class="fa fa-check"></i> Client Approved</button>
+                            <!--<button type="button" class="btn btn-primary btn-success" id="client_approve" onclick="postData({{$quotation->id}}, 'client_approve');"><i class="fa fa-check"></i> Client Approved</button>-->
+                            <button type="button" class="btn btn-primary btn-success" id="client_approve" data-toggle="modal" data-target="#purchase-type-modal"><i class="fa fa-check"></i> Client Approved</button>
                             <button type="button" class="btn btn-primary btn-danger" id="client_declined" onclick="postData({{$quotation->id}}, 'client_declined');"><i class="fa fa-times"></i> Client Rejected</button>
                         @endif
                         @if($quotation->status < 2)
@@ -165,6 +168,7 @@
             </div>
 			@if ($quotation->status == 2)
 				 @include('quote.partials.get_client_response')
+				 @include('quote.partials.purchase_type_modal')
 			@endif
         </div>
 
@@ -178,33 +182,105 @@
 @section('page_script')
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- date picker -->
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
     <script>
         $(function () {
+            //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+
+            //Initialize date picker
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                    dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
+            });
+
+            //call hideFields method on when the page has loaded
+            hideFields();
+
+            //show/hide file upload or manual fields on radio checked
+            $('#rdo_once_off_payment, #rdo_recurring_payment').on('ifChecked', function(){
+                hideFields();
+            });
+
+            //Post purchase type form to server using ajax
+            $('#save-purchase-type').on('click', function() {
+                var strUrl = '/quote/client-approve/' + {{ $quotation->id }};
+                var modalID = 'purchase-type-modal';
+                var objData = {
+                    payment_option: $('#'+modalID).find("input[name='payment_option']:checked").val(),
+                    payment_term: $('#'+modalID).find('#payment_term').val(),
+                    first_payment_date: $('#'+modalID).find('#first_payment_date').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'save-purchase-type';
+                var redirectUrl = '/crm/account/quote/' + {{ $quotation->id }};
+                //var redirectUrl = null;
+                var successMsgTitle = 'Quote Approved!';
+                var successMsg = 'The quotation has been successfully approved.';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
         });
-	function postData(id, data)
-	{						
-		if (data == 'approve_quote')
-			location.href = "/quote/approve_quote/" + id;
-		else if(data == 'decline_quote')
-			location.href = "/quote/decline_quote/" + id;
-		else if (data == 'client_approve')
-			location.href = "/quote/approve_quote/" + id;
-		else if(data == 'client_declined')
-			location.href = "/quote/decline_quote/" + id;
-		else if(data == 'cancel_quote')
-			location.href = "/quote/cancel_quote/" + id;
-		else if(data == 'modify_quote')
-			location.href = "/quote/modify_quote/" + id;
-		else if(data == 'print_quote')
-			location.href = "/quote/print_quote/" + id;
-		else if(data == 'email_quote')
-			location.href = "/quote/email_quote/" + id;
-	}
+        function postData(id, data)
+        {
+            if (data == 'approve_quote')
+                location.href = "/quote/approve_quote/" + id;
+            else if(data == 'decline_quote')
+                location.href = "/quote/decline_quote/" + id;
+            else if (data == 'client_approve')
+                location.href = "/quote/approve_quote/" + id;
+            else if(data == 'client_declined')
+                location.href = "/quote/decline_quote/" + id;
+            else if(data == 'cancel_quote')
+                location.href = "/quote/cancel_quote/" + id;
+            else if(data == 'modify_quote')
+                location.href = "/quote/modify_quote/" + id;
+            else if(data == 'print_quote')
+                location.href = "/quote/print_quote/" + id;
+            else if(data == 'email_quote')
+                location.href = "/quote/email_quote/" + id;
+        }
+
+        //function to show/hide payment fields
+        function hideFields() {
+            var paymentOption = $("input[name='payment_option']:checked").val();
+            if (paymentOption == 1) { //yes
+                $('.recurring-payment-field').hide();
+            }
+            else if (paymentOption == 2) { //no
+                $('.recurring-payment-field').show();
+            }
+            return paymentOption;
+        }
     </script>
 @endsection

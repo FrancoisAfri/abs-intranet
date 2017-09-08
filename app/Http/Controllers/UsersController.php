@@ -393,6 +393,16 @@ class UsersController extends Controller
             $person['date_of_birth'] = str_replace('/', '-', $person['date_of_birth']);
             $person['date_of_birth'] = strtotime($person['date_of_birth']);
         }
+		 //convert date joined company to unix time stamp
+        if (isset($person['date_joined'])) {
+            $person['date_joined'] = str_replace('/', '-', $person['date_joined']);
+            $person['date_joined'] = strtotime($person['date_joined']);
+        }
+		 //convert date left company to unix time stamp
+        if (isset($person['date_left'])) {
+            $person['date_left'] = str_replace('/', '-', $person['date_left']);
+            $person['date_left'] = strtotime($person['date_left']);
+        }
 		if (empty($person['position'])) $person['position'] = 0;
 		
         //Update users and hr table

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 class ContactPerson extends Model
 {
     //Specify the table
-    public $table = 'contacts_contacts';
+    public $table = 'contacts_contacts'; 
 
     // Mass assignable fields
     protected $fillable = [
@@ -36,6 +36,16 @@ class ContactPerson extends Model
     public function quotations()
     {
         return $this->hasMany(Quotation::class, 'client_id');
+    }
+
+    /**
+     * Relationship between Contact Person and Account
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function accounts()
+    {
+        return $this->hasMany(CRMAccount::class, 'client_id');
     }
 
     //Full Name accessor

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
+use App\CRMAccount;
+use App\CRMPayment;
 use App\DivisionLevel;
 use App\DivisionLevelFive;
 use App\EmailTemplate;
@@ -219,18 +221,43 @@ class QuotesController extends Controller
         AuditReportsController::store('Quote', 'Quote Authorisation Page Accessed', "Accessed By User", 0);
         return view('quote.authorisation')->with($data);  
     }
-	# Approve Quote
-	public function approveQuote(Quotation $quote)
+
+    /**
+     * Client approved the quote
+     *
+     * @param $request
+     * @param $quotation
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function clientApproveQuote(Request $request, Quotation $quote)
     {
+        $this->validate($request, [
+            'payment_option' => 'bail|required|integer|min:1',
+            'payment_term' => 'bail|required_if:payment_option,2|integer',
+            'first_payment_date' => 'bail|required_if:payment_option,2|date_format:d/m/Y',
+        ]);
+
+        $paymentOption = $request->input('payment_option');
+        $paymentTerm = $request->input('payment_term');
+        $firstPaymentDate = str_replace('/', '-', $request->input('first_payment_date'));
+        $firstPaymentDate = strtotime($firstPaymentDate);
+
+        return $this->approveQuote($quote, true, $paymentOption, $paymentTerm, $firstPaymentDate);
+    }
+
+	# Approve Quote
+	public function approveQuote(Quotation $quote, $isClientApproval = false, $paymentOption = null, $paymentTerm = null, $firstPaymentDate = null)
+    {
+        $stastus = $quote->status;
 		if ($quote->status == 1) $stastus = 2;
 		elseif ($quote->status == 2) $stastus = 5;
-		
-		$changedStatus =  "Status Changed To: ".$this->quoteStatuses[$stastus];
-		$quote->status = $stastus;
-		$quote->update();
+
+        $quote->status = $stastus;
+        $changedStatus =  "Status Changed To: " . $quote->quote_status;
+        //$quote->update();
 		if ($stastus == 5)
 		{
-			//Email Client to confirn success
+			//Email Client to confirm success
 			$quote->load('client');
             $messageContents = EmailTemplate::where('template_key', 'approved_quote')->first();
             if (!empty($messageContents))
@@ -240,7 +267,39 @@ class QuotesController extends Controller
             $quoteAttachment = $this->viewQuote($quote, true, false, true);
             Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 			$quote->status = 5;
-            $quote->update();
+
+            //Create an account for the client or add quote to his existing account
+            DB::transaction(function () use ($isClientApproval, $quote, $paymentOption, $paymentTerm, $firstPaymentDate) {
+                if ($isClientApproval)
+                {
+                    $quote->payment_option = $paymentOption;
+                    $quote->payment_term = ($paymentTerm) ? $paymentTerm : null;
+                    $quote->first_payment_date = ($firstPaymentDate) ? $firstPaymentDate : null;
+
+                    $crmAccount = CRMAccount::where('client_id', $quote->client_id)
+                        ->where(function ($query) use($quote) {
+                            if ($quote->company_id && $quote->company_id > 0) $query->where('company_id', $quote->company_id);
+                        })->first();
+                    if (! ($crmAccount)) {
+                        $crmAccount = new CRMAccount();
+                        $crmAccount->client_id = $quote->client_id;
+                        $crmAccount->company_id = $quote->company_id;
+                        $crmAccount->start_date = time();
+                        $crmAccount->status = 1;
+                        $crmAccount->save();
+                    }
+
+                    $companyDetails = CompanyIdentity::systemSettings();
+                    $accountNumber = $companyDetails['header_acronym_bold'] . $companyDetails['header_acronym_regular'];
+                    $accountNumber = !empty($accountNumber) ? strtoupper($accountNumber) : 'SYS';
+                    $accountNumber .= 'ACC' . sprintf('%07d', $crmAccount->id);
+                    $crmAccount->account_number = $accountNumber;
+                    $crmAccount->update();
+
+                    $quote->account_id = $crmAccount->id;
+                }
+                $quote->update();
+            });
 			$changedStatus .= ", Email sent to client, to welcome them";
 		}
 		elseif ($stastus == 2)
@@ -267,7 +326,8 @@ class QuotesController extends Controller
 		$QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
 		$QuoteApprovalHistory->save();
 		AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", "Edited by User", 0);
-		return back();  
+		if ($isClientApproval) return redirect('/crm/account/quote/' . $quote->id);
+		else return back();
     }
 	# Decline Quote
 	public function declineQuote(Quotation $quote)
@@ -454,6 +514,13 @@ class QuotesController extends Controller
             $quote->status = 1;
             $quote->save();
 
+            $companyDetails = CompanyIdentity::systemSettings();
+            $quoteNumber = $companyDetails['header_acronym_bold'] . $companyDetails['header_acronym_regular'];
+            $quoteNumber = !empty($quoteNumber) ? strtoupper($quoteNumber) : 'SYS';
+            $quoteNumber .= 'QTE' . sprintf('%07d', $quote->id);
+            $quote->quote_number = $quoteNumber;
+            $quote->update();
+
             //save quote's products
             $prices = $request->input('price');
             $quantities = $request->input('quantity');
@@ -591,9 +658,39 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false)
+    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false)
     {
         $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions');
+        $invoice = null;
+        $totalPaid = 0;
+        if ($isInvoice) {
+            $quotation->load('invoices', 'account');
+            //once-off purchases
+            if ($quotation->payment_option == 1) {
+                //specify invoice
+                $invoice = $quotation->invoices->first();
+
+                //get the sum of the previous payments
+                $totalPaid = CRMPayment::where('quote_id', $quotation->id)->sum('amount');
+
+                //update statuses if invoice is being emailed to the client
+                if ($emailQuote) {
+                    DB::transaction(function () use ($quotation, $invoice) {
+                        if ($quotation->status < 6) {
+                            $quotation->status = 6;
+                            $quotation->update();
+                        }
+                        if ($invoice->status < 2) {
+                            $invoice->status = 2;
+                            $invoice->update();
+                        }
+                    });
+                }
+            }
+            else {
+                //calculate invoice payment due date $invoice->payment_due_date
+            }
+        }
         $productsSubtotal = 0;
         $packagesSubtotal = 0;
         foreach ($quotation->products as $product) {
@@ -611,7 +708,7 @@ class QuotesController extends Controller
 
         //return $quotation;
 
-        $data['page_title'] = "Quotes";
+        $data['page_title'] = ($isInvoice) ? "Invoice" : "Quotes";
         $data['page_description'] = "View a quotation";
         $data['breadcrumb'] = [
             ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
@@ -620,11 +717,14 @@ class QuotesController extends Controller
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'search';
         $data['quotation'] = $quotation;
+        $data['invoice'] = $invoice;
+        $data['totalPaid'] = $totalPaid;
         $data['subtotal'] = $subtotal;
         $data['discountPercent'] = $discountPercent;
         $data['discountAmount'] = $discountAmount;
         $data['vatAmount'] = $vatAmount;
         $data['total'] = $total;
+        $data['balanceDue'] = $total - $totalPaid;
         AuditReportsController::store('Quote', 'View Quote Page Accessed', "Accessed By User", 0);
 
         if ($isPDF) {
@@ -635,15 +735,17 @@ class QuotesController extends Controller
             $data['file_name'] = 'Quotation';
             $data['user'] = Auth::user()->load('person');
             $data['quoteProfile'] = $quoteProfile;
-            //$data['date'] = Carbon::now()->format('d/m/Y');
 
-            $view = view('quote.pdf_quote', $data)->render();
+            $view = ($isInvoice) ? view('crm.pdf_invoice', $data)->render() : view('quote.pdf_quote', $data)->render();
             $pdf = resolve('dompdf.wrapper');
             $pdf->loadHTML($view);
             if ($printQuote) return $pdf->stream('quotation_' . $quotation->id . '.pdf');
             elseif ($emailQuote) return $pdf->output();
         }
-        else return view('quote.view_quote')->with($data);
+        else {
+            if ($isInvoice) return view('crm.view_invoice')->with($data);
+            else return view('quote.view_quote')->with($data);
+        }
     }
 
     /**
@@ -651,7 +753,6 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
     */
-	
     public function viewPDFQuote(Quotation $quotation)
     {
         return $this->viewQuote($quotation, true, true);

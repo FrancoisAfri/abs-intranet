@@ -59,7 +59,7 @@
                             <tr>
                                 <th style="width: 10px">#</th>
                                 <th>Product</th>
-                                <th>Quantity</th>
+                                <th class="text-center">Quantity</th>
                                 <th style="text-align: right;">Unit Price</th>
                             </tr>
                             @foreach ($quotation->products as $product)
@@ -119,7 +119,7 @@
                             <!-- banking details section -->
                             <div class="col-xs-5 no-padding">
                                 <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                    <b>Baning Details</b><br><br>
+                                    <b>Banking Details</b><br><br>
                                     Bank Name: {{ $quoteProfile->bank_name }}<br>
                                     Branch Code: {{ $quoteProfile->bank_branch_code }}<br>
                                     Account Name: {{ $quoteProfile->bank_account_name }}<br>

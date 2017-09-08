@@ -38,6 +38,16 @@ class ContactCompany extends Model
     }
 
     /**
+     * Relationship between Contact Company and Account
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function accounts()
+    {
+        return $this->hasMany(CRMAccount::class, 'company_id');
+    }
+
+    /**
      * Accessor to return the company's full  physical address
      *
      * @return String

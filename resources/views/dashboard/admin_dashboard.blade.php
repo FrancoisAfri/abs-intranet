@@ -2,9 +2,13 @@
 @section('page_dependencies')
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 @endsection
 @section('content')
 
+ @foreach($Ribbon_module as $modules)
+     @if (($modules->id === 9) && $modules->active === 1)              
     <div class="row">
         <div class="col-md-12">
             <!-- Employee Monthly performance Widget-->
@@ -55,6 +59,11 @@
         </div>
         <!-- /.col -->
     </div>
+    @endif
+    @endforeach
+    <!--  -->
+    @foreach($Ribbon_module as $modules)
+     @if (($modules->id === 9) && $modules->active === 1)    
     <div class="row">
         <div class="col-md-12">
             @if($canViewCPWidget)
@@ -134,6 +143,11 @@
         </div>
         <!-- /.col -->
     </div>
+    @endif
+    @endforeach
+    <!--  -->
+@foreach($Ribbon_module as $modules)
+     @if (($modules->id === 4) && $modules->active === 1)    
 @if($canViewEmpRankWidget)
     <div class="row">
         <div class="col-md-12">
@@ -201,7 +215,13 @@
         </div>
     </div>
 @endif
+  @endif
+    @endforeach
+
+<!--  -->
 @if($canViewTaskWidget)
+    @foreach($Ribbon_module as $modules)
+     @if (($modules->id === 13 || $modules->id === 10 ) && $modules->active === 1)   
     <div class="row">
         <div class="col-md-12">
             <!-- Employees Performance Ranking Widget -->
@@ -260,7 +280,7 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
-				 <!-- Loading wheel overlay -->
+                 <!-- Loading wheel overlay -->
                 <div class="overlay" id="loading_overlay_emp_tasks">
                     <i class="fa fa-refresh fa-spin"></i>
                 </div>
@@ -268,19 +288,30 @@
             <!-- /.Employees Performance Ranking Widget -->
         </div>
     </div>
-@endif
+@endif 
+    @endforeach
+         @endif
+<!--  -->
+
 <!-- /Check if induction is active before showing this  And Meeting-->
-	<div class="row">
+  @foreach($Ribbon_module as $modules)
+     @if (($modules->id === 13) && $modules->active === 1) 
+    <div class="row">
         <div class="col-md-7">
             <!-- Include tasks widget -->
             @include('dashboard.partials.widgets.tasks_widget')
         </div>
-		<div class="col-md-5">
+        <div class="col-md-5">
             <!-- Include tasks to check widget -->
             @include('dashboard.partials.widgets.tasks_to_check_widget')
         </div>
     </div>
-	<div class="row">
+      @endif
+    @endforeach
+    <!--  -->
+     @foreach($Ribbon_module as $modules)
+     @if (($modules->id === 9) && $modules->active === 1)  
+    <div class="row">
         <div class="col-md-6">
             <!-- Available Perks Widgets -->
             <div class="box box-warning same-height-widget">
@@ -309,7 +340,12 @@
             <!-- /.Available Perks Widgets -->
         </div>
     </div>
+     @endif
+    @endforeach
+    
     <!--  -->
+     @foreach($Ribbon_module as $modules)
+     @if (($modules->id === 5) && $modules->active === 1)    
      <div class="row">
         <div class="col-md-6">
          <!-- /Tasks List -->
@@ -331,10 +367,7 @@
                     <thead>
                         <tr>
                             <th>Leave Type</th>
-
-                            <th style="text-align: right;">Leave Balance</th>
-                          <!--   <th>Due Date</th>
-                            <th>Client Name</th> -->
+                            <th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave Balance</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -388,12 +421,13 @@
             <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
               <div class="table-responsive">
                 <table class="table no-margin">
+                    
                     <thead>
                         <tr>
-                            <th>Leave Type</th>
-                            <th>Date From </th>
-                             <th>Date To </th>
-                            <th style="text-align: right;">Status</th>
+                            <th><i class="material-icons">shop_two</i>Leave Type</th>
+                              <th><i class="fa fa-calendar-o"></i>Date From</th>
+                             <th><i class="fa fa-calendar-o"></i>Date To</th>
+                            <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -418,39 +452,34 @@
             </div>
           </div>
         </div>
-        
      </div>
-    <!--  -->
-    <!-- Ticket Widget -->
-      <div class="row">
-        <div class="col-md-6">
-         <!-- /Tasks List -->
-          <!-- <div class="box box-info"> -->
-          <div>
-             <div class="box box-danger same-height-widget">
-                <div class="box-header with-border">
-                <i class="fa fa-ticket"></i>
-                    <h3 class="box-title">view Tickets</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+     @endif
+    @endforeach
+     <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
               <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                                <tr>
+                         @if (count($helpdeskTickets) > 0)
+                        @foreach($helpdeskTickets as $helpdeskTicket)
+                          <tr>
+                             
+                             <th rowspan="2" width="3px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-user-o"></i></h1></th>
+                                    <th>Your Ticket(s)  {{ $names." ".$surname }}</th>
+                                     <th class="btn btn-primary ">  {{ $helpdeskTicket->ticket->count() }}</th>
+                                    <!-- <td ><span class="label label-primary ">{{ $helpdeskTicket->ticket->count() }}</span></td> -->
+
+                          </tr>
+                        @endforeach
+                    @endif
+                                </tr>
+                            </table>
                 <table class="table no-margin">
                     <thead>
-                        <tr>
-                            <th>Ticket #</th>
-                           <!--  <th>Email</th> -->
-                            <th>Subject</th>
-                            <th>Ticket Date</th>
-                            <th style="text-align: right;">Status</th>
-                          <!--   <th>Due Date</th>
-                            <th>Client Name</th> -->
+                        <tr>                     
+                            <th><i class="fa fa-id-badge"></i> Ticket Number</th>
+                            <th><i class="fa fa-envelope"></i> Subject</th>
+                            <th><i class="fa fa-calendar-o"></i> Ticket Date</th>        
+                            <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -459,35 +488,138 @@
                     @if (!empty($tickets))
                         @foreach($tickets as $ticket)
                           <tr>
-                        <td>TICK{{ (!empty($ticket->id)) ?  $ticket->id : ''}}</td>
-                        <!-- <td>{{ (!empty($ticket->email)) ?  $ticket->email : ''}}</td> -->
-                        <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}}</td> 
-                         <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
-                         <td style="text-align: right;">{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
-
+                            <td>TICK{{ (!empty($ticket->id)) ?  $ticket->id : ''}}</td>
+                            <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}}</td> 
+                             <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
+                             <td style="text-align: right;">{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
                           </tr>
                         @endforeach
                     @endif
                   </tbody>
                 </table>
                 <div class="box-footer">
-                   <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
-                   <!--   <button id="ticket"class="btn btn-primary pull-right"><i class="fa fa-ticket"></i> Create Ticket</button> -->
                       <button type="button" id="new_tickets" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-ticket-modal">Add Ticket</button>
                 </div>
-              </div>
-             
+              </div>  
             </div>
-            <!-- /.box-body -->
             <div class="box-footer clearfix">
             </div>
-            <!-- /.box-footer -->
           </div>
-         
         </div>
-
-       
      </div>
+   
+
+    
+     
+    
+
+  <!--     @foreach($Ribbon_module as $modules)
+     @if (($modules->id === 6) && $modules->active === 1) 
+    <div class="row">
+        <div class="col-md-6">
+          <div>
+             <div class="box box-danger same-height-widget">
+                <div class="box-header with-border">
+                <i class="fa fa-product-hunt"></i>
+                    <h3 class="box-title">Product Category</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                    <thead>
+                        <tr>
+                            <th>Category #</th>
+                            <th>Product</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    @if (!empty($ProductCategory))
+                        @foreach($ProductCategory as $category)
+                          <tr>
+                        <td>{{ (!empty($category->name)) ?  $category->name : ''}}</td>
+                        </tr>
+                        <tr>
+                        <td>
+                       @foreach($category->productCategory as $productCategory )
+                         <td>{{ (!empty($productCategory->name)) ?  $productCategory->name : ''}}</td>
+                          @endforeach
+                        @endforeach
+                        </tr>
+                    @endif
+                  </tbody>
+                </table>
+              </div>  
+            </div>
+            <div class="box-footer clearfix">
+            </div>
+          </div>
+        </div>
+     </div> -->
+     <!-- Products -->
+       
+     <!--    <div class="row">
+        <div class="col-md-6">
+          <div>
+             <div class="box box-danger same-height-widget">
+                <div class="box-header with-border">
+                <i class="fa fa-product-hunt"></i>
+                    <h3 class="box-title">Package Product</h3>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                    <thead>
+                        <tr>
+                            <th>Package #</th>
+                            <th>Product</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    @if (!empty($packages))
+                        @foreach($packages as $package)
+                          <tr>
+                        <td>{{ (!empty($package->name)) ?  $package->name : ''}}</td>
+                        </tr>
+                        <tr>
+                       @foreach($package->products_type as $productstype )
+                            <tr>
+                         <td>{{ (!empty($productstype->name)) ?  $productstype->name : ''}}</td>
+                         </tr>
+                          @endforeach
+                        @endforeach
+                        </tr>
+                    @endif
+                  </tbody>
+                </table>
+                <div class="box-footer">
+                      <button type="button" id="new_tickets" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-ticket-modal">Add Ticket</button>
+                </div>
+              </div>  
+            </div>
+            <div class="box-footer clearfix">
+            </div>
+          </div>
+        </div>
+     </div>
+    </div>
+    </div>
+    @endif
+    @endforeach --> -->
+    <!--  -->
 @endsection
   @include('dashboard.partials.add_ticket')
 
@@ -500,9 +632,9 @@
     <script src="/custom_components/js/admindbcharts.js"></script>
     <!-- matchHeight.js
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script>-->
-	<!-- the main fileinput plugin file -->
+    <!-- the main fileinput plugin file -->
     <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-	<!-- Ajax form submit -->
+    <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
@@ -510,55 +642,55 @@
     <script src="/custom_components/js/tasktimer.js"></script>
 
     <script>
-		function postData(id, data)
-		{
-			if (data == 'start')
-				location.href = "/task/start/" + id;
-			else if (data == 'pause')
-				location.href = "/task/pause/" + id;
-			else if (data == 'end')
-				location.href = "/task/end/" + id;
-		}
-		///delete this
-		/*var time = 0;
-		var running = 0;
+        function postData(id, data)
+        {
+            if (data == 'start')
+                location.href = "/task/start/" + id;
+            else if (data == 'pause')
+                location.href = "/task/pause/" + id;
+            else if (data == 'end')
+                location.href = "/task/end/" + id;
+        }
+        ///delete this
+        /*var time = 0;
+        var running = 0;
 
-		function startPause() {
-			if (running == 0)
-			{
-				running = 1;
-				increment();
-				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-pause'></i> Pause";
-				$("#end-button").show();
-			}
-			else
-			{
-				running = 0;
-				document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-repeat'></i> Resume";
-				$("#end-button").show();
-			}
-		}
+        function startPause() {
+            if (running == 0)
+            {
+                running = 1;
+                increment();
+                document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-pause'></i> Pause";
+                $("#end-button").show();
+            }
+            else
+            {
+                running = 0;
+                document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-repeat'></i> Resume";
+                $("#end-button").show();
+            }
+        }
 
-		function increment() {
-			if (running == 1) {
-				setTimeout(function() {
-					time++;
-					var mins = Math.floor(time / 10 / 60) % 60;
-					var secs = Math.floor(time / 10) % 60;
-					var tenths = time % 10;
+        function increment() {
+            if (running == 1) {
+                setTimeout(function() {
+                    time++;
+                    var mins = Math.floor(time / 10 / 60) % 60;
+                    var secs = Math.floor(time / 10) % 60;
+                    var tenths = time % 10;
 
-					if (mins < 10) {
-						mins = "0" + mins;
-					}
-					if (secs < 10) {
-						secs = "0" + secs;
-					}
-					document.getElementById("stopWatchDisplay").innerHTML = mins + ":" + secs + ":" + "0" + tenths;
-					increment();
-				}, 100);
-			}
-		}
-		*/
+                    if (mins < 10) {
+                        mins = "0" + mins;
+                    }
+                    if (secs < 10) {
+                        secs = "0" + secs;
+                    }
+                    document.getElementById("stopWatchDisplay").innerHTML = mins + ":" + secs + ":" + "0" + tenths;
+                    increment();
+                }, 100);
+            }
+        }
+        */
           //Post module form to server using ajax (ADD)
             $('#add_tiket').on('click', function() {
                 //console.log('strUrl');
@@ -582,8 +714,8 @@
 
 
         $(function () {
-			// hide end button when page load
-			//$("#end-button").show();
+            // hide end button when page load
+            //$("#end-button").show();
             //Initialize Select2 Elements
             $(".select2").select2();
 
@@ -663,9 +795,9 @@
                 //var totNumEmp = parseInt('{{ $totNumEmp }}');
                 //loadEmpListPerformance(bottomTenList, 0, 0, false, true, totNumEmp);
             }
-			if (canViewTaskWidget == 1)
-			{
-				//Load divisions drop down
+            if (canViewTaskWidget == 1)
+            {
+                //Load divisions drop down
                 var parentDDID = '';
                 var loadAllDivs = 1;
                 var firstDivDDID = null;
@@ -681,7 +813,7 @@
                     @if($loop->first)
                         var selectFirstDiv = 1;
                         var divHeadSpecific = 1;
-						if (isSuperuser) divHeadSpecific = 0;
+                        if (isSuperuser) divHeadSpecific = 0;
                         else if (isDivHead) divHeadSpecific = 1;
                         loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
                         firstDivDDID = ddID;
@@ -692,7 +824,7 @@
                     parentDDID = ddID;
                     loadAllDivs = -1;
                 @endforeach
-			}
+            }
 
             //Draw employee performance graph
             var empID = parseInt('{{ $user->person->id }}');
@@ -779,14 +911,14 @@
                 var modal = $(this);
                 perkDetailsOnShow(perkLink, modal);
             });
-			//Show success action modal
+            //Show success action modal
             $('#success-action-modal').modal('show');
-			document.getElementById("notes").placeholder = "Enter Task Note or Summary";
-			//Post end task form to server using ajax (add)
-			var taskID;
-			var employeeID;
-			var uploadRequired;
-			
+            document.getElementById("notes").placeholder = "Enter Task Note or Summary";
+            //Post end task form to server using ajax (add)
+            var taskID;
+            var employeeID;
+            var uploadRequired;
+            
              $('#end-task-modal').on('show.bs.modal', function (e) {
                 var btnEnd = $(e.relatedTarget);
                 taskID = btnEnd.data('task_id');
@@ -797,7 +929,7 @@
                 modal.find('#employee_id').val(employeeID);
                 modal.find('#upload_required').val(uploadRequired);
             });
-			
+            
             $('#end-task').on('click', function() {
                 endTask(taskID);
                 /*
@@ -812,13 +944,13 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 */
             });
-			$('#close-task-modal').on('show.bs.modal', function (e) {
+            $('#close-task-modal').on('show.bs.modal', function (e) {
                 var btnEnd = $(e.relatedTarget);
                 taskID = btnEnd.data('task_id');
                 var modal = $(this);
                 modal.find('#task_id').val(taskID);
             });
-			
+            
             $('#close-task').on('click', function() {
                 var strUrl = '/task/check';
                 var formName = 'close-task-form';
