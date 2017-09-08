@@ -512,6 +512,7 @@ Route::get('quote/approve_quote/{quote}', 'QuotesController@approveQuote');
 Route::get('quote/decline_quote/{quote}', 'QuotesController@declineQuote');
 Route::get('quote/modify_quote/{quote}', 'QuotesController@updateQuoteIndex');
 Route::post('quote/adjust_modification/{quote}', 'QuotesController@adjustQuoteModification');
+Route::post('quote/search', 'QuotesController@searchResults');
 Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
 Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
 
