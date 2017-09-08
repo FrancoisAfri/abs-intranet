@@ -16,9 +16,11 @@
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
                     <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">
-                    @foreach($tcIDs as $tcID)
-                        <input type="hidden" name="tc_id[]" value="{{ $tcID }}">
-                    @endforeach
+                    @if($tcIDs && count($tcIDs) > 0)
+                        @foreach($tcIDs as $tcID)
+                            <input type="hidden" name="tc_id[]" value="{{ $tcID }}">
+                        @endforeach
+                    @endif
                     <div class="box-header with-border">
                         <h3 class="box-title">New Quote</h3>
                     </div>
@@ -102,18 +104,20 @@
                                         </td>
                                     </tr>
                                     <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
-                                    @foreach($package->products_type as $product)
-                                        <tr class="{{ ($package->promotions->first()) ? 'warning' : '' }}">
-                                            <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                            <td style="vertical-align: middle;">{{ $product->name }}</td>
-                                            <td style="text-align: center; vertical-align: middle; width: 80px;">
-                                                &mdash;
-                                            </td>
-                                            <td style="vertical-align: middle; text-align: right;">
-                                                &mdash;
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    @if($package->products_type && count($package->products_type) > 0)
+                                        @foreach($package->products_type as $product)
+                                            <tr class="{{ ($package->promotions->first()) ? 'warning' : '' }}">
+                                                <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
+                                                <td style="vertical-align: middle;">{{ $product->name }}</td>
+                                                <td style="text-align: center; vertical-align: middle; width: 80px;">
+                                                    &mdash;
+                                                </td>
+                                                <td style="vertical-align: middle; text-align: right;">
+                                                    &mdash;
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 @endforeach
                             </table>
 
