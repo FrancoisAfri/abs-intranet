@@ -255,12 +255,13 @@ class QuotesController extends Controller
 	# Approve Quote
 	public function approveQuote(Quotation $quote, $isClientApproval = false, $paymentOption = null, $paymentTerm = null, $firstPaymentDate = null)
     {
+        $stastus = $quote->status;
 		if ($quote->status == 1) $stastus = 2;
 		elseif ($quote->status == 2) $stastus = 5;
-		
-		$changedStatus =  "Status Changed To: ".$this->quoteStatuses[$stastus];
-		$quote->status = $stastus;
-		//$quote->update();
+
+        $quote->status = $stastus;
+        $changedStatus =  "Status Changed To: " . $quote->quote_status;
+        //$quote->update();
 		if ($stastus == 5)
 		{
 			//Email Client to confirm success
