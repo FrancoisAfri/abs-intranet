@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\CRMAccount;
+use App\CRMInvoice;
+use App\CRMPayment;
 use App\Quotation;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 
 class CRMAccountController extends Controller
 {
@@ -33,6 +36,7 @@ class CRMAccountController extends Controller
         $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
         $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
 
+        //should check payment option
         //calculate quote cost | calculate the balance | check which action buttons to show
         foreach ($account->quotations as $quotation) {
             //calculate the quote cost
@@ -51,6 +55,17 @@ class CRMAccountController extends Controller
             $vatAmount = ($quotation->add_vat == 1) ? $discountedAmount * 0.14 : 0;
             $total = $discountedAmount + $vatAmount;
             $quotation->cost = $total;
+
+            //calculate the balance
+            $totalPaid = CRMPayment::where('quote_id', $quotation->id)->sum('amount');
+            $quotation->balance = $quotation->cost - $totalPaid;
+
+            //load invoices
+            if ($quotation->payment_option == 1) { //once-off purchases load the first invoice.
+                $quotation->load(['invoices' => function($query) {
+                    $query->first();
+                }]);
+            }
 
             //Action buttons
             if (in_array($quotation->status, [6, 7])) $quotation->can_capture_payment = true;
@@ -86,5 +101,63 @@ class CRMAccountController extends Controller
     {
         $account = CRMAccount::find($quote->account_id);
         return $this->viewAccount($account);
+    }
+
+    /**
+     * Capture/save a payment in the payments table.
+     *
+     * @param $quoteID
+     * @param $invoiceID
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
+    public function capturePayment(Request $request, Quotation $quotation, CRMInvoice $invoice)
+    {
+        //Validate amount and date
+        $this->validate($request, [
+            'payment_date' => 'bail|required|date_format:"d/m/Y"',
+            'amount_paid' => 'bail|required|numeric|min:0'
+        ]);
+
+        $paymentDate = trim($request->input('payment_date'));
+        $paymentDate = str_replace('/', '-', $paymentDate);
+        $paymentDate = strtotime($paymentDate);
+
+        $payment = null;
+        DB::transaction(function () use ($payment, $quotation, $invoice, $request, $paymentDate) {
+            //get the sum of the previous payments
+            $sumPaid = CRMPayment::where('invoice_id', $invoice->id)->sum('amount');
+
+            //save new payment
+            $payment = new CRMPayment();
+            $payment->quote_id = $quotation->id;
+            $payment->invoice_id = $invoice->id;
+            $payment->amount = $request->input('amount_paid');
+            $payment->payment_date = $paymentDate;
+            $payment->save();
+
+            //Upload supporting document
+            if ($request->hasFile('supporting_document')) {
+                $fileExt = $request->file('supporting_document')->extension();
+                if (in_array($fileExt, ['jpg', 'jpeg', 'png', 'pdf']) && $request->file('supporting_document')->isValid()) {
+                    $fileName = $payment->id . "_proof_of_payment_" . '.' . $fileExt;
+                    $request->file('supporting_document')->storeAs('crm/proof_of_payments', $fileName);
+                    //Update file name in hr table
+                    $payment->proof_of_payment = $fileName;
+                    $payment->update();
+                }
+            }
+
+            //update statuses
+            $quotation->status = (($invoice->amount - $sumPaid - $request->input('amount_paid')) > 0) ? 7 : 8;
+            $quotation->update();
+            $invoice->status = (($invoice->amount - $sumPaid - $request->input('amount_paid')) > 0) ? 3 : 4;
+            $invoice->update();
+
+            //audit the action
+            AuditReportsController::store('CRM', 'New Payment Captured (payment id: ' . $payment->id . ')', "By User", 0);
+        });
+
+        return response()->json(['payment_captured' => ($payment) ? $payment->id : 0], 200);
     }
 }

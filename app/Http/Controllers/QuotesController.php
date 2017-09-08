@@ -6,6 +6,7 @@ use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\CRMAccount;
+use App\CRMPayment;
 use App\DivisionLevel;
 use App\DivisionLevelFive;
 use App\EmailTemplate;
@@ -610,12 +611,17 @@ class QuotesController extends Controller
     {
         $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions');
         $invoice = null;
+        $totalPaid = 0;
         if ($isInvoice) {
             $quotation->load('invoices', 'account');
             //once-off purchases
             if ($quotation->payment_option == 1) {
                 //specify invoice
                 $invoice = $quotation->invoices->first();
+
+                //get the sum of the previous payments
+                $totalPaid = CRMPayment::where('quote_id', $quotation->id)->sum('amount');
+
                 //update statuses if invoice is being emailed to the client
                 if ($emailQuote) {
                     DB::transaction(function () use ($quotation, $invoice) {
@@ -651,7 +657,7 @@ class QuotesController extends Controller
 
         //return $quotation;
 
-        $data['page_title'] = "Quotes";
+        $data['page_title'] = ($isInvoice) ? "Invoice" : "Quotes";
         $data['page_description'] = "View a quotation";
         $data['breadcrumb'] = [
             ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
@@ -661,11 +667,13 @@ class QuotesController extends Controller
         $data['active_rib'] = 'search';
         $data['quotation'] = $quotation;
         $data['invoice'] = $invoice;
+        $data['totalPaid'] = $totalPaid;
         $data['subtotal'] = $subtotal;
         $data['discountPercent'] = $discountPercent;
         $data['discountAmount'] = $discountAmount;
         $data['vatAmount'] = $vatAmount;
         $data['total'] = $total;
+        $data['balanceDue'] = $total - $totalPaid;
         AuditReportsController::store('Quote', 'View Quote Page Accessed', "Accessed By User", 0);
 
         if ($isPDF) {

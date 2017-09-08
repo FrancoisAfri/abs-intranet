@@ -42,7 +42,7 @@
                                     <th>Status</th>
                                 </tr> 
 								<tr>
-                                    <td>{{$quotation->company->name}}</td>
+                                    <td>{{ ($quotation->company) ? $quotation->company->name : '[Individual]' }}</td>
                                     <td>{{$quotation->client->first_name." ".$quotation->client->surname}}</td>
                                     <td>{{$quotation->person->first_name." ".$quotation->person->surname}}</td>
 									<td>{{$quotation->created_at}}</td>

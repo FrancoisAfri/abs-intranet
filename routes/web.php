@@ -522,6 +522,7 @@ Route::get('crm/account/quote/{quote}', 'CRMAccountController@viewAccountFromQuo
 Route::get('crm/setup', 'CRMSetupController@index');
 Route::get('crm/invoice/view/{quotation}/pdf', 'CRMInvoiceController@viewPDFInvoice');
 Route::get('crm/invoice/mail/{quotation}', 'CRMInvoiceController@emailInvoice');
+Route::post('crm/capture-payment/{quotation}/{invoice}', 'CRMAccountController@capturePayment');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

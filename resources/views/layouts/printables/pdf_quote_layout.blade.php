@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{ $file_name or "Quotation" }}</title>
+    <title>{{ $page_title or "PDF View" }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
@@ -36,10 +36,20 @@
         <!-- title row -->
         <div class="row">
             <div class="col-xs-12 no-padding">
-                <h2 class="page-header">
-                    <img width="100%" src="{{ public_path() . $quoteProfile->letterhead_url }}" alt="letterhead">
-                    <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->
-                </h2>
+                @if($quoteProfile->letterhead_url)
+                    <h2 class="page-header">
+                        <img width="100%" src="{{ public_path() . $quoteProfile->letterhead_url }}" alt="letterhead">
+                        <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->
+                    </h2>
+                @else
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="text-center">
+                                <h1>Please Upload a Letterhead</h1>
+                            </td>
+                        </tr>
+                    </table>
+                @endif
             </div>
             <!-- /.col -->
         </div>
