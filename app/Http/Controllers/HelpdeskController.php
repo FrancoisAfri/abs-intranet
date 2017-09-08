@@ -122,77 +122,75 @@ class HelpdeskController extends Controller {
     }
 
     public function view_service(HelpDesk $service) {
-        if ($service->status == 1) {
+        if ($service->status == 1) 
+        {
             $serviceID = $service->id;
             //return $serviceID ;
             $serviceName = $service->name;
             //return $serviceName;
             $description = $service->description;
             $systems = operator::orderBy('id', 'asc')->get();
-
+            
             $employees = HRPerson::where('status', 1)->get();
-
-            //$Rensponder = DB::table('auto_rensponder')->select('helpdesk_id', $serviceID)->get()->first();
-            // return $Rensponder;
+             
+     //$Rensponder = DB::table('auto_rensponder')->select('helpdesk_id', $serviceID)->get()->first();
+         // return $Rensponder; 
             $counRow = autoRensponder::count();
-            // return $counRow;
+          // return $counRow;
 
-            if ($counRow == 0) {
-                $autRensponder = new autoRensponder();
-                $autRensponder->save();
-            } else {
-                $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();
+           if ($counRow ==  0) {
+            $autRensponder = new autoRensponder();
+            $autRensponder->save();
+            }else{
+                $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();  
             }
 
-            $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();
-
-            $settings = system_email_setup::orderBy('id', 'des')->get()->first();
-
+            $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();  
+             
+            $settings = system_email_setup::orderBy('id', 'des')->get()->first();  
+                
             $operators = DB::table('operator')
-                    ->select('operator.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-                    ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
-                    ->where('operator.helpdesk_id', $serviceID)
-                    ->orderBy('operator.operator_id')
-                    ->get();
+                        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
+                        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
+                         ->where('operator.helpdesk_id', $serviceID)
+                        ->orderBy('operator.operator_id')
+                        ->get();
 
             $HelpdeskAdmin = DB::table('helpdesk_Admin')
-                    ->select('helpdesk_Admin.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-                    ->leftJoin('hr_people', 'helpdesk_Admin.admin_id', '=', 'hr_people.id')
-                    ->where('helpdesk_Admin.helpdesk_id', $serviceID)
-                    ->orderBy('helpdesk_Admin.helpdesk_id')
-                    ->get();
-            $names = HRPerson::where('status', 1)->pluck('user_id')->get();
-            //return $names;
+                  ->select('helpdesk_Admin.*','hr_people.first_name as firstname','hr_people.surname as surname')
+                  ->leftJoin('hr_people', 'helpdesk_Admin.admin_id', '=', 'hr_people.id')
+                  ->where('helpdesk_Admin.helpdesk_id', $serviceID)
+                  ->orderBy('helpdesk_Admin.helpdesk_id')
+                  ->get();
 
 
-
-
-            $data['autoRensponder'] = $autoRensponder;
-            $data['products'] = $service;
-            $data['settings'] = $settings;
-            $data['HelpdeskAdmin'] = $HelpdeskAdmin;
-            $data['employees'] = $employees;
-            $data['systems'] = $systems;
-            $data['serviceID'] = $serviceID;
-            $data['serviceName'] = $serviceName;
-            $data['service'] = $service;
-            $data['description'] = $description;
-            $data['operators'] = $operators;
-            $data['$description'] = 'description';
-            $data['page_title'] = "View Help Desk  ($serviceName) ";
-            $data['page_description'] = "Help Desk Settings page";
-            $data['breadcrumb'] = [
-                    ['title' => 'HelpDesk', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                    ['title' => 'Manage HelpDesk Settings', 'active' => 1, 'is_module' => 0]
+            
+             $data['autoRensponder'] = $autoRensponder;          
+             $data['products'] = $service;
+             $data['settings'] = $settings;
+             $data['HelpdeskAdmin'] = $HelpdeskAdmin;
+             $data['employees']= $employees;
+             $data['systems'] = $systems;
+             $data['serviceID']  = $serviceID;     
+             $data['serviceName'] = $serviceName;    
+             $data['service'] = $service;
+             $data['description'] = $description;
+             $data['operators'] = $operators;
+             $data['$description'] = 'description';
+             $data['page_title'] = "View Help Desk  ($serviceName) " ;
+             $data['page_description'] = "Help Desk Settings page";
+             $data['breadcrumb'] = [
+            ['title' => 'HelpDesk', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage HelpDesk Settings', 'active' => 1, 'is_module' => 0]
             ];
 
-            $data['active_mod'] = 'Help Desk';
-            $data['active_rib'] = 'Setup';
+              $data['active_mod'] = 'Help Desk';
+              $data['active_rib'] = 'Setup';
             //AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             return view('help_desk.helpdesk_setup')->with($data);
-        } else
-            return back();
-    }
+        }
+        else return back();
+    } 
 
     public function Addoperator(Request $request, HelpDesk $serviceID) {
         $this->validate($request, [
@@ -240,6 +238,29 @@ class HelpdeskController extends Controller {
         $tick->name = $request->input('name');
         $tick->email = $request->input('email');
         $tick->user_id = $loggedInEmplID;
+        $tick->helpdesk_id = $request->input('helpdesk_id');
+        $tick->subject = $request->input('subject');
+        $tick->message = $request->input('message');
+        $tick->ticket_date = $currentDate = time();
+        $tick->status = 1;
+        $tick->save();
+        // AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+        return response()->json();
+    }
+
+    //client TICKET
+      public function clientlTicket(Request $request, ticket $tick) {
+        $this->validate($request, [
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+         $clientID = Auth::user()->person->id;
+
+        $tick->name = $request->input('name');
+        $tick->email = $request->input('email');
+        $tick->client_id = $clientID;
         $tick->helpdesk_id = $request->input('helpdesk_id');
         $tick->subject = $request->input('subject');
         $tick->message = $request->input('message');

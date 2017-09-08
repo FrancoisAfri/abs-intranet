@@ -11,6 +11,7 @@ use App\DivisionLevelTwo;
 use App\EmployeeTasks;
 use App\HRPerson;
 use App\HelpDesk;
+use App\ticket;
 use App\leave_application;
 use App\leave_credit;
 use App\module_access;
@@ -38,7 +39,7 @@ class DashboardController extends Controller {
 
     public function index() {
 
-                     
+            $loggedInEmplID = Auth::user()->person->id;         
 
             $data['breadcrumb'] = [
                     ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
@@ -47,9 +48,10 @@ class DashboardController extends Controller {
             $user = Auth::user()->load('person');
 
             //  CRMAccounts
-            $loggedInEmplID = Auth::user()->person->id;
             
-            $ClientsCompanyId = ContactPerson::where('id', $loggedInEmplID)->pluck('company_id')->first();
+             $clientID = Auth::user()->person->id;
+            
+            $ClientsCompanyId = ContactPerson::where('id', $clientID)->pluck('company_id')->first();
            
             $Accounts = CRMAccount::where('company_id',$ClientsCompanyId)->get();
            
@@ -175,6 +177,9 @@ class DashboardController extends Controller {
             #View Tickets
 
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
+
+            $ticketLabels = [1 => "label-danger", 2 => "label-warning", 3 => 'label-success', 4 => 'label-info'];
+
             $tickets = DB::table('ticket')
                     ->where('user_id', $loggedInEmplID)
                     ->orderBy('id', 'asc')
@@ -184,18 +189,22 @@ class DashboardController extends Controller {
 
             $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
 
+            $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
+                if (!empty($helpdeskTickets))
+                    $helpdeskTickets->load('ticket');
+
             $name = HRPerson::where('id', $loggedInEmplID)
                     ->select('first_name', 'surname')
                     ->get()
                     ->first();
-            $names = $name->first_name;
-            $surname = $name->surname;
+             $names = $name->first_name;
+             $surname = $name->surname;
             #Product_Category-------->
 
             $ProductCategory = product_category::orderBy('id', 'asc')->get();
             if (!empty($ProductCategory))
                 $ProductCategory = $ProductCategory->load('productCategory');
-
+           // return $helpdeskTickets;
                 
 
                $row = product_category::count();
@@ -223,7 +232,8 @@ class DashboardController extends Controller {
                 } else {
                     $package = $packages->first()->id;
                 }
-               
+
+            $data['$ticketLabels'] = $ticketLabels;  
             $data['account'] = $account;
             $data['Ribbon_module'] = $Ribbon_module;
             $data['ProductCategory'] = $ProductCategory;
@@ -234,6 +244,7 @@ class DashboardController extends Controller {
             $data['names'] = $names;
             $data['surname'] = $surname;
             $data['ticketStatus'] = $ticketStatus;
+            $data['helpdeskTickets'] = $helpdeskTickets;
             $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;
             $data['balance'] = $balance;
@@ -258,27 +269,58 @@ class DashboardController extends Controller {
 
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         } else {
-             $name = HRPerson::where('id', $loggedInEmplID)
+             $name = HRPerson::where('id', $clientID)
                     ->select('first_name', 'surname')
                     ->get()
                     ->first();
                      $tickets = DB::table('ticket')
-                    ->where('user_id', $loggedInEmplID)
+                    ->where('client_id', $clientID)
                     ->orderBy('id', 'asc')
                     ->get();
                      $user = Auth::user()->load('person');
                       $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
+                      // 
+            $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
+            $ticketcount = ticket::where('client_id', $clientID)->count();
+            $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
 
+          
+                      
             //return $account;
                     $email = $user->email;
-                    $names = $name->first_name;
-                    $surname = $name->surname;   
+                    //getclient names
+                    $clientname = ContactPerson::where('id',$clientID)->select('first_name','surname')->first();
+                    $names = $clientname->first_name;
+                    $surname = $clientname->surname;   
                            
             $purchaseStatus = ['' => '', 5 => ' Waiting For My Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
             $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];   
             
+            //packages 
+
+            $packages = product_packages::orderBy('name', 'asc')->get();
+                if (!empty($packages))
+                    $packages = $packages->load('products_type');
+
+              //  $Product = product_products::orderBy('name', 'asc')->get();
+                //return $Product;
+
+                $row = product_packages::count();
+                if ($row < 1) {
+
+                    $package = 0;
+                } else {
+                    $package = $packages->first()->id;
+                }
+
+               //   return $packages;
+
+            $data['packages'] = $packages;
+            $data['helpdeskTickets'] = $helpdeskTickets;
+            $data['ticketStatus'] =$ticketStatus;
             $data['account'] = $account; 
             $data['Helpdesk'] = $Helpdesk;
+            $data['ticketcount'] = $ticketcount;
             $data['names'] = $names;
             $data['email'] = $email;
             $data['labelColors'] = $labelColors;
