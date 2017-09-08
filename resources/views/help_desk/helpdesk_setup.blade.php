@@ -664,7 +664,7 @@
                                         <!-- <div><input type="checkbox" name="esc_low_email"></div> -->
 
                                         <input type="hidden" class="checkbox selectall"  name="auto_processemails" value="0">
-                                     <div class="sms"><input type="checkbox" name="auto_processemails" value="1" {{ $settings->auto_processemails === 1 ? 'checked ="checked"' : 0 }}> </div>
+                                     <div class="sms"><input type="checkbox" name="auto_processemails" value="1" > </div>
                                       
                                     </td> 
                                 </td>
@@ -677,7 +677,7 @@
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
                                          <input type="hidden" class="checkbox selectall"  name="anly_processreplies" value="0">
-                                     <div class="sms"><input type="checkbox" name="anly_processreplies" value="1" {{ $settings->anly_processreplies === 1 ? 'checked ="checked"' : 0 }}> </div>
+                                     <div class="sms"><input type="checkbox" name="anly_processreplies" value="1" > </div>
 
                                     </td> 
                                 </td>
@@ -688,7 +688,7 @@
                                 <td>Email address:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="email_address" class="form-control pull-left" name="email_address" value="{{ $settings->email_address }}" >
+                                       <input type="email" id ="email_address" class="form-control pull-left" name="email_address" value="" >
                                     </td> 
                                 </td>
                               </tr>
@@ -699,7 +699,7 @@
                                 <td>Server Name:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="server_name" class="form-control pull-left" name="server_name" value="{{ $settings->server_name }}" >
+                                       <input type="text" id ="server_name" class="form-control pull-left" name="server_name" value="" >
                                     </td> 
                                 </td>
                               </tr>
@@ -722,7 +722,7 @@
                                 <td>Server Port:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="server_port" class="form-control pull-left" name="server_port" value="{{ $settings->server_port }}" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="server_port" class="form-control pull-left" name="server_port" value="" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
@@ -733,7 +733,7 @@
                                 <td>Username:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="username" class="form-control pull-left" name="username" value="{{ $settings->username }}" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="username" class="form-control pull-left" name="username" value="" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
@@ -753,7 +753,7 @@
                                 <td>Signature Start String:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="Signature_start" class="form-control pull-left" name="Signature_start" value="{{ $settings->Signature_start }}" placeholder="Everything below & including this string will be removed.">
+                                       <input type="text" id ="Signature_start" class="form-control pull-left" name="Signature_start" value="" placeholder="Everything below & including this string will be removed.">
                                     </td> 
                                 </td>
                               </tr>

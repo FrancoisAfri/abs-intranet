@@ -421,6 +421,7 @@
             <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
               <div class="table-responsive">
                 <table class="table no-margin">
+                    
                     <thead>
                         <tr>
                             <th><i class="material-icons">shop_two</i>Leave Type</th>
@@ -454,32 +455,31 @@
      </div>
      @endif
     @endforeach
-    <!-- Ticket Widget -->
-     @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 7) && $modules->active === 1) 
-      <div class="row">
-        <div class="col-md-6">
-          <div>
-             <div class="box box-danger same-height-widget">
-                <div class="box-header with-border">
-                <i class="fa fa-ticket"></i>
-                    <h3 class="box-title">view Tickets</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+     <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
               <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                                <tr>
+                         @if (count($helpdeskTickets) > 0)
+                        @foreach($helpdeskTickets as $helpdeskTicket)
+                          <tr>
+                             
+                             <th rowspan="2" width="3px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-user-o"></i></h1></th>
+                                    <th>Your Ticket(s)  {{ $names." ".$surname }}</th>
+                                     <th class="btn btn-primary ">  {{ $helpdeskTicket->ticket->count() }}</th>
+                                    <!-- <td ><span class="label label-primary ">{{ $helpdeskTicket->ticket->count() }}</span></td> -->
+
+                          </tr>
+                        @endforeach
+                    @endif
+                                </tr>
+                            </table>
                 <table class="table no-margin">
                     <thead>
-                        <tr>
-                        <th><i class="fa fa-id-badge"></i> Ticket Number</th>
-                             <th><i class="fa fa-envelope"></i>Subject</th>
-                            <th><i class="fa fa-calendar-o"></i>Ticket Date</th>
+                        <tr>                     
+                            <th><i class="fa fa-id-badge"></i> Ticket Number</th>
+                            <th><i class="fa fa-envelope"></i> Subject</th>
+                            <th><i class="fa fa-calendar-o"></i> Ticket Date</th>        
                             <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-                            <!-- <th style="text-align: right;">Status</th> -->
                             <th></th>
                         </tr>
                     </thead>
@@ -488,12 +488,10 @@
                     @if (!empty($tickets))
                         @foreach($tickets as $ticket)
                           <tr>
-                        <td>TICK{{ (!empty($ticket->id)) ?  $ticket->id : ''}}</td>
-                        <!-- <td>{{ (!empty($ticket->email)) ?  $ticket->email : ''}}</td> -->
-                        <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}}</td> 
-                         <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
-                         <td style="text-align: right;">{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
-
+                            <td>TICK{{ (!empty($ticket->id)) ?  $ticket->id : ''}}</td>
+                            <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}}</td> 
+                             <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
+                             <td style="text-align: right;">{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
                           </tr>
                         @endforeach
                     @endif
@@ -509,64 +507,13 @@
           </div>
         </div>
      </div>
-     @endif
-    @endforeach
-     <!--  -->
-     <div class="row">
-        <div class="col-md-6">
-          <div>
-             <div class="box box-warning same-height-widget">
-                <div class="box-header with-border">
-                <i class="fa fa-product-hunt"></i>
-                    <h3 class="box-title">view Products</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                    <thead>
-                        <tr>
-                            <th><i class="fa fa-id-badge"></i> Account Number</th>
-                                    <th><i class="fa fa-building-o"></i> Company</th>
-                                    <th><i class="fa fa-user"></i> Contact Person</th>
-                                    <th><i class="fa fa-calendar-o"></i> Date Created</th>
-                                    <th><i class="fa fa-info-circle"></i> Status</th>
-                        </tr>
-                    </thead>
+   
 
-                    <tbody>
-                    @if (!empty($tickets))
-                        @foreach($tickets as $ticket)
-                          <tr>
-                        <td>{{ (!empty($ticket->id)) ?  $ticket->id : ''}}</td>
-                        <!-- <td>{{ (!empty($ticket->email)) ?  $ticket->email : ''}}</td> -->
-                        <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}}</td> 
-                         <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
-                         <td style="text-align: right;">{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
+    
+     
+    
 
-                          </tr>
-                        @endforeach
-                    @endif
-                  </tbody>
-                </table>
-                <div class="box-footer">
-                      <button type="button" id="new_tickets" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-ticket-modal">Add Ticket</button>
-                </div>
-              </div>  
-            </div>
-            <div class="box-footer clearfix">
-            </div>
-          </div>
-        </div>
-     </div>
-    </div>
-
-    <!-- product -->
-      @foreach($Ribbon_module as $modules)
+  <!--     @foreach($Ribbon_module as $modules)
      @if (($modules->id === 6) && $modules->active === 1) 
     <div class="row">
         <div class="col-md-6">
@@ -614,10 +561,10 @@
             </div>
           </div>
         </div>
-     </div>
+     </div> -->
      <!-- Products -->
        
-        <div class="row">
+     <!--    <div class="row">
         <div class="col-md-6">
           <div>
              <div class="box box-danger same-height-widget">
@@ -671,7 +618,7 @@
     </div>
     </div>
     @endif
-    @endforeach
+    @endforeach --> -->
     <!--  -->
 @endsection
   @include('dashboard.partials.add_ticket')

@@ -206,14 +206,10 @@ class LeaveApplicationController extends Controller {
         $leaveApp = $request->all();
         unset($leaveApp['_token']);
 
-        return $leaveApp;
-
         $negDays = leave_configuration::where('id', 1)->first();
         $study = $negDays->document_compulsory_on_Study_leave_application;
         //return $study;
         $sickdays = $negDays->document_compulsory_when_two_sick_leave_8_weeks;
-
-        //return $negDays;
 
         $anualdays = $negDays->allow_annual_negative_days;
         if ($anualdays = null) {

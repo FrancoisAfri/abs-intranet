@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 class ContactPerson extends Model
 {
     //Specify the table
-    public $table = 'contacts_contacts';
+    public $table = 'contacts_contacts'; 
 
     // Mass assignable fields
     protected $fillable = [

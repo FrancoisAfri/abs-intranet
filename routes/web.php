@@ -252,6 +252,7 @@ Route::get('helpdesk/ticket', 'HelpdeskController@createTicket');
 Route::post('help_desk/operator/add/{serviceID}', 'HelpdeskController@Addoperator');
 Route::post('help_desk/admin/add/{adminID}', 'HelpdeskController@addAdmin');
 Route::post('help_desk/ticket/add', 'HelpdeskController@addTicket');
+Route::post('help_desk/ticket/client', 'HelpdeskController@clientlTicket');
 
 
 //   ----------------- Help Desk Settings ------------------   //
