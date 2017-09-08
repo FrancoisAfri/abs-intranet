@@ -32,13 +32,13 @@ class CRMAccountController extends Controller
     public function viewAccount(CRMAccount $account)
     {
         $account->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type');
-
+        return $account;
         $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
         $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
 
         //should check payment option
         //calculate quote cost | calculate the balance | check which action buttons to show
-        foreach ($account->quotations as $quotation) {
+       // foreach ($account->quotations as $quotation) {
             //calculate the quote cost
             $productsSubtotal = 0;
             $packagesSubtotal = 0;
