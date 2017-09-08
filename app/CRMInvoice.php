@@ -28,6 +28,16 @@ class CRMInvoice extends Model
     }
 
     /**
+     * Relationship between CRMInvoice and CRMPayment
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany(CRMPayment::class, 'invoice_id');
+    }
+
+    /**
      * Invoice status accessor
      *
      * @return  string

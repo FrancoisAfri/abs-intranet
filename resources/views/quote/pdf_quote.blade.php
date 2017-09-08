@@ -59,7 +59,7 @@
                             <tr>
                                 <th style="width: 10px">#</th>
                                 <th>Product</th>
-                                <th>Quantity</th>
+                                <th class="text-center">Quantity</th>
                                 <th style="text-align: right;">Unit Price</th>
                             </tr>
                             @foreach ($quotation->products as $product)

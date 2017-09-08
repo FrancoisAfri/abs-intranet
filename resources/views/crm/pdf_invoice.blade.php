@@ -28,7 +28,7 @@
         <div class="col-xs-4 invoice-col no-padding">
             <b>Invoice #: </b> {{ ($invoice) ? $invoice->invoice_number : '' }}<br>
             <br>
-            <b>Date: </b> {{ ($invoice && $invoice->invoice_date) ? date('d/m/Y', $invoice->invoice_date) : '' }}<br>
+            <b>Invoice Date: </b> {{ ($invoice && $invoice->invoice_date) ? date('d/m/Y', $invoice->invoice_date) : '' }}<br>
             <b>Order #:</b> {{ $quotation->quote_number }}<br>
             @if($invoice->payment_due_date)
                 <b>Payment Due:</b> {{ $invoice->payment_due_date }}
@@ -64,7 +64,7 @@
                             <tr>
                                 <th style="width: 10px">#</th>
                                 <th>Product</th>
-                                <th>Quantity</th>
+                                <th class="text-center">Quantity</th>
                                 <th style="text-align: right;">Unit Price</th>
                             </tr>
                             @foreach ($quotation->products as $product)
@@ -151,6 +151,14 @@
                                     <tr>
                                         <th style="text-align: left; vertical-align: middle;">Total:</th>
                                         <td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap>{{ 'R ' . number_format($total, 2) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: left; vertical-align: middle;">Amount Paid:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap>{{ 'R ' . number_format($totalPaid, 2) }}</td>
+                                    </tr>
+                                    <tr class="active">
+                                        <th style="text-align: left; vertical-align: middle;">Balance Due:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap>{{ 'R ' . number_format($balanceDue, 2) }}</td>
                                     </tr>
                                 </table>
                             </div>

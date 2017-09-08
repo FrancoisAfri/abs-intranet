@@ -55,7 +55,7 @@
                                     @endif
                                     <tr class="{{ ($product->promotions->first()) ? 'warning' : '' }}"
                                         @if($promotion = $product->promotions->first())
-                                        data-toggle="tooltip" title="{{ 'This product is on promotion from ' .
+                                        data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
                                         date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
                                         @endif>
 
@@ -81,7 +81,7 @@
                                 @foreach ($packages as $package)
                                     <tr class="{{ ($package->promotions->first()) ? 'warning' : 'success' }}"
                                         @if($promotion = $package->promotions->first())
-                                        data-toggle="tooltip" title="{{ 'This product is on promotion from ' .
+                                        data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
                                         date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
                                         @endif>
 

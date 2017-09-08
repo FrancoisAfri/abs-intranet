@@ -11,6 +11,16 @@ class CRMPayment extends Model
 
     //Mass assignable fields
     protected $fillable = [
-        'invoice_id', 'amount', 'payment_date', 'proof_of_payment',
+        'amount', 'payment_date', 'proof_of_payment',
     ];
+
+    /**
+     * Relationship between CRMPayment and CRMInvoice
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function invoice()
+    {
+        return $this->belongsTo(CRMInvoice::class, 'invoice_id');
+    }
 }

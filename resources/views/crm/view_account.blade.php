@@ -3,8 +3,6 @@
 @section('page_dependencies')
     <!-- iCheck -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-    <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
@@ -88,14 +86,23 @@
                                         <td class="text-right" nowrap>{{ ($quotation->balance) ? 'R ' . number_format($quotation->balance, 2) : '' }}</td>
                                         <td class="text-right" nowrap>
                                             @if($quotation->can_capture_payment)
-                                                <a href="" class="btn btn-success btn-flat btn-xs"><i class="fa fa-credit-card"></i> Capture Payment</a>
+                                                <button type="button" class="btn btn-success btn-flat btn-xs" data-toggle="modal"
+                                                        data-target="#capture-payment-modal" data-quote_id="{{ $quotation->id }}"
+                                                        data-invoice_id="{{ ($quotation->invoices->first()) ? $quotation->invoices->first()->id : 0 }}"
+                                                        data-balance="{{ $quotation->balance }}">
+                                                    <i class="fa fa-credit-card"></i> Capture Payment
+                                                </button>
                                             @endif
+
                                             @if($quotation->can_send_invoice)
                                                 <a href="/crm/invoice/mail/{{ $quotation->id }}" class="btn btn-primary btn-flat btn-xs">
                                                     <i class="fa fa-send"></i> Send Invoice
                                                 </a>
                                             @endif
-                                            <a href="/crm/invoice/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary btn-flat btn-xs"><i class="fa fa-print"></i> Print Invoice</a>
+
+                                            <a href="/crm/invoice/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary btn-flat btn-xs">
+                                                <i class="fa fa-print"></i> Print Invoice
+                                            </a>
                                         </td>
                                     </tr>
                                     @if($quotation && (count($quotation->products) > 0 || count($quotation->packages) > 0))
@@ -137,7 +144,8 @@
             </div>
         </div>
 
-        <!-- Include modal -->
+        <!-- Include modals -->
+        @include('crm.partials.capture_payment_modal')
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
         @endif
@@ -145,15 +153,84 @@
 @endsection
 
 @section('page_script')
+    <!-- Start Bootstrap File input -->
+    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+    <!-- optionally if you need translation for your language then include locale file as mentioned below
+    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
+    <!-- End Bootstrap File input -->
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- date picker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
     <script>
         $(function () {
+            //Date picker
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                //endDate: '-0d',
+                autoclose: true,
+                todayHighlight: true
+            }).on('show.bs.modal', function(event) {
+                // prevent datepicker from firing bootstrap modal "show.bs.modal"
+                event.stopPropagation();
+            });
+
+            //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                    dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
+            });
+
+            //pass the statement id to the warning modal when it shows
+            var quoteID = 0, invoiceID = 0;
+            $('#capture-payment-modal').on('show.bs.modal', function (e) {
+                var btnTrigger = $(e.relatedTarget);
+                quoteID = btnTrigger.data('quote_id');
+                invoiceID = btnTrigger.data('invoice_id');
+                var balance = btnTrigger.data('balance');
+                var modal = $(this);
+                modal.find('#amount_paid').val(balance);
+                console.log('gets here: q=' + quoteID + ', i=' + invoiceID);
+            });
+
+            //submit payment modal with ajax (add payment)
+            $('#submit-payment').on('click', function() {
+                var strUrl = '/crm/capture-payment/' + quoteID + '/' + invoiceID;
+                var formName = 'capture-payment-form';
+                var modalID = 'capture-payment-modal';
+                //var modal = $('#'+modalID);
+                var submitBtnID = 'submit-payment';
+                var redirectUrl = '/crm/account/{{ $account->id }}';
+                var successMsgTitle = 'Payment Captured!';
+                var successMsg = 'The payment has been successfully captured.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
         });
     </script>
 @endsection
