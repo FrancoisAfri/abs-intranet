@@ -524,7 +524,7 @@ class QuotesController extends Controller
             $quoteNumber = $companyDetails['header_acronym_bold'] . $companyDetails['header_acronym_regular'];
             $quoteNumber = !empty($quoteNumber) ? strtoupper($quoteNumber) : 'SYS';
             $quoteNumber .= 'QTE' . sprintf('%07d', $quote->id);
-            $quoteNumber->quote_number = $quoteNumber;
+            $quote->quote_number = $quoteNumber;
             $quote->update();
 
             //save quote's products
