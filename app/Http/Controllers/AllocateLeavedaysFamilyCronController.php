@@ -32,16 +32,16 @@ class AllocateLeavedaysFamilyCronController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function execute() {
-        
-		 ### BEGIN: FAMILY RESPONSIBILITY LEAVE ACCRUAL (Leave Type = 2)
-		
-		$DefaultFamily = 0;
-	    $lev = new LeaveType();
+
+        ### BEGIN: FAMILY RESPONSIBILITY LEAVE ACCRUAL (Leave Type = 2)
+
+        $DefaultFamily = 0;
+        $lev = new LeaveType();
         $users = HRPerson::where('status', 1)->pluck('user_id');
         foreach ($users as $empID) {
-			$currentDate = time(); //current_date today
-			
-			$iStartCredits = 0;
+            $currentDate = time(); //current_date today
+
+            $iStartCredits = 0;
             $lev = new leave_credit();
             $FamilyLeaveTypeID = 2;
             $leavebalance = leave_credit::where('hr_id', $empID)
@@ -50,10 +50,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
             if ($leavebalance == null) {
                 $leavebalance = 0;
             }
-
-        
-		 
-        
+        }
     }
 
 }

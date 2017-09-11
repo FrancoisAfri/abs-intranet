@@ -4,6 +4,7 @@
 <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
 @section('content')
 <!--  -->
@@ -136,7 +137,7 @@
                     <th><i class="fa fa-envelope"></i> Subject</th>
                     <th><i class="fa fa-calendar-o"></i> Ticket Date</th>
                     <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-                    <th></th>
+                   
                 </tr>
             </thead>
 
@@ -161,85 +162,187 @@
  @include('dashboard.partials.add_ticket')
 <!-- end Tickets -->
 
-<!-- products -->
-<div class="row">
-    <div class="col-md-12">
-        <div>
-             <div class="box box-danger same-height-widget">
+<!--  -->
+
+ <div class="row">
+        <div class="col-md-12">    
+            <div class="box box-danger same-height-widget">
+            <form class="form-horizontal" method="POST" action="/quote/save">
+                    {{ csrf_field() }}
                <div class="box-header with-border">
                     <i class="fa fa-product-hunt"></i>
-                    <h3 class="box-title">View Package-Product(s)</h3>
+                    <h3 class="box-title">New Quote</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
-                <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-                    <div class="table-responsive">
-                        <table class="table no-margin">
-                            <thead>
+
+
+                    <div class="box-body">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                            <table class="table table-striped table-bordered">
                                 <tr>
-                                    <th><i class="fa fa-object-group"></i> Package</th>
-                                    <th><i class="fa fa-commenting-o"></i> Description</th>
-                                    <th><i class="fa fa-percent"></i> Discount</th>
+                                    <th style="width: 10px">#</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th style="text-align: right;">Unit Price</th>
                                     <th></th>
                                 </tr>
-                            </thead>
+                                @foreach ($products as $product)
+                                    @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
+                                        <?php $prevCategory = 0; ?>
+                                        <tr>
+                                            <th class="success" colspan="4" style="text-align: center;">
+                                                <i>{{ $product->ProductPackages->name }}</i>
+                                            </th>
+                                        </tr>
+                                    @endif
+                                    <tr class="{{ ($product->promotions->first()) ? 'warning' : '' }}"
+                                        @if($promotion = $product->promotions->first())
+                                        data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
+                                        date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
+                                        @endif>
 
-                            <tbody>
-                                @if (!empty($packages))
-                                @foreach($packages as $package)
-                                <tr>
-                                   <td>{{ (!empty($package->name)) ?  $package->name : ''}}</td>
-                                    <td>{{ (!empty($package->description)) ?  $package->description : ''}}</td>
-                                    <td>% {{  (!empty($package->discount)) ?  $package->discount : ''}}</td>
-                                </tr>
+                                        <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
+                                        <td style="vertical-align: middle;">
+                                            {{ $product->name }}
+                                            @if($product->promotions->first())
+                                                &nbsp;<i class="fa fa-info-circle"></i>
+                                            @endif
+                                        </td>
+                                        <td style="vertical-align: middle; width: 80px;">
+                                            <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
+                                                   value="1" data-price="{{ $product->current_price }}" onchange="subtotal()" required>
+                                        </td>
 
-                            </tbody>
-                        </table>
-
-                    </div>
-                    <!--  -->
-                    <div class="table-responsive">
-                        <table class="table no-margin">
-                            <thead>
-
-                                <tr>
-                                    <td></td>
-                                    <th><i class="material-icons">folder_special</i>Product(s)</th>
-                                    <th><i class="fa fa-commenting-o"></i> Description</th>
-                                    <th>Price <i class="fa fa-credit-card-alt"></i></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody >
-                                @foreach($package->products_type as $productstype )
-                                <tr>
-                                    <td width="5px"><i class="fa fa-caret-down"></i></td>
-                                   <!--  <td><a href="/">{{ ($accounts->quote_number) ? $accounts->quote_number : $accounts->id }}</a></td> -->
-                                    <td >{{ (!empty($productstype->name)) ?  $productstype->name : ''}}</td>
-                                     <td >{{ (!empty($productstype->description)) ?  $productstype->description : ''}}</td>
-                                      <td >{{ (!empty($productstype->price)) ?  $productstype->price : ''}}</td>
-                                       <td>
-                                        <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail fa fa-plus open-modal" value=" ">Add</button>
-
-                                    </td>
-                                </tr>
+                                        <td style="vertical-align: middle; text-align: right;">
+                                        <!--  {{ $product->price }} -->
+                                            {{ $product->current_price ? 'R ' . number_format($product->current_price, 2) : '' }}
+                                        </td>
+                                        <td style="vertical-align: middle; width: 80px;"> <label class="radio-inline pull-right" style="padding-left: 0px;"><input class="rdo-iCheck" type="checkbox" id="" name="" value="1" > <span class="label ">Active</span></label></td>
+                                    </tr>
+                                    <input type="hidden" name="price[{{ $product->id }}]"
+                                           value="{{ ($product->current_price) ? $product->current_price : '' }}">
+                                    <?php $prevCategory = $product->category_id; ?>
                                 @endforeach
+                                @foreach ($packages as $package)
+                                    <tr class="{{ ($package->promotions->first()) ? 'warning' : 'success' }}"
+                                        @if($promotion = $package->promotions->first())
+                                        data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
+                                        date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
+                                        @endif>
+
+                                        <td style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
+                                        <th style="vertical-align: middle;">
+                                            Package: {{ $package->name }}
+                                            @if($package->promotions->first())
+                                                &nbsp;<i class="fa fa-info-circle"></i>
+                                            @endif
+                                        </th>
+                                        <td style="vertical-align: middle; width: 80px;">
+                                            <input type="number" class="form-control input-sm item-quantity" name="package_quantity[{{ $package->id }}]"
+                                                   value="1" data-price="{{ $package->price }}"
+                                                   onchange="subtotal()" required>
+                                        </td>
+                                        <td style="vertical-align: middle; text-align: right;">
+
+                                            {{ ($package->price) ? 'R ' . number_format($package->price, 2) : '' }}
+                                        </td>
+                                         <td style="vertical-align: middle; width: 80px;"> <label class="radio-inline pull-right" style="padding-left: 0px;"><input class="rdo-iCheck" type="checkbox" id="" name="" value="1" > <span class="label ">Active</span></label></td>
+                                    </tr>
+                                    <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
+                                    @if($package->products_type && count($package->products_type) > 0)
+                                        @foreach($package->products_type as $product)
+                                            <tr class="{{ ($package->promotions->first()) ? 'warning' : '' }}">
+                                                <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
+                                                <td style="vertical-align: middle;">{{ $product->name }}</td>
+                                                <td style="text-align: center; vertical-align: middle; width: 80px;">
+                                                    &mdash;
+                                                </td>
+                                                <td style="vertical-align: middle; text-align: right;">
+                                                    &mdash;
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+
+                            </table>
+                               <div class="col-sm-6 col-sm-offset-6 no-padding">
+                                <table class="table">
+                                    <tr>
+                                        <td></td>
+                                        <th style="text-align: left;">Subtotal:</th>
+                                        <td style="text-align: right;" id="subtotal" nowrap></td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td style="width: 250px; vertical-align: middle;">
+                                            <div class="form-group no-margin{{ $errors->has('discount_percent') ? ' has-error' : '' }}">
+                                                <label for="{{ 'discount_percent' }}" class="col-sm-4 control-label">Discount</label>
+
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-percent"></i></div>
+                                                        <input type="number" class="form-control input-sm" id="discount_percent"
+                                                               name="discount_percent" placeholder="Discount"
+                                                               value="{{ old('discount_percent') }}" onchange="subtotal()">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <th style="text-align: left; vertical-align: middle;">Discount:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="discount-amount" nowrap></td>
+                                    </tr> -->
+                                    <tr>
+                                        <td style="vertical-align: middle;">
+                                            <div class="form-group no-margin">
+                                                <label for="" class="col-sm-4 control-label"></label>
+                                                <div class="col-sm-8">
+                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1"></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <th style="text-align: left; vertical-align: middle;">VAT:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="vat-amount" nowrap></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <th style="text-align: left; vertical-align: middle;">Total:</th>
+                                        <td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="box-footer clearfix">
-                </div>
+                    
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Submit Quote</button>
+                    </div>
+                 
+                </form>
             </div>
         </div>
     </div>
-</div>
 
+        <!-- Include modal -->
+        @if(Session('changes_saved'))
+            @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
+        @endif
+    </div>
 @endsection
  
 
@@ -260,7 +363,7 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Task timer -->
     <script src="/custom_components/js/tasktimer.js"></script>
-
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
     <script>
         function postData(id, data)
         {
@@ -281,7 +384,13 @@
                 location.href = '/helpdesk/ticket';
             });
 
-            
+            //Initialize iCheck/iRadio Elements
+            $('.rdo-iCheck').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+
             //initialise matchHeight on widgets
             //$('.same-height-widget').matchHeight();
 
@@ -302,6 +411,49 @@
                 $('.modal:visible').each(reposition);
             });
 
+               //call the function to calculate the subtotal
+            subtotal();
+
+             //function to calculate the subtotal
+        function subtotal() {
+            var subtotal = 0;
+            var discountAmount = 0;
+            $( ".item-quantity" ).each(function( index ) {
+                //console.log( index + ": " + $( this ).data('price') );
+                var qty = $( this ).val();
+                var price = $( this ).data('price');
+                subtotal += (qty * price);
+                $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
+            });
+
+            var discountPercent = $('#discount_percent').val();
+            discountAmount = (subtotal * discountPercent) / 100;
+            $( "#discount-amount" ).html('R ' + discountAmount.formatMoney(2));
+
+            var total = (subtotal - discountAmount);
+
+            var formattedVAT = '&mdash;';
+            var vatCheckValue = $('#rdo_add_vat').iCheck('update')[0].checked;
+            if (vatCheckValue) {
+                var vatAmount = (total * 0.14);
+                formattedVAT = 'R ' + vatAmount.formatMoney(2);
+                total += vatAmount;
+            }
+            $( "#vat-amount" ).html(formattedVAT);
+
+            $( "#total-amount" ).html('R ' + total.formatMoney(2));
+        }
+
+         Number.prototype.formatMoney = function(c, d, t){
+            var n = this,
+                c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
           //Post module form to server using ajax (ADD)
             $('#add_tiket').on('click', function() {
                 //console.log('strUrl');
@@ -323,6 +475,9 @@
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+            // 
+
         });
     </script>
 @endsection

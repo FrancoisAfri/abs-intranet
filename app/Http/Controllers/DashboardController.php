@@ -204,8 +204,6 @@ class DashboardController extends Controller {
             $ProductCategory = product_category::orderBy('id', 'asc')->get();
             if (!empty($ProductCategory))
                 $ProductCategory = $ProductCategory->load('productCategory');
-           // return $helpdeskTickets;
-                
 
                $row = product_category::count();
                if ($row < 1) {
@@ -296,25 +294,49 @@ class DashboardController extends Controller {
             $purchaseStatus = ['' => '', 5 => ' Waiting For My Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
             $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];   
             
-            //packages 
+          
+            //$packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
+      
 
-            $packages = product_packages::orderBy('name', 'asc')->get();
-                if (!empty($packages))
-                    $packages = $packages->load('products_type');
+             $packages = product_packages::orderBy('name', 'asc')->get();
+        if (!empty($packages))
+            $packages = $packages->load('products_type');
 
-              //  $Product = product_products::orderBy('name', 'asc')->get();
-                //return $Product;
 
-                $row = product_packages::count();
-                if ($row < 1) {
+         //calculate the package price
+            foreach ($packages as $package) {
+                $packageProducts = $package->products_type;
+                $packageCost = 0;
+                foreach ($packageProducts as $packageProduct) {
+                    $packageProduct->current_price = ($packageProduct->productPrices && $packageProduct->productPrices->first())
+                        ? $packageProduct->productPrices->first()->price : (($packageProduct->price) ? $packageProduct->price : 0);
 
-                    $package = 0;
-                } else {
-                    $package = $packages->first()->id;
+                    $packageCost += $packageProduct->current_price;
+                }
+                $packageDiscount = ($package->discount) ? $package->discount : 0;
+                $promoDiscount = ($package->promotions->first()) ? $package->promotions->first()->discount : 0;
+                $packagePrice = $packageCost - (($packageCost * $packageDiscount) / 100);
+                //$packagePrice = $packagePrice - (($packagePrice * $promoDiscount) / 100);
+                $package->price = $packagePrice;
+            }
+        
+       
+        //Get products
+              $products = product_products::where('status', 1)->orderBy('category_id', 'asc')->get();
+              if(!empty($products))
+               $products = $products->load('promotions');
+                foreach ($products as $product) {
+                    $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
+                    $currentPrice = ($product->productPrices->first())
+                        ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+                    $currentPrice = $currentPrice - (($currentPrice * $promoDiscount) / 100);
+                    $product->current_price = $currentPrice;
                 }
 
-               //   return $packages;
+            //return $currentPrice;
+        
 
+            $data['products'] = $products;
             $data['packages'] = $packages;
             $data['helpdeskTickets'] = $helpdeskTickets;
             $data['ticketStatus'] =$ticketStatus;
