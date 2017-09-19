@@ -84,6 +84,7 @@ class Assign_ticketController extends Controller
     	
     	 $helpdeskId = $operatorID->helpdesk_id;
     	 $ticketID = $operatorID->id;
+       $userID = $operatorID->user_id;
     	 $currentDate = $currentDate = time();
         $docData = $request->all();
         unset($docData['_token']);
@@ -95,17 +96,15 @@ class Assign_ticketController extends Controller
         $operatorID->update();
 
         #send email to operator
-        $operators = HRPerson::where('id', $operator)->first();
+        $operators = HRPerson::where('user_id', 2)->first();
+     //return $operators;
         Mail::to($operators->email)->send(new assignOperatorEmail($operators));
 
         #assign Operator to Task
-     //    TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,
-					// ,0,0,0,0,0,0,0,$helpdeskId,$ticketID);
 
-        TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,0
-	,0,0,0,0,0,0,0,0,0,0 ,$helpdeskId,$ticketID);
+       //  TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,$operators
+      	// ,0,0,0,0,0,0,0,0,0,0 ,$helpdeskId,$ticketID);
 
-        
         AuditReportsController::store('Assign operators', 'Assigned Operator to a atask', "Actioned By User", 0);
         return response()->json();
 

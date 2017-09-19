@@ -21,19 +21,20 @@
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($ProductCategory) > 0)
-                        @foreach($ProductCategory as $jobTitle)
-                         <tr id="jobtitles-list">
+                        @foreach($ProductCategory as $category)
+                         <tr id="categorys-list">
                            <td nowrap>
-                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                               <a href="{{ '/Product/Product/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-money"></i> Products</a></td>
-                          <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td>
-                          <td>{{ (!empty( $jobTitle->description)) ?  $jobTitle->description : ''}} </td>
+                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{$category->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                               <a href="{{ '/Product/Product/' . $category->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{$category->description}}"  ><i class="fa fa-money"></i> Products</a></td>
+                          <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
+                          <td>{{ (!empty( $category->description)) ?  $category->description : ''}} </td>
                           
-                          <td nowrap>
-                            <button type="button" id="view_ribbons" class="btn {{ (!empty($jobTitle->active) && $jobTitle->active == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$jobTitle->id}}, 'dactive');"><i class="fa {{ (!empty($jobTitle->active) && $jobTitle->active == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($jobTitle->active) && $jobTitle->active == 1) ? "De-Activate" : "Activate"}}</button>
-                                    </td>
+                          <td>
+                            <!--   leave here  -->
+                            <button type="button" id="view_ribbons" class="btn {{ (!empty($category->status) && $category->status == 1) ? " btn-danger " : "btn-success " }}
+							  btn-xs" onclick="postData({{$category->id}}, 'actdeac');"><i class="fa {{ (!empty($category->status) && $category->status == 1) ?
+							  " fa-times " : "fa-check " }}"></i> {{(!empty($category->status) && $category->status == 1) ? "De-Activate" : "Activate"}}</button>
+                            </td>
                                 </tr>
                                    @endforeach
                                @else
@@ -68,11 +69,8 @@
 <!-- Ajax form submit -->
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
-        function postData(id , data ){
-            if (data == 'qual') location.href = "/hr/addqul/" + id;
-            else if (data == 'doc') location.href = "/hr/adddoc/" + id;
-            else if (data == 'dactive') location.href = "/Product/category/" + id;
-            else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
+        function postData(id , data ){   
+            if(data == 'actdeac') location.href = "/Product/category/" + id; 
         }
         $(function () {
             var moduleId;

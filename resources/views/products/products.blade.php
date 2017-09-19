@@ -21,21 +21,24 @@
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($products->productCategory) > 0)
-						@foreach($products->productCategory as $jobTitle)
-						 <tr id="jobtitles-list">
+						@foreach($products->productCategory as $category)
+						 <tr id="categorys-list">
 						   <td nowrap>
-                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                               <a href="{{ '/Product/price/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-money"></i> Prices</a></td>
-						  <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td>
-						  <td>{{ (!empty( $jobTitle->description)) ?  $jobTitle->description : ''}} </td>
-                          <td>{{ (!empty( $jobTitle->price)) ?  $jobTitle->price : ''}} </td>
-						  <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
-                          </td>
+                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{ $category->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                               <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{$category->description}}"  ><i class="fa fa-money"></i> Prices</a></td>
+						  <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
+						  <td>{{ (!empty( $category->description)) ?  $category->description : ''}} </td>
+                          <td>{{ (!empty( $category->price)) ?  $category->price : ''}} </td>
+						   <td>
+                            <!--   leave here  -->
+                            <button type="button" id="view_ribbons" class="btn {{ (!empty($category->status) && $category->status == 1) ? " btn-danger " : "btn-success " }}
+                              btn-xs" onclick="postData({{$category->id}}, 'actdeac');"><i class="fa {{ (!empty($category->status) && $category->status == 1) ?
+                              " fa-times " : "fa-check " }}"></i> {{(!empty($category->status) && $category->status == 1) ? "De-Activate" : "Activate"}}</button>
+                            </td>
 						</tr>
 						@endforeach
                     @else
-						<tr id="jobtitles-list">
+						<tr id="categorys-list">
 						<td colspan="6">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -63,12 +66,9 @@
 @section('page_script')
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
-		function postData(id, data)
-		{
-			if (data == 'actdeac')
-				location.href = "/hr/job_title_active/" + id;
-            //product/Categories
-		}
+		function postData(id , data ){   
+            if(data == 'actdeac') location.href = "/Product/product_act/" + id; 
+        }
          $('#back_button').click(function () {
                 location.href = '/product/Categories';
             });

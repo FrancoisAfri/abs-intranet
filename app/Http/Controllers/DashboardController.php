@@ -39,30 +39,29 @@ class DashboardController extends Controller {
 
     public function index() {
 
-            $loggedInEmplID = Auth::user()->person->id;         
+        $loggedInEmplID = Auth::user()->person->id;
 
-            $data['breadcrumb'] = [
-                    ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
-            ];
-            $data['active_mod'] = 'dashboard';
-            $user = Auth::user()->load('person');
+        $data['breadcrumb'] = [
+                ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
+        ];
+        $data['active_mod'] = 'dashboard';
+        $user = Auth::user()->load('person');
 
-            //  CRMAccounts
-            
-             $clientID = Auth::user()->person->id;
-            
-            $ClientsCompanyId = ContactPerson::where('id', $clientID)->pluck('company_id')->first();
-           
-            $Accounts = CRMAccount::where('company_id',$ClientsCompanyId)->get();
-           
-            $account = $Accounts->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type');
-            $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
-            $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success']; 
+        //  CRMAccounts
 
-          //  return $account;   
+        $clientID = Auth::user()->person->id;
 
-            //check if Ribbon is active
-            $Ribbon_module =  modules::where('active' , 1)->get();
+        $ClientsCompanyId = ContactPerson::where('id', $clientID)->pluck('company_id')->first();
+
+        $Accounts = CRMAccount::where('company_id', $ClientsCompanyId)->get();
+
+        $account = $Accounts->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type');
+        $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
+        $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
+
+        //  return $account;
+        //check if Ribbon is active
+        $Ribbon_module = modules::where('active', 1)->get();
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -174,7 +173,6 @@ class DashboardController extends Controller {
                     ->whereNull('checked')
                     ->orderBy('employee_tasks.employee_id')
                     ->get();
-            #View Tickets
 
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
 
@@ -190,48 +188,47 @@ class DashboardController extends Controller {
             $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
 
             $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
-                if (!empty($helpdeskTickets))
-                    $helpdeskTickets->load('ticket');
+            if (!empty($helpdeskTickets))
+                $helpdeskTickets->load('ticket');
 
             $name = HRPerson::where('id', $loggedInEmplID)
                     ->select('first_name', 'surname')
                     ->get()
                     ->first();
-             $names = $name->first_name;
-             $surname = $name->surname;
+            $names = $name->first_name;
+            $surname = $name->surname;
             #Product_Category-------->
+
 
             $ProductCategory = product_category::orderBy('id', 'asc')->get();
             if (!empty($ProductCategory))
                 $ProductCategory = $ProductCategory->load('productCategory');
 
-               $row = product_category::count();
-               if ($row < 1) {
+            $row = product_category::count();
+            if ($row < 1) {
 
-                   $products = 0;
-
-               } else {
-                   $products = $ProductCategory->first()->id;
-
-               }
+                $products = 0;
+            } else {
+                $products = $ProductCategory->first()->id;
+            }
             #------------------>
             #Package_Product
-             $packages = product_packages::orderBy('name', 'asc')->get();
-                if (!empty($packages))
-                    $packages = $packages->load('products_type');
+            $packages = product_packages::orderBy('name', 'asc')->get();
+            if (!empty($packages))
+                $packages = $packages->load('products_type');
 
-              //  $Product = product_products::orderBy('name', 'asc')->get();
-                //return $Product;
+            //  $Product = product_products::orderBy('name', 'asc')->get();
+            //return $Product;
 
-                $row = product_packages::count();
-                if ($row < 1) {
+            $row = product_packages::count();
+            if ($row < 1) {
 
-                    $package = 0;
-                } else {
-                    $package = $packages->first()->id;
-                }
+                $package = 0;
+            } else {
+                $package = $packages->first()->id;
+            }
 
-            $data['$ticketLabels'] = $ticketLabels;  
+            $data['$ticketLabels'] = $ticketLabels;
             $data['account'] = $account;
             $data['Ribbon_module'] = $Ribbon_module;
             $data['ProductCategory'] = $ProductCategory;
@@ -267,49 +264,48 @@ class DashboardController extends Controller {
 
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         } else {
-             $name = HRPerson::where('id', $clientID)
+            $name = HRPerson::where('id', $clientID)
                     ->select('first_name', 'surname')
                     ->get()
                     ->first();
-                     $tickets = DB::table('ticket')
+            $tickets = DB::table('ticket')
                     ->where('client_id', $clientID)
                     ->orderBy('id', 'asc')
                     ->get();
-                     $user = Auth::user()->load('person');
-                      $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
-                      // 
+            $user = Auth::user()->load('person');
+            $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
+            //
             $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
             $ticketcount = ticket::where('client_id', $clientID)->count();
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
 
-          
-                      
+
+
             //return $account;
-                    $email = $user->email;
-                    //getclient names
-                    $clientname = ContactPerson::where('id',$clientID)->select('first_name','surname')->first();
-                    $names = $clientname->first_name;
-                    $surname = $clientname->surname;   
-                           
+            $email = $user->email;
+            //getclient names
+            $clientname = ContactPerson::where('id', $clientID)->select('first_name', 'surname')->first();
+            $names = $clientname->first_name;
+            $surname = $clientname->surname;
+
             $purchaseStatus = ['' => '', 5 => ' Waiting For My Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
-            $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];   
-            
-          
+            $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
+
+
             //$packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
-      
-
-             $packages = product_packages::orderBy('name', 'asc')->get();
-        if (!empty($packages))
-            $packages = $packages->load('products_type');
 
 
-         //calculate the package price
+            $packages = product_packages::orderBy('name', 'asc')->get();
+            if (!empty($packages))
+                $packages = $packages->load('products_type');
+
+
+            //calculate the package price
             foreach ($packages as $package) {
                 $packageProducts = $package->products_type;
                 $packageCost = 0;
                 foreach ($packageProducts as $packageProduct) {
-                    $packageProduct->current_price = ($packageProduct->productPrices && $packageProduct->productPrices->first())
-                        ? $packageProduct->productPrices->first()->price : (($packageProduct->price) ? $packageProduct->price : 0);
+                    $packageProduct->current_price = ($packageProduct->productPrices && $packageProduct->productPrices->first()) ? $packageProduct->productPrices->first()->price : (($packageProduct->price) ? $packageProduct->price : 0);
 
                     $packageCost += $packageProduct->current_price;
                 }
@@ -319,28 +315,28 @@ class DashboardController extends Controller {
                 //$packagePrice = $packagePrice - (($packagePrice * $promoDiscount) / 100);
                 $package->price = $packagePrice;
             }
-        
-       
-        //Get products
-              $products = product_products::where('status', 1)->orderBy('category_id', 'asc')->get();
-              if(!empty($products))
-               $products = $products->load('promotions');
-                foreach ($products as $product) {
-                    $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
-                    $currentPrice = ($product->productPrices->first())
-                        ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
-                    $currentPrice = $currentPrice - (($currentPrice * $promoDiscount) / 100);
-                    $product->current_price = $currentPrice;
-                }
+
+
+            //Get products
+            $products = product_products::where('status', 1)->orderBy('category_id', 'asc')->get();
+            if (!empty($products))
+                $products = $products->load('promotions');
+            foreach ($products as $product) {
+                $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
+                $currentPrice = ($product->productPrices->first()) ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+                $currentPrice = $currentPrice - (($currentPrice * $promoDiscount) / 100);
+                $product->current_price = $currentPrice;
+            }
 
             //return $currentPrice;
-        
+
+
 
             $data['products'] = $products;
             $data['packages'] = $packages;
             $data['helpdeskTickets'] = $helpdeskTickets;
-            $data['ticketStatus'] =$ticketStatus;
-            $data['account'] = $account; 
+            $data['ticketStatus'] = $ticketStatus;
+            $data['account'] = $account;
             $data['Helpdesk'] = $Helpdesk;
             $data['ticketcount'] = $ticketcount;
             $data['names'] = $names;
@@ -356,4 +352,5 @@ class DashboardController extends Controller {
         }
     }
 
+    
 }

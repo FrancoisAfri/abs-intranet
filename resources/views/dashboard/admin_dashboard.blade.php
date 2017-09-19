@@ -455,63 +455,8 @@
      </div>
      @endif
     @endforeach
-     <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-              <table class="table table-striped table-bordered">
-                                <tr>
-                         @if (count($helpdeskTickets) > 0)
-                        @foreach($helpdeskTickets as $helpdeskTicket)
-                          <tr>
-                             
-                             <th rowspan="2" width="3px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-user-o"></i></h1></th>
-                                    <th>Your Ticket(s)  {{ $names." ".$surname }}</th>
-                                     <th class="btn btn-primary ">  {{ $helpdeskTicket->ticket->count() }}</th>
-                                    <!-- <td ><span class="label label-primary ">{{ $helpdeskTicket->ticket->count() }}</span></td> -->
-
-                          </tr>
-                        @endforeach
-                    @endif
-                                </tr>
-                            </table>
-                <table class="table no-margin">
-                    <thead>
-                        <tr>                     
-                            <th><i class="fa fa-id-badge"></i> Ticket Number</th>
-                            <th><i class="fa fa-envelope"></i> Subject</th>
-                            <th><i class="fa fa-calendar-o"></i> Ticket Date</th>        
-                            <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    @if (!empty($tickets))
-                        @foreach($tickets as $ticket)
-                          <tr>
-                            <td>TICK{{ (!empty($ticket->id)) ?  $ticket->id : ''}}</td>
-                            <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}}</td> 
-                             <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
-                             <td style="text-align: right;">{{ (!empty($ticket->status)) ?  $ticketStatus[$ticket->status] : ''}} </td>
-                          </tr>
-                        @endforeach
-                    @endif
-                  </tbody>
-                </table>
-                <div class="box-footer">
-                      <button type="button" id="new_tickets" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-ticket-modal">Add Ticket</button>
-                </div>
-              </div>  
-            </div>
-            <div class="box-footer clearfix">
-            </div>
-          </div>
-        </div>
-     </div>
    
 
-    
-     
-    
 
   <!--     @foreach($Ribbon_module as $modules)
      @if (($modules->id === 6) && $modules->active === 1) 
@@ -618,7 +563,7 @@
     </div>
     </div>
     @endif
-    @endforeach --> -->
+    @endforeach -->
     <!--  -->
 @endsection
   @include('dashboard.partials.add_ticket')

@@ -998,4 +998,60 @@ class QuotesController extends Controller
 
         return redirect("/quote/view/$quote->id")->with(['success_add' => 'The quotation has been successfully added!']);
     }
+
+    #
+    public function newQuote(Request $request ){
+
+         $this->validate($request, [
+               
+
+        ]);
+        $quotes = $request->all();
+       
+        unset($quotes['_token']);
+       foreach ($quotes as $key => $value)
+        {
+            if (empty($quotes[$key])) {
+                unset($quotes[$key]);
+            }
+        }
+             //return $quotes;
+            foreach ($quotes as $key => $sValue) {
+            if (strlen(strstr($key, 'selected')))
+            {
+                $aValue = explode("_", $key);
+                $proID = $aValue[1];
+
+                //return $unit;
+                 $products = product_products::where('id', $proID)->orderBy('category_id', 'asc')->get();
+            if (!empty($products))
+                $products = $products->load('promotions');
+            
+            foreach ($products as $product) {
+                $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
+                $currentPrice = ($product->productPrices->first()) ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+                $currentPrice = $currentPrice - (($currentPrice * $promoDiscount) / 100);
+                $product->current_price = $currentPrice;
+                    }
+                }
+            }
+
+
+
+
+        $quote = new Quotation();
+
+         //Get products
+           
+
+           // return $products;
+        
+
+
+            $data['page_title'] = "Dashboard";
+            $data['page_description'] = "Main Dashboard";
+            //$data['Ribbon_module'] = $Ribbon_module;
+            return back();
+            // return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
+    }
 }

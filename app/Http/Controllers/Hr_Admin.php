@@ -213,13 +213,7 @@ class Hr_Admin extends Controller {
         //Exclude empty fields from query
         //return $results;
         unset($results['_token']);
-        // foreach ($results as $key => $value)
-        // {
-        // 	if (empty($results[$key])) {
-        // 		unset($results[$key]);
-        // 	}
-        // }
-        // $emp = $count = $depID = 0;
+       
         $user = Auth::user();
         foreach ($results as $key => $sValue) {
             if (strlen(strstr($key, 'selected'))) {

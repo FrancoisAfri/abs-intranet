@@ -201,8 +201,10 @@ Route::post('Product/categories', 'Product_categoryController@categorySave');
 Route::post('/Product/Product/add/{products}', 'Product_categoryController@addProductType');
 Route::patch('Product/product_edit/{product}', 'Product_categoryController@editProduct');
 Route::patch('Product/category_edit/{Category}', 'Product_categoryController@editCategory');
-Route::get('/Product/category/{cat}', 'Product_categoryController@CategoryAct');
-
+Route::get('/Product/category/{Category}', 'Product_categoryController@CategoryAct');
+Route::get('/Product/product_act/{Category}', 'Product_categoryController@ProdAct');
+Route::get('/Product/productPack_act/{product}', 'Product_categoryController@ProdPackAct');
+Route::get('/Product/productpackagesAct/{product}', 'Product_categoryController@productpackagesAct');
 
 
 #
@@ -517,6 +519,8 @@ Route::post('quote/adjust_modification/{quote}', 'QuotesController@adjustQuoteMo
 Route::post('quote/search', 'QuotesController@searchResults');
 Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
 Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
+Route::post('newquote/save', 'QuotesController@newQuote');
+
 
 //CRM
 Route::get('crm/account/{account}', 'CRMAccountController@viewAccount');

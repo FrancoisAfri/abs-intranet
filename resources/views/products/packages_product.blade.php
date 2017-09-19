@@ -19,6 +19,7 @@
                      <th>Description</th>
                      <th>Price</th>
                      <!-- <th>Discount</th> -->
+                     dd
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($products) > 0)
@@ -68,7 +69,7 @@
         function postData(id, data)
         {
             if (data == 'actdeac')
-                location.href = "/hr/job_title_active/" + id;
+                location.href = "/product/productpackagesAct/" + id;
             //product/Categories
         }
          $('#back_button').click(function () {

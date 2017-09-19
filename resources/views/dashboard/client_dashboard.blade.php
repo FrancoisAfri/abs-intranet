@@ -114,6 +114,23 @@
     </div>
 </div>
 <!-- Ticket Widget -->
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <div class="box box-Success same-height-widget">
+                <div class="box-header with-border">
+                    <i class="fa fa-product-hunt"></i>
+                    <h3 class="box-title">View My Tickets(s)</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                    <div rowspan="2" width="3px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-user-o"></i></h1></div>
+                <h4>Your Ticket(s)  - {{ $names." ".$surname }}</h4>
+                <h4 class="btn btn-primary " style="vertical-align: right";>  {{ $ticketcount }}</h4>
+                </div>
+
 <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
@@ -121,16 +138,12 @@
                 @if (count($helpdeskTickets) > 0)
                 @foreach($helpdeskTickets as $helpdeskTicket)
             <tr>
-
-                <th rowspan="2" width="3px" style="vertical-align: middle;"><h1 class="no-margin"><i class="fa fa-user-o"></i></h1></th>
-                <th>Your Ticket(s)  - {{ $names." ".$surname }}</th>
-                <th class="btn btn-primary ">  {{ $ticketcount }}</th>
             </tr>
             @endforeach
             @endif
             </tr>
-        </table>
-        <table class="table no-margin">
+         </table>
+         <table class="table no-margin">
             <thead>
                 <tr>
                     <th><i class="fa fa-id-badge"></i> Ticket Number</th>
@@ -139,8 +152,7 @@
                     <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
                    
                 </tr>
-            </thead>
-
+         </thead>
             <tbody>
                 @if (!empty($tickets))
                 @foreach($tickets as $ticket)
@@ -157,7 +169,11 @@
         <div class="box-footer">
             <button type="button" id="new_tickets" class="btn btn-primary pull-right fa fa-paper-plane" data-toggle="modal" data-target="#add-new-ticket-modal">Add Ticket</button>
         </div>
+      </div>
+     </div>
     </div>
+   </div>
+  </div>
 </div>
  @include('dashboard.partials.add_ticket')
 <!-- end Tickets -->
@@ -167,7 +183,7 @@
  <div class="row">
         <div class="col-md-12">    
             <div class="box box-danger same-height-widget">
-            <form class="form-horizontal" method="POST" action="/quote/save">
+            <form class="form-horizontal" method="POST" action="/newquote/save">
                     {{ csrf_field() }}
                <div class="box-header with-border">
                     <i class="fa fa-product-hunt"></i>
@@ -178,8 +194,6 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
-
-
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -192,7 +206,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
                             <table class="table table-striped table-bordered">
                                 <tr>
@@ -233,7 +246,7 @@
                                         <!--  {{ $product->price }} -->
                                             {{ $product->current_price ? 'R ' . number_format($product->current_price, 2) : '' }}
                                         </td>
-                                        <td style="vertical-align: middle; width: 80px;"> <label class="radio-inline pull-right" style="padding-left: 0px;"><input class="rdo-iCheck" type="checkbox" id="" name="" value="1" > <span class="label ">Active</span></label></td>
+                                        <td style="vertical-align: middle; width: 80px;"> <label class="radio-inline pull-right" style="padding-left: 0px;"><input class="rdo-iCheck" type="checkbox" id=""  name="selected_{{ $product->id }}_{{ $product->name }}_check[]" value="{{ $product->id }}" > <span class="label ">Active</span></label></td>
                                     </tr>
                                     <input type="hidden" name="price[{{ $product->id }}]"
                                            value="{{ ($product->current_price) ? $product->current_price : '' }}">
@@ -262,7 +275,7 @@
 
                                             {{ ($package->price) ? 'R ' . number_format($package->price, 2) : '' }}
                                         </td>
-                                         <td style="vertical-align: middle; width: 80px;"> <label class="radio-inline pull-right" style="padding-left: 0px;"><input class="rdo-iCheck" type="checkbox" id="" name="" value="1" > <span class="label ">Active</span></label></td>
+                                         <td style="vertical-align: middle; width: 80px;"> <label class="radio-inline pull-right" style="padding-left: 0px;"><input class="rdo-iCheck" type="checkbox" id=""  name="selected_{{ $package->id }}_{{ $package->name }}_check[]" value="1" > <span class="label ">Active</span></label></td>
                                     </tr>
                                     <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
                                     @if($package->products_type && count($package->products_type) > 0)
@@ -280,63 +293,16 @@
                                         @endforeach
                                     @endif
                                 @endforeach
-
                             </table>
-                               <div class="col-sm-6 col-sm-offset-6 no-padding">
-                                <table class="table">
-                                    <tr>
-                                        <td></td>
-                                        <th style="text-align: left;">Subtotal:</th>
-                                        <td style="text-align: right;" id="subtotal" nowrap></td>
-                                    </tr>
-                                    <!-- <tr>
-                                        <td style="width: 250px; vertical-align: middle;">
-                                            <div class="form-group no-margin{{ $errors->has('discount_percent') ? ' has-error' : '' }}">
-                                                <label for="{{ 'discount_percent' }}" class="col-sm-4 control-label">Discount</label>
-
-                                                <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon"><i class="fa fa-percent"></i></div>
-                                                        <input type="number" class="form-control input-sm" id="discount_percent"
-                                                               name="discount_percent" placeholder="Discount"
-                                                               value="{{ old('discount_percent') }}" onchange="subtotal()">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <th style="text-align: left; vertical-align: middle;">Discount:</th>
-                                        <td style="text-align: right; vertical-align: middle;" id="discount-amount" nowrap></td>
-                                    </tr> -->
-                                    <tr>
-                                        <td style="vertical-align: middle;">
-                                            <div class="form-group no-margin">
-                                                <label for="" class="col-sm-4 control-label"></label>
-                                                <div class="col-sm-8">
-                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1"></label>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <th style="text-align: left; vertical-align: middle;">VAT:</th>
-                                        <td style="text-align: right; vertical-align: middle;" id="vat-amount" nowrap></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <th style="text-align: left; vertical-align: middle;">Total:</th>
-                                        <td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap></td>
-                                    </tr>
-                                </table>
-                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="box-footer">
+                       </div>
+                      <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Submit Quote</button>
                     </div>
-                 
                 </form>
             </div>
         </div>
-    </div>
+       </div>
 
         <!-- Include modal -->
         @if(Session('changes_saved'))
