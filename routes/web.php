@@ -167,7 +167,10 @@ Route::post('contacts/company/{company}/reject', 'ContactCompaniesController@rej
 Route::post('contacts/company/{company}/approve', 'ContactCompaniesController@approve');
 Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@editCompany');
 Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@actCompany');
+Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
 Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
+Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
+
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
 //AGM
@@ -240,6 +243,11 @@ Route::patch('help_desk/system/adit/{service}', 'HelpdeskController@editService'
 Route::get('help_desk/service/{service}', 'HelpdeskController@view_service');
 //--------------------#---------
 Route::get('helpdesk/view_ticket', 'HelpdeskController@viewTicket');
+Route::get('/helpdesk/helpdeskAct/{desk}', 'HelpdeskController@helpdeskAct');
+//
+Route::get('/helpdesk/operatorAct/{desk}', 'HelpdeskController@operatorAct');
+Route::get('/helpdesk/help_deskAdmin/{desk}', 'HelpdeskController@help_deskAdmin');
+
 
 #search
 Route::get('helpdesk/search', 'HelpdeskController@searhTickets');
@@ -427,6 +435,8 @@ Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
+Route::get('induction/tasks_library/{task}/delete', 'InductionAdminController@deleteTask');
+
 // Minutes Meeting
 Route::get('/meeting_minutes/recurring', 'RecurringMeetingsController@index');
 Route::get('/meeting_minutes/recurring/{recurring}/view', 'RecurringMeetingsController@show');

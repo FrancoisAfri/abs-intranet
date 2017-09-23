@@ -7,6 +7,11 @@
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/select2/select2.min.css">
 <!-- iCheck -->
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css"> 
+	<!--  -->
+	 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -276,6 +281,9 @@
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
 <!-- iCheck -->
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="/custom_components/js/modal_ajax_submit.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
 
 function hideFields() {
@@ -305,6 +313,15 @@ function postData(id, data)
 }
 $(function () {
 
+	 $(".select2").select2();
+
+	 $('#due_time').datetimepicker({
+             format: 'HH:mm:ss'
+        });
+        $('#time_to').datetimepicker({
+             format: 'HH:mm:ss'
+        });
+	 
 	 //Initialize iCheck/iRadio Elements
 	$('input').iCheck({
 		checkboxClass: 'icheckbox_square-green',

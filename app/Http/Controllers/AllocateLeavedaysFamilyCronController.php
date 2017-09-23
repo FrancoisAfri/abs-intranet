@@ -68,16 +68,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                 $lev->leave_type_id = $FamilyLeaveTypeID;
                 $lev->create_at = strtotime(date("Y-m-d"));
                 $lev->save();
-            } elseif ((date('d', $dateofhire) == date('d', $currentDate)) && (date('n', $currentDate) == date('n', $dateofhire)) && (date('Y', $currentDate) - date('Y', $dateofhire) + 1)) {
-                ### allocate days only if its users annivesary
-
-                $lev = new leave_credit();
-                $lev->hr_id = $empID;
-                $lev->leave_balance = 3;
-                $lev->leave_type_id = $FamilyLeaveTypeID;
-                $lev->create_at = strtotime(date("Y-m-d"));
-                $lev->update();
-            }
+            } 
         }
     }
 

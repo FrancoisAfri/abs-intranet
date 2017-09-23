@@ -23,6 +23,7 @@
                         <th>Order No</th>
                         <th>Description</th>
                         <th>Required upload</th>
+                        <th></th>
                         <th style="width: 40px"></th>
                     </tr> 
                     @if (!empty($libraries))
@@ -46,6 +47,8 @@
 							  btn-xs" onclick="postData({{$library->id}}, 'actdeac');"><i class="fa {{ (!empty($library->active) && $library->active == 1) ?
 							  " fa-times " : "fa-check " }}"></i> {{(!empty($library->active) && $library->active == 1) ? "De-Activate" : "Activate"}}</button>
                         </td>
+
+                        <td> <button type="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete Task</button></td>
                     </tr>
                      @endforeach
                  @else
@@ -67,6 +70,10 @@
     <!-- Include add new prime rate modal -->
     @include('induction.partials.add_new_task') 
     @include('induction.partials.edit_task')
+
+     <!-- Include delete warning Modal form-->
+        @include('contacts.partials.task_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Task? This action cannot be undone.'])
+
 </div>
 
   @endsection
@@ -80,6 +87,9 @@
     function postData(id, data) {
        if (data == 'actdeac') location.href = "/induction/library_tasks_activate/" + id;
     }
+    function deleteRecord() {
+            
+        }
     $(function () {
         //Tooltip
         $('[data-toggle="tooltip"]').tooltip();

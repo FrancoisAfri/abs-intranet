@@ -1015,7 +1015,7 @@ class QuotesController extends Controller
                 unset($quotes[$key]);
             }
         }
-             //return $quotes;
+              return $quotes;
             foreach ($quotes as $key => $sValue) {
             if (strlen(strstr($key, 'selected')))
             {
@@ -1026,7 +1026,7 @@ class QuotesController extends Controller
                  $products = product_products::where('id', $proID)->orderBy('category_id', 'asc')->get();
             if (!empty($products))
                 $products = $products->load('promotions');
-            
+
             foreach ($products as $product) {
                 $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
                 $currentPrice = ($product->productPrices->first()) ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
@@ -1037,15 +1037,13 @@ class QuotesController extends Controller
             }
 
 
+            $quote = new Quotation();
+            $user = Auth::user()->load('person');
 
-
-        $quote = new Quotation();
-
-         //Get products
-           
-
-           // return $products;
-        
+            //
+                   $typID[] = $quotes['package_quantity'];
+                    return $typID;
+            
 
 
             $data['page_title'] = "Dashboard";

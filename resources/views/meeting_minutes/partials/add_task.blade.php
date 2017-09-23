@@ -31,19 +31,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="employee_id" class="col-sm-3 control-label">Responsible Person</label>
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <select class="form-control select2" style="width:170px;" id="employee_id" name="employee_id">
-								<option selected="selected" value="0">*** Select Attendee ***</option>
-								@foreach($attendees as $attendee)
-									<option value="{{ $attendee->hr_id }}">{{ $attendee->first_name.' '.$attendee->surname}}</option>
-								@endforeach
-								</select>
+
+                        <div class="form-group " style="display: block;">
+                          <label for="time" class="col-sm-3 control-label">Due Time</label>  
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    
+                             <input type="text" class="form-control" id="due_time" name="due_time" value="{{ old('due_time') }}" placeholder="Select Start time...">
+                            </div>
+                          </div>
+                        </div>
+
+                     <div class="form-group {{ $errors->has('employee_id') ? ' has-error' : '' }}">
+                            <label for="employee_id" class="col-sm-3 control-label">Responsible Person</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <select class="form-control select2" multiple="multiple" style="width:170px;" id="employee_id" name="employee_id[]">
+                                        
+                                    <option value="0">*** Select a attendee ***</option>
+                                    @foreach($attendees as $attendee)
+                                    <option value="{{ $attendee->hr_id }}">{{ $attendee->first_name.' '.$attendee->surname}}</option>
+                                @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
 					<div class="form-group">
                         <label for="checked_by" class="col-sm-3 control-label">Check By</label>
 

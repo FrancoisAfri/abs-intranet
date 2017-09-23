@@ -55,7 +55,7 @@ class Assign_ticketController extends Controller
 				        ->get();
 
           		$data['ID'] = $ID;
-          		$data['Names'] = $Names;		      // return $operators;
+          		$data['Names'] = $Names;		      
           		$data['operators'] = $operators;		        
            		$data['tickets'] = $tickets; 
               $data['active_mod'] = 'Help Desk';

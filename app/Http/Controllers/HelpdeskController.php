@@ -597,4 +597,36 @@ class HelpdeskController extends Controller {
         return view('help_desk.helpdesk_results')->with($data);
     }
 
+        public function helpdeskAct(HelpDesk $desk) {
+        if ($desk->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $desk->status = $stastus;
+        $desk->update();
+        return back();
+    }
+
+    public function operatorAct(operator $desk) {
+        if ($desk->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $desk->status = $stastus;
+        $desk->update();
+        return back();
+    }
+
+    public function help_deskAdmin(helpdesk_Admin $desk) {
+        if ($desk->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $desk->status = $stastus;
+        $desk->update();
+        return back();
+    }
 }

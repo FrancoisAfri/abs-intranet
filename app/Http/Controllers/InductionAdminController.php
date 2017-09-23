@@ -8,6 +8,7 @@ use App\HRPerson;
 use App\User;
 use App\ClientInduction;
 use App\EmployeeTasks;
+use App\TaskLibrary ;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Controllers\TaskManagementController;
@@ -486,6 +487,24 @@ class InductionAdminController extends Controller
 		AuditReportsController::store('Induction', 'Print with Search Results', "Print with Results", 0);
         return view('induction.reports.induction_print')->with($data);
     }
+
+    #### Delete Task
+     public function deleteTask(TaskLibrary $task)
+    {
+        // $user = Auth::user();
+        // if ($user->type == 1 || $user->type == 3) {
+        //     $person->load('user');
+        //     if ($person->user) {
+        //         $user = $person->user;
+        //         $user->delete();
+        //     }
+            $task->delete();
+
+            AuditReportsController::store('Contacts', 'Task Deleted', "Task has been deleted", 0);
+            return redirect('/induction/tasks_library');
+        }
+    
+
 	public function deleteInduction(ClientInduction $induction)
 	{
 		# Delete record form database

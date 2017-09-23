@@ -20,22 +20,22 @@
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($systems) > 0)
-                        @foreach($systems as $jobTitle)
-                         <tr id="jobtitles-list">
+                        @foreach($systems as $helpdesk)
+                         <tr id="helpdesks-list">
                            <td nowrap>
-                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-service-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-service-modal" data-id="{{ $helpdesk->id }}" data-name="{{ $helpdesk->name }}" data-description="{{ $helpdesk->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
 
-                               <a href="{{ '/help_desk/service/' . $jobTitle->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{$jobTitle->description}}"  ><i class="fa fa-tasks"></i> view help desk</a></td>
+                               <a href="{{ '/help_desk/service/' . $helpdesk->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $helpdesk->id }}" data-name="{{ $helpdesk->name }}" data-description="{{$helpdesk->description}}"  ><i class="fa fa-tasks"></i> view help desk</a></td>
 
-                          <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td>
-                          <td>{{ (!empty( $jobTitle->description)) ?  $jobTitle->description : ''}} </td>
+                          <td>{{ (!empty($helpdesk->name)) ?  $helpdesk->name : ''}} </td>
+                          <td>{{ (!empty( $helpdesk->description)) ?  $helpdesk->description : ''}} </td>
                           <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_job_title" class="btn {{ (!empty($helpdesk->status) && $helpdesk->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$helpdesk->id}}, 'actdeac');"><i class="fa {{ (!empty($helpdesk->status) && $helpdesk->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($helpdesk->status) && $helpdesk->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
                         </tr>
                         @endforeach
                     @else
-                        <tr id="jobtitles-list">
+                        <tr id="helpdesks-list">
                         <td colspan="6">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -65,19 +65,12 @@
         function postData(id, data)
         {
             if (data == 'actdeac')
-                location.href = "/hr/job_title_active/" + id;
-            //product/Categories
+                location.href = "/helpdesk/helpdeskAct/" + id;
         }
-         $('#back_button').click(function () {
-                location.href = '/product/Categories';
-            });
+       
         $(function () {
             var jobId;
-            
-            // document.getElementById("back_button").onclick = function () {
-            // location.href = "/hr/job_title"; 
-   //      }
-            //Tooltip
+
             $('[data-toggle="tooltip"]').tooltip();
 
             //Vertically center modals on page
