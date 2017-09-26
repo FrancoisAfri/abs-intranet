@@ -10,6 +10,8 @@ use App\Mail\CompanyELMApproval;
 use App\Mail\RejectedCompany;
 use App\Province;
 use App\User;
+Use App\contacts_note;
+use App\ContactPerson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -191,6 +193,97 @@ class ContactCompaniesController extends Controller
         return view('contacts.view_company')->with($data);
     }
 
+    /******
+
+    */
+     ###
+    public function notes(ContactCompany $company)
+    {
+        $companyID = $company->id;
+        $persons = HRPerson::where('id', $companyID)->get(); 
+      
+        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
+                $query->orderBy('name', 'asc');
+            }]);
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+       
+        $contactPeople = ContactPerson::where('company_id', $companyID )->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();  
+
+
+        $notes = contacts_note::orderBy('id', 'asc')->get();
+
+        //
+         $contactnotes = DB::table('contacts_notes')
+                ->select('contacts_notes.*','contacts_contacts.gender as gender', 'contacts_contacts.profile_pic as profile_pic')
+                ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->orderBy('contacts_notes.id')
+                ->get();
+         
+         
+      
+        $company->load('employees.company');
+        $data['page_title'] = "Notes";
+        $data['page_description'] = "Notes ";
+        $data['persons'] = $persons;
+        $data['contactnotes'] = $contactnotes;
+        $data['companies'] = $companies;
+        $data['contactPeople'] =$contactPeople;
+
+        $data['employees'] = $employees;
+        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'View Notes', 'active' => 1, 'is_module' => 0]
+        ];
+       // $data['positions'] = $aPositions;
+        $data['company'] = $company;
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Search Company';
+       AuditReportsController::store('Notes', 'Notes Updated', " Updated By User", 0);
+        return view('contacts.notes')->with($data);
+
+    }
+
+    ####
+     public function addnote(Request $request) {
+        $this->validate($request, [
+            // 'hr_id' => 'required',
+            // 'number_of_days' => 'required',
+        ]);
+
+        $noteData = $request->all();
+        unset($noteData['_token']);
+
+        $date = str_replace('/', '-', $noteData['date']);
+        $date = strtotime($date);
+
+        $time = str_replace('/', '-', $noteData['time']);
+        $time = strtotime($time);
+
+        $follow_date = str_replace('/', '-', $noteData['follow_date']);
+        $follow_date = strtotime($follow_date);
+
+        $contactsnote = new contacts_note();
+        $contactsnote->originator_type = $noteData['originator_type'];
+        $contactsnote->company_id = $noteData['company_id']; 
+        $contactsnote->hr_person_id = $noteData['hr_person_id'];
+        $contactsnote->employee_id = $noteData['employee_id'];
+        $contactsnote->date =  $date;
+        $contactsnote->time =  $time;
+        $contactsnote->communication_method = $noteData['communication_method'];
+        $contactsnote->rensponse = $noteData['rensponse_type'];
+        $contactsnote->notes = $noteData['notes'];
+        $contactsnote->next_action = $noteData['next_action'];
+        $contactsnote->follow_date = $follow_date;
+        $contactsnote->save();
+
+
+        //AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
+        return response()->json();
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -240,7 +333,7 @@ class ContactCompaniesController extends Controller
             'phys_postal_code' => 'integer',
         ]);
         $formData = $request->all();
-
+         // return  $formData ;
         //Exclude empty fields from query
         foreach ($formData as $key => $value)
         {
@@ -249,7 +342,10 @@ class ContactCompaniesController extends Controller
             }
         }
 
+        // return $formData;
         //Update company data
+        // $company->estimated_spent = $formData['estimated_spent'];
+        // $company->domain_name = $formData['domain_name'];
         $company->update($formData);
 
         //Upload BEE document
@@ -563,8 +659,9 @@ class ContactCompaniesController extends Controller
                 'bee_score' => 'numeric',
                 'email' => 'email',
             ]);
-            $companyData = $request->all();
 
+            $companyData = $request->all();
+           
             //Exclude empty fields from query
             foreach ($companyData as $key => $value)
             {
@@ -576,6 +673,11 @@ class ContactCompaniesController extends Controller
             //convert numeric values to numbers
             if (isset($companyData['bee_score'])) {
                 $companyData['bee_score'] = (double) $companyData['bee_score'];
+            }
+
+            //convert numeric values to numbers
+            if (isset($companyData['estimated_spent'])) {
+                $companyData['estimated_spent'] = (double) $companyData['estimated_spent'];
             }
 
             //Update company data
@@ -643,4 +745,6 @@ class ContactCompaniesController extends Controller
     {
         //
     }
+
+   
 }

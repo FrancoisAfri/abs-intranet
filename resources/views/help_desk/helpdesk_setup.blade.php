@@ -806,7 +806,7 @@
                           <td>{{ $serviceName }} </td>
                           <td>{{ ( $jobTitle->firstname . ' ' . $jobTitle->surname) }} </td>
                           <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'OPeratoractdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
                           <!-- <td>
                            <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-operator-modal">Add Operator</button>
@@ -896,6 +896,12 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script> 
     <script>
+
+        function postData(id , data ){   
+            if(data == 'OPeratoractdeac') location.href = "/helpdesk/operatorAct/" + id;
+            else if(data == 'actdeac') location.href = "/helpdesk/help_deskAdmin/" + id; 
+           
+        }
 
         $(function () {
             var jobId;

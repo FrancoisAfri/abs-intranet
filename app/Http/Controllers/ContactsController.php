@@ -49,6 +49,36 @@ class ContactsController extends Controller
 		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
         return view('contacts.search_contact')->with($data);
     }
+
+    public function reports(){
+
+        //$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+        $employees = HRPerson::where('status', 1)->get();
+       // return $employees;
+
+          $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+       
+
+
+        $data['page_title'] = "Induction";
+        $data['page_description'] = "Create New Induction";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Clients', 'path' => '/Clients/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Clients Clients-reports', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'contacts';
+        $data['active_rib'] = 'report';
+        $data['companies'] = $companies;
+        
+        $data['employees'] = $employees;
+        AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
+        return view('contacts.contacts_report_index')->with($data);
+
+    }
+
+
     public function create($companyID = null) {
 
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];

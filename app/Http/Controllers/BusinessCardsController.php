@@ -288,7 +288,7 @@ class BusinessCardsController extends Controller
 		$results = $request->all();
 
 		unset($results['_token']);
-		//return $results;
+	//	return $results;
 
         $personName = trim($request->employe_name);
       
@@ -349,7 +349,7 @@ class BusinessCardsController extends Controller
 					->orderBy('surname')
 					->get();
 	
-		$data['business_card'] = "business_card";
+		    $data['business_card'] = "business_card";
         $data['page_title'] = "Business Cards";
         $data['page_description'] = "List of users found";
         $data['persons'] = $persons;

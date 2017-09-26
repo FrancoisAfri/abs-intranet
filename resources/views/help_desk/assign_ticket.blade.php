@@ -32,24 +32,15 @@
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($tickets) > 0)
-                        @foreach($tickets as $jobTitle)
+                        @foreach($tickets as $ticket)
                          <tr id="jobtitles-list">
                            <td nowrap>
-                        <td>{{ (!empty($jobTitle->name)) ?  $jobTitle->name : ''}} </td> 
-                        <td>{{ (!empty($jobTitle->email)) ?  $jobTitle->email : ''}} </td>
-                        <td>{{ (!empty($jobTitle->subject)) ?  $jobTitle->subject : ''}} </td>
-                        <td>{{ !empty($jobTitle->ticket_date) ? date('d M Y ', $jobTitle->ticket_date) : '' }}</td>
-                         <td>
-                             
-                         </td>
-                        <td>
-                    <button type="button" id="add_operators" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#assign-operators-modal" data-id="{{ $jobTitle->id }}"
-                    > <i class="fa fa-ticket"></i> Assign Ticket</button>
-                    
-
-                            </td>
-
-                            
+                        <td>{{ (!empty($ticket->name)) ?  $ticket->name : ''}} </td> 
+                        <td>{{ (!empty($ticket->email)) ?  $ticket->email : ''}} </td>
+                        <td>{{ (!empty($ticket->subject)) ?  $ticket->subject : ''}} </td>
+                        <td>{{ !empty($ticket->ticket_date) ? date('d M Y ', $ticket->ticket_date) : '' }}</td>
+                     <td><button type="button" id="add_operators" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#assign-operators-modal" data-id="{{ $ticket->id }}"
+                    > <i class="fa fa-ticket"></i> Assign Ticket</button></td>
                         </tr>
                         @endforeach
                     @else

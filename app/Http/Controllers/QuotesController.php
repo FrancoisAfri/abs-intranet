@@ -215,13 +215,6 @@ class QuotesController extends Controller
             ['title' => 'Quotes', 'path' => 'quotes/authorisation', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Quotes Authorisation', 'active' => 1, 'is_module' => 0]
         ];
-		
-		/*$quoteApplications = Quotation::with(['products','packages', 'person' => function ($query) {
-			$query->where('manager_id', Auth::user()->person->id);
-		}])
-		->orderBy('id')
-		->get();
-*/
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'Authorisation';
         $data['quoteApplications'] = $quoteApplications;
@@ -645,7 +638,64 @@ class QuotesController extends Controller
      */
     public function searchQuote()
     {
-        return 'Search page';
+        $highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first()
+            ->load(['divisionLevelGroup' => function ($query) {
+                $query->has('quoteProfile');
+            }]);
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+        $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
+        $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
+        $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
+
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "Create a quotation";
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'create quote';
+        $data['highestLvl'] = $highestLvl;
+        $data['companies'] = $companies;
+        $data['contactPeople'] = $contactPeople;
+        $data['products'] = $products;
+        $data['packages'] = $packages;
+        $data['termsAndConditions'] = $termsAndConditions;
+        AuditReportsController::store('Quote', 'Search Quote Page Accessed', "Accessed By User", 0);
+
+        return view('quote.search_quote')->with($data);
+    } 
+	public function searchResults(Request $request)
+    {
+		$companyID = trim($request->company_id);
+        $contactPersonID = $request->contact_person_id;
+        $personPassportNum = $request->passport_number;
+        $divisionID = $request->division_id;
+        $status = $request->status;
+        $highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first();
+		$quoteApplications = Quotation::where(function ($query) use($companyID) {
+                if ($companyID) $query->where('id', $companyID);
+            })
+		->whereIn('status', [1,2])
+		->with('products','packages','person','company','client','divisionName')
+		->orderBy('id')
+		->get();
+		$data['highestLvl'] = $highestLvl;
+        $data['page_title'] = "Quotes";
+        $data['page_description'] = "Quotes Search Results";
+        $data['breadcrumb'] = [
+            ['title' => 'Quotes', 'path' => 'quotes/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Search Results', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Search Results';
+        $data['quoteApplications'] = $quoteApplications;
+		//return $quoteApplications;
+        AuditReportsController::store('Quote', 'Quote Search Results', "Accessed By User", 0);
+        return view('quote.search_results')->with($data); 
     }
 
     /**
@@ -992,5 +1042,59 @@ class QuotesController extends Controller
         AuditReportsController::store('Quote', 'Quote Modified', "Modified by user", 0);
 
         return redirect("/quote/view/$quote->id")->with(['success_add' => 'The quotation has been successfully added!']);
+    }
+
+    #
+    public function newQuote(Request $request ){
+
+         $this->validate($request, [
+               
+
+        ]);
+        $quotes = $request->all();
+       
+        unset($quotes['_token']);
+       foreach ($quotes as $key => $value)
+        {
+            if (empty($quotes[$key])) {
+                unset($quotes[$key]);
+            }
+        }
+              return $quotes;
+            foreach ($quotes as $key => $sValue) {
+            if (strlen(strstr($key, 'selected')))
+            {
+                $aValue = explode("_", $key);
+                $proID = $aValue[1];
+
+                //return $unit;
+                 $products = product_products::where('id', $proID)->orderBy('category_id', 'asc')->get();
+            if (!empty($products))
+                $products = $products->load('promotions');
+
+            foreach ($products as $product) {
+                $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
+                $currentPrice = ($product->productPrices->first()) ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+                $currentPrice = $currentPrice - (($currentPrice * $promoDiscount) / 100);
+                $product->current_price = $currentPrice;
+                    }
+                }
+            }
+
+
+            $quote = new Quotation();
+            $user = Auth::user()->load('person');
+
+            //
+                   $typID[] = $quotes['package_quantity'];
+                    return $typID;
+            
+
+
+            $data['page_title'] = "Dashboard";
+            $data['page_description'] = "Main Dashboard";
+            //$data['Ribbon_module'] = $Ribbon_module;
+            return back();
+            // return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
     }
 }

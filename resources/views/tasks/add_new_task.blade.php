@@ -8,6 +8,11 @@
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <!--  -->
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -61,6 +66,17 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group " style="display: block;">
+                          <label for="time" class="col-sm-3 control-label">Due Time</label>  
+
+                       		<div class="col-sm-9">
+                            	<div class="input-group">
+                                  	
+                             <input type="text" class="form-control" id="due_time" name="due_time" value="{{ old('due_time') }}" placeholder="Select Start time...">
+                            </div>
+                          </div>
+                    	</div>
+
 						<div class="form-group">
 							<label for="manager_duration" class="col-sm-3 control-label">Duration</label>
 
@@ -70,11 +86,13 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="form-group {{ $errors->has('employee_id') ? ' has-error' : '' }}">
 							<label for="employee_id" class="col-sm-3 control-label">Employee Person</label>
 							<div class="col-sm-9">
 								<div class="input-group">
-									<select class="form-control select2" style="width:170px;" id="employee_id" name="employee_id">
+									<select class="form-control select2" multiple="multiple" style="width:170px;" id="employee_id" name="employee_id[]">
+										
 									<option value="0">*** Select a Employee ***</option>
 									@foreach($users as $user)
 										<option value="{{ $user->id }}" {{ ($user->id === old('employee_id')) ? ' selected="selected" ' : '' }}>{{ $user->first_name.' '.$user->surname}}</option>
@@ -119,16 +137,28 @@
 <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 <!-- iCheck -->
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="/custom_components/js/modal_ajax_submit.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script>
     $(function () {
 		//Initialize Select2 Elements
             $(".select2").select2();
+
+
 		//Date picker
 		$('.datepicker').datepicker({
 			format: 'dd/mm/yyyy',
 			autoclose: true,
 			todayHighlight: true
 		});
+
+		$('#due_time').datetimepicker({
+             format: 'HH:mm:ss'
+        });
+        $('#time_to').datetimepicker({
+             format: 'HH:mm:ss'
+        });
+
     });
 </script>
  @endsection

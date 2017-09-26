@@ -157,7 +157,8 @@ class Product_categoryController extends Controller {
                 ['title' => 'Employee Records', 'path' => '/Product/Promotions', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Manage Product Promotions', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Product';
+
+        $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Promotions';
 
         AuditReportsController::store('Product', 'Promotion Page Accessed', "Actioned By User", 0);
@@ -282,6 +283,23 @@ class Product_categoryController extends Controller {
         return view('products.products_search')->with($data);
     }
 
+     public function categorySave(Request $request, product_category $cat) {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        // $doc_type = new doc_type($docData);
+        $cat->name = $request->input('name');
+        $cat->description = $request->input('description');
+        $cat->status = 1;
+        $cat->save();
+        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+        return response()->json();
+    }
     public function editCategory(Request $request, product_category $Category) {
         $this->validate($request, [
             'name' => 'required',
@@ -303,25 +321,10 @@ class Product_categoryController extends Controller {
 
         $Category->status = $stastus;
         $Category->update();
+         return back();
     }
 
-    public function categorySave(Request $request, product_category $cat) {
-        $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
-        ]);
-
-        $docData = $request->all();
-        unset($docData['_token']);
-
-        // $doc_type = new doc_type($docData);
-        $cat->name = $request->input('name');
-        $cat->description = $request->input('description');
-        $cat->status = 1;
-        $cat->save();
-        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
-        return response()->json();
-    }
+   
 
     public function addProductType(Request $request, product_category $products) {
         $this->validate($request, [
@@ -359,12 +362,25 @@ class Product_categoryController extends Controller {
             'price' => 'required',
         ]);
 
-        $product->name = $request->input('name');
-        $product->description = $request->input('description');
-        $product->price = $request->input('price');
-        $product->update();
-        AuditReportsController::store('Employee Records', 'Category Informations Edited', "Edited by User", 0);
-        return response()->json(['new_name' => $product->name, 'new_description' => $product->description, 'price' => $product->price], 200);
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $documentType = new product_products($docData);
+
+        $documentType->status = 1;
+        $documentType->category_id = $products->id;
+        // $products->addProducttype($producttype);
+
+        $documentType->name = $docData['name'];
+        $documentType->description = $docData['description'];
+        $documentType->price = $docData['price'];
+        $documentType->update();
+        #
+         $newName = $docData['name'];
+        $newDescription = $docData['description'];
+        $newPrice = $docData['price'];
+        AuditReportsController::store('Document Type', 'Document Type saved ', "Edited by User", 0);
+        return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice], 200);
     }
 
     #
@@ -409,18 +425,22 @@ class Product_categoryController extends Controller {
         $docData = $request->all();
         unset($docData['_token']);
 
-        $Product = $docData['product_id'];
-
+         $Product = $docData['product_id'];
+        // Add Package
+        $packs = new product_packages();
+        $packs->name = $request->input('name');
+        $packs->description = $request->input('description');
+        $packs->discount = $request->input('discount');
+        $packs->status = 1;
+        $packs->save();
+        //Save Products linked to package
         foreach ($Product as $products) {
-            $package = new product_packages();
-            $package->name = $request->input('name');
-            $package->description = $request->input('description');
-            $package->discount = $request->input('discount');
-            $package->status = 1;
-            $package->products_id = $products;
-            $package->update();
-            //  AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+            $pack_prod = new packages_product_table();
+            $pack_prod->product_packages_id = $packs->id;
+            $pack_prod->product_product_id = $products;
+            $pack_prod->update();
         }
+        return response()->json();
     }
 
     #promotions
@@ -717,5 +737,40 @@ class Product_categoryController extends Controller {
         $promotion->update();
         return back()->with(['success_end' => 'The promotion has been successfully ended!']);
     }
+    
+    ###product activation!!
+     public function ProdAct(product_products $Category) {
+        if ($Category->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
 
+        $Category->status = $stastus;
+        $Category->update();
+        return back();
+    }
+    
+     public function ProdPackAct(product_packages $product) {
+        if ($product->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $product->status = $stastus;
+        $product->update();
+        return back();
+    }
+
+    public function productpackagesAct(product_products $product) {
+        if ($product->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $product->status = $stastus;
+        $product->update();
+        
+        return back();
+        
+    }
 }

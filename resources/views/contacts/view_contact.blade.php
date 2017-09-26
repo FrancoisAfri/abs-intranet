@@ -282,6 +282,23 @@
                                 </div>
                             </div>
                         </div>
+                           <div class="form-group">
+                            <label for="ethnicity" class="col-sm-2 control-label">Office Created</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-bar-chart"></i>
+                                    </div>
+                                    <select name="ethnicity" class="form-control select2">
+                                        <option value="">*** Select office client belongs too ***</option>
+                                        @foreach($ethnicities as $ethnicity)
+                                           <!--  <option value="{{ $ethnicity->id }}" {{ ($contactPerson->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option> -->
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
