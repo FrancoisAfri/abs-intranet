@@ -789,14 +789,14 @@ class ContactCompaniesController extends Controller
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
-        $data['page_title'] = "Leave history Audit Report";
-        $data['page_description'] = "Leave history Audit Report";
+        $data['page_title'] = "Notes  Report";
+        $data['page_description'] = "Notes Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Contacts Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Reports';
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Report';
         AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
         return view('contacts.contacts_note')->with($data);
 
