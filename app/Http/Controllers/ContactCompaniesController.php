@@ -218,10 +218,15 @@ class ContactCompaniesController extends Controller
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
                 ->orderBy('contacts_notes.id')
                 ->get();
+                //return $contactnotes;
          
+         $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');
+         $communicationmethod = array(1 => 'Telephone', 2 => 'Meeting/Interview', 3 => 'Email', 4 => 'Fax' , 4 => 'SMS' );
          
       
         $company->load('employees.company');
+        $data['notesStatus'] = $notesStatus;
+        $data['communicationmethod'] = $communicationmethod;
         $data['page_title'] = "Notes";
         $data['page_description'] = "Notes ";
         $data['persons'] = $persons;
@@ -741,9 +746,61 @@ class ContactCompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function contactnote(Request $request){
+        $this->validate($request, [
+            // 'name' => 'required',
+        ]);
+
+        $notedata = $request->all();
+        unset($notedata['_token']);
+
+       
+
+        $userID = $notedata['hr_person_id'];
+        $companyID = $notedata['company_id'];
+        $personID = $notedata['contact_person_id'];
+       
+        $notes = DB::table('contacts_notes')
+                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname')
+                ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                
+                ->where(function ($query) use ($userID) {
+                    if (!empty($userID)) {
+                        $query->where('contacts_notes.employee_id', $userID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('contacts_notes.company_id', $companyID);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('contacts_notes.hr_person_id', $personID);
+                    }
+                })
+                ->orderBy('contacts_notes.id')
+                ->get();
+
+                //return $notes;
+
+      
+        $data['userID'] = $userID;
+        $data['companyID'] = $companyID;
+        $data['personID'] = $personID;
+        $data['notes'] = $notes;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.contacts_note')->with($data);
+
+
     }
 
    

@@ -46,7 +46,7 @@
 
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Client Note </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Meetings & Calls</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Meetings </label>
                                      <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Follow Up Action</label>
                                       
                                 </div>
@@ -65,33 +65,6 @@
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group levAction-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                                <label for="leave_types_id" class="col-sm-2 control-label">Leave Action</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                        
-                                             <input type="text" class="form-control" id="action" name="action" placeholder="Enter an Action...">
-                                      
-                                    </div>
-                                </div>
-                            </div> 
-                        
-                          <div class="form-group date-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Action Date</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
-                                    
                                 </div>
                             </div>
                         </div>
@@ -122,35 +95,6 @@
                             </div>
                         </div>
 
-                    
-                         <div class="row emp-field" style="display: block;">
-                                <div class="col-xs-6">
-                                    <div class="form-group from-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                        <label for="date_from" class="col-sm-4 control-label">Date From</label>
-                                        <div class="col-sm-8">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="text" class="form-control" id="date_from" name="date_from" value="{{ old('date_from') }}" placeholder="Select Month...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group to-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                        <label for="date_to" class="col-sm-3 control-label">Date To</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="text" class="form-control" id="date_to" name="date_to" value="{{ old('date_to') }}" placeholder="Select Month...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div> 
                      <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
@@ -266,7 +210,7 @@
                  $('.from-field').show();
                  $('.levAction-field').hide();
                  $('.date-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/taken');
+                 $('form[name="leave-application-form"]').attr('action', '/contacts/reports/contact_note');
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
@@ -275,7 +219,7 @@
                  $('.manual-field').hide();
                 $('.levAction-field').hide();
                  $('.date-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavebal');
+                 $('form[name="leave-application-form"]').attr('action', '/contacts/reports/meetings');
                  //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
                  $('#gen-report').val("Submit"); 
             }

@@ -17,6 +17,7 @@ use App\Http\Requests;
 use App\HRPerson;
 use App\SmS_Configuration;
 use App\User;
+use App\DivisionLevel;
 use App\Province;
 use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Mail;
@@ -226,6 +227,7 @@ class ContactsController extends Controller
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
         $canDeleteAndActivate = false;
         if ($loggedInUser->type == 1 || $loggedInUser->type == 3) $canDeleteAndActivate = true;
@@ -234,6 +236,7 @@ class ContactsController extends Controller
         $data['back'] = "/contacts";
         $data['view_by_admin'] = 1;
 		
+        $data['division_levels'] = $divisionLevels;
         $data['contactPerson'] = $person;
         $data['avatar'] = $person->profile_pic_url;
         $data['provinces'] = $provinces;
@@ -361,6 +364,7 @@ class ContactsController extends Controller
             }
         }
 
+
         //convert numeric values to numbers
         if (isset($person['res_postal_code'])) {
             $person['res_postal_code'] = (int) $person['res_postal_code'];
@@ -379,6 +383,21 @@ class ContactsController extends Controller
         }
         if (isset($person['ethnicity'])) {
             $person['ethnicity'] = (int) $person['ethnicity'];
+        }
+         if (isset($person['division_level_5'])) {
+            $person['division_level_5'] = (int) $person['division_level_5'];
+        }
+        if (isset($person['division_level_4'])) {
+            $person['division_level_4'] = (int) $person['division_level_4'];
+        }
+        if (isset($person['division_level_3'])) {
+            $person['division_level_3'] = (int) $person['division_level_3'];
+        }
+        if (isset($person['division_level_2'])) {
+            $person['division_level_2'] = (int) $person['division_level_2'];
+        }
+        if (isset($person['division_level_1'])) {
+            $person['division_level_1'] = (int) $person['division_level_1'];
         }
 
         //convert date of birth to unix time stamp
