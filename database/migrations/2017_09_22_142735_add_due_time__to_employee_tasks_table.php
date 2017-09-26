@@ -15,7 +15,7 @@ class AddDueTimeToEmployeeTasksTable extends Migration
     {
         Schema::table('employee_tasks', function (Blueprint $table) {
              $table->bigInteger('due_time')->index()->unsigned()->nullable();
-        });
+		});	 
     }
 
     /**
@@ -26,7 +26,7 @@ class AddDueTimeToEmployeeTasksTable extends Migration
     public function down()
     {
         Schema::table('employee_tasks', function (Blueprint $table) {
-             $table->bigInteger('due_time');
+			 $table->dropColumn('due_time');
         });
     }
 }

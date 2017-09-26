@@ -59,6 +59,7 @@ Route::post('users/update-users-access', 'SecurityController@updateRights');
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
 Route::get('contacts/add-to-company/{companyID}', 'ContactsController@create');
+Route::get('contacts/Clients-reports', 'ContactsController@reports');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
 Route::get('contacts/{person}/edit', 'ContactsController@edit');
 Route::get('contacts/{person}/activate', 'ContactsController@activateContact');
