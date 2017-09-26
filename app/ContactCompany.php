@@ -15,7 +15,8 @@ class ContactCompany extends Model
 		'tax_number', 'contact_person', 'cp_cell_number', 'cp_home_number', 
 		'bee_score', 'bee_certificate_doc', 'comp_reg_doc', 'sector', 'phone_number',
 		'fax_number', 'email', 'phys_address', 'phys_city', 'phys_postal_code',
-        'phys_province', 'postal_address', 'account_number','estimated_spent','domain_name'
+        'phys_province', 'postal_address', 'account_number','estimated_spent','domain_name',
+        'division_level_1', 'division_level_2', 'division_level_3','division_level_4', 'division_level_5'
     ];
 
     /**
@@ -46,8 +47,7 @@ class ContactCompany extends Model
     {
         return $this->hasMany(CRMAccount::class, 'company_id');
     }
-
-    /**
+/**
      * Relationship between Contact Company and Meetings
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -55,6 +55,15 @@ class ContactCompany extends Model
     public function meetings()
     {
         return $this->hasMany(MeetingMinutes::class, 'company_id');
+    }
+
+    /**
+     * Relationship hr_person (manager) and Division level group
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\Hasone
+     */
+    public function divisionLevelGroup() {
+        return $this->hasOne(DivisionLevelGroup::class, 'manager_id');
     }
 
     /**
@@ -72,5 +81,19 @@ class ContactCompany extends Model
             $address .= " \n" . $province->name;
         }
         return $address;
+    }
+
+    ##
+     //function to get people from a specific div level
+    public static function peopleFronDivLvl($whereField, $divValue, $incInactive) {
+        $hrPeople = HRPerson::where($whereField, $divValue)
+            ->where(function ($query) use($incInactive) {
+                if ($incInactive == -1) {
+                    $query->where('status', 1);
+                }
+            })->get()
+            ->sortBy('full_name')
+            ->pluck('id', 'full_name');
+        return $hrPeople;
     }
 }

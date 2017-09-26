@@ -47,7 +47,8 @@
                           <td>{{ (!empty($notes->notes)) ?  $notes->notes : ''}} </td>
                           <td>{{ !empty($notes->date) ? date('d M Y ', $notes->date) : '' }}</td>
                           <td>{{ !empty($notes->time) ? date('d M Y ', $notes->time) : '' }}</td>
-                          <td> {{$notes->employee_id}}</td>
+                           <!-- <td>{{ (!empty($notes->next_action)) ?  $notes->next_action : ''}} </td> -->
+                           <td>{{ (!empty($notes->next_action)) ?  $notesStatus[$notes->next_action] : ''}} </td>
                           <td>{{ !empty($notes->follow_date) ? date('d M Y ', $notes->follow_date) : '' }}</td>
                           <td><button type="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $notes->id }}" data-originator_type="{{ $notes->originator_type }}" data-company_id="{{$notes->company_id}}" data-hr_person_id="{{$notes->hr_person_id}}" data-employee_id="{{$notes->employee_id}}"
                             ><i class="fa fa-pencil-square-o"></i> Edit</button></td>

@@ -56,22 +56,6 @@ class TaskLibraryController extends Controller
         return view('induction.library_view')->with($data);
     }
 
-    #### Delete Task
-     public function deleteTask(ContactPerson $person)
-    {
-        $user = Auth::user();
-        if ($user->type == 1 || $user->type == 3) {
-            $person->load('user');
-            if ($person->user) {
-                $user = $person->user;
-                $user->delete();
-            }
-            $person->delete();
-
-            AuditReportsController::store('Contacts', 'Client Deleted', "Client ID has been deleted", 0);
-            return redirect('/contacts');
-        }
-    }
 
     /**
      * Store a newly created resource in storage.

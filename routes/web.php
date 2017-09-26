@@ -171,9 +171,16 @@ Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@ac
 Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
 Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
 Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
+##reports
+Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
 
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
+
+
+
+
+
 //AGM
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');
