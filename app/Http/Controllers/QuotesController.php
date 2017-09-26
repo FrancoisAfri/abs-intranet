@@ -6,6 +6,7 @@ use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\CRMAccount;
+use App\CRMInvoice;
 use App\CRMPayment;
 use App\DivisionLevel;
 use App\DivisionLevelFive;
@@ -306,6 +307,50 @@ class QuotesController extends Controller
                     $quote->account_id = $crmAccount->id;
                 }
                 $quote->update();
+
+                //create invoices if the payment option is 2
+                if ($quote->payment_option == 2 && $quote->payment_term > 0 && $quote->first_payment_date) {
+                    $paymentDueDate = Carbon::createFromTimestamp($quote->first_payment_date); //payment due date
+
+                    //calculate quotation total cost
+                    $productsSubtotal = 0;
+                    $packagesSubtotal = 0;
+                    foreach ($quote->products as $product) {
+                        $productsSubtotal += ($product->pivot->price * $product->pivot->quantity);
+                    }
+                    foreach ($quote->packages as $package) {
+                        $packagesSubtotal += ($package->pivot->price * $package->pivot->quantity);
+                    }
+                    $subtotal = $productsSubtotal + $packagesSubtotal;
+                    $discountPercent = $quote->discount_percent;
+                    $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
+                    $discountedAmount = $subtotal - $discountAmount;
+                    $vatAmount = ($quote->add_vat == 1) ? $discountedAmount * 0.14 : 0;
+                    $quoteTotal = $discountedAmount + $vatAmount;
+
+                    $invoiceAmount = $quoteTotal / $quote->payment_term;
+
+                    for ($i = 1; $i <= $quote->payment_term; $i++) {
+                        $invoice = new CRMInvoice();
+                        $invoice->quotation_id = $quote->id;
+                        $invoice->company_id = $quote->company_id;
+                        $invoice->client_id = $quote->client_id;
+                        $invoice->account_id = $quote->account_id;
+                        $invoice->invoice_date = time();
+                        $invoice->payment_due_date = $paymentDueDate->timestamp;
+                        $invoice->status = 1;
+                        $invoice->amount = $invoiceAmount;
+                        $invoice->save();
+
+                        $companyDetails = CompanyIdentity::systemSettings();
+                        $invoiceNumber = $companyDetails['header_acronym_bold'] . $companyDetails['header_acronym_regular'];
+                        $invoiceNumber = !empty($invoiceNumber) ? strtoupper($invoiceNumber) : 'SYS';
+                        $invoiceNumber .= 'INV' . sprintf('%07d', $invoice->id);
+                        $invoice->invoice_number = $invoiceNumber;
+                        $invoice->update();
+                        $paymentDueDate->addMonth();
+                    }
+                }
             });
 			$changedStatus .= ", Email sent to client, to welcome them";
 		}
@@ -320,7 +365,7 @@ class QuotesController extends Controller
             $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
             $quoteAttachment = $this->viewQuote($quote, true, false, true);
             Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
-            $quote->status = 2;
+            $quote->status = $stastus;
             $quote->update();
 			$changedStatus .= ", , Email sent to client, to notify them";
 		}

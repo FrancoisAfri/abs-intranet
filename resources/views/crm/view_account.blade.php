@@ -85,24 +85,32 @@
                                         <td class="text-right" nowrap>{{ ($quotation->cost) ? 'R ' . number_format($quotation->cost, 2) : '' }}</td>
                                         <td class="text-right" nowrap>{{ ($quotation->balance) ? 'R ' . number_format($quotation->balance, 2) : '' }}</td>
                                         <td class="text-right" nowrap>
-                                            @if($quotation->can_capture_payment)
-                                                <button type="button" class="btn btn-success btn-flat btn-xs" data-toggle="modal"
-                                                        data-target="#capture-payment-modal" data-quote_id="{{ $quotation->id }}"
-                                                        data-invoice_id="{{ ($quotation->invoices->first()) ? $quotation->invoices->first()->id : 0 }}"
-                                                        data-balance="{{ $quotation->balance }}">
-                                                    <i class="fa fa-credit-card"></i> Capture Payment
+                                            @if($quotation->payment_option == 1)
+                                                @if($quotation->can_capture_payment)
+                                                    <button type="button" class="btn btn-success btn-flat btn-xs" data-toggle="modal"
+                                                            data-target="#capture-payment-modal" data-quote_id="{{ $quotation->id }}"
+                                                            data-invoice_id="{{ ($quotation->invoices->first()) ? $quotation->invoices->first()->id : 0 }}"
+                                                            data-balance="{{ $quotation->balance }}">
+                                                        <i class="fa fa-credit-card"></i> Capture Payment
+                                                    </button>
+                                                @endif
+
+                                                @if($quotation->can_send_invoice)
+                                                    <a href="/crm/invoice/mail/{{ $quotation->id }}" class="btn btn-primary btn-flat btn-xs">
+                                                        <i class="fa fa-send"></i> Send Invoice
+                                                    </a>
+                                                @endif
+
+                                                <a href="/crm/invoice/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary btn-flat btn-xs">
+                                                    <i class="fa fa-print"></i> Print Invoice
+                                                </a>
+                                            @elseif($quotation->payment_option == 2)
+                                                <button type="button" class="btn btn-primary btn-flat btn-xs" data-toggle="modal"
+                                                        data-target="#payments-schedule-modal" data-quote_id="{{ $quotation->id }}"
+                                                        data-invoices="{{ json_encode($quotation->invoices) }}">
+                                                    <i class="fa fa-eye"></i> Invoices
                                                 </button>
                                             @endif
-
-                                            @if($quotation->can_send_invoice)
-                                                <a href="/crm/invoice/mail/{{ $quotation->id }}" class="btn btn-primary btn-flat btn-xs">
-                                                    <i class="fa fa-send"></i> Send Invoice
-                                                </a>
-                                            @endif
-
-                                            <a href="/crm/invoice/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary btn-flat btn-xs">
-                                                <i class="fa fa-print"></i> Print Invoice
-                                            </a>
                                         </td>
                                     </tr>
                                     @if($quotation && (count($quotation->products) > 0 || count($quotation->packages) > 0))
@@ -128,6 +136,8 @@
                                 @endforeach
                                 </tbody>
                             </table>
+
+                            <hr class="hr-text" data-content="SUBSCRIPTIONS">
                         </div>
 
                     </div>
@@ -146,6 +156,7 @@
 
         <!-- Include modals -->
         @include('crm.partials.capture_payment_modal')
+        @include('crm.partials.payments_schedule_modal')
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
         @endif
@@ -216,7 +227,7 @@
                 var balance = btnTrigger.data('balance');
                 var modal = $(this);
                 modal.find('#amount_paid').val(balance);
-                console.log('gets here: q=' + quoteID + ', i=' + invoiceID);
+                //console.log('gets here: q=' + quoteID + ', i=' + invoiceID);
             });
 
             //submit payment modal with ajax (add payment)
@@ -231,6 +242,59 @@
                 var successMsg = 'The payment has been successfully captured.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+            //pass invoices data to the invoices modal when it shows
+            $('#payments-schedule-modal').on('show.bs.modal', function (e) {
+                var btnTrigger = $(e.relatedTarget);
+                var invoices = btnTrigger.data('invoices');
+                var quoteID = btnTrigger.data('quote_id');
+                var modal = $(this);
+                modal.find('#invoices').empty();
+                var invoiceStatuses = ['', 'Client Waiting Invoice', 'Invoice Sent To Client', 'Invoice Partially Paid', 'Invoice Paid'];
+                var labelColors = ['label-danger', 'label-warning', 'label-primary', 'label-primary', 'label-success'];
+                $(invoices).each(function( index ) {
+                    var invoiceRow = $('<tr></tr>');
+                    var dueDate = new Date(this.payment_due_date * 1000);
+                    var dueDateCell = $('<td></td>').html(dueDate.getDate() + '/' + dueDate.getMonth() + '/' + dueDate.getFullYear());
+                    var invoiceNumCell = $('<td></td>').html(this.invoice_number);
+                    var statusLabelColor = labelColors[this.status];
+                    var statusLabel = $('<span></span>').addClass('label').addClass(statusLabelColor).html(invoiceStatuses[this.status]);
+                    var statusCell = $('<td></td>').html(statusLabel);
+                    var invoiceAmount = parseFloat(this.amount);
+                    var formattedAmount = 'R ' + invoiceAmount.formatMoney(2);
+                    var amountCell = $('<td class="text-right"></td>').html(formattedAmount);
+                    var totalPaid = 0;
+                    var payments = this.payments;
+                    $(payments).each(function( index ) {
+                        totalPaid += parseFloat(this.amount);
+                    });
+                    var balance = invoiceAmount.formatMoney(2) - totalPaid;
+                    var formattedBalance = 'R ' + balance.formatMoney(2);
+                    var balanceCell = $('<td class="text-right"></td>').html(formattedBalance);
+                    var captutePaymentBtn = $('<button type="button" class="btn btn-success btn-flat btn-xs"></button>')
+                        .attr('data-toggle', 'modal').attr('data-target', '#capture-payment-modal').attr('data-quote_id', "{{ $quotation->id }}");
+                    /*var captutePaymentBtn = '<button type="button" class="btn btn-success btn-flat btn-xs" data-toggle="modal"
+                    data-target="#capture-payment-modal" data-quote_id="{{ $quotation->id }}"
+                    data-invoice_id="{{ ($quotation->invoices->first()) ? $quotation->invoices->first()->id : 0 }}"
+                    data-balance="{{ $quotation->balance }}">
+                        <i class="fa fa-credit-card"></i> Capture Payment
+                    </button>';*/
+                    //console.log( index + ": " + $( this ).id );
+                    invoiceRow.append(dueDateCell, invoiceNumCell, statusCell, amountCell, balanceCell);
+                    modal.find('#invoices').append(invoiceRow);
+                });
+            });
         });
+
+        Number.prototype.formatMoney = function(c, d, t){
+            var n = this,
+                c = isNaN(c = Math.abs(c)) ? 2 : c,
+                d = d == undefined ? "." : d,
+                t = t == undefined ? "," : t,
+                s = n < 0 ? "-" : "",
+                i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+                j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        };
     </script>
 @endsection

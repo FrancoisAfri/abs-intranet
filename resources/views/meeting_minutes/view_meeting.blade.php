@@ -110,7 +110,7 @@
 														<div class="alert alert-danger alert-dismissable">
 															<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><textarea rows="8" cols="100" class="form-control" id="" name="" readonly>No minutes to display, please start by adding one.</textarea></div>
 													</td>
-												</tr> 
+												</tr>
 										@endif
 										</tbody>
 									</table>
