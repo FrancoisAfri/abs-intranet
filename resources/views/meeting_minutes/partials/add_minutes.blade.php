@@ -13,17 +13,26 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-					<div class="form-group">
-                        <label for="employee_id" class="col-sm-3 control-label">Attendee</label>
+                    <div class="form-group">
+                        <label for="employee_id" class="col-sm-3 control-label">Attendee (internal)</label>
                         <div class="col-sm-9">
-                            <div class="input-group">
-                                <select class="form-control select2" style="width:170px;" id="employee_id" name="employee_id">
-								<option selected="selected" value="0">*** Select Attendee ***</option>
-								@foreach($attendees as $attendee)
-									<option value="{{ $attendee->hr_id }}">{{ $attendee->first_name.' '.$attendee->surname}}</option>
-								@endforeach
-								</select>
-                            </div>
+                            <select class="form-control select2" style="width: 100%;" id="employee_id" name="employee_id">
+                                <option selected="selected" value="0">*** Select An Internal Attendee ***</option>
+                                @foreach($attendees as $attendee)
+                                    <option value="{{ $attendee->hr_id }}">{{ $attendee->first_name.' '.$attendee->surname}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label for="client_id" class="col-sm-3 control-label">Attendee (external)</label>
+                        <div class="col-sm-9">
+                            <select class="form-control select2" style="width: 100%;" id="client_id" name="client_id">
+    							<option selected="selected" value="0">*** Select An External Attendee ***</option>
+    							@foreach($externalAttendees as $externalAttendee)
+    								<option value="{{ $externalAttendee->id }}">{{ $externalAttendee->full_name }}</option>
+    							@endforeach
+							</select>
                         </div>
 					</div>
                     <div class="form-group">

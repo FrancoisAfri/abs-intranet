@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-                    <div class="form-group">
+                    <div class="form-group internal-attendee">
                         <label for="supplier_id" class="col-sm-3 control-label">Attendee</label>
 
                         <div class="col-sm-9">
@@ -20,10 +20,27 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-briefcase"></i>
                                 </div>
-								<select class="form-control select2" style="width:170px;" id="employee_id" name="employee_id">
-								<option selected="selected" value="0">*** Select Attendee ***</option>
-								@foreach($employees as $employee)
-									<option value="{{ $employee->id }}">{{ $employee->first_name.' '.$employee->surname}}</option>
+                                <select class="form-control select2" style="width: 100%;" id="employee_id" name="employee_id">
+                                <option selected="selected" value="0">*** Select Attendee ***</option>
+                                @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->first_name.' '.$employee->surname}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group external-attendee">
+                        <label for="client_id" class="col-sm-3 control-label">Attendee</label>
+
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </div>
+								<select class="form-control select2" style="width: 100%;" id="client_id" name="client_id">
+								<option value="0">*** Select Attendee ***</option>
+								@foreach($externalAttendees as $externalAttendee)
+									<option value="{{ $externalAttendee->id }}">{{ $externalAttendee->full_name }}</option>
 								@endforeach
 								</select>
                             </div>

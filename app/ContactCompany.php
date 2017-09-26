@@ -48,6 +48,16 @@ class ContactCompany extends Model
     }
 
     /**
+     * Relationship between Contact Company and Meetings
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function meetings()
+    {
+        return $this->hasMany(MeetingMinutes::class, 'company_id');
+    }
+
+    /**
      * Accessor to return the company's full  physical address
      *
      * @return String
