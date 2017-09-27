@@ -760,6 +760,7 @@ class ContactCompaniesController extends Controller
         $companyID = $notedata['company_id'];
         $personID = $notedata['contact_person_id'];
        
+        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');       
         $notes = DB::table('contacts_notes')
                 ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname')
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
@@ -782,10 +783,15 @@ class ContactCompaniesController extends Controller
                 ->orderBy('contacts_notes.id')
                 ->get();
 
-                //return $notes;
+             
 
-      
+             //  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
+               
+
+
+        //$data['companies'] = $companies;
         $data['userID'] = $userID;
+        $data['notesStatus'] = $notesStatus;
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
@@ -801,6 +807,21 @@ class ContactCompaniesController extends Controller
         return view('contacts.contacts_note')->with($data);
 
 
+    }
+
+     public function meetings(Request $request){
+        $this->validate($request, [
+            // 'name' => 'required',
+        ]);
+
+        $meetingdata = $request->all();
+        unset($meetingdata['_token']);
+
+       
+
+        $userID = $meetingdata['hr_person_id'];
+        $companyID = $meetingdata['company_id'];
+        $personID = $meetingdata['contact_person_id'];  
     }
 
    

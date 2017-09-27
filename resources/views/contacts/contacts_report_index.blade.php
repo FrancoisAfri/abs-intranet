@@ -47,7 +47,7 @@
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Client Note </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Meetings </label>
-                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Follow Up Action</label>
+                                     <!-- <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Follow Up Action</label> -->
                                       
                                 </div>
                             </div>
@@ -231,25 +231,7 @@
                   $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
                    $('#gen-report').val("Submit"); 
             }
-            else if(allType == 4){
-                 $('.to-field').hide();
-                 $('.from-field').hide();
-                 $('.levAction-field').hide();
-                  $('.manual-field').show();
-                 $('.lev-field').show();
-                 $('.date-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
-                 $('#gen-report').val("Submit"); 
-            } else if(allType == 5){
-                  $('.to-field').hide();
-                 $('.from-field').hide();
-                 $('.lev-field-field').hide();
-                 $('.manual-field').hide();
-                 $('.levAction-field').hide();
-                 $('.date-field').show();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/history/');    
-                 $('#gen-report').val("Submit"); 
-            }
+           
             return allType;      
             }
           //Load divisions drop down
