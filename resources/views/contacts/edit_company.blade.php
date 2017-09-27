@@ -248,8 +248,20 @@
                                 </div>
                             </div>
                         </div>
-                         <hr>
-                       
+                        <hr>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">Choose {{$dept->name}}</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<select class="form-control select2" id="dept_id" name="dept_id">
+										<option selected="selected" value="0">*** Select {{$dept->name}} ***</option>
+										@foreach($deparments as $deparment)
+											<option value="{{ $deparment->id }}" {{ ($company->dept_id == $deparment->id) ? ' selected' : '' }}>{{ $deparment->name}}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

@@ -29,9 +29,11 @@
                         <div class="col-sm-9">
                             <select class="form-control select2" style="width: 100%;" id="client_id" name="client_id">
     							<option selected="selected" value="0">*** Select An External Attendee ***</option>
-    							@foreach($externalAttendees as $externalAttendee)
+    							@if (!empty($externalAttendees))
+								@foreach($externalAttendees as $externalAttendee)
     								<option value="{{ $externalAttendee->id }}">{{ $externalAttendee->full_name }}</option>
     							@endforeach
+								@endif
 							</select>
                         </div>
 					</div>

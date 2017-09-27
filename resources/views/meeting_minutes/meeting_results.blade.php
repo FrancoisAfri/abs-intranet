@@ -13,7 +13,6 @@
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">
                         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                        <div class="panel box box-primary">
                             <div class="box-body">
 								<table class="table table-striped">
 									<tr>
@@ -21,14 +20,16 @@
 										<th>Location</th>
 										<th>Agenda</th>
 										<th>Date</th>
+										<th>Client</th>
 									</tr>
-									@if(count($meetings) > 0)
+									@if(!empty($meetings))
 										@foreach($meetings as $meeting)
 											<tr>
 												<td><a href="{{ '/meeting_minutes/view_meeting/' . $meeting->id . '/view' }}" class="product-title">{{ !empty($meeting->meeting_name) ? $meeting->meeting_name : '' }}</a></td>
 												<td>{{ !empty($meeting->meeting_location) ? $meeting->meeting_location : '' }}</td>
 												<td>{{ !empty($meeting->meeting_agenda) ? $meeting->meeting_agenda : '' }}</td>
 												<td>{{ !empty($meeting->created_at) ? $meeting->created_at : '' }}</td>
+												<td>{{ !empty($meeting->compname) ? $meeting->compname : '' }}</td>
 											</tr>
 										@endforeach
 									<tr>
@@ -46,7 +47,6 @@
 								</div>
 								<!-- End amortization /table -->
 							</div>
-                        </div>
                     </div>
                     <!-- /. End Collapsible section containing the amortization schedule -->
                 </div>

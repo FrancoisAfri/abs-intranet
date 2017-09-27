@@ -44,7 +44,9 @@ class ContactCompaniesController extends Controller
      */
 	public function create()
     {
-        $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
+        $deparments = DB::table('division_level_fours')->where('active', 1)->orderBy('name', 'asc')->get();
+        $dept = DB::table('division_setup')->where('level', 4)->first();
+		$provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $data['page_title'] = "Contacts";
         $data['page_description'] = "Add a New Company";
         $data['breadcrumb'] = [
@@ -52,6 +54,8 @@ class ContactCompaniesController extends Controller
             ['title' => 'Add company', 'active' => 1, 'is_module' => 0]
         ];
         $data['provinces'] = $provinces;
+		$data['deparments'] = $deparments;
+        $data['dept'] = $dept;
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Add Company';
         return view('contacts.add_company')->with($data);
@@ -175,6 +179,8 @@ class ContactCompaniesController extends Controller
         $beeCertDoc = $company->bee_certificate_doc;
         $compRegDoc = $company->comp_reg_doc;
         $provinces = Province::where('country_id', 1)->where('id', $company->phys_province)->get()->first();
+		$dept = DB::table('division_setup')->where('level', 4)->first();
+		$deparments = DB::table('division_level_fours')->where('active', 1)->where('id', $company->dept_id)->first();
         $canEdit = (in_array($user->type, [1, 3]) || ($user->type == 2 && ($user->person->company_id && $user->person->company_id == $company->id))) ? true : false;
 
         $data['page_title'] = "Clients";
@@ -190,13 +196,11 @@ class ContactCompaniesController extends Controller
         $data['comp_reg_doc'] = (!empty($compRegDoc)) ? Storage::disk('local')->url("company_docs/$compRegDoc") : '';
         $data['provinces'] = $provinces;
         $data['canEdit'] = $canEdit;
+		$data['deparments'] = $deparments;
+        $data['dept'] = $dept;
         return view('contacts.view_company')->with($data);
     }
 
-    /******
-
-    */
-     ###
     public function notes(ContactCompany $company)
     {
         $companyID = $company->id;
@@ -298,7 +302,9 @@ class ContactCompaniesController extends Controller
     public function editCompany(ContactCompany $company)
     {
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
-        $data['page_title'] = "Clients";
+        $dept = DB::table('division_setup')->where('level', 4)->first();
+		$deparments = DB::table('division_level_fours')->where('active', 1)->orderBy('name', 'asc')->get();
+		$data['page_title'] = "Clients";
         $data['page_description'] = "Edit Company Details";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
@@ -306,6 +312,8 @@ class ContactCompaniesController extends Controller
         ];
         $data['company'] = $company;
         $data['provinces'] = $provinces;
+		$data['deparments'] = $deparments;
+        $data['dept'] = $dept;
         $data['active_mod'] = 'clients';
         $data['active_rib'] = 'add company';
         return view('contacts.edit_company')->with($data);
@@ -537,7 +545,6 @@ class ContactCompaniesController extends Controller
             $this->validate($request, [
                 'rejection_reason' => 'required'
             ]);
-
             //Update status to rejected
             if ($company->status === 1){
                 $company->status = -1;
@@ -550,7 +557,6 @@ class ContactCompaniesController extends Controller
                 $company->second_rejection_reason = $request['rejection_reason'];
             }
             $company->update();
-
             //Notify the applicant about the rejection
             $creator = User::find("$company->loader_id")->load('person');
             $creatorEmail = $creator->person->email;
@@ -760,7 +766,8 @@ class ContactCompaniesController extends Controller
         $companyID = $notedata['company_id'];
         $personID = $notedata['contact_person_id'];
        
-        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');       
+       $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
+ 
         $notes = DB::table('contacts_notes')
                 ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
@@ -794,8 +801,8 @@ class ContactCompaniesController extends Controller
 
 
         //$data['companies'] = $companies;
-        $data['userID'] = $userID;
         $data['notesStatus'] = $notesStatus;
+        $data['userID'] = $userID;
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
@@ -884,5 +891,114 @@ class ContactCompaniesController extends Controller
         return view('contacts.meeting_minutes_report_result')->with($data);
     }
 
+    ##print reports
+       public function printmeetingsReport(Request $request) {
+
+        $personID = $request['hr_person_id'];
+        $Datefrom = $request['date_from'];
+        $Dateto = $request['date_to'];
+        $companyID = $request['company_id'];
+        
+
+
+
+        $meetingminutes = DB::table('meeting_minutes')
+                ->select('meeting_minutes.*', 'meetings_minutes.minutes as meeting_minutes','contact_companies.name as companyname' )
+                ->leftJoin('meetings_minutes', 'meeting_minutes.id', '=', 'meetings_minutes.meeting_id')
+                ->leftJoin('contact_companies', 'meeting_minutes.company_id', '=' , 'contact_companies.id' )
+                
+                ->where(function ($query) use ($Datefrom, $Dateto) {
+                    if ($Datefrom > 0 && $Dateto > 0) {
+                        $query->whereBetween('meeting_minutes.meeting_date', [$Datefrom, $Dateto]);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('meetings_minutes.client_id', $personID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('meeting_minutes.company_id', $companyID);
+                    }
+                })
+               // ->orderBy('contacts_notes.id')
+                ->get();
+
+               // return $meetingminutes;
+      
+
+     
+       
+        $data['meetingminutes'] = $meetingminutes;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        $user = Auth::user()->load('person');
+        $data['support_email'] = 'support@afrixcel.co.za';
+        $data['company_name'] = 'Afrixcel Business Solution';
+        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+        $data['date'] = date("d-m-Y");
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.reports.meeting_print')->with($data);
+    }
+
+          public function printclientReport(Request $request) {
+
+
+        $userID = $request['hr_person_id'];
+        $companyID = $request['company_id'];
+        $personID = $request['user_id'];
+       
+        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');
+
+        $notes = DB::table('contacts_notes')
+                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
+                ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->leftJoin('contact_companies', 'contacts_notes.company_id', '=' , 'contact_companies.id' )
+                
+                ->where(function ($query) use ($userID) {
+                    if (!empty($userID)) {
+                        $query->where('contacts_notes.employee_id', $userID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('contacts_notes.company_id', $companyID);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('contacts_notes.hr_person_id', $personID);
+                    }
+                })
+                ->orderBy('contacts_notes.id')
+                ->get();
+      
+
+        // return $notes;
+        $data['notesStatus'] = $notesStatus;
+        $data['notes'] = $notes;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        $user = Auth::user()->load('person');
+        $data['support_email'] = 'support@afrixcel.co.za';
+        $data['company_name'] = 'Afrixcel Business Solution';
+        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+        $data['date'] = date("d-m-Y");
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.reports.contacts_note_print')->with($data);
+    }
    
 }
