@@ -3,7 +3,6 @@
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/select2/select2.min.css">
 	<!-- iCheck -->
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
     <!-- bootstrap file input -->
@@ -55,36 +54,39 @@
 								</select>
 							</div>
 						</div>
+						<div class="form-group new-field {{ $errors->has('company_id') ? ' has-error' : '' }}">
+							<label for="company_id" class="col-sm-2 control-label">Client</label>
+							<div class="col-sm-10">
+								<select id="company_id" name="company_id" class="form-control select2" style="width: 100%;">
+									<option value="">*** Select a Client Company ***</option>
+									@foreach($companies as $company)
+										<option value="{{ $company->id }}">{{ $company->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
                         <div class="form-group new-field {{ $errors->has('meeting_name') ? ' has-error' : '' }}">
 							<label for="Meeting Name" class="col-sm-2 control-label">Title</label>
 							<div class="col-sm-10">
-								<div class="input-group">
-									<input type="text" class="form-control" id="meeting_name" name="meeting_name" value="{{ old('meeting_name') }}" placeholder="Enter Name">
-								</div>
+								<input type="text" class="form-control" id="meeting_name" name="meeting_name" value="{{ old('meeting_name') }}" placeholder="Enter Name">
 							</div>
 						</div>
                         <div class="form-group new-field {{ $errors->has('meeting_date') ? ' has-error' : '' }}">
                         <label for="Meeting Date" class="col-sm-2 control-label">Date</label>
                         <div class="col-sm-10">
-							 <div class="input-group">
                             <input type="text" class="form-control datepicker" name="meeting_date" placeholder="  dd/mm/yyyy" value="{{ old('meeting_date') }}">
-							</div>
                         </div>
 						</div>
 						<div class="form-group new-field {{ $errors->has('meeting_location') ? ' has-error' : '' }}">
 							<label for="Meeting Location" class="col-sm-2 control-label">Location</label>
 							<div class="col-sm-10">
-								<div class="input-group">
-									<input type="text" class="form-control" id="meeting_location" name="meeting_location" value="{{ old('meeting_location') }}" placeholder="Enter Location">
-								</div>
+								<input type="text" class="form-control" id="meeting_location" name="meeting_location" value="{{ old('meeting_location') }}" placeholder="Enter Location">
 							</div>
 						</div>
 						<div class="form-group new-field {{ $errors->has('meeting_agenda') ? ' has-error' : '' }}">
 							<label for="Meeting Agenda" class="col-sm-2 control-label">Agenda</label>
 							<div class="col-sm-10">
-								<div class="input-group">
 								<textarea rows="4" cols="50" class="form-control" id="meeting_agenda" name="meeting_agenda" placeholder="Enter Agenda">{{ old('meeting_agenda') }}</textarea>
-								</div>
 							</div>
 						</div>
                     </div>
@@ -145,4 +147,4 @@
 		}
 	}
 </script>
- @endsection
+@endsection

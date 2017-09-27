@@ -13,7 +13,7 @@
                 <div class="modal-body">
                     <div id="invalid-exp-input-alert"></div>
                     <div id="success-alert"></div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="supplier_id" class="col-sm-3 control-label">Attendee</label>
 
                         <div class="col-sm-9">
@@ -21,7 +21,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-briefcase"></i>
                                 </div>
-								<select class="form-control select2" style="width:170px;" id="employee_id" name="employee_id">
+								<select class="form-control select2"  multiple="multiple" style="width:170px;" id="employee_id" name="employee_id[]">
 								<option selected="selected" value="0">*** Select Attendee ***</option>
 								@foreach($employees as $employee)
 									<option value="{{ $employee->id }}">{{ $employee->first_name.' '.$employee->surname}}</option>
@@ -29,7 +29,39 @@
 								</select>
                             </div>
                         </div>
+                    </div> -->
+                    <div class="form-group {{ $errors->has('employee_id') ? ' has-error' : '' }}">
+                        <label for="employee_id" class="col-sm-3 control-label">Attendee (internal)</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-briefcase"></i>
+                                </div>
+                                <select class="form-control select2" multiple="multiple" style="width: 100%;" id="employee_id" name="employee_id[]" data-placeholder="Select (an) Employee(s)">
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
+                    @if($externalAttendees)
+                        <div class="form-group {{ $errors->has('client_id') ? ' has-error' : '' }}">
+                            <label for="client_id" class="col-sm-3 control-label">Attendee (external)</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-briefcase"></i>
+                                    </div>
+                                    <select class="form-control select2" multiple="multiple"style="width: 100%;" id="client_id" name="client_id[]" data-placeholder="Select External Attendee">
+                                        @foreach($externalAttendees as $externalAttendee)
+                                            <option value="{{ $externalAttendee->id }}">{{ $externalAttendee->full_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 					<div class="form-group">
                         <label for="attendance" class="col-sm-3 control-label">Attendee</label>
 

@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Product Type Promotions</h3>
+                    <h3 class="box-title">Promotions</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -25,33 +25,45 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-                                <th style="width: 10px; text-align: center;"></th>
+                                <!--<th style="width: 10px; text-align: center;"></th>-->
                                 <th>Name</th>
                                 <th>Description</th>
+                                <th>Product</th>
+                                <th>Package</th>
                                 <th>Start Date</th>
                                  <th>End Date</th>
-                                 <th>Discount %</th>
-                                 <th>Price</th>
+                                 <th class="text-center">Discount</th>
+                                <!--  <th>Price</th> -->
 
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
                             @if (count($productsPromotions) > 0)
                               @foreach ($productsPromotions as $type)
                                <tr id="categories-list">
-                               <td nowrap>
+                                   <!--
+                               <td style="width: 10px; text-align: center;" nowrap>
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                         <!--    <a href="{{ '/Product/Promotions/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product Type</a> -->
+                                         <!--    <a href="{{ '/Product/Promotions/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product Type</a> --
                                     </td>
+                                   -->
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }}</td>
-                                    <td>{{ !empty($type->start_date) ? date('d M Y ', $type->start_date) : '' }}</td>
-                                    <td>{{ !empty($type->end_date) ? date(' d M Y', $type->end_date) : '' }}</td>
-                                    <td>{{ $type->discount }} %</td>
-                                    <td>{{ $type->price }}</td>
-                                    <td>
+                                    <td>{{ ($type->product) ? $type->product->name : '' }}</td>
+                                    <td>{{ ($type->package) ? $type->package->name : '' }}</td>
+                                    <td nowrap>{{ !empty($type->start_date) ? date('d M Y ', $type->start_date) : '' }}</td>
+                                    <td nowrap>{{ !empty($type->end_date) ? date(' d M Y', $type->end_date) : '' }}</td>
+                                    <td style="text-align: center;" nowrap>{{ $type->discount }} %</td>
+                                    
+                                    <td style="width: 10px; text-align: center;">
+                                        <button class="btn btn-danger btn-xs" data-toggle="modal" data-target="#end-promotion-warning-modal"
+                                                data-promo_id="{{ $type->id }}" data-promo_name="{{ $type->name }}">
+                                            <i class="fa fa-times"></i> End Promotion
+                                        </button>
+                                        <!--
                                     <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                                        -->
                                     </td>
                                 </tr>
                                    @endforeach
@@ -69,13 +81,14 @@
                         </div>
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-promotion-modal">Add new Promotions </button>
+                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-promotion-modal">Add New Promotion</button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
         @include('products.partials.add_promotion_modal')
         @include('hr.partials.edit_category_modal')
+        @include('products.partials.end_promotion_modal')
 
 
 </div>
@@ -190,7 +203,7 @@
                     package: $('#'+modalID).find('#package').val(),
                     product: $('#'+modalID).find('#product').val(),
                     price: $('#'+modalID).find('#price').val(),
-                    promotion_type: $('#'+modalID).find('input[name = promotion_type]').val(),
+                    promotion_type: $('#'+modalID).find('input:checked[name = promotion_type]').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'cat_module';
@@ -231,6 +244,16 @@
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
+            $('#end-promotion-warning-modal').on('show.bs.modal', function (e) {
+                console.log('gets here');
+                var btnEdit = $(e.relatedTarget);
+                var promotionID = btnEdit.data('promo_id');
+                var promotionName = btnEdit.data('promo_name');
+                var modal = $(this);
+                modal.find('#promotion_name').html('<i class="fa fa-warning"></i> ' + promotionName);
+                modal.find('#end_promotion').attr('href', '/product/promotion/end/' + promotionID);
+
+            });
         });
     </script>
 @endsection

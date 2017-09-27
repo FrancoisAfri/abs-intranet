@@ -24,7 +24,7 @@ class emailMinutes extends Mailable
      *
      * @return void
      */
-    public function __construct(HRPerson $person, MeetingMinutes $meeting)
+    public function __construct($person, MeetingMinutes $meeting)
 	{
 		$this->person = $person;
 		$this->meeting =$meeting;

@@ -19,8 +19,14 @@ class product_packages extends Model
             
     }
 
-    public function package_Promotions() {
-        return $this->belongsTo(product_promotions::class, 'category_id');
+    /**
+     * The relationships between package and promotion.
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function promotions()
+    {
+        return $this->hasMany(product_promotions::class, 'product_packages_id');
     }
 
     /**

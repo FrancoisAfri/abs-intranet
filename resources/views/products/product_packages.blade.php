@@ -39,11 +39,12 @@
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }} </td>
                                     <td>{{ $type->discount }} %</td>
-                                    <td>
-                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$type->id}}, 'actdive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
-                                    </td>
+                                  <td>
+                                    <!--   leave here  -->
+                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->status) && $type->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$type->id}}, 'actdeac');"><i class="fa {{ (!empty($type->status) && $type->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->status) && $type->status == 1) ? "De-Activate" : "Activate"}}</button>
+                                 </td>
                                 </tr>
                                    @endforeach
                                @else
@@ -83,11 +84,8 @@
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
-        function postData(id , data ){
-            if (data == 'actdive') location.href = "/hr/addqul/" + id;
-            // else if (data == 'doc') location.href = "/hr/adddoc/" + id;
-            // else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
-            // else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
+       function postData(id , data ){   
+            if(data == 'actdeac') location.href = "/Product/productPack_act/" + id; 
         }
 
         $(function () {

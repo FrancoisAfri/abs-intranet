@@ -181,6 +181,49 @@
                                 </div>
                             </div>
                         </div>
+                           <div class="form-group {{ $errors->has('status') ? ' has-error' : '' }}">
+                            <label for="status" class="col-sm-2 control-label">Status</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-pinterest-p"></i>
+                                    </div>
+                                    <select  name="status" class="form-control">
+                                        <option value="">*** Select Your Priority ***</option>
+                                        <option value="1" >Start</option>
+                                        <option value="2" >Progress</option>
+                                        <option value="3" >Assign</option>
+                                    </select >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('estimated_spent') ? ' has-error' : '' }}">
+                            <label for="estimated_spent" class="col-sm-2 control-label">Estimated Expenditure</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-credit-card-alt"></i>
+                                    </div>
+                                    <input type="number" class="form-control" id="estimated_spent" name="estimated_spent" value="{{ !empty($company->estimated_spent) ? $company->estimated_spent : '' }}" placeholder="Estimated Expenditure">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('domain_name') ? ' has-error' : '' }}">
+                            <label for="domain_name" class="col-sm-2 control-label">Domain name </label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                       <i class="fa fa-internet-explorer"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="domain_name" name="domain_name" value="{{ !empty($company->domain_name) ? $company->domain_name : '' }}" placeholder="Domain name">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('bee_certificate_doc') ? ' has-error' : '' }}">
                             <label for="bee_certificate_doc" class="col-sm-2 control-label">BEE Certificate</label>
 
@@ -205,6 +248,8 @@
                                 </div>
                             </div>
                         </div>
+                         <hr>
+                       
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

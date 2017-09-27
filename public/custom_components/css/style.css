@@ -107,7 +107,7 @@ Align the
     -moz-box-sizing: border-box; 
     box-sizing: border-box;
 }
-}
+
 /**/
 *,
 *:before,
@@ -196,3 +196,27 @@ body {
   font-size: 1.25em;
   margin: .25em auto;
 } 
+
+/**/
+button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd; 
+}
+
+div.panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+}

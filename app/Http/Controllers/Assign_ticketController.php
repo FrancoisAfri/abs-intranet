@@ -35,18 +35,11 @@ class Assign_ticketController extends Controller
 
      	$ID = $ticket->id;
      	//return $ID;
-      
      	$helpdeskId = $ticket->helpdesk_id;
 
-      #
-     
-      #
-     	return $helpdeskId;
-
-  //    	$helpdeskTickets = ticket::orderBy('id', 'asc')->get();
-		// if (!empty($helpdeskTickets)) $helpdeskTickets->load('hrPeople');
-
-
+      $tickets = $ticket->where('helpdesk_id', $ID)
+                ->orderBy('id', 'asc')
+                ->get();
 
           $names = DB::table('help_desk')
                   ->select('name' ) 
@@ -54,13 +47,6 @@ class Assign_ticketController extends Controller
                         ->get();
           $Names = $names->first()->name;
 
-
-    
-     	  $tickets = DB::table('ticket')
-                ->where('helpdesk_id', $ID)
-                ->orderBy('id', 'asc')
-                ->get();
-            // return $tickets;
  		  $operators = DB::table('operator')
 				        ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
 				        ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
@@ -69,7 +55,7 @@ class Assign_ticketController extends Controller
 				        ->get();
 
           		$data['ID'] = $ID;
-          		$data['Names'] = $Names;		      // return $operators;
+          		$data['Names'] = $Names;		      
           		$data['operators'] = $operators;		        
            		$data['tickets'] = $tickets; 
               $data['active_mod'] = 'Help Desk';
@@ -98,6 +84,7 @@ class Assign_ticketController extends Controller
     	
     	 $helpdeskId = $operatorID->helpdesk_id;
     	 $ticketID = $operatorID->id;
+       $userID = $operatorID->user_id;
     	 $currentDate = $currentDate = time();
         $docData = $request->all();
         unset($docData['_token']);
@@ -109,17 +96,15 @@ class Assign_ticketController extends Controller
         $operatorID->update();
 
         #send email to operator
-        $operators = HRPerson::where('id', $operator)->first();
+        $operators = HRPerson::where('user_id', 2)->first();
+     //return $operators;
         Mail::to($operators->email)->send(new assignOperatorEmail($operators));
 
         #assign Operator to Task
-     //    TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,
-					// ,0,0,0,0,0,0,0,$helpdeskId,$ticketID);
 
-        TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,0
-	,0,0,0,0,0,0,0,0,0,0 ,$helpdeskId,$ticketID);
+       //  TaskManagementController::store($AssignOperator,$currentDate,$currentDate,0,$operator,$operators
+      	// ,0,0,0,0,0,0,0,0,0,0 ,$helpdeskId,$ticketID);
 
-        
         AuditReportsController::store('Assign operators', 'Assigned Operator to a atask', "Actioned By User", 0);
         return response()->json();
 

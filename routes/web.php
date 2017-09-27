@@ -28,7 +28,7 @@ Auth::routes();
 
 //Users related requests
 Route::get('users', 'UsersController@index');
-Route::get('users/modules', 'UsersController@viewModules');
+//Route::get('users/modules', 'UsersController@viewModules');
 Route::get('users/create', 'UsersController@create');
 Route::get('users/{user}/edit', 'UsersController@edit');
 Route::get('users/profile', 'UsersController@profile');
@@ -59,6 +59,7 @@ Route::post('users/update-users-access', 'SecurityController@updateRights');
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
 Route::get('contacts/add-to-company/{companyID}', 'ContactsController@create');
+Route::get('contacts/Clients-reports', 'ContactsController@reports');
 Route::post('contacts/email', 'ContactsController@emailAdmin');
 Route::get('contacts/{person}/edit', 'ContactsController@edit');
 Route::get('contacts/{person}/activate', 'ContactsController@activateContact');
@@ -167,9 +168,20 @@ Route::post('contacts/company/{company}/reject', 'ContactCompaniesController@rej
 Route::post('contacts/company/{company}/approve', 'ContactCompaniesController@approve');
 Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@editCompany');
 Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@actCompany');
+Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
 Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
+Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
+##reports
+Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
+Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
+
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
+
+
+
+
+
 //AGM
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');
@@ -180,7 +192,7 @@ Route::post('hr/user_active', 'Hr_Admin@activeEmployee');
 Route::get('hr/active_user', 'Hr_Admin@cards');
 
 
-Route::get('hr/job_title', 'Product_categoryController@index');
+//Route::get('hr/job_title', 'Product_categoryController@index');
 Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
 Route::patch('hr/category_edit/{jobCategory}', 'EmployeeJobTitleController@editCategory');
 Route::get('hr/jobtitles/{jobCategory}', 'EmployeeJobTitleController@jobView');
@@ -201,9 +213,10 @@ Route::post('Product/categories', 'Product_categoryController@categorySave');
 Route::post('/Product/Product/add/{products}', 'Product_categoryController@addProductType');
 Route::patch('Product/product_edit/{product}', 'Product_categoryController@editProduct');
 Route::patch('Product/category_edit/{Category}', 'Product_categoryController@editCategory');
-//>>>status
-Route::get('/Product/category/{cat}', 'Product_categoryController@CategoryAct');
-
+Route::get('/Product/category/{Category}', 'Product_categoryController@CategoryAct');
+Route::get('/Product/product_act/{Category}', 'Product_categoryController@ProdAct');
+Route::get('/Product/productPack_act/{product}', 'Product_categoryController@ProdPackAct');
+Route::get('/Product/productpackagesAct/{product}', 'Product_categoryController@productpackagesAct');
 
 
 #
@@ -216,6 +229,7 @@ Route::patch('Product/packages_edit/{package}', 'Product_categoryController@edit
 //----Promotions ---
 Route::get('product/Promotions', 'Product_categoryController@view_promotions');
 Route::post('Product/promotions/add', 'Product_categoryController@promotionSave');
+Route::get('product/promotion/end/{promotion}', 'Product_categoryController@endPromotion');
 
 #----price -----
  Route::get('product/price', 'Product_categoryController@index');
@@ -231,8 +245,6 @@ Route::post('product/category/Search', 'Product_categoryController@categorySearc
 Route::post('product/package/Search', 'Product_categoryController@packageSearch');
 Route::post('product/promotion/Search', 'Product_categoryController@promotionSearch');
 
-#
-
 #Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
 Route::post('help_desk/system/add', 'HelpdeskController@systemAdd');
@@ -240,6 +252,11 @@ Route::patch('help_desk/system/adit/{service}', 'HelpdeskController@editService'
 Route::get('help_desk/service/{service}', 'HelpdeskController@view_service');
 //--------------------#---------
 Route::get('helpdesk/view_ticket', 'HelpdeskController@viewTicket');
+Route::get('/helpdesk/helpdeskAct/{desk}', 'HelpdeskController@helpdeskAct');
+//
+Route::get('/helpdesk/operatorAct/{desk}', 'HelpdeskController@operatorAct');
+Route::get('/helpdesk/help_deskAdmin/{desk}', 'HelpdeskController@help_deskAdmin');
+
 
 #search
 Route::get('helpdesk/search', 'HelpdeskController@searhTickets');
@@ -254,6 +271,7 @@ Route::get('helpdesk/ticket', 'HelpdeskController@createTicket');
 Route::post('help_desk/operator/add/{serviceID}', 'HelpdeskController@Addoperator');
 Route::post('help_desk/admin/add/{adminID}', 'HelpdeskController@addAdmin');
 Route::post('help_desk/ticket/add', 'HelpdeskController@addTicket');
+Route::post('help_desk/ticket/client', 'HelpdeskController@clientlTicket');
 
 
 //   ----------------- Help Desk Settings ------------------   //
@@ -426,6 +444,8 @@ Route::get('/induction/reports', 'InductionAdminController@reports');
 Route::post('/induction/reports', 'InductionAdminController@getReport');
 Route::post('/induction_tasks/print', 'InductionAdminController@printreport');
 Route::get('/cron/induction', 'InductionCronController@execute');
+Route::get('induction/tasks_library/{task}/delete', 'InductionAdminController@deleteTask');
+
 // Minutes Meeting
 Route::get('/meeting_minutes/recurring', 'RecurringMeetingsController@index');
 Route::get('/meeting_minutes/recurring/{recurring}/view', 'RecurringMeetingsController@show');
@@ -506,8 +526,28 @@ Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController
 Route::get('quote/create', 'QuotesController@createIndex');
 Route::post('quote/adjust', 'QuotesController@adjustQuote');
 Route::post('quote/save', 'QuotesController@saveQuote');
+Route::post('quote/update/{quote}', 'QuotesController@updateQuote');
 Route::get('quote/view/{quotation}', 'QuotesController@viewQuote');
 Route::get('quote/search', 'QuotesController@searchQuote');
+Route::get('quote/view/{quotation}/pdf', 'QuotesController@viewPDFQuote');
+Route::get('quote/approve_quote/{quote}', 'QuotesController@approveQuote');
+Route::post('quote/client-approve/{quote}', 'QuotesController@clientApproveQuote');
+Route::get('quote/decline_quote/{quote}', 'QuotesController@declineQuote');
+Route::get('quote/modify_quote/{quote}', 'QuotesController@updateQuoteIndex');
+Route::post('quote/adjust_modification/{quote}', 'QuotesController@adjustQuoteModification');
+Route::post('quote/search', 'QuotesController@searchResults');
+Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
+Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
+Route::post('newquote/save', 'QuotesController@newQuote');
+
+
+//CRM
+Route::get('crm/account/{account}', 'CRMAccountController@viewAccount');
+Route::get('crm/account/quote/{quote}', 'CRMAccountController@viewAccountFromQuote');
+Route::get('crm/setup', 'CRMSetupController@index');
+Route::get('crm/invoice/view/{quotation}/pdf', 'CRMInvoiceController@viewPDFInvoice');
+Route::get('crm/invoice/mail/{quotation}', 'CRMInvoiceController@emailInvoice');
+Route::post('crm/capture-payment/{quotation}/{invoice}', 'CRMAccountController@capturePayment');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

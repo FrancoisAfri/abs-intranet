@@ -48,6 +48,53 @@
                         </div>
                     </div>
 
+                    <hr class="hr-text" data-content="CONTACT DETAILS" style="margin-top: 0;">
+
+                    <div class="form-group{{ $errors->has('phys_address') ? ' has-error' : '' }}">
+                        <label for="{{ 'phys_address' }}" class="col-sm-2 control-label">Physical Address</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="phys_address" name="phys_address" placeholder="Physical Address"
+                                   value="{{ old('phys_address') }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group{{ $errors->has('phys_city') ? ' has-error' : '' }}">
+                        <label for="{{ 'phys_city' }}" class="col-sm-2 control-label">City</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="phys_city" name="phys_city" placeholder="City"
+                                   value="{{ old('phys_city') }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group{{ $errors->has('phys_postal_code') ? ' has-error' : '' }}">
+                        <label for="{{ 'phys_postal_code' }}" class="col-sm-2 control-label">Postal Code</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="phys_postal_code" name="phys_postal_code" placeholder="Postal Code"
+                                   value="{{ old('phys_postal_code') }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                        <label for="{{ 'phone_number' }}" class="col-sm-2 control-label">Phone Number</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number"
+                                   value="{{ old('phone_number') }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <label for="{{ 'email' }}" class="col-sm-2 control-label">Email</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="email" name="email" placeholder="Email"
+                                   value="{{ old('email') }}">
+                        </div>
+                    </div>
+
                     <hr class="hr-text" data-content="BANKING DETAILS">
 
                     <div class="form-group{{ $errors->has('bank_name') ? ' has-error' : '' }}">
@@ -88,7 +135,7 @@
                     <hr class="hr-text" data-content="QUOTE SETTINGS">
 
                     <div class="form-group{{ $errors->has('validity_period') ? ' has-error' : '' }}">
-                        <label for="{{ 'validity_period' }}" class="col-sm-2 control-label">Validity Period</label>
+                        <label for="{{ 'validity_period' }}" class="col-sm-2 control-label">Quote Validity Period</label>
 
                         <div class="col-sm-10">
                             <select id="validity_period" name="validity_period" class="form-control select2" style="width: 100%;">

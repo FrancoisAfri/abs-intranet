@@ -282,6 +282,41 @@
                                 </div>
                             </div>
                         </div>
+                          <!--  <div class="form-group">
+                            <label for="ethnicity" class="col-sm-2 control-label">Office Created</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-bar-chart"></i>
+                                    </div>
+                                    <select name="ethnicity" class="form-control select2">
+                                        <option value="">*** Select office client belongs too ***</option>
+                                        @foreach($ethnicities as $ethnicity)
+                                            <option value="{{ $ethnicity->id }}" {{ ($contactPerson->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div> -->
+                                         <hr  class="hr-text" align="right" data-content="SELECT Office Details">
+
+                          @foreach($division_levels as $division_level)
+                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                              @endforeach
+
                         <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
@@ -381,6 +416,8 @@
     <!-- optionally if you need translation for your language then include locale file as mentioned below -->
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>
     <!-- End Bootstrap File input -->
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
         $(function () {
@@ -560,5 +597,28 @@
 			if (data == 'access')
 				location.href = "/users/module_access/" + id;
 		}
+
+        //       //Load divisions drop down
+        var parentDDID = '';
+            var loadAllDivs = 1;
+            @if (isset($view_by_admin) && $view_by_admin === 1)
+                @foreach($division_levels as $division_level)
+                    //Populate drop down on page load
+                    var ddID = '{{ 'division_level_' . $division_level->level }}';
+                    var postTo = '{!! route('divisionsdropdown') !!}';
+                    var selectedOption = '';
+                    var divLevel = parseInt('{{ $division_level->level }}');
+                    if (divLevel == 5) selectedOption = '{{ $contactPerson->division_level_5 }}';
+                    else if(divLevel == 4) selectedOption = '{{ $contactPerson->division_level_4 }}';
+                    else if(divLevel == 3) selectedOption = '{{ $contactPerson->division_level_3 }}';
+                    else if(divLevel == 2) selectedOption = '{{ $contactPerson->division_level_2 }}';
+                    else if(divLevel == 1) selectedOption = '{{ $contactPerson->division_level_1 }}';
+                    var incInactive = -1;
+                    var loadAll = loadAllDivs;
+                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+                    parentDDID = ddID;
+                    loadAllDivs = -1;
+                @endforeach
+            @endif
     </script>
 @endsection

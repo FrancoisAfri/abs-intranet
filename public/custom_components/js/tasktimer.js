@@ -6,6 +6,8 @@ function startPause(taskID) {
         //running = 1;
         //call function to fetch the duration from the database and increment the timer
         getTaskDurationAndIncrement(taskID);
+        //Show the end task button
+        $("button[data-task_id='"+taskID+"']").removeClass('hidden');
         //increment();
         //document.getElementById("startPause").innerHTML = "<i class='fa fa-pause'></i> Pause";
     } else {
@@ -28,7 +30,7 @@ function increment(taskID) {
     if (running[taskID] == 1) {
         setTimeout(function() {
             time[taskID]++;
-            var hours = Math.floor(time[taskID] / 10 / 60 / 60) % 24;
+            var hours = Math.floor(time[taskID] / 10 / 60 / 60) % 60;
             var mins = Math.floor(time[taskID] / 10 / 60) % 60;
             var secs = Math.floor(time[taskID] / 10) % 60;
             var tenths = time[taskID] % 10;

@@ -10,6 +10,8 @@ use App\Mail\CompanyELMApproval;
 use App\Mail\RejectedCompany;
 use App\Province;
 use App\User;
+Use App\contacts_note;
+use App\ContactPerson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -191,6 +193,102 @@ class ContactCompaniesController extends Controller
         return view('contacts.view_company')->with($data);
     }
 
+    /******
+
+    */
+     ###
+    public function notes(ContactCompany $company)
+    {
+        $companyID = $company->id;
+        $persons = HRPerson::where('id', $companyID)->get(); 
+      
+        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
+                $query->orderBy('name', 'asc');
+            }]);
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+       
+        $contactPeople = ContactPerson::where('company_id', $companyID )->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();  
+
+
+        $notes = contacts_note::orderBy('id', 'asc')->get();
+
+        //
+         $contactnotes = DB::table('contacts_notes')
+                ->select('contacts_notes.*','contacts_contacts.gender as gender', 'contacts_contacts.profile_pic as profile_pic')
+                ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->orderBy('contacts_notes.id')
+                ->get();
+                //return $contactnotes;
+         
+         $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');
+         $communicationmethod = array(1 => 'Telephone', 2 => 'Meeting/Interview', 3 => 'Email', 4 => 'Fax' , 4 => 'SMS' );
+         
+      
+        $company->load('employees.company');
+        $data['notesStatus'] = $notesStatus;
+        $data['communicationmethod'] = $communicationmethod;
+        $data['page_title'] = "Notes";
+        $data['page_description'] = "Notes ";
+        $data['persons'] = $persons;
+        $data['contactnotes'] = $contactnotes;
+        $data['companies'] = $companies;
+        $data['contactPeople'] =$contactPeople;
+
+        $data['employees'] = $employees;
+        $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+        $data['status_values'] = [0 => 'Inactive', 1 => 'Active'];
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'View Notes', 'active' => 1, 'is_module' => 0]
+        ];
+       // $data['positions'] = $aPositions;
+        $data['company'] = $company;
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Search Company';
+       AuditReportsController::store('Notes', 'Notes Updated', " Updated By User", 0);
+        return view('contacts.notes')->with($data);
+
+    }
+
+    ####
+     public function addnote(Request $request) {
+        $this->validate($request, [
+            // 'hr_id' => 'required',
+            // 'number_of_days' => 'required',
+        ]);
+
+        $noteData = $request->all();
+        unset($noteData['_token']);
+
+        $date = str_replace('/', '-', $noteData['date']);
+        $date = strtotime($date);
+
+        $time = str_replace('/', '-', $noteData['time']);
+        $time = strtotime($time);
+
+        $follow_date = str_replace('/', '-', $noteData['follow_date']);
+        $follow_date = strtotime($follow_date);
+
+        $contactsnote = new contacts_note();
+        $contactsnote->originator_type = $noteData['originator_type'];
+        $contactsnote->company_id = $noteData['company_id']; 
+        $contactsnote->hr_person_id = $noteData['hr_person_id'];
+        $contactsnote->employee_id = $noteData['employee_id'];
+        $contactsnote->date =  $date;
+        $contactsnote->time =  $time;
+        $contactsnote->communication_method = $noteData['communication_method'];
+        $contactsnote->rensponse = $noteData['rensponse_type'];
+        $contactsnote->notes = $noteData['notes'];
+        $contactsnote->next_action = $noteData['next_action'];
+        $contactsnote->follow_date = $follow_date;
+        $contactsnote->save();
+
+
+        //AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
+        return response()->json();
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -240,7 +338,7 @@ class ContactCompaniesController extends Controller
             'phys_postal_code' => 'integer',
         ]);
         $formData = $request->all();
-
+         // return  $formData ;
         //Exclude empty fields from query
         foreach ($formData as $key => $value)
         {
@@ -249,7 +347,10 @@ class ContactCompaniesController extends Controller
             }
         }
 
+        // return $formData;
         //Update company data
+        // $company->estimated_spent = $formData['estimated_spent'];
+        // $company->domain_name = $formData['domain_name'];
         $company->update($formData);
 
         //Upload BEE document
@@ -563,8 +664,9 @@ class ContactCompaniesController extends Controller
                 'bee_score' => 'numeric',
                 'email' => 'email',
             ]);
-            $companyData = $request->all();
 
+            $companyData = $request->all();
+           
             //Exclude empty fields from query
             foreach ($companyData as $key => $value)
             {
@@ -576,6 +678,11 @@ class ContactCompaniesController extends Controller
             //convert numeric values to numbers
             if (isset($companyData['bee_score'])) {
                 $companyData['bee_score'] = (double) $companyData['bee_score'];
+            }
+
+            //convert numeric values to numbers
+            if (isset($companyData['estimated_spent'])) {
+                $companyData['estimated_spent'] = (double) $companyData['estimated_spent'];
             }
 
             //Update company data
@@ -639,8 +746,143 @@ class ContactCompaniesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function contactnote(Request $request){
+        $this->validate($request, [
+            // 'name' => 'required',
+        ]);
+
+        $notedata = $request->all();
+        unset($notedata['_token']);
+
+       
+
+        $userID = $notedata['hr_person_id'];
+        $companyID = $notedata['company_id'];
+        $personID = $notedata['contact_person_id'];
+       
+        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');       
+        $notes = DB::table('contacts_notes')
+                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
+                ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->leftJoin('contact_companies', 'contacts_notes.company_id', '=' , 'contact_companies.id' )
+                
+                ->where(function ($query) use ($userID) {
+                    if (!empty($userID)) {
+                        $query->where('contacts_notes.employee_id', $userID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('contacts_notes.company_id', $companyID);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('contacts_notes.hr_person_id', $personID);
+                    }
+                })
+                ->orderBy('contacts_notes.id')
+                ->get();
+
+                
+                 $companyname = $notes->first()->companyname;
+                //return $negsickDays;
+             
+
+             //  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
+               
+
+
+        //$data['companies'] = $companies;
+        $data['userID'] = $userID;
+        $data['notesStatus'] = $notesStatus;
+        $data['companyID'] = $companyID;
+        $data['personID'] = $personID;
+        $data['notes'] = $notes;
+        $data['companyname'] = $companyname;
+        $data['page_title'] = "Notes  Report";
+        $data['page_description'] = "Notes Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Contacts Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Report';
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.contacts_note_report_result')->with($data);
+
+
     }
+
+     public function meetings(Request $request){
+        $this->validate($request, [
+            // // 'name' => 'required',
+            // 'date_from' => 'date_format:"d F Y"',
+            //'action_date' => 'required',
+        ]);
+
+        $meetingdata = $request->all();
+        unset($meetingdata['_token']);
+
+        $companyID = $meetingdata['company_id'];
+        $personID = $meetingdata['contact_person_id']; 
+        $datefrom = $meetingdata['date_from'];
+        $dateto = $meetingdata['date_to'];
+
+       
+        $Datefrom = str_replace('/', '-', $meetingdata['date_from']);
+        $Datefrom = strtotime($meetingdata['date_from']);
+
+        $Dateto = str_replace('/', '-', $meetingdata['date_to']);
+        $Dateto = strtotime($meetingdata['date_to']);
+        
+        ##
+        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
+
+        $meetingminutes = DB::table('meeting_minutes')
+                ->select('meeting_minutes.*', 'meetings_minutes.minutes as meeting_minutes','contact_companies.name as companyname' )
+                ->leftJoin('meetings_minutes', 'meeting_minutes.id', '=', 'meetings_minutes.meeting_id')
+                ->leftJoin('contact_companies', 'meeting_minutes.company_id', '=' , 'contact_companies.id' )
+                
+                ->where(function ($query) use ($Datefrom, $Dateto) {
+                    if ($Datefrom > 0 && $Dateto > 0) {
+                        $query->whereBetween('meeting_minutes.meeting_date', [$Datefrom, $Dateto]);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('meetings_minutes.client_id', $personID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('meeting_minutes.company_id', $companyID);
+                    }
+                })
+               // ->orderBy('contacts_notes.id')
+                ->get();
+
+                 $companyname = $meetingminutes->first()->companyname;
+                 // return $meetingminutes;
+
+        $data['notesStatus'] = $notesStatus;
+        $data['companyID'] = $companyID;
+        $data['companyname'] = $companyname;
+        $data['personID'] = $personID;
+        $data['Datefrom'] = $Datefrom;
+        $data['Dateto'] = $Dateto;
+        $data['meetingminutes'] = $meetingminutes;
+        $data['page_title'] = "Notes  Report";
+        $data['page_description'] = "Notes Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Contacts Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Report';
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.meeting_minutes_report_result')->with($data);
+    }
+
+   
 }

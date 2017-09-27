@@ -13,7 +13,7 @@ class AddUserIdToQuotesApprovalHistoryTable extends Migration
      */
     public function up()
     {
-         Schema::table('quote_approval_history', function (Blueprint $table) {
+        Schema::table('quote_approval_history', function (Blueprint $table) {
             $table->integer('user_id')->nullable();
         });
     }

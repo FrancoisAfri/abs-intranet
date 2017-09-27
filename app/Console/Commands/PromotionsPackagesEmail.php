@@ -11,14 +11,14 @@ class PromotionsPackagesEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
-
+    protected $signature = 'promemails:sent';
+    protected $signature = 'emptask:overdue';
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'This command will send emails to clents if they is a running promotion';
 
     /**
      * Create a new command instance.
@@ -38,5 +38,7 @@ class PromotionsPackagesEmail extends Command
     public function handle()
     {
         //
+         app('App\Http\Controllers\promotionpackageCronController')->execute();
+        // \Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
     }
 }

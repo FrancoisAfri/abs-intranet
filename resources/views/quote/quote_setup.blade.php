@@ -43,6 +43,11 @@
                                                     data-division_id="{{ $quoteProfile->division_id }}"
                                                     data-registration_number="{{ $quoteProfile->registration_number }}"
                                                     data-vat_number="{{ $quoteProfile->vat_number }}"
+                                                    data-phys_address="{{ $quoteProfile->phys_address }}"
+                                                    data-phys_city="{{ $quoteProfile->phys_city }}"
+                                                    data-phone_number="{{ $quoteProfile->phone_number }}"
+                                                    data-email="{{ $quoteProfile->email }}"
+                                                    data-phys_postal_code="{{ $quoteProfile->phys_postal_code }}"
                                                     data-bank_name="{{ $quoteProfile->bank_name }}"
                                                     data-bank_branch_code="{{ $quoteProfile->bank_branch_code }}"
                                                     data-bank_account_name="{{ $quoteProfile->bank_account_name }}"
@@ -101,6 +106,8 @@
                     <div class="box-body">
                         <textarea id="send_quote_message" name="template_content" rows="10" cols="80">{{ ($sendQuoteTemplate) ? $sendQuoteTemplate->template_content : '' }}</textarea>
                         <input type="hidden" name="template_key" value="send_quote">
+                        <br>
+                        <p style="margin-bottom: 0;">Placeholders: [client name]</p>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -126,6 +133,8 @@
                     <div class="box-body">
                         <textarea id="approved_quote_message" name="template_content" rows="10" cols="80">{{ ($approvedQuoteTemplate) ? $approvedQuoteTemplate->template_content : '' }}</textarea>
                         <input type="hidden" name="template_key" value="approved_quote">
+						<br>
+                        <p style="margin-bottom: 0;">Placeholders: [client name]</p>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -231,6 +240,11 @@
                 var divID = btnEdit.data('division_id');
                 var regNumber = btnEdit.data('registration_number');
                 var vatNumber = btnEdit.data('vat_number');
+                var physAddress = btnEdit.data('phys_address');
+                var city = btnEdit.data('phys_city');
+                var postalCode = btnEdit.data('phys_postal_code');
+                var phoneNumber = btnEdit.data('phone_number');
+                var emailAddress = btnEdit.data('email');
                 var bankName = btnEdit.data('bank_name');
                 var branchCode = btnEdit.data('bank_branch_code');
                 var accName = btnEdit.data('bank_account_name');
@@ -242,6 +256,11 @@
                 modal.find('#division_id').val(divID).trigger('change');
                 modal.find('#registration_number').val(regNumber);
                 modal.find('#vat_number').val(vatNumber);
+                modal.find('#phys_address').val(physAddress);
+                modal.find('#phys_city').val(city);
+                modal.find('#phys_postal_code').val(postalCode);
+                modal.find('#phone_number').val(phoneNumber);
+                modal.find('#email').val(emailAddress);
                 modal.find('#bank_name').val(bankName);
                 modal.find('#bank_branch_code').val(branchCode);
                 modal.find('#bank_account_name').val(accName);

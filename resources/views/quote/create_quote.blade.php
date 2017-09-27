@@ -1,8 +1,12 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 @endsection
 
 @section('content')
@@ -72,7 +76,7 @@
                         <hr class="hr-text" data-content="SELECT PRODUCTS">
 
                         <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Products</label>
+                            <label for="product_id" class="col-sm-2 control-label">Products</label>
 
                             <div class="col-sm-10">
                                 <select id="product_id" name="product_id[]" class="form-control select2" style="width: 100%;" multiple>
@@ -87,7 +91,7 @@
                         <hr class="hr-text" data-content="OR SELECT PACKAGES">
 
                         <div class="form-group{{ $errors->has('package_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'package_id' }}" class="col-sm-2 control-label">Package</label>
+                            <label for="package_id" class="col-sm-2 control-label">Package</label>
 
                             <div class="col-sm-10">
                                 <select id="package_id" name="package_id[]" class="form-control select2" style="width: 100%;" multiple>
@@ -98,6 +102,36 @@
                                 </select>
                             </div>
                         </div>
+
+                        <hr class="hr-text" data-content="SELECT TERMS AND CONDITIONS">
+
+                        <table id="terms-conditions-table" class="table table-bordered table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th width="5px" class="col-xs-2"></th>
+                                <th class="col-xs-10">Terms And Conditions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($termsAndConditions as $condition)
+                                <tr>
+                                    <td class="col-xs-2">
+                                        <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
+                                            <input class="rdo-iCheck" type="checkbox" id="" name="tc_id[]" value="{{ $condition->id }}">
+                                        </label>
+                                    </td>
+                                    <td class="col-xs-10">{!! $condition->term_name !!}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>Terms And Conditions</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -116,8 +150,13 @@
 @endsection
 
 @section('page_script')
+    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- DataTables -->
+    <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
@@ -129,6 +168,23 @@
 
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
+
+            //Initialize the data table
+            $('#terms-conditions-table').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": false,
+                "autoWidth": true
+            });
+
+            //Initialize iCheck/iRadio Elements
+            $('.rdo-iCheck').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
 
             //Vertically center modals on page
             function reposition() {

@@ -22,8 +22,8 @@ class CreateProductPromotionsTable extends Migration
             $table->double('discount')->nullable();
             $table->double('price')->nullable();
             $table->smallInteger('status')->nullable();
-            $table->integer('product_product_id')->nullable();
-            $table->integer('product_packages_id')->nullable();
+            $table->integer('product_product_id')->unsigned()->index()->nullable();
+            $table->integer('product_packages_id')->unsigned()->index()->nullable();
             $table->integer('category_id')->nullable();
             $table->timestamps();
         });

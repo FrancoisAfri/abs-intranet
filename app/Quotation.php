@@ -12,24 +12,54 @@ class Quotation extends Model
     // Mass assignable fields
     protected $fillable = [
         'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id', 'approval_person_id', 'status',
-        'send_date', 'approval_date', 'discount_percent', 'add_vat'
+        'send_date', 'approval_date', 'discount_percent', 'add_vat', 'payment_option', 'payment_term', 'first_payment_date', 'account_id', 'quote_number'
     ];
 
     //quotation status
     protected $quoteStatuses = [
         1 => 'Awaiting Manager Approval',
         2 => 'Awaiting Client Approval',
-        3 => 'Declined by Manager',
-        4 => 'Accepted by Client',
-        5 => 'Declined by Client',
-        6 => 'Cancelled',
-        7 => 'Authorised'
+        3 => 'Approved by Manager',
+        -3 => 'Declined by Manager',
+        4 => 'Approved by Client',
+        -4 => 'Declined by Client',
+        -1 => 'Cancelled',
+        5 => 'Authorised (Client Waiting Invoice)',
+        6 => 'Invoice Sent',
+        7 => 'Partially Paid',
+        8 => 'Paid'
     ];
+
+    //Payment opyions
+    protected $paymentOptions = [
+        1 => 'Once-Off',
+        2 => 'Recurring'
+    ];
+
+    /**
+     * Relationship between Quotation and Contact Company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function company()
+    {
+        return $this->belongsTo(ContactCompany::class, 'company_id');
+    }
+
+    /**
+     * Relationship between Quotation and Contact Person (contacts_contacts)
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function client()
+    {
+        return $this->belongsTo(ContactPerson::class, 'client_id');
+    }
 
     /**
      * Relationship between Quotations and Products
      *
-     * @return
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function products()
     {
@@ -39,7 +69,7 @@ class Quotation extends Model
     /**
      * Relationship between Quotations and Packages
      *
-     * @return
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function packages()
     {
@@ -47,23 +77,45 @@ class Quotation extends Model
     }
 
     /**
+     * Relationship between Quotations and Terms and Conditions
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function termsAndConditions()
+    {
+        return $this->belongsToMany('App\QuotesTermAndConditions', 'quotation_terms_and_conditions', 'quotation_id', 'term_condition_id')->withTimestamps();
+    }
+
+    /**
      * Relationship between Quotation and HRPerson
      *
-     * @return
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function person()
     {
         return $this->belongsTo(HRPerson::class, 'hr_person_id');
     }
-	public function company()
+
+    /**
+     * Relationship between Quotation and CRMAccount
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function account()
     {
-        return $this->belongsTo(ContactCompany::class, 'company_id');
+        return $this->belongsTo(CRMAccount::class, 'account_id');
+    }
+
+    /**
+     * Relationship between Quotation and CRMInvoice
+     *
+     * @return  \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoices()
+    {
+        return $this->hasMany(CRMInvoice::class, 'quotation_id');
     }
 	
-	public function client()
-    {
-        return $this->belongsTo(ContactPerson::class, 'client_id');
-    }
 	public function divisionName()
     {
         return $this->belongsTo(DivisionLevelFive::class, 'division_id');
@@ -81,5 +133,14 @@ class Quotation extends Model
      */
 	public function getQuoteStatusAttribute() {
         return (!empty($this->status)) ? $this->quoteStatuses[$this->status] : null;
+    }
+
+    /**
+     * Quote payment option string accessor
+     *
+     * @return String
+     */
+	public function getStrPaymentOptionAttribute() {
+        return (!empty($this->payment_option)) ? $this->paymentOptions[$this->payment_option] : null;
     }
 }

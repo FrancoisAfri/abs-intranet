@@ -16,9 +16,13 @@ class MeetingAttendees extends Model
 	//Relationship categories and Kpas
     public function meetings() {
         return $this->belongsTo(MeetingMinutes::class, 'meeting_id');
-    }	
-	//Relationship categories and Kpas
+    }   
+    //Relationship categories and Kpas
     public function attendeesInfo() {
-		return $this->belongsTo(HRPerson::class, 'employee_id');
+        return $this->belongsTo(HRPerson::class, 'employee_id');
+    }	
+	//Relationship MeetingAttendee and 
+    public function client() {
+		return $this->belongsTo(ContactPerson::class, 'client_id');
     }
 }

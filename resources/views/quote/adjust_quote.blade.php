@@ -16,6 +16,11 @@
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
                     <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">
+                    @if($tcIDs && count($tcIDs) > 0)
+                        @foreach($tcIDs as $tcID)
+                            <input type="hidden" name="tc_id[]" value="{{ $tcID }}">
+                        @endforeach
+                    @endif
                     <div class="box-header with-border">
                         <h3 class="box-title">New Quote</h3>
                     </div>
@@ -50,9 +55,19 @@
                                             </th>
                                         </tr>
                                     @endif
-                                    <tr>
+                                    <tr class="{{ ($product->promotions->first()) ? 'warning' : '' }}"
+                                        @if($promotion = $product->promotions->first())
+                                        data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
+                                        date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
+                                        @endif>
+
                                         <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                        <td style="vertical-align: middle;">{{ $product->name }}</td>
+                                        <td style="vertical-align: middle;">
+                                            {{ $product->name }}
+                                            @if($product->promotions->first())
+                                                &nbsp;<i class="fa fa-info-circle"></i>
+                                            @endif
+                                        </td>
                                         <td style="vertical-align: middle; width: 80px;">
                                             <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
                                                    value="1" data-price="{{ $product->current_price }}" onchange="subtotal()" required>
@@ -66,33 +81,43 @@
                                     <?php $prevCategory = $product->category_id; ?>
                                 @endforeach
                                 @foreach ($packages as $package)
-                                    <tr>
-                                        <td class="success" style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
-                                        <th class="success" style="vertical-align: middle;">
+                                    <tr class="{{ ($package->promotions->first()) ? 'warning' : 'success' }}"
+                                        @if($promotion = $package->promotions->first())
+                                        data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
+                                        date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
+                                        @endif>
+
+                                        <td style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
+                                        <th style="vertical-align: middle;">
                                             Package: {{ $package->name }}
+                                            @if($package->promotions->first())
+                                                &nbsp;<i class="fa fa-info-circle"></i>
+                                            @endif
                                         </th>
-                                        <td class="success" style="vertical-align: middle; width: 80px;">
+                                        <td style="vertical-align: middle; width: 80px;">
                                             <input type="number" class="form-control input-sm item-quantity" name="package_quantity[{{ $package->id }}]"
                                                    value="1" data-price="{{ $package->price }}"
                                                    onchange="subtotal()" required>
                                         </td>
-                                        <td class="success" style="vertical-align: middle; text-align: right;">
+                                        <td style="vertical-align: middle; text-align: right;">
                                             {{ ($package->price) ? 'R ' . number_format($package->price, 2) : '' }}
                                         </td>
                                     </tr>
                                     <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
-                                    @foreach($package->products_type as $product)
-                                        <tr>
-                                            <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                            <td style="vertical-align: middle;">{{ $product->name }}</td>
-                                            <td style="text-align: center; vertical-align: middle; width: 80px;">
-                                                &mdash;
-                                            </td>
-                                            <td style="vertical-align: middle; text-align: right;">
-                                                &mdash;
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                    @if($package->products_type && count($package->products_type) > 0)
+                                        @foreach($package->products_type as $product)
+                                            <tr class="{{ ($package->promotions->first()) ? 'warning' : '' }}">
+                                                <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
+                                                <td style="vertical-align: middle;">{{ $product->name }}</td>
+                                                <td style="text-align: center; vertical-align: middle; width: 80px;">
+                                                    &mdash;
+                                                </td>
+                                                <td style="vertical-align: middle; text-align: right;">
+                                                    &mdash;
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 @endforeach
                             </table>
 
@@ -145,7 +170,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Send Quote</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Submit Quote</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>

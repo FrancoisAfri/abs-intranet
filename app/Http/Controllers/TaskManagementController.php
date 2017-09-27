@@ -57,6 +57,7 @@ class TaskManagementController extends Controller
         return view('tasks.search')->with($data);
     }
 	// Add task
+
 	public function addTask()
     {
         $companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
@@ -208,10 +209,13 @@ class TaskManagementController extends Controller
 	public function addNewTask(Request $request) 
 	{
 		$this->validate($request, [
-            'employee_id' => 'bail|required|integer|min:1',       
+            'employee_id' => 'required',       
             'description' => 'required',     
         ]);
 		$AddData = $request->all();
+		 unset($AddData['_token']);
+		$employeeID = $AddData['employee_id'];
+
         //Exclude empty fields from query
         foreach ($AddData as $key => $value)
         {
@@ -228,17 +232,29 @@ class TaskManagementController extends Controller
             $AddData['due_date'] = str_replace('/', '-', $AddData['due_date']);
             $duedate = strtotime($AddData['due_date']);
         }
-		//return $AddData;
+        if (!empty($AddData['due_time'])) {
+            $AddData['due_time'] = str_replace('/', '-', $AddData['due_time']);
+            $duetime = strtotime($AddData['due_time']);
+        }
+
+
 		# Add Task 
-		$employeeID = $AddData['employee_id'];
+		  foreach ($employeeID as $empID) {
 		$companyID = !empty($AddData['company_id']) ? $AddData['company_id'] : 0;
 		$managerDuration = $AddData['manager_duration'];
-		$escalationPerson = HRPerson::where('id', $employeeID)->first();
+		$escalationPerson = HRPerson::where('id', $empID)->first();
 		$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;			
 		$description = $AddData['description'];
+		$escID = 3;
 		
-		TaskManagementController::store($description,$duedate,$startDate,$managerID,$employeeID,3
-					,0,0,0,0,0,0,0,0,$companyID, $managerDuration);
+		// TaskManagementController::store($description,$duedate,$startDate,$managerID,$empID,$escID
+		// 			,0,0,0,0,0,0,0,0,$companyID, $managerDuration,0,$duetime);
+
+		TaskManagementController::store($description,$duedate,$startDate,$managerID,$empID,$escID
+			,0,0,0,0,0,0,0,0,$companyID,$managerDuration , 0 , 0 ,$duetime);
+	
+	
+			}
 		AuditReportsController::store('Task Management', "Task Added", "Added By User", 0);
 		return Back();
     }
@@ -250,7 +266,7 @@ class TaskManagementController extends Controller
     */
     public static function store($description='',$duedate=0,$startDate=0,$escalationID=0,$employeeID=0,$taskType=0
 	,$orderNo=0,$libraryID=0,$priority=0,$uploadRequired=0,$meetingID=0,$inductionID=0,$administratorID=0
-	,$checkByID=0,$clientID=0,$managerDuration=0 , $helpDeskID = 0 , $ticketID = 0)
+	,$checkByID=0,$clientID=0,$managerDuration=0 , $helpDeskID = 0 , $ticketID = 0 ,$duetime = 0)
     {
 		$user = Auth::user();
 		$EmployeeTasks = new EmployeeTasks();
@@ -275,6 +291,7 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->client_id = $clientID;
 		$EmployeeTasks->manager_duration = $managerDuration;
 		$EmployeeTasks->helpdesk_id = $helpDeskID;
+		$EmployeeTasks->due_time = $duetime;
 		//Save task
         $EmployeeTasks->save();
 		if (empty($inductionID))

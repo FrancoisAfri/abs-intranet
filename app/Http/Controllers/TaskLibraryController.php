@@ -56,6 +56,7 @@ class TaskLibraryController extends Controller
         return view('induction.library_view')->with($data);
     }
 
+
     /**
      * Store a newly created resource in storage.
      *

@@ -17,6 +17,7 @@ use App\Http\Requests;
 use App\HRPerson;
 use App\SmS_Configuration;
 use App\User;
+use App\DivisionLevel;
 use App\Province;
 use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Mail;
@@ -49,6 +50,36 @@ class ContactsController extends Controller
 		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
         return view('contacts.search_contact')->with($data);
     }
+
+    public function reports(){
+
+        //$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+        $employees = HRPerson::where('status', 1)->get();
+       // return $employees;
+
+          $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+       
+
+
+        $data['page_title'] = "Induction";
+        $data['page_description'] = "Create New Induction";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Clients', 'path' => '/Clients/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Clients Clients-reports', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'contacts';
+        $data['active_rib'] = 'report';
+        $data['companies'] = $companies;
+        
+        $data['employees'] = $employees;
+        AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
+        return view('contacts.contacts_report_index')->with($data);
+
+    }
+
+
     public function create($companyID = null) {
 
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
@@ -196,6 +227,7 @@ class ContactsController extends Controller
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
         $canDeleteAndActivate = false;
         if ($loggedInUser->type == 1 || $loggedInUser->type == 3) $canDeleteAndActivate = true;
@@ -204,6 +236,7 @@ class ContactsController extends Controller
         $data['back'] = "/contacts";
         $data['view_by_admin'] = 1;
 		
+        $data['division_levels'] = $divisionLevels;
         $data['contactPerson'] = $person;
         $data['avatar'] = $person->profile_pic_url;
         $data['provinces'] = $provinces;
@@ -331,6 +364,7 @@ class ContactsController extends Controller
             }
         }
 
+
         //convert numeric values to numbers
         if (isset($person['res_postal_code'])) {
             $person['res_postal_code'] = (int) $person['res_postal_code'];
@@ -349,6 +383,21 @@ class ContactsController extends Controller
         }
         if (isset($person['ethnicity'])) {
             $person['ethnicity'] = (int) $person['ethnicity'];
+        }
+         if (isset($person['division_level_5'])) {
+            $person['division_level_5'] = (int) $person['division_level_5'];
+        }
+        if (isset($person['division_level_4'])) {
+            $person['division_level_4'] = (int) $person['division_level_4'];
+        }
+        if (isset($person['division_level_3'])) {
+            $person['division_level_3'] = (int) $person['division_level_3'];
+        }
+        if (isset($person['division_level_2'])) {
+            $person['division_level_2'] = (int) $person['division_level_2'];
+        }
+        if (isset($person['division_level_1'])) {
+            $person['division_level_1'] = (int) $person['division_level_1'];
         }
 
         //convert date of birth to unix time stamp

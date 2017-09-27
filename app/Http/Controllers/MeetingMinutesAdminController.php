@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\CompanyIdentity;
 use App\ContactCompany;
 use App\HRPerson;
+use App\ContactPerson;
 use App\User;
 use App\ClientInduction;
 use App\EmployeeTasks;
@@ -41,7 +42,7 @@ class meetingMinutesAdminController extends Controller
 		->where('status', 1)
 		->orderBy('meeting_title', 'asc')
 		->get();
-		$companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
+		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
 		$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
         $data['page_title'] = "Meeting Minutes";
@@ -50,6 +51,7 @@ class meetingMinutesAdminController extends Controller
             ['title' => 'Meeting Minutes', 'path' => '/meeting_minutes/create', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
             ['title' => 'Create Minutes', 'active' => 1, 'is_module' => 0]];
         $data['questions'] = $questions;
+        $data['companies'] = $companies;
         $data['active_mod'] = 'Meeting Minutes';
         $data['active_rib'] = 'Create Minutes';
 
@@ -128,7 +130,8 @@ class meetingMinutesAdminController extends Controller
      */
     public function show(MeetingMinutes $meeting)
     {
-        $meeting->load('attendees.attendeesInfo','tasksMeeting.employeesTasks','MinutesMeet.minutesPerson');
+        $meeting->load('attendees.attendeesInfo', 'attendees.client','tasksMeeting.employeesTasks','MinutesMeet.minutesPerson', 'MinutesMeet.client', 'company.employees');
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
 		$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		$attendees = DB::table('meeting_attendees')
 		->distinct()
@@ -138,6 +141,7 @@ class meetingMinutesAdminController extends Controller
 		->where('meeting_attendees.meeting_id', $meeting->id)
 		->orderBy('hr_people.first_name', 'asc')->get();
 		//return $meeting;
+        $externalAttendees = ($meeting->company && $meeting->company->employees && count($meeting->company->employees) > 0) ? $meeting->company->employees : null;
 		$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 		$data['page_title'] = "View Meeting Details";
 		$data['page_description'] = "Meeting Minutes Details";
@@ -148,9 +152,11 @@ class meetingMinutesAdminController extends Controller
 			];
 		$data['active_mod'] = 'Meeting Minutes';
 		$data['active_rib'] = 'Search Meeting ';
-		$data['meeting'] = $meeting;
+        $data['meeting'] = $meeting;
+		$data['companies'] = $companies;
 		$data['employees'] = $employees;
-		$data['attendees'] = $attendees;
+        $data['attendees'] = $attendees;
+		$data['externalAttendees'] = $externalAttendees;
 		$data['taskStatus'] = $taskStatus;
 
 		AuditReportsController::store('Minutes Meeting', 'Minutes Meeting Details Page Accessed', "Accessed by User", 0);
@@ -202,15 +208,15 @@ class meetingMinutesAdminController extends Controller
     }
 	public function updateAttendee(Request $request, MeetingAttendees $attendee)
     {
-
         $this->validate($request, [       
-            'employee_id' => 'bail|required|integer|min:1',        
+            //'employee_id' => 'bail|required|integer|min:1',        
             'attendance_edit' => 'bail|required|integer|min:1',        
             'apology' => 'required_if:attendance_edit,2',        
             'attendee_id' => 'bail|required|integer|min:1',        
         ]);
 		unset($request['_token']);
-		$attendee->employee_id = $request->input('employee_id');
+        $attendee->employee_id = ($request->input('employee_id') > 0) ? $request->input('employee_id') : null;
+		$attendee->client_id = ($request->input('client_id') > 0) ? $request->input('client_id') : null;
 		$attendee->attendance = $request->input('attendance_edit');
 		$attendee->apology = $request->input('apology');
         $attendee->update();
@@ -228,15 +234,36 @@ class meetingMinutesAdminController extends Controller
         $this->validate($request, [       
             'apology' => 'required_if:attendance,2',
             'attendance' => 'bail|required|integer|min:1',      
-            'employee_id' => 'bail|required|integer|min:1',        
+            //'employee_id' => 'bail|required|integer|min:1',        
             'meeting_id' => 'bail|required|integer|min:1',        
         ]);
 		$attendeeData = $request->all();
 		unset($attendeeData['_token']);
-		
-		$attendee = new MeetingAttendees($attendeeData);
-        $attendee->save();
-		$attendance = $request->input('attendance');
+
+        $employees = $attendeeData['employee_id'];
+        $clients = $attendeeData['client_id'];
+        foreach ($employees as $empID) {
+           $attendee = new MeetingAttendees();
+           $attendee->employee_id = $empID;
+           $attendee->apology = $attendeeData['apology'];
+           $attendee->attendance = $attendeeData['attendance'];
+           $attendee->meeting_id = $attendeeData['meeting_id'];
+           $attendee->save();
+           $attendance = $request->input('attendance'); 
+        }
+
+        if (count($clients) > 0) {
+            foreach ($clients as $clientID) {
+                $attendee = new MeetingAttendees();
+                $attendee->client_id = $clientID;
+                $attendee->apology = $attendeeData['apology'];
+                $attendee->attendance = $attendeeData['attendance'];
+                $attendee->meeting_id = $attendeeData['meeting_id'];
+                $attendee->save();
+                $attendance = $request->input('attendance');
+            }
+        }
+	
         AuditReportsController::store('Minutes Meeting', 'Meeting Attendee Added', "Added by User", 0);
         return response()->json(['new_attendance' => $attendance], 200);
     }
@@ -244,7 +271,7 @@ class meetingMinutesAdminController extends Controller
     {
         $this->validate($request, [       
             'minutes' => 'required',      
-            'employee_id' => 'bail|required|integer|min:1',        
+            //'employee_id' => 'bail|required|integer|min:1',        
             'meeting_id' => 'bail|required|integer|min:1',        
         ]);
 		$minuteData = $request->all();
@@ -261,8 +288,9 @@ class meetingMinutesAdminController extends Controller
         $this->validate($request, [       
             'description' => 'required',      
             'due_date' => 'required',      
-            'employee_id' => 'bail|required|integer|min:1',        
-            'check_by_id' => 'bail|required|integer|min:1',        
+            'employee_id' => 'required',        
+            'check_by_id' => 'bail|required|integer|min:1',   
+            'due_time' => 'required',     
             //'meeting_id' => 'bail|required|integer|min:1',        
         ]);
 		$taskData = $request->all();
@@ -271,13 +299,26 @@ class meetingMinutesAdminController extends Controller
             $taskData['due_date'] = str_replace('/', '-', $taskData['due_date']);
             $duedate = strtotime($taskData['due_date']);
         }
-		$startDate = strtotime(date('Y-m-d'));
-		$employeeID = $taskData['employee_id'];
-		$escalationPerson = HRPerson::where('id', $employeeID)->first();
-		$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
-		TaskManagementController::store($taskData['description'],$duedate,$startDate,$managerID,$employeeID,2
-					,0,0,0,0,$meeting->id,0,0,$taskData['check_by_id']);
-		$description = $request->input('description');
+        if (!empty($taskData['due_time'])) {
+            $taskData['due_time'] = str_replace('/', '-', $taskData['due_time']);
+            $duetime = strtotime($taskData['due_time']);
+        }
+
+
+        $employees = $taskData['employee_id'];
+
+         foreach ($employees as $empID) {
+        $startDate = strtotime(date('Y-m-d'));
+        // $employeeID = $taskData['employee_id'];
+        $escalationPerson = HRPerson::where('id', $empID)->first();
+        $managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
+        TaskManagementController::store($taskData['description'],$duedate,$startDate,$managerID,$empID,2
+                    ,0,0,0,0,$meeting->id,0,0,$taskData['check_by_id'],0,0,0,0,$duetime);
+        $description = $request->input('description');
+         }
+
+
+		
         AuditReportsController::store('Minutes Meeting', 'Meeting Task Added', "Added by User", 0);
         return response()->json(['new_task' => $description], 200);
     }
@@ -410,8 +451,10 @@ class meetingMinutesAdminController extends Controller
 			{
 				foreach($attendees as $attendee)
 				{
-					$employee = HRPerson::where('id', $attendee->employee_id)->first();
-					Mail::to($employee->email)->send(new emailMinutes($employee,$meeting));
+                    $employee = null;
+                    if ($attendee->employee_id > 0) $employee = HRPerson::where('id', $attendee->employee_id)->first();
+                    elseif ($attendee->client_id > 0) $employee = ContactPerson::where('id', $attendee->client_id)->first();
+                    if ($employee) Mail::to($employee->email)->send(new emailMinutes($employee,$meeting));
 				}
 			}
 			else
