@@ -47,12 +47,12 @@
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Client Note </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Meetings </label>
-                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Follow Up Action</label>
+                                     <!-- <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Follow Up Action</label> -->
                                       
                                 </div>
                             </div>
 
-                          <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                          <div class="form-group employee-field {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -85,7 +85,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
                             <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
 
                             <div class="col-sm-10">
@@ -94,6 +94,36 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group meetings-field">
+                            <div class="col-xs-6">
+                                <div class="form-group ">
+                                    <label for="date_from" class="col-sm-4 control-label">From</label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control" id="date_from" name="date_from"   placeholder="" data-mask>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group ">
+                                    <label for="date_to" class="col-sm-3 control-label">To</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input type="text" class="form-control" id="date_to" name="date_to"   placeholder="" data-mask>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   
 
                         </div> 
                      <div class="box-footer">
@@ -155,20 +185,20 @@
             $("[data-mask]").inputmask();
 
             //Date picker
-            $('#date_from').datepicker({
-                format: 'MM yyyy',
-                autoclose: true,
-                startView: "months",
-                minViewMode: "months",
-                todayHighlight: true
-            });
-            $('#date_to').datepicker({
-                format: 'MM yyyy',
-                autoclose: true,
-                startView: "months",
-                minViewMode: "months",
-                todayHighlight: true
-            });
+          
+
+            
+              $('input[name="date_from"]').daterangepicker({
+                  singleDatePicker: true,
+                  showDropdowns: false,
+               });
+               $('input[name="date_to"]').daterangepicker({
+                  singleDatePicker: true,
+                  showDropdowns: false,
+               });
+
+
+                                       
         
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
@@ -178,11 +208,7 @@
             });
                 hideFields();
                 //Date Range picker
-        $('.daterangepicker').daterangepicker({
-            format: 'DD/MM/YYYY',
-            endDate: '-1d',
-            autoclose: true
-        });
+      
             //show/hide fields on radio button toggles (depending on registration type)
 
             $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH').on('ifChecked', function(){      
@@ -206,21 +232,15 @@
             var allType = $("input[name='application_type']:checked").val();
             if (allType == 1) { //adjsut leave
                  //$('.hours-field').hide();
-                 $('.to-field').show();
-                 $('.from-field').show();
-                 $('.levAction-field').hide();
-                 $('.date-field').hide();
+                 $('.employee-field').show();
+                 $('.meetings-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/contacts/reports/contact_note');
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
-                 $('.to-field').show();
-                 $('.from-field').hide();
-                 $('.manual-field').hide();
-                $('.levAction-field').hide();
-                 $('.date-field').hide();
+                 $('.meetings-field').show();
+                 $('.employee-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/contacts/reports/meetings');
-                 //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
                  $('#gen-report').val("Submit"); 
             }
             else if(allType == 3){
@@ -231,25 +251,7 @@
                   $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
                    $('#gen-report').val("Submit"); 
             }
-            else if(allType == 4){
-                 $('.to-field').hide();
-                 $('.from-field').hide();
-                 $('.levAction-field').hide();
-                  $('.manual-field').show();
-                 $('.lev-field').show();
-                 $('.date-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
-                 $('#gen-report').val("Submit"); 
-            } else if(allType == 5){
-                  $('.to-field').hide();
-                 $('.from-field').hide();
-                 $('.lev-field-field').hide();
-                 $('.manual-field').hide();
-                 $('.levAction-field').hide();
-                 $('.date-field').show();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/history/');    
-                 $('#gen-report').val("Submit"); 
-            }
+           
             return allType;      
             }
           //Load divisions drop down

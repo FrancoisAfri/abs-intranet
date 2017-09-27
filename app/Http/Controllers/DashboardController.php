@@ -62,6 +62,7 @@ class DashboardController extends Controller {
         //  return $account;
         //check if Ribbon is active
         $Ribbon_module = modules::where('active', 1)->get();
+        $activeModules = modules::where('active', 1)->get();
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -231,6 +232,7 @@ class DashboardController extends Controller {
             $data['$ticketLabels'] = $ticketLabels;
             $data['account'] = $account;
             $data['Ribbon_module'] = $Ribbon_module;
+            $data['activeModules'] = $activeModules;
             $data['ProductCategory'] = $ProductCategory;
             $data['packages'] = $packages;
             $data['products'] = $products;
@@ -348,6 +350,7 @@ class DashboardController extends Controller {
             $data['page_title'] = "Dashboard";
             $data['page_description'] = "Main Dashboard";
             $data['Ribbon_module'] = $Ribbon_module;
+            $data['activeModules'] = $activeModules;
             return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }

@@ -768,9 +768,11 @@ class ContactCompaniesController extends Controller
         $companyID = $notedata['company_id'];
         $personID = $notedata['contact_person_id'];
        
+        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');       
         $notes = DB::table('contacts_notes')
-                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname')
+                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->leftJoin('contact_companies', 'contacts_notes.company_id', '=' , 'contact_companies.id' )
                 
                 ->where(function ($query) use ($userID) {
                     if (!empty($userID)) {
@@ -790,13 +792,22 @@ class ContactCompaniesController extends Controller
                 ->orderBy('contacts_notes.id')
                 ->get();
 
-                //return $notes;
+                
+                 $companyname = $notes->first()->companyname;
+                //return $negsickDays;
+             
 
-      
+             //  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
+               
+
+
+        //$data['companies'] = $companies;
         $data['userID'] = $userID;
+        $data['notesStatus'] = $notesStatus;
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
+        $data['companyname'] = $companyname;
         $data['page_title'] = "Notes  Report";
         $data['page_description'] = "Notes Report";
         $data['breadcrumb'] = [
@@ -806,9 +817,79 @@ class ContactCompaniesController extends Controller
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Report';
         AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
-        return view('contacts.contacts_note')->with($data);
+        return view('contacts.contacts_note_report_result')->with($data);
 
 
+    }
+
+     public function meetings(Request $request){
+        $this->validate($request, [
+            // // 'name' => 'required',
+            // 'date_from' => 'date_format:"d F Y"',
+            //'action_date' => 'required',
+        ]);
+
+        $meetingdata = $request->all();
+        unset($meetingdata['_token']);
+
+        $companyID = $meetingdata['company_id'];
+        $personID = $meetingdata['contact_person_id']; 
+        $datefrom = $meetingdata['date_from'];
+        $dateto = $meetingdata['date_to'];
+
+       
+        $Datefrom = str_replace('/', '-', $meetingdata['date_from']);
+        $Datefrom = strtotime($meetingdata['date_from']);
+
+        $Dateto = str_replace('/', '-', $meetingdata['date_to']);
+        $Dateto = strtotime($meetingdata['date_to']);
+        
+        ##
+        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
+
+        $meetingminutes = DB::table('meeting_minutes')
+                ->select('meeting_minutes.*', 'meetings_minutes.minutes as meeting_minutes','contact_companies.name as companyname' )
+                ->leftJoin('meetings_minutes', 'meeting_minutes.id', '=', 'meetings_minutes.meeting_id')
+                ->leftJoin('contact_companies', 'meeting_minutes.company_id', '=' , 'contact_companies.id' )
+                
+                ->where(function ($query) use ($Datefrom, $Dateto) {
+                    if ($Datefrom > 0 && $Dateto > 0) {
+                        $query->whereBetween('meeting_minutes.meeting_date', [$Datefrom, $Dateto]);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('meetings_minutes.client_id', $personID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('meeting_minutes.company_id', $companyID);
+                    }
+                })
+               // ->orderBy('contacts_notes.id')
+                ->get();
+
+                 $companyname = $meetingminutes->first()->companyname;
+                 // return $meetingminutes;
+
+        $data['notesStatus'] = $notesStatus;
+        $data['companyID'] = $companyID;
+        $data['companyname'] = $companyname;
+        $data['personID'] = $personID;
+        $data['Datefrom'] = $Datefrom;
+        $data['Dateto'] = $Dateto;
+        $data['meetingminutes'] = $meetingminutes;
+        $data['page_title'] = "Notes  Report";
+        $data['page_description'] = "Notes Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Contacts Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Report';
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.meeting_minutes_report_result')->with($data);
     }
 
    
