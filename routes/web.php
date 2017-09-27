@@ -173,7 +173,7 @@ Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCom
 Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
 ##reports
 Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
-Route::post('contacts/reports/client_report', 'ContactCompaniesController@meetings');
+Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
 
 #reports
 Route::post('reports/contact_note/meetingreport', 'ContactCompaniesController@printmeetingsReport');

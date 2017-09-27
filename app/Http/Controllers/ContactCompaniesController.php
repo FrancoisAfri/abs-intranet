@@ -794,7 +794,8 @@ class ContactCompaniesController extends Controller
                 ->get();
 
                 
-                 $companyname = $notes->first()->companyname;
+                 //$companyname = $notes->first()->companyname;
+
                 //return $negsickDays;
              
 
@@ -808,7 +809,7 @@ class ContactCompaniesController extends Controller
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
-        $data['companyname'] = $companyname;
+       // $data['companyname'] = $companyname;
         $data['page_title'] = "Notes  Report";
         $data['page_description'] = "Notes Report";
         $data['breadcrumb'] = [
@@ -871,12 +872,12 @@ class ContactCompaniesController extends Controller
                // ->orderBy('contacts_notes.id')
                 ->get();
 
-                 $companyname = $meetingminutes->first()->companyname;
+               //  $companyname = $meetingminutes->first()->companyname;
                  // return $meetingminutes;
 
         $data['notesStatus'] = $notesStatus;
         $data['companyID'] = $companyID;
-        $data['companyname'] = $companyname;
+        //$data['companyname'] = $companyname;
         $data['personID'] = $personID;
         $data['Datefrom'] = $Datefrom;
         $data['Dateto'] = $Dateto;
