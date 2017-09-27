@@ -10,7 +10,7 @@ use App\projects;
 use App\User;
 use App\AuditTrail;
 use Illuminate\Http\Request;
-
+use App\CompanyIdentity;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -105,7 +105,7 @@ class AuditReportsController extends Controller
 		})
 		->orderBy('audit_trail.module_name')
 		->get();
-		
+		//die('do you get here');
         $data['action'] = $request->action;
         $data['module_name'] = $request->module_name;
         $data['user_id'] = $request->user_id;
@@ -120,6 +120,7 @@ class AuditReportsController extends Controller
         ];
         $data['active_mod'] = 'Audit';
         $data['active_rib'] = 'Audit Report';
+	
 		AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
         return view('audit.audit_results')->with($data);
     }
@@ -163,6 +164,8 @@ class AuditReportsController extends Controller
 		->orderBy('audit_trail.module_name')
 		->get();
 		
+		$companyDetails = CompanyIdentity::systemSettings();
+
         $data['audits'] = $audits;   
         $data['page_title'] = "Audit Report";
         $data['page_description'] = "Audit Report";
@@ -174,9 +177,11 @@ class AuditReportsController extends Controller
         $data['active_mod'] = 'Audit';
         $data['active_rib'] = 'Audit Report';
 		$user = Auth::user()->load('person');
-		$data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'OSIZWENI EDUCATIONAL AND DEVELOPMENT \TRUST';
-        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+		
+		$data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		
 		$data['date'] = date("d-m-Y");
 		$data['user'] = $user;
 		//return $data;

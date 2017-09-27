@@ -47,6 +47,15 @@ class ContactCompany extends Model
     {
         return $this->hasMany(CRMAccount::class, 'company_id');
     }
+/**
+     * Relationship between Contact Company and Meetings
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function meetings()
+    {
+        return $this->hasMany(MeetingMinutes::class, 'company_id');
+    }
 
     /**
      * Relationship hr_person (manager) and Division level group

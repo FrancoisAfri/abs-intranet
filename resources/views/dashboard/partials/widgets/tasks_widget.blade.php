@@ -56,11 +56,11 @@
                                             <i class="fa fa-repeat"></i> Resume
                                         @endif
                                     </button>
+                                    <button id="end-button" class="btn btn-xs btn-warning btn-flat{{ ($task->status == 1) ? ' hidden' : '' }}"
+                                            data-toggle="modal" data-target="#end-task-modal"
+                                            data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}"
+                                            data-upload_required="{{ $task->upload_required }}"><i class="fa fa-stop"></i> End</button>
                                     @if($task->status != 1)
-                                        <button id="end-button" class="btn btn-xs btn-warning btn-flat"
-                                                data-toggle="modal" data-target="#end-task-modal"
-                                                data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}"
-                                                data-upload_required="{{ $task->upload_required }}"><i class="fa fa-stop"></i> End</button>
                                     @endif
                                 </div>
                             </td>

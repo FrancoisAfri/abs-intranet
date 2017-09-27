@@ -27,7 +27,7 @@
 										<th>Action Date</th>
 										<th>Notes</th>
 									</tr>
-									@if(count($audits) > 0)
+									@if(!empty($audits))
 										@foreach($audits as $audit)
 											<tr>
 												<td>{{ !empty($audit->module_name) ? $audit->module_name : '' }}</td>

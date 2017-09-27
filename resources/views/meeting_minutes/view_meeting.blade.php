@@ -3,8 +3,6 @@
 @section('page_dependencies')
         <!-- bootstrap datepicker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-<!-- Select2 -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/select2/select2.min.css">
 <!-- iCheck -->
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css"> 
 	<!--  -->
@@ -64,6 +62,17 @@
 											</div>
 										</div>
 									</div>
+									<div class="form-group new-field {{ $errors->has('company_id') ? ' has-error' : '' }}">
+										<label for="company_id" class="col-sm-2 control-label">Client</label>
+										<div class="col-sm-10">
+											<select id="company_id" name="company_id" class="form-control select2" style="width: 100%;">
+												<option value="">*** Select a Client Company ***</option>
+												@foreach($companies as $company)
+													<option value="{{ $company->id }}" {{ ($company->id == $meeting->company_id) ? ' selected' : '' }}>{{ $company->name }}</option>
+												@endforeach
+											</select>
+										</div>
+									</div>
 									<div class="form-group">
 										<label for="Meeting Agenda" class="col-sm-2 control-label">Agenda</label>
 										<div class="col-sm-10">
@@ -105,7 +114,9 @@
 										@if(!empty($meeting->MinutesMeet))
 											@foreach($meeting->MinutesMeet as $minute)
 												<tr>
-													<td>{{ $minute->minutesPerson->first_name  .' '. $minute->minutesPerson->surname }}</td>
+													<td>{{ ($minute->employee_id > 0) ? $minute->minutesPerson->first_name  .' '. $minute->minutesPerson->surname : '' }}
+														{{ ($minute->client_id > 0) ? $minute->client->full_name : '' }}
+													</td>
 													<td><textarea rows="2" cols="70" class="form-control" id="" name="" readonly>{{ $minute->minutes}}</textarea></td>
 												</tr>
 											@endforeach
@@ -115,7 +126,7 @@
 														<div class="alert alert-danger alert-dismissable">
 															<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><textarea rows="8" cols="100" class="form-control" id="" name="" readonly>No minutes to display, please start by adding one.</textarea></div>
 													</td>
-												</tr> 
+												</tr>
 										@endif
 										</tbody>
 									</table>
@@ -231,11 +242,16 @@
 											data-toggle="modal" data-target="#edit-attendees-modal"
 											data-attendee_id="{{ $attendee->id }}" 
 											data-employee_id="{{ $attendee->employee_id }}" 
+											data-client_id="{{ $attendee->client_id }}" 
 											data-attendance="{{ $attendee->attendance }}" 
 											data-apology="{{ $attendee->apology }}">Edit
 										</button>
 										</td>
-										<td>{{ $attendee->attendeesInfo->first_name  .' '. $attendee->attendeesInfo->surname}}</td>
+										@if($attendee->employee_id)
+											<td>{{ $attendee->attendeesInfo->first_name  .' '. $attendee->attendeesInfo->surname}}</td>
+										@elseif($attendee->client_id)
+											<td>{{ $attendee->client->full_name }}</td>
+										@endif
 										<td>{{ !empty($attendee->client_id) ? 'Client' : 'Employee' }}</td>
 										<td>{{ ($attendee->attendance == 1) ? 'Yes' : 'No'  }}</td>
 										<td>{{ $attendee->apology}}</td>
@@ -483,14 +499,25 @@ $(function () {
 	$('#edit-attendees-modal').on('show.bs.modal', function (e) {
 		var btnEdit = $(e.relatedTarget);
 		attendeeID = btnEdit.data('attendee_id');
-		var employeeID = btnEdit.data('employee_id');
+		var employeeID = btnEdit.data('employee_id') || 0;
+		var clientID = btnEdit.data('client_id') || 0;
 		var Attendance = btnEdit.data('attendance');
 		var Apology = btnEdit.data('apology');
 		var modal = $(this);
-		modal.find('#employee_id').val(employeeID);
+		//console.log('gets here. clientID = ' + clientID + '. empID = ' + employeeID);
 		modal.find('#apology').val(Apology);
 		modal.find('#attendee_id').val(attendeeID);
-		modal.find('select#employee_id').val(employeeID);
+		modal.find('select#employee_id').val(employeeID).trigger('change');
+		modal.find('select#client_id').val(clientID).trigger('change');
+		if (employeeID > 0) {
+			$('.internal-attendee').show();
+			$('.external-attendee').hide();
+		}
+		else if (clientID > 0) {
+			$('.internal-attendee').hide();
+			$('.external-attendee').show();
+		}
+
 		if (Attendance == 2)
 		{
 			$("#attendance_no_edit").iCheck('check');

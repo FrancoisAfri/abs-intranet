@@ -295,7 +295,7 @@
 
 <!-- /Check if induction is active before showing this  And Meeting-->
   @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 13) && $modules->active === 1) 
+     @if (($modules->id === 8) && $modules->active === 1) //13
     <div class="row">
         <div class="col-md-7">
             <!-- Include tasks widget -->

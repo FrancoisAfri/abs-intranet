@@ -48,6 +48,26 @@ class ContactPerson extends Model
         return $this->hasMany(CRMAccount::class, 'client_id');
     }
 
+    /**
+     * Relationship between Contact Person and MeetingAttendees
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function meetings()
+    {
+        return $this->hasMany(MeetingAttendees::class, 'client_id');
+    }
+
+    /**
+     * Relationship between Contact Person and MeetingsMinutes
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function minutes()
+    {
+        return $this->hasMany(MeetingsMinutes::class, 'client_id');
+    }
+
     //Full Name accessor
     public function getFullNameAttribute() {
         return $this->first_name . ' ' . $this->surname;
