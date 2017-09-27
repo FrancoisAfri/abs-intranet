@@ -312,10 +312,11 @@ class DatabaseSeeder extends Seeder
         $groupLevel->active = 1;
         $groupLevel->save();
 
-        //Insert navigation menus
+        //Insert navigation menus (Modules)
         $module = new modules(); //Contacts
         $module->active = 1;
         $module->name = 'Contacts';
+        $module->code_name = 'contacts';
         $module->path = 'contacts';
         $module->font_awesome = 'fa-users';
         $module->save();
@@ -387,6 +388,7 @@ class DatabaseSeeder extends Seeder
         $module = new modules(); //Quote
         $module->active = 1;
         $module->name = 'Quote';
+        $module->code_name = 'quote';
         $module->path = 'quote';
         $module->font_awesome = 'fa-file-text-o';
         $module->save();
@@ -440,6 +442,7 @@ class DatabaseSeeder extends Seeder
         $module = new modules();
         $module->active = 1;
         $module->name = 'CRM';
+        $module->code_name = 'crm';
         $module->path = 'crm';
         $module->font_awesome = 'fa-handshake-o';
         $module->save();
@@ -465,6 +468,7 @@ class DatabaseSeeder extends Seeder
         $module = new modules(); // Security
         $module->active = 1;
         $module->name = 'Security';
+        $module->code_name = 'security';
         $module->path = 'users';
         $module->font_awesome = 'fa-lock';
         $module->save();
@@ -517,6 +521,7 @@ class DatabaseSeeder extends Seeder
 		$module = new modules(); //Employee Records
         $module->active = 1;
         $module->name = 'Employee Records';
+        $module->code_name = 'hr';
         $module->path = 'hr ';
         $module->font_awesome = 'fa-users';
         $module->save();
@@ -605,6 +610,7 @@ class DatabaseSeeder extends Seeder
 		$module = new modules(); //Leave Management
         $module->active = 1;
         $module->name = 'Leave Management';
+        $module->code_name = 'leave';
         $module->path = 'leave';
         $module->font_awesome = 'fa-glass';
         $module->save();
@@ -669,6 +675,7 @@ class DatabaseSeeder extends Seeder
         $module = new modules(); 
         $module->active = 1;
         $module->name = 'Products';
+        $module->code_name = 'products';
         $module->path = 'Product';
         $module->font_awesome = 'fa-product-hunt';
         $module->save();
@@ -722,7 +729,8 @@ class DatabaseSeeder extends Seeder
         $module = new modules(); 
         $module->active = 1;
         $module->name = 'Help Desk';
-        $module->path = 'Help Desk';
+        $module->code_name = 'helpdesk';
+        $module->path = 'helpdesk';
         $module->font_awesome = 'fa-info-circle';
         $module->save();
 
@@ -779,8 +787,9 @@ class DatabaseSeeder extends Seeder
 		
 		$module = new modules();//Audit Management
         $module->active = 1;
-        $module->name = 'Audit';
-        $module->path = 'Audit Management';
+        $module->name = 'Audit Management';
+        $module->code_name = 'audit';
+        $module->path = 'audit';
         $module->font_awesome = 'fa-eye';
         $module->save();
 		
@@ -796,6 +805,7 @@ class DatabaseSeeder extends Seeder
 		$module = new modules(); //Performance Appraisal
         $module->active = 1;
         $module->name = 'Performance Appraisal';
+        $module->code_name = 'appraisal';
         $module->path = 'appraisal';
         $module->font_awesome = 'fa-line-chart';
         $module->save();
@@ -875,6 +885,7 @@ class DatabaseSeeder extends Seeder
 		$module = new modules(); //Induction/Tasks
         $module->active = 1;
         $module->name = 'Induction';
+        $module->code_name = 'induction';
         $module->path = 'induction';
         $module->font_awesome = 'fa-tasks';
         $module->save();
@@ -927,7 +938,8 @@ class DatabaseSeeder extends Seeder
 		$module = new modules(); //Meeting Munites/Tasks
         $module->active = 1;
         $module->name = 'Meeting Minutes';
-        $module->path = 'meeting_minutes';
+        $module->code_name = 'meeting';
+        $module->path = 'meeting=minutes';
         $module->font_awesome = 'fa-calendar-check-o';
         $module->save();
 		
@@ -970,6 +982,7 @@ class DatabaseSeeder extends Seeder
         $module = new modules(); //Survey
         $module->active = 1;
         $module->name = 'Survey';
+        $module->code_name = 'survey';
         $module->path = 'survey';
         $module->font_awesome = 'fa-list-alt';
         $module->save();
@@ -1004,6 +1017,7 @@ class DatabaseSeeder extends Seeder
 		$module = new modules(); //Task Management
         $module->active = 1;
         $module->name = 'Task Management';
+        $module->code_name = 'tasks';
         $module->path = 'tasks';
         $module->font_awesome = 'fa-tasks';
         $module->save();

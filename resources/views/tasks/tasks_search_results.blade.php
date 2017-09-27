@@ -13,8 +13,7 @@
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">
                         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                        <div class="panel box box-primary">
-                            <div class="box-body">
+                        <div class="box-body">
 								<table class="table table-striped">
 									<tr>
 										<th>Task Description</th>
@@ -47,7 +46,6 @@
 								</div>
 								<!-- End amortization /table -->
 							</div>
-                        </div>
                     </div>
                     <!-- /. End Collapsible section containing the amortization schedule -->
                 </div>

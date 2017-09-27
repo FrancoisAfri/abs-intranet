@@ -44,7 +44,9 @@ class ContactCompaniesController extends Controller
      */
 	public function create()
     {
-        $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
+        $deparments = DB::table('division_level_fours')->where('active', 1)->orderBy('name', 'asc')->get();
+        $dept = DB::table('division_setup')->where('level', 4)->first();
+		$provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $data['page_title'] = "Contacts";
         $data['page_description'] = "Add a New Company";
         $data['breadcrumb'] = [
@@ -52,6 +54,8 @@ class ContactCompaniesController extends Controller
             ['title' => 'Add company', 'active' => 1, 'is_module' => 0]
         ];
         $data['provinces'] = $provinces;
+		$data['deparments'] = $deparments;
+        $data['dept'] = $dept;
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Add Company';
         return view('contacts.add_company')->with($data);
@@ -175,6 +179,8 @@ class ContactCompaniesController extends Controller
         $beeCertDoc = $company->bee_certificate_doc;
         $compRegDoc = $company->comp_reg_doc;
         $provinces = Province::where('country_id', 1)->where('id', $company->phys_province)->get()->first();
+		$dept = DB::table('division_setup')->where('level', 4)->first();
+		$deparments = DB::table('division_level_fours')->where('active', 1)->where('id', $company->dept_id)->first();
         $canEdit = (in_array($user->type, [1, 3]) || ($user->type == 2 && ($user->person->company_id && $user->person->company_id == $company->id))) ? true : false;
 
         $data['page_title'] = "Clients";
@@ -190,13 +196,11 @@ class ContactCompaniesController extends Controller
         $data['comp_reg_doc'] = (!empty($compRegDoc)) ? Storage::disk('local')->url("company_docs/$compRegDoc") : '';
         $data['provinces'] = $provinces;
         $data['canEdit'] = $canEdit;
+		$data['deparments'] = $deparments;
+        $data['dept'] = $dept;
         return view('contacts.view_company')->with($data);
     }
 
-    /******
-
-    */
-     ###
     public function notes(ContactCompany $company)
     {
         $companyID = $company->id;
@@ -298,7 +302,9 @@ class ContactCompaniesController extends Controller
     public function editCompany(ContactCompany $company)
     {
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
-        $data['page_title'] = "Clients";
+        $dept = DB::table('division_setup')->where('level', 4)->first();
+		$deparments = DB::table('division_level_fours')->where('active', 1)->orderBy('name', 'asc')->get();
+		$data['page_title'] = "Clients";
         $data['page_description'] = "Edit Company Details";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
@@ -306,6 +312,8 @@ class ContactCompaniesController extends Controller
         ];
         $data['company'] = $company;
         $data['provinces'] = $provinces;
+		$data['deparments'] = $deparments;
+        $data['dept'] = $dept;
         $data['active_mod'] = 'clients';
         $data['active_rib'] = 'add company';
         return view('contacts.edit_company')->with($data);
