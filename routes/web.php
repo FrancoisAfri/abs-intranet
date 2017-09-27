@@ -28,7 +28,7 @@ Auth::routes();
 
 //Users related requests
 Route::get('users', 'UsersController@index');
-Route::get('users/modules', 'UsersController@viewModules');
+//Route::get('users/modules', 'UsersController@viewModules');
 Route::get('users/create', 'UsersController@create');
 Route::get('users/{user}/edit', 'UsersController@edit');
 Route::get('users/profile', 'UsersController@profile');

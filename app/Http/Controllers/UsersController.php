@@ -160,12 +160,13 @@ class UsersController extends Controller
 	{
         $this->validate($request, [
             'module_name' => 'required',
+            'code_name' => 'required',
             'module_path' => 'required',
             'font_awesome' => 'required',
-        
         ]);
 
         $mod->name = $request->input('module_name');
+        $mod->code_name = strtolower(trim($request->input('code_name')));
         $mod->path = $request->input('module_path');
         $mod->font_awesome = $request->input('font_awesome');
         $mod->update();
@@ -213,15 +214,16 @@ class UsersController extends Controller
 	
 		$this->validate($request, [
             'module_name' => 'required',
+            'code_name' => 'required',
             'module_path' => 'required',
             'font_awesome' => 'required',
-        
         ]);
 		$moduleData = $request->all();
 		unset($moduleData['_token']);
 		$module = new modules($moduleData);
 		$module->active = 1;
-		$module->name = $moduleData['module_name'];
+        $module->name = $moduleData['module_name'];
+		$module->code_name = strtolower(trim($moduleData['code_name']));
 		$module->path = $moduleData['module_path'];
 		$module->font_awesome = $moduleData['font_awesome'];
         $module->save();

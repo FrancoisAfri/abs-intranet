@@ -297,9 +297,9 @@
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
 <!-- iCheck -->
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-<script src="/custom_components/js/modal_ajax_submit.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
 <script type="text/javascript">
 
 function hideFields() {

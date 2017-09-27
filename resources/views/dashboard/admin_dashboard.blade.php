@@ -6,567 +6,368 @@
       rel="stylesheet">
 @endsection
 @section('content')
+    @if($activeModules->where('code_name', 'appraisal')->first())
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Employee Monthly performance Widget-->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Employee Monthly Appraisal</h3>
 
- @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 9) && $modules->active === 1)              
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Employee Monthly performance Widget-->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Employee Monthly Appraisal</h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <p class="text-center">
-                                <strong>My Performance For {{ date('Y') }}</strong>
-                            </p>
-
-                            <div class="chart">
-                                <!-- Sales Chart Canvas-->
-                                <canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>
-                            </div>
-                            <!-- /.chart-responsive -->
-                        </div>
-                        <!-- Appraised months list col -->
-                        <div class="col-md-4">
-                            <p class="text-center">
-                                <strong>Appraised Months List</strong>
-                            </p>
-                            <div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
-                                <ul class="nav nav-pills nav-stacked" id="emp-appraised-month-list"></ul>
-                            </div>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                            </button>
                         </div>
                     </div>
-                    <!-- /.row -->
-                </div>
-                <!-- Loading wheel overlay -->
-                <div class="overlay" id="loading_overlay_emp_monthly_appraisal">
-                    <i class="fa fa-refresh fa-spin"></i>
-                </div>
-            </div>
-            <!-- /.box Employee Monthly performance Widget -->
-        </div>
-        <!-- /.col -->
-    </div>
-    @endif
-    @endforeach
-    <!--  -->
-    @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 9) && $modules->active === 1)    
-    <div class="row">
-        <div class="col-md-12">
-            @if($canViewCPWidget)
-            <!-- company performance Widget -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Company Appraisal</h3>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p class="text-center">
+                                    <strong>My Performance For {{ date('Y') }}</strong>
+                                </p>
 
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="row" id="myStaffPerformanceRankingRow" hidden>
-                        <div class="col-md-12">
-                            <p class="text-center"><strong>My Staff Performance Ranking For {{ date('Y') }}</strong></p>
-                            <div class="no-padding" style="max-height: 420px; overflow-y: scroll;">
-                                <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="my-staff-ranking-list">
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" id="topLvlDivGraphAndRankingRow">
-                        <!-- Chart col -->
-                        <div class="col-md-8">
-                            <p class="text-center">
-                                <strong>
-                                    @if($isSuperuser)
-                                        {{ $topGroupLvl->plural_name }}
-                                    @elseif($isDivHead)
-                                        {{ $managedDivsLevel->plural_name }}
-                                    @endif
-                                    Performance For {{ date('Y') }}
-                                </strong>
-                            </p>
-
-                            <div class="chart">
-                                <!-- Sales Chart Canvas-->
-                                <canvas id="divisionsPerformanceChart" style="height: 220px;"></canvas>
-                            </div>
-                            <!-- /.chart-responsive -->
-                        </div>
-                        <!-- Ranking col -->
-                        <div class="col-md-4">
-                            <p class="text-center">
-                                <strong>Ranking</strong>
-                            </p>
-                            <div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
-                                <ul class="nav nav-pills nav-stacked" id="ranking-list">
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- Loading wheel overlay -->
-                <div class="overlay" id="lo_company_appraisal">
-                    <i class="fa fa-refresh fa-spin"></i>
-                </div>
-                <!-- Include division performance modal -->
-                @include('dashboard.partials.division_4_performance_modal')
-                @include('dashboard.partials.division_3_performance_modal')
-                @include('dashboard.partials.division_2_performance_modal')
-                @include('dashboard.partials.division_1_performance_modal')
-                <!-- Include emp list performance modal -->
-                @include('dashboard.partials.emp_list_performance_modal')
-                <!-- Include emp year performance modal -->
-                @include('dashboard.partials.emp_year_performance_modal')
-            </div>
-            <!-- /.box company performance Widget -->
-            @endif
-        </div>
-        <!-- /.col -->
-    </div>
-    @endif
-    @endforeach
-    <!--  -->
-@foreach($Ribbon_module as $modules)
-     @if (($modules->id === 4) && $modules->active === 1)    
-@if($canViewEmpRankWidget)
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Employees Performance Ranking Widget -->
-            <div class="box box-success same-height-widget" id="empPerformanceRankingWidgetBox">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Employees Ranking</h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                    <!-- Emp Group Filters (divisions) -->
-                    <div class="col-sm-4 border-right">
-                        <p class="text-center">
-                            <strong>Filters</strong>
-                        </p>
-                        <form>
-                            @foreach($divisionLevels as $divisionLevel)
-                                <div class="form-group">
-                                    <label for="{{ 'division_level_' . $divisionLevel->level }}" class="control-label">{{ $divisionLevel->name }}</label>
-
-                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpPWOnChange(this, $('#emp-top-ten-list'), $('#emp-bottom-ten-list'), parseInt('{{ $totNumEmp }}'), $('#loading_overlay_emp_performance_ranking'))" style="width: 100%;">
-                                    </select>
+                                <div class="chart">
+                                    <!-- Sales Chart Canvas-->
+                                    <canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>
                                 </div>
-                            @endforeach
-                        </form>
-                    </div>
-                    <!-- /.Emp Group Filters (divisions) -->
-                    <!-- Top ten -->
-                    <div class="col-sm-4 border-right">
-                        <p class="text-center">
-                            <strong class="label label-success"><i class="fa fa-level-up"></i> Top 10 Employees</strong>
-                        </p>
-                        <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
-                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-top-ten-list">
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- Bottom ten -->
-                    <div class="col-sm-4">
-                        <p class="text-center">
-                            <strong class="label label-danger"><i class="fa fa-level-down"></i> Bottom 10 Employees</strong>
-                        </p>
-                        <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
-                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box"
-                                id="emp-bottom-ten-list">
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.box-body -->
-                <!-- Loading wheel overlay -->
-                <div class="overlay" id="loading_overlay_emp_performance_ranking">
-                    <i class="fa fa-refresh fa-spin"></i>
-                </div>
-            </div>
-            <!-- /.Employees Performance Ranking Widget -->
-        </div>
-    </div>
-@endif
-  @endif
-    @endforeach
-
-<!--  -->
-@if($canViewTaskWidget)
-    @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 13 || $modules->id === 10 ) && $modules->active === 1)   
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Employees Performance Ranking Widget -->
-            <div class="box box-success same-height-widget" id="emptasksWidgetBox">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Company Tasks</h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                    <!-- Emp Group Filters (divisions) -->
-                    <div class="col-sm-4 border-right">
-                        <p class="text-center">
-                            <strong>Filters</strong>
-                        </p>
-                        <form>
-                            @foreach($divisionLevels as $divisionLevel)
-                                <div class="form-group">
-                                    <label for="{{ 'division_level_' . $divisionLevel->level }}" class="control-label">{{ $divisionLevel->name }}</label>
-
-                                    <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpTasksOnChange(this, $('#emp-meeting-tasks-list'), $('#emp-induction-tasks-list'),$('#emptasksWidgetBox'), $('#loading_overlay_emp_tasks'))" style="width: 100%;">
-                                    </select>
+                                <!-- /.chart-responsive -->
+                            </div>
+                            <!-- Appraised months list col -->
+                            <div class="col-md-4">
+                                <p class="text-center">
+                                    <strong>Appraised Months List</strong>
+                                </p>
+                                <div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
+                                    <ul class="nav nav-pills nav-stacked" id="emp-appraised-month-list"></ul>
                                 </div>
-                            @endforeach
-                        </form>
+                            </div>
+                        </div>
+                        <!-- /.row -->
                     </div>
-                    <!-- /.Emp Group Filters (divisions) -->
+                    <!-- Loading wheel overlay -->
+                    <div class="overlay" id="loading_overlay_emp_monthly_appraisal">
+                        <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                </div>
+                <!-- /.box Employee Monthly performance Widget -->
+            </div>
+            <!-- /.col -->
+        </div>
+    @endif
 
-                    <!-- Top ten -->
-                    <div class="col-sm-4 border-right">
-                        <p class="text-center">
-                            <strong class="label label-success"> Meeting Tasks</strong>
-                        </p>
-                        <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
-                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-meeting-tasks-list">
-                            </ul>
+    @if($activeModules->where('code_name', 'appraisal')->first())
+        <div class="row">
+            <div class="col-md-12">
+                @if($canViewCPWidget)
+                <!-- company performance Widget -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Company Appraisal</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                            </button>
                         </div>
                     </div>
-                    <!-- Bottom ten -->
-                    <div class="col-sm-4">
-                        <p class="text-center">
-                            <strong class="label label-success">Induction Tasks</strong>
-                        </p>
-                        <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
-                            <ul class="nav nav-pills nav-stacked products-list product-list-in-box"
-                                id="emp-induction-tasks-list">
-                            </ul>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row" id="myStaffPerformanceRankingRow" hidden>
+                            <div class="col-md-12">
+                                <p class="text-center"><strong>My Staff Performance Ranking For {{ date('Y') }}</strong></p>
+                                <div class="no-padding" style="max-height: 420px; overflow-y: scroll;">
+                                    <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="my-staff-ranking-list">
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+                        <div class="row" id="topLvlDivGraphAndRankingRow">
+                            <!-- Chart col -->
+                            <div class="col-md-8">
+                                <p class="text-center">
+                                    <strong>
+                                        @if($isSuperuser)
+                                            {{ $topGroupLvl->plural_name }}
+                                        @elseif($isDivHead)
+                                            {{ $managedDivsLevel->plural_name }}
+                                        @endif
+                                        Performance For {{ date('Y') }}
+                                    </strong>
+                                </p>
+
+                                <div class="chart">
+                                    <!-- Sales Chart Canvas-->
+                                    <canvas id="divisionsPerformanceChart" style="height: 220px;"></canvas>
+                                </div>
+                                <!-- /.chart-responsive -->
+                            </div>
+                            <!-- Ranking col -->
+                            <div class="col-md-4">
+                                <p class="text-center">
+                                    <strong>Ranking</strong>
+                                </p>
+                                <div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
+                                    <ul class="nav nav-pills nav-stacked" id="ranking-list">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.row -->
                     </div>
-                </div>
-                <!-- /.box-body -->
-                 <!-- Loading wheel overlay -->
-                <div class="overlay" id="loading_overlay_emp_tasks">
-                    <i class="fa fa-refresh fa-spin"></i>
-                </div>
-            </div>
-            <!-- /.Employees Performance Ranking Widget -->
-        </div>
-    </div>
-@endif 
-    @endforeach
-         @endif
-<!--  -->
-
-<!-- /Check if induction is active before showing this  And Meeting-->
-  @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 8) && $modules->active === 1) //13
-    <div class="row">
-        <div class="col-md-7">
-            <!-- Include tasks widget -->
-            @include('dashboard.partials.widgets.tasks_widget')
-        </div>
-        <div class="col-md-5">
-            <!-- Include tasks to check widget -->
-            @include('dashboard.partials.widgets.tasks_to_check_widget')
-        </div>
-    </div>
-      @endif
-    @endforeach
-    <!--  -->
-     @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 9) && $modules->active === 1)  
-    <div class="row">
-        <div class="col-md-6">
-            <!-- Available Perks Widgets -->
-            <div class="box box-warning same-height-widget">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Available Perks</h3>
-
-                    <div class="box-tools pull-right">
-                        <!-- <span class="label label-warning">8 New Members</span> -->
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
+                    <!-- Loading wheel overlay -->
+                    <div class="overlay" id="lo_company_appraisal">
+                        <i class="fa fa-refresh fa-spin"></i>
                     </div>
+                    <!-- Include division performance modal -->
+                    @include('dashboard.partials.division_4_performance_modal')
+                    @include('dashboard.partials.division_3_performance_modal')
+                    @include('dashboard.partials.division_2_performance_modal')
+                    @include('dashboard.partials.division_1_performance_modal')
+                    <!-- Include emp list performance modal -->
+                    @include('dashboard.partials.emp_list_performance_modal')
+                    <!-- Include emp year performance modal -->
+                    @include('dashboard.partials.emp_year_performance_modal')
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body no-padding">
-                    <ul class="users-list clearfix" id="perks-widget-list">
-                    </ul>
-                    <!-- /.users-list -->
-                </div>
-                <!-- /.box-body -->
-                <!-- include perk details modal -->
-                @include('appraisals.partials.edit_perk', ['isReaOnly' => true])
-            </div>
-            <!-- /.Available Perks Widgets -->
-        </div>
-    </div>
-     @endif
-    @endforeach
-    
-    <!--  -->
-     @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 5) && $modules->active === 1)    
-     <div class="row">
-        <div class="col-md-6">
-         <!-- /Tasks List -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-             <i class="fa fa-hourglass"></i>
-              <h3 class="box-title">Leave Balance</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                    <thead>
-                        <tr>
-                            <th>Leave Type</th>
-                            <th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave Balance</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    @if (!empty($balance))
-                        @foreach($balance as $task)
-                          <tr>
-                        <td>{{ (!empty($task->leavetype)) ?  $task->leavetype : ''}}</td>
-            <!-- <td style="text-align: right;"><span class="label {{ $statusLabels[$task->leave_balance] }} pull-right"> -->
-                <td style="text-align: right;">{{ (!empty($task->leave_balance)) ?  $task->leave_balance : ''}}</td>
-                            
-                          
-                          </tr>
-                        @endforeach
-                    @endif
-                  </tbody>
-                </table>
-                <div class="box-footer">
-                   <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
-                     <button id="Apply"class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Apply For Leave</button>
-                </div>
-              </div>
-                @if(Session('error_starting'))
-                    @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
+                <!-- /.box company performance Widget -->
                 @endif
-                @include('tasks.partials.end_task')
             </div>
-            <!-- /.box-body -->
-            <div class="box-footer clearfix">
-            </div>
-            <!-- /.box-footer -->
-          </div>
-          <!-- /Tasks List End -->
+            <!-- /.col -->
         </div>
-
-        <div class="col-md-6">
-         <!-- /Tasks List -->
-          <div class="box box-info">
-            <div class="box-header with-border">
-             <i class="fa fa-hourglass"></i>
-              <h3 class="box-title">Leave Applied For Status</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                    
-                    <thead>
-                        <tr>
-                            <th><i class="material-icons">shop_two</i>Leave Type</th>
-                              <th><i class="fa fa-calendar-o"></i>Date From</th>
-                             <th><i class="fa fa-calendar-o"></i>Date To</th>
-                            <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @if (!empty($application))
-                        @foreach($application as $checkTask)
-                          <tr>
-                            <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
-                           <!--  <td>{{ (!empty($checkTask->start_date)) ?  $checkTask->start_date : ''}}</td> -->
-                             <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
-                             <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
-                           <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
-                            <!-- <td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td> -->
-                            <td>
-                           
-                            </td>
-                          </tr>
-                        @endforeach
-                    @endif
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-     </div>
-     @endif
-    @endforeach
-   
-
-
-  <!--     @foreach($Ribbon_module as $modules)
-     @if (($modules->id === 6) && $modules->active === 1) 
-    <div class="row">
-        <div class="col-md-6">
-          <div>
-             <div class="box box-danger same-height-widget">
-                <div class="box-header with-border">
-                <i class="fa fa-product-hunt"></i>
-                    <h3 class="box-title">Product Category</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                    <thead>
-                        <tr>
-                            <th>Category #</th>
-                            <th>Product</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    @if (!empty($ProductCategory))
-                        @foreach($ProductCategory as $category)
-                          <tr>
-                        <td>{{ (!empty($category->name)) ?  $category->name : ''}}</td>
-                        </tr>
-                        <tr>
-                        <td>
-                       @foreach($category->productCategory as $productCategory )
-                         <td>{{ (!empty($productCategory->name)) ?  $productCategory->name : ''}}</td>
-                          @endforeach
-                        @endforeach
-                        </tr>
-                    @endif
-                  </tbody>
-                </table>
-              </div>  
-            </div>
-            <div class="box-footer clearfix">
-            </div>
-          </div>
-        </div>
-     </div> -->
-     <!-- Products -->
-       
-     <!--    <div class="row">
-        <div class="col-md-6">
-          <div>
-             <div class="box box-danger same-height-widget">
-                <div class="box-header with-border">
-                <i class="fa fa-product-hunt"></i>
-                    <h3 class="box-title">Package Product</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-              <div class="table-responsive">
-                <table class="table no-margin">
-                    <thead>
-                        <tr>
-                            <th>Package #</th>
-                            <th>Product</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                    @if (!empty($packages))
-                        @foreach($packages as $package)
-                          <tr>
-                        <td>{{ (!empty($package->name)) ?  $package->name : ''}}</td>
-                        </tr>
-                        <tr>
-                       @foreach($package->products_type as $productstype )
-                            <tr>
-                         <td>{{ (!empty($productstype->name)) ?  $productstype->name : ''}}</td>
-                         </tr>
-                          @endforeach
-                        @endforeach
-                        </tr>
-                    @endif
-                  </tbody>
-                </table>
-                <div class="box-footer">
-                      <button type="button" id="new_tickets" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-ticket-modal">Add Ticket</button>
-                </div>
-              </div>  
-            </div>
-            <div class="box-footer clearfix">
-            </div>
-          </div>
-        </div>
-     </div>
-    </div>
-    </div>
     @endif
-    @endforeach -->
-    <!--  -->
+
+    @if($activeModules->where('code_name', 'appraisal')->first())
+        @if($canViewEmpRankWidget)
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Employees Performance Ranking Widget -->
+                    <div class="box box-success same-height-widget" id="empPerformanceRankingWidgetBox">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Employees Ranking</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body no-padding">
+                            <!-- Emp Group Filters (divisions) -->
+                            <div class="col-sm-4 border-right">
+                                <p class="text-center">
+                                    <strong>Filters</strong>
+                                </p>
+                                <form>
+                                    @foreach($divisionLevels as $divisionLevel)
+                                        <div class="form-group">
+                                            <label for="{{ 'division_level_' . $divisionLevel->level }}" class="control-label">{{ $divisionLevel->name }}</label>
+
+                                            <select id="{{ 'division_level_' . $divisionLevel->level }}" name="{{ 'division_level_' . $divisionLevel->level }}" class="form-control input-sm select2" onchange="divDDEmpPWOnChange(this, $('#emp-top-ten-list'), $('#emp-bottom-ten-list'), parseInt('{{ $totNumEmp }}'), $('#loading_overlay_emp_performance_ranking'))" style="width: 100%;">
+                                            </select>
+                                        </div>
+                                    @endforeach
+                                </form>
+                            </div>
+                            <!-- /.Emp Group Filters (divisions) -->
+                            <!-- Top ten -->
+                            <div class="col-sm-4 border-right">
+                                <p class="text-center">
+                                    <strong class="label label-success"><i class="fa fa-level-up"></i> Top 10 Employees</strong>
+                                </p>
+                                <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
+                                    <ul class="nav nav-pills nav-stacked products-list product-list-in-box" id="emp-top-ten-list">
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Bottom ten -->
+                            <div class="col-sm-4">
+                                <p class="text-center">
+                                    <strong class="label label-danger"><i class="fa fa-level-down"></i> Bottom 10 Employees</strong>
+                                </p>
+                                <div class="no-padding" style="max-height: 274px; overflow-y: scroll;">
+                                    <ul class="nav nav-pills nav-stacked products-list product-list-in-box"
+                                        id="emp-bottom-ten-list">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                        <!-- Loading wheel overlay -->
+                        <div class="overlay" id="loading_overlay_emp_performance_ranking">
+                            <i class="fa fa-refresh fa-spin"></i>
+                        </div>
+                    </div>
+                    <!-- /.Employees Performance Ranking Widget -->
+                </div>
+            </div>
+        @endif
+    @endif
+
+    @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
+        @if($canViewTaskWidget)
+            <div class="row">
+                <div class="col-md-7">
+                    <!-- Include tasks widget -->
+                    @include('dashboard.partials.widgets.tasks_widget')
+                </div>
+                <div class="col-md-5">
+                    <!-- Include tasks to check widget -->
+                    @include('dashboard.partials.widgets.tasks_to_check_widget')
+                </div>
+            </div>
+        @endif
+    @endif
+
+    @if($activeModules->where('code_name', 'appraisal')->first())
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Available Perks Widgets -->
+                <div class="box box-warning same-height-widget">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Available Perks</h3>
+
+                        <div class="box-tools pull-right">
+                            <!-- <span class="label label-warning">8 New Members</span> -->
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <ul class="users-list clearfix" id="perks-widget-list">
+                        </ul>
+                        <!-- /.users-list -->
+                    </div>
+                    <!-- /.box-body -->
+                    <!-- include perk details modal -->
+                    @include('appraisals.partials.edit_perk', ['isReaOnly' => true])
+                </div>
+                <!-- /.Available Perks Widgets -->
+            </div>
+        </div>
+    @endif
+
+    @if($activeModules->where('code_name', 'leave')->first())
+        <div class="row">
+           <div class="col-md-6">
+            <!-- /Tasks List -->
+             <div class="box box-info">
+               <div class="box-header with-border">
+                <i class="fa fa-hourglass"></i>
+                 <h3 class="box-title">Leave Balance</h3>
+
+                 <div class="box-tools pull-right">
+                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                   </button>
+                   <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                 </div>
+               </div>
+               <!-- /.box-header -->
+               <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                 <div class="table-responsive">
+                   <table class="table no-margin">
+                       <thead>
+                           <tr>
+                               <th>Leave Type</th>
+                               <th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave Balance</th>
+                               <th></th>
+                           </tr>
+                       </thead>
+
+                       <tbody>
+                       @if (!empty($balance))
+                           @foreach($balance as $task)
+                             <tr>
+                           <td>{{ (!empty($task->leavetype)) ?  $task->leavetype : ''}}</td>
+               <!-- <td style="text-align: right;"><span class="label {{ $statusLabels[$task->leave_balance] }} pull-right"> -->
+                   <td style="text-align: right;">{{ (!empty($task->leave_balance)) ?  $task->leave_balance : ''}}</td>
+                               
+                             
+                             </tr>
+                           @endforeach
+                       @endif
+                     </tbody>
+                   </table>
+                   <div class="box-footer">
+                      <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
+                        <button id="Apply"class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Apply For Leave</button>
+                   </div>
+                 </div>
+                   @if(Session('error_starting'))
+                       @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
+                   @endif
+                   @include('tasks.partials.end_task')
+               </div>
+               <!-- /.box-body -->
+               <div class="box-footer clearfix">
+               </div>
+               <!-- /.box-footer -->
+             </div>
+             <!-- /Tasks List End -->
+           </div>
+
+           <div class="col-md-6">
+            <!-- /Tasks List -->
+             <div class="box box-info">
+               <div class="box-header with-border">
+                <i class="fa fa-hourglass"></i>
+                 <h3 class="box-title">Leave Applied For Status</h3>
+
+                 <div class="box-tools pull-right">
+                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                   </button>
+                   <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                 </div>
+               </div>
+               <!-- /.box-header -->
+               <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                 <div class="table-responsive">
+                   <table class="table no-margin">
+                       
+                       <thead>
+                           <tr>
+                               <th><i class="material-icons">shop_two</i>Leave Type</th>
+                                 <th><i class="fa fa-calendar-o"></i>Date From</th>
+                                <th><i class="fa fa-calendar-o"></i>Date To</th>
+                               <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                       @if (!empty($application))
+                           @foreach($application as $checkTask)
+                             <tr>
+                               <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
+                              <!--  <td>{{ (!empty($checkTask->start_date)) ?  $checkTask->start_date : ''}}</td> -->
+                                <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
+                                <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
+                              <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
+                               <!-- <td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td> -->
+                               <td>
+                              
+                               </td>
+                             </tr>
+                           @endforeach
+                       @endif
+                     </tbody>
+                   </table>
+                 </div>
+               </div>
+             </div>
+           </div>
+        </div>
+    @endif
 @endsection
-  @include('dashboard.partials.add_ticket')
 
 @section('page_script')
     <!-- Select2 -->
@@ -596,67 +397,6 @@
             else if (data == 'end')
                 location.href = "/task/end/" + id;
         }
-        ///delete this
-        /*var time = 0;
-        var running = 0;
-
-        function startPause() {
-            if (running == 0)
-            {
-                running = 1;
-                increment();
-                document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-pause'></i> Pause";
-                $("#end-button").show();
-            }
-            else
-            {
-                running = 0;
-                document.getElementById("startPause").innerHTML = "<i class='glyphicon glyphicon-repeat'></i> Resume";
-                $("#end-button").show();
-            }
-        }
-
-        function increment() {
-            if (running == 1) {
-                setTimeout(function() {
-                    time++;
-                    var mins = Math.floor(time / 10 / 60) % 60;
-                    var secs = Math.floor(time / 10) % 60;
-                    var tenths = time % 10;
-
-                    if (mins < 10) {
-                        mins = "0" + mins;
-                    }
-                    if (secs < 10) {
-                        secs = "0" + secs;
-                    }
-                    document.getElementById("stopWatchDisplay").innerHTML = mins + ":" + secs + ":" + "0" + tenths;
-                    increment();
-                }, 100);
-            }
-        }
-        */
-          //Post module form to server using ajax (ADD)
-            $('#add_tiket').on('click', function() {
-                //console.log('strUrl');
-                var strUrl = '/help_desk/ticket/add';
-                var modalID = 'add-new-ticket-modal';
-                var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    email: $('#'+modalID).find('#email').val(),
-                    helpdesk_id: $('#'+modalID).find('#helpdesk_id').val(),
-                    subject: $('#'+modalID).find('#subject').val(),
-                    message: $('#'+modalID).find('#message').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val(),
-                };
-                var submitBtnID = 'new_tickets';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The ticket has been Added successfully.';
-                //var formMethod = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
-
 
         $(function () {
             // hide end button when page load
