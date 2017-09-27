@@ -760,7 +760,8 @@ class ContactCompaniesController extends Controller
         $companyID = $notedata['company_id'];
         $personID = $notedata['contact_person_id'];
        
-        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');       
+       $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
+ 
         $notes = DB::table('contacts_notes')
                 ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
@@ -794,8 +795,8 @@ class ContactCompaniesController extends Controller
 
 
         //$data['companies'] = $companies;
-        $data['userID'] = $userID;
         $data['notesStatus'] = $notesStatus;
+        $data['userID'] = $userID;
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
@@ -884,5 +885,114 @@ class ContactCompaniesController extends Controller
         return view('contacts.meeting_minutes_report_result')->with($data);
     }
 
+    ##print reports
+       public function printmeetingsReport(Request $request) {
+
+        $personID = $request['hr_person_id'];
+        $Datefrom = $request['date_from'];
+        $Dateto = $request['date_to'];
+        $companyID = $request['company_id'];
+        
+
+
+
+        $meetingminutes = DB::table('meeting_minutes')
+                ->select('meeting_minutes.*', 'meetings_minutes.minutes as meeting_minutes','contact_companies.name as companyname' )
+                ->leftJoin('meetings_minutes', 'meeting_minutes.id', '=', 'meetings_minutes.meeting_id')
+                ->leftJoin('contact_companies', 'meeting_minutes.company_id', '=' , 'contact_companies.id' )
+                
+                ->where(function ($query) use ($Datefrom, $Dateto) {
+                    if ($Datefrom > 0 && $Dateto > 0) {
+                        $query->whereBetween('meeting_minutes.meeting_date', [$Datefrom, $Dateto]);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('meetings_minutes.client_id', $personID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('meeting_minutes.company_id', $companyID);
+                    }
+                })
+               // ->orderBy('contacts_notes.id')
+                ->get();
+
+               // return $meetingminutes;
+      
+
+     
+       
+        $data['meetingminutes'] = $meetingminutes;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        $user = Auth::user()->load('person');
+        $data['support_email'] = 'support@afrixcel.co.za';
+        $data['company_name'] = 'Afrixcel Business Solution';
+        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+        $data['date'] = date("d-m-Y");
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.reports.meeting_print')->with($data);
+    }
+
+          public function printclientReport(Request $request) {
+
+
+        $userID = $request['hr_person_id'];
+        $companyID = $request['company_id'];
+        $personID = $request['user_id'];
+       
+        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');
+
+        $notes = DB::table('contacts_notes')
+                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
+                ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->leftJoin('contact_companies', 'contacts_notes.company_id', '=' , 'contact_companies.id' )
+                
+                ->where(function ($query) use ($userID) {
+                    if (!empty($userID)) {
+                        $query->where('contacts_notes.employee_id', $userID);
+                    }
+                })
+                ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('contacts_notes.company_id', $companyID);
+                    }
+                })
+                ->where(function ($query) use ($personID) {
+                    if (!empty($personID)) {
+                        $query->where('contacts_notes.hr_person_id', $personID);
+                    }
+                })
+                ->orderBy('contacts_notes.id')
+                ->get();
+      
+
+        // return $notes;
+        $data['notesStatus'] = $notesStatus;
+        $data['notes'] = $notes;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        $user = Auth::user()->load('person');
+        $data['support_email'] = 'support@afrixcel.co.za';
+        $data['company_name'] = 'Afrixcel Business Solution';
+        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+        $data['date'] = date("d-m-Y");
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('contacts.reports.contacts_note_print')->with($data);
+    }
    
 }

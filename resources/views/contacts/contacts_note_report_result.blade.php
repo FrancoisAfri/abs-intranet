@@ -4,7 +4,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="">
+                 <form class="form-horizontal" method="POST" action="/reports/contact_note/client_report">
+
+                 <input type="hidden" name="hr_person_id" value="{{ !empty($personID) ? $personID : ''  }}">
+                 <input type="hidden" name="company_id" value="{{ !empty($companyID) ? $companyID : ''  }}">
+                 <input type="hidden" name="user_id" value="{{ !empty($userID) ? $userID : ''  }}">
+                      
+
                     {{ csrf_field() }}
                     <div class="box-header with-border">
                          <i class="fa fa-file-text-o pull-right"></i>
@@ -12,25 +18,9 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        @if (count($errors) > 0)
-                            <div class="alert alert-danger alert-dismissible fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                                <ul>
-                                   
-                                </ul>
-                            </div>
-                        @endif
+                    
                         <div style="overflow-x:auto;">
-                          <!--   <h4 style="text-align: center; class="box-title">Company Details</h4> -->
-                                
-                                 <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                    <strong class="lead">Company Details</strong><br>
-                                  
-                                    @if(!empty($companyname))
-                                    <strong>Company Name :</strong> <em>{{ $companyname }}</em> &nbsp; &nbsp;
-                                    @endif
-                                </p>
+                       
 
                             <table class="table table-striped table-bordered">
                                 <tr>
@@ -50,6 +40,7 @@
                                       @foreach($notes as $notereport)
                                    <tr>
                                     <td></td>
+                                    
                                   <td>{{ !empty($notereport->name) && !empty($notereport->surname) ? $notereport->name.' '.$notereport->surname : '' }}</td>
                                   <td>{{ !empty($notereport->notes) ? $notereport->notes : '' }}</td>
                                   <td>{{ (!empty($notereport->next_action)) ?  $notesStatus[$notereport->next_action] : ''}} </td>
