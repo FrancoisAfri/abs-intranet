@@ -545,7 +545,6 @@ class ContactCompaniesController extends Controller
             $this->validate($request, [
                 'rejection_reason' => 'required'
             ]);
-
             //Update status to rejected
             if ($company->status === 1){
                 $company->status = -1;
@@ -558,7 +557,6 @@ class ContactCompaniesController extends Controller
                 $company->second_rejection_reason = $request['rejection_reason'];
             }
             $company->update();
-
             //Notify the applicant about the rejection
             $creator = User::find("$company->loader_id")->load('person');
             $creatorEmail = $creator->person->email;
