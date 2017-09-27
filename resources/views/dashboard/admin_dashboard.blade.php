@@ -603,6 +603,7 @@
             @endif
 
             @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
+                document.getElementById("notes").placeholder = "Enter Task Note or Summary";
                 //Post end task form to server using ajax (add)
                 var taskID;
                 var employeeID;
@@ -659,7 +660,6 @@
 
             //Show success action modal
             //$('#success-action-modal').modal('show');
-            //document.getElementById("notes").placeholder = "Enter Task Note or Summary";
         });
     </script>
 @endsection
