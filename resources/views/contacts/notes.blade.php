@@ -21,16 +21,14 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                    <h3 class="box-title">Add Note for:  {{ $company->name}}</h3>
-
                 </div>
                  {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                 <!-- /.box-header -->
                 <div class="box-body">
-
                 <table class="table table-bordered">
                      <tr><th style="width: 10px"></th>
-                      <th></th>
+                     <th></th>
                      <th>Notes</th>
                      <th>Date</th>
                      <!-- <th>Time</th> -->

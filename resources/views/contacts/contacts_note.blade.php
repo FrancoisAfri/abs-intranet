@@ -7,7 +7,7 @@
     <!-- New User Form -->
     <div class="col-md-12 col-md-12">
         <!-- Horizontal Form -->
-        <form class="form-horizontal" method="get" action="/leave/approval">
+        <form class="form-horizontal" method="get">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
@@ -15,12 +15,8 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-
                 <div class="box-body">
-                       <!-- Contact's company details -->
-                       
-                                
-                                
+                       <!-- Contact's company details -->          
                     <div style="overflow-X:auto;">
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -43,14 +39,10 @@
                                 @foreach($notes as $approval)
                                 <tr>
                                     <td>{{ !empty($approval->name) && !empty($approval->surname) ? $approval->name.' '.$approval->surname : '' }}</td>
-                                    
                                     <td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
                                     <td></td>
                                      <td></td>
                                     <td></td>
-
-
-                                   
                                     @endforeach
                                     </tbody>
                                

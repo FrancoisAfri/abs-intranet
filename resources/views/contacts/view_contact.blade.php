@@ -299,25 +299,7 @@
                                 </div>
                             </div>
                         </div> -->
-                                         <hr  class="hr-text" align="right" data-content="SELECT Office Details">
-
-                          @foreach($division_levels as $division_level)
-                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                              @endforeach
-
-                        <div class="form-group">
+                          <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
                             <div class="col-sm-10">

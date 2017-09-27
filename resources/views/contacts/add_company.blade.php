@@ -43,18 +43,18 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="form-group{{ $errors->has('trading_as') ? ' has-error' : '' }}">
-                                <label for="name" class="col-sm-2 control-label">Trading As</label>
+						<div class="form-group{{ $errors->has('trading_as') ? ' has-error' : '' }}">
+							<label for="name" class="col-sm-2 control-label">Trading As</label>
 
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-building"></i>
-                                        </div>
-                                        <input type="text" class="form-control" id="trading_as" name="trading_as" value="{{ old('trading_as') }}" placeholder="Trading As">
-                                    </div>
-                                </div>
-                            </div>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-building"></i>
+									</div>
+									<input type="text" class="form-control" id="trading_as" name="trading_as" value="{{ old('trading_as') }}" placeholder="Trading As">
+								</div>
+							</div>
+						</div>
                         <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
                             <label for="phone_number" class="col-sm-2 control-label">Phone Number</label>
 
@@ -67,18 +67,18 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="form-group{{ $errors->has('fax_number') ? ' has-error' : '' }}">
-                                <label for="phone_number" class="col-sm-2 control-label">Fax Number</label>
+						<div class="form-group{{ $errors->has('fax_number') ? ' has-error' : '' }}">
+							<label for="phone_number" class="col-sm-2 control-label">Fax Number</label>
 
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-fax"></i>
-                                        </div>
-                                        <input type="text" class="form-control" id="fax_number" name="fax_number" value="{{ old('phone_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Fax Number" data-mask>
-                                    </div>
-                                </div>
-                            </div>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-fax"></i>
+									</div>
+									<input type="text" class="form-control" id="fax_number" name="fax_number" value="{{ old('phone_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Fax Number" data-mask>
+								</div>
+							</div>
+						</div>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-sm-2 control-label">Email</label>
 
@@ -144,18 +144,18 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="form-group{{ $errors->has('postal_address') ? ' has-error' : '' }}">
-                                <label for="phys_address" class="col-sm-2 control-label">Postal Address</label>
+						<div class="form-group{{ $errors->has('postal_address') ? ' has-error' : '' }}">
+							<label for="phys_address" class="col-sm-2 control-label">Postal Address</label>
 
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-envelope-square"></i>
-                                        </div>
-                                        <textarea class="form-control" id="postal_address" name="postal_address" placeholder="Postal Address" rows="3">{{ old('postal_address') }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-envelope-square"></i>
+									</div>
+									<textarea class="form-control" id="postal_address" name="postal_address" placeholder="Postal Address" rows="3">{{ old('postal_address') }}</textarea>
+								</div>
+							</div>
+						</div>
                         <div class="form-group{{ $errors->has('registration_number') ? ' has-error' : '' }}">
                             <label for="registration_number" class="col-sm-2 control-label">Registration Number</label>
 
@@ -228,7 +228,6 @@
                                 </div>
                             </div>
                         </div>
-                       
                         <hr>
                         <div class="form-group{{ $errors->has('do') ? ' has-error' : '' }}">
                             <label for="domain_name" class="col-sm-2 control-label">Domain Name</label>
@@ -242,6 +241,19 @@
                                 </div>
                             </div>
                         </div>
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">Choose {{$dept->name}}</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<select class="form-control select2" id="dept_id" name="dept_id">
+										<option selected="selected" value="0">*** Select {{$dept->name}} ***</option>
+										@foreach($deparments as $deparment)
+											<option value="{{ $deparment->id }}">{{ $deparment->name}}</option>
+										@endforeach
+									</select>
+								</div>
+							</div>
+						</div>
                          <!--
                         <div class="form-group{{ $errors->has('cp_cell_number') ? ' has-error' : '' }}">
                             <label for="phone_number" class="col-sm-2 control-label">Cell Number</label>
