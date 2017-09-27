@@ -16,6 +16,7 @@
                 <form class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
+                         <i class="fa fa-file-text-o pull-right"></i>
                         <h3 class="box-title">Notes Details</h3>
                     </div>
                     <!-- /.box-header -->
@@ -34,9 +35,14 @@
 
                         <div style="overflow-x:auto;">
                           <!--   <h4 style="text-align: center; class="box-title">Company Details</h4> -->
-                                @if(!empty($notes->id))
-                                    <strong>Company Name :</strong> <em>{{ $notes->id }}</em> &nbsp; &nbsp;
-                                @endif
+                                
+                                 <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    <strong class="lead">Company Details</strong><br>
+                                  
+                                    @if(!empty($companyname))
+                                    <strong>Company Name :</strong> <em>{{ $companyname }}</em> &nbsp; &nbsp;
+                                    @endif
+                                </p>
                                
                              <!--  <div style="text-align: center; vertical-align: middle;">Company Details</div> -->
                              
@@ -76,8 +82,8 @@
                               </table>
                             </div>
                          <!--  -->
-                        </div>
-                    </div>
+                    
+                  
                     <!-- /.box-body -->
                     <div class="box-footer text-center">
                      

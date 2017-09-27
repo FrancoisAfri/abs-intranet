@@ -52,7 +52,7 @@
                                 </div>
                             </div>
 
-                          <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                          <div class="form-group employee-field {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -85,7 +85,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
                             <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
 
                             <div class="col-sm-10">
@@ -206,21 +206,15 @@
             var allType = $("input[name='application_type']:checked").val();
             if (allType == 1) { //adjsut leave
                  //$('.hours-field').hide();
-                 $('.to-field').show();
-                 $('.from-field').show();
-                 $('.levAction-field').hide();
+                 $('.employee-field').show();
                  $('.date-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/contacts/reports/contact_note');
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
                  $('.to-field').show();
-                 $('.from-field').hide();
-                 $('.manual-field').hide();
-                $('.levAction-field').hide();
-                 $('.date-field').hide();
+                 $('.employee-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/contacts/reports/meetings');
-                 //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
                  $('#gen-report').val("Submit"); 
             }
             else if(allType == 3){

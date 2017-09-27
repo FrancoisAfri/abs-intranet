@@ -762,8 +762,9 @@ class ContactCompaniesController extends Controller
        
         $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');       
         $notes = DB::table('contacts_notes')
-                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname')
+                ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->leftJoin('contact_companies', 'contacts_notes.company_id', '=' , 'contact_companies.id' )
                 
                 ->where(function ($query) use ($userID) {
                     if (!empty($userID)) {
@@ -783,6 +784,9 @@ class ContactCompaniesController extends Controller
                 ->orderBy('contacts_notes.id')
                 ->get();
 
+                
+                 $companyname = $notes->first()->companyname;
+                //return $negsickDays;
              
 
              //  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
@@ -795,6 +799,7 @@ class ContactCompaniesController extends Controller
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
+        $data['companyname'] = $companyname;
         $data['page_title'] = "Notes  Report";
         $data['page_description'] = "Notes Report";
         $data['breadcrumb'] = [
@@ -817,6 +822,7 @@ class ContactCompaniesController extends Controller
         $meetingdata = $request->all();
         unset($meetingdata['_token']);
 
+        return $meetingdata;
        
 
         $userID = $meetingdata['hr_person_id'];
