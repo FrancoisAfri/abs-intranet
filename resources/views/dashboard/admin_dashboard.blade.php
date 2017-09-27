@@ -441,216 +441,225 @@
                 canViewTaskWidget = parseInt({{ (int) $canViewTaskWidget }}),
                 canViewEmpRankWidget = parseInt({{ (int) $canViewEmpRankWidget }});
 
-            //Employees ranking widget
-            if (canViewEmpRankWidget == 1) {
-                //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                var firstDivDDID = null;
-                var parentContainer = $('#empPerformanceRankingWidgetBox');
-                @foreach($divisionLevels as $divisionLevel)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    //var divLevel = parseInt('{{ $divisionLevel->level }}');
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                    @if($loop->first)
-                        var selectFirstDiv = 1;
-                        var divHeadSpecific;
-                        if (isSuperuser) divHeadSpecific = 0;
-                        else if (isDivHead) divHeadSpecific = 1;
-                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
-                        //firstDivDDID = ddID;
-                    @else
-                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
-                    @endif
-                    //parentDDID
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
+            @if($activeModules->where('code_name', 'appraisal')->first())
+                //Employees ranking widget
+                if (canViewEmpRankWidget == 1) {
+                    //Load divisions drop down
+                    var parentDDID = '';
+                    var loadAllDivs = 1;
+                    var firstDivDDID = null;
+                    var parentContainer = $('#empPerformanceRankingWidgetBox');
+                    @foreach($divisionLevels as $divisionLevel)
+                        //Populate drop down on page load
+                        var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
+                        var postTo = '{!! route('divisionsdropdown') !!}';
+                        var selectedOption = '';
+                        //var divLevel = parseInt('{{ $divisionLevel->level }}');
+                        var incInactive = -1;
+                        var loadAll = loadAllDivs;
+                        @if($loop->first)
+                            var selectFirstDiv = 1;
+                            var divHeadSpecific;
+                            if (isSuperuser) divHeadSpecific = 0;
+                            else if (isDivHead) divHeadSpecific = 1;
+                            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
+                            //firstDivDDID = ddID;
+                        @else
+                            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
+                        @endif
+                        //parentDDID
+                        parentDDID = ddID;
+                        loadAllDivs = -1;
+                    @endforeach
 
-                //Load top ten performing employees (widget)
-                //var topTenList = $('#emp-top-ten-list');
-                //loadEmpListPerformance(topTenList, 0, 0, true);
+                    //Load top ten performing employees (widget)
+                    //var topTenList = $('#emp-top-ten-list');
+                    //loadEmpListPerformance(topTenList, 0, 0, true);
 
-                //Load Bottom ten performing employees (widget)
-                //var bottomTenList = $('#emp-bottom-ten-list');
-                //var totNumEmp = parseInt('{{ $totNumEmp }}');
-                //loadEmpListPerformance(bottomTenList, 0, 0, false, true, totNumEmp);
-            }
-            if (canViewTaskWidget == 1)
-            {
-                //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                var firstDivDDID = null;
-                var parentContainer = $('#emptasksWidgetBox');
-                @foreach($divisionLevels as $divisionLevel)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    //var divLevel = parseInt('{{ $divisionLevel->level }}');
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                    @if($loop->first)
-                        var selectFirstDiv = 1;
-                        var divHeadSpecific = 1;
-                        if (isSuperuser) divHeadSpecific = 0;
-                        else if (isDivHead) divHeadSpecific = 1;
-                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
-                        firstDivDDID = ddID;
-                    @else
-                        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
-                    @endif
-                    //parentDDID
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
-            }
-
-            //Draw employee performance graph
-            var empID = parseInt('{{ $user->person->id }}');
-            var empChartCanvas = $('#empMonthlyPerformanceChart');
-            var loadingWheel = $('#loading_overlay_emp_monthly_appraisal');
-            var empAppraisedMonthList = $('#emp-appraised-month-list');
-            loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
-
-            //Company appraisal
-            if (canViewCPWidget == 1) {
-                //Draw divisions performance graph [Comp Appraisal Widget]
-                var rankingList = $('#ranking-list');
-                var divChartCanvas = $('#divisionsPerformanceChart');
-                var loadingWheelCompApr = $('#lo_company_appraisal');
-                var managerID = parseInt({{ $user->person->id }});
-                if (isSuperuser == 1) {
-                    var divLevel = parseInt('{{ $topGroupLvl->id }}');
-                    loadDivPerformance(divChartCanvas, rankingList, divLevel, null, null, loadingWheelCompApr);
-                }
-                else if (isDivHead == 1) {
-                    var divLevel = parseInt({{ $managedDivsLevel->level }});
-                    loadDivPerformance(divChartCanvas, rankingList, divLevel, null, managerID, loadingWheelCompApr);
-                }
-                else if (isSupervisor) {
-                    $('#topLvlDivGraphAndRankingRow').hide();
-                    var staffPerfRow = $('#myStaffPerformanceRankingRow');
-                    staffPerfRow.show();
-                    rankingList = staffPerfRow.find('#my-staff-ranking-list');
-                    loadEmpListPerformance(rankingList, 0, 0, false, false, null, managerID, loadingWheelCompApr);
+                    //Load Bottom ten performing employees (widget)
+                    //var bottomTenList = $('#emp-bottom-ten-list');
+                    //var totNumEmp = parseInt('{{ $totNumEmp }}');
+                    //loadEmpListPerformance(bottomTenList, 0, 0, false, true, totNumEmp);
                 }
 
-                //show performance of sub division levels on modals (modal show) [Comp Appraisal Widget]
-                var i = 1;
-                for (i; i <= 4; i++) {
-                    $('#sub-division-performance-modal-' + i).on('show.bs.modal', function (e) {
+                if (canViewTaskWidget == 1)
+                {
+                    //Load divisions drop down
+                    var parentDDID = '';
+                    var loadAllDivs = 1;
+                    var firstDivDDID = null;
+                    var parentContainer = $('#emptasksWidgetBox');
+                    @foreach($divisionLevels as $divisionLevel)
+                        //Populate drop down on page load
+                        var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
+                        var postTo = '{!! route('divisionsdropdown') !!}';
+                        var selectedOption = '';
+                        //var divLevel = parseInt('{{ $divisionLevel->level }}');
+                        var incInactive = -1;
+                        var loadAll = loadAllDivs;
+                        @if($loop->first)
+                            var selectFirstDiv = 1;
+                            var divHeadSpecific = 1;
+                            if (isSuperuser) divHeadSpecific = 0;
+                            else if (isDivHead) divHeadSpecific = 1;
+                            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
+                            firstDivDDID = ddID;
+                        @else
+                            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
+                        @endif
+                        //parentDDID
+                        parentDDID = ddID;
+                        loadAllDivs = -1;
+                    @endforeach
+                }
+
+                //Draw employee performance graph
+                var empID = parseInt('{{ $user->person->id }}');
+                var empChartCanvas = $('#empMonthlyPerformanceChart');
+                var loadingWheel = $('#loading_overlay_emp_monthly_appraisal');
+                var empAppraisedMonthList = $('#emp-appraised-month-list');
+                loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
+
+                //Company appraisal
+                if (canViewCPWidget == 1) {
+                    //Draw divisions performance graph [Comp Appraisal Widget]
+                    var rankingList = $('#ranking-list');
+                    var divChartCanvas = $('#divisionsPerformanceChart');
+                    var loadingWheelCompApr = $('#lo_company_appraisal');
+                    var managerID = parseInt({{ $user->person->id }});
+                    if (isSuperuser == 1) {
+                        var divLevel = parseInt('{{ $topGroupLvl->id }}');
+                        loadDivPerformance(divChartCanvas, rankingList, divLevel, null, null, loadingWheelCompApr);
+                    }
+                    else if (isDivHead == 1) {
+                        var divLevel = parseInt({{ $managedDivsLevel->level }});
+                        loadDivPerformance(divChartCanvas, rankingList, divLevel, null, managerID, loadingWheelCompApr);
+                    }
+                    else if (isSupervisor) {
+                        $('#topLvlDivGraphAndRankingRow').hide();
+                        var staffPerfRow = $('#myStaffPerformanceRankingRow');
+                        staffPerfRow.show();
+                        rankingList = staffPerfRow.find('#my-staff-ranking-list');
+                        loadEmpListPerformance(rankingList, 0, 0, false, false, null, managerID, loadingWheelCompApr);
+                    }
+
+                    //show performance of sub division levels on modals (modal show) [Comp Appraisal Widget]
+                    var i = 1;
+                    for (i; i <= 4; i++) {
+                        $('#sub-division-performance-modal-' + i).on('show.bs.modal', function (e) {
+                            var linkDiv = $(e.relatedTarget);
+                            var modalWin = $(this);
+                            subDivOnShow(linkDiv, modalWin);
+                        });
+                        $('#sub-division-performance-modal-' + i).on('hidden.bs.modal', function (e) {
+                            $('#lo-sub-division-performance-modal-' + i).show();
+                        });
+                    }
+
+                    //show performance of employees on modals [Comp Appraisal Widget]
+                    $('#emp-list-performance-modal').on('show.bs.modal', function (e) {
                         var linkDiv = $(e.relatedTarget);
                         var modalWin = $(this);
-                        subDivOnShow(linkDiv, modalWin);
+                        var loadingWheelEmpList = $('#lo-emp-list-performance-modal');
+                        empPerOnShow(linkDiv, modalWin);
                     });
-                    $('#sub-division-performance-modal-' + i).on('hidden.bs.modal', function (e) {
-                        $('#lo-sub-division-performance-modal-' + i).show();
+                    $('#emp-list-performance-modal').on('hidden.bs.modal', function (e) {
+                        $('#lo-emp-list-performance-modal').show();
+                    });
+
+                    //show employee monthly performance on modal [Comp Appraisal Widget]
+                    $('#emp-year-performance-modal').on('show.bs.modal', function (e) {
+                        var linkDiv = $(e.relatedTarget);
+                        var empID = parseInt(linkDiv.data('emp_id'));
+                        var empName = linkDiv.data('emp_name');
+                        var empChartCanvas = $('#empMonthlyPerformanceModalChart');
+                        var loadingWheel = $('#lo-emp-year-performance-modal');
+                        var empAppraisedMonthList = $('#emp-appraised-month-modal-list');
+                        var modalWin = $(this);
+                        modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
+                        loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
+                    });
+                    $('#emp-year-performance-modal').on('hidden.bs.modal', function (e) {
+                        $('#lo-emp-year-performance-modal').show();
                     });
                 }
 
-                //show performance of employees on modals [Comp Appraisal Widget]
-                $('#emp-list-performance-modal').on('show.bs.modal', function (e) {
-                    var linkDiv = $(e.relatedTarget);
-                    var modalWin = $(this);
-                    var loadingWheelEmpList = $('#lo-emp-list-performance-modal');
-                    empPerOnShow(linkDiv, modalWin);
+                //Show available perks on the perks widget
+                var perksWidgetList = $('#perks-widget-list');
+                loadAvailablePerks(perksWidgetList);
+
+                //Show perk details
+                $('#edit-perk-modal').on('show.bs.modal', function (e) {
+                    var perkLink = $(e.relatedTarget);
+                    var modal = $(this);
+                    perkDetailsOnShow(perkLink, modal);
                 });
-                $('#emp-list-performance-modal').on('hidden.bs.modal', function (e) {
-                    $('#lo-emp-list-performance-modal').show();
+            @endif
+
+            @if($activeModules->where('code_name', 'leave')->first())
+                //leave status (widget)
+                var LeaveStatus = $('#leave-status-list');
+                //loadLeaveStatus();
+            @endif
+
+            @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
+                //Post end task form to server using ajax (add)
+                var taskID;
+                var employeeID;
+                var uploadRequired;
+                $('#end-task-modal').on('show.bs.modal', function (e) {
+                    var btnEnd = $(e.relatedTarget);
+                    taskID = btnEnd.data('task_id');
+                    employeeID = btnEnd.data('employee_id');
+                    uploadRequired = btnEnd.data('upload_required');
+                    var modal = $(this);
+                    modal.find('#task_id').val(taskID);
+                    modal.find('#employee_id').val(employeeID);
+                    modal.find('#upload_required').val(uploadRequired);
                 });
 
-                //show employee monthly performance on modal [Comp Appraisal Widget]
-                $('#emp-year-performance-modal').on('show.bs.modal', function (e) {
-                    var linkDiv = $(e.relatedTarget);
-                    var empID = parseInt(linkDiv.data('emp_id'));
-                    var empName = linkDiv.data('emp_name');
-                    var empChartCanvas = $('#empMonthlyPerformanceModalChart');
-                    var loadingWheel = $('#lo-emp-year-performance-modal');
-                    var empAppraisedMonthList = $('#emp-appraised-month-modal-list');
-                    var modalWin = $(this);
-                    modalWin.find('#emp-year-modal-title').html(empName + '  - Appraisal');
-                    loadEmpMonthlyPerformance(empChartCanvas, empID, loadingWheel, empAppraisedMonthList);
+                $('#end-task').on('click', function() {
+                    endTask(taskID);
+                    /*
+                    var strUrl = '/task/end';
+                    var formName = 'end-task-form';
+                    var modalID = 'end-task-modal';
+                    var submitBtnID = 'end-task';
+                    var redirectUrl = '/';
+                    var successMsgTitle = 'Task Ended!';
+                    var successMsg = 'Task has been Successfully ended!';
+
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                    */
                 });
-                $('#emp-year-performance-modal').on('hidden.bs.modal', function (e) {
-                    $('#lo-emp-year-performance-modal').show();
+
+                $('#close-task-modal').on('show.bs.modal', function (e) {
+                    var btnEnd = $(e.relatedTarget);
+                    taskID = btnEnd.data('task_id');
+                    var modal = $(this);
+                    modal.find('#task_id').val(taskID);
                 });
-            }
+                
+                $('#close-task').on('click', function() {
+                    var strUrl = '/task/check';
+                    var formName = 'close-task-form';
+                    var modalID = 'close-task-modal';
+                    var submitBtnID = 'close-task';
+                    var redirectUrl = '/';
+                    var successMsgTitle = 'Task Checked!';
+                    var successMsg = 'Task has been Successfully checked!';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
 
-            //Show available perks on the perks widget
-            var perksWidgetList = $('#perks-widget-list');
-            loadAvailablePerks(perksWidgetList);
+                //Launch counter for running tasks
+                @foreach($tasks as $task)
+                    increment({{ $task->task_id }});
+                @endforeach
+            @endif
 
-            //leave status (widget)
-            var LeaveStatus = $('#leave-status-list');
-            //loadLeaveStatus();
-
-            //Show perk details
-            $('#edit-perk-modal').on('show.bs.modal', function (e) {
-                var perkLink = $(e.relatedTarget);
-                var modal = $(this);
-                perkDetailsOnShow(perkLink, modal);
-            });
             //Show success action modal
-            $('#success-action-modal').modal('show');
-            document.getElementById("notes").placeholder = "Enter Task Note or Summary";
-            //Post end task form to server using ajax (add)
-            var taskID;
-            var employeeID;
-            var uploadRequired;
-            
-             $('#end-task-modal').on('show.bs.modal', function (e) {
-                var btnEnd = $(e.relatedTarget);
-                taskID = btnEnd.data('task_id');
-                employeeID = btnEnd.data('employee_id');
-                uploadRequired = btnEnd.data('upload_required');
-                var modal = $(this);
-                modal.find('#task_id').val(taskID);
-                modal.find('#employee_id').val(employeeID);
-                modal.find('#upload_required').val(uploadRequired);
-            });
-            
-            $('#end-task').on('click', function() {
-                endTask(taskID);
-                /*
-                var strUrl = '/task/end';
-                var formName = 'end-task-form';
-                var modalID = 'end-task-modal';
-                var submitBtnID = 'end-task';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Task Ended!';
-                var successMsg = 'Task has been Successfully ended!';
-
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                */
-            });
-            $('#close-task-modal').on('show.bs.modal', function (e) {
-                var btnEnd = $(e.relatedTarget);
-                taskID = btnEnd.data('task_id');
-                var modal = $(this);
-                modal.find('#task_id').val(taskID);
-            });
-            
-            $('#close-task').on('click', function() {
-                var strUrl = '/task/check';
-                var formName = 'close-task-form';
-                var modalID = 'close-task-modal';
-                var submitBtnID = 'close-task';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Task Checked!';
-                var successMsg = 'Task has been Successfully checked!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
-
-            //Launch counter for running tasks
-            @foreach($tasks as $task)
-                increment({{ $task->task_id }});
-            @endforeach
+            //$('#success-action-modal').modal('show');
+            //document.getElementById("notes").placeholder = "Enter Task Note or Summary";
         });
     </script>
 @endsection
