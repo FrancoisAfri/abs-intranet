@@ -760,13 +760,11 @@ class ContactCompaniesController extends Controller
         $notedata = $request->all();
         unset($notedata['_token']);
 
-       
-
         $userID = $notedata['hr_person_id'];
         $companyID = $notedata['company_id'];
         $personID = $notedata['contact_person_id'];
        
-       $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
+		$notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
  
         $notes = DB::table('contacts_notes')
                 ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
@@ -791,14 +789,10 @@ class ContactCompaniesController extends Controller
                 ->orderBy('contacts_notes.id')
                 ->get();
 
-                
-                 $companyname = $notes->first()->companyname;
-                //return $negsickDays;
-             
+		$companyname = $notes->first()->companyname;
+		//return $negsickDays;
 
-             //  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
-               
-
+		//  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
 
         //$data['companies'] = $companies;
         $data['notesStatus'] = $notesStatus;
