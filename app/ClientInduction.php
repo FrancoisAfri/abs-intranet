@@ -23,5 +23,23 @@ class ClientInduction extends Model
         return $this->belongsTo(ContactCompany::class, 'company_id');
     }
 
+     //Total task accessor
+    public function getTOTALTASKAttribute() {
+        $this->load('TasksList');
+        return $this->TasksList->count();
+    }
+
+        //Total completed task accessor
+     public function getCompletedTaskAttribute() {
+        $this->load(['TasksList' => function($query) {
+            $query->where('status', 4);
+        }]);
+        return $this->TasksList->count();
+    }
+
+   
+
+
+
 	
 }

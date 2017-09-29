@@ -277,9 +277,9 @@
                     <table class="table table-striped table-bordered">
 
                         <tr>
-                            <th style="width: 10px">#</th>
+                           <!--  <th style="width: 10px">#</th> -->
                             <th>Induction Name</th>
-                            <th>Created by </th>
+                            <th>KAM </th>
                             <th>Client</th>
                             <th style="text-align: center;"><i class="fa fa-info-circle"></i> Status</th>
                         </tr> 
@@ -287,14 +287,14 @@
                        @if (!empty($ClientInduction))
                            @foreach($ClientInduction as $Induction)
                              <tr>
-                                <td></td>
+                               <!--  <td>{{ $Induction->completed_task }}</td> -->
                                 <td>{{ (!empty($Induction->induction_title)) ?  $Induction->induction_title : ''}}</td>
                                 <td>{{ !empty($Induction->firstname) && !empty($Induction->surname) ? $Induction->firstname.' '.$Induction->surname : '' }}</td>
                                  <!-- <td>{{ (!empty($Induction->create_by)) ?  $Induction->create_by : ''}}</td> -->
                            <td>{{ (!empty($Induction->company_name)) ?  $Induction->company_name : ''}}</td>
                            <td><div class="progress">
                                 <div class="progress-bar progress-bar-warning  progress-bar-striped" role="progressbar"
-                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ $Induction->create_by }}%"> {{ $Induction->create_by }}%</div></div>
+                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ $Induction->completed_task == 0 ? 0 : ($Induction->completed_task/$Induction->total_task * 100)  }}%"> {{  (round($Induction->completed_task == 0 ? 0 : ($Induction->completed_task/$Induction->total_task * 100)))}}%</div></div>
                             </td>
                              </tr>
                            @endforeach

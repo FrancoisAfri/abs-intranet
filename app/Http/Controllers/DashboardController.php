@@ -238,12 +238,10 @@ class DashboardController extends Controller {
                                ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
                                ->leftJoin('contact_companies', 'client_inductions.company_id', '=' ,'contact_companies.id' )
                                ->get();
-                                if (!empty($ClientInduction))
-                                    $ClientInduction->load('ClientName')->first();
-                               
-           
 
-           
+                                $ClientTask = $ClientInduction->load('TasksList');
+
+                            
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
             $data['account'] = $account;
