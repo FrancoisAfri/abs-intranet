@@ -760,11 +760,13 @@ class ContactCompaniesController extends Controller
         $notedata = $request->all();
         unset($notedata['_token']);
 
+       
+
         $userID = $notedata['hr_person_id'];
         $companyID = $notedata['company_id'];
         $personID = $notedata['contact_person_id'];
        
-		$notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
+       $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
  
         $notes = DB::table('contacts_notes')
                 ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
@@ -789,10 +791,15 @@ class ContactCompaniesController extends Controller
                 ->orderBy('contacts_notes.id')
                 ->get();
 
-		$companyname = $notes->first()->companyname;
-		//return $negsickDays;
+                
+                 //$companyname = $notes->first()->companyname;
 
-		//  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
+                //return $negsickDays;
+             
+
+             //  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
+               
+
 
         //$data['companies'] = $companies;
         $data['notesStatus'] = $notesStatus;
@@ -800,7 +807,7 @@ class ContactCompaniesController extends Controller
         $data['companyID'] = $companyID;
         $data['personID'] = $personID;
         $data['notes'] = $notes;
-        $data['companyname'] = $companyname;
+       // $data['companyname'] = $companyname;
         $data['page_title'] = "Notes  Report";
         $data['page_description'] = "Notes Report";
         $data['breadcrumb'] = [
@@ -863,12 +870,12 @@ class ContactCompaniesController extends Controller
                // ->orderBy('contacts_notes.id')
                 ->get();
 
-                 $companyname = $meetingminutes->first()->companyname;
+               //  $companyname = $meetingminutes->first()->companyname;
                  // return $meetingminutes;
 
         $data['notesStatus'] = $notesStatus;
         $data['companyID'] = $companyID;
-        $data['companyname'] = $companyname;
+        //$data['companyname'] = $companyname;
         $data['personID'] = $personID;
         $data['Datefrom'] = $Datefrom;
         $data['Dateto'] = $Dateto;

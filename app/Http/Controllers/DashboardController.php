@@ -21,6 +21,7 @@ use App\product_packages;
 use App\Http\Requests;
 use App\projects;
 use App\activity;
+use App\ClientInduction;
 use App\modules;
 use App\programme;
 use App\ContactPerson;
@@ -63,6 +64,7 @@ class DashboardController extends Controller {
         //check if Ribbon is active
         $Ribbon_module = modules::where('active', 1)->get();
         $activeModules = modules::where('active', 1)->get();
+       // return $activeModules;
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -229,6 +231,18 @@ class DashboardController extends Controller {
                 $package = $packages->first()->id;
             }
 
+                #induction
+
+            $ClientInduction = ClientInduction::
+                               select('client_inductions.*','hr_people.first_name as firstname', 'hr_people.surname as surname','contact_companies.name as company_name')
+                               ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
+                               ->leftJoin('contact_companies', 'client_inductions.company_id', '=' ,'contact_companies.id' )
+                               ->get();
+
+                                $ClientTask = $ClientInduction->load('TasksList');
+
+                            
+            $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
             $data['account'] = $account;
             $data['Ribbon_module'] = $Ribbon_module;
