@@ -37,40 +37,41 @@
                                       
                                     <tr><td class="caption" colspan="2">Allow Sending of Messages</td>
                                         <input type="hidden" name="allow_sending_messages" value="0">
-                                        <td colspan="3"><input type="checkbox" name="allow_sending_messages" value="1" ></td>
+                                        <td colspan="3"><input type="checkbox" name="allow_sending_messages" value="1" {{ $configuration->allow_sending_messages === 1 ? 'checked ="checked"' : 0 }} ></td>
                                     </tr>
                                     <tr><td class="caption" colspan="2">Use Fleet Number</td>
                                           <input type="hidden" name="use_fleet_number" value="0">
-                                        <td colspan="3"><input type="checkbox" name="use_fleet_number" value="1" ></td>
+                                        <td colspan="3"><input type="checkbox" name="use_fleet_number" value="1" {{ $configuration->use_fleet_number === 1 ? 'checked ="checked"' : 0 }} ></td>
 
                                     </tr>
                                     <tr><td class="caption" colspan="2">Include Inspection Documents</td>
                                          <input type="hidden" name="include_inspection_document" value="0">
-                                        <td colspan="3"><input type="checkbox" name="include_inspection_document" value="1"></td>
+                                        <td colspan="3"><input type="checkbox" name="include_inspection_document" value="1" {{ $configuration->include_inspection_document === 1 ? 'checked ="checked"' : 0 }} ></td>
+
                                     </tr>
                                     <tr><td class="caption" colspan="2">New Vehicle Approval</td>
                                         <input type="hidden" name="new_vehicle_approval" value="0">
-                                        <td colspan="3"><input type="checkbox" name="new_vehicle_approval" value="1"></td>
+                                        <td colspan="3"><input type="checkbox" name="new_vehicle_approval" value="1" {{ $configuration->new_vehicle_approval === 1 ? 'checked ="checked"' : 0 }} ></td>
                                     </tr>
                                     <tr><td class="caption" colspan="2">Include Division in Reports</td>
                                         <input type="hidden" name="include_division_report" value="0">
-                                        <td colspan="3"><input type="checkbox" name="include_division_report" value="1" ></td>
+                                        <td colspan="3"><input type="checkbox" name="include_division_report" value="1" {{ $configuration->include_division_report === 1 ? 'checked ="checked"' : 0 }} ></td>
                                     </tr>
                                     <tr><td class="caption" colspan="2">Fuel Auto Approval</td>
                                         <input type="hidden" name="fuel_auto_approval" value="0">
-                                        <td colspan="3"><input type="checkbox" name="fuel_auto_approval" value="1"  onclick="$('.tr_hide').toggle();"></td>
+                                        <td colspan="3"><input type="checkbox" name="fuel_auto_approval" value="1"  onclick="$('.tr_hide').toggle();" {{ $configuration->fuel_auto_approval === 1 ? 'checked ="checked"' : 0 }} ></td>></td>
                                     </tr>
                                     <tr class="tr_hide"><td class="caption" colspan="2">Fuel Require Tank Manager Approval</td>
                                          <input type="hidden" name="fuel_require_tank_manager_approval" value="0">
-                                        <td colspan="3"><input type="checkbox" name="fuel_require_tank_manager_approval" value="1"></td>
+                                        <td colspan="3"><input type="checkbox" name="fuel_require_tank_manager_approval" value="1" {{ $configuration->fuel_require_tank_manager_approval === 1 ? 'checked ="checked"' : 0 }} ></td>
                                     </tr>
                                     <tr class="tr_hide"><td class="caption" colspan="2">Fuel Require CEO Approval</td>
                                         <input type="hidden" name="fuel_require_ceo_approval" value="0">
-                                        <td colspan="3"><input type="checkbox" name="fuel_require_ceo_approval" value="1" ></td>
+                                        <td colspan="3"><input type="checkbox" name="fuel_require_ceo_approval" value="1" {{ $configuration->fuel_require_ceo_approval === 1 ? 'checked ="checked"' : 0 }} ></td>
                                     </tr>
                                     <tr><td class="caption" colspan="2">Sms Job Card to Mechanic</td>
                                         <input type="hidden" name="mechanic_sms" value="0">
-                                        <td colspan="3"><input type="checkbox" name="mechanic_sms" value="1"></td>
+                                        <td colspan="3"><input type="checkbox" name="mechanic_sms" value="1"{{ $configuration->mechanic_sms === 1 ? 'checked ="checked"' : 0 }} ></td>
 
                                     <tr><td class="caption" colspan="2">New Permit Upload Days</td>
                                         <input type="hidden" name="permit_days" value="0">
