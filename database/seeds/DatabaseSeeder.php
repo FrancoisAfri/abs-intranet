@@ -781,9 +781,81 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'helpdesk/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-
-
         #end
+
+          //Insert navigation menus
+        $module = new modules(); //Vehicle Management
+        $module->active = 1;
+        $module->name = 'Vehicle Management';
+        $module->code_name = 'vehicle';
+        $module->path = 'vehicle_management';
+        $module->font_awesome = 'fa fa-truck';
+        $module->save();
+
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 1;
+        // $ribbon->ribbon_name = 'Manage Fleet Types ';
+        // $ribbon->description = 'Manage Fleet Types ';
+        // $ribbon->ribbon_path = 'vehicle_management/Manage_fleet_types';
+        // $ribbon->access_level = 3;
+        // $module->addRibbon($ribbon);
+        
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 2;
+        // $ribbon->ribbon_name = 'Manage Fleet Card Types ';
+        // $ribbon->description = 'Manage Fleet Card Types ';
+        // $ribbon->ribbon_path = 'vehicle_management/fleet_card';
+        // $ribbon->access_level = 3;
+        // $module->addRibbon($ribbon);
+
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Manage Fleet Filling Station';
+        // $ribbon->description = 'Manage Fleet Filling Station damage categories';
+        // $ribbon->ribbon_path = 'vehicle_management/fillingstaion';
+        // $ribbon->access_level = 3;
+        // $module->addRibbon($ribbon);
+
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Manage Fleet License Permit ';
+        // $ribbon->description = 'Manage Fleet License Type/Permit ';
+        // $ribbon->ribbon_path = 'vehicle_management/Permit';
+        // $ribbon->access_level = 3;
+        // $module->addRibbon($ribbon);
+
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Manage Document Type';
+        // $ribbon->description = 'Manage Document Type';
+        // $ribbon->ribbon_path = 'vehicle_management/Document_type';
+        // $ribbon->access_level = 3;
+        // $module->addRibbon($ribbon);
+
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Manage Incidents Type';
+        // $ribbon->description = 'Manage Incidents Type';
+        // $ribbon->ribbon_path = 'vehicle_management/Incidents_type';
+        // $ribbon->access_level = 3;
+        // $module->addRibbon($ribbon);
+
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'vehicle_management/setup';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+         #end
 		
 		$module = new modules();//Audit Management
         $module->active = 1;
@@ -1013,6 +1085,9 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'survey/reports';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+
+        #
+      
 		
 		$module = new modules(); //Task Management
         $module->active = 1;
@@ -1121,6 +1196,8 @@ class DatabaseSeeder extends Seeder
         $profile->name = 'Shift Worker';
         $profile->description = 'Shift Worker Employee leave' ;
         $profile->save();
+
+         
 
     }
 }
