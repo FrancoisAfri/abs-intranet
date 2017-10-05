@@ -74,11 +74,11 @@
 
                                     <tr><td class="caption" colspan="2">New Permit Upload Days</td>
                                         <input type="hidden" name="permit_days" value="0">
-                                        <td colspan="6"><input type="number" name="permit_days" size="20" maxlength="7"  placeholder="Enter Permit Days" ></td>
+                                        <td colspan="6"><input type="number" name="permit_days" size="20" maxlength="7"  placeholder="Enter Permit Days" required="" ></td>
                                     </tr>
 
                                     <tr><td class="caption" colspan="2">Currency</td>
-                                        <td colspan="3"><input type="text" name="currency" size="20" maxlength="4" placeholder="Enter Currency" ></td>
+                                        <td colspan="3"><input type="text" name="currency" size="20" maxlength="4" placeholder="Enter Currency" required=""></td>
                                     </tr>
                                     <tr><td class="caption" colspan="2">Approvals Done By</td>
                                         <td colspan="3">
@@ -179,26 +179,26 @@
                                     <!--  -->
                                     <tr><td class="caption" colspan="2">Send Alert before service is due</td>
                                         
-                                        <td colspan="6"><input type="number" name="service_days" size="20" maxlength="7"  placeholder="Enter service days" > Days
+                                        <td colspan="6"><input type="number" name="service_days" size="20" maxlength="7"  placeholder="Enter service days" required="" > Days
                                         <br>
                                         <br>
-                                        <input type="number" name="service_km" size="20" maxlength="7"  placeholder="Enter service km" > km</td>
+                                        <input type="number" name="service_km" size="20" maxlength="7"  placeholder="Enter service km" required=""> km</td>
                                     </tr>
                                     <!--  -->
                                     <tr><td class="caption" colspan="2">Send Recurring Notifications when service is overdue</td>
                                         
-                                        <td colspan="6"><input type="number" name="service_overdue_days" size="20" maxlength="7"  placeholder="Enter service overdue days" > Days
+                                        <td colspan="6"><input type="number" name="service_overdue_days" size="20" maxlength="7"  placeholder="Enter service overdue days" required=""> Days
                                         <br>
                                         <br>
-                                        <input type="number" name="service_overdue_km" size="20" maxlength="7"  placeholder="Enter service overdue km " > km</td>
+                                        <input type="number" name="service_overdue_km" size="20" maxlength="7"  placeholder="Enter service overdue km " required=""> km</td>
                                     </tr>
                                     <!--  -->
                                     <tr><td class="caption" colspan="2">Do not allow bookings if service overdue </td>
                                         
-                                        <td colspan="6"><input type="number" name="no_bookings_days" size="20" maxlength="7"  placeholder="Enter no bookings days" > Days
+                                        <td colspan="6"><input type="number" name="no_bookings_days" size="20" maxlength="7"  placeholder="Enter no bookings days" required="" > Days
                                         <br>
                                         <br>
-                                        <input type="number" name="no_bookings_km" size="20" maxlength="7"  placeholder="Enter no bookings km" > km</td>
+                                        <input type="number" name="no_bookings_km" size="20" maxlength="7"  placeholder="Enter no bookings km" required=""> km</td>
                                     </tr>
 
                                     <tr>
@@ -217,7 +217,7 @@
 
                                     <tr><td class="caption" colspan="2">Auto-Cancel if collection overdue</td>
                                         
-                                        <td colspan="6"><input type="text" name="service_overdue_days" size="20" maxlength="7"  placeholder="Enter Hours " > Hours
+                                        <td colspan="6"><input type="text" name="service_overdue_days" size="20" maxlength="7"  placeholder="Enter Hours " required=""> Hours
                                     </tr>
                             </table>
                             <br>
