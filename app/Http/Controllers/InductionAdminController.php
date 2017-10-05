@@ -36,7 +36,7 @@ class InductionAdminController extends Controller
 		->orderBy('dept_id', 'asc')
 		->orderBy('order_no', 'asc')
 		->get();
-		$companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
+		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
 		$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
         $data['page_title'] = "Induction";
