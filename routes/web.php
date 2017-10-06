@@ -81,6 +81,8 @@ Route::patch('contacts/update_sms/{smsConfiguration}', 'ContactsController@updat
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
 
+
+
 #Business Card
 Route::get('hr/user_card', 'BusinessCardsController@userCard');
 Route::get('hr/business_card', 'BusinessCardsController@view');
@@ -183,10 +185,6 @@ Route::post('reports/contact_note/client_report', 'ContactCompaniesController@pr
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
 
-
-
-
-
 //AGM
 //Route::get('contacts/agm', 'AGMContactsController@create');
 //Route::post('contacts/agm/store', 'AGMContactsController@store');
@@ -286,6 +284,57 @@ Route::post('help_desk/auto_escalations', 'HelpdeskController@auto_escalations')
 Route::post('help_desk/unresolved_tickets', 'HelpdeskController@unresolved_tickets');
 Route::post('help_desk/auto_responder_messages', 'HelpdeskController@auto_responder_messages');
 Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
+
+
+##*************** Vehicle Management ************
+Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
+Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
+Route::patch('vehice/edit_fleet/{fleet}', 'VehicleManagemntController@editfleet');
+Route::get('/vehice/fleet_act/{fleet}', 'VehicleManagemntController@VehicleAct');
+Route::get('vehice/Manage_fleet/{fleet}/delete', 'VehicleManagemntController@deletefleet');
+
+// ---
+Route::get('vehicle_management/fleet_card', 'VehicleManagemntController@Fleet_Card');
+Route::post('vehice/add_fleetcard', 'VehicleManagemntController@AddfleetCards');
+Route::patch('vehice/edit_fleetcard/{card}', 'VehicleManagemntController@editfleetcard');
+Route::get('/vehice/fleetcard_act/{card}', 'VehicleManagemntController@fleetcardAct');
+Route::get('vehice/Manage_fleetcard_types/{card}/delete', 'VehicleManagemntController@deletefleetcard');
+// ---
+Route::get('vehicle_management/fillingstaion', 'VehicleManagemntController@Fleet_fillingstaion');
+Route::post('vehice/add_fillingstation', 'VehicleManagemntController@Addfillingstation');
+Route::patch('vehice/edit_station/{station}', 'VehicleManagemntController@editstation');
+Route::get('/vehice/station_act/{station}', 'VehicleManagemntController@stationcardAct');
+Route::get('vehice/station/{station}/delete', 'VehicleManagemntController@deletestation');
+// ---
+Route::get('vehicle_management/Permit', 'VehicleManagemntController@Fleet_licencePermit');
+Route::post('vehice/add_license', 'VehicleManagemntController@AddlicencePermit');
+Route::patch('vehice/edit_license/{permit}', 'VehicleManagemntController@editlicense');
+Route::get('/vehice/licence_act/{permit}', 'VehicleManagemntController@licensePermitAct');
+Route::get('vehice/license/{permit}/delete', 'VehicleManagemntController@deleteLicensePermit');
+// ---
+Route::get('vehicle_management/Document_type', 'VehicleManagemntController@Fleet_DocumentType');
+Route::post('vehice/add_document', 'VehicleManagemntController@AddDocumentType');
+Route::patch('vehice/edit_document/{document}', 'VehicleManagemntController@EditDocumentType');
+Route::get('/vehice/document_act/{document}', 'VehicleManagemntController@DocumentTypeAct');
+Route::get('vehice/document/{document}/delete', 'VehicleManagemntController@deleteDocument');
+//---
+Route::get('vehicle_management/Incidents_type', 'VehicleManagemntController@IncidentType');
+Route::post('vehice/incident_type', 'VehicleManagemntController@AddIncidentType');
+Route::patch('vehice/edit_incident/{incident}', 'VehicleManagemntController@EditIncidentType');
+Route::get('/vehice/incident_act/{incident}', 'VehicleManagemntController@incidentTypeAct');
+Route::get('vehice/incident/{incident}/delete', 'VehicleManagemntController@deleteIncident');
+// ----
+Route::get('vehicle_management/group_admin', 'VehicleManagemntController@groupAdmin');
+Route::post('vehice/groupadmin', 'VehicleManagemntController@Addgroupadmin');
+Route::patch('vehice/edit_group/{group}', 'VehicleManagemntController@edit_group');
+Route::get('/vehice/group_act/{group}', 'VehicleManagemntController@groupAct');
+
+// ---setup
+Route::get('vehicle_management/setup', 'VehicleManagemntController@VehicleSetup');
+Route::get('vehicle_management/vehicle_configuration', 'VehicleManagemntController@VehicleConfiguration');
+Route::post('vehicle_management/configuration/{configuration}', 'VehicleManagemntController@Configuration');
+
+
 
 
 # Performance Appraisals Module
