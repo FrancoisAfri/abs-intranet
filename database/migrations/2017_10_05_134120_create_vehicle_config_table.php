@@ -25,7 +25,7 @@ class CreateVehicleConfigTable extends Migration
             $table->smallInteger('fuel_require_ceo_approval')->nullable();
             $table->smallInteger('mechanic_sms')->nullable();
             $table->integer('permit_days')->nullable();
-            $table->integer('currency')->nullable();
+            $table->string('currency')->nullable();
             $table->smallInteger('approval_manager_capturer')->nullable();
             $table->smallInteger('approval_manager_driver')->nullable();
             $table->smallInteger('approval_hod')->nullable();

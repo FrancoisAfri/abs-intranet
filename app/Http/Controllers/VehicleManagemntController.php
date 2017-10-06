@@ -525,18 +525,7 @@ class VehicleManagemntController extends Controller
             $vehicleconfig->no_bookings_days = 0;
             $vehicleconfig->no_bookings_km = 0;
             $vehicleconfig->save();
-
-//            DB::table('vehicle_configuration')
-////                ->where('id', 1)
-//                ->update(['permit_days' => 0],
-//                    ['currency' => 0],
-//                    ['service_days' => 0],
-//                    ['service_km' => 0],
-//                    ['service_overdue_days' => 0],
-//                    ['service_overdue_km' => 0],
-//                    ['no_bookings_days' => 0],
-//                    ['no_bookings_km' => 0]);
-                    }
+        }
 
         $configuration = DB::table('vehicle_configuration')->where("id", 1)->get()->first();
 
