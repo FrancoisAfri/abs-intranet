@@ -292,7 +292,6 @@ Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
 Route::patch('vehice/edit_fleet/{fleet}', 'VehicleManagemntController@editfleet');
 Route::get('/vehice/fleet_act/{fleet}', 'VehicleManagemntController@VehicleAct');
 Route::get('vehice/Manage_fleet/{fleet}/delete', 'VehicleManagemntController@deletefleet');
-
 // ---
 Route::get('vehicle_management/fleet_card', 'VehicleManagemntController@Fleet_Card');
 Route::post('vehice/add_fleetcard', 'VehicleManagemntController@AddfleetCards');
@@ -328,12 +327,13 @@ Route::get('vehicle_management/group_admin', 'VehicleManagemntController@groupAd
 Route::post('vehice/groupadmin', 'VehicleManagemntController@Addgroupadmin');
 Route::patch('vehice/edit_group/{group}', 'VehicleManagemntController@edit_group');
 Route::get('/vehice/group_act/{group}', 'VehicleManagemntController@groupAct');
-
 // ---setup
 Route::get('vehicle_management/setup', 'VehicleManagemntController@VehicleSetup');
 Route::get('vehicle_management/vehicle_configuration', 'VehicleManagemntController@VehicleConfiguration');
 Route::post('vehicle_management/configuration/{configuration}', 'VehicleManagemntController@Configuration');
-
+##*************** Job card Management ************
+Route::get('Jobcard_management/Job_card', 'JobcardManagementController@JobcardManagent');
+Route::get('Jobcard_management/addJob_card', 'JobcardManagementController@addJobcard');
 
 
 
