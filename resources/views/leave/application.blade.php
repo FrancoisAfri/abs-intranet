@@ -299,10 +299,10 @@
                                         //Initialize Select2 Elements
                                         $(".select2").select2();
                                         //Cancel button click event
-                                        changetextbox();
-                                        $('#cancel').click(function() {
-                                            location.href = '/leave/application';
-                                        });
+                                        // changetextbox();
+                                        // $('#cancel').click(function() {
+                                        //     location.href = '/leave/application';
+                                        // });
                                         function postData(id, data) {
                                             alert(id);
                                             //if (data == 'approval_id') location.href = "/leave/approval/" + id;

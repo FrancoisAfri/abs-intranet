@@ -14,6 +14,8 @@ use App\fleet_licence_permit;
 use App\incident_type;
 use App\vehicle_config;
 use App\modules;
+Use App\vehiclemodel;
+use App\vehiclemake;
 use App\fleet_documentType;
 use App\fleet_fillingstation;
 use App\module_access;
@@ -564,5 +566,200 @@ class VehicleManagemntController extends Controller {
         $configuration->update($config);
         return back();
     }
+	public function vehicemake () {
+		$vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+
+        $data['page_title'] = " Vehicle Management ";
+        $data['page_description'] = "Vehicle Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['vehiclemake'] = $vehiclemake;
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Setup';
+
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.vehicle_make')->with($data);	
+	}
+	
+	public function AddVehicleMake(Request $request) {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $vehiclemake = new vehiclemake($SysData);
+        $vehiclemake->status = 1;
+        $vehiclemake->save();
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+    }
+	
+	  public function editvehiclemake(Request $request, vehiclemake $vmake) {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $vmake->name = $SysData['name'];
+        $vmake->description = $SysData['description'];
+        $vmake->update();
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+    }
+
+     public function vehiclemakeAct(Request $request, vehiclemake $vmake) {
+        if ($vmake->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $vmake->status = $stastus;
+        $vmake->update();
+        return back();
+    }
+
+    public function deleteVehiclemake(Request $request, vehiclemake $vmake) {
+        $vmake->delete();
+
+        AuditReportsController::store('Vehicle Make', 'Vehicle Make Deleted', "Vehicle Make has been deleted", 0);
+        return redirect('/vehicle_management/vehice_make');
+    }
+
+        public function vehicemodel () {
+        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+
+        $data['page_title'] = " Vehicle Management ";
+        $data['page_description'] = "Vehicle Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['vehiclemodel'] = $vehiclemodel;
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Setup';
+
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.vehicle_model')->with($data);  
+    }
+
+    public function AddVehicleModel(Request $request){
+         $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $vehiclemodel = new vehiclemodel($SysData);
+        $vehiclemodel->status = 1;
+        $vehiclemodel->save();
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+    }
+
+     public function editvehiclemodel(Request $request, vehiclemodel $vmodel) {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $vmodel->name = $SysData['name'];
+        $vmodel->description = $SysData['description'];
+        $vmodel->update();
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+    }
+
+    public function vehiclemodelAct(Request $request, vehiclemodel $vmodel) {
+        if ($vmodel->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $vmodel->status = $stastus;
+        $vmodel->update();
+        return back();
+    }
+
+     public function deleteVehiclemodel(Request $request, vehiclemodel $vmodel) {
+        $vmodel->delete();
+
+        AuditReportsController::store('Vehicle Model', 'Vehicle Model Deleted', "Vehicle Model has been deleted", 0);
+        return redirect('/vehicle_management/vehice_model');
+    }
+
+    // 
+       public function VehicleSearch(Request $request) {
+        $this->validate($request, [
+        ]);
+        $vehicleData = $request->all();
+        unset($vehicleData['_token']);
+
+        return $vehicleData;
+
+        // $actionFrom = $actionTo = 0;
+        // $userID = $request['hr_person_id'];
+        // $action = $request['action'];
+        // $actionDate = $request['action_date'];
+        // if (!empty($actionDate)) {
+        //     $startExplode = explode('-', $actionDate);
+        //     $actionFrom = strtotime($startExplode[0]);
+        //     $actionTo = strtotime($startExplode[1]);
+        // }
+        // $historyAudit = DB::table('leave_history')
+        //         ->select('leave_history.*', 'hr_people.employee_number as employee_number ', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+        //         ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
+        //         ->where(function ($query) use ($actionFrom, $actionTo) {
+        //             if ($actionFrom > 0 && $actionTo > 0) {
+        //                 $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
+        //             }
+        //         })
+        //         ->where(function ($query) use ($userID) {
+        //             if (!empty($userID)) {
+        //                 $query->where('leave_history.hr_id', $userID);
+        //             }
+        //         })
+        //         ->where(function ($query) use ($action) {
+        //             if (!empty($action)) {
+        //                 $query->where('leave_history.action', 'ILIKE', "%$action%");
+        //             }
+        //         })
+        //         ->orderBy('leave_history.hr_id')
+        //         ->get();
+
+        $data['actionFrom'] = $actionFrom;
+        $data['userID'] = $userID;
+        $data['action'] = $action;
+        $data['actionDate'] = $actionDate;
+        $data['historyAudit'] = $historyAudit;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
+        return view('leave.leave_history report')->with($data);
+    }
+
+
+
 
 }

@@ -146,10 +146,10 @@
 
 
 		//Date picker
-		$('.datepicker').datepicker({
-			format: 'dd/mm/yyyy',
-			autoclose: true,
-			todayHighlight: true
+		$('.job_card_date').datepicker({
+			formminViewMode: 'years',
+            autoclose: true,
+            format: 'yyyy'
 		});
 
 		$('#due_time').datetimepicker({
