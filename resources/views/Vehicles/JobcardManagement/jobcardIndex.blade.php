@@ -5,7 +5,7 @@
     <div class="col-md-12">
         <div class="box box-warning">
             <div class="box-header with-border">
-                <h3 class="box-title">Vehicle Management Settings</h3>
+                <h4 class="box-title">Job Card Management</h4>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                     <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -14,43 +14,35 @@
 
             <div align="center" class="box box-default">
 				<div class="box-header with-border">
-                <h3 class="box-title">Vehicle Configuration</h3>
+                <h3 class="box-title"> </h3>
 				</div>
 			<div class="box-body">
-				  <a href="/vehicle_management/Manage_fleet_types" class="btn btn-app">
-					<i class="fa fa-truck"></i>  Vehicle types
+				  <a href="/Jobcard_management/addJob_card" class="btn btn-app">
+					<i class="fa fa-tasks"></i>  Add Job Card
 				  </a>
 
-                   <a href="/vehicle_management/vehice_make" class="btn btn-app">
-                    <i class="fa fa-modx"></i>  Vehicle Make
-                  </a>
+				  {{--<a href="/vehicle_management/fleet_card" class="btn btn-app">--}}
+					{{--<i class="fa fa-car" ></i> Fleet Card Types --}}
+				  {{--</a>--}}
 
-                  <a href="/vehicle_management/vehice_model" class="btn btn-app">
-                    <i class="fa fa-bullseye"></i>  Vehicle Model
-                  </a>
+				  {{--<a href="/vehicle_management/fillingstaion" class="btn btn-app">--}}
+					{{--<i class="fa fa-bitbucket"></i> Fleet Filling Station damage categories --}}
+				  {{--</a>--}}
 
-				  <a href="/vehicle_management/fleet_card" class="btn btn-app">
-					<i class="fa fa-car" ></i> Fleet Card Types 
-				  </a>
+				  {{--<a href="/vehicle_management/Document_type"  class="btn btn-app">--}}
+					{{--<i class="fa fa-file-o"></i>  Document Type --}}
+				  {{--</a>--}}
 
-				  <a href="/vehicle_management/fillingstaion" class="btn btn-app">
-					<i class="fa fa-bitbucket"></i> Fleet Filling Station damage categories 
-				  </a>
+				  {{--<a href="/vehicle_management/Permit"  class="btn btn-app">--}}
+					{{--<i class="fa fa-id-card-o"></i> Fleet License Type/Permit --}}
+				  {{--</a>--}}
 
-				  <a href="/vehicle_management/Document_type"  class="btn btn-app">
-					<i class="fa fa-file-o"></i>  Document Type 
-				  </a>
-
-				  <a href="/vehicle_management/Permit"  class="btn btn-app">
-					<i class="fa fa-id-card-o"></i> Fleet License Type/Permit 
-				  </a>
-
-				   <a href="/vehicle_management/Incidents_type"  class="btn btn-app">
-					<i class="fa fa-medkit"></i>  Incidents Type  
-				  </a>
-				  <a href="/vehicle_management/group_admin"  class="btn btn-app">
-					<i class="fa fa-comments"></i>  Message group admin  
-				  </a>
+				   {{--<a href="/vehicle_management/Incidents_type"  class="btn btn-app">--}}
+					{{--<i class="fa fa-medkit"></i>  Incidents Type  --}}
+				  {{--</a>--}}
+				  {{--<a href="/vehicle_management/group_admin"  class="btn btn-app">--}}
+					{{--<i class="fa fa-comments"></i>  Message group admin  --}}
+				  {{--</a>--}}
 			</div>
           <!-- /.box-body -->
 			</div>
