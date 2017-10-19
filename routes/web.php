@@ -354,6 +354,7 @@ Route::get('vehicle_management/add_vehicle', 'FleetManagementController@addvehic
 // 
 Route::post('vehicle_management/add_vehicleDetails', 'FleetManagementController@addvehicleDetails');
 Route::get('vehicle_management/viewdetails/{maintenance}', 'FleetManagementController@viewDetails');
+Route::patch('vehicle_management/edit_vehicleDetails/{maintenance}', 'FleetManagementController@editvehicleDetails');
 
 # Performance Appraisals Module
 

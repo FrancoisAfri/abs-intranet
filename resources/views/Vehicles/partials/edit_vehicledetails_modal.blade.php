@@ -1,4 +1,4 @@
-<div id="edit-package-modal" class="modal modal-default fade">
+<div id="edit-vehicle-modal" class="modal modal-default fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-module-form">
@@ -43,6 +43,8 @@
                                     <option value="">*** Select a Vehicle Make ***</option>
                                     @foreach($vehiclemake as $Vehicle)
                                         <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
+                                        {{--<option value="{{ $Vehicle->id }}" {{ ($Vehicle->name == $Vehicle->id)--}}
+                                        {{--? ' selected' : '' }}>{{ $vehiclemaintenance->vehicle_make }}</option>--}}
                                     @endforeach
                                 </select>
                             </div>
@@ -92,7 +94,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control" id="year" name="year" value="{{ old('year') }}" placeholder="Select  Year ...">
+                                <input type="text" class="form-control" id="year" name="year" value="{{ $vehicle_maintenance->year }}" placeholder="Select  Year ...">
 
                             </div>
                         </div>
@@ -101,7 +103,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Registration</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control"  id="vehicle_registration" name="vehicle_registration" value="" placeholder="Enter vehicle registration" >
+                            <input type="text" class="form-control"  id="vehicle_registration" name="vehicle_registration" value="{{ $vehicle_maintenance->vehicle_registration }}" placeholder="Enter vehicle registration" >
                         </div>
 
                     </div>
@@ -109,7 +111,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Chassis Number</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control"  id="chassis_number" name="chassis_number" value="" placeholder="Enter vehicle chassis number" >
+                            <input type="text" class="form-control"  id="chassis_number" name="chassis_number" value="{{ $vehicle_maintenance->chassis_number }}" placeholder="Enter vehicle chassis number" >
                         </div>
 
                     </div>
@@ -117,7 +119,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Engine Number</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control"  id="engine_number" name="engine_number" value="" placeholder="Enter vehicle engine number" >
+                            <input type="text" class="form-control"  id="engine_number" name="engine_number" value="{{ $vehicle_maintenance->engine_number }}" placeholder="Enter vehicle engine number" >
                         </div>
 
                     </div>
@@ -126,7 +128,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Color</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control"  id="vehicle_color" name="vehicle_color" value="" placeholder="Enter vehicle color " >
+                            <input type="text" class="form-control"  id="vehicle_color" name="vehicle_color" value="{{ $vehicle_maintenance->vehicle_color }}" placeholder="Enter vehicle color " >
                         </div>
 
                     </div>
@@ -143,7 +145,7 @@
                     <div class="form-group odometer-field">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control"  id="odometer_reading" name="odometer_reading" value="" placeholder="Enter Odometer Reading " > Km
+                            <input type="text" class="form-control"  id="odometer_reading" name="odometer_reading" value="{{ $vehicle_maintenance->odometer_reading }}" placeholder="Enter Odometer Reading " > Km
                         </div>
 
                     </div>
@@ -151,7 +153,7 @@
                     <div class="form-group hours-field">
                         <label for="path" class="col-sm-2 control-label">Hours Reading</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control"  id="hours_reading" name="hours_reading" value="0" placeholder="Enter vehicle color " >
+                            <input type="number" class="form-control"  id="hours_reading" name="hours_reading" value="{{ $vehicle_maintenance->hours_reading }}" placeholder="Enter vehicle color " >
                         </div>
 
                     </div>
@@ -178,7 +180,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Size of Fuel Tank</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control"  id="size_of_fuel_tank" name="size_of_fuel_tank" value="" placeholder="Enter Size of Fuel Tank " >
+                            <input type="number" class="form-control"  id="size_of_fuel_tank" name="size_of_fuel_tank" value="{{$vehicle_maintenance->size_of_fuel_tank}}" placeholder="Enter Size of Fuel Tank " >
                         </div>
 
                     </div>
@@ -186,7 +188,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Fleet Number</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control"  id="fleet_number" name="fleet_number" value="" placeholder="Enter vehicle color " >
+                            <input type="number" class="form-control"  id="fleet_number" name="fleet_number" value="{{ $vehicle_maintenance->fleet_number }}" placeholder="Enter fleet number  " >
                         </div>
 
                     </div>
@@ -194,15 +196,15 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Cell Number</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="cell_number" name="cell_number" value="{{ old('cell_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
+                            <input type="text" class="form-control" id="cell_number" name="cell_number" value="{{ $vehicle_maintenance->cell_number }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Cell Number" data-mask>
                         </div>
 
                     </div>
 
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
+                        <label for="path" class="col-sm-2 control-label">Tracking  Number</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control"  id="tracking_umber" name="tracking_umber" value="" placeholder="Enter Tracking Cell Number" >
+                            <input type="number" class="form-control"  id="tracking_umber" name="tracking_umber" value="{{ $vehicle_maintenance->tracking_umber }}" placeholder="Enter Tracking Cell Number" >
                         </div>
 
                     </div>
@@ -267,14 +269,16 @@
                         </div>
                     </div>
 
-                    <div class="form-group notes-field{{ $errors->has('extras') ? ' has-error' : '' }}">
+
+                    <div class="form-group">
                         <label for="extras" class="col-sm-2 control-label">Extras</label>
+
                         <div class="col-sm-8">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-sticky-note"></i>
                                 </div>
-                                <textarea class="form-control" id="extras" name="extras" placeholder="Enter Extras..." rows="3">{{ old('Extras') }}</textarea>
+                                <textarea name="extras" class="form-control" placeholder="Enter Extras... " rows="3">{{ $vehicle_maintenance->extras }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -289,7 +293,7 @@
                                     <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
                                 </div>
                             @endif
-                            <input type="file" id="image" name="image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            <input type="file" id="image" name="image" value=" {{ $vehicle_maintenance->image }}" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
 
@@ -300,7 +304,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-file-pdf-o"></i>
                                 </div>
-                                <input type="file" id="registration_papers" name="registration_papers" class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
+                                <input type="file" id="registration_papers" name="registration_papers" value=" {{ $vehicle_maintenance->registration_papers }}"  class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]' data-show-upload="false">
                             </div>
                         </div>
                     </div>
@@ -326,7 +330,7 @@
                   </div>  
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_vehicle_model" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                    <button type="button" id="edit_vehicle" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
             </form>
             </div>

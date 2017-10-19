@@ -199,20 +199,26 @@ class FleetManagementController extends Controller
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
+        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
 
 
         if ($maintenance->status == 1) {
-            $vehiclemaintenances = DB::table('vehicle_maintenance')
+            $ID = $maintenance->id;
+            //return $ID;
+            $vehiclemaintenance = DB::table('vehicle_maintenance')
                 ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
                     'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
                 ->leftJoin('vehicle_make', 'vehicle_maintenance.vehicle_make', '=', 'vehicle_make.id')
                 ->leftJoin('vehicle_model', 'vehicle_maintenance.vehicle_model', '=', 'vehicle_model.id')
                 ->leftJoin('vehicle_managemnet', 'vehicle_maintenance.vehicle_type', '=', 'vehicle_managemnet.id')
-                ->where('vehicle_managemnet.id', $ID)
+                ->where('vehicle_maintenance.id', $ID)
                 ->orderBy('vehicle_maintenance.id')
                 ->get();
 
-            $vehiclemaintenance =  $vehiclemaintenances->first();
+
+            $vehiclemaintenances = $vehiclemaintenance ->first();
+
+          // return $vehicle_maintenance;
 
 
             //$Category->load('productCategory');
@@ -223,6 +229,7 @@ class FleetManagementController extends Controller
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+            $data['vehicle_maintenance'] = $vehicle_maintenance;
             $data['vehicle'] = $vehicle;
             $data['Vehicle_types'] = $Vehicle_types;
             $data['vehiclemodel'] = $vehiclemodel;
@@ -230,6 +237,7 @@ class FleetManagementController extends Controller
             $data['vehicledetail'] = $vehicledetail;
             $data['vehiclemake'] = $vehiclemake;
             $data['vehiclemaintenance'] = $vehiclemaintenance;
+            $data['vehiclemaintenances'] = $vehiclemaintenances;
             $data['maintenance'] = $maintenance;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
@@ -238,5 +246,23 @@ class FleetManagementController extends Controller
             return view('Vehicles.FleetManagement.viewfleetDetails')->with($data);
         } else
             return back();
+    }
+
+    public  function  editvehicleDetails( Request $request ,vehicle_maintenance $maintenance) {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $maintenance->vehicle_make = $SysData['vehicle_make'];
+        $maintenance->vehicle_model = $SysData['vehicle_model'];
+        $maintenance->vehicle_type = $SysData['vehicle_type'];
+        // $fleet->status = 1;
+        $maintenance->update();
+        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
     }
 }

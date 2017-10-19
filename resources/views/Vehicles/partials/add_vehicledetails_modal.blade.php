@@ -185,7 +185,7 @@
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Fleet Number</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control"  id="fleet_number" name="fleet_number" value="" placeholder="Enter vehicle color " >
+                            <input type="number" class="form-control"  id="fleet_number" name="fleet_number" value="" placeholder="Enter fleet number " >
                         </div>
 
                     </div>

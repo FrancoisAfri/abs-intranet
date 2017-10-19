@@ -34,8 +34,9 @@
 
                 <div align="center" class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title"> Vehicle Management
-                            - {{ $maintenance->vehicle_model . ' ' . $maintenance->vehicle_registration . ' ' . $maintenance->year }}</h3>
+                        <h3 class="box-title"> Vehicle Management-{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
+
+                        </h3>
                     </div>
                     <div class="box-body">
                         <a href="/Jobcard_management/addJob_card" class="btn btn-app">
@@ -77,42 +78,45 @@
 
 
                         <table class = "table table-striped table-bordered">
+
+                                @foreach ($vehiclemaintenance as $vehiclemaintenance)
                             <tr>
-                                <td class="caption">Fleet Number</td><td>{{ $vehiclemaintenance->fleet_number }}</td>
-                                <td class="caption">Year</td><td>{{ $vehiclemaintenance->year }}</td>
+
+                                <td class="caption">Fleet Number</td><td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
+                                <td class="caption">Year</td><td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
                             </tr>
                             <tr>
                                 <td class="caption">Registration</td><td>1 </td>
-                                <td class="caption">Engine Number</td><td>{{ $vehiclemaintenance->engine_number }}</td>
+                                <td class="caption">Engine Number</td><td>{{ !empty($vehiclemaintenance->engine_number) ? $vehiclemaintenance->engine_number : ''}}</td>
                             </tr>
                             <tr>
-                                <td class="caption" width="25%">Make</td><td width="25%"> {{ $vehiclemaintenance->vehicle_make }} </td>
-                                <td class="caption">Vehicle Type</td><td>{{ $vehiclemaintenance->vehicle_type }}</td>
+                                <td class="caption" width="25%">Make</td><td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
+                                <td class="caption">Vehicle Type</td><td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>
                             </tr>
                             <tr>
-                                <td class="caption" width="25%">Model</td><td width="25%"> {{ $vehiclemaintenance->vehicle_model }}</td>
+                                <td class="caption" width="25%">Model</td><td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
                                 <td class="caption">Licence Next Renewal Date</td><td></td>
                             </tr>
                             <tr>
-                                <td class="caption">Chassis Number</td><td>{{ $vehiclemaintenance->chassis_number }}</td>
+                                <td class="caption">Chassis Number</td><td>{{ !empty($vehiclemaintenance->chassis_number) ? $vehiclemaintenance->chassis_number : ''}}</td>
                                 <td class="caption">COF Expiry Date</td><td></td>
                             </tr>
                             <tr>
-                                <td class="caption">Vehicle Color</td><td>{{ $vehiclemaintenance->vehicle_color }}</td>
+                                <td class="caption">Vehicle Color</td><td>{{ !empty($vehiclemaintenance->vehicle_color) ? $vehiclemaintenance->vehicle_color : ''}}</td>
                                 <td class="caption">Purchase Price</td><td>0
-                                </td></tr><tr>	<td class="caption">Machine Hours</td><td>1</td>	<td class="caption">Vehicle Cell Number</td><td>{{ $vehiclemaintenance->cell_number }}</td>
+                                </td></tr><tr>	<td class="caption">Machine Hours</td><td>1</td>	<td class="caption">Vehicle Cell Number</td><td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
                             </tr>
                             <tr>
-                                <td class="caption">Fuel Type</td><td>{{ $vehiclemaintenance->fuel_type }}</td>
-                                <td class="caption">Tracking Cell Number</td><td>{{ $vehiclemaintenance->tracking_umber }}</td>
+                                <td class="caption">Fuel Type</td><td>{{ !empty($vehiclemaintenance->fuel_type) ? $vehiclemaintenance->fuel_type : ''}}</td>
+                                <td class="caption">Tracking Cell Number</td><td>{{ !empty($vehiclemaintenance->tracking_umber) ? $vehiclemaintenance->tracking_umber : ''}}</td>
                             </tr>
                             <tr>
-                                <td class="caption">Tank Size</td><td>{{ $vehiclemaintenance->size_of_fuel_tank }}</td>
+                                <td class="caption">Tank Size</td><td>{{ !empty($vehiclemaintenance->size_of_fuel_tank) ? $vehiclemaintenance->size_of_fuel_tank : ''}}</td>
                                 <td class="caption">Fleet Card</td><td></td>
                             </tr>
                             <tr>
                                 <td class="caption">Division</td><td>Marhine Plant Hire</td>
-                                <td class="caption">Vehicle Owner Name</td><td>{{ $vehiclemaintenance->vehicle_owner }}</td>
+                                <td class="caption">Vehicle Owner Name</td><td>{{ !empty($vehiclemaintenance->vehicle_owner) ? $vehiclemaintenance->vehicle_owner : ''}}</td>
                             </tr>
                             <tr>
                                 <td class="caption">Department</td><td></td>
@@ -123,9 +127,10 @@
                                 <td class="caption">Registration Paper</td><td></td>
                             </tr>
                             <tr>
-                                <td class="caption">Extras</td><td>{{ $vehiclemaintenance->extras }}</td>
-                                <td class="caption">Status</td><td>{{ $vehiclemaintenance->status }}</td>
+                                <td class="caption">Extras</td><td>{{ !empty($vehiclemaintenance->extras) ? $vehiclemaintenance->extras : ''}}</td>
+                                <td class="caption">Status</td><td>{{ !empty($vehiclemaintenance->status) ? $vehiclemaintenance->status : ''}}</td>
                             </tr>
+
 
 
 
@@ -138,7 +143,7 @@
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
                     {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
-                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehiclemaintenance->id }}" data-name="{{ $vehiclemaintenance->extras }}" data-description="{{$vehiclemaintenance->extras}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal" data-target="#edit-vehicle-modal" data-id="{{ $vehiclemaintenance->id }}" data-extras="{{ $vehiclemaintenance->extras }}" data-cell_number="{{$vehiclemaintenance->cell_number}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
 
 
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Images</a>
@@ -150,6 +155,7 @@
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Reminders</a>
 
                 </div>
+                @endforeach
             </div>
         </div>
         @include('Vehicles.partials.edit_vehicledetails_modal')
@@ -319,25 +325,27 @@
             });
 
             var doc_typeID;
-            $('#edit-category-modal').on('show.bs.modal', function (e) {
+            $('#edit-vehicle-modal').on('show.bs.modal', function (e) {
                 //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
                 doc_typeID = btnEdit.data('id');
-                var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
-                //var employeeName = btnEdit.data('employeename');
+                var vehicle_make = btnEdit.data('vehicle_make');
+                var vehicle_model = btnEdit.data('vehicle_model');
+                var vehicle_type = btnEdit.data('vehicle_type');
                 var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#description').val(description);
+                modal.find('#vehicle_make').val(vehicle_make);
+                modal.find('#vehicle_model').val(vehicle_model);
+                modal.find('#vehicle_type').val(vehicle_type);
 
             });
-            $('#edit_category').on('click', function () {
-                var strUrl = '/Product/category_edit/' + doc_typeID;
+            $('#edit_vehicle').on('click', function () {
+                var strUrl = '/vehicle_management/edit_vehicleDetails/' + doc_typeID;
                 // Product/category_edit/{Category}
                 var modalID = 'edit-category-modal';
                 var objData = {
-                    name: $('#' + modalID).find('#name').val(),
-                    description: $('#' + modalID).find('#description').val(),
+                    vehicle_make: $('#' + modalID).find('#vehicle_make').val(),
+                    vehicle_model: $('#' + modalID).find('#vehicle_model').val(),
+                    vehicle_type: $('#' + modalID).find('#vehicle_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'save_category';
