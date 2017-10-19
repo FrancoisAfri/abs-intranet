@@ -27,11 +27,10 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                 <table class="table table-bordered">
-                     <tr><th style="width: 10px"></th>
-                     <th></th>
+                     <tr>
+					 <th style="width: 10px"></th>
                      <th>Notes</th>
                      <th>Date</th>
-                     <!-- <th>Time</th> -->
                      <th>Communication Method</th>
                      <th>Next Action </th>
                      <th>Follow up Date</th>
