@@ -340,6 +340,7 @@ Route::post('vehicle_management/vehicle/Search', 'VehicleManagemntController@Veh
 
 
 
+
 // ---
 Route::get('vehicle_management/group_admin', 'VehicleManagemntController@groupAdmin');
 Route::post('vehice/groupadmin', 'VehicleManagemntController@Addgroupadmin');
@@ -360,6 +361,7 @@ Route::get('vehicle_management/manage_fleet', 'FleetManagementController@fleetMa
 Route::get('vehicle_management/add_vehicle', 'FleetManagementController@addvehicle');
 // 
 Route::post('vehicle_management/add_vehicleDetails', 'FleetManagementController@addvehicleDetails');
+Route::get('vehicle_management/viewdetails/{maintenance}', 'FleetManagementController@viewDetails');
 
 
 

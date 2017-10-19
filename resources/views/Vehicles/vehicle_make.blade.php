@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Job Card(s)</h3>
+                    <h3 class="box-title">Add vehicle make</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -29,11 +29,11 @@
                                 <th style="width: 5px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($jobcardMaintance) > 0)
-                              @foreach ($jobcardMaintance as $vehice)
+                            @if (count($vehiclemake) > 0)
+                              @foreach ($vehiclemake as $vehice)
                                <tr id="categories-list">
                                <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehice->id }}" data-name="{{ $vehice->name }}" data-description="{{$vehice->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button vehice="button" id="edit-package-modal" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehice->id }}" data-name="{{ $vehice->name }}" data-description="{{$vehice->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
                                      <td>{{ (!empty( $vehice->name)) ?  $vehice->name : ''}} </td>
                                      <td>{{ (!empty( $vehice->description)) ?  $vehice->description : ''}} </td>
@@ -66,7 +66,8 @@
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('Vehicles.JobcardManagement.partials.add_jobcard_modal')
+        @include('Vehicles.partials.edit_vehiclemake_modal')
+        @include('Vehicles.partials.edit_vehicle_modal')
    
 </div>
 
@@ -117,22 +118,22 @@
 
             $(".js-example-basic-multiple").select2();
 
-                      //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                @foreach($division_levels as $division_level)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $division_level->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    var divLevel = parseInt('{{ $division_level->level }}');
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
-        //        });
+                      {{--//Load divisions drop down--}}
+                {{--var parentDDID = '';--}}
+                {{--var loadAllDivs = 1;--}}
+                {{--@foreach($division_levels as $division_level)--}}
+                    {{--//Populate drop down on page load--}}
+                    {{--var ddID = '{{ 'division_level_' . $division_level->level }}';--}}
+                    {{--var postTo = '{!! route('divisionsdropdown') !!}';--}}
+                    {{--var selectedOption = '';--}}
+                    {{--var divLevel = parseInt('{{ $division_level->level }}');--}}
+                    {{--var incInactive = -1;--}}
+                    {{--var loadAll = loadAllDivs;--}}
+                    {{--loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);--}}
+                    {{--parentDDID = ddID;--}}
+                    {{--loadAllDivs = -1;--}}
+                {{--@endforeach--}}
+        {{--//        });--}}
 
             //save Fleet
             //Post module form to server using ajax (ADD)

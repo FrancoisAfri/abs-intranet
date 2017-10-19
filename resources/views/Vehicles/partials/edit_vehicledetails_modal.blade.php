@@ -1,4 +1,4 @@
-<div id="add-vehicledetails-modal" class="modal modal-default fade">
+<div id="edit-package-modal" class="modal modal-default fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-module-form">
@@ -8,13 +8,14 @@
                <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Vehicle General Details </h4>
+                    <h4 class="modal-title">Edit Vehicle Model</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-					 <div class="form-group">
+
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
                             <div class="input-group">
@@ -31,7 +32,7 @@
                         </div>
                     </div>
 
-                      <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Make</label>
                         <div class="col-sm-8">
                             <div class="input-group">
@@ -65,7 +66,7 @@
                         </div>
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
                         <div class="col-sm-8">
                             <div class="input-group">
@@ -82,22 +83,22 @@
                         </div>
                     </div>
 
-                        
-                             
-                 <div class="form-group">
+
+
+                    <div class="form-group">
                         <label for="year" class="col-sm-2 control-label">Year</label>
                         <div class="col-sm-8">
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                               <input type="text" class="form-control" id="year" name="year" value="{{ old('year') }}" placeholder="Select  Year ...">
+                                <input type="text" class="form-control" id="year" name="year" value="{{ old('year') }}" placeholder="Select  Year ...">
 
                             </div>
                         </div>
                     </div>
 
-                   <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Registration</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control"  id="vehicle_registration" name="vehicle_registration" value="" placeholder="Enter vehicle registration" >
@@ -105,7 +106,7 @@
 
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Chassis Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control"  id="chassis_number" name="chassis_number" value="" placeholder="Enter vehicle chassis number" >
@@ -113,7 +114,7 @@
 
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Engine Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control"  id="engine_number" name="engine_number" value="" placeholder="Enter vehicle engine number" >
@@ -122,7 +123,7 @@
                     </div>
 
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Color</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control"  id="vehicle_color" name="vehicle_color" value="" placeholder="Enter vehicle color " >
@@ -131,13 +132,13 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('metre_reading_type') ? ' has-error' : '' }}">
-                                <label for="Leave_type" class="col-sm-2 control-label"> Metre Reading Type </label>
-                                <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_package" name="promotion_type" value="1" checked> Kilometres   </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type" value="2">  Hours  </label>
+                        <label for="Leave_type" class="col-sm-2 control-label"> Metre Reading Type </label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_package" name="promotion_type" value="1" checked> Kilometres   </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type" value="2">  Hours  </label>
 
-                                </div>
-                    </div> 
+                        </div>
+                    </div>
 
                     <div class="form-group odometer-field">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
@@ -172,9 +173,9 @@
                         </div>
                     </div>
 
-                    
 
-                     <div class="form-group">
+
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Size of Fuel Tank</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control"  id="size_of_fuel_tank" name="size_of_fuel_tank" value="" placeholder="Enter Size of Fuel Tank " >
@@ -182,7 +183,7 @@
 
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Fleet Number</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control"  id="fleet_number" name="fleet_number" value="" placeholder="Enter vehicle color " >
@@ -198,7 +199,7 @@
 
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control"  id="tracking_umber" name="tracking_umber" value="" placeholder="Enter Tracking Cell Number" >
@@ -223,13 +224,13 @@
                         </div>
                     </div>
 
-                     <div class="form-group{{ $errors->has('title_type') ? ' has-error' : '' }}">
-                                <label for="Leave_type" class="col-sm-2 control-label"> Title Holder </label>
-                                <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fin" name="title_type" value="1" checked> Financial Institution   </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_comp" name="title_type" value="2">  Company  </label>
+                    <div class="form-group{{ $errors->has('title_type') ? ' has-error' : '' }}">
+                        <label for="Leave_type" class="col-sm-2 control-label"> Title Holder </label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fin" name="title_type" value="1" checked> Financial Institution   </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_comp" name="title_type" value="2">  Company  </label>
 
-                                </div>
+                        </div>
                     </div>
 
                     <div class="form-group fin-field">
@@ -266,7 +267,7 @@
                         </div>
                     </div>
 
-                     <div class="form-group notes-field{{ $errors->has('extras') ? ' has-error' : '' }}">
+                    <div class="form-group notes-field{{ $errors->has('extras') ? ' has-error' : '' }}">
                         <label for="extras" class="col-sm-2 control-label">Extras</label>
                         <div class="col-sm-8">
                             <div class="input-group">
@@ -279,18 +280,18 @@
                     </div>
 
 
-                     <div class="form-group">
-                            <label for="image" class="col-sm-2 control-label">Image</label>
+                    <div class="form-group">
+                        <label for="image" class="col-sm-2 control-label">Image</label>
 
-                            <div class="col-sm-8">
-                                @if(!empty($avatar))
-                                    <div style="margin-bottom: 10px;">
-                                        <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
-                                    </div>
-                                @endif
-                                <input type="file" id="image" name="image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
-                            </div>
+                        <div class="col-sm-8">
+                            @if(!empty($avatar))
+                                <div style="margin-bottom: 10px;">
+                                    <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
+                                </div>
+                            @endif
+                            <input type="file" id="image" name="image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
+                    </div>
 
                     <div class="form-group supDoc-field{{ $errors->has('registration_papers') ? ' has-error' : '' }}">
                         <label for="registration_papers" class="col-sm-2 control-label">Registration Papers</label>
@@ -305,7 +306,7 @@
                     </div>
 
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="property_type" class="col-sm-2 control-label">Property Type</label>
                         <div class="col-sm-8">
                             <div class="input-group">
@@ -321,15 +322,15 @@
                             </div>
                         </div>
                     </div>
-                
-
-                      </div>  
-                     <div class="modal-footer">
+					  
+                  </div>  
+                <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_vehicledetails" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save</button>
+                    <button type="button" id="edit_vehicle_model" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
-             </form>
+            </form>
             </div>
          </div>
-        </div>
+    </div>
+        
            
