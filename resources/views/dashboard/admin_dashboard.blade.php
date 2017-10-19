@@ -213,7 +213,6 @@
     @endif
 
     @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
-        @if($canViewTaskWidget)
             <div class="row">
                 <div class="col-md-7">
                     <!-- Include tasks widget -->
@@ -224,7 +223,6 @@
                     @include('dashboard.partials.widgets.tasks_to_check_widget')
                 </div>
             </div>
-        @endif
     @endif
 
     @if($activeModules->where('code_name', 'appraisal')->first())
