@@ -213,7 +213,6 @@
     @endif
 
     @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
-        @if($canViewTaskWidget)
             <div class="row">
                 <div class="col-md-7">
                     <!-- Include tasks widget -->
@@ -224,7 +223,6 @@
                     @include('dashboard.partials.widgets.tasks_to_check_widget')
                 </div>
             </div>
-        @endif
     @endif
 
     @if($activeModules->where('code_name', 'appraisal')->first())
@@ -292,7 +290,7 @@
                                 <td>{{ !empty($Induction->firstname) && !empty($Induction->surname) ? $Induction->firstname.' '.$Induction->surname : '' }}</td>
                                  <!-- <td>{{ (!empty($Induction->create_by)) ?  $Induction->create_by : ''}}</td> -->
                            <td>{{ (!empty($Induction->company_name)) ?  $Induction->company_name : ''}}</td>
-                           <td><div class="progress">
+                           <td><div class="progress xs">
                                 <div class="progress-bar progress-bar-warning  progress-bar-striped" role="progressbar"
                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ $Induction->completed_task == 0 ? 0 : ($Induction->completed_task/$Induction->total_task * 100)  }}%"> {{  (round($Induction->completed_task == 0 ? 0 : ($Induction->completed_task/$Induction->total_task * 100)))}}%</div></div>
                             </td>
