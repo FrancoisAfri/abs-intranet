@@ -49,7 +49,7 @@
                                     <i class="fa fa-user-circle"></i>
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
-                                    <option value="">*** Select an User ***</option>
+                                    <option value="">*** Select an Contact Representative ***</option>
                                     @foreach($contactPeople as $employee)
                                     <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
@@ -145,7 +145,12 @@
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="next_action" name="next_action">
                                         <option value="">*** Select Option ***</option>
-                                        <option value="1" >Test</option>
+                                        <option value="1">Supplier</option>
+                                        <option value="2">Operations</option>
+                                        <option value="3">Finance</option>
+                                        <option value="4">After Hours</option>
+                                        <option value="5">Sales</option>
+                                        <option value="6">Client</option>
                                         
                                     </select>
                                 </div>
