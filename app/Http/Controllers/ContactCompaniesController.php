@@ -203,41 +203,31 @@ class ContactCompaniesController extends Controller
 
     public function notes(ContactCompany $company)
     {
+		//die('dd/');
         $companyID = $company->id;
-        $persons = HRPerson::where('id', $companyID)->get(); 
-      
-        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
+		$employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
                 $query->orderBy('name', 'asc');
             }]);
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
-       
         $contactPeople = ContactPerson::where('company_id', $companyID )->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();  
-
-
         $notes = contacts_note::orderBy('id', 'asc')->get();
-
-        //
-         $contactnotes = DB::table('contacts_notes')
+        $contactnotes = DB::table('contacts_notes')
                 ->select('contacts_notes.*','contacts_contacts.gender as gender', 'contacts_contacts.profile_pic as profile_pic')
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+                ->where('contacts_notes.company_id', $companyID)
                 ->orderBy('contacts_notes.id')
                 ->get();
-                //return $contactnotes;
-         
-         $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');
-         $communicationmethod = array(1 => 'Telephone', 2 => 'Meeting/Interview', 3 => 'Email', 4 => 'Fax' , 4 => 'SMS' );
-         
-      
+        $notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client');
+        $communicationmethod = array(1 => 'Telephone', 2 => 'Meeting/Interview', 3 => 'Email', 4 => 'Fax' , 4 => 'SMS' );
+
         $company->load('employees.company');
         $data['notesStatus'] = $notesStatus;
         $data['communicationmethod'] = $communicationmethod;
         $data['page_title'] = "Notes";
         $data['page_description'] = "Notes ";
-        $data['persons'] = $persons;
         $data['contactnotes'] = $contactnotes;
         $data['companies'] = $companies;
         $data['contactPeople'] =$contactPeople;
-
         $data['employees'] = $employees;
         $data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
@@ -252,7 +242,6 @@ class ContactCompaniesController extends Controller
         $data['active_rib'] = 'Search Company';
        AuditReportsController::store('Notes', 'Notes Updated', " Updated By User", 0);
         return view('contacts.notes')->with($data);
-
     }
 
     ####
@@ -387,8 +376,6 @@ class ContactCompaniesController extends Controller
 
         return redirect('/contacts/company/' . $company->id . '/view')->with('success_edit', "The company details have been successfully updated");
     }
-	
-	
 	
 	/**
      * Store a newly created resource in storage.
@@ -738,7 +725,6 @@ class ContactCompaniesController extends Controller
                     }
                 }
             }
-
             $strCompanyType = $this->company_types[$company->company_type];
 			AuditReportsController::store('Partners', 'Partners Updated', "$strCompanyType Updated By User", 0);
             return redirect('/contacts/company/' . $company->id . '/view')->with('success_edit', "The $strCompanyType details have been successfully updated.$notifConf");
@@ -760,19 +746,14 @@ class ContactCompaniesController extends Controller
         $notedata = $request->all();
         unset($notedata['_token']);
 
-       
-
         $userID = $notedata['hr_person_id'];
         $companyID = $notedata['company_id'];
         $personID = $notedata['contact_person_id'];
-       
-       $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
- 
+		$notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client'); 
         $notes = DB::table('contacts_notes')
                 ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
                 ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
                 ->leftJoin('contact_companies', 'contacts_notes.company_id', '=' , 'contact_companies.id' )
-                
                 ->where(function ($query) use ($userID) {
                     if (!empty($userID)) {
                         $query->where('contacts_notes.employee_id', $userID);
@@ -791,16 +772,6 @@ class ContactCompaniesController extends Controller
                 ->orderBy('contacts_notes.id')
                 ->get();
 
-                
-                 //$companyname = $notes->first()->companyname;
-
-                //return $negsickDays;
-             
-
-             //  $companies = ContactCompany::where('id', $companyID)->orderBy('name', 'asc')->get()->first();
-               
-
-
         //$data['companies'] = $companies;
         $data['notesStatus'] = $notesStatus;
         $data['userID'] = $userID;
@@ -818,8 +789,6 @@ class ContactCompaniesController extends Controller
         $data['active_rib'] = 'Report';
         AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
         return view('contacts.contacts_note_report_result')->with($data);
-
-
     }
 
      public function meetings(Request $request){
@@ -836,17 +805,11 @@ class ContactCompaniesController extends Controller
         $personID = $meetingdata['contact_person_id']; 
         $datefrom = $meetingdata['date_from'];
         $dateto = $meetingdata['date_to'];
-
-       
         $Datefrom = str_replace('/', '-', $meetingdata['date_from']);
         $Datefrom = strtotime($meetingdata['date_from']);
-
         $Dateto = str_replace('/', '-', $meetingdata['date_to']);
         $Dateto = strtotime($meetingdata['date_to']);
-        
-        ##
-        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed'); 
-
+        $notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client'); 
         $meetingminutes = DB::table('meeting_minutes')
                 ->select('meeting_minutes.*', 'meetings_minutes.minutes as meeting_minutes','contact_companies.name as companyname' )
                 ->leftJoin('meetings_minutes', 'meeting_minutes.id', '=', 'meetings_minutes.meeting_id')
@@ -893,7 +856,7 @@ class ContactCompaniesController extends Controller
     }
 
     ##print reports
-       public function printmeetingsReport(Request $request) {
+    public function printmeetingsReport(Request $request) {
 
         $personID = $request['hr_person_id'];
         $Datefrom = $request['date_from'];
@@ -949,14 +912,13 @@ class ContactCompaniesController extends Controller
         return view('contacts.reports.meeting_print')->with($data);
     }
 
-          public function printclientReport(Request $request) {
-
+         public function printclientReport(Request $request) {
 
         $userID = $request['hr_person_id'];
         $companyID = $request['company_id'];
         $personID = $request['user_id'];
        
-        $notesStatus = array(1 => 'Test', 2 => 'Not Started', 3 => 'Paused', 4 => 'Completed');
+        $notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client');
 
         $notes = DB::table('contacts_notes')
                 ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
@@ -980,9 +942,6 @@ class ContactCompaniesController extends Controller
                 })
                 ->orderBy('contacts_notes.id')
                 ->get();
-      
-
-        // return $notes;
         $data['notesStatus'] = $notesStatus;
         $data['notes'] = $notes;
         $data['page_title'] = "Leave history Audit Report";

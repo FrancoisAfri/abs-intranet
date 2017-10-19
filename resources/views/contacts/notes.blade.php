@@ -40,7 +40,6 @@
                     @if (count($contactnotes) > 0)
                         @foreach($contactnotes as $notes)
                          <tr id="notess-list">
-                           <td nowrap>
                           <td ><img src="{{ (!empty($notes->profile_pic)) ? Storage::disk('local')->url("avatars/$notes->profile_pic") : (($notes->gender === 0) ? $f_silhouette : $m_silhouette) }}" width="30" height="30" alt="" ></td>
                           <td>{{ (!empty($notes->notes)) ?  $notes->notes : ''}} </td>
                           <td>{{ !empty($notes->date) ? date('d M Y ', $notes->date) : '' }}</td>
@@ -54,7 +53,7 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="5">
+                        <td colspan="7">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                              No Notes to display, Begin by Adding Notes.
@@ -127,9 +126,6 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-    
-            //
-
              $('#time').datetimepicker({
                     format: 'HH:mm:ss'
                 });
