@@ -80,6 +80,9 @@ Route::patch('contacts/update_sms/{smsConfiguration}', 'ContactsController@updat
 //#Company Identity (company details: logo, theme color, etc)
 Route::post('security/setup/company_details', 'CompanyIdentityController@saveOrUpdate');
 
+
+
+
 #Business Card
 Route::get('hr/user_card', 'BusinessCardsController@userCard');
 Route::get('hr/business_card', 'BusinessCardsController@view');
@@ -88,6 +91,7 @@ Route::post('hr/search', 'BusinessCardsController@getSearch');
 Route::post('hr/print_card', 'BusinessCardsController@busibess_card');
 Route::post('/hr/card_active', 'BusinessCardsController@activeCard');
 Route::post('hr/emial', 'LeaveController@getEmail');
+
 
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -175,6 +179,7 @@ Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
 Route::post('reports/contact_note/meetingreport', 'ContactCompaniesController@printmeetingsReport');
 Route::post('reports/contact_note/client_report', 'ContactCompaniesController@printclientReport');
 
+
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');
 
@@ -186,6 +191,7 @@ Route::get('hr/Admin', 'Hr_Admin@view');
 Route::post('hr/searchemployees', 'Hr_Admin@search_employees');
 Route::post('hr/user_active', 'Hr_Admin@activeEmployee');
 Route::get('hr/active_user', 'Hr_Admin@cards');
+
 
 //Route::get('hr/job_title', 'Product_categoryController@index');
 Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
@@ -212,6 +218,8 @@ Route::get('/Product/category/{Category}', 'Product_categoryController@CategoryA
 Route::get('/Product/product_act/{Category}', 'Product_categoryController@ProdAct');
 Route::get('/Product/productPack_act/{product}', 'Product_categoryController@ProdPackAct');
 Route::get('/Product/productpackagesAct/{product}', 'Product_categoryController@productpackagesAct');
+
+
 #
 //----packages ---
 Route::get('product/Packages', 'Product_categoryController@view_packages');
@@ -354,6 +362,8 @@ Route::get('vehicle_management/add_vehicle', 'FleetManagementController@addvehic
 // 
 Route::post('vehicle_management/add_vehicleDetails', 'FleetManagementController@addvehicleDetails');
 Route::get('vehicle_management/viewdetails/{maintenance}', 'FleetManagementController@viewDetails');
+
+
 
 # Performance Appraisals Module
 
