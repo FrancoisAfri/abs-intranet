@@ -148,6 +148,8 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->size_of_fuel_tank = $SysData['size_of_fuel_tank'];
         $vehicle_maintenance->cell_number = $SysData['cell_number'];
         $vehicle_maintenance->tracking_umber = $SysData['tracking_umber'];
+       // $vehicle_maintenance->registration_papers = $SysData['registration_papers'];
+
         //$vehicle_maintenance->vehicle_owner = $SysData['vehicle_owner'];
         // $vehicle_maintenance->financial_institution = $SysData['financial_institution'];
         // $vehicle_maintenance->company = $SysData['company'];
