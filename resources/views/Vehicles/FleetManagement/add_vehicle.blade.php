@@ -16,7 +16,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-primary">
+            <div class="box box-warning">
                 <div class="box-header with-border">
                     <h3 class="box-title">Add Vehicle Details</h3>
                     <div class="box-tools pull-right">
@@ -51,7 +51,9 @@
                                            data-id="{{ $card->id }}">View</a>
 
                                         <div id="my_div" class="hidden">
-                                            <a href="http://www.google.com">booking log</a>
+                                            <a href="{{ '/vehicle_management/viewImage/' . $card->id }}"
+                                               id="edit_compan" class="btn btn-default  btn-xs"
+                                               data-id="{{ $card->id }}">image</a>
                                         </div>
                                         <div id="my_div" class="hidden">
                                             <a href="http://www.google.com">fuel log</a>
@@ -91,12 +93,7 @@
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}
                                         </button>
                                     </td>
-                                    {{--<td>--}}
-                                    {{--<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"--}}
-                                    {{--data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>--}}
-                                    {{--Delete--}}
-                                    {{--</button>--}}
-                                    {{--</td>--}}
+
                                 </tr>
                             @endforeach
                         @else

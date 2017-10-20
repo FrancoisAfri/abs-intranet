@@ -251,10 +251,10 @@ class FleetManagementController extends Controller
     }
 
     public  function  editvehicleDetails( Request $request ,vehicle_maintenance $maintenance) {
-        $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
-        ]);
+//        $this->validate($request, [
+//            'name' => 'required',
+//            'description' => 'required',
+//        ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
@@ -266,5 +266,65 @@ class FleetManagementController extends Controller
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
         return response()->json();
+    }
+
+    public function viewImage(vehicle_maintenance $maintenance) {
+
+        $ID =  $maintenance->id;
+
+        $vehicle = vehicle::orderBy('id', 'asc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
+        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
+
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+            $vehiclemaintenance = DB::table('vehicle_maintenance')
+                ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
+                    'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
+                ->leftJoin('vehicle_make', 'vehicle_maintenance.vehicle_make', '=', 'vehicle_make.id')
+                ->leftJoin('vehicle_model', 'vehicle_maintenance.vehicle_model', '=', 'vehicle_model.id')
+                ->leftJoin('vehicle_managemnet', 'vehicle_maintenance.vehicle_type', '=', 'vehicle_managemnet.id')
+                ->where('vehicle_maintenance.id', $ID)
+                ->orderBy('vehicle_maintenance.id')
+                ->get();
+
+
+            $vehiclemaintenances = $vehiclemaintenance ->first();
+
+            // return $vehicle_maintenance;
+
+
+            //$Category->load('productCategory');
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['vehicle_maintenance'] = $vehicle_maintenance;
+            $data['vehicle'] = $vehicle;
+            $data['Vehicle_types'] = $Vehicle_types;
+            $data['vehiclemodel'] = $vehiclemodel;
+            $data['divisionLevels'] = $divisionLevels;
+            $data['vehicledetail'] = $vehicledetail;
+            $data['vehiclemake'] = $vehiclemake;
+            $data['vehiclemaintenance'] = $vehiclemaintenance;
+            $data['vehiclemaintenances'] = $vehiclemaintenances;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Products';
+            $data['active_rib'] = 'Categories';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.viewfleetImage')->with($data);
+        } else
+            return back();
+
     }
 }
