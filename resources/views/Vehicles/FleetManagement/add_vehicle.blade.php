@@ -98,12 +98,12 @@
                             @endforeach
                         @else
                             <tr id="categories-list">
-                                <td colspan="5">
+                                <td colspan="10">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
                                         </button>
-                                        No FleetType to display, please start by adding a new FleetType..
+                                        No Fleet to display, please start by adding a new Fleet..
                                     </div>
                                 </td>
                             </tr>
@@ -117,7 +117,7 @@
                         </button>
 
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-vehicledetails-modal">Add new Incident Type
+                                data-target="#add-vehicledetails-modal">Add new Vehicle
                         </button>
 
                     </div>
