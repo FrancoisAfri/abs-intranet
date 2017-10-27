@@ -34,106 +34,73 @@
 
                 <div align="center" class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title"> Vehicle Management-{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
+                        <h3 class="box-title"> Image(s) for -{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
 
                         </h3>
                     </div>
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <div class="box-body">
-                        <a href="/Jobcard_management/addJob_card" class="btn btn-app">
-                            <i class="fa fa-bars"></i> General Details
-                        </a>
-
-                        <a href="/vehicle_management/fleet_card" class="btn btn-app">
-                            <i class="fa fa-book"></i> Booking Log
-                        </a>
-
-                        <a href="/vehicle_management/fillingstaion" class="btn btn-app">
-                            <i class="fa fa-tint"></i> Fuel Log
-                        </a>
-
-                        <a href="/vehicle_management/Document_type" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
-
-                        <a href="/vehicle_management/Permit" class="btn btn-app">
-                            <i class="fa fa-medkit"></i> Incidents
-                        </a>
-
-                        <a href="/vehicle_management/Incidents_type" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-comments"></i> Service Details
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-yoast"></i> Insurance
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-wpforms"></i> Warranties
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-money"></i> General Cost
-                        </a>
 
 
 
                         <table class = "table table-striped table-bordered">
-
                                 @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                            <tr>
+                        </table>
 
-                                <td class="caption">Fleet Number</td><td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
-                                <td class="caption">Year</td><td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
-                            </tr>
+                        <table class="table table-bordered">
                             <tr>
-                                <td class="caption">Registration</td><td>1 </td>
-                                <td class="caption">Engine Number</td><td>{{ !empty($vehiclemaintenance->engine_number) ? $vehiclemaintenance->engine_number : ''}}</td>
+                                <th style="width: 10px; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;">Image</th>
+                                <th>Description</th>
+                                <th>Date Uploaded</th>
+                                <th> Registration</th>
+                                <th>Uploaded By</th>
+                                <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            <tr>
-                                <td class="caption" width="25%">Make</td><td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
-                                <td class="caption">Vehicle Type</td><td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption" width="25%">Model</td><td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
-                                <td class="caption">Licence Next Renewal Date</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Chassis Number</td><td>{{ !empty($vehiclemaintenance->chassis_number) ? $vehiclemaintenance->chassis_number : ''}}</td>
-                                <td class="caption">COF Expiry Date</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Vehicle Color</td><td>{{ !empty($vehiclemaintenance->vehicle_color) ? $vehiclemaintenance->vehicle_color : ''}}</td>
-                                <td class="caption">Purchase Price</td><td>0
-                                </td></tr><tr>	<td class="caption">Machine Hours</td><td>1</td>	<td class="caption">Vehicle Cell Number</td><td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Fuel Type</td><td>{{ !empty($vehiclemaintenance->fuel_type) ? $vehiclemaintenance->fuel_type : ''}}</td>
-                                <td class="caption">Tracking Cell Number</td><td>{{ !empty($vehiclemaintenance->tracking_umber) ? $vehiclemaintenance->tracking_umber : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Tank Size</td><td>{{ !empty($vehiclemaintenance->size_of_fuel_tank) ? $vehiclemaintenance->size_of_fuel_tank : ''}}</td>
-                                <td class="caption">Fleet Card</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Division</td><td>Marhine Plant Hire</td>
-                                <td class="caption">Vehicle Owner Name</td><td>{{ !empty($vehiclemaintenance->vehicle_owner) ? $vehiclemaintenance->vehicle_owner : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Department</td><td></td>
-                                <td class="caption">Title Holder Name</td><td>Marhine Plant Hire</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Responsible Person</td><td></td>
-                                <td class="caption">Registration Paper</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Extras</td><td>{{ !empty($vehiclemaintenance->extras) ? $vehiclemaintenance->extras : ''}}</td>
-                                <td class="caption">Status</td><td>{{ !empty($vehiclemaintenance->status) ? $vehiclemaintenance->status : ''}}</td>
-                            </tr>
+                            @if (count($vehiclemaintenance) > 0)
+
+                                    <tr id="categories-list">
+                                        <td nowrap>
+                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehiclemaintenance->id }}" data-image="{{ $vehiclemaintenance->image }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        </td>
+                                        <td>
 
 
+                                            <div id="my_div" class="hidden">
+                                                <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
+                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   data-id="{{ $vehiclemaintenance->id }}">image</a>
+                                            </div>
+
+
+                                        </td>
+                                        <td>
+                                            <div class="product-img">
+                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
+                                            </div>
+                                        </td>
+                                        {{--<td>{{ (!empty( $card->image)) ?  $card->image : ''}} </td>--}}
+                                        <td>{{ !empty($vehiclemaintenance->vehicle_model . ' ' . $vehiclemaintenance->year ) ? $vehiclemaintenance->vehicle_model  . ' ' . $vehiclemaintenance->year: ''}}</td>
+                                        <td></td>
+
+                                        <td></td>
+
+
+                                    </tr>
+
+                            @else
+                                <tr id="categories-list">
+                                    <td colspan="9">
+                                        <div class="alert alert-danger alert-dismissable">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                            No Fleet to display, please start by adding a new Fleet..
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                         </table>
 
 
@@ -141,26 +108,13 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
-                    {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
-                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal" data-target="#edit-vehicle-modal" data-id="{{ $vehiclemaintenance->id }}" data-extras="{{ $vehiclemaintenance->extras }}" data-cell_number="{{$vehiclemaintenance->cell_number}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-
-                    <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Images</a>
-
-                    {{--<a href="/vehicle_management/viewImage/{{$vehiclemaintenance->id}}}" class="btn btn-sm btn-default btn-flat">Images</a>--}}
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Key Tracking</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Permit/Licences</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Documents</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Contracts</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Notes</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Reminders</a>
-
+                   
                 </div>
                 @endforeach
             </div>
         </div>
         @include('Vehicles.partials.edit_vehicledetails_modal')
+
     </div>
 @endsection
 @section('page_script')

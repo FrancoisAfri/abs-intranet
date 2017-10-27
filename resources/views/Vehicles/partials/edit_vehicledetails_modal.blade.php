@@ -1,7 +1,7 @@
 <div id="edit-vehicle-modal" class="modal modal-default fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+             <form class="form-horizontal" name="edit-vehicledetails-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -288,12 +288,10 @@
                         <label for="image" class="col-sm-2 control-label">Image</label>
 
                         <div class="col-sm-8">
-                            @if(!empty($avatar))
-                                <div style="margin-bottom: 10px;">
-                                    <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200" height="200">
-                                </div>
-                            @endif
-                            <input type="file" id="image" name="image" value=" {{ $vehicle_maintenance->image }}" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            <div class="product-img">
+                                    <img src="{{ (!empty($vehicle_maintenance->image)) ? Storage::disk('local')->url("image/$vehicle_maintenance->image") : 'http://placehold.it/50x50' }}"  alt="Product Image" width="50" height="50">
+                            </div>
+                            <input type="file" id="image" name="image"  class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
 

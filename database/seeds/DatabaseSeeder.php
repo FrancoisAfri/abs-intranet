@@ -806,12 +806,9 @@ class DatabaseSeeder extends Seeder
          $ribbon->sort_order = 2;
          $ribbon->ribbon_name = 'Job Card Management';
          $ribbon->description = 'Job Card Management';
-         $ribbon->ribbon_path = 'Jobcard_management/Job_card ';
+         $ribbon->ribbon_path = 'Jobcard_management/Job_card';
          $ribbon->access_level = 3;
          $module->addRibbon($ribbon);
-        
-        
-
         // $ribbon = new module_ribbons();
         // $ribbon->active = 1;
         // $ribbon->sort_order = 3;
