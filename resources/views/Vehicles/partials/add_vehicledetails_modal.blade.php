@@ -14,6 +14,23 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
+                     @foreach($division_levels as $division_level)
+                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                              @endforeach
+
+
 					 <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
@@ -162,11 +179,12 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-filter"></i>
                                 </div>
-                                <select class="form-control select2" style="width: 100%;" id="fuel_type" name="fuel_type">
-                                    <option value="">*** Select Fuel Type  ***</option>
-                                    @foreach($vehicle as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
-                                    @endforeach
+
+                                <select name="fuel_type" class="form-control">
+                                            <option value="">*** Select Fuel Type  ***</option>
+                                            <option value="1" > Unleaded</option>
+                                            <option value="2" > Lead replacement </option>
+                                            <option value="3" > Diesel </option>
                                 </select>
                             </div>
                         </div>
@@ -312,16 +330,15 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-building-o"></i>
                                 </div>
-                                <select class="form-control select2" style="width: 100%;" id="property_type" name="property_type">
-                                    <option value="">*** Select Property ***</option>
-                                    @foreach($vehicle as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
-                                    @endforeach
+                                <select name="property_type" class="form-control">
+                                            <option value="">*** Select  Property ***</option>
+                                            <option value="1" > Internal</option>
+                                            <option value="2" > External </option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                
+
 
                       </div>  
                      <div class="modal-footer">
@@ -332,4 +349,23 @@
             </div>
          </div>
         </div>
-           
+        
+          <script type="text/javascript">            
+                    //Load divisions drop down
+                var parentDDID = '';
+                var loadAllDivs = 1;
+                @foreach($division_levels as $division_level)
+                    //Populate drop down on page load
+                    var ddID = '{{ 'division_level_' . $division_level->level }}';
+                    var postTo = '{!! route('divisionsdropdown') !!}';
+                    var selectedOption = '';
+                    var divLevel = parseInt('{{ $division_level->level }}');
+                    var incInactive = -1;
+                    var loadAll = loadAllDivs;
+                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+                    parentDDID = ddID;
+                    loadAllDivs = -1;
+                @endforeach
+            </script>
+
+       

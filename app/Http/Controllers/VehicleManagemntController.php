@@ -15,6 +15,7 @@ use App\incident_type;
 use App\vehicle_config;
 use App\modules;
 Use App\vehiclemodel;
+use App\DivisionLevel;
 use App\vehiclemake;
 use App\fleet_documentType;
 use App\fleet_fillingstation;
@@ -710,53 +711,67 @@ class VehicleManagemntController extends Controller {
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
-        return $vehicleData;
+        
 
-        // $actionFrom = $actionTo = 0;
-        // $userID = $request['hr_person_id'];
-        // $action = $request['action'];
-        // $actionDate = $request['action_date'];
-        // if (!empty($actionDate)) {
-        //     $startExplode = explode('-', $actionDate);
-        //     $actionFrom = strtotime($startExplode[0]);
-        //     $actionTo = strtotime($startExplode[1]);
-        // }
-        // $historyAudit = DB::table('leave_history')
-        //         ->select('leave_history.*', 'hr_people.employee_number as employee_number ', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-        //         ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
-        //         ->where(function ($query) use ($actionFrom, $actionTo) {
-        //             if ($actionFrom > 0 && $actionTo > 0) {
-        //                 $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
-        //             }
-        //         })
-        //         ->where(function ($query) use ($userID) {
-        //             if (!empty($userID)) {
-        //                 $query->where('leave_history.hr_id', $userID);
-        //             }
-        //         })
-        //         ->where(function ($query) use ($action) {
-        //             if (!empty($action)) {
-        //                 $query->where('leave_history.action', 'ILIKE', "%$action%");
-        //             }
-        //         })
-        //         ->orderBy('leave_history.hr_id')
-        //         ->get();
+        $companyID = $request['company_id'];
+        $departmentID = $request['department_id'];
+        $propertyID = $request['property_type'];
+        $vehicleID = $request['vehicle_type'];
+        $fleetID = $request['fleet_number'];
+        $registration_number = $request['registration_number'];
+        $promotionID = $request['promotion_type'];
+        
+         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
-        $data['actionFrom'] = $actionFrom;
-        $data['userID'] = $userID;
-        $data['action'] = $action;
-        $data['actionDate'] = $actionDate;
-        $data['historyAudit'] = $historyAudit;
-        $data['page_title'] = "Leave history Audit Report";
-        $data['page_description'] = "Leave history Audit Report";
+
+        $vehiclemaintenance = DB::table('vehicle_maintenance')
+            ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
+            ->leftJoin('vehicle_make', 'vehicle_maintenance.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_maintenance.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_maintenance.vehicle_type', '=', 'vehicle_managemnet.id')
+
+             ->where(function ($query) use ($vehicleID) {
+                    if (!empty($vehicleID)) {
+                        $query->where('vehicle_maintenance.vehicle_type', $vehicleID);
+                    }
+                })
+              ->where(function ($query) use ($fleetID) {
+                    if (!empty($fleetID)) {
+                        $query->where('vehicle_maintenance.fleet_number', $fleetID);
+                    }
+                })
+              ->where(function ($query) use ($registration_number) {
+                    if (!empty($registration_number)) {
+                        $query->where('vehicle_maintenance.vehicle_registration', $registration_number);
+                    }
+                })
+             ->orderBy('vehicle_maintenance.id')
+             ->get();
+
+            //return $vehiclemaintenance;
+
+
+        $data['division_levels'] = $divisionLevels;    
+        $data['companyID'] = $companyID;
+        $data['departmentID'] = $departmentID;
+        $data['propertyID'] = $propertyID;
+        $data['vehicleID'] =$vehicleID;
+        $data['fleetID'] = $fleetID;
+        $data['registration_number'] = $registration_number;
+        $data['promotionID'] = $promotionID;
+        $data['vehiclemaintenance'] = $vehiclemaintenance;
+        $data['page_title'] = " Vehicle Management ";
+        $data['page_description'] = "Internal Vehicle Management Search Results";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Reports';
+
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Audit', 'View Audit Search Results', "view Audit Results", 0);
-        return view('leave.leave_history report')->with($data);
+        return view('Vehicles.vehicle_search_results')->with($data);  
     }
 
 

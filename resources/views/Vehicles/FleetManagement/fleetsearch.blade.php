@@ -38,7 +38,7 @@
                             </div>
                             <div class="box-body">
                             
-                          <!--    <div class="form-group">
+                             <div class="form-group">
                             <label for="company_id" class="col-sm-3 control-label">Company</label>
                             <div class="col-sm-7">
                                 <div class="input-group">
@@ -66,23 +66,7 @@
                                     </select> 
                                 </div>
                             </div>
-                        </div> -->
-
-                             @foreach($division_levels as $division_level)
-                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-3 control-label">{{ $division_level->name }}</label>
-
-                                <div class="col-sm-7">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                              @endforeach
+                        </div>
 
                          <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
                                 <label for="property_type" class="col-sm-3 control-label"> Property Type </label>
@@ -95,22 +79,20 @@
                                 </div>
                          </div> 
 
-                        <div class="form-group">
-                        <label for="path" class="col-sm-3 control-label">Vehicle Type</label>
-                        <div class="col-sm-7">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-truck"></i>
+                         <div class="form-group">
+                            <label for="vehicle_id" class="col-sm-3 control-label">Vehicle Type</label>
+                            <div class="col-sm-7">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <select class="form-control select2" id="vehicle_id" name="vehicle_id">
+                                        <option selected="selected" value="0">*** Select a Vehicle Type ***</option>
+                                       
+                                    </select> 
                                 </div>
-                                <select class="form-control select2" style="width: 100%;" id="vehicle_type" name="vehicle_type">
-                                    <option value="">*** Select a Vehicle Type ***</option>
-                                    @foreach($Vehicle_types as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
-                    </div>
 
                         <div class="form-group">
                             <label for="fleet_number" class="col-sm-3 control-label">Fleet Number </label>
@@ -304,27 +286,11 @@
                     var modalID = 'add-vehicledetails-modal';
                     //var modal = $('#'+modalID);
                     var submitBtnID = 'add_vehicledetails';
-                    var redirectUrl = '/vehicle_management/manage_fleet';
+                    var redirectUrl = '/vehicle_management/add_vehicle';
                     var successMsgTitle = 'Fleet Type Added!';
                     var successMsg = 'The Fleet Type has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
-
-                  //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                @foreach($division_levels as $division_level)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $division_level->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    var divLevel = parseInt('{{ $division_level->level }}');
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
 
 
             </script>

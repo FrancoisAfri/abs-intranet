@@ -37,6 +37,32 @@ class FleetManagementController extends Controller
     {
         //$incidentType = incident_type::orderBy('id', 'asc')->get();
 
+        $vehicle = vehicle::orderBy('id', 'asc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
+
+//        $vehiclemaintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
+
+        $vehiclemaintenance = DB::table('vehicle_maintenance')
+            ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
+            ->leftJoin('vehicle_make', 'vehicle_maintenance.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_maintenance.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_maintenance.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->orderBy('vehicle_maintenance.id')
+            ->get();
+
+        $data['vehiclemaintenance'] = $vehiclemaintenance;
+        $data['vehicledetail'] = $vehicledetail;
+        $data['division_levels'] = $divisionLevels;
+        $data['vehicle'] = $vehicle;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['vehiclemodel'] = $vehiclemodel;
+        $data['vehiclemake'] = $vehiclemake;
+
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = " FleetManagement";
         $data['breadcrumb'] = [
@@ -144,6 +170,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->vehicle_color = $SysData['vehicle_color'];
         $vehicle_maintenance->odometer_reading = $SysData['odometer_reading'];
         $vehicle_maintenance->hours_reading = $SysData['hours_reading'];
+        $vehicle_maintenance->fleet_number = $SysData['fleet_number'];
         // $vehicle_maintenance->fuel_type = $SysData['fuel_type'];
         $vehicle_maintenance->size_of_fuel_tank = $SysData['size_of_fuel_tank'];
         $vehicle_maintenance->cell_number = $SysData['cell_number'];
