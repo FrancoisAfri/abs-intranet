@@ -97,14 +97,14 @@
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
                                                                                                           id="rdo_package"
                                                                                                           name="property_type"
-                                                                                                          value="1"
+                                                                                                          value="0"
                                                                                                           checked> All
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_product"
-                                                                               name="property_type" value="2"> Internal
+                                                                               name="property_type" value="1"> Internal
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="property_type" value="3"> External
+                                                                               name="property_type" value="2"> External
                                             </label>
 
                                         </div>

@@ -342,4 +342,18 @@ class FleetManagementController extends Controller
             return back();
 
     }
+
+    public function vehiclesAct(Request $request, vehicle_maintenance $vehicle){
+        if ($vehicle->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $vehicle->status = $stastus;
+        $vehicle->update();
+       // return view('Vehicles.vehicle_search_results');
+        return back();
+    }
+
+    
 }

@@ -332,7 +332,7 @@
                                     <i class="fa fa-building-o"></i>
                                 </div>
                                 <select name="property_type" class="form-control">
-                                            <option value="">*** Select  Property ***</option>
+                                            <option value="0">*** Select  Property ***</option>
                                             <option value="1" > Internal</option>
                                             <option value="2" > External </option>
                                 </select>

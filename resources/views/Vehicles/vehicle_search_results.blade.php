@@ -2,13 +2,16 @@
 @section('page_dependencies')
    
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <link href="bootstrap.css" rel="stylesheet">
+<link href="bootstrap-switch.css" rel="stylesheet">
+
 @endsection
 @section('content')
     <div class="row">
         <!-- New User Form -->
         <div class="col-md-12 col-md-offset-0">
             <!-- Horizontal Form -->
-			<form class="form-horizontal">
+			<!-- <form class="form-horizontal" method="get" action="/leave/approval"> -->
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
@@ -81,14 +84,11 @@
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <!--   leave here  -->
-                                        <button vehice="button" id="view_ribbons"
-                                                class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}
-                                                        btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i
-                                                    class="fa {{ (!empty($card->status) && $card->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}
-                                        </button>
-                                    </td>
+                                    <!--   leave here  -->
+                                    <button card="button" id="view_ribbons" class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i class="fa {{ (!empty($card->status) && $card->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}</button>
+                                 </td>
 
                                 </tr>
 					@endforeach
@@ -120,7 +120,7 @@
                     </div>
                     <!-- /.box-footer -->
             </div>
-			</form>
+			<!-- wat are pep -->
             <!-- /.box -->
         </div>
         <!-- End new User Form-->
@@ -131,9 +131,15 @@
 	<!-- DataTables -->
 <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="jquery.js"></script>
+<script src="bootstrap-switch.js"></script>
     <!-- End Bootstrap File input -->
 
-    <script type="text/javascript">
+    <script>
+       function postData(id , data ){   
+            if(data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id; 
+          
+        }
 	//Cancel button click event
 	document.getElementById("cancel").onclick = function () {
 		location.href = "/vehicle_management/manage_fleet";
