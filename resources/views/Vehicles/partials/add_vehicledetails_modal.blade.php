@@ -40,9 +40,10 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="responsible_for_maintenance" name="responsible_for_maintenance">
                                     <option value="">*** Select User  ***</option>
-                                    @foreach($Vehicle_types as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
+                                    @foreach($hrDetails as $employee)
+                                        <option value="{{ $Vehicle->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
+                                    
                                 </select>
                             </div>
                         </div>
@@ -99,8 +100,8 @@
                         </div>
                     </div>
 
-                        
-                             
+
+
                  <div class="form-group">
                         <label for="year" class="col-sm-2 control-label">Year</label>
                         <div class="col-sm-8">
@@ -154,7 +155,7 @@
                                     <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type" value="2">  Hours  </label>
 
                                 </div>
-                    </div> 
+                    </div>
 
                     <div class="form-group odometer-field">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
@@ -190,7 +191,7 @@
                         </div>
                     </div>
 
-                    
+
 
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Size of Fuel Tank</label>
@@ -233,8 +234,8 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_owner" name="vehicle_owner">
                                     <option value="">*** Select Vehicle Owner  ***</option>
-                                    @foreach($vehicle as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
+                                    @foreach($DivisionLevelFive as $owner)
+                                        <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -276,8 +277,8 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="company" name="company">
                                     <option value="">*** Select Company  ***</option>
-                                    @foreach($vehicle as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
+                                   @foreach($DivisionLevelFive as $owner)
+                                        <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -340,7 +341,7 @@
                     </div>
 
 
-                      </div>  
+                      </div>
                      <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <button type="button" id="add_vehicledetails" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save</button>
@@ -349,23 +350,26 @@
             </div>
          </div>
         </div>
-        
-          <script type="text/javascript">            
+
+         <!-- Ajax dropdown options load -->
+            <script src="/custom_components/js/load_dropdown_options.js"></script>
+
+          <script type="text/javascript">
                     //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                @foreach($division_levels as $division_level)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $division_level->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    var divLevel = parseInt('{{ $division_level->level }}');
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
+                // var parentDDID = '';
+                // var loadAllDivs = 1;
+                // @foreach($division_levels as $division_level)
+                //     //Populate drop down on page load
+                //     var ddID = '{{ 'division_level_' . $division_level->level }}';
+                //     var postTo = '{!! route('divisionsdropdown') !!}';
+                //     var selectedOption = '';
+                //     var divLevel = parseInt('{{ $division_level->level }}');
+                //     var incInactive = -1;
+                //     var loadAll = loadAllDivs;
+                //     loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
+                //     parentDDID = ddID;
+                //     loadAllDivs = -1;
+                // @endforeach
             </script>
 
        

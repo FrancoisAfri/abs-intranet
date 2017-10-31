@@ -80,11 +80,11 @@
                                                 <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
                                             </div>
                                         </td>
-                                        {{--<td>{{ (!empty( $card->image)) ?  $card->image : ''}} </td>--}}
-                                        <td>{{ !empty($vehiclemaintenance->vehicle_model . ' ' . $vehiclemaintenance->year ) ? $vehiclemaintenance->vehicle_model  . ' ' . $vehiclemaintenance->year: ''}}</td>
-                                        <td></td>
+                                        
+                                       <td>{{ !empty($vehiclemaintenance->currentDate) ? date(' d M Y', $vehiclemaintenance->currentDate) : '' }}</td>
+                                       <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
 
-                                        <td></td>
+                                        <td>{{ !empty($vehiclemaintenance->currentDate) ? $vehiclemaintenance->currentDate : ''}}</td>
 
 
                                     </tr>
@@ -113,7 +113,7 @@
                 @endforeach
             </div>
         </div>
-        @include('Vehicles.partials.edit_vehicledetails_modal')
+        @include('Vehicles.partials.edit_image_modal')
 
     </div>
 @endsection

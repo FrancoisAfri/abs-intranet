@@ -12,6 +12,7 @@ use App\FleetType;
 use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
 use App\incident_type;
+use App\HRPerson;
 use App\vehicle_config;
 use App\modules;
 Use App\vehiclemodel;
@@ -711,8 +712,8 @@ class VehicleManagemntController extends Controller {
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
-        
-
+        $hrDetails = HRPerson::where('status', 1)->get();
+       
         $companyID = $request['company_id'];
         $departmentID = $request['department_id'];
         $propertyID = $request['property_type'];
@@ -731,6 +732,11 @@ class VehicleManagemntController extends Controller {
             ->leftJoin('vehicle_model', 'vehicle_maintenance.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_maintenance.vehicle_type', '=', 'vehicle_managemnet.id')
 
+            ->where(function ($query) use ($propertyID) {
+                    if (!empty($propertyID)) {
+                        $query->where('vehicle_maintenance.property_type', $propertyID);
+                    }
+                })
              ->where(function ($query) use ($vehicleID) {
                     if (!empty($vehicleID)) {
                         $query->where('vehicle_maintenance.vehicle_type', $vehicleID);
@@ -749,9 +755,10 @@ class VehicleManagemntController extends Controller {
              ->orderBy('vehicle_maintenance.id')
              ->get();
 
-            //return $vehiclemaintenance;
+           // return $vehiclemaintenance;
 
 
+        $data['hrDetails'] = $hrDetails;     
         $data['division_levels'] = $divisionLevels;    
         $data['companyID'] = $companyID;
         $data['departmentID'] = $departmentID;

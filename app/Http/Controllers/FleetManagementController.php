@@ -13,6 +13,7 @@ use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
 use App\vehicle;
 Use App\job_maintanace;
+use App\HRPerson;
 use App\vehicle_detail;
 use App\vehiclemodel;
 use App\modules;
@@ -21,6 +22,7 @@ use App\vehiclemake;
 use App\fleet_documentType;
 use App\fleet_fillingstation;
 use App\module_access;
+use App\DivisionLevelFive;
 use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,9 @@ class FleetManagementController extends Controller
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
+        $hrDetails = HRPerson::where('status', 1)->get();
+        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
+
 
 //        $vehiclemaintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
 
@@ -55,6 +60,8 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_maintenance.id')
             ->get();
 
+        $data['DivisionLevelFive'] = $DivisionLevelFive;
+        $data['hrDetails'] = $hrDetails;    
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['vehicledetail'] = $vehicledetail;
         $data['division_levels'] = $divisionLevels;
@@ -123,31 +130,7 @@ class FleetManagementController extends Controller
         return view('Vehicles.FleetManagement.add_vehicle')->with($data);
 
     }
-    // public function addvehicleDetails(Request $request , job_maintanace $jobmaintanace) {
-    //    $this->validate($request, [
-    //         // 'name' => 'required',
-    //         'description' => 'required',
-    //     ]);
-    //     $jobData = $request->all();
-    //     unset($jobData['_token']);
 
-    //     $jobmaintanace->status = 1;
-    //     $jobmaintanace->responsible_for_maintenance = $jobData['responsible_for_maintenance'];
-    //     $jobmaintanace->vehicle_make = $jobData['vehicle_make'];
-    //     $jobmaintanace->vehicle_registration = $jobData['vehicle_registration'];
-    //     $jobmaintanace->chassis_number = $jobData['chassis_number'];
-    //     // $jobmaintanace->name = $jobData['name'];
-    //     // $jobmaintanace->name = $SysData['name'];
-    //     // $jobmaintanace->name = $SysData['name'];
-    //     // $jobmaintanace->name = $SysData['name'];
-    //     // $jobmaintanace->name = $SysData['name'];
-    //     $jobmaintanace->save();
-    //     AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
-    //     ;
-    //     return response()->json();
-
-
-    // }
 
     public function addvehicleDetails(Request $request)
     {
@@ -158,8 +141,11 @@ class FleetManagementController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
+         $currentDate = time();
+
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = 1;
+        $vehicle_maintenance->responsible_for_maintenance = $SysData['responsible_for_maintenance'];
         $vehicle_maintenance->vehicle_make = $SysData['vehicle_make'];
         $vehicle_maintenance->vehicle_model = $SysData['vehicle_model'];
         $vehicle_maintenance->vehicle_type = $SysData['vehicle_type'];
@@ -170,19 +156,20 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->vehicle_color = $SysData['vehicle_color'];
         $vehicle_maintenance->odometer_reading = $SysData['odometer_reading'];
         $vehicle_maintenance->hours_reading = $SysData['hours_reading'];
-        $vehicle_maintenance->fleet_number = $SysData['fleet_number'];
-        // $vehicle_maintenance->fuel_type = $SysData['fuel_type'];
+        $vehicle_maintenance->fuel_type = $SysData['fuel_type'];
         $vehicle_maintenance->size_of_fuel_tank = $SysData['size_of_fuel_tank'];
+        $vehicle_maintenance->fleet_number = $SysData['fleet_number'];
         $vehicle_maintenance->cell_number = $SysData['cell_number'];
         $vehicle_maintenance->tracking_umber = $SysData['tracking_umber'];
-       // $vehicle_maintenance->registration_papers = $SysData['registration_papers'];
-
-        //$vehicle_maintenance->vehicle_owner = $SysData['vehicle_owner'];
-        // $vehicle_maintenance->financial_institution = $SysData['financial_institution'];
-        // $vehicle_maintenance->company = $SysData['company'];
+        $vehicle_maintenance->vehicle_owner = $SysData['vehicle_owner'];
+        $vehicle_maintenance->financial_institution = 0;
+        $vehicle_maintenance->company = $SysData['company'];
         $vehicle_maintenance->extras = $SysData['extras'];
-//           $vehicle_maintenance->image = $SysData['image'];
-        //$vehicle_maintenance->property_type = $SysData['property_type'];
+        $vehicle_maintenance->property_type = $SysData['property_type'];
+        $vehicle_maintenance->division_level_5 =5;
+        $vehicle_maintenance->division_level_4 =4;
+        $vehicle_maintenance->currentDate = $currentDate;
+        $vehicle_maintenance->title_type =0;
         $vehicle_maintenance->save();
 
         //Upload Image picture
@@ -306,6 +293,7 @@ class FleetManagementController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
+        $currentDate = time();
 
 
         if ($maintenance->status == 1) {
