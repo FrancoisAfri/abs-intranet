@@ -16,6 +16,7 @@ use App\HRPerson;
 use App\vehicle_config;
 use App\modules;
 Use App\vehiclemodel;
+use App\safe;
 use App\DivisionLevel;
 use App\vehiclemake;
 use App\fleet_documentType;
@@ -781,6 +782,75 @@ class VehicleManagemntController extends Controller {
         return view('Vehicles.vehicle_search_results')->with($data);  
     }
 
+    public function safe() {
+
+        $safe = safe::orderBy('id', 'asc')->get();
+
+        $data['page_title'] = "Fleet Types";
+        $data['page_description'] = "Fleet Types Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['safe'] = $safe;
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Setup';
+
+        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Add_safe')->with($data);
+    }
+
+    public function Addsafe(Request $request){
+         $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $safe = new safe($SysData);
+        $safe->status = 1;
+        $safe->save();
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+    }
+
+    public function editsafe(Request $request, safe $safe) {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $safe->name = $SysData['name'];
+        $safe->description = $SysData['description'];
+        $safe->update();
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+    }
+
+     public function safeAct(Request $request, safe $safe) {
+        if ($safe->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $safe->status = $stastus;
+        $safe->update();
+        return back();
+    }
+
+     public function deletesafe(Request $request, safe $safe) {
+        $safe->delete();
+
+        AuditReportsController::store('Vehicle Model', 'safe  Deleted', "safe has been deleted", 0);
+        return redirect('/vehicle_management/safe');
+    }
 
 
 

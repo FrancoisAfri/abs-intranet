@@ -347,6 +347,14 @@ Route::get('Jobcard_management/Job_card', 'JobcardManagementController@JobcardMa
 Route::get('Jobcard_management/addJob_card', 'JobcardManagementController@addJobcard');
 Route::post('jobcard_management/add_maintenance', 'JobcardManagementController@Addmaintenance');
 ////
+#**************** SAFE ***********************
+Route::get('vehicle_management/safe', 'VehicleManagemntController@safe');
+Route::post('vehicle_management/addsafe', 'VehicleManagemntController@Addsafe');
+Route::patch('vehicle_management/edit_safe/{safe}', 'VehicleManagemntController@editsafe');
+Route::get('vehicle_management/safe_act/{safe}', 'VehicleManagemntController@safeAct');
+Route::get('vehicle_management/Manage_safe/{safe}/delete', 'VehicleManagemntController@deletesafe');
+
+
 
 ##*************** Fleet Management ************
 Route::get('vehicle_management/manage_fleet', 'FleetManagementController@fleetManagent');
@@ -358,7 +366,21 @@ Route::patch('vehicle_management/edit_vehicleDetails/{maintenance}', 'FleetManag
 
 Route::get('/vehicle_management/vehicles_Act/{vehicle}', 'FleetManagementController@vehiclesAct');
 
+#******************** post redirects ****************
 Route::get('vehicle_management/viewImage/{maintenance}', 'FleetManagementController@viewImage');
+Route::get('vehicle_management/keys/{maintenance}', 'FleetManagementController@keys');
+Route::get('vehicle_management/permits_licences/{maintenance}', 'FleetManagementController@permits_licences');
+Route::get('vehicle_management/document/{maintenance}', 'FleetManagementController@document');
+Route::get('vehicle_management/contracts/{maintenance}', 'FleetManagementController@contracts');
+Route::get('vehicle_management/notes/{maintenance}', 'FleetManagementController@notes');
+Route::get('vehicle_management/reminders/{maintenance}', 'FleetManagementController@reminders');
+
+
+
+Route::post('vehicle_management/add_images', 'FleetManagementController@addImages');
+Route::post('vehicle_management/add_keys', 'FleetManagementController@addkeys');
+
+
 # Performance Appraisals Module
 
 Route::get('appraisal/setup', 'AppraisalSetupController@index');

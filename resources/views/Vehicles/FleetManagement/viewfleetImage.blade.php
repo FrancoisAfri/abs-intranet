@@ -36,19 +36,41 @@
                     <div class="box-header with-border">
                         <h3 class="box-title"> Image(s) for -{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
 
+
                         </h3>
                     </div>
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <div class="box-body">
 
-
-
+                            <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    <strong class="lead">Vehicle Details</strong><br>
+                                    
+                                    @if(!empty($vehiclemaker))
+                                        | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($vehiclemodeler))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($vehicleTypes))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->vehicle_registration))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong> <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->year))
+                                        -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp; &nbsp;
+                                    @endif
+                                     @if(!empty($maintenance->vehicle_color))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Color:</strong> <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                    @endif
+                                    
+                                </p>
+                            </div>
+                        </div>
                         <table class = "table table-striped table-bordered">
-                                @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                        </table>
-
-                        <table class="table table-bordered">
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;">Image</th>
@@ -59,7 +81,7 @@
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
                             @if (count($vehiclemaintenance) > 0)
-
+                             @foreach ($vehiclemaintenance as $vehiclemaintenance)
                                     <tr id="categories-list">
                                         <td nowrap>
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehiclemaintenance->id }}" data-image="{{ $vehiclemaintenance->image }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
@@ -79,17 +101,30 @@
                                             <div class="product-img">
                                                 <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
                                             </div>
+
+                                             <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargeImageModal" aria-hidden="true">
+                                           <!--  <div class="modal-dialog modal" role="document"> -->
+                                            <div class="modal-dialog modal-sm">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                  <img src="" class="enlargeImageModalSource" style="width: 100%;">
+                                                 
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>
                                         </td>
-                                        
+ 
                                        <td>{{ !empty($vehiclemaintenance->currentDate) ? date(' d M Y', $vehiclemaintenance->currentDate) : '' }}</td>
                                        <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
 
                                         <td>{{ !empty($vehiclemaintenance->currentDate) ? $vehiclemaintenance->currentDate : ''}}</td>
-
-
                                     </tr>
-
-                            @else
+                             @endforeach
+                               @else
                                 <tr id="categories-list">
                                     <td colspan="9">
                                         <div class="alert alert-danger alert-dismissable">
@@ -102,19 +137,15 @@
                                 </tr>
                             @endif
                         </table>
-
-
+                        <div class="box-footer">
+                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#upload-image-modal">Upload new Image</button>
                     </div>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-body" align="center">
-                   
-                </div>
-                @endforeach
+                 @include('Vehicles.partials.edit_image_modal')  
+                 @include('Vehicles.partials.upload_newImage_modal')
+               
             </div>
         </div>
-        @include('Vehicles.partials.edit_image_modal')
-
     </div>
 @endsection
 @section('page_script')
@@ -149,12 +180,12 @@
     <script>
 
         $('#back_button').click(function () {
-            location.href = '/product/Packages';
+            location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
         });
         $(function () {
             $(".select2").select2();
-            $('.hours-field').hide();
-            $('.comp-field').hide();
+            $('.zip-field').hide();
+           
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
@@ -184,6 +215,13 @@
                 todayHighlight: true
             });
 
+            $(function() {
+                    $('img').on('click', function() {
+                        $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+                        $('#enlargeImageModal').modal('show');
+                    });
+            });
+
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -201,61 +239,41 @@
 
             });
 
-            $('#rdo_package, #rdo_product').on('ifChecked', function () {
+            $('#rdo_single, #rdo_zip').on('ifChecked', function () {
                 var allType = hideFields();
-                if (allType == 1) $('#box-subtitle').html('Site Address');
-                else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-            });
-
-            //
-
-            $('#rdo_fin, #rdo_comp').on('ifChecked', function () {
-                var allType = hidenFields();
                 if (allType == 1) $('#box-subtitle').html('Site Address');
                 else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
             });
 
 
             function hideFields() {
-                var allType = $("input[name='promotion_type']:checked").val();
+                var allType = $("input[name='image_type']:checked").val();
                 if (allType == 1) {
-                    $('.hours-field').hide();
-                    $('.odometer-field').show();
+                    $('.zip-field').hide();
+                    $('.Single-field').show();
                 }
                 else if (allType == 2) {
-                    $('.odometer-field').hide();
-                    $('.hours-field').show();
-                }
-                return allType;
-            }
-
-            //
-            function hidenFields() {
-                var allType = $("input[name='title_type']:checked").val();
-                if (allType == 1) {
-                    $('.comp-field').hide();
-                    $('.fin-field').show();
-                }
-                else if (allType == 2) {
-                    $('.fin-field').hide();
-                    $('.comp-field').show();
+                    $('.Single-field').hide();
+                    $('.zip-field').show();
                 }
                 return allType;
             }
 
 
+             //Post perk form to server using ajax (add)
+                $('#add-vehicle_image').on('click', function () {
 
-            //Post perk form to server using ajax (edit)
-            $('#edit_vehicle').on('click', function() {
-                var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
-                var formName = 'edit-vehicledetails-form';
-                var modalID = 'edit-vehicle-modal';
-                var submitBtnID = 'edit_vehicle';
-                var redirectUrl = '/vehicle_management/viewdetails/{{ $vehiclemaintenances->id }}}';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Vehicle details have been updated successfully!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
+                    var strUrl = '/vehicle_management/add_images';
+                    var formName = 'add-new-vehicleImage-form';
+                    var modalID = 'upload-image-modal';
+                    //var modal = $('#'+modalID);
+                    var submitBtnID = 'vehicle_image';
+                    var redirectUrl = '/vehicle_management/viewImage/{{ $ID}}';
+                    var successMsgTitle = 'Image Added!';
+                    var successMsg = 'The Image  has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
+           
 
             var vehicleID;
             $('#edit-vehicle-modal').on('show.bs.modal', function (e) {

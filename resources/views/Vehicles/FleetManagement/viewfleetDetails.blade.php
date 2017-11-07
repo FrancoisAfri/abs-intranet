@@ -148,8 +148,10 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Images</a>
 
-                    {{--<a href="/vehicle_management/viewImage/{{$vehiclemaintenance->id}}}" class="btn btn-sm btn-default btn-flat">Images</a>--}}
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Key Tracking</a>
+                     <a href="{{ '/vehicle_management/keys/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a>  
+
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Permit/Licences</a>
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Documents</a>
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Contracts</a>
