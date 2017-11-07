@@ -20,6 +20,9 @@ use App\modules;
 use App\vehicle_maintenance;
 use App\vehiclemake;
 use App\fleet_documentType;
+use App\keytracking;
+use App\safe;
+use App\images;
 use App\fleet_fillingstation;
 use App\module_access;
 use App\DivisionLevelFive;
@@ -40,6 +43,7 @@ class FleetManagementController extends Controller
         //$incidentType = incident_type::orderBy('id', 'asc')->get();
 
         $vehicle = vehicle::orderBy('id', 'asc')->get();
+        //return $vehicle;
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
@@ -172,6 +176,9 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->title_type =0;
         $vehicle_maintenance->save();
 
+        
+
+
         //Upload Image picture
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
@@ -196,14 +203,21 @@ class FleetManagementController extends Controller
             }
         }
 
+          $vehicleImages = new images();
+
+          $ID = $vehicle_maintenance->id;
+          $name = $vehicle_maintenance->image;
+
+
+          $vehicleImages->vehicle_maintanace = $ID;
+          $vehicleImages->name = $name;
+          $vehicleImages->upload_date = $currentDate;
+          $vehicleImages->save();
 
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }
 
-//    public function viewDetails(){
-//
-//    }
 
     public function viewDetails(vehicle_maintenance $maintenance) {
 
@@ -293,7 +307,21 @@ class FleetManagementController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
+        $vehicle_image = images::orderBy('id', 'asc')->get();
+        
         $currentDate = time();
+
+         ################## WELL DETAILS ###############
+         $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+         $vehiclemaker =  $vehiclemake->name;
+
+         $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+         $vehiclemodeler =  $vehicle_model->name;
+
+         $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         $vehicleTypes =  $vehicleType->name;
+       ################## WELL DETAILS ###############
+
 
 
         if ($maintenance->status == 1) {
@@ -312,9 +340,6 @@ class FleetManagementController extends Controller
 
             $vehiclemaintenances = $vehiclemaintenance ->first();
 
-            // return $vehicle_maintenance;
-
-
             //$Category->load('productCategory');
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
@@ -323,6 +348,11 @@ class FleetManagementController extends Controller
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['ID'] = $ID;
+            $data['vehicle_image'] = $vehicle_image;
             $data['vehicle_maintenance'] = $vehicle_maintenance;
             $data['vehicle'] = $vehicle;
             $data['Vehicle_types'] = $Vehicle_types;
@@ -343,6 +373,93 @@ class FleetManagementController extends Controller
 
     }
 
+    public function keys(vehicle_maintenance $maintenance) {
+
+        $ID =  $maintenance->id;
+
+        $vehicle = vehicle::orderBy('id', 'asc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
+        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
+        $vehicle_image = images::orderBy('id', 'asc')->get();
+        $keytracking = keytracking::orderBy('id' , 'asc')->get();
+        $safe = safe::orderBy('id' , 'asc')->get();
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+          
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',); 
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe'); 
+        
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+         $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+         $vehiclemaker =  $vehiclemake->name;
+
+         $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+         $vehiclemodeler =  $vehicle_model->name;
+
+         $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         $vehicleTypes =  $vehicleType->name;
+       ################## WELL DETAILS ###############
+
+         $loggedInEmplID = Auth::user()->person->id;
+         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+         $name =  $Employee->first_name . ' ' . $Employee->surname;
+        ###################>>>>>################# 
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+
+
+                 $keytracking = DB::table('keytracking')
+                ->select('keytracking.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'hr_people.manager_id as manager', 'safe.name as safeName')
+                ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
+                ->leftJoin('safe', 'keytracking.safe_name', '=', 'safe.id')
+                ->orderBy('keytracking.id')
+                ->get();
+
+               // return $keytracking;
+
+
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['name'] = $name;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['safe'] = $safe;
+            $data['employees'] = $employees;
+            $data['keytracking'] = $keytracking;
+            $data['vehicle_image'] = $vehicle_image;
+            $data['vehicle_maintenance'] = $vehicle_maintenance;
+            $data['vehicle'] = $vehicle;
+            $data['Vehicle_types'] = $Vehicle_types;
+            $data['vehiclemodel'] = $vehiclemodel;
+            $data['divisionLevels'] = $divisionLevels;
+            $data['vehicledetail'] = $vehicledetail;
+            $data['vehiclemake'] = $vehiclemake;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Products';
+            $data['active_rib'] = 'Categories';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.key_tracking')->with($data);
+        } else
+            return back();
+
+    }
+
     public function vehiclesAct(Request $request, vehicle_maintenance $vehicle){
         if ($vehicle->status == 1)
             $stastus = 0;
@@ -353,6 +470,75 @@ class FleetManagementController extends Controller
         $vehicle->update();
        // return view('Vehicles.vehicle_search_results');
         return back();
+    }
+
+    public function addImages(Request $request ){
+        $this->validate($request, [
+            'name' => 'required',
+            // 'description' => 'required',
+            'image' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+         $currentDate = time();         
+
+          $vehicleImages = new images(); 
+
+          //$vehicleImages->vehicle_maintanace = $ID;
+
+          $vehicleImages->name =   $SysData['name']; 
+          $vehicleImages->description = $SysData['description']; 
+          $vehicleImages->upload_date = $currentDate;
+          $vehicleImages->save();
+
+            //Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = "image" . time() . '.' . $fileExt;
+                $request->file('image')->storeAs('image', $fileName);
+                //Update file name in the database
+                $vehicleImages->image = $fileName;
+                $vehicleImages->update();
+            }
+        }
+
+
+    }
+
+      public function addkeys(Request $request ){
+        $this->validate($request, [
+             // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+         $currentDate = time();  
+
+         $dates = $SysData['date_issued'] = str_replace('/', '-', $SysData['date_issued']);
+         $dates = $SysData['date_issued'] = strtotime($SysData['date_issued']);
+
+       $keytracking = new keytracking(); 
+
+       $keytracking->key_number = $SysData['key_number']; 
+       $keytracking->key_type = $SysData['key_type'];
+       $keytracking->key_status = $SysData['key_status'];
+       $keytracking->description = $SysData['description'];
+       $keytracking->employee = $SysData['key'];
+       $keytracking->date_issued = $dates;
+       $keytracking->issued_by = $SysData['issued_by'];
+       $keytracking->safe_name = $SysData['safe_name'];
+       $keytracking->safe_controller = $SysData['safe_controller'];
+       $keytracking->issued_to = $SysData['issued_to'];
+       $keytracking->vehicle_type =0 ;
+       $keytracking->vehicle_id = 0;    
+       $keytracking->save();
+       $keytracking->save();
+
+     
+
+
     }
 
     

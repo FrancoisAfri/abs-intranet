@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add vehicle make</h3>
+                    <h3 class="box-title"> Add Safe </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -29,15 +29,15 @@
                                 <th style="width: 5px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($vehiclemake) > 0)
-                              @foreach ($vehiclemake as $vehice)
+                            @if (count($safe) > 0)
+                              @foreach ($safe as $vehice)
                                <tr id="categories-list">
-                                   <td nowrap>
-                                       <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehice->id }}" data-name="{{ $vehice->name }}" data-description="{{$vehice->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                   </td>
-                                   <td>{{ (!empty( $vehice->name)) ?  $vehice->name : ''}} </td>
-                                   <td>{{ (!empty( $vehice->description)) ?  $vehice->description : ''}} </td>
-                                   <td>
+                               <td nowrap>
+                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehice->id }}" data-name="{{ $vehice->name }}" data-description="{{$vehice->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                    </td>
+                                     <td>{{ (!empty( $vehice->name)) ?  $vehice->name : ''}} </td>
+                                     <td>{{ (!empty( $vehice->description)) ?  $vehice->description : ''}} </td>
+                                  <td>
                                     <!--   leave here  -->
                                     <button vehice="button" id="view_ribbons" class="btn {{ (!empty($vehice->status) && $vehice->status == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$vehice->id}}, 'actdeac');"><i class="fa {{ (!empty($vehice->status) && $vehice->status == 1) ?
@@ -51,7 +51,7 @@
                         <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No Vehicle Make  to display, please start by adding a new Vehicle Make ..
+                            No Safe to display, please start by adding a new Safe....
                         </div>
                         </td>
                         </tr>
@@ -61,14 +61,17 @@
                                    <!-- /.box-body -->
                     <div class="box-footer">
                          <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-vehicle_make-modal">Add new Vehicle Make</button>
+                     <button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-safe-modal">Add new Safe </button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_vehiclemake_modal')
-        @include('Vehicles.partials.edit_vehiclemake_modal')
-
+        @include('Vehicles.partials.add_safe_modal')
+        @include('Vehicles.partials.edit_safe_modal')
+          <!-- Include delete warning Modal form-->
+      @if (count($safe) > 0)
+         @include('Vehicles.warnings.safe_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Safe ? This action cannot be undone.'])
+    @endif
 </div>
 
 
@@ -79,9 +82,9 @@
 <!-- Select2 -->
 <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 <script>
-       function postData(id , data ){
-            if(data == 'actdeac') location.href = "/vehice/vehiclemake_act/" + id;
-
+       function postData(id , data ){   
+            if(data == 'actdeac') location.href = "/vehicle_management/safe_act/" + id; 
+          
         }
         $('#back_button').click(function () {
                 location.href = '/vehicle_management/setup';
@@ -113,70 +116,53 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-
+    
             //
 
             $(".js-example-basic-multiple").select2();
 
-                      {{--//Load divisions drop down--}}
-                {{--var parentDDID = '';--}}
-                {{--var loadAllDivs = 1;--}}
-                {{--@foreach($division_levels as $division_level)--}}
-                    {{--//Populate drop down on page load--}}
-                    {{--var ddID = '{{ 'division_level_' . $division_level->level }}';--}}
-                    {{--var postTo = '{!! route('divisionsdropdown') !!}';--}}
-                    {{--var selectedOption = '';--}}
-                    {{--var divLevel = parseInt('{{ $division_level->level }}');--}}
-                    {{--var incInactive = -1;--}}
-                    {{--var loadAll = loadAllDivs;--}}
-                    {{--loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);--}}
-                    {{--parentDDID = ddID;--}}
-                    {{--loadAllDivs = -1;--}}
-                {{--@endforeach--}}
-        {{--//        });--}}
-
             //save Fleet
             //Post module form to server using ajax (ADD)
-            $('#add-vehicle_make').on('click', function() {
+            $('#add-safe').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/vehice/addvehicle_make';
-                var modalID = 'add-vehicle_make-modal';
+                var strUrl = '/vehicle_management/addsafe';
+                var modalID = 'add-safe-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
-                var redirectUrl = '/vehicle_management/vehice_make';
-                var successMsgTitle = 'Vehicles Make Added!';
-                var successMsg = 'The vehice Make has been updated successfully.';
+                var submitBtnID = 'add-safe';
+                var redirectUrl = '/vehicle_management/safe';
+                var successMsgTitle = 'Safe Type Added!';
+                var successMsg = 'The Safe has been updated successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-              var fleetID;
+              var safeID;
             $('#edit-package-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                fleetID = btnEdit.data('id');
+                safeID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
              });
-            $('#edit_vehiclemake').on('click', function () {
-                var strUrl = '/vehice/edit_vehicle_make/' + fleetID;
+            $('#edit_safe').on('click', function () {
+                var strUrl = '/vehicle_management/edit_safe/' + safeID;
                 var modalID = 'edit-package-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
-                var redirectUrl = '/vehicle_management/vehice_make';
+                var submitBtnID = 'edit_safe';
+                var redirectUrl = '/vehicle_management/safe';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The vehice make has been updated successfully.';
+                var successMsg = 'The Safe has been updated successfully.';
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });

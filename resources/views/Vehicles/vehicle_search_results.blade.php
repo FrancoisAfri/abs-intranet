@@ -2,9 +2,6 @@
 @section('page_dependencies')
    
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <link href="bootstrap.css" rel="stylesheet">
-<link href="bootstrap-switch.css" rel="stylesheet">
-
 @endsection
 @section('content')
     <div class="row">
@@ -55,16 +52,34 @@
                                                data-id="{{ $card->id }}">image</a>
                                         </div>
                                         <div id="my_div" class="hidden">
-                                            <a href="http://www.google.com">fuel log</a>
+                                            <a href="{{ '/vehicle_management/keys/' . $card->id }}"
+                                               id="edit_compan" class="btn btn-default  btn-xs"
+                                               data-id="{{ $card->id }}">Keys </a>
                                         </div>
                                         <div id="my_div" class="hidden">
-                                            <a href="http://www.google.com">oil log</a>
+                                           <a href="{{ '/vehicle_management/permits_licences/' . $card->id }}"
+                                               id="edit_compan" class="btn btn-default  btn-xs"
+                                               data-id="{{ $card->id }}">Permits/Licences </a>
                                         </div>
                                         <div id="my_div" class="hidden">
-                                            <a href="http://www.google.com">incident</a>
+                                            <a href="{{ '/vehicle_management/document/' . $card->id }}"
+                                               id="edit_compan" class="btn btn-default  btn-xs"
+                                               data-id="{{ $card->id }}">document </a>
                                         </div>
                                         <div id="my_div" class="hidden">
-                                            <a href="http://www.google.com">fines</a>
+                                            <a href="{{ '/vehicle_management/contracts/' . $card->id }}"
+                                               id="edit_compan" class="btn btn-default  btn-xs"
+                                               data-id="{{ $card->id }}">Contracts </a>
+                                        </div>
+                                        <div id="my_div" class="hidden">
+                                            <a href="{{ '/vehicle_management/notes /' . $card->id }}"
+                                               id="edit_compan" class="btn btn-default  btn-xs"
+                                               data-id="{{ $card->id }}">Notes  </a>
+                                        </div>
+                                         <div id="my_div" class="hidden">
+                                            <a href="{{ '/vehicle_management/reminders  /' . $card->id }}"
+                                               id="edit_compan" class="btn btn-default  btn-xs"
+                                               data-id="{{ $card->id }}">Reminders   </a>
                                         </div>
 
 
@@ -131,8 +146,6 @@
 	<!-- DataTables -->
 <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-<script src="jquery.js"></script>
-<script src="bootstrap-switch.js"></script>
     <!-- End Bootstrap File input -->
 
     <script>
