@@ -11,39 +11,37 @@
 					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
-                    <div class="box-group" id="accordion">
-                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                        <div class="panel box box-primary">
-                            <div class="box-body">
-								<table class="table table-striped">
-									<tr>
-										<th></th>
-										<th>Induction Title</th>
-										<th>Compamy</th>
-										<th>Date Created</th>
-										<th>Created By</th>
-									</tr>
-									@if(count($inductions) > 0)
-										@foreach($inductions as $induction)
-											<tr>
-												<td><button type="button" class="btn btn-warning" id="delete_button" name="command"
-								onclick="if(confirm('Are you sure you want to delete this Induction ?')){ deleteRecord({{$induction->id}})} else {return false;}"
-                                value="Delete"><i class="fa fa-trash"></i> Delete Induction
-                        </button></td>
-												<td><a href="{{ '/induction/' . $induction->id . '/view' }}" class="product-title">{{ !empty($induction->induction_title) ? $induction->induction_title : '' }}</a></td>
-												<td>{{ !empty($induction->comp_name) ? $induction->comp_name : '' }}</td>
-												<td>{{ !empty($induction->created_at) ? $induction->created_at : '' }}</td>
-												<td>{{ !empty($induction->firstname) && !empty($induction->surname) ? $induction->firstname.' '.$induction->surname : '' }}</td>
-												
-											</tr>
-										@endforeach
-									<tr>
-										<th>Induction Title</th>
-										<th>Compamy</th>
-										<th>Date Created</th>
-										<th>Created By</th>
-									</tr>
-									@endif
+                     <table class="table table-striped">
+						<tr>
+							<th></th>
+							<th>Induction Title</th>
+							<th>Compamy</th>
+							<th>Date Created</th>
+							<th>Created By</th>
+						</tr>
+						@if(count($inductions) > 0)
+							@foreach($inductions as $induction)
+								<tr>
+									<td><button type="button" class="btn btn-warning" id="delete_button" name="command"
+										onclick="if(confirm('Are you sure you want to delete this Induction ?')){ deleteRecord({{$induction->id}})} else {return false;}"
+										value="Delete"><i class="fa fa-trash"></i> Delete Induction
+										</button>
+									</td>
+									<td><a href="{{ '/induction/' . $induction->id . '/view' }}" class="product-title">{{ !empty($induction->induction_title) ? $induction->induction_title : '' }}</a></td>
+									<td>{{ !empty($induction->comp_name) ? $induction->comp_name : '' }}</td>
+									<td>{{ !empty($induction->created_at) ? $induction->created_at : '' }}</td>
+									<td>{{ !empty($induction->firstname) && !empty($induction->surname) ? $induction->firstname.' '.$induction->surname : '' }}</td>
+									
+								</tr>
+							@endforeach
+						<tr>
+							<th></th>
+							<th>Induction Title</th>
+							<th>Compamy</th>
+							<th>Date Created</th>
+							<th>Created By</th>
+						</tr>
+						@endif
 								</table>
 								<div class="row no-print">
 									<div class="col-xs-12">
@@ -51,12 +49,9 @@
 									</div>
 								</div>
 								<!-- End amortization /table -->
-							</div>
-                        </div>
-                    </div>
+						
                     <!-- /. End Collapsible section containing the amortization schedule -->
                 </div>
-				</form>
             </div>
         </div>
     </div>
