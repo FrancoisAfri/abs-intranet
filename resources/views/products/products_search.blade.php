@@ -345,11 +345,6 @@
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
-            //Cancel button click event
-
-            // $('#cancel').click(function () {
-            //     location.href = '/leave/reports';
-            // });
              function postData(id, data) {
         alert(id);
          //if (data == 'approval_id') location.href = "/leave/approval/" + id;
@@ -357,9 +352,6 @@
              //Phone mask
             $("[data-mask]").inputmask();
 
-            //Date picker
-          
-        
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -377,10 +369,6 @@
 
             $('#rdo_levTkn, #rdo_bal ,#rdo_po,#rdo_all').on('ifChecked', function(){      
                 var allType = hideFields();
-                // if (allType == 1) $('#box-subtitle').html('Employee Document ');
-                // else if (allType == 2) $('#box-subtitle').html('Employee Qualification ');
-                // else if (allType == 3) $('#box-subtitle').html('Employee Search');
-               
             });
          
            function reposition() {
@@ -402,7 +390,7 @@
             $('#success-action-modal').modal('show');
         });      
     
-        //function to hide/show fields depending on the allocation  type
+        //function to hide/show fields depending on the
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();
             if (allType == 1) { //adjsut leave

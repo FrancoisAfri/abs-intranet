@@ -50,7 +50,10 @@ class FleetManagementController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
+
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
+
+        
 
 
 //        $vehiclemaintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
@@ -175,9 +178,6 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->currentDate = $currentDate;
         $vehicle_maintenance->title_type =0;
         $vehicle_maintenance->save();
-
-        
-
 
         //Upload Image picture
         if ($request->hasFile('image')) {
@@ -422,6 +422,7 @@ class FleetManagementController extends Controller
                 ->orderBy('keytracking.id')
                 ->get();
 
+
                // return $keytracking;
 
 
@@ -534,11 +535,38 @@ class FleetManagementController extends Controller
        $keytracking->vehicle_type =0 ;
        $keytracking->vehicle_id = 0;    
        $keytracking->save();
-       $keytracking->save();
 
-     
+    }
 
+    public  function  editKeys( Request $request ,keytracking $keytracking) {
+//        $this->validate($request, [
+//            'name' => 'required',
+//            'description' => 'required',
+//        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
 
+        $currentDate = time();  
+
+       $dates = $SysData['date_issued'] = str_replace('/', '-', $SysData['date_issued']);
+       $dates = $SysData['date_issued'] = strtotime($SysData['date_issued']);
+
+       $keytracking->key_number = $SysData['key_number']; 
+       $keytracking->key_type = $SysData['key_type'];
+       $keytracking->key_status = $SysData['key_status'];
+       $keytracking->description = $SysData['description'];
+       $keytracking->employee = $SysData['key'];
+       $keytracking->date_issued = $dates;
+       $keytracking->issued_by = $SysData['issued_by'];
+       $keytracking->safe_name = $SysData['safe_name'];
+       $keytracking->safe_controller = $SysData['safe_controller'];
+       $keytracking->issued_to = $SysData['issued_to'];
+       $keytracking->vehicle_type =0 ;
+       $keytracking->vehicle_id = 0;    
+       $keytracking->update();
+       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
     }
 
     

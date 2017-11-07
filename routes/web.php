@@ -379,6 +379,7 @@ Route::get('vehicle_management/reminders/{maintenance}', 'FleetManagementControl
 
 Route::post('vehicle_management/add_images', 'FleetManagementController@addImages');
 Route::post('vehicle_management/add_keys', 'FleetManagementController@addkeys');
+Route::patch('vehicle_management/edit_key/{keytracking}', 'FleetManagementController@editKeys');
 
 
 # Performance Appraisals Module

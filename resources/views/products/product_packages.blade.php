@@ -133,7 +133,7 @@
                       discount: $('#'+modalID).find('#discount').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'add-package';
                 var redirectUrl = '/product/Packages';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The package has been updated successfully.';
@@ -168,7 +168,7 @@
                     discount: $('#'+modalID).find('#discount').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_package';
                 var redirectUrl = '/product/Packages';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Package modal has been updated successfully.';

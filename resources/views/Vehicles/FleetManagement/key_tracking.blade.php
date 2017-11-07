@@ -302,7 +302,7 @@
                 modal.find('#description').val(description);
              });
             $('#edit_key').on('click', function () {
-                var strUrl = '/vehice/edit_key/' + fleetID;
+                var strUrl = '/vehicle_management/edit_key/' + keyID;
                 var modalID = 'edit-package-modal';
                 var objData = {
                    date_issued: $('#'+modalID).find('#date_issued').val(),
@@ -319,7 +319,7 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_key';
-                var redirectUrl = '/vehicle_management/Manage_fleet_types';
+                var redirectUrl = '/vehicle_management/key/{{ $maintenance->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Key Details have been updated successfully.';
                 var Method = 'PATCH';

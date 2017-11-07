@@ -114,7 +114,7 @@
                      price: $('#'+modalID).find('#price').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'add_products_title';
+                var submitBtnID = 'add-product_title';
                 var redirectUrl = '/Product/Product/{{ $products->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group has been updated successfully.';
@@ -148,7 +148,7 @@
                     price: $('#'+modalID).find('#price').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'update-product_title';
                 var redirectUrl = '/Product/Product/{{ $products->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Category modal has been updated successfully.';
