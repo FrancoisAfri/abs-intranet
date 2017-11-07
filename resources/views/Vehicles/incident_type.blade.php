@@ -163,7 +163,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_incident';
                 var redirectUrl = '/vehicle_management/Incidents_type';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Incident Type has been updated successfully.';

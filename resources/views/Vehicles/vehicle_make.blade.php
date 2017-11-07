@@ -173,7 +173,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_vehiclemake';
                 var redirectUrl = '/vehicle_management/vehice_make';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The vehice make has been updated successfully.';

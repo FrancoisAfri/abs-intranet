@@ -159,7 +159,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'edit-package-modal';
+                var submitBtnID = 'edit_vehicle_model';
                 var redirectUrl = '/vehicle_management/vehice_model';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The vehice model has been updated successfully.';

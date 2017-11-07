@@ -68,25 +68,27 @@
                                 <th>Key Status</th>
                             </tr>
                             @if (count($keytracking) > 0)
-                              @foreach ($keytracking as $fleet)
+                              @foreach ($keytracking as $key)
                                <tr id="categories-list">
                                <td nowrap>
-                                        <button vehice="button" id="edit_fleetcard" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $fleet->id }}" data-key_number="{{ $fleet->key_number }}" data-key_type="{{$fleet->key_type}}" data-key_status="{{$fleet->key_status}}" data-description="{{$fleet->description}}" data-date_issued="{{$fleet->date_issued}}"
-                                          data-issued_by ="{{ $fleet->issued_by}}" data-employee ="{{ $fleet->employee}}"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $key->id }}" data-key_number="{{ $key->key_number }}" data-key_type="{{$key->key_type}}" data-key_status="{{$key->key_status}}" data-description="{{$key->description}}" data-date_issued="{{$key->date_issued}}"
+                                          data-issued_by ="{{ $key->issued_by}}" data-issued_by ="{{ $key->issued_by}}"  
+
+                                            ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
-                                     <td>{{ (!empty( $fleet->firstname)) ?  $IssuedTo[$fleet->employee] : ''}} </td>
+                                     <td>{{ (!empty( $key->firstname)) ?  $IssuedTo[$key->employee] : ''}} </td>
 
 
-                                     <td>{{ (!empty( $fleet->firstname . ' ' . $fleet->surname)) ?   $fleet->firstname . ' ' . $fleet->surname : ''}} </td>
-                                     <td>{{ (!empty( $fleet->safeName)) ?  $fleet->safeName : ''}} </td>
-                                     <td>{{ (!empty( $fleet->safe_controller)) ?  $fleet->safe_controller : ''}} </td>
-                                     <td>{{ !empty($fleet->date_issued) ? date(' d M Y', $fleet->date_issued) : '' }}</td>
+                                     <td>{{ (!empty( $key->firstname . ' ' . $key->surname)) ?   $key->firstname . ' ' . $key->surname : ''}} </td>
+                                     <td>{{ (!empty( $key->safeName)) ?  $key->safeName : ''}} </td>
+                                     <td>{{ (!empty( $key->safe_controller)) ?  $key->safe_controller : ''}} </td>
+                                     <td>{{ !empty($key->date_issued) ? date(' d M Y', $key->date_issued) : '' }}</td>
                                      <td></td>
-                                     <td>{{ (!empty( $fleet->issued_by)) ?  $fleet->issued_by : ''}} </td>
-                                     <td>{{ (!empty( $fleet->description)) ?  $fleet->description : ''}} </td>
-                                    <!--  <td>{{ (!empty( $fleet->key_status)) ?  $fleet->key_status : ''}} </td> -->
+                                     <td>{{ (!empty( $key->issued_by)) ?  $key->issued_by : ''}} </td>
+                                     <td>{{ (!empty( $key->description)) ?  $key->description : ''}} </td>
+                                    <!--  <td>{{ (!empty( $key->key_status)) ?  $key->key_status : ''}} </td> -->
 
-                                    <td>{{ (!empty($fleet->key_status)) ?  $keyStatus[$fleet->key_status] : ''}} </td>
+                                    <td>{{ (!empty($key->key_status)) ?  $keyStatus[$key->key_status] : ''}} </td>
                                     
                                 </tr>
                                    @endforeach
@@ -279,33 +281,52 @@
             });
 
 
+            . var keyID;
+            $('#edit-package-modal').on('show.bs.modal', function (e) {
+                    //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                keyID = btnEdit.data('id');
+                var date_issued = btnEdit.data('date_issued');
+                var key_number = btnEdit.data('key_number');
+                var key_type = btnEdit.data('key_type');
+                var key_status = btnEdit.data('key_status');
+                var description = btnEdit.data('description');
+                var key = btnEdit.data('key');
+                var issued_by = btnEdit.data('issued_by');
+                var safe_name = btnEdit.data('safe_name');
+                var safe_controller = btnEdit.data('safe_controller');
+                var issued_to = btnEdit.data('issued_to');
+                var employee = btnEdit.data('employee');
+                var modal = $(this);
+                modal.find('#name').val(name);
+                modal.find('#description').val(description);
+             });
+            $('#edit_key').on('click', function () {
+                var strUrl = '/vehice/edit_key/' + fleetID;
+                var modalID = 'edit-package-modal';
+                var objData = {
+                   date_issued: $('#'+modalID).find('#date_issued').val(),
+                    key_number: $('#'+modalID).find('#key_number').val(),
+                    key_type: $('#'+modalID).find('#key_type').val(),
+                    key_status: $('#'+modalID).find('#key_status').val(),
+                    description: $('#'+modalID).find('#description').val(),
+                    key: $('#'+modalID).find('input:checked[name = key]').val(),
+                    issued_by: $('#'+modalID).find('#issued_by').val(),
+                    safe_name: $('#'+modalID).find('#safe_name').val(),
+                    safe_controller: $('#'+modalID).find('#safe_controller').val(),
+                    issued_to: $('#'+modalID).find('#issued_to').val(),
+                    employee: $('#'+modalID).find('#employee').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'edit_key';
+                var redirectUrl = '/vehicle_management/Manage_fleet_types';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The Key Details have been updated successfully.';
+                var Method = 'PATCH';
+         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            });
 
-         //      var fleetID;
-         //    $('#edit-package-modal').on('show.bs.modal', function (e) {
-         //            //console.log('kjhsjs');
-         //        var btnEdit = $(e.relatedTarget);
-         //        fleetID = btnEdit.data('id');
-         //        var name = btnEdit.data('name');
-         //        var description = btnEdit.data('description');
-         //        var modal = $(this);
-         //        modal.find('#name').val(name);
-         //        modal.find('#description').val(description);
-         //     });
-         //    $('#edit_fleetcard').on('click', function () {
-         //        var strUrl = '/vehice/edit_fleetcard/' + fleetID;
-         //        var modalID = 'edit-package-modal';
-         //        var objData = {
-         //            name: $('#'+modalID).find('#name').val(),
-         //            description: $('#'+modalID).find('#description').val(),
-         //            _token: $('#'+modalID).find('input[name=_token]').val()
-         //        };
-         //        var submitBtnID = 'save_category';
-         //        var redirectUrl = '/vehicle_management/Manage_fleet_types';
-         //        var successMsgTitle = 'Changes Saved!';
-         //        var successMsg = 'The Fleet Type has been updated successfully.';
-         //        var Method = 'PATCH';
-         // modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-         //    });
+
 
         });
     </script>

@@ -162,7 +162,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_document';
                 var redirectUrl = '/vehicle_management/Document_type';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Fleet Type has been updated successfully.';

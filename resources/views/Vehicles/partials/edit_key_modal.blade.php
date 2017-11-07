@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-module-form">
-                {{ csrf_field() }}
+              <!--   {{ csrf_field() }} -->
                 {{ method_field('PATCH') }}
 
                <div class="modal-header">
@@ -14,18 +14,18 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 					
-                     <!-- <div class="form-group">
+                    <!--  <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Name" required>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="path" class="col-sm-3 control-label">Description</label>
                              <div class="col-sm-9">
                             <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Description" required>
                         </div>
-                     </div> -->
+                     </div>
                       <div class="form-group Single-field">
                         <label for="path" class="col-sm-3 control-label">Key Number </label>
                         <div class="col-sm-8">
@@ -104,7 +104,7 @@
                   </div>  
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_fleetcard" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                    <button type="button" id="edit_key" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
             </form>
             </div>
