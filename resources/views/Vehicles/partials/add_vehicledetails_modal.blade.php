@@ -29,8 +29,6 @@
                                 </div>
                             </div>
                               @endforeach
-
-
 					 <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
@@ -48,7 +46,6 @@
                             </div>
                         </div>
                     </div>
-
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Make</label>
                         <div class="col-sm-8">
