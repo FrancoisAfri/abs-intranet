@@ -23,7 +23,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-black-tie"></i>
                                     </div>
-                                    <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%;">
+                                    <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this, null, 'add-vehicledetails-modal')" style="width: 100%;">
                                     </select>
                                 </div>
                             </div>
@@ -39,7 +39,7 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;"
                                         id="responsible_for_maintenance" name="responsible_for_maintenance">
-                                    <option value="0">*** Select User ***</option>
+                                    <option value="">*** Select User ***</option>
                                     @foreach($hrDetails as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
@@ -58,7 +58,7 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_make"
                                         name="vehicle_make">
-                                    <option value="0">*** Select a Vehicle Make ***</option>
+                                    <option value="">*** Select a Vehicle Make ***</option>
                                     @foreach($vehiclemake as $make)
                                         <option value="{{ $make->id }}">{{ $make->name }}</option>
                                     @endforeach
@@ -66,6 +66,8 @@
                             </div>
                         </div>
                     </div>
+
+        
 
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
@@ -76,9 +78,9 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_model"
                                         name="vehicle_model">
-                                    <option value="0">*** Select a Vehicle Model ***</option>
-                                    @foreach($vehiclemodel as $Model)
-                                        <option value="{{ $Model->id }}">{{ $Model->name }}</option>
+                                    <option value="">*** Select a Vehicle Model ***</option>
+                                    @foreach($vehiclemodel as $model)
+                                        <option value="{{ $model->id }}">{{ $model->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -95,9 +97,9 @@
                                                 </div>
                                                 <select class="form-control select2" style="width: 100%;"
                                                         id="vehicle_type" name="vehicle_type">
-                                                    <option value="0">*** Select a Vehicle Type ***</option>
-                                                    @foreach($Vehicle_types as $Vehicle)
-                                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
+                                                    <option value="">*** Select a Vehicle Type ***</option>
+                                                    @foreach($Vehicle_types as $type)
+                                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -196,7 +198,7 @@
                                 </div>
 
                                 <select name="fuel_type" class="form-control">
-                                    <option value="0">*** Select Fuel Type ***</option>
+                                    <option value="">*** Select Fuel Type ***</option>
                                     <option value="1"> Unleaded</option>
                                     <option value="2"> Lead replacement</option>
                                     <option value="3"> Diesel</option>
@@ -218,7 +220,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Fleet Number</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="fleet_number" name="fleet_number" value=""
+                            <input type="text" class="form-control" id="fleet_number" name="fleet_number" value=""
                                    placeholder="Enter fleet number ">
                         </div>
 
@@ -237,7 +239,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="tracking_umber" name="tracking_umber" value=""
+                            <input type="text" class="form-control" id="tracking_umber" name="tracking_umber" value=""
                                    placeholder="Enter Tracking Cell Number">
                         </div>
 
@@ -252,7 +254,7 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_owner"
                                         name="vehicle_owner">
-                                    <option value="0">*** Select Vehicle Owner ***</option>
+                                    <option value="">*** Select Vehicle Owner ***</option>
                                     @foreach($DivisionLevelFive as $owner)
                                         <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                     @endforeach
@@ -283,7 +285,7 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="financial_institution"
                                         name="financial_institution">
-                                    <option value="0">*** Select Financial Institution ***</option>
+                                    <option value="">*** Select Financial Institution ***</option>
                                     @foreach($vehicle as $Vehicle)
                                         <option value="{{ $Vehicle->id }}">{{ (!empty( $vehice->name)) ?  $vehice->name : ''}}</option>
                                     @endforeach
@@ -300,7 +302,7 @@
                                     <i class="fa fa-building"></i>
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="company" name="company">
-                                    <option value="0">*** Select Company ***</option>
+                                    <option value="">*** Select Company ***</option>
                                     @foreach($DivisionLevelFive as $owner)
                                         <option value="{{ $owner->id }}">
                                             {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
