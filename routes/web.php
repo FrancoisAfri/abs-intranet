@@ -170,7 +170,8 @@ Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
 ##reports
 Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
 Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
-
+Route::get('import/company', 'ContactsUploadController@index');
+Route::post('contacts_upload', 'ContactsUploadController@store');
 #reports
 Route::post('reports/contact_note/meetingreport', 'ContactCompaniesController@printmeetingsReport');
 Route::post('reports/contact_note/client_report', 'ContactCompaniesController@printclientReport');
@@ -187,6 +188,7 @@ Route::post('hr/searchemployees', 'Hr_Admin@search_employees');
 Route::post('hr/user_active', 'Hr_Admin@activeEmployee');
 Route::get('hr/active_user', 'Hr_Admin@cards');
 
+Route::get('hr/upload', 'EmployeeUploadController@index');
 Route::get('hr/job_title', 'EmployeeJobTitleController@index');
 Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
 Route::patch('hr/category_edit/{jobCategory}', 'EmployeeJobTitleController@editCategory');

@@ -51,7 +51,7 @@
                         <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No FleetType to display, please start by adding a new FleetType..
+                            No Vehicle Type to display, please start by adding a new Fleet Type..
                         </div>
                         </td>
                         </tr>
