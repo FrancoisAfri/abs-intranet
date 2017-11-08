@@ -11,9 +11,9 @@
                     <h4 class="modal-title">Edit Image</h4>
                 </div>
 
-                 <div align="center" class="product-img">
-                                    <img src="{{ (!empty($vehicle_maintenance->image)) ? Storage::disk('local')->url("image/$vehicle_maintenance->image") : 'http://placehold.it/50x50' }}"  alt="Products Image" width="50" height="50">
-                            </div>
+                 <div class="product-img">
+                     <img src="{{ (!empty($vehiclemaintenance->vehicle_images)) ? Storage::disk('local')->url("image/$vehiclemaintenance->vehicle_images") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
+                  </div>                           
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
@@ -22,7 +22,7 @@
                      <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="image" name="image" value="{{ $vehicle_maintenance->image }}" placeholder="Enter Name" required>
+                            <input type="text" class="form-control" id="image" name="image" value="{{ $vehicle_maintenance->vehicle_images }}" placeholder="Enter Name" required>
                         </div>
                     </div>
 

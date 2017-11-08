@@ -33,11 +33,39 @@
                 </div>
 
                 <div align="center" class="box box-default">
-                    <div class="box-header with-border">
+                    <!-- <div class="box-header with-border">
                         <h3 class="box-title"> Vehicle Management-{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
 
                         </h3>
-                    </div>
+                    </div> -->
+
+                    <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    <strong class="lead">Vehicle Details</strong><br>
+                                    
+                                    @if(!empty($vehiclemaker))
+                                        | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($vehiclemodeler))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($vehicleTypes))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->vehicle_registration))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong> <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->year))
+                                        -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp; &nbsp;
+                                    @endif
+                                     @if(!empty($maintenance->vehicle_color))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Color:</strong> <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                    @endif
+                                    
+                                </p>
+                            </div>
+                        </div>
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <div class="box-body">
@@ -150,7 +178,11 @@
 
                      <a href="{{ '/vehicle_management/keys/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a>  
+                       data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a> 
+
+                       <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>   
 
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Permit/Licences</a>
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Documents</a>

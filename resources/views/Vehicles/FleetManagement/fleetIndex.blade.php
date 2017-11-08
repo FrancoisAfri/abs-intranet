@@ -38,36 +38,7 @@
                                 </div>
                                 <div class="box-body">
 
-                                    <!--    <div class="form-group">
-                                      <label for="company_id" class="col-sm-3 control-label">Company</label>
-                                      <div class="col-sm-7">
-                                          <div class="input-group">
-                                              <div class="input-group-addon">
-                                                  <i class="fa fa-user"></i>
-                                              </div>
-                                              <select class="form-control select2" id="company_id" name="company_id">
-                                                  <option selected="selected" value="0">*** Select a Company ***</option>
-
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div>
-
-                                   <div class="form-group">
-                                      <label for="department_id" class="col-sm-3 control-label">Department</label>
-                                      <div class="col-sm-7">
-                                          <div class="input-group">
-                                              <div class="input-group-addon">
-                                                  <i class="fa fa-user"></i>
-                                              </div>
-                                              <select class="form-control select2" id="department_id" name="department_id">
-                                                  <option selected="selected" value="0">*** Select a Department ***</option>
-
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div> -->
-
+                                   
                                     @foreach($division_levels as $division_level)
                                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                             <label for="{{ 'division_level_' . $division_level->level }}"

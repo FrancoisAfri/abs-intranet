@@ -34,8 +34,7 @@
 
                 <div align="center" class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title"> Image(s) for -{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
-
+                        <h3 class="box-title"> Image(s) 
 
                         </h3>
                     </div>
@@ -70,6 +69,7 @@
                                 </p>
                             </div>
                         </div>
+{{ $ID}}
                         <table class = "table table-striped table-bordered">
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
@@ -99,8 +99,9 @@
                                         </td>
                                         <td>
                                             <div class="product-img">
-                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
+                                                <img src="{{ (!empty($vehiclemaintenance->vehicle_images)) ? Storage::disk('local')->url("image/$vehiclemaintenance->vehicle_images") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
                                             </div>
+
 
                                              <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargeImageModal" aria-hidden="true">
                                            <!--  <div class="modal-dialog modal" role="document"> -->
@@ -267,13 +268,14 @@
                     var formName = 'add-new-vehicleImage-form';
                     var modalID = 'upload-image-modal';
                     //var modal = $('#'+modalID);
-                    var submitBtnID = 'vehicle_image';
+                    var submitBtnID = 'add-vehicle_image';
                     var redirectUrl = '/vehicle_management/viewImage/{{ $ID}}';
                     var successMsgTitle = 'Image Added!';
                     var successMsg = 'The Image  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
-           
+
+            
 
             var vehicleID;
             $('#edit-vehicle-modal').on('show.bs.modal', function (e) {

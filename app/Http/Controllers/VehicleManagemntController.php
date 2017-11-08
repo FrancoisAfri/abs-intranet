@@ -726,13 +726,15 @@ class VehicleManagemntController extends Controller {
          $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
 
+
         $vehiclemaintenance = DB::table('vehicle_maintenance')
-            ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
+             ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type')
             ->leftJoin('vehicle_make', 'vehicle_maintenance.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_image','vehicle_maintenance.id','=' , 'vehicle_image.vehicle_maintanace' )
             ->leftJoin('vehicle_model', 'vehicle_maintenance.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_maintenance.vehicle_type', '=', 'vehicle_managemnet.id')
-
+            
             ->where(function ($query) use ($propertyID) {
                     if (!empty($propertyID)) {
                         $query->where('vehicle_maintenance.property_type', $propertyID);
@@ -753,10 +755,11 @@ class VehicleManagemntController extends Controller {
                         $query->where('vehicle_maintenance.vehicle_registration', $registration_number);
                     }
                 })
+              //->where('vehicle_maintenance.image','0')
              ->orderBy('vehicle_maintenance.id')
              ->get();
 
-           // return $vehiclemaintenance;
+            //return $vehiclemaintenance;
 
 
         $data['hrDetails'] = $hrDetails;     

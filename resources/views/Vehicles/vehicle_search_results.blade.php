@@ -92,25 +92,10 @@
                                     </td> -->
                                      <td>
                                             <div class="product-img">
-                                                <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("image/$card->image") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
+                                                <img src="{{ (!empty($card->vehicle_images)) ? Storage::disk('local')->url("image/$card->vehicle_images") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
                                             </div>
-
-                                             <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargeImageModal" aria-hidden="true">
-                                           <!--  <div class="modal-dialog modal" role="document"> -->
-                                            <div class="modal-dialog modal-sm">
-                                              <div class="modal-content">
-                                                <div class="modal-header">
-                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                  <img src="" class="enlargeImageModalSource" style="width: 100%;">
-                                                 
-                                                </div>
-                                              </div>
-                                            </div>
-                                        </div>
                                         </td>
-                                    {{--<td>{{ (!empty( $card->image)) ?  $card->image : ''}} </td>--}}
+                                    
                                     <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
                                     <td>{{ !empty($card->fleet_number) ? $card->fleet_number : ''}}</td>
                                     <td>{{ !empty($card->vehicle_registration) ? $card->vehicle_registration : ''}}</td>

@@ -1,7 +1,7 @@
 <div id="upload-image-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-new-vehicleImage-form">
+            <form class="form-horizontal" name="add-new-vehicleImage-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
                
 
@@ -26,6 +26,8 @@
                                 </div>
                             </div>
 
+                            <input type="hidden" id="valueID" name="valueID" value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+
                      <div class="form-group Single-field">
                         <label for="path" class="col-sm-3 control-label">Image name</label>
                              <div class="col-sm-8">
@@ -39,11 +41,12 @@
                         </div>
                     </div>
 
-                      <div class="form-group Single-field">
+                      
+
+                    <div class="form-group">
                         <label for="image" class="col-sm-3 control-label">Upload</label>
 
                         <div class="col-sm-8">
-                           
                             <input type="file" id="image" name="image"  class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>

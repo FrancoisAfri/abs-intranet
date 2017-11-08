@@ -41,10 +41,8 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_make" name="vehicle_make">
                                     <option value="">*** Select a Vehicle Make ***</option>
-                                    @foreach($vehiclemake as $Vehicle)
+                                    @foreach($Vehiclemake as $Vehicle)
                                         <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
-                                        {{--<option value="{{ $Vehicle->id }}" {{ ($Vehicle->name == $Vehicle->id)--}}
-                                        {{--? ' selected' : '' }}>{{ $vehiclemaintenance->vehicle_make }}</option>--}}
                                     @endforeach
                                 </select>
                             </div>
