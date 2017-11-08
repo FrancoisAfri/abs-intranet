@@ -281,7 +281,7 @@
             });
 
 
-            . var keyID;
+             var keyID;
             $('#edit-package-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
