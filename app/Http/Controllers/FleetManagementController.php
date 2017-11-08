@@ -42,26 +42,18 @@ class FleetManagementController extends Controller
     public function fleetManagent()
     {
         //$incidentType = incident_type::orderBy('id', 'asc')->get();
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         //return $vehicle;
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+		//return $vehiclemake;
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
-
         $images = images::orderBy('id','asc')->get();
-        
-
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
-
-
-
-
-//        $vehiclemaintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
-
+//      $vehiclemaintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
         $vehiclemaintenance = DB::table('vehicle_maintenance')
             ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type')
@@ -102,7 +94,6 @@ class FleetManagementController extends Controller
 
     public function addvehicle()
     {
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -110,7 +101,7 @@ class FleetManagementController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
 
-//        $vehiclemaintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
+//      $vehiclemaintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
 
         $vehiclemaintenance = DB::table('vehicle_maintenance')
              ->select('vehicle_maintenance.*', 'vehicle_make.name as vehicle_make',
@@ -122,15 +113,12 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_maintenance.id')
             ->get();
 
-
-
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
             ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-
 
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['vehicledetail'] = $vehicledetail;
@@ -157,7 +145,7 @@ class FleetManagementController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-         $currentDate = time();
+        $currentDate = time();
 
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = 1;
@@ -189,7 +177,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->image = 1;
         $vehicle_maintenance->save();
 
-         $vehicleImages = new images();
+        $vehicleImages = new images();
 
         //Upload Image picture
         if ($request->hasFile('image')) {
@@ -217,21 +205,20 @@ class FleetManagementController extends Controller
 
           
 
-          $ID = $vehicle_maintenance->id;
-          $name = $vehicle_maintenance->image;
-           //details of logged in user
-          $loggedInEmplID = Auth::user()->person->id;
-          // $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-          // $username =  $Employee->id;
-          //return $loggedInEmplID;
+		$ID = $vehicle_maintenance->id;
+		$name = $vehicle_maintenance->image;
+		//details of logged in user
+		$loggedInEmplID = Auth::user()->person->id;
+		// $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+		// $username =  $Employee->id;
+		//return $loggedInEmplID;
 
-
-          $vehicleImages->vehicle_maintanace = $ID;
-          $vehicleImages->name = $name;
-          $vehicleImages->user_name = $loggedInEmplID;
-          $vehicleImages->upload_date = $currentDate;
-          $vehicleImages->status = 1;
-          $vehicleImages->save();
+		$vehicleImages->vehicle_maintanace = $ID;
+		$vehicleImages->name = $name;
+		$vehicleImages->user_name = $loggedInEmplID;
+		$vehicleImages->upload_date = $currentDate;
+		$vehicleImages->status = 1;
+		$vehicleImages->save();
 
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
