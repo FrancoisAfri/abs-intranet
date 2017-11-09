@@ -67,13 +67,24 @@
                             @if (count($vehicleDocumets) > 0)
                               @foreach ($vehicleDocumets as $document)
                                <tr id="categories-list">
-                                <td></td>
-                                <td></td>
+                                 <td nowrap>
+                                       <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $document->id }}" data-name="{{ $document->name }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                   </td>
+                                <td nowrap>
+                                        
+                                            @if(!empty($document->document))
+                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $document->document }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
+                                            @else
+                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                       
+                                    </td>
                                     <td>{{ !empty($document->description) ? $document->description : ''}}</td>
                                     <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
                                     <td>{{ !empty($document->description) ? $document->description : ''}}</td>
                                     <td>{{ !empty($document->description) ? $document->description : ''}}</td>
 
+                                     <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
                                          
 
                                   
