@@ -24,6 +24,7 @@ class CreateKeytrackingTable extends Migration
             $table->integer('issued_by')->nullable()->unsigned()->index();
             $table->string('description')->nullable();
             $table->integer('status')->nullable();
+            $table->string('captured_by')->nullable();
             $table->timestamps();
         });
     }

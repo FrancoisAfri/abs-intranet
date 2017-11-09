@@ -117,7 +117,7 @@
                             </tr>
                             <tr>
                                 <td class="caption">Registration</td><td>1 </td>
-                                <td class="caption">Engine Number</td><td>{{ !empty($vehiclemaintenance->engine_number) ? $vehiclemaintenance->engine_number : ''}}</td>
+                                <td class="caption">vehicle registration Number</td><td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
                             </tr>
                             <tr>
                                 <td class="caption" width="25%">Make</td><td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
@@ -137,7 +137,7 @@
                                 </td></tr><tr>	<td class="caption">Machine Hours</td><td>1</td>	<td class="caption">Vehicle Cell Number</td><td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
                             </tr>
                             <tr>
-                                <td class="caption">Fuel Type</td><td>{{ !empty($vehiclemaintenance->fuel_type) ? $vehiclemaintenance->fuel_type : ''}}</td>
+                                <td class="caption">Fuel Type</td><td>{{ (!empty($vehiclemaintenance->fuel_type)) ?  $fueltype[$vehiclemaintenance->fuel_type] : ''}} </td>
                                 <td class="caption">Tracking Cell Number</td><td>{{ !empty($vehiclemaintenance->tracking_umber) ? $vehiclemaintenance->tracking_umber : ''}}</td>
                             </tr>
                             <tr>
@@ -145,20 +145,20 @@
                                 <td class="caption">Fleet Card</td><td></td>
                             </tr>
                             <tr>
-                                <td class="caption">Division</td><td>Marhine Plant Hire</td>
+                                <td class="caption">Division</td><td>{{ !empty($vehiclemaintenance->company) ? $vehiclemaintenance->company : ''}}</td>
                                 <td class="caption">Vehicle Owner Name</td><td>{{ !empty($vehiclemaintenance->vehicle_owner) ? $vehiclemaintenance->vehicle_owner : ''}}</td>
                             </tr>
                             <tr>
-                                <td class="caption">Department</td><td></td>
+                                <td class="caption">Department</td><td>{{ !empty($vehiclemaintenance->Department) ? $vehiclemaintenance->Department : ''}}</td>
                                 <td class="caption">Title Holder Name</td><td>Marhine Plant Hire</td>
                             </tr>
                             <tr>
-                                <td class="caption">Responsible Person</td><td></td>
+                                <td class="caption">Responsible Person</td><td>{{ !empty($vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname) ? $vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname : ''}}</td>
                                 <td class="caption">Registration Paper</td><td></td>
                             </tr>
                             <tr>
                                 <td class="caption">Extras</td><td>{{ !empty($vehiclemaintenance->extras) ? $vehiclemaintenance->extras : ''}}</td>
-                                <td class="caption">Status</td><td>{{ !empty($vehiclemaintenance->status) ? $vehiclemaintenance->status : ''}}</td>
+                                <td class="caption">Status</td><td>{{ (!empty($vehiclemaintenance->status)) ?  $status[$vehiclemaintenance->status] : ''}}</td>
                             </tr>
 
 

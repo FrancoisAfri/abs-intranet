@@ -132,7 +132,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'add-vehicle_make';
+                var submitBtnID = 'add-vehicle_model';
                 var redirectUrl = '/vehicle_management/vehice_model';
                 var successMsgTitle = 'Vehicles Model Added!';
                 var successMsg = 'The vehice Model has been updated successfully.';

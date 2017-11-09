@@ -69,7 +69,6 @@
                                 </p>
                             </div>
                         </div>
-{{ $ID}}
                         <table class = "table table-striped table-bordered">
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
