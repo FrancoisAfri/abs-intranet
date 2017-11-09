@@ -184,7 +184,10 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>   
 
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Permit/Licences</a>
+                       <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Documents</a>  
+                    
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Documents</a>
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Contracts</a>
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Notes</a>

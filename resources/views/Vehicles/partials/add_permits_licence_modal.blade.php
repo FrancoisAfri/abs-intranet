@@ -90,10 +90,9 @@
                                 <input type="file" id="documents" name="documents"
                                        class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
                                        data-show-upload="false">
-                            </div>
+                                </div>
                         
                     </div>
-
 
                 </div>
                 <div class="modal-footer">

@@ -247,7 +247,7 @@
                 modal.find('#exp_date').val(exp_date);
                 modal.find('#status').val(status);
                 modal.find('#captured_by').val(captured_by);
-                modal.find('#documents').val(documents);
+                //modal.find('#documents').val(documents);
              });
 
             $('#edit_permit').on('click', function () {
@@ -261,7 +261,7 @@
                     exp_date: $('#'+modalID).find('#exp_date').val(),
                     status: $('#'+modalID).find('#status').val(),
                     captured_by: $('#'+modalID).find('#captured_by').val(),
-                    documents: $('#'+modalID).find('#documents').val(),
+                    //documents: $('#'+modalID).find('#documents').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_permit';

@@ -798,7 +798,8 @@ class FleetManagementController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $document->name = $SysData['permit'];
+        $permit->permit_licence = $SysData['permit_licence'];
+        $permit->Supplier = $SysData['Supplier'];
         $document->update();
         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
