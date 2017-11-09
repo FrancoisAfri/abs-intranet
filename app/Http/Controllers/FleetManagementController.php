@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Users;
 use App\DivisionLevel;
 use App\jobcardMaintance;
+Use App\permits_licence;
 use App\FleetType;
 use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
@@ -282,9 +283,8 @@ class FleetManagementController extends Controller
             //return $ID;
              $vehiclemaintenance = DB::table('vehicle_details')
              ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type','division_level_fives.name as company' ,'division_level_fours.name as Department','hr_people.first_name as first_name' , 'hr_people.surname as surname')
+                'vehicle_model.name as vehicle_model','vehicle_managemnet.name as vehicle_type','division_level_fives.name as company' ,'division_level_fours.name as Department','hr_people.first_name as first_name' , 'hr_people.surname as surname')
                 ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-                ->leftJoin('vehicle_image','vehicle_details.id','=' , 'vehicle_image.vehicle_maintanace' )
                 ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
                 ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
                 ->leftJoin('division_level_fives','vehicle_details.division_level_5', '=', 'division_level_fives.id' )
@@ -568,6 +568,24 @@ class FleetManagementController extends Controller
          return response()->json();
     }
 
+    public function editImage( Request $request ,images $image) {
+
+        //        $this->validate($request, [
+//            'name' => 'required',
+//            'description' => 'required',
+//        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $image->name =   $SysData['name'];
+        $imagedescription = $SysData['name'];
+        $imageimages = $SysData['name'];  
+       $image->update();
+       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();    
+    }
+
       public function addkeys(Request $request ){
         $this->validate($request, [
              // 'issued_to' => 'required_if:key,1',
@@ -670,20 +688,22 @@ class FleetManagementController extends Controller
          $name =  $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
+         $status = array(1 => 'Active', 2 => 'InActive'); 
+
         if ($maintenance->status == 1) {
             $ID = $maintenance->id;
             //return $ID;
 
+               
 
-                 $keytracking = DB::table('keytracking')
-                ->select('keytracking.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'hr_people.manager_id as manager', 'safe.name as safeName')
-                ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
-                ->leftJoin('safe', 'keytracking.safe_name', '=', 'safe.id')
-                ->orderBy('keytracking.id')
-                ->get();
+                $permits = DB::table('permits_licence')
+                           ->select('permits_licence.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                           ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
+                           ->orderBy('permits_licence.id') 
+                           ->get();
 
 
-               // return $keytracking;
+               // return $permits;
 
 
             $data['page_title'] = " View Fleet Details";
@@ -693,6 +713,7 @@ class FleetManagementController extends Controller
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+            $data['status'] = $status;
             $data['name'] = $name;
             $data['vehicleTypes'] = $vehicleTypes;
             $data['vehiclemodeler'] = $vehiclemodeler;
@@ -701,7 +722,7 @@ class FleetManagementController extends Controller
             $data['keyStatus'] = $keyStatus;
             $data['safe'] = $safe;
             $data['employees'] = $employees;
-            $data['keytracking'] = $keytracking;
+            $data['permits'] = $permits;
             $data['vehicle_image'] = $vehicle_image;
             $data['vehicle_maintenance'] = $vehicle_maintenance;
             $data['vehicle'] = $vehicle;
@@ -719,6 +740,69 @@ class FleetManagementController extends Controller
         } else
             return back();
 
+    }
+
+    public function addPermit(Request $request ){
+        $this->validate($request, [
+             // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+
+
+         $currentDate = time();  
+         $loggedInEmplID = Auth::user()->person->id;
+         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+         $name =  $Employee->first_name . ' ' . $Employee->surname;
+
+         $dates = $SysData['date_issued'] = str_replace('/', '-', $SysData['date_issued']);
+         $dates = $SysData['date_issued'] = strtotime($SysData['date_issued']);
+         
+         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+
+       $permits = new permits_licence(); 
+
+       $permits->permit_licence = $SysData['permit_licence']; 
+       $permits->Supplier = $SysData['Supplier'];
+       $permits->exp_date = $Expdate;
+       $permits->date_issued = $dates;
+       $permits->status = $SysData['status'];
+       $permits->permits_licence_no = $SysData['permits_licence_no'];
+       $permits->captured_by = $name;
+          
+       $permits->save();
+
+       //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $permits->id . "_registration_papers." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $permits->document = $fileName;
+                $permits->save();
+            }
+        }
+
+        return response()->json();
+
+    }
+
+     public function editPermit(Request $request, permits_licence $permit) {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $document->name = $SysData['permit'];
+        $document->update();
+        AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
     }
     
 }

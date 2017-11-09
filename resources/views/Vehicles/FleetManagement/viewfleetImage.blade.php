@@ -274,46 +274,51 @@
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
-            
-
-            var vehicleID;
-            $('#edit-vehicle-modal').on('show.bs.modal', function (e) {
+                
+            var ImageID;
+            $('#edit-package-modal').on('show.bs.modal', function (e) {
+                    //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                vehicleID = btnEdit.data('id');
-                var vehicle_make = btnEdit.data('vehicle_make');
-                var vehicle_model = btnEdit.data('vehicle_model');
-                var vehicle_type = btnEdit.data('vehicle_type');
-                var year = btnEdit.data('year');
-                var vehicle_registration = btnEdit.data('vehicle_registration');
-                var chassis_number = btnEdit.data('chassis_number');
-                var engine_number = btnEdit.data('engine_number');
-                var vehicle_color = btnEdit.data('vehicle_color');
-                var odometer_reading = btnEdit.data('odometer_reading');
-                var hours_reading = btnEdit.data('hours_reading');
-                var size_of_fuel_tank = btnEdit.data('size_of_fuel_tank');
-                var cell_number = btnEdit.data('cell_number');
-                var tracking_umber = btnEdit.data('tracking_umber');
-                var extras = btnEdit.data('extras');
-                var image = btnEdit.data('image');
-                var registration_papers = btnEdit.data('registration_papers');
+                ImageID = btnEdit.data('id');
+                var name = btnEdit.data('name');
+                var description = btnEdit.data('description');
+                var images = btnEdit.data('images');
                 var modal = $(this);
-                modal.find('#vehicle_make').val(vehicle_make);
-                modal.find('#vehicle_model').val(vehicle_model);
-                modal.find('#vehicle_type').val(vehicle_type);
-                modal.find('#year').val(year);
-                modal.find('#vehicle_registration').val(vehicle_registration);
-                modal.find('#chassis_number').val(chassis_number);
-                modal.find('#engine_number').val(engine_number);
-                modal.find('#vehicle_color').val(vehicle_color);
-                modal.find('#odometer_reading').val(odometer_reading);
-                modal.find('#hours_reading').val(hours_reading);
-                modal.find('#size_of_fuel_tank').val(size_of_fuel_tank);
-                modal.find('#cell_number').val(cell_number);
-                modal.find('#tracking_umber').val(tracking_umber);
-                modal.find('#extras').val(extras);
-                modal.find('#image').val(image);
-                modal.find('#registration_papers').val(registration_papers);
+                modal.find('#name').val(name);
+                modal.find('#description').val(description);
+                modal.find('#images').val(images);
+             });
 
+            // //Post perk form to server using ajax (add)
+            //     $('#edit_image').on('click', function () {
+
+            //         var strUrl = '/vehicle_management/edit_images/' + ImageID;
+            //         var formName = 'add-new-vehicleImage-form';
+            //         var modalID = 'edit-image-modal';
+            //         //var modal = $('#'+modalID);
+            //         var submitBtnID = 'edit_image';
+            //         var redirectUrl = '/vehicle_management/viewImage/{{ $ID}}';
+            //         var successMsgTitle = 'Image Modified!';
+            //         var successMsg = 'The Image  has been updated successfully.';
+            //         var Method = 'PATCH';
+            //         modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            //     });
+
+             $('#edit_image').on('click', function () {
+               var strUrl = '/vehicle_management/edit_images/' + ImageID;
+               var modalID = 'edit-image-modal';
+               var objData = {
+                    name: $('#'+modalID).find('#name').val(),
+                    description: $('#'+modalID).find('#description').val(),
+                    images:$('#'+modalID).find('#images').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'edit_image';
+                var redirectUrl = '/vehicle_management/viewImage/{{ $ID}}';
+                var successMsgTitle = 'Image Modified!';
+                var successMsg = 'The Image  has been updated successfully.';
+                var Method = 'PATCH'
+         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
 
