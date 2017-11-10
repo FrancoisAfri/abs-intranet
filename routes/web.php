@@ -356,8 +356,6 @@ Route::patch('vehicle_management/edit_safe/{safe}', 'VehicleManagemntController@
 Route::get('vehicle_management/safe_act/{safe}', 'VehicleManagemntController@safeAct');
 Route::get('vehicle_management/Manage_safe/{safe}/delete', 'VehicleManagemntController@deletesafe');
 
-
-
 ##*************** Fleet Management ************
 Route::get('vehicle_management/manage_fleet', 'FleetManagementController@fleetManagent');
 Route::get('vehicle_management/add_vehicle', 'FleetManagementController@addvehicle');
@@ -376,8 +374,6 @@ Route::get('vehicle_management/document/{maintenance}', 'FleetManagementControll
 Route::get('vehicle_management/contracts/{maintenance}', 'FleetManagementController@contracts');
 Route::get('vehicle_management/notes/{maintenance}', 'FleetManagementController@notes');
 Route::get('vehicle_management/reminders/{maintenance}', 'FleetManagementController@reminders');
-
-
 
 Route::post('vehicle_management/add_images', 'FleetManagementController@addImages');
 Route::post('vehicle_management/add_keys', 'FleetManagementController@addkeys');
