@@ -372,9 +372,9 @@ class FleetManagementController extends Controller
         $maintenance = new vehicle_maintenance();
         $maintenance->status = 1;
         $maintenance->responsible_for_maintenance = $SysData['responsible_for_maintenance'];
-        $maintenance->vehicle_make = 0;
-        $maintenance->vehicle_model = 0;
-        $maintenance->vehicle_type = 0;
+        $maintenance->vehicle_make = 5;
+        $maintenance->vehicle_model = 3;
+        $maintenance->vehicle_type = 3;
         $maintenance->year = $SysData['year'];
         $maintenance->vehicle_registration = $SysData['vehicle_registration'];
         $maintenance->chassis_number = $SysData['chassis_number'];
@@ -401,7 +401,7 @@ class FleetManagementController extends Controller
         $maintenance->title_type =0;
         $maintenance->responsible =0;
         $maintenance->image = 1;
-        $maintenance->save();
+        $maintenance->update();
 
          $vehicleImages = new images();
          $vehicledocumets = new vehicle_documets();
@@ -426,7 +426,7 @@ class FleetManagementController extends Controller
                 $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
                 //Update file name in the table
                 $vehicledocumets->document = $fileName;
-                $vehicledocumets->save();
+                $vehicledocumets->update();
             }
         }
 
@@ -442,7 +442,7 @@ class FleetManagementController extends Controller
           $vehicleImages->upload_date = $currentDate;
           $vehicleImages->default_image = 1;
           $vehicleImages->status = 1;
-          $vehicleImages->save();
+          $vehicleImages->update();
 
           ##document 
           $vehicledocumets->vehicleID = $ID;
@@ -451,7 +451,7 @@ class FleetManagementController extends Controller
           $vehicledocumets->upload_date = $currentDate;
           $vehicledocumets->default_documrnt = 1;
           $vehicledocumets->status = 1;
-          $vehicledocumets->save();
+          $vehicledocumets->update();
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
         return response()->json();

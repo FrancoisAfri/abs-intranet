@@ -357,6 +357,7 @@
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
                 var modal = $(this);
+                
                 modal.find('#vehicle_make').val(vehicle_make);
                 modal.find('#vehicle_model').val(vehicle_model);
                 modal.find('#vehicle_type').val(vehicle_type);
@@ -382,7 +383,7 @@
                 var formName = 'edit-vehicledetails-form';
                 var modalID = 'edit-vehicle-modal';
                 var submitBtnID = 'edit_vehicle';
-                var redirectUrl = '/vehicle_management/viewdetails/{{ $vehiclemaintenances->id }}}';
+                var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Vehicle details have been updated successfully!';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
