@@ -2,9 +2,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-note-form">
-                {{ csrf_field() }}
-                
-
+                 {{ csrf_field() }}
+              
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -17,9 +16,9 @@
                   
 
                     <div class="form-group">
-                        <label for="role" class="col-sm-2 control-label">Captured By</label>
+                        <label for="captured_by" class="col-sm-2 control-label">Captured By</label>
                         <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;" id="role" name="role">
+                            <select class="form-control select2" style="width: 100%;" id="captured_by" name="captured_by">
                                 <option value="">*** Select a Role ***</option>
                                 @foreach($employees as $employee)
                                     <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
@@ -34,6 +33,8 @@
                                    value="{{ old('date_captured') }}" placeholder="Select  Expiry date ...">
                         </div>
                     </div>
+                     <input type="hidden" name="ID" value="">
+
                       <div class="form-group zip-field">
                         <label for="days" class="col-sm-3 control-label">Note</label>
                         <div class="col-sm-8">
