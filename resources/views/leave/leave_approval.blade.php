@@ -57,9 +57,9 @@
                                         <div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
                                             <label for="supporting_doc" class="control-label"></label>
                                             @if(!empty($approval->supporting_docs))
-                                            <br><a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $approval->supporting_docs }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
+                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $approval->supporting_docs }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
                                             @else
-                                            <br><a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
                                     </td>

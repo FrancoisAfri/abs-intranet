@@ -1,7 +1,7 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
 <!-- bootstrap datepicker -->
- <!-- Include Date Range Picker -->
+
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
@@ -10,13 +10,14 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
+    <!--Time Charger-->
 @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Documents  </h3>
+                    <h3 class="box-title"> List Contracts  </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -54,61 +55,64 @@
                                 </p>
                             </div>
                         </div>
-                        <table class="table table-bordered">
-                            <tr>
-                               <th style="width: 10px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;"></th>
-                                <th>Description</th>
-                                <th>Date Uploaded</th>
-                                <th>Date From</th>
-                                <th>Expiry Date</th>
-                                <th style="width: 5px; text-align: center;"></th>
-                            </tr>
-                            @if (count($vehicleDocumets) > 0)
-                              @foreach ($vehicleDocumets as $document)
-                               <tr id="categories-list">
-                                 <td nowrap>
-                                       <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-newdoc-modal" data-id="{{ $document->id }}" data-type="{{ $document->type }}"
-                                        data-description="{{ $document->description }}" data-role="{{ $document->role }}" data-datefrom="{{ $document->date_from }}" data-exp_date="{{ $document->exp_date }}" 
-                                        ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                   </td>
-                                <td nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($document->document))
-                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $document->document }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
-                                            @else
-                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>{{ !empty($document->description) ? $document->description : ''}}</td>
-                                    <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
-                                    <td>{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
-                                    <td>{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : '' }}</td>
-                                    
 
-                                     <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
-                                    
-                                </tr>
-                                   @endforeach
-                               @else
-                               <tr id="categories-list">
-                        <td colspan="5">
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                           No key records for this vehicle, please start by adding key records for this vehicle..
+                         <form class="form-horizontal" method="POST" action="/vehicle_management/vehicle/Search">
+                    {{ csrf_field() }}
+
+                    <div class="box-body">
+
+                        <!--  -->
+                    <div class="col-md-8 col-md-offset-2">
+                        <div >
+                            <div class="box-header with-border">
+                             <!--  <h3 class="box-title">Search for a Vehicle</h3> -->
+                            </div>
+                            <div class="box-body">
+                            
+                        <div class="form-group">
+                            <label for="vehicle_id" class="col-sm-3 control-label">Category Type</label>
+                            <div class="col-sm-7">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <select class="form-control select2" id="vehicle_id" name="vehicle_id">
+                                        <option selected="selected" value="0">*** Select a Category Type ***</option>
+                                       
+                                    </select> 
+                                </div>
+                            </div>
                         </div>
-                        </td>
-                        </tr>
-                        @endif
-                            </table>
+
+                         <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
+                                <label for="property_type" class="col-sm-3 control-label"> Property Type </label>
+
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_package" name="property_type" value="1" checked> Active     </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_product" name="property_type" value="2">  Inactive    </label>
+                                     <label class="radio-inline"><input type="radio" id="rdo_products" name="property_type" value="3">  Archived   </label>
+
+                                </div>
+                         </div> 
+
+                        
+
+
+                        <div class="box-footer">
+                            <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-search"></i> List</button>
+                     </div>
+                    </div>
+                   </div>
+                  </div>   
+                    <!-- /.box-body -->
+                    
+                    <!-- /.box-footer -->
+                </form>
+
                       <!--   </div> -->
                                    <!-- /.box-body -->
-                    <div class="box-footer">
-                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-document-modal">Upload new document</button>
-                    </div>
+                    
              </div>
         </div>
    <!-- Include add new prime rate modal -->
@@ -152,9 +156,10 @@
             if(data == 'actdeac') location.href = "/vehice/fleetcard_act/" + id; 
           
         }
-         $('#back_button').click(function () {
+       $('#back_button').click(function () {
             location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
         });
+
 
         $(function () {
              $('#back_button').click(function () {

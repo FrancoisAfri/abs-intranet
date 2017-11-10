@@ -170,7 +170,12 @@
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
                     {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
-                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal" data-target="#edit-vehicle-modal" data-id="{{ $vehiclemaintenance->id }}" data-extras="{{ $vehiclemaintenance->extras }}" data-cell_number="{{$vehiclemaintenance->cell_number}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal" data-target="#edit-vehicle-modal" data-id="{{ $vehiclemaintenance->id }}" data-extras="{{ $vehiclemaintenance->extras }}" data-cell_number="{{$vehiclemaintenance->cell_number}}" 
+                    data-year="{{$vehiclemaintenance->year}}"  data-vehicle_registration="{{$vehiclemaintenance->vehicle_registration}}" data-chassis_number="{{$vehiclemaintenance->chassis_number}}"  
+                    data-engine_number="{{$vehiclemaintenance->engine_number}}" data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"  data-odometer_reading="{{$vehiclemaintenance->odometer_reading}}"
+                    data-hours_reading="{{$vehiclemaintenance->hours_reading}}" data-size_of_fuel_tank="{{$vehiclemaintenance->size_of_fuel_tank}}" data-fleet_number="{{$vehiclemaintenance->fleet_number}}" 
+                    data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}"
+                        ><i class="fa fa-pencil-square-o"></i> Edit</button>
 
                     <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
@@ -187,10 +192,18 @@
                        <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Documents</a>  
+
+                        <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Contracts</a> 
+
                     
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Documents</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Contracts</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Notes</a>
+                    <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Notes</a> 
+
+
+
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Reminders</a>
 
                 </div>
@@ -227,7 +240,8 @@
 
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
-
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
 
@@ -328,17 +342,7 @@
 
 
 
-            //Post perk form to server using ajax (edit)
-            $('#edit_vehicle').on('click', function() {
-                var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
-                var formName = 'edit-vehicledetails-form';
-                var modalID = 'edit-vehicle-modal';
-                var submitBtnID = 'edit_vehicle';
-                var redirectUrl = '/vehicle_management/viewdetails/{{ $vehiclemaintenances->id }}}';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Vehicle details have been updated successfully!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
+            
 
             var vehicleID;
             $('#edit-vehicle-modal').on('show.bs.modal', function (e) {
@@ -361,6 +365,7 @@
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
                 var modal = $(this);
+
                 modal.find('#vehicle_make').val(vehicle_make);
                 modal.find('#vehicle_model').val(vehicle_model);
                 modal.find('#vehicle_type').val(vehicle_type);
@@ -380,7 +385,36 @@
 
             });
 
+            //Post perk form to server using ajax (edit)
+            $('#edit_vehicle').on('click', function() {
+                var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
+                var formName = 'edit-vehicledetails-form';
+                var modalID = 'edit-vehicle-modal';
+                var submitBtnID = 'edit_vehicle';
+                var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The Vehicle details have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
 
         });
+
+     //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+            //Populate drop down on page load
+            var ddID = '{{ 'division_level_' . $division_level->level }}';
+            var postTo = '{!! route('divisionsdropdown') !!}';
+            var selectedOption = '';
+            var divLevel = parseInt('{{ $division_level->level }}');
+            var incInactive = -1;
+            var loadAll = loadAllDivs;
+            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+            parentDDID = ddID;
+            loadAllDivs = -1;
+        @endforeach
+
     </script>
 @endsection

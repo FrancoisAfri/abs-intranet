@@ -221,6 +221,20 @@ class FleetManagementController extends Controller
 
        $ID =  $maintenance->id;
 
+       $vehicle = vehicle::orderBy('id', 'asc')->get();
+        //return $vehicle;
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
+        $hrDetails = HRPerson::where('status', 1)->get();
+
+        $images = images::orderBy('id','asc')->get();
+        
+
+        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
+
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $Vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -270,6 +284,17 @@ class FleetManagementController extends Controller
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+            $data['images'] = $images;    
+            $data['DivisionLevelFive'] = $DivisionLevelFive;
+            $data['hrDetails'] = $hrDetails;    
+            $data['vehiclemaintenance'] = $vehiclemaintenance;
+            $data['vehicledetail'] = $vehicledetail;
+            $data['division_levels'] = $divisionLevels;
+            $data['vehicle'] = $vehicle;
+            $data['Vehicle_types'] = $Vehicle_types;
+            $data['vehiclemodel'] = $vehiclemodel;
+            $data['Vehiclemake'] = $Vehiclemake;
+
             $data['status'] = $status;
             $data['fueltype'] =  $fueltype;
             $data['vehicleTypes'] = $vehicleTypes;
@@ -302,11 +327,92 @@ class FleetManagementController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $maintenance->vehicle_make = $SysData['vehicle_make'];
-        $maintenance->vehicle_model = $SysData['vehicle_model'];
-        $maintenance->vehicle_type = $SysData['vehicle_type'];
-        // $fleet->status = 1;
+       
+         $currentDate = time();
+
+        $maintenance = new vehicle_maintenance();
+        $maintenance->status = 1;
+        $maintenance->responsible_for_maintenance = $SysData['responsible_for_maintenance'];
+        $maintenance->vehicle_make = 5;
+        $maintenance->vehicle_model = 3;
+        $maintenance->vehicle_type = 3;
+        $maintenance->year = $SysData['year'];
+        $maintenance->vehicle_registration = $SysData['vehicle_registration'];
+        $maintenance->chassis_number = $SysData['chassis_number'];
+        $maintenance->engine_number = $SysData['engine_number'];
+        $maintenance->vehicle_color = $SysData['vehicle_color'];
+        $maintenance->odometer_reading = 0;
+        $maintenance->hours_reading = $SysData['hours_reading'];
+        $maintenance->fuel_type = $SysData['fuel_type'];
+        $maintenance->size_of_fuel_tank = $SysData['size_of_fuel_tank'];
+        $maintenance->fleet_number = $SysData['fleet_number'];
+        $maintenance->cell_number = $SysData['cell_number'];
+        $maintenance->tracking_umber = $SysData['tracking_umber'];
+        $maintenance->vehicle_owner = $SysData['vehicle_owner'];
+        $maintenance->financial_institution = 0;
+        $maintenance->company = $SysData['company'];
+        $maintenance->extras = $SysData['extras'];
+        $maintenance->property_type = $SysData['property_type'];
+        $maintenance->division_level_5 = $SysData['division_level_5'];
+        $maintenance->division_level_4 = $SysData['division_level_4'];
+        $maintenance->division_level_3 = 0;
+        $maintenance->division_level_2 = 0;
+        $maintenance->division_level_1 =0;
+        $maintenance->currentDate = $currentDate;
+        $maintenance->title_type =0;
+        $maintenance->responsible =0;
+        $maintenance->image = 1;
         $maintenance->update();
+
+         $vehicleImages = new images();
+         $vehicledocumets = new vehicle_documets();
+
+        //Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = "image" . time() . '.' . $fileExt;
+                $request->file('image')->storeAs('image', $fileName);
+                //Update file name in the database
+                $vehicleImages->image = $fileName;
+                $vehicleImages->update();
+            }
+        }
+
+        //Upload supporting document
+        if ($request->hasFile('registration_papers')) {
+            $fileExt = $request->file('registration_papers')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('registration_papers')->isValid()) {
+                $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
+                $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
+                //Update file name in the table
+                $vehicledocumets->document = $fileName;
+                $vehicledocumets->update();
+            }
+        }
+
+          
+
+          $ID = $maintenance->id;
+          $name = $maintenance->image;
+          $loggedInEmplID = Auth::user()->person->id;
+
+          $vehicleImages->vehicle_maintanace = $ID;
+          $vehicleImages->name = $name;
+          $vehicleImages->user_name = $loggedInEmplID;
+          $vehicleImages->upload_date = $currentDate;
+          $vehicleImages->default_image = 1;
+          $vehicleImages->status = 1;
+          $vehicleImages->update();
+
+          ##document 
+          $vehicledocumets->vehicleID = $ID;
+          $vehicledocumets->name = $name;
+          $vehicledocumets->user_name = $loggedInEmplID;
+          $vehicledocumets->upload_date = $currentDate;
+          $vehicledocumets->default_documrnt = 1;
+          $vehicledocumets->status = 1;
+          $vehicledocumets->update();
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
         return response()->json();
@@ -763,6 +869,48 @@ class FleetManagementController extends Controller
         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
         return response()->json();
+    }
+
+    public function newdocument(Request $request ){
+        $this->validate($request, [
+             // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $datefrom = $SysData['date_from'] = str_replace('/', '-', $SysData['date_from']);
+        $datefrom = $SysData['date_from'] = strtotime($SysData['date_from']);
+         
+        $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+        $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+
+        $currentDate = time();
+
+        $vehicledocumets = new vehicle_documets();
+        $vehicledocumets->type = $SysData['type'];
+        $vehicledocumets->description =$SysData['description'];
+        $vehicledocumets->role = $SysData['role'];
+        $vehicledocumets->date_from = $datefrom;
+        $vehicledocumets->exp_date = $Expdate;
+        $vehicledocumets->upload_date = $currentDate; 
+        $vehicledocumets->save();
+
+        //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
+                $request->file('documents')->storeAs('documents', $fileName);
+                //Update file name in the table
+                $vehicledocumets->document = $fileName;
+                $vehicledocumets->update();
+            }
+        }
+        
+         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+
     }
     
 }

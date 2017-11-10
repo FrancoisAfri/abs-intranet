@@ -86,7 +86,7 @@
                                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($permit->document))
-                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $permit->document }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
+                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ Storage::disk('local')->url("projects/documents/$permit->document") }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
                                             @else
                                             <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
@@ -154,6 +154,10 @@
     <script type="text/javascript">
 
       $(function () {
+
+         $('#back_button').click(function () {
+            location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+        });
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();
