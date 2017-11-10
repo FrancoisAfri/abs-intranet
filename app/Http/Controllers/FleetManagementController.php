@@ -27,6 +27,7 @@ use App\vehicle_documets;
 use App\images;
 use App\fleet_fillingstation;
 use App\module_access;
+use App\notes;
 use App\DivisionLevelFive;
 use App\module_ribbons;
 use App\ribbons_access;
@@ -954,4 +955,42 @@ class FleetManagementController extends Controller
 
     }
     
+    public function newnotes(Request $request ){
+        $this->validate($request, [
+             // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $datecaptured = $SysData['date_captured'] = str_replace('/', '-', $SysData['date_captured']);
+        $datecaptured = $SysData['date_captured'] = strtotime($SysData['date_captured']);
+         
+
+        $currentDate = time();
+
+        $notes = new notes();
+        $notes->captured_by = $datecaptured;
+        $notes->date_captured =$SysData['date_captured'];
+        $notes->captured_by = $SysData['captured_by']; 
+        $notes->notes = $SysData['notes'];
+        $notes->vehicleID = 0;
+        $notes->save();
+
+        //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $notes->id . "_registration_papers." . $fileExt;
+                $request->file('documents')->storeAs('documents', $fileName);
+                //Update file name in the table
+                $notes->documents = $fileName;
+                $notes->update();
+            }
+        }
+        
+         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+
+    }
 }

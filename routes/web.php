@@ -377,6 +377,7 @@ Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@add
 Route::get('vehicle_management/reminders/{maintenance}', 'FleetManagementController@reminders');
 
 Route::post('vehicle_management/add_new_document', 'FleetManagementController@newdocument');
+Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
 
 Route::get('vehicle_management/permits_licences/{maintenance}', 'FleetManagementController@permits_licences');
 Route::post('vehicle_management/addPermit', 'FleetManagementController@addPermit');
