@@ -154,6 +154,10 @@
     <script type="text/javascript">
 
       $(function () {
+
+         $('#back_button').click(function () {
+            location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+        });
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();

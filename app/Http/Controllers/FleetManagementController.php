@@ -911,5 +911,47 @@ class FleetManagementController extends Controller
         ;
         return response()->json();
     }
+
+    public function newdocument(Request $request ){
+        $this->validate($request, [
+             // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $datefrom = $SysData['date_from'] = str_replace('/', '-', $SysData['date_from']);
+        $datefrom = $SysData['date_from'] = strtotime($SysData['date_from']);
+         
+        $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+        $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+
+        $currentDate = time();
+
+        $vehicledocumets = new vehicle_documets();
+        $vehicledocumets->type = $SysData['type'];
+        $vehicledocumets->description =$SysData['description'];
+        $vehicledocumets->role = $SysData['role'];
+        $vehicledocumets->date_from = $datefrom;
+        $vehicledocumets->exp_date = $Expdate;
+        $vehicledocumets->upload_date = $currentDate; 
+        $vehicledocumets->save();
+
+        //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
+                $request->file('documents')->storeAs('documents', $fileName);
+                //Update file name in the table
+                $vehicledocumets->document = $fileName;
+                $vehicledocumets->update();
+            }
+        }
+        
+         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+
+    }
     
 }

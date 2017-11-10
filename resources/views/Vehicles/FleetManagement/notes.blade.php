@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Documents  </h3>
+                    <h3 class="box-title"> Vehicle Notes  </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -64,8 +64,8 @@
                                 <th>Expiry Date</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($vehicleDocumets) > 0)
-                              @foreach ($vehicleDocumets as $document)
+                            @if (count($vehiclenotes) > 0)
+                              @foreach ($vehiclenotes as $document)
                                <tr id="categories-list">
                                  <td nowrap>
                                        <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-newdoc-modal" data-id="{{ $document->id }}" data-type="{{ $document->type }}"
@@ -107,12 +107,12 @@
                                    <!-- /.box-body -->
                     <div class="box-footer">
                      <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-document-modal">Upload new document</button>
+                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-note-modal">Upload new Notes</button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.upload_newdocument_modal')
+        @include('Vehicles.partials.upload_newnote_modal')
         @include('Vehicles.partials.edit_newdocument_modal')
           <!-- Include delete warning Modal form-->
      
@@ -265,12 +265,12 @@
             
 
             //Post perk form to server using ajax (add)
-        $('#add_document').on('click', function () {
-            var strUrl = '/vehicle_management/add_new_document';
-            var formName = 'add-document-form';
-            var modalID = 'add-document-modal';
-            var submitBtnID = 'add_document';
-            var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
+        $('#add_notes').on('click', function () {
+            var strUrl = '/vehicle_management/add_new_note';
+            var formName = 'add-note-form';
+            var modalID = 'add-note-modal';
+            var submitBtnID = 'add_notes';
+            var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
             var successMsgTitle = 'New Documents Details Added!';
             var successMsg = 'The Documents Details has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

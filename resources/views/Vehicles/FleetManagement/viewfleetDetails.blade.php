@@ -192,10 +192,18 @@
                        <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Documents</a>  
+
+                        <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Contracts</a> 
+
                     
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Documents</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Contracts</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Notes</a>
+                    <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Notes</a> 
+
+
+
                     <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Reminders</a>
 
                 </div>
@@ -357,7 +365,7 @@
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
                 var modal = $(this);
-                
+
                 modal.find('#vehicle_make').val(vehicle_make);
                 modal.find('#vehicle_model').val(vehicle_model);
                 modal.find('#vehicle_type').val(vehicle_type);
