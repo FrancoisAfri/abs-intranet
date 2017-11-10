@@ -723,43 +723,39 @@ class VehicleManagemntController extends Controller {
         $registration_number = $request['registration_number'];
         $promotionID = $request['promotion_type'];
         
-         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-
-
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
         $vehiclemaintenance = DB::table('vehicle_details')
              ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type','division_level_fives.name as company' ,'division_level_fours.name as Department' )
+                'vehicle_model.name as vehicle_model','vehicle_managemnet.name as vehicle_type','division_level_fives.name as company' ,'division_level_fours.name as Department' )
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_image','vehicle_details.id','=' , 'vehicle_image.vehicle_maintanace' )
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('division_level_fives','vehicle_details.division_level_5', '=', 'division_level_fives.id' )
-             ->leftJoin('division_level_fours','vehicle_details.division_level_4', '=', 'division_level_fours.id' )
+            ->leftJoin('division_level_fours','vehicle_details.division_level_4', '=', 'division_level_fours.id' )
             
             ->where(function ($query) use ($propertyID) {
                     if (!empty($propertyID)) {
                         $query->where('vehicle_details.property_type', $propertyID);
                     }
                 })
-             ->where(function ($query) use ($vehicleID) {
+            ->where(function ($query) use ($vehicleID) {
                     if (!empty($vehicleID)) {
                         $query->where('vehicle_details.vehicle_type', $vehicleID);
                     }
                 })
-              ->where(function ($query) use ($fleetID) {
+            ->where(function ($query) use ($fleetID) {
                     if (!empty($fleetID)) {
                         $query->where('vehicle_details.fleet_number', $fleetID);
                     }
                 })
-              ->where(function ($query) use ($registration_number) {
+            ->where(function ($query) use ($registration_number) {
                     if (!empty($registration_number)) {
                         $query->where('vehicle_details.vehicle_registration', $registration_number);
                     }
                 })
-              ->where('vehicle_image.default_image','1')
-             ->orderBy('vehicle_details.id')
-             ->get();
+            ->orderBy('vehicle_details.id')
+            ->get();
 
             //return $vehiclemaintenance;
 

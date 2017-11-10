@@ -287,7 +287,7 @@
 
                         <div class="col-sm-8">
                             <div class="product-img">
-                                    <img src="{{ (!empty($vehicle_maintenance->image)) ? Storage::disk('local')->url("image/$vehicle_maintenance->image") : 'http://placehold.it/50x50' }}"  alt="Product Image" width="50" height="50">
+                                    <img src="{{ (!empty($vehicle_maintenance->image)) ? Storage::disk('local')->url("image/$vehicle_maintenance->image") : 'http://placehold.it/50x50' }}"  alt="Vehicle Image" width="50" height="50">
                             </div>
                             <input type="file" id="image" name="image"  class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>

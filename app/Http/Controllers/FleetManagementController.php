@@ -151,7 +151,7 @@ class FleetManagementController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-       $currentDate = time();
+		$currentDate = time();
 
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = 1;
@@ -183,22 +183,20 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->division_level_1 =0;
         $vehicle_maintenance->currentDate = $currentDate;
         $vehicle_maintenance->title_type =0;
-        $vehicle_maintenance->responsible =0;
-        $vehicle_maintenance->image = 1;
         $vehicle_maintenance->save();
 
-         $vehicleImages = new images();
-         $vehicledocumets = new vehicle_documets();
+        $vehicledocumets = new vehicle_documets();
 
+		$loggedInEmplID = Auth::user()->person->id;
         //Upload Image picture
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = "image" . time() . '.' . $fileExt;
+                $fileName =  $vehicle_maintenance->id . "image." . $fileExt;
                 $request->file('image')->storeAs('image', $fileName);
                 //Update file name in the database
-                $vehicleImages->image = $fileName;
-                $vehicleImages->update();
+				$vehicle_maintenance->image = $fileName; 
+				$vehicle_maintenance->update();
             }
         }
 
@@ -206,36 +204,13 @@ class FleetManagementController extends Controller
         if ($request->hasFile('registration_papers')) {
             $fileExt = $request->file('registration_papers')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('registration_papers')->isValid()) {
-                $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
+                $fileName = $vehicle_maintenance->id . "_registration_papers." . $fileExt;
                 $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
                 //Update file name in the table
-                $vehicledocumets->document = $fileName;
-                $vehicledocumets->save();
+                $vehicle_maintenance->registration_papers = $fileName;
+				$vehicle_maintenance->update();
             }
         }
-
-          
-
-          $ID = $vehicle_maintenance->id;
-          $name = $vehicle_maintenance->image;
-          $loggedInEmplID = Auth::user()->person->id;
-
-          $vehicleImages->vehicle_maintanace = $ID;
-          $vehicleImages->name = $name;
-          $vehicleImages->user_name = $loggedInEmplID;
-          $vehicleImages->upload_date = $currentDate;
-          $vehicleImages->default_image = 1;
-          $vehicleImages->status = 1;
-          $vehicleImages->save();
-
-          ##document 
-          $vehicledocumets->vehicleID = $ID;
-          $vehicledocumets->name = $name;
-          $vehicledocumets->user_name = $loggedInEmplID;
-          $vehicledocumets->upload_date = $currentDate;
-          $vehicledocumets->default_documrnt = 1;
-          $vehicledocumets->status = 1;
-          $vehicledocumets->save();
 
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);;
         return response()->json();

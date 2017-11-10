@@ -22,7 +22,6 @@ class CreateVehicleImageTable extends Migration
              $table->integer('user_name')->nullable();
              $table->integer('status')->nullable();
              $table->integer('vehicle_maintanace')->nullable()->unsigned()->index();
-             $table->integer('default_image')->nullable();
              $table->timestamps();
         });
     }

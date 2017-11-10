@@ -42,14 +42,7 @@ class CreatevehicleDetailsTable extends Migration
             $table->string('extras')->nullable();
             $table->string('image')->nullable();
             $table->string('registration_papers')->nullable();
-            $table->bigInteger('currentDate')->nullable();
             $table->integer('property_type')->unsigned()->index()->nullable();
-            $table->integer('division_level_1')->nullable()->unsigned()->index();
-            $table->integer('division_level_2')->nullable()->unsigned()->index();
-            $table->integer('division_level_3')->nullable()->unsigned()->index();
-            $table->integer('division_level_4')->nullable()->unsigned()->index();
-            $table->integer('division_level_5')->nullable()->unsigned()->index();
-            $table->integer('responsible')->nullable();
             $table->timestamps();
         });
     }
