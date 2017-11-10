@@ -71,13 +71,14 @@
                                        <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $document->id }}" data-name="{{ $document->name }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                    </td>
                                 <td nowrap>
-                                        
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
                                             @if(!empty($document->document))
                                             <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $document->document }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
                                             @else
                                             <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
-                                       
+                                        </div>
                                     </td>
                                     <td>{{ !empty($document->description) ? $document->description : ''}}</td>
                                     <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>

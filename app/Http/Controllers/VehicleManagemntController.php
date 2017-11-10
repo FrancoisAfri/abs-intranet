@@ -728,7 +728,7 @@ class VehicleManagemntController extends Controller {
 
 
         $vehiclemaintenance = DB::table('vehicle_details')
-             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
+            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type','division_level_fives.name as company' ,'division_level_fours.name as Department' )
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_image','vehicle_details.id','=' , 'vehicle_image.vehicle_maintanace' )
