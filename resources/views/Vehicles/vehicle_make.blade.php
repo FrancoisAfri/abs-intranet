@@ -146,7 +146,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'add-vehicle_make';
                 var redirectUrl = '/vehicle_management/vehice_make';
                 var successMsgTitle = 'Vehicles Make Added!';
                 var successMsg = 'The vehice Make has been updated successfully.';

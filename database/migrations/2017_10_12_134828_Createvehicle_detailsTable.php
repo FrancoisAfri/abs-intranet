@@ -22,7 +22,7 @@ class CreatevehicleDetailsTable extends Migration
             $table->integer('vehicle_make')->unsigned()->index()->nullable();
             $table->integer('vehicle_model')->unsigned()->index()->nullable();
             $table->integer('vehicle_type')->unsigned()->index()->nullable();
-            $table->bigInteger('year')->nullable();
+            $table->string('year')->nullable();
             $table->string('vehicle_registration')->nullable();
             $table->string('chassis_number')->nullable();
             $table->string('engine_number')->nullable();
@@ -42,7 +42,14 @@ class CreatevehicleDetailsTable extends Migration
             $table->string('extras')->nullable();
             $table->string('image')->nullable();
             $table->string('registration_papers')->nullable();
+            $table->bigInteger('currentDate')->nullable();
             $table->integer('property_type')->unsigned()->index()->nullable();
+            $table->integer('division_level_1')->nullable()->unsigned()->index();
+            $table->integer('division_level_2')->nullable()->unsigned()->index();
+            $table->integer('division_level_3')->nullable()->unsigned()->index();
+            $table->integer('division_level_4')->nullable()->unsigned()->index();
+            $table->integer('division_level_5')->nullable()->unsigned()->index();
+            $table->integer('responsible')->nullable();
             $table->timestamps();
         });
     }

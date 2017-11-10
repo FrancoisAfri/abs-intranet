@@ -1,6 +1,5 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-<!-- bootstrap datepicker -->
  <!-- Include Date Range Picker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
@@ -10,6 +9,7 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
+    <!--Time Charger-->
 @endsection
 @section('content')
     <div class="row">
@@ -66,23 +66,32 @@
                                 <th>Date Captured</th>
                                 <th> Document</th>
                             </tr>
-                            @if (count($keytracking) > 0)
-                              @foreach ($keytracking as $key)
+                            @if (count($permits) > 0)
+                              @foreach ($permits as $permit)
                                <tr id="categories-list">
-                               <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $key->id }}" data-key_number="{{ $key->key_number }}" data-key_type="{{$key->key_type}}" data-key_status="{{$key->key_status}}" data-description="{{$key->description}}" data-date_issued="{{$key->date_issued}}"
-                                          data-issued_by ="{{ $key->issued_by}}" data-issued_by ="{{ $key->issued_by}}"  
-
-                                            ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                            
+                                    <td nowrap>
+                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id="{{ $permit->id }}" data-Supplier="{{ $permit->Supplier }}" data-permits_licence_no="{{ $permit->permits_licence_no }}"
+                                            data-date_issued="{{ $permit->date_issued }}" data-exp_date="{{ $permit->exp_date }}" data-status="{{ $permit->status }}" data-captured_by="{{ $permit->captured_by }}" 
+                                            data-date_captured="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
+                                            
+                                    <td>{{ !empty($permit->Supplier) ? $permit->Supplier : ''}}</td>
+                                    <td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
+                                    <td>{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
+                                    <td>{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
+                                    <td>{{ (!empty($permit->status)) ?  $status[$permit->status] : ''}}</td>
+                                    <td>{{ !empty($permit->captured_by) ? $permit->captured_by : ''}}</td>
+                                    <td>{{ !empty($permit->date_captured) ? date(' d M Y', $permit->date_captured) : '' }}</td>
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($permit->document))
+                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $permit->document }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
+                                            @else
+                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
                                     </td>
-                                     <td></td>
-                                      <td></td>
-                                       <td></td>
-                                        <td></td>
-                                         <td></td>
-                                          <td></td>
-                                           <td></td>
-                                            <td></td>
                                     
                                 </tr>
                                    @endforeach
@@ -91,7 +100,7 @@
                         <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                           No key records for this vehicle, please start by adding key records for this vehicle..
+                           No Permits/Licences records for this vehicle, please start by adding Permits/Licences records for this vehicle..
                         </div>
                         </td>
                         </tr>
@@ -101,113 +110,107 @@
                                    <!-- /.box-body -->
                     <div class="box-footer">
                      <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-key-modal">Add Permits/Licences</button>
+                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-permit-modal">Add Permits/Licences</button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_key_modal')
-        @include('Vehicles.partials.edit_key_modal')
+       @include('Vehicles.partials.add_permits_licence_modal')
+        @include('Vehicles.partials.edit_permits_licence_modal')
           <!-- Include delete warning Modal form-->
-     
+    
 </div>
 
 
 @endsection
 
 @section('page_script')
-<script src="/custom_components/js/modal_ajax_submit.js"></script>
-<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+ <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-    <!-- iCheck -->
-    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-            type="text/javascript"></script>
-    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-            type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-<script>
-       function postData(id , data ){   
-            if(data == 'actdeac') location.href = "/vehice/fleetcard_act/" + id; 
-          
-        }
-         $('#back_button').click(function () {
-            location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-        });
 
-        $(function () {
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+            type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+
+    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <script type="text/javascript">
+
+      $(function () {
+            $(".select2").select2();
+            $('.hours-field').hide();
+            $('.comp-field').hide();
             var moduleId;
-            //Initialize Select2 Elements
-           $(".select2").select2();
-           $('.safe-field').hide();
-           $('.sex-field').hide();
-
-
             //Tooltip
-
             $('[data-toggle="tooltip"]').tooltip();
+
+            //Vertically center modals on page
+
+            //Phone mask
+            $("[data-mask]").inputmask();
+
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
+                    dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
 
                 // Dividing by two centers the modal exactly, but dividing by three
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
+
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
-            $(window).on('resize', function() {
+            $(window).on('resize', function () {
                 $('.modal:visible').each(reposition);
             });
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-    
-            //
+        });
 
-            $(".js-example-basic-multiple").select2();
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true
+        });
+         $('#exp_date').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
 
-            $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
+           
 
-            $(function() {
-                    $('img').on('click', function() {
-                        $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
-                        $('#enlargeImageModal').modal('show');
-                    });
-            });
+        //Initialize iCheck/iRadio Elements
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '10%' // optional
+        });
 
-            //Initialize iCheck/iRadio Elements
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '10%' // optional
-            });
+        $(document).ready(function () {
 
-            $(document).ready(function () {
-
-                $('#date_issued').datepicker({
+            $('#date_issued').datepicker({
                     format: 'dd/mm/yyyy',
                     autoclose: true,
                     todayHighlight: true
@@ -215,113 +218,59 @@
 
             });
 
-
-
-
-            $('#rdo_user, #rdo_safe').on('ifChecked', function () {
-                var allType = hideFields();
-                if (allType == 1) $('#box-subtitle').html('Site Address');
-                else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-            });
-
-
-            function hideFields() {
-                var allType = $("input[name='key']:checked").val();
-                if (allType == 1) {
-                    $('.safe-field').hide();
-                    $('.user-field').show();
-                }
-                else if (allType == 2) {
-                    $('.user-field').hide();
-                    $('.safe-field').show();
-                }
-                return allType;
-            }
-
-            function changetextbox() {
-                var levID = document.getElementById("key_status").value;
-                                                    // alert (levID);
-                    if (levID == 1) {
-                    $('.sex-field').hide();
-                    // $('.Sick-field').show();
-              } 
-            }    
-            //save Fleet
-            //Post module form to server using ajax (ADD)
-            $('#add-key-card').on('click', function() {
-                //console.log('strUrl');
-                var strUrl = '/vehicle_management/add_keys';
-                var modalID = 'add-key-modal';
-                var objData = {
-                    date_issued: $('#'+modalID).find('#date_issued').val(),
-                    key_number: $('#'+modalID).find('#key_number').val(),
-                    key_type: $('#'+modalID).find('#key_type').val(),
-                    key_status: $('#'+modalID).find('#key_status').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    key: $('#'+modalID).find('input:checked[name = key]').val(),
-                    issued_by: $('#'+modalID).find('#issued_by').val(),
-                    safe_name: $('#'+modalID).find('#safe_name').val(),
-                    safe_controller: $('#'+modalID).find('#safe_controller').val(),
-                    issued_to: $('#'+modalID).find('#issued_to').val(),
-                    employee: $('#'+modalID).find('#employee').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
-                 var submitBtnID = 'add-key-card';
-                var redirectUrl = '/vehicle_management/keys/{{ $maintenance->id }}';
-                var successMsgTitle = 'Keys Added!';
-                var successMsg = 'The Key Details  have been updated successfully..';
-                //var formMethod = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
-
-
-            . var keyID;
-            $('#edit-package-modal').on('show.bs.modal', function (e) {
+        
+        //Post perk form to server using ajax (add)
+        $('#add_permit').on('click', function () {
+            var strUrl = '/vehicle_management/addPermit';
+            var formName = 'add-permit-form';
+            var modalID = 'add-permit-modal';
+            var submitBtnID = 'add_permit';
+            var redirectUrl = '/vehicle_management/permits_licences/{{ $maintenance->id }}';
+            var successMsgTitle = 'New Permits/Licences Details Added!';
+            var successMsg = 'The Permits/Licences Details has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+       
+       //
+       var permitID; 
+       $('#edit-permit-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                keyID = btnEdit.data('id');
-                var date_issued = btnEdit.data('date_issued');
-                var key_number = btnEdit.data('key_number');
-                var key_type = btnEdit.data('key_type');
-                var key_status = btnEdit.data('key_status');
+                permitID = btnEdit.data('id');
+                var permit_licence = btnEdit.data('permit_licence');
                 var description = btnEdit.data('description');
-                var key = btnEdit.data('key');
-                var issued_by = btnEdit.data('issued_by');
-                var safe_name = btnEdit.data('safe_name');
-                var safe_controller = btnEdit.data('safe_controller');
-                var issued_to = btnEdit.data('issued_to');
-                var employee = btnEdit.data('employee');
                 var modal = $(this);
                 modal.find('#name').val(name);
-                modal.find('#description').val(description);
+                modal.find('#Supplier').val(Supplier);
+                modal.find('#permits_licence_no').val(permits_licence_no);
+                modal.find('#date_issued').val(date_issued);
+                modal.find('#exp_date').val(exp_date);
+                modal.find('#status').val(status);
+                modal.find('#captured_by').val(captured_by);
+                //modal.find('#documents').val(documents);
              });
-            $('#edit_key').on('click', function () {
-                var strUrl = '/vehicle_management/edit_key/' + keyID;
-                var modalID = 'edit-package-modal';
+
+            $('#edit_permit').on('click', function () {
+                var strUrl = '/vehicle_management/edit_permit/' + fleetID;
+                var modalID = 'edit-permit-modal';
                 var objData = {
-                   date_issued: $('#'+modalID).find('#date_issued').val(),
-                    key_number: $('#'+modalID).find('#key_number').val(),
-                    key_type: $('#'+modalID).find('#key_type').val(),
-                    key_status: $('#'+modalID).find('#key_status').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    key: $('#'+modalID).find('input:checked[name = key]').val(),
-                    issued_by: $('#'+modalID).find('#issued_by').val(),
-                    safe_name: $('#'+modalID).find('#safe_name').val(),
-                    safe_controller: $('#'+modalID).find('#safe_controller').val(),
-                    issued_to: $('#'+modalID).find('#issued_to').val(),
-                    employee: $('#'+modalID).find('#employee').val(),
+                    name: $('#'+modalID).find('#name').val(),
+                    Supplier: $('#'+modalID).find('#Supplier').val(),
+                    permits_licence_no: $('#'+modalID).find('#permits_licence_no').val(),
+                    date_issued: $('#'+modalID).find('#date_issued').val(),
+                    exp_date: $('#'+modalID).find('#exp_date').val(),
+                    status: $('#'+modalID).find('#status').val(),
+                    captured_by: $('#'+modalID).find('#captured_by').val(),
+                    //documents: $('#'+modalID).find('#documents').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'edit_key';
-                var redirectUrl = '/vehicle_management/key/{{ $maintenance->id }}';
+                var submitBtnID = 'edit_permit';
+                var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Key Details have been updated successfully.';
+                var successMsg = 'The vehice make has been updated successfully.';
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
-
-
-        });
     </script>
 @endsection

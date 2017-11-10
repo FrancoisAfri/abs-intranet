@@ -102,8 +102,8 @@
                                     <td></td>
                                     <td>{{ !empty($card->engine_number) ? $card->engine_number : ''}}</td>
                                     <td>{{ !empty($card->odometer_reading . ' ' . $card->hours_reading ) ? $card->odometer_reading  . ' ' . $card->hours_reading: ''}}</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ !empty($card->company) ? $card->company : ''}}</td>
+                                    <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
                                     <td>
                                     <!--   leave here  -->
                                     <button card="button" id="view_ribbons" class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}

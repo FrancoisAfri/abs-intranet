@@ -176,7 +176,7 @@
             </div>
             <!-- /.box -->
         </div>
-        @include('Vehicles.partials.add_vehicledetails_modal')
+        @include('Vehicles.partials.add_vehicledetail_modal')
     </div>
 @endsection
 
@@ -314,8 +314,8 @@
             var modalID = 'add-vehicledetails-modal';
             var submitBtnID = 'add_vehicledetails';
             var redirectUrl = '/vehicle_management/manage_fleet';
-            var successMsgTitle = 'Fleet Type Added!';
-            var successMsg = 'The Fleet Type has been updated successfully.';
+            var successMsgTitle = 'New Vehicle Details Added!';
+            var successMsg = 'TheVehicle Details has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 

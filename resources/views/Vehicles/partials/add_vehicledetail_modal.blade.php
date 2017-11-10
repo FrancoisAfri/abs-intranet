@@ -3,18 +3,20 @@
         <div class="modal-content">
             <form class="form-horizontal" name="add-new-vehicledetails-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
+               
 
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Vehicle General Details </h4>
+                     <h4 class="modal-title">Add Vehicle General Details </h4>
                 </div>
+
+                   
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                    @foreach($division_levels as $division_level)
+                         @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
@@ -371,20 +373,16 @@
                             </div>
                         </div>
                     </div>
+                      
 
-
-                </div>
-                <div class="modal-footer">
+                      </div>  
+                     <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_vehicledetails" class="btn btn-warning"><i
-                                class="fa fa-cloud-upload"></i> Save
-                    </button>
+                    <button type="button" id="add_vehicledetails" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save</button>
                 </div>
-            </form>
+             </form>
+            </div>
+         </div>
         </div>
     </div>
-</div>
-
-
-
-       
+           
