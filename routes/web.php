@@ -374,10 +374,13 @@ Route::get('vehicle_management/keys/{maintenance}', 'FleetManagementController@k
 Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@document');
 Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
 Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@addnotes');
-Route::get('vehicle_management/reminders/{maintenance}', 'FleetManagementController@reminders');
+Route::get('vehicle_management/reminders/{maintenance}', 'VehicleFleetController@reminders');
 
 Route::post('vehicle_management/add_new_document', 'FleetManagementController@newdocument');
 Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
+Route::get('vehice/{maintenance}/document/{documents}/delete', 'FleetManagementController@deleteDoc');
+Route::patch('vehicle_management/edit_newdoc/{note}', 'FleetManagementController@editNote');
+
 
 Route::get('vehicle_management/permits_licences/{maintenance}', 'FleetManagementController@permits_licences');
 Route::post('vehicle_management/addPermit', 'FleetManagementController@addPermit');

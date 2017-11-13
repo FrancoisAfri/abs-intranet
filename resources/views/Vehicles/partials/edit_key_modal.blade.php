@@ -1,8 +1,8 @@
-<div id="edit-package-modal" class="modal modal-default fade">
+<div id="edit-key-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-module-form">
-              <!--   {{ csrf_field() }} -->
+              {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
                <div class="modal-header">
@@ -14,25 +14,16 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 					
-                    <!--  <div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Name" required>
-                        </div>
-                    </div> -->
-                    <div class="form-group">
-                        <label for="path" class="col-sm-3 control-label">Description</label>
-                             <div class="col-sm-9">
-                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Description" required>
-                        </div>
-                     </div>
-                      <div class="form-group Single-field">
+                     <div class="form-group Single-field">
                         <label for="path" class="col-sm-3 control-label">Key Number </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="key_number" name="key_number" value=""
                                    placeholder="Enter Key Number" required>
                         </div>
                     </div>
+
+                    <input type="hidden" id="valueID" name="valueID" value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+                    
                     <div class="form-group">
                         <label for="key_type" class="col-sm-3 control-label">Key Type</label>
                         <div class="col-sm-8">
@@ -50,14 +41,34 @@
                         <label for="key_status" class="col-sm-3 control-label">Key Status</label>
                         <div class="col-sm-8">
 
-                            <select name="key_status" id="key_status" onChange= "changetextbox();" class="form-control">
+                    <select name="key_status" id="Status"  class="form-control">
                                 <option value="0">*** Select a Key Status ***</option>
                                 <option value="1"> In Use</option>
                                 <option value="2"> Reallocated</option>
                                 <option value="3"> Lost</option>
                                 <option value="4"> In Safe</option>
-                            </select>
+                    </select>
 
+                        </div>
+                    </div>
+
+                      <div class="form-group lost-field{{ $errors->has('reason_loss') ? ' has-error' : '' }}">
+                        <label for="days" class="col-sm-3 control-label">Reason For Loss</label>
+                        <div class="col-sm-8">
+
+
+                            <textarea class="form-control" id="reason_loss" name="reason_loss"
+                                      placeholder="Enter Reason For Loss..."
+                                      rows="4">{{ old('reason_loss') }}</textarea>
+
+                        </div>
+                    </div>
+
+                     <div class="form-group lost-field">
+                        <label for="path" class="col-sm-3 control-label">Date Lost </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="date_lost" name="date_lost"
+                                   value="{{ old('date_lost') }}" placeholder="Select date lost ...">
                         </div>
                     </div>
 
@@ -72,7 +83,8 @@
 
                         </div>
                     </div>
-                   
+
+
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Date Issued </label>
                         <div class="col-sm-8">
@@ -100,6 +112,7 @@
                                    value="{{ !empty($name)  ? $name : ''}}" placeholder="Select  User ..." readonly="">
                         </div>
                     </div>
+                     
 					  
                   </div>  
                 <div class="modal-footer">

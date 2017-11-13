@@ -67,7 +67,7 @@
                               @foreach ($vehiclenotes as $document)
                                <tr id="categories-list">
                                  <td nowrap>
-                                       <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-newdoc-modal" data-id="{{ $document->id }}" data-notes="{{ $document->notes }}"
+                                       <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-newdoc-modal" data-id="{{ $document->id }}" data-captured_by="{{ date(' d M Y', $document->date_captured) }}"
                                         data-date_captured="{{ $document->date_captured }}" data-notes="{{ $document->notes }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                         
                                    </td>
@@ -96,7 +96,7 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="5">
+                        <td colspan="7">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                            No key records for this vehicle, please start by adding key records for this vehicle..
@@ -115,7 +115,7 @@
         </div>
    <!-- Include add new prime rate modal -->
         @include('Vehicles.partials.upload_newnote_modal')
-        @include('Vehicles.partials.edit_newdocument_modal')
+        @include('Vehicles.partials.edit_notes_modal')
           <!-- Include delete warning Modal form-->
      
 </div>
@@ -158,16 +158,12 @@
             location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
         });
 
-        $(function () {
-             $('#back_button').click(function () {
-            location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-        });
+        
             var moduleId;
             //Initialize Select2 Elements
            $(".select2").select2();
            $('.zip-field').hide();
-           $('.sex-field').hide();
-
+         
 
             //Tooltip
 
@@ -232,9 +228,7 @@
                     todayHighlight: true
                 });
 
-            });
-
-
+            
 
 
             $('#rdo_single, #rdo_bulke').on('ifChecked', function () {
@@ -273,10 +267,43 @@
             var modalID = 'add-note-modal';
             var submitBtnID = 'add_notes';
             var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
-            var successMsgTitle = 'New Documents Details Added!';
-            var successMsg = 'The Documents Details has been updated successfully.';
+            var successMsgTitle = 'New Note  Added!';
+            var successMsg = 'The Note  has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
+
+       // });
+
+       var noteID; 
+       $('#edit-newdoc-modal').on('show.bs.modal', function (e) {
+                    //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                noteID = btnEdit.data('id');
+                var captured_by = btnEdit.data('captured_by');
+                var date_captured = btnEdit.data('date_captured');
+                var notes = btnEdit.data('notes');
+                var documents = btnEdit.data('documents');
+                var modal = $(this);
+                modal.find('#captured_by').val(captured_by);
+                modal.find('#date_captured').val(date_captured);
+                modal.find('#notes').val(notes);
+                modal.find('#documents').val(documents);
+               
+             });
+
+   
+            //Post perk form to server using ajax (edit)
+            $('#edit_newdoc').on('click', function() {
+                var strUrl = '/vehicle_management/edit_newdoc/' + noteID;
+                var formName = 'edit-newdoc-form';
+                 var modalID = 'edit-newdoc-modal';
+                var submitBtnID = 'edit_newdoc';
+                var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The  details have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
 
 
     </script>

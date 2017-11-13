@@ -98,7 +98,7 @@
                                         </td>
                                         <td>
                                             <div class="product-img">
-                                                <img src="{{ (!empty($vehiclemaintenance->vehicle_images)) ? Storage::disk('local')->url("image/$vehiclemaintenance->vehicle_images") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
+                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"  alt="Product Image" width="50" height="50">
                                             </div>
 
 

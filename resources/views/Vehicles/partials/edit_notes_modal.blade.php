@@ -1,21 +1,20 @@
-<div id="add-note-modal" class="modal modal-default fade">
+<div id="edit-newdoc-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-note-form">
-                 {{ csrf_field() }}
-              
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <form class="form-horizontal" method="POST" name="edit-newdoc-form">
+                {{ csrf_field() }}
+                {{ method_field('PATCH') }}
+
+               <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"> Upload new Notes</h4>
+                    <h4 class="modal-title">Edit Notes</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
-                  
-
-                    <div class="form-group">
+					
+                      <div class="form-group">
                         <label for="captured_by" class="col-sm-2 control-label">Captured By</label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="captured_by" name="captured_by">
@@ -29,7 +28,7 @@
                       <div class="form-group ">
                         <label for="path" class="col-sm-2 control-label"> Date Captured </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="date_captured" name="date_captured"
+                            <input type="text" class="form-control" id="datecaptured" name="date_captured"
                                    value="{{ old('date_captured') }}" placeholder="Select  Expiry date ...">
                         </div>
                     </div>
@@ -58,21 +57,15 @@
                             </div>
                         </div>
                     </div>
-
-                  
-
-
-                </div>
+					  
+                  </div>  
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_notes" class="btn btn-warning"><i class="fa fa-cloud-upload"></i>
-                        Save
-                    </button>
+                    <button type="button" id="edit_newdoc" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
             </form>
-        </div>
+            </div>
+         </div>
     </div>
-</div>
-</div>
-
+        
            

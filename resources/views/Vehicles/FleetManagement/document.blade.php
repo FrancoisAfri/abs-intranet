@@ -94,10 +94,10 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="5">
+                        <td colspan="7">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                           No key records for this vehicle, please start by adding key records for this vehicle..
+                           No Documents  for this vehicle, please start by adding Documents for this vehicle..
                         </div>
                         </td>
                         </tr>
@@ -115,6 +115,9 @@
         @include('Vehicles.partials.upload_newdocument_modal')
         @include('Vehicles.partials.edit_newdocument_modal')
           <!-- Include delete warning Modal form-->
+           @if (count($vehicleDocumets) > 0)
+         @include('Vehicles.warnings.documents_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Document? This action cannot be undone.'])
+    @endif
      
 </div>
 

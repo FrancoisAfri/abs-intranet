@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Key Details </h3>
+                    <h3 class="box-title"> Vehicle Reminders  </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -57,46 +57,43 @@
                         <table class="table table-bordered">
                             <tr>
                                <th style="width: 10px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;"> Issued To</th>
-                                <th>Employee</th>
-                                <th>Safe Name</th>
-                                <th> Safe Controller</th>
-                                <th> Date Issued</th>
-                                <th>Date Status Change</th>
-                                <th>Issued By</th>
-                                <th>Description</th>
-                                <th>Key Status</th>
+                                <th>Name</th>
+                                <th>Description </th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($keytracking) > 0)
-                              @foreach ($keytracking as $key)
+                            @if (count($reminders) > 0)
+                              @foreach ($reminders as $reminder)
                                <tr id="categories-list">
-                               <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-key-modal" data-id="{{ $key->id }}" data-key_number="{{ $key->key_number }}" data-key_type="{{$key->key_type}}" data-key_status="{ {$key->key_status}}" data-description="{{$key->description}}" data-date_issued="{{$key->date_issued}}"
-                                          data-issued_by ="{{ $key->issued_by}}" data-issued_by ="{{ $key->issued_by}}"  
-
-                                            ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                 <td nowrap>
+                                       <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-newdoc-modal" data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}"
+                                        data-description="{{ $reminder->description }}" data-start_date="{{ $reminder->start_date }}"  data-end_date="{{ $reminder->end_date }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        
+                                   </td>
+                               
+                                    
+                                    <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
+                                    <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
+                                    <td>{{ !empty($reminder->start_date) ? date(' d M Y', $reminder->start_date) : '' }}</td>
+                                     <td>{{ !empty($reminder->end_date) ? date(' d M Y', $reminder->end_date) : '' }}</td>
+                                      <td>
+                                    <!--   leave here  -->
+                                    <button reminder="button" id="view_ribbons" class="btn {{ (!empty($reminder->status) && $reminder->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$reminder->id}}, 'actdeac');"><i class="fa {{ (!empty($reminder->status) && $reminder->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($reminder->status) && $reminder->status == 1) ? "De-Activate" : "Activate"}}</button>
                                     </td>
-                                     <td>{{ (!empty( $key->firstname)) ?  $IssuedTo[$key->employee] : ''}} </td>
-
-
-                                     <td>{{ (!empty( $key->firstname . ' ' . $key->surname)) ?   $key->firstname . ' ' . $key->surname : ''}} </td>
-                                     <td>{{ (!empty( $key->safeName)) ?  $key->safeName : ''}} </td>
-                                     <td>{{ (!empty( $key->safe_controller)) ?  $key->safe_controller : ''}} </td>
-                                     <td>{{ !empty($key->date_issued) ? date(' d M Y', $key->date_issued) : '' }}</td>
-                                     <td></td>
-                                     <td>{{ (!empty( $key->issued_by)) ?  $key->issued_by : ''}} </td>
-                                     <td>{{ (!empty( $key->description)) ?  $key->description : ''}} </td>
-
-                                    <td>{{ (!empty($key->key_status)) ?  $keyStatus[$key->key_status] : ''}} </td>
+                                     <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
                                     
                                 </tr>
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="10">
+                        <td colspan="7">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                           No key records for this vehicle, please start by adding key records for this vehicle..
+                           No Reminders for this vehicle, please start by adding Reminders for this vehicle..
                         </div>
                         </td>
                         </tr>
@@ -106,13 +103,13 @@
                                    <!-- /.box-body -->
                     <div class="box-footer">
                      <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-key-modal">Add Key Details</button>
+                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-note-modal">Upload new Notes</button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_key_modal')
-        @include('Vehicles.partials.edit_key_modal')
+        @include('Vehicles.partials.upload_newnote_modal')
+        @include('Vehicles.partials.edit_notes_modal')
           <!-- Include delete warning Modal form-->
      
 </div>
@@ -155,14 +152,12 @@
             location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
         });
 
-        $(function () {
+        
             var moduleId;
             //Initialize Select2 Elements
            $(".select2").select2();
-           $('.safe-field').hide();
-           $('.lost-field').hide();
-
-
+           $('.zip-field').hide();
+         
 
             //Tooltip
 
@@ -213,7 +208,7 @@
 
             $(document).ready(function () {
 
-                $('#date_issued').datepicker({
+                $('#datecaptured').datepicker({
                     format: 'dd/mm/yyyy',
                     autoclose: true,
                     todayHighlight: true
@@ -221,52 +216,16 @@
 
             });
 
-               $(document).ready(function () {
-
-                $('#issued').datepicker({
+            $('#exp_date').datepicker({
                     format: 'dd/mm/yyyy',
                     autoclose: true,
                     todayHighlight: true
                 });
 
-            });
-
-               $(document).ready(function () {
-
-                $('#date_lost').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
-                });
-
-            });    
-               
-               //#hide fields on loss click
-             $('#key_status').on("click", function(event){
-                   var levID = document.getElementById("key_status").value;
-                   // alert (levID);
-                    if (levID == 3) {
-                    $('.lost-field').show();
-              } else if (levID == 0 , 1 , 2 , 4) {  
-                   $('.lost-field').hide();
-                   }    
-            });
-
-             Status
-              $('#Status').on("click", function(event){
-                   var levID = document.getElementById("Status").value;
-                   // alert (levID);
-                    if (levID == 3) {
-                    $('.lost-field').show();
-              } else if (levID == 0 , 1 , 2 , 4) {  
-                   $('.lost-field').hide();
-                   }    
-            });
+            
 
 
-
-
-            $('#rdo_user, #rdo_safe').on('ifChecked', function () {
+            $('#rdo_single, #rdo_bulke').on('ifChecked', function () {
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Site Address');
                 else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
@@ -274,104 +233,72 @@
 
 
             function hideFields() {
-                var allType = $("input[name='key']:checked").val();
+                var allType = $("input[name='upload_type']:checked").val();
                 if (allType == 1) {
-                    $('.safe-field').hide();
+                    $('.zip-field').hide();
                     $('.user-field').show();
                 }
                 else if (allType == 2) {
                     $('.user-field').hide();
-                    $('.safe-field').show();
+                    $('.zip-field').show();
                 }
                 return allType;
             }
-             
- 
-            //save Fleet
-            //Post module form to server using ajax (ADD)
-            $('#add-key-card').on('click', function() {
-                //console.log('strUrl');
-                var strUrl = '/vehicle_management/add_keys';
-                var modalID = 'add-key-modal';
-                var objData = {
-                    date_issued: $('#'+modalID).find('#date_issued').val(),
-                    key_number: $('#'+modalID).find('#key_number').val(),
-                    key_type: $('#'+modalID).find('#key_type').val(),
-                    key_status: $('#'+modalID).find('#key_status').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    key: $('#'+modalID).find('input:checked[name = key]').val(),
-                    issued_by: $('#'+modalID).find('#issued_by').val(),
-                    safe_name: $('#'+modalID).find('#safe_name').val(),
-                    safe_controller: $('#'+modalID).find('#safe_controller').val(),
-                    issued_to: $('#'+modalID).find('#issued_to').val(),
-                    employee: $('#'+modalID).find('#employee').val(),
-                    date_lost: $('#'+modalID).find('#date_lost').val(),
-                    valueID:$('#'+modalID).find('#valueID').val(),
-                    reason_loss: $('#'+modalID).find('#reason_loss').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
-                 var submitBtnID = 'add-key-card';
-                var redirectUrl = '/vehicle_management/keys/{{ $maintenance->id }}';
-                var successMsgTitle = 'Keys Added!';
-                var successMsg = 'The Key Details  have been updated successfully..';
-                //var formMethod = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
 
+            function changetextbox() {
+                var levID = document.getElementById("key_status").value;
+                    if (levID == 1) {
+                    $('.sex-field').hide();
+                    // $('.Sick-field').show();
+              } 
+            }    
+            
 
-             var keyID;
-            $('#edit-key-modal').on('show.bs.modal', function (e) {
+            //Post perk form to server using ajax (add)
+        $('#add_notes').on('click', function () {
+            var strUrl = '/vehicle_management/add_new_note';
+            var formName = 'add-note-form';
+            var modalID = 'add-note-modal';
+            var submitBtnID = 'add_notes';
+            var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
+            var successMsgTitle = 'New Note  Added!';
+            var successMsg = 'The Note  has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+
+       // });
+
+       var noteID; 
+       $('#edit-newdoc-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                keyID = btnEdit.data('id');
-                var date_issued = btnEdit.data('date_issued');
-                var key_number = btnEdit.data('key_number');
-                var key_type = btnEdit.data('key_type');
-                var key_status = btnEdit.data('key_status');
-                var description = btnEdit.data('description');
-                var key = btnEdit.data('key');
-                var issued_by = btnEdit.data('issued_by');
-                var safe_name = btnEdit.data('safe_name');
-                var safe_controller = btnEdit.data('safe_controller');
-                var issued_to = btnEdit.data('issued_to');
-                var employee = btnEdit.data('employee');
-                var date_lost = btnEdit.data('date_lost');
-                var  valueID = btnEdit.data('valueID');
-                var reason_loss = btnEdit.data('reason_loss');
+                noteID = btnEdit.data('id');
+                var captured_by = btnEdit.data('captured_by');
+                var date_captured = btnEdit.data('date_captured');
+                var notes = btnEdit.data('notes');
+                var documents = btnEdit.data('documents');
                 var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#description').val(description);
+                modal.find('#captured_by').val(captured_by);
+                modal.find('#date_captured').val(date_captured);
+                modal.find('#notes').val(notes);
+                modal.find('#documents').val(documents);
+               
              });
-            $('#edit_key').on('click', function () {
-                var strUrl = '/vehicle_management/edit_key/' + keyID;
-                var modalID = 'edit-key-modal';
-                var objData = {
-                   date_issued: $('#'+modalID).find('#date_issued').val(),
-                    key_number: $('#'+modalID).find('#key_number').val(),
-                    key_type: $('#'+modalID).find('#key_type').val(),
-                    key_status: $('#'+modalID).find('#key_status').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    key: $('#'+modalID).find('input:checked[name = key]').val(),
-                    issued_by: $('#'+modalID).find('#issued_by').val(),
-                    safe_name: $('#'+modalID).find('#safe_name').val(),
-                    safe_controller: $('#'+modalID).find('#safe_controller').val(),
-                    issued_to: $('#'+modalID).find('#issued_to').val(),
-                    employee: $('#'+modalID).find('#employee').val(),
-                    date_lost: $('#'+modalID).find('#date_lost').val(),
-                    valueID:$('#'+modalID).find('#valueID').val(),
-                    reason_loss: $('#'+modalID).find('#reason_loss').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
-                var submitBtnID = 'edit_key';
-                var redirectUrl = '/vehicle_management/key/{{ $maintenance->id }}';
+
+   
+            //Post perk form to server using ajax (edit)
+            $('#edit_newdoc').on('click', function() {
+                var strUrl = '/vehicle_management/edit_newdoc/' + noteID;
+                var formName = 'edit-newdoc-form';
+                 var modalID = 'edit-newdoc-modal';
+                var submitBtnID = 'edit_newdoc';
+                var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Key Details have been updated successfully.';
-                var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                var successMsg = 'The  details have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
 
 
-        });
     </script>
 @endsection

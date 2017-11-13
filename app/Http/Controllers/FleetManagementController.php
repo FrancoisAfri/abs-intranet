@@ -424,16 +424,17 @@ class FleetManagementController extends Controller
             //return $ID;
             $vehiclemaintenance = DB::table('vehicle_details')
                 ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type')
+                'vehicle_model.name as vehicle_model','vehicle_image.image as image','vehicle_managemnet.name as vehicle_type')
                 ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-                ->leftJoin('vehicle_image','vehicle_details.id','=' , 'vehicle_image.vehicle_maintanace' )
+                ->rightJoin('vehicle_image','vehicle_details.id','=' , 'vehicle_image.vehicle_maintanace' )
                 ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
                 ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
                 ->where('vehicle_details.id', $ID)
                 ->orderBy('vehicle_details.id')
                 ->get();
+            //needs fixing
 
-                //return $vehiclemaintenance;
+              // return $vehiclemaintenance;
 
 
             //$vehiclemaintenances = $vehiclemaintenance ->first();
@@ -469,6 +470,42 @@ class FleetManagementController extends Controller
         } else
             return back();
 
+    }
+
+    public function addImages(Request $request ){
+        $this->validate($request, [
+            'name' => 'required',
+            // 'description' => 'required',
+            'image' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $currentDate = time();
+
+        $vehicleImages = new images();
+
+        //$vehicleImages->vehicle_maintanace = $ID;
+
+        $vehicleImages->name =   $SysData['name'];
+        $vehicleImages->description = $SysData['description'];
+        $vehicleImages->vehicle_maintanace = $SysData['valueID'];
+        $vehicleImages->upload_date = $currentDate;
+        $vehicleImages->save();
+
+        //Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = "image" . time() . '.' . $fileExt;
+                $request->file('image')->storeAs('image', $fileName);
+                //Update file name in the database
+                $vehicleImages->image = $fileName;
+                $vehicleImages->update();
+            }
+        }
+
+        return response()->json();
     }
 
     public function keys(vehicle_maintenance $maintenance) {
@@ -571,41 +608,7 @@ class FleetManagementController extends Controller
         return back();
     }
 
-    public function addImages(Request $request ){
-        $this->validate($request, [
-            'name' => 'required',
-            // 'description' => 'required',
-            'image' => 'required',
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
 
-         $currentDate = time();         
-
-          $vehicleImages = new images(); 
-
-          //$vehicleImages->vehicle_maintanace = $ID;
-
-          $vehicleImages->name =   $SysData['name']; 
-          $vehicleImages->description = $SysData['description']; 
-          $vehicleImages->vehicle_maintanace = $SysData['valueID']; 
-          $vehicleImages->upload_date = $currentDate;
-          $vehicleImages->save();
-
-            //Upload Image picture
-        if ($request->hasFile('image')) {
-            $fileExt = $request->file('image')->extension();
-            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = "image" . time() . '.' . $fileExt;
-                $request->file('image')->storeAs('image', $fileName);
-                //Update file name in the database
-                $vehicleImages->image = $fileName;
-                $vehicleImages->update();
-            }
-        }
-
-         return response()->json();
-    }
 
     public function editImage( Request $request ,images $image) {
 
@@ -637,6 +640,11 @@ class FleetManagementController extends Controller
          $dates = $SysData['date_issued'] = str_replace('/', '-', $SysData['date_issued']);
          $dates = $SysData['date_issued'] = strtotime($SysData['date_issued']);
 
+         $datelost = $SysData['date_lost'] = str_replace('/', '-', $SysData['date_lost']);
+         $datelost = $SysData['date_lost'] = strtotime($SysData['date_lost']);
+
+         
+
        $keytracking = new keytracking(); 
 
        $keytracking->key_number = $SysData['key_number']; 
@@ -649,8 +657,11 @@ class FleetManagementController extends Controller
        $keytracking->safe_name = $SysData['safe_name'];
        $keytracking->safe_controller = $SysData['safe_controller'];
        $keytracking->issued_to = $SysData['issued_to'];
+       $keytracking->date_lost = $datelost;
+       $keytracking->reason_loss = $SysData['reason_loss'];
        $keytracking->vehicle_type =0 ;
-       $keytracking->vehicle_id = 0;    
+       $keytracking->vehicle_id = $SysData['valueID'];  
+
        $keytracking->save();
 
         return response()->json();
@@ -667,8 +678,11 @@ class FleetManagementController extends Controller
 
         $currentDate = time();  
 
-       $dates = $SysData['date_issued'] = str_replace('/', '-', $SysData['date_issued']);
-       $dates = $SysData['date_issued'] = strtotime($SysData['date_issued']);
+         $dates = $SysData['date_issued'] = str_replace('/', '-', $SysData['date_issued']);
+         $dates = $SysData['date_issued'] = strtotime($SysData['date_issued']);
+
+         $datelost = $SysData['date_lost'] = str_replace('/', '-', $SysData['date_lost']);
+         $datelost = $SysData['date_lost'] = strtotime($SysData['date_lost']);
 
        $keytracking->key_number = $SysData['key_number']; 
        $keytracking->key_type = $SysData['key_type'];
@@ -680,8 +694,10 @@ class FleetManagementController extends Controller
        $keytracking->safe_name = $SysData['safe_name'];
        $keytracking->safe_controller = $SysData['safe_controller'];
        $keytracking->issued_to = $SysData['issued_to'];
+       $keytracking->date_lost = $datelost;
+       $keytracking->reason_loss = $SysData['reason_loss'];
        $keytracking->vehicle_type =0 ;
-       $keytracking->vehicle_id = 0;    
+       $keytracking->vehicle_id = $SysData['valueID'];      
        $keytracking->update();
        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
@@ -819,7 +835,7 @@ class FleetManagementController extends Controller
                 $request->file('documents')->storeAs('projects/documents', $fileName);
                 //Update file name in the table
                 $permits->document = $fileName;
-                $permits->save();
+                $permits->update();
             }
         }
 
@@ -829,15 +845,45 @@ class FleetManagementController extends Controller
 
      public function editPermit(Request $request, permits_licence $permit) {
         $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
+            
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $permit->permit_licence = $SysData['permit_licence'];
-        $permit->Supplier = $SysData['Supplier'];
-        $document->update();
+         $currentDate = time();  
+         $loggedInEmplID = Auth::user()->person->id;
+         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+         $name =  $Employee->first_name . ' ' . $Employee->surname;
+
+         $dates = $SysData['date_issued'] = str_replace('/', '-', $SysData['date_issued']);
+         $dates = $SysData['date_issued'] = strtotime($SysData['date_issued']);
+         
+         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+
+
+
+       $permit->permit_licence = $SysData['permit_licence']; 
+       $permit->Supplier = $SysData['Supplier'];
+       $permit->exp_date = $Expdate;
+       $permit->date_issued = $dates;
+       $permit->status = $SysData['status'];
+       $permit->permits_licence_no = $SysData['permits_licence_no'];
+       $permit->captured_by = $name;
+          
+       $permit->update();
+
+       //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $permit->id . "_registration_papers." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $permit->document = $fileName;
+                $permit->update();
+            }
+        }
         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
         return response()->json();
@@ -884,6 +930,16 @@ class FleetManagementController extends Controller
         return response()->json();
 
     }
+
+    public function deleteDoc(vehicle_maintenance $maintenance ,vehicle_documets $documents) {
+
+        $id = $maintenance->id;
+
+        $documents->delete();
+
+        AuditReportsController::store('Vehicle Management', 'document  Deleted', "document has been deleted", 0);
+        return redirect('/vehicle_management/document/$maintenance->id');
+    }
     
     public function newnotes(Request $request ){
         $this->validate($request, [
@@ -899,8 +955,8 @@ class FleetManagementController extends Controller
         $currentDate = time();
 
         $notes = new notes();
-        $notes->captured_by = $datecaptured;
-        $notes->date_captured =$SysData['date_captured'];
+        //$notes->captured_by = $datecaptured;
+        $notes->date_captured = $datecaptured;
         $notes->captured_by = $SysData['captured_by']; 
         $notes->notes = $SysData['notes'];
         $notes->vehicleID = 0;
@@ -923,4 +979,45 @@ class FleetManagementController extends Controller
         return response()->json();
 
     }
+
+     public function editNote(Request $request, notes $note) {
+        $this->validate($request, [
+            
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+         // $currentDate = time();  
+         // $loggedInEmplID = Auth::user()->person->id;
+         // $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+         // $name =  $Employee->first_name . ' ' . $Employee->surname;
+
+        
+         $datecaptured = $SysData['date_captured'] = str_replace('/', '-', $SysData['date_captured']);
+         $datecaptured = $SysData['date_captured'] = strtotime($SysData['date_captured']);
+
+
+
+        $notes->date_captured = $datecaptured;
+        $notes->captured_by = $SysData['captured_by']; 
+        $notes->notes = $SysData['notes'];
+        $notes->vehicleID = 0;
+        $notes->save();
+
+        //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $notes->id . "_registration_papers." . $fileExt;
+                $request->file('documents')->storeAs('documents', $fileName);
+                //Update file name in the table
+                $notes->documents = $fileName;
+                $notes->update();
+            }
+        }
+        AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
+        return response()->json();
+    }
+
 }
