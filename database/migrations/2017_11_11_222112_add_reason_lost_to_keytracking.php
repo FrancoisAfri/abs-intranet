@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCurrentDateVehicleDetailsTable extends Migration
+class AddReasonLostToKeytracking extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddCurrentDateVehicleDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::table('vehicle_details', function ($table) {
-			$table->bigInteger('currentDate')->nullable();
+       Schema::table('keytracking', function ($table) {
+             $table->bigInteger('date_lost')->nullable();
+             $table->string('reason_loss')->nullable();
         });
     }
 
@@ -25,8 +26,9 @@ class AddCurrentDateVehicleDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_details', function ($table) {
-            // $table->dropColumn('currentDate');
+        Schema::table('keytracking', function ($table) {
+            $table->dropColumn('date_lost');
+            $table->dropColumn('reason_loss');
         });
     }
 }

@@ -71,9 +71,9 @@
                                <tr id="categories-list">
                             
                                     <td nowrap>
-                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id="{{ $permit->id }}" data-Supplier="{{ $permit->Supplier }}" data-permits_licence_no="{{ $permit->permits_licence_no }}"
-                                            data-date_issued="{{ $permit->date_issued }}" data-exp_date="{{ $permit->exp_date }}" data-status="{{ $permit->status }}" data-captured_by="{{ $permit->captured_by }}" 
-                                            data-date_captured="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
+                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
+                                            data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
+                                            data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
                                             
                                     <td>{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
                                     <td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
@@ -220,7 +220,24 @@
                     todayHighlight: true
                 });
 
-            });
+      
+
+            $('#dateissued').datepicker({
+                        format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+          
+
+            $('#expdate').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+            });        
+
 
         
         //Post perk form to server using ajax (add)
@@ -254,27 +271,21 @@
                 //modal.find('#documents').val(documents);
              });
 
-            $('#edit_permit').on('click', function () {
-                var strUrl = '/vehicle_management/edit_permit/' + fleetID;
-                var modalID = 'edit-permit-modal';
-                var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    Supplier: $('#'+modalID).find('#Supplier').val(),
-                    permits_licence_no: $('#'+modalID).find('#permits_licence_no').val(),
-                    date_issued: $('#'+modalID).find('#date_issued').val(),
-                    exp_date: $('#'+modalID).find('#exp_date').val(),
-                    status: $('#'+modalID).find('#status').val(),
-                    captured_by: $('#'+modalID).find('#captured_by').val(),
-                    //documents: $('#'+modalID).find('#documents').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
+   
+            //Post perk form to server using ajax (edit)
+            $('#edit_permit').on('click', function() {
+                var strUrl = '/vehicle_management/edit_permit/' + permitID;
+                var formName = 'edit-permit-form';
+                 var modalID = 'edit-permit-modal';
                 var submitBtnID = 'edit_permit';
                 var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The vehice make has been updated successfully.';
-                var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                var successMsg = 'The  details have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+ //});
+     
 
     </script>
 @endsection

@@ -198,13 +198,13 @@
                        data-id="{{ $vehiclemaintenance->id }}">Contracts</a> 
 
                     
-                    <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
+                     <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Notes</a> 
 
-
-
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Reminders</a>
+                    <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Reminders</a> 
 
                 </div>
                 @endforeach

@@ -20,32 +20,21 @@
                              </div>
                      </div>
 
-                      <div class="form-group">
-                        <label for="key_type" class="col-sm-3 control-label">Key Type</label>
-                        <div class="col-sm-8">
-                           
-                                <select name="key_type" class="form-control">
-                                            <option value="">*** Select a Key Type ***</option>
-                                            <option value="1" > Main Key</option>
-                                            <option value="2" > Spare Key </option>
-                                            <option value="3" > Remote </option>
-                                </select>
-                       
-                        </div>
-                    </div>
-
-                    <div class="form-group">
+                      <div class="form-group ">
                         <label for="key_status" class="col-sm-3 control-label">Key Status</label>
                         <div class="col-sm-8">
 
-                                <select name="key_status" class="form-control">
-                                            <option value="">*** Select a Key Status ***</option>
-                                            <option value="1" > In Use </option>
-                                            <option value="2" > In Safe  </option>
-                                </select>
-                            
+                            <select name="key_status" id="key_status" onChange= "changetextbox();" class="form-control">
+                                <option value="0">*** Select a Key Status ***</option>
+                                <option value="1"> In Use</option>
+                                <option value="2"> Reallocated</option>
+                                <option value="3"> Lost</option>
+                                <option value="4"> In Safe</option>
+                            </select>
+
                         </div>
                     </div>
+
 
                      <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-3 control-label">Description</label>
@@ -66,6 +55,25 @@
                                 </div>
 
                      </div>
+                      <div class="form-group lost-field">
+                        <label for="path" class="col-sm-3 control-label">Date Lost </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="date_lost" name="date_lost"
+                                   value="{{ old('date_lost') }}" placeholder="Select  issue date ...">
+                        </div>
+                    </div>
+
+                     <div class="form-group lost-field{{ $errors->has('description') ? ' has-error' : '' }}">
+                        <label for="days" class="col-sm-3 control-label">Reason for loss</label>
+                        <div class="col-sm-8">
+
+
+                            <textarea class="form-control" id="reason" name="reason"
+                                      placeholder="Enter a Brief Description of the leave Application..."
+                                      rows="4">{{ old('reason') }}</textarea>
+
+                        </div>
+                    </div>
 
                       
                     <div class="form-group safe-field">

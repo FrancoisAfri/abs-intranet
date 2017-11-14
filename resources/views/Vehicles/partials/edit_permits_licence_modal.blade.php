@@ -1,7 +1,7 @@
 <div id="edit-permit-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+            <form class="form-horizontal" method="POST" name="edit-permit-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -41,14 +41,14 @@
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Permit/Licence Number </label>
                         <div class="col-sm-8">
-                        <input type="text" class="form-control" id="permits_licence_no" name="permits_licence_no" value="" placeholder="Enter permit licence number ..." >           
+                        <input type="text" class="form-control" id="permits_licence_no" name="permits_licence_no" value="{{ old('permits_licence_no') }}" placeholder="Enter permit licence number ..." >           
                         </div>
                     </div>
 
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Date Issued </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="date_issued" name="date_issued"
+                            <input type="text" class="form-control" id="dateissued" name="date_issued"
                                    value="" placeholder="Select  issue date ...">
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                      <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Expiry Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="exp_date" name="exp_date"
+                            <input type="text" class="form-control" id="expdate" name="exp_date"
                                    value=" " placeholder="Select  issue date ...">
                         </div>
                     </div>

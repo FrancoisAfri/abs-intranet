@@ -11,11 +11,7 @@ class AddDivisionLevel1ToVehicleMaintenance extends Migration
      *
      * @return void
      */
-	 /*     $table->integer('division_level_1')->nullable()->unsigned()->index();
-            $table->integer('division_level_2')->nullable()->unsigned()->index();
-            $table->integer('division_level_3')->nullable()->unsigned()->index();
-            $table->integer('division_level_4')->nullable()->unsigned()->index();
-            $table->integer('division_level_5')->nullable()->unsigned()->index();*/
+
     public function up()
     {
         Schema::table('vehicle_maintenance', function ($table) {
