@@ -32,8 +32,8 @@
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="Supplier" name="Supplier">
                                 <option value="0">*** Select a Supplier ***</option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
+                                @foreach($companies as $company)
+                                    <option value="{{ $company->id }}"> {{$company->name}}</option>
                                 @endforeach
                             </select>
                         </div>

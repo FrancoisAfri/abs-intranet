@@ -43,6 +43,7 @@ class VehicleFleetController extends Controller
 
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
@@ -51,10 +52,8 @@ class VehicleFleetController extends Controller
         $safe = safe::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -65,7 +64,7 @@ class VehicleFleetController extends Controller
 
         $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         $vehicleTypes = $vehicleType->name;
-        ################## WELL DETAILS ###############
+       ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
@@ -163,10 +162,6 @@ class VehicleFleetController extends Controller
                 ->orderBy('vehicle_documets.id')
                 ->get();
 
-
-            //return $vehicleDocumets;
-
-
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [
@@ -243,17 +238,12 @@ class VehicleFleetController extends Controller
         if ($maintenance->status == 1) {
             $ID = $maintenance->id;
             //return $ID;
-
-
-            $vehiclenotes = DB::table('notes')
-                ->select('notes.*')
-                ->orderBy('notes.id')
-                ->get();
-
-
-            //return $vehicleDocumets;
-
-
+			$vehiclenotes = DB::table('notes')
+			->select('notes.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+			->leftJoin('hr_people', 'notes.captured_by', '=', 'hr_people.id')
+            		->orderBy('notes.id')
+			->get();
+		
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [

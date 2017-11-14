@@ -208,7 +208,7 @@ class FleetManagementController extends Controller
                 $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
                 //Update file name in the table
                 $vehicle_maintenance->registration_papers = $fileName;
-                $vehicle_maintenance->update();
+				$vehicle_maintenance->update();
             }
         }
 
@@ -433,7 +433,6 @@ class FleetManagementController extends Controller
                 ->where('vehicle_details.id', $ID)
                 ->orderBy('vehicle_details.id')
                 ->get();
-          
 
 
             //$vehiclemaintenances = $vehiclemaintenance ->first();
@@ -595,8 +594,7 @@ class FleetManagementController extends Controller
 
     }
 
-    public function vehiclesAct(Request $request, vehicle_maintenance $vehicle)
-    {
+    public function vehiclesAct(Request $request, vehicle_maintenance $vehicle){
         if ($vehicle->status == 1)
             $stastus = 0;
         else
@@ -806,10 +804,6 @@ class FleetManagementController extends Controller
         unset($SysData['_token']);
 
 
-        $currentDate = time();
-        $loggedInEmplID = Auth::user()->person->id;
-        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
 
          $currentDate = time();  
          $loggedInEmplID = Auth::user()->person->id;
@@ -880,17 +874,6 @@ class FleetManagementController extends Controller
           
        $permit->update();
 
-
-       $permit->permit_licence = $SysData['permit_licence']; 
-       $permit->Supplier = $SysData['Supplier'];
-       $permit->exp_date = $Expdate;
-       $permit->date_issued = $dates;
-       $permit->status = $SysData['status'];
-       $permit->permits_licence_no = $SysData['permits_licence_no'];
-       $permit->captured_by = $name;
-          
-       $permit->update();
-
        //Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
@@ -925,7 +908,7 @@ class FleetManagementController extends Controller
         $vehicledocumets = new vehicle_documets();
         $vehicledocumets->type = $SysData['type'];
         $vehicledocumets->description =$SysData['description'];
-        $vehicledocumets->role = $SysData['role'];
+        //$vehicledocumets->role = $SysData['role'];
         $vehicledocumets->date_from = $datefrom;
         $vehicledocumets->exp_date = $Expdate;
         $vehicledocumets->upload_date = $currentDate; 

@@ -1,6 +1,6 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-    <!-- Include Date Range Picker -->
+ <!-- Include Date Range Picker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
@@ -18,78 +18,63 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"> Permits/Licences </h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
-                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
                 <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                <strong class="lead">Vehicle Details</strong><br>
-
-                                @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp;
-                                    &nbsp;
-                                @endif
-                                @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em>
-                                    &nbsp; &nbsp;
-                                @endif
-                                @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp;
-                                    &nbsp;
-                                @endif
-                                @if(!empty($maintenance->vehicle_registration))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
-                                    <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
-                                @endif
-                                @if(!empty($maintenance->year))
-                                    -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp;
-                                    &nbsp;
-                                @endif
-                                @if(!empty($maintenance->vehicle_color))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
-                                    <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
-                                @endif
-
-                            </p>
+                    {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    <strong class="lead">Vehicle Details</strong><br>
+                                    
+                                    @if(!empty($vehiclemaker))
+                                        | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($vehiclemodeler))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($vehicleTypes))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->vehicle_registration))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong> <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->year))
+                                        -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp; &nbsp;
+                                    @endif
+                                     @if(!empty($maintenance->vehicle_color))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Color:</strong> <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                    @endif
+                                    
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <table class="table table-bordered">
-                        <tr>
-                            <th style="width: 10px; text-align: center;"></th>
-                            <th>Supplier</th>
-                            <th>Permit/Licence Number</th>
-                            <th> Date Issued</th>
-                            <th> Expiry Date</th>
-                            <th>Status</th>
-                            <th>Captured By</th>
-                            <th>Date Captured</th>
-                            <th> Document</th>
-                        </tr>
-                        @if (count($permits) > 0)
-                            @foreach ($permits as $permit)
-                                <tr id="categories-list">
-
+                        <table class="table table-bordered">
+                            <tr>
+                               <th style="width: 10px; text-align: center;"></th>
+                                <th>Supplier</th>
+                                <th>Permit/Licence Number </th>
+                                <th> Date Issued </th>
+                                <th> Expiry Date</th>
+                                <th>Status </th>
+                                <th>Captured By</th>
+                                <th>Date Captured</th>
+                                <th> Document</th>
+                            </tr>
+                            @if (count($permits) > 0)
+                              @foreach ($permits as $permit)
+                               <tr id="categories-list">
+                            
                                     <td nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
-                                                data-toggle="modal" data-target="#edit-permit-modal"
-                                                data-id="{{ $permit->id }}" data-Supplier="{{ $permit->Supplier }}"
-                                                data-permits_licence_no="{{ $permit->permits_licence_no }}"
-                                                data-status="{{ $permit->status }}"
-                                                data-captured_by="{{ $permit->captured_by }}"
-                                                data-date_captured="{{ $permit->date_captured }}"><i
-                                                    class="fa fa-pencil-square-o"></i> Edit
-                                        </button>
-                                    </td>
-
+                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
+                                            data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
+                                            data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
+                                            
                                     <td>{{ !empty($permit->Supplier) ? $permit->Supplier : ''}}</td>
                                     <td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
                                     <td>{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
@@ -105,8 +90,7 @@
                                                    href="{{ Storage::disk('local')->url("projects/documents/$permit->document") }}"
                                                    target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
                                     </td>
@@ -143,6 +127,7 @@
         <!-- Include delete warning Modal form-->
 
         </div>
+
 
 
     @endsection
@@ -226,6 +211,7 @@
                     todayHighlight: true
                 });
 
+      
 
                 //Initialize iCheck/iRadio Elements
                 $('input').iCheck({
@@ -258,6 +244,7 @@
 
                 });
 
+            });        
 
                 //Post perk form to server using ajax (add)
                 $('#add_permit').on('click', function () {
@@ -290,6 +277,18 @@
                     //modal.find('#documents').val(documents);
                 });
 
+   
+            //Post perk form to server using ajax (edit)
+            $('#edit_permit').on('click', function() {
+                var strUrl = '/vehicle_management/edit_permit/' + permitID;
+                var formName = 'edit-permit-form';
+                 var modalID = 'edit-permit-modal';
+                var submitBtnID = 'edit_permit';
+                var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The  details have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
 
                 //Post perk form to server using ajax (edit)
                 $('#edit_permit').on('click', function () {
@@ -303,8 +302,5 @@
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
-                //});
-
-
-            </script>
+    </script>
 @endsection

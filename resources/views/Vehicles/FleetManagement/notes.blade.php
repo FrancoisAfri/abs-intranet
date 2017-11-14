@@ -146,6 +146,7 @@
 
         </div>
 
+@endsection
 
         @endsection
 
@@ -185,12 +186,23 @@
                     location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 });
 
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
+            });
 
                 var moduleId;
                 //Initialize Select2 Elements
                 $(".select2").select2();
                 $('.zip-field').hide();
 
+            $(".js-example-basic-multiple").select2();
 
                 //Tooltip
 
@@ -289,6 +301,12 @@
                     }
                     return allType;
                 }
+                else if (allType == 2) {
+                    $('.user-field').hide();
+                    $('.zip-field').show();
+                }
+                return allType;
+            }
 
                 function changetextbox() {
                     var levID = document.getElementById("key_status").value;
@@ -298,6 +316,17 @@
                     }
                 }
 
+            //Post perk form to server using ajax (add)
+        $('#add_notes').on('click', function () {
+            var strUrl = '/vehicle_management/add_new_note';
+            var formName = 'add-note-form';
+            var modalID = 'add-note-modal';
+            var submitBtnID = 'add_notes';
+            var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
+            var successMsgTitle = 'New Note  Added!';
+            var successMsg = 'The Note  has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
 
                 //Post perk form to server using ajax (add)
                 $('#add_notes').on('click', function () {

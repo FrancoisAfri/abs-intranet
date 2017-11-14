@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Users;
-use App\ContactCompany;
 use App\DivisionLevel;
 use App\jobcardMaintance;
 Use App\permits_licence;
@@ -208,7 +207,7 @@ class FleetManagementController extends Controller
                 $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
                 //Update file name in the table
                 $vehicle_maintenance->registration_papers = $fileName;
-                $vehicle_maintenance->update();
+				$vehicle_maintenance->update();
             }
         }
 
@@ -433,7 +432,9 @@ class FleetManagementController extends Controller
                 ->where('vehicle_details.id', $ID)
                 ->orderBy('vehicle_details.id')
                 ->get();
-          
+            //needs fixing
+
+              // return $vehiclemaintenance;
 
 
             //$vehiclemaintenances = $vehiclemaintenance ->first();
@@ -595,8 +596,7 @@ class FleetManagementController extends Controller
 
     }
 
-    public function vehiclesAct(Request $request, vehicle_maintenance $vehicle)
-    {
+    public function vehiclesAct(Request $request, vehicle_maintenance $vehicle){
         if ($vehicle->status == 1)
             $stastus = 0;
         else
@@ -711,7 +711,6 @@ class FleetManagementController extends Controller
         $ID =  $maintenance->id;
 
         $vehicle = vehicle::orderBy('id', 'asc')->get();
-        $companies = ContactCompany::orderBy('name', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
@@ -750,12 +749,11 @@ class FleetManagementController extends Controller
             $ID = $maintenance->id;
             //return $ID;
 
-        $permits = DB::table('permits_licence')
-            ->select('permits_licence.*','contact_companies.name as comp_name','hr_people.first_name as firstname', 'hr_people.surname as surname')
-            ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
-            ->leftJoin('contact_companies', 'permits_licence.Supplier', '=', 'contact_companies.id')
-            ->orderBy('permits_licence.id') 
-            ->get();
+                $permits = DB::table('permits_licence')
+                           ->select('permits_licence.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                           ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
+                           ->orderBy('permits_licence.id') 
+                           ->get();
 
 
                // return $permits;
@@ -771,7 +769,6 @@ class FleetManagementController extends Controller
             $data['status'] = $status;
             $data['name'] = $name;
             $data['vehicleTypes'] = $vehicleTypes;
-            $data['companies'] = $companies;
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehiclemaker'] = $vehiclemaker;
             $data['IssuedTo'] = $IssuedTo;
@@ -806,10 +803,6 @@ class FleetManagementController extends Controller
         unset($SysData['_token']);
 
 
-        $currentDate = time();
-        $loggedInEmplID = Auth::user()->person->id;
-        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
 
          $currentDate = time();  
          $loggedInEmplID = Auth::user()->person->id;
@@ -868,17 +861,6 @@ class FleetManagementController extends Controller
          $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
          $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
-
-
-       $permit->permit_licence = $SysData['permit_licence']; 
-       $permit->Supplier = $SysData['Supplier'];
-       $permit->exp_date = $Expdate;
-       $permit->date_issued = $dates;
-       $permit->status = $SysData['status'];
-       $permit->permits_licence_no = $SysData['permits_licence_no'];
-       $permit->captured_by = $name;
-          
-       $permit->update();
 
 
        $permit->permit_licence = $SysData['permit_licence']; 
@@ -992,7 +974,8 @@ class FleetManagementController extends Controller
             }
         }
         
-        AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        ;
         return response()->json();
 
     }
