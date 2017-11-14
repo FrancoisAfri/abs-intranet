@@ -94,7 +94,7 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="5">
+                        <td colspan="6">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                            No key records for this vehicle, please start by adding key records for this vehicle..

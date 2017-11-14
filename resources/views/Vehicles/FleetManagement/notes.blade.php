@@ -64,29 +64,27 @@
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
                             @if (count($vehiclenotes) > 0)
-                              @foreach ($vehiclenotes as $document)
+                              @foreach ($vehiclenotes as $note)
                                <tr id="categories-list">
                                  <td nowrap>
-                                       <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-newdoc-modal" data-id="{{ $document->id }}" data-notes="{{ $document->notes }}"
-                                        data-date_captured="{{ $document->date_captured }}" data-notes="{{ $document->notes }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                       <button document="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-newdoc-modal" data-id="{{ $note->id }}" data-notes="{{ $note->notes }}"
+                                        data-date_captured="{{ $note->date_captured }}" data-notes="{{ $note->notes }}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                         
                                    </td>
-                               
-                                    
-                                    <td>{{ !empty($document->captured_by) ?  $document->captured_by : '' }}</td>
-                                    <td>{{ !empty($document->date_captured) ? date(' d M Y', $document->date_captured) : '' }}</td>
-                                    <td>{{ !empty($document->notes) ?  $document->notes : '' }}</td>
+                                    <td>{{ !empty($note->date_captured) ? date(' d M Y', $note->date_captured) : '' }}</td>
+                                    <td>{{(!empty( $note->firstname . ' ' . $note->surname)) ?   $note->firstname . ' ' . $note->surname : ''}}</td>
+                                    <td>{{ !empty($note->notes) ?  $note->notes : '' }}</td>
                                      <td nowrap>
                                         <div class="form-group{{ $errors->has('documents') ? ' has-error' : '' }}">
                                             <label for="documents" class="control-label"></label>
-                                            @if(!empty($document->documents))
-                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $document->documents }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
+                                            @if(!empty($note->documents))
+                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ $note->documents }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
                                             @else
                                             <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
                                     </td>
-                                    <!--  <td>{{ !empty($document->documents) ?  $document->documents : '' }}</td> -->
+                                    <!--  <td>{{ !empty($note->documents) ?  $note->documents : '' }}</td> -->
                                     
                                     
 

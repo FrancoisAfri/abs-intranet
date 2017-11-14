@@ -75,7 +75,7 @@
                                             data-date_issued="{{ $permit->date_issued }}" data-exp_date="{{ $permit->exp_date }}" data-status="{{ $permit->status }}" data-captured_by="{{ $permit->captured_by }}" 
                                             data-date_captured="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
                                             
-                                    <td>{{ !empty($permit->Supplier) ? $permit->Supplier : ''}}</td>
+                                    <td>{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
                                     <td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
                                     <td>{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
                                     <td>{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
@@ -97,7 +97,7 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="5">
+                        <td colspan="9">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                            No Permits/Licences records for this vehicle, please start by adding Permits/Licences records for this vehicle..

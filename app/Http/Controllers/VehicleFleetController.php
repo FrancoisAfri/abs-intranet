@@ -207,10 +207,9 @@ class VehicleFleetController extends Controller
 
     }
 
-         public function addnotes(vehicle_maintenance $maintenance) {
+    public function addnotes(vehicle_maintenance $maintenance) {
 
         $ID =  $maintenance->id;
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -244,20 +243,15 @@ class VehicleFleetController extends Controller
          $name =  $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
-        if ($maintenance->status == 1) {
+			if ($maintenance->status == 1) {
             $ID = $maintenance->id;
             //return $ID;
-
-
-                 $vehiclenotes = DB::table('notes')
-                ->select('notes.*')
-                ->orderBy('notes.id')
-                ->get();
-
-
-                //return $vehicleDocumets;
-
-
+			$vehiclenotes = DB::table('notes')
+			->select('notes.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+			->leftJoin('hr_people', 'notes.captured_by', '=', 'hr_people.id')
+            ->orderBy('notes.id')
+			->get();
+		
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [

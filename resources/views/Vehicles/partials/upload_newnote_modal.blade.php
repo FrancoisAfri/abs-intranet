@@ -12,9 +12,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
-                  
-
                     <div class="form-group">
                         <label for="captured_by" class="col-sm-2 control-label">Captured By</label>
                         <div class="col-sm-8">
@@ -34,16 +31,12 @@
                         </div>
                     </div>
                      <input type="hidden" name="ID" value="">
-
-                      <div class="form-group zip-field">
-                        <label for="days" class="col-sm-3 control-label">Note</label>
+                      <div class="form-group">
+                        <label for="days" class="col-sm-2 control-label">Note</label>
                         <div class="col-sm-8">
-                           
-                                <textarea class="form-control" id="notes" name="notes" placeholder="Enter notes..." rows="3">{{ old('notes') }}</textarea>
-                            
+                        <textarea class="form-control" id="notes" name="notes" placeholder="Enter notes..." rows="3">{{ old('notes') }}</textarea>
                         </div>
                      </div>
-
                       <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
