@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                   
+
                                     @foreach($division_levels as $division_level)
                                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                             <label for="{{ 'division_level_' . $division_level->level }}"
@@ -51,13 +51,13 @@
                                                     </div>
                                                     <select id="{{ 'division_level_' . $division_level->level }}"
                                                             name="{{ 'division_level_' . $division_level->level }}"
-                                                            class="form-control" onchange="divDDOnChange(this, null, 'vehicle_details')">
+                                                            class="form-control"
+                                                            onchange="divDDOnChange(this, null, 'vehicle_details')">
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
-
 
 
                                     <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
@@ -66,10 +66,10 @@
 
                                         <div class="col-sm-9">
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          id="rdo_package"
-                                                                                                          name="property_type"
-                                                                                                          value="0"
-                                                                                                          checked> All
+                                                                                                          ge"
+                                                pe"
+                                                0"
+                                                ll
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_product"
                                                                                name="property_type" value="1"> Internal
@@ -129,14 +129,13 @@
 
                                     <div class="form-group{{ $errors->has('promotion_type') ? ' has-error' : '' }}">
                                         <label for="property_type" class="col-xs-3 control-label"> Status
-                                             </label>
+                                        </label>
 
                                         <div class="col-sm-9">
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          id="rdo_package"
-                                                                                                          name="promotion_type"
-                                                                                                          value="1"
-                                                                                                          checked>
+                                                                                                          ge"
+                                                e"
+                                                >
                                                 Inactive </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_product"
                                                                                name="promotion_type" value="2"> Active
@@ -158,8 +157,6 @@
                                         <button type="submit" class="btn btn-primary pull-left"><i
                                                     class="fa fa-search"></i> Search
                                         </button>
-                                        <!--  <button type="button" class="btn btn-primary pull-right" id="add_vehicle" ><i class="fa fa-plus-square-o"></i> Add Vehicle</button> -->
-
                                         <button type="button" id="cat_module" class="btn btn-primary pull-right"
                                                 data-toggle="modal"
                                                 data-target="#add-vehicledetails-modal"><i
@@ -169,9 +166,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.box-body -->
-
-                        <!-- /.box-footer -->
                 </form>
             </div>
             <!-- /.box -->
@@ -323,33 +317,33 @@
         var parentDDID = '';
         var loadAllDivs = 1;
         @foreach($division_levels as $division_level)
-            //Populate drop down on page load
-            var ddID = '{{ 'division_level_' . $division_level->level }}';
-            var postTo = '{!! route('divisionsdropdown') !!}';
-            var selectedOption = '';
-            var divLevel = parseInt('{{ $division_level->level }}');
-            var incInactive = -1;
-            var loadAll = loadAllDivs;
-            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-            parentDDID = ddID;
-            loadAllDivs = -1;
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+        parentDDID = ddID;
+        loadAllDivs = -1;
         @endforeach
 
         //Load divisions drop down
         var parentDDID = '';
         var loadAllDivs = 1;
         @foreach($division_levels as $division_level)
-            //Populate drop down on page load
-            var ddID = '{{ 'division_level_' . $division_level->level }}';
-            var postTo = '{!! route('divisionsdropdown') !!}';
-            var selectedOption = '';
-            var divLevel = parseInt('{{ $division_level->level }}');
-            var incInactive = -1;
-            var loadAll = loadAllDivs;
-            var parentContainer = $('#add-vehicledetails-modal');
-            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, 0, 0, parentContainer);
-            parentDDID = ddID;
-            loadAllDivs = -1;
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        var parentContainer = $('#add-vehicledetails-modal');
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, 0, 0, parentContainer);
+        parentDDID = ddID;
+        loadAllDivs = -1;
         @endforeach
 
     </script>

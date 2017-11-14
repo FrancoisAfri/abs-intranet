@@ -374,12 +374,34 @@ Route::get('vehicle_management/keys/{maintenance}', 'FleetManagementController@k
 Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@document');
 Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
 Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@addnotes');
+
+#
+Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');
+Route::post('vehicle_management/addwarranty', 'VehicleFleetController@addwarranty');
+
+
 Route::get('vehicle_management/reminders/{maintenance}', 'VehicleFleetController@reminders');
+Route::post('vehicle_management/addreminder', 'VehicleFleetController@addreminder');
+Route::patch('vehicle_management/edit_reminder/{reminder}', 'VehicleFleetController@editreminder');
+Route::get('vehicle_management/reminder_act/{reminder}', 'VehicleFleetController@reminderAct');
+
 
 Route::post('vehicle_management/add_new_document', 'FleetManagementController@newdocument');
 Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
 Route::get('vehice/{maintenance}/document/{documents}/delete', 'FleetManagementController@deleteDoc');
-Route::patch('vehicle_management/edit_newdoc/{note}', 'FleetManagementController@editNote');
+Route::patch('vehicle_management/edit_vehicledoc/{vehicledocumets}', 'FleetManagementController@editVehicleDoc');
+
+
+Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote');
+
+
+##
+Route::get('vehicle_management/general_cost/{maintenance}', 'VehicleFleetController@viewGeneralCost');
+Route::post('vehicle_management/addcosts', 'VehicleFleetController@addcosts');
+Route::patch('vehicle_management/edit_costs/{costs}', 'VehicleFleetController@editcosts');
+Route::get('vehicle_management/Manage_costs/{costs}/delete', 'VehicleFleetController@deletecosts');
+
+
 
 
 Route::get('vehicle_management/permits_licences/{maintenance}', 'FleetManagementController@permits_licences');

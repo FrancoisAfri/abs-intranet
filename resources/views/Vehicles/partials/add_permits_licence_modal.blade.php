@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-permit-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
-                
+
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -14,11 +14,12 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                     <div class="form-group safe-field">
-                        <label for="permit_licence" class="col-sm-3 control-label">Permit/Licence  </label>
+                    <div class="form-group safe-field">
+                        <label for="permit_licence" class="col-sm-3 control-label">Permit/Licence </label>
                         <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;" id="permit_licence" name="permit_licence">
-                                <option value="0">*** Select a Permit/Licence  ***</option>
+                            <select class="form-control select2" style="width: 100%;" id="permit_licence"
+                                    name="permit_licence">
+                                <option value="0">*** Select a Permit/Licence ***</option>
                                 @foreach($employees as $employee)
                                     <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
                                 @endforeach
@@ -36,13 +37,14 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>  
+                    </div>
 
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Permit/Licence Number </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="permits_licence_no" name="permits_licence_no"
-                                   value=" {{ old('permits_licence_no') }}" placeholder="Enter permit licence number ..." >
+                                   value=" {{ old('permits_licence_no') }}"
+                                   placeholder="Enter permit licence number ...">
                         </div>
                     </div>
 
@@ -54,7 +56,7 @@
                         </div>
                     </div>
 
-                     <div class="form-group ">
+                    <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Expiry Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="exp_date" name="exp_date"
@@ -62,16 +64,16 @@
                         </div>
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="Status" class="col-sm-3 control-label">Status </label>
                         <div class="col-sm-8">
-                          
-                                <select id="status" name="status" class="form-control">
-                                    <option value="0">*** Select Status ***</option>
-                                    <option value="1"> Active</option>
-                                    <option value="2"> InActive</option>
-                                </select>
-                           
+
+                            <select id="status" name="status" class="form-control">
+                                <option value="0">*** Select Status ***</option>
+                                <option value="1"> Active</option>
+                                <option value="2"> InActive</option>
+                            </select>
+
                         </div>
                     </div>
 
@@ -83,15 +85,15 @@
                         </div>
                     </div>
 
-                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
+                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-3 control-label">Attachment </label>
                         <div class="col-sm-8">
-                            
-                                <input type="file" id="documents" name="documents"
-                                       class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
-                                       data-show-upload="false">
-                                </div>
-                        
+
+                            <input type="file" id="documents" name="documents"
+                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
+                                   data-show-upload="false">
+                        </div>
+
                     </div>
 
                 </div>
@@ -108,6 +110,6 @@
 </div>
 
 <script type="text/javascript">
- 
+
 </script>
            

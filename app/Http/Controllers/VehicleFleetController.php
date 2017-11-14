@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Users;
 use App\DivisionLevel;
-use App\jobcardMaintance;
-Use App\permits_licence;
+use App\vehicle_warranties;
 use App\FleetType;
 use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
@@ -20,12 +19,13 @@ use App\vehiclemodel;
 use App\modules;
 use App\vehicle_maintenance;
 use App\vehiclemake;
-use App\fleet_documentType;
 use App\keytracking;
 use App\safe;
-use App\reminders;
+Use App\reminders;
 use App\vehicle_documets;
 use App\images;
+use App\ContactCompany;
+use App\general_cost;
 use App\fleet_fillingstation;
 use App\module_access;
 use App\DivisionLevelFive;
@@ -288,10 +288,10 @@ class VehicleFleetController extends Controller
             return back();
     }
 
-    public function reminders(vehicle_maintenance $maintenance){
-    	 $ID = $maintenance->id;
+    public function reminders(vehicle_maintenance $maintenance)
+    {
+        $ID = $maintenance->id;
 
-        
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
@@ -353,4 +353,316 @@ class VehicleFleetController extends Controller
         } else
             return back();
     }
+
+    public function addreminder(Request $request)
+    {
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $currentDate = time();
+
+        $startdate = $SysData['start_date'] = str_replace('/', '-', $SysData['start_date']);
+        $startdate = $SysData['start_date'] = strtotime($SysData['start_date']);
+
+        $enddate = $SysData['end_date'] = str_replace('/', '-', $SysData['end_date']);
+        $enddate = $SysData['end_date'] = strtotime($SysData['end_date']);
+
+        $reminders = new reminders();
+        $reminders->name = $SysData['name'];
+        $reminders->description = $SysData['description'];
+        $reminders->start_date = $startdate;
+        $reminders->end_date = $enddate;
+        $reminders->vehicleID = $SysData['valueID'];
+        $reminders->status = 1;
+        $reminders->save();
+
+        return response()->json();
+
+    }
+
+    public function editreminder(Request $request, reminders $reminder)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $startdate = $SysData['start_date'] = str_replace('/', '-', $SysData['start_date']);
+        $startdate = $SysData['start_date'] = strtotime($SysData['start_date']);
+
+        $enddate = $SysData['end_date'] = str_replace('/', '-', $SysData['end_date']);
+        $enddate = $SysData['end_date'] = strtotime($SysData['end_date']);
+
+        $reminders->name = $SysData['name'];
+        $reminders->description = $SysData['description'];
+        $reminders->start_date = $startdate;
+        $reminders->end_date = $enddate;
+        $reminders->vehicleID = $SysData['valueID'];
+        $reminders->status = 1;
+        $reminders->update();
+
+        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);;
+        return response()->json();
+    }
+
+    public function reminderAct(Request $request, reminders $reminder)
+    {
+        if ($reminder->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $reminder->status = $stastus;
+        $reminder->update();
+        return back();
+    }
+
+    public function viewGeneralCost(vehicle_maintenance $maintenance)
+    {
+        $ID = $maintenance->id;
+
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemaker = $vehiclemake->name;
+
+        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehiclemodeler = $vehicle_model->name;
+
+        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        $vehicleTypes = $vehicleType->name;
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        ###################>>>>>#################
+        $costtype = array(1 => 'Oil');
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+
+
+            $generalcost = DB::table('vehicle_generalcosts')
+                ->select('vehicle_generalcosts.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
+                ->leftJoin('hr_people', 'vehicle_generalcosts.person_esponsible', '=', 'hr_people.id')
+                ->orderBy('vehicle_generalcosts.id')
+                ->get();
+
+
+            //return $vehicleDocumets;
+
+
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['name'] = $name;
+            $data['costtype'] = $costtype;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['employees'] = $employees;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['generalcost'] = $generalcost;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Vehicle Management';
+            $data['active_rib'] = 'Manage Fleet';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.viewGeneralcost')->with($data);
+        } else
+            return back();
+    }
+
+    public function addcosts(Request $request)
+    {
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $currentDate = time();
+
+        $date = $SysData['date'] = str_replace('/', '-', $SysData['date']);
+        $date = $SysData['date'] = strtotime($SysData['date']);
+
+        $generalcost = new general_cost();
+        $generalcost->date = $date;
+        $generalcost->document_number = $SysData['document_number'];
+        $generalcost->supplier_name = $SysData['supplier_name'];
+        $generalcost->cost_type = $SysData['cost_type'];
+        $generalcost->cost = $SysData['cost'];
+        $generalcost->litres = $SysData['litres'];
+        $generalcost->description = $SysData['description'];
+        $generalcost->person_esponsible = $SysData['person_esponsible'];
+        $generalcost->vehicleID = $SysData['valueID'];
+        $generalcost->save();
+
+        return response()->json();
+
+    }
+
+    public function editcosts(Request $request, general_cost $costs)
+    {
+
+        $this->validate($request, [
+            'date' => 'required',
+            // 'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $date = $SysData['date'] = str_replace('/', '-', $SysData['date']);
+        $date = $SysData['date'] = strtotime($SysData['date']);
+
+        $costs->date = $date;
+        $costs->document_number = $SysData['document_number'];
+        $costs->supplier_name = $SysData['supplier_name'];
+        $costs->cost_type = $SysData['cost_type'];
+        $costs->cost = $SysData['cost'];
+        $costs->litres = $SysData['litres'];
+        $costs->description = $SysData['description'];
+        $costs->person_esponsible = $SysData['person_esponsible'];
+        $costs->vehicleID = $SysData['valueID'];
+        $costs->update();
+        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        return back();
+    }
+
+    public function deletecosts(general_cost $costs)
+    {
+
+        $costs->delete();
+
+        AuditReportsController::store('Vehicle Management', 'document  Deleted', "document has been deleted", 0);
+        return back();
+        //return redirect('/vehicle_management/general_cost/$maintenance->id');
+    }
+
+    public function viewWarranties(vehicle_maintenance $maintenance)
+    {
+        $ID = $maintenance->id;
+
+        $ContactCompany = ContactCompany::orderBy('id','asc')->get();
+        //return $ContactCompany;
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemaker = $vehiclemake->name;
+
+        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehiclemodeler = $vehicle_model->name;
+
+        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        $vehicleTypes = $vehicleType->name;
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        ###################>>>>>#################
+        $costtype = array(1 => 'Oil');
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+
+
+            $vehiclewarranties = DB::table('vehicle_warranties')
+                ->select('vehicle_warranties.*')
+                ->orderBy('vehicle_warranties.id')
+                ->get();
+
+
+            //return $vehicleDocumets;
+
+
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['ContactCompany'] = $ContactCompany;
+            $data['name'] = $name;
+            $data['costtype'] = $costtype;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['employees'] = $employees;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['vehiclewarranties'] = $vehiclewarranties;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Vehicle Management';
+            $data['active_rib'] = 'Manage Fleet';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.viewWarranties')->with($data);
+        } else
+            return back();
+    }
+
+     public function addwarranty(Request $request){
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $currentDate = time();
+
+        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
+        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+
+        $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+        $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+
+        $Vehiclewarranties = new vehicle_warranties($SysData);
+        $Vehiclewarranties->exp_date = $Expdate;
+        $Vehiclewarranties->inception_date = $inceptiondate ;
+        $Vehiclewarranties->status = 1;
+        $Vehiclewarranties->save();
+
+         //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $Vehiclewarranties->document = $fileName;
+                $Vehiclewarranties->update();
+            }
+        }
+
+        return response()->json();
+
+    }
+
 }

@@ -1,6 +1,6 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
- <!-- Include Date Range Picker -->
+    <!-- Include Date Range Picker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
@@ -18,63 +18,78 @@
                 <div class="box-header with-border">
                     <h3 class="box-title"> Permits/Licences </h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
+                        </button>
                     </div>
                 </div>
                 <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                    <strong class="lead">Vehicle Details</strong><br>
-                                    
-                                    @if(!empty($vehiclemaker))
-                                        | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp; &nbsp;
-                                    @endif
-                                    @if(!empty($vehiclemodeler))
-                                        -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em> &nbsp; &nbsp;
-                                    @endif
-                                    @if(!empty($vehicleTypes))
-                                        -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp; &nbsp;
-                                    @endif
-                                    @if(!empty($maintenance->vehicle_registration))
-                                        -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong> <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
-                                    @endif
-                                    @if(!empty($maintenance->year))
-                                        -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp; &nbsp;
-                                    @endif
-                                     @if(!empty($maintenance->vehicle_color))
-                                        -| &nbsp; &nbsp; <strong>Vehicle Color:</strong> <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
-                                    @endif
-                                    
-                                </p>
-                            </div>
+            {{ csrf_field() }}
+            {{ method_field('PATCH') }}
+            <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                <strong class="lead">Vehicle Details</strong><br>
+
+                                @if(!empty($vehiclemaker))
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp;
+                                    &nbsp;
+                                @endif
+                                @if(!empty($vehiclemodeler))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em>
+                                    &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($vehicleTypes))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp;
+                                    &nbsp;
+                                @endif
+                                @if(!empty($maintenance->vehicle_registration))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
+                                    <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($maintenance->year))
+                                    -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp;
+                                    &nbsp;
+                                @endif
+                                @if(!empty($maintenance->vehicle_color))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
+                                    <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                @endif
+
+                            </p>
                         </div>
-                        <table class="table table-bordered">
-                            <tr>
-                               <th style="width: 10px; text-align: center;"></th>
-                                <th>Supplier</th>
-                                <th>Permit/Licence Number </th>
-                                <th> Date Issued </th>
-                                <th> Expiry Date</th>
-                                <th>Status </th>
-                                <th>Captured By</th>
-                                <th>Date Captured</th>
-                                <th> Document</th>
-                            </tr>
-                            @if (count($permits) > 0)
-                              @foreach ($permits as $permit)
-                               <tr id="categories-list">
-                            
+                    </div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 10px; text-align: center;"></th>
+                            <th>Supplier</th>
+                            <th>Permit/Licence Number</th>
+                            <th> Date Issued</th>
+                            <th> Expiry Date</th>
+                            <th>Status</th>
+                            <th>Captured By</th>
+                            <th>Date Captured</th>
+                            <th> Document</th>
+                        </tr>
+                        @if (count($permits) > 0)
+                            @foreach ($permits as $permit)
+                                <tr id="categories-list">
+
                                     <td nowrap>
-                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
-                                            data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
-                                            data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
-                                            
+                                        <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
+                                                data-toggle="modal" data-target="#edit-permit-modal"
+                                                data-id="{{ $permit->id }}" data-Supplier="{{ $permit->Supplier }}"
+                                                data-permits_licence_no="{{ $permit->permits_licence_no }}"
+                                                data-status="{{ $permit->status }}"
+                                                data-captured_by="{{ $permit->captured_by }}"
+                                                data-date_captured="{{ $permit->date_captured }}"><i
+                                                    class="fa fa-pencil-square-o"></i> Edit
+                                        </button>
+                                    </td>
+
                                     <td>{{ !empty($permit->Supplier) ? $permit->Supplier : ''}}</td>
                                     <td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
                                     <td>{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
@@ -86,206 +101,210 @@
                                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($permit->document))
-                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs" href="{{ Storage::disk('local')->url("projects/documents/$permit->document") }}" target="_blank"><i class="fa fa-file-pdf-o"></i>  View Document</a>
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("projects/documents/$permit->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i
+                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
                                     </td>
-                                    
+
                                 </tr>
-                                   @endforeach
-                               @else
-                               <tr id="categories-list">
-                        <td colspan="5">
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                           No Permits/Licences records for this vehicle, please start by adding Permits/Licences records for this vehicle..
-                        </div>
-                        </td>
-                        </tr>
+                            @endforeach
+                        @else
+                            <tr id="categories-list">
+                                <td colspan="5">
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        No Record records for this vehicle, please start by adding
+                                        Record records for this vehicle..
+                                    </div>
+                                </td>
+                            </tr>
                         @endif
-                            </table>
-                      <!--   </div> -->
-                                   <!-- /.box-body -->
+                    </table>
+                    <!--   </div> -->
+                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-permit-modal">Add Permits/Licences</button>
+                        <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                        <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
+                                data-target="#add-permit-modal">Add Permits/Licences
+                        </button>
                     </div>
-             </div>
-        </div>
-   <!-- Include add new prime rate modal -->
-       @include('Vehicles.partials.add_permits_licence_modal')
+                </div>
+            </div>
+            <!-- Include add new prime rate modal -->
+        @include('Vehicles.partials.add_permits_licence_modal')
         @include('Vehicles.partials.edit_permits_licence_modal')
-          <!-- Include delete warning Modal form-->
-    
-</div>
+        <!-- Include delete warning Modal form-->
+
+        </div>
 
 
-@endsection
+    @endsection
 
-@section('page_script')
+    @section('page_script')
 
- <!-- Select2 -->
-    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    <!-- bootstrap datepicker -->
-    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+        <!-- Select2 -->
+            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+            <!-- bootstrap datepicker -->
+            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 
-    <!-- InputMask -->
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+            <!-- InputMask -->
+            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 
-    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-            type="text/javascript"></script>
-    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+            <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+                    type="text/javascript"></script>
+            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
 
-    <!-- the main fileinput plugin file -->
-    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+            <!-- the main fileinput plugin file -->
+            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
 
-    <!-- iCheck -->
-    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+            <!-- iCheck -->
+            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-    <!-- Ajax dropdown options load -->
-    <script src="/custom_components/js/load_dropdown_options.js"></script>
-    <!-- Ajax form submit -->
-    <script src="/custom_components/js/modal_ajax_submit.js"></script>
-    <script type="text/javascript">
+            <!-- Ajax dropdown options load -->
+            <script src="/custom_components/js/load_dropdown_options.js"></script>
+            <!-- Ajax form submit -->
+            <script src="/custom_components/js/modal_ajax_submit.js"></script>
+            <script type="text/javascript">
 
-      $(function () {
+                $(function () {
 
-         $('#back_button').click(function () {
-            location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-        });
-            $(".select2").select2();
-            $('.hours-field').hide();
-            $('.comp-field').hide();
-            var moduleId;
-            //Tooltip
-            $('[data-toggle="tooltip"]').tooltip();
+                    $('#back_button').click(function () {
+                        location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+                    });
+                    $(".select2").select2();
+                    $('.hours-field').hide();
+                    $('.comp-field').hide();
+                    var moduleId;
+                    //Tooltip
+                    $('[data-toggle="tooltip"]').tooltip();
 
-            //Vertically center modals on page
+                    //Vertically center modals on page
 
-            //Phone mask
-            $("[data-mask]").inputmask();
+                    //Phone mask
+                    $("[data-mask]").inputmask();
 
-            //Vertically center modals on page
-            function reposition() {
-                var modal = $(this),
-                    dialog = modal.find('.modal-dialog');
-                modal.css('display', 'block');
+                    //Vertically center modals on page
+                    function reposition() {
+                        var modal = $(this),
+                            dialog = modal.find('.modal-dialog');
+                        modal.css('display', 'block');
 
-                // Dividing by two centers the modal exactly, but dividing by three
-                // or four works better for larger screens.
-                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-            }
+                        // Dividing by two centers the modal exactly, but dividing by three
+                        // or four works better for larger screens.
+                        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+                    }
 
-            // Reposition when a modal is shown
-            $('.modal').on('show.bs.modal', reposition);
-            // Reposition when the window is resized
-            $(window).on('resize', function () {
-                $('.modal:visible').each(reposition);
-            });
+                    // Reposition when a modal is shown
+                    $('.modal').on('show.bs.modal', reposition);
+                    // Reposition when the window is resized
+                    $(window).on('resize', function () {
+                        $('.modal:visible').each(reposition);
+                    });
 
-            //Show success action modal
-            $('#success-action-modal').modal('show');
-        });
+                    //Show success action modal
+                    $('#success-action-modal').modal('show');
+                });
 
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
-         $('#exp_date').datepicker({
+                $('.datepicker').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+                $('#exp_date').datepicker({
                     format: 'dd/mm/yyyy',
                     autoclose: true,
                     todayHighlight: true
                 });
 
-           
 
-        //Initialize iCheck/iRadio Elements
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '10%' // optional
-        });
-
-        $(document).ready(function () {
-
-            $('#date_issued').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
+                //Initialize iCheck/iRadio Elements
+                $('input').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '10%' // optional
                 });
 
-      
+                $(document).ready(function () {
 
-            $('#dateissued').datepicker({
+                    $('#date_issued').datepicker({
                         format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+
+                    $('#dateissued').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+
+                    $('#expdate').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
                 });
 
-          
 
-            $('#expdate').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
+                //Post perk form to server using ajax (add)
+                $('#add_permit').on('click', function () {
+                    var strUrl = '/vehicle_management/addPermit';
+                    var formName = 'add-permit-form';
+                    var modalID = 'add-permit-modal';
+                    var submitBtnID = 'add_permit';
+                    var redirectUrl = '/vehicle_management/permits_licences/{{ $maintenance->id }}';
+                    var successMsgTitle = 'New Permits/Licences Details Added!';
+                    var successMsg = 'The Permits/Licences Details has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
-            });        
-
-
-        
-        //Post perk form to server using ajax (add)
-        $('#add_permit').on('click', function () {
-            var strUrl = '/vehicle_management/addPermit';
-            var formName = 'add-permit-form';
-            var modalID = 'add-permit-modal';
-            var submitBtnID = 'add_permit';
-            var redirectUrl = '/vehicle_management/permits_licences/{{ $maintenance->id }}';
-            var successMsgTitle = 'New Permits/Licences Details Added!';
-            var successMsg = 'The Permits/Licences Details has been updated successfully.';
-            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
-       
-       //
-       var permitID; 
-       $('#edit-permit-modal').on('show.bs.modal', function (e) {
+                //
+                var permitID;
+                $('#edit-permit-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
-                var btnEdit = $(e.relatedTarget);
-                permitID = btnEdit.data('id');
-                var permit_licence = btnEdit.data('permit_licence');
-                var description = btnEdit.data('description');
-                var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#Supplier').val(Supplier);
-                modal.find('#permits_licence_no').val(permits_licence_no);
-                modal.find('#date_issued').val(date_issued);
-                modal.find('#exp_date').val(exp_date);
-                modal.find('#status').val(status);
-                modal.find('#captured_by').val(captured_by);
-                //modal.find('#documents').val(documents);
-             });
+                    var btnEdit = $(e.relatedTarget);
+                    permitID = btnEdit.data('id');
+                    var permit_licence = btnEdit.data('permit_licence');
+                    var description = btnEdit.data('description');
+                    var modal = $(this);
+                    modal.find('#name').val(name);
+                    modal.find('#Supplier').val(Supplier);
+                    modal.find('#permits_licence_no').val(permits_licence_no);
+                    modal.find('#date_issued').val(date_issued);
+                    modal.find('#exp_date').val(exp_date);
+                    modal.find('#status').val(status);
+                    modal.find('#captured_by').val(captured_by);
+                    //modal.find('#documents').val(documents);
+                });
 
-   
-            //Post perk form to server using ajax (edit)
-            $('#edit_permit').on('click', function() {
-                var strUrl = '/vehicle_management/edit_permit/' + permitID;
-                var formName = 'edit-permit-form';
-                 var modalID = 'edit-permit-modal';
-                var submitBtnID = 'edit_permit';
-                var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The  details have been updated successfully!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
 
- //});
-     
+                //Post perk form to server using ajax (edit)
+                $('#edit_permit').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_permit/' + permitID;
+                    var formName = 'edit-permit-form';
+                    var modalID = 'edit-permit-modal';
+                    var submitBtnID = 'edit_permit';
+                    var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
+                    var successMsgTitle = 'Changes Saved!';
+                    var successMsg = 'The  details have been updated successfully!';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
 
-    </script>
+                //});
+
+
+            </script>
 @endsection

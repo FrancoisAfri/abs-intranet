@@ -16,20 +16,25 @@
 
                     @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                            <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+                            <label for="{{ 'division_level_' . $division_level->level }}"
+                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-black-tie"></i>
                                     </div>
-                                    <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this, null, 'add-vehicledetails-modal')" style="width: 100%;">
+                                    <select id="{{ 'division_level_' . $division_level->level }}"
+                                            name="{{ 'division_level_' . $division_level->level }}"
+                                            class="form-control select2"
+                                            onchange="divDDOnChange(this, null, 'add-vehicledetails-modal')"
+                                            style="width: 100%;">
                                     </select>
                                 </div>
                             </div>
                         </div>
-                     @endforeach
-               
+                    @endforeach
+
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
@@ -67,7 +72,6 @@
                         </div>
                     </div>
 
-        
 
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
@@ -88,23 +92,23 @@
                     </div>
 
 
-                     <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
-                                        <div class="col-sm-8">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
-                                                </div>
-                                                <select class="form-control select2" style="width: 100%;"
-                                                        id="vehicle_type" name="vehicle_type">
-                                                    <option value="0">*** Select a Vehicle Type ***</option>
-                                                    @foreach($Vehicle_types as $type)
-                                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>               
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-truck"></i>
+                                </div>
+                                <select class="form-control select2" style="width: 100%;"
+                                        id="vehicle_type" name="vehicle_type">
+                                    <option value="0">*** Select a Vehicle Type ***</option>
+                                    @foreach($Vehicle_types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
 
                     <div class="form-group">

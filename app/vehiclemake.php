@@ -8,5 +8,5 @@ class vehiclemake extends Model
 {
     protected $table = 'vehicle_make';
 
-    protected $fillable = [ 'name', 'description','status'];
+    protected $fillable = ['name', 'description', 'status'];
 }

@@ -26,7 +26,7 @@ class AddCurrentDateVehicleDetailsTable extends Migration
     public function down()
     {
         Schema::table('vehicle_details', function ($table) {
-            // $table->dropColumn('currentDate');
+             $table->dropColumn('currentDate');
         });
     }
 }

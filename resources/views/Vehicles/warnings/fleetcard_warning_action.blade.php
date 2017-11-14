@@ -11,7 +11,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">No</button>
-                <a href="{{ '/vehice/Manage_fleetcard_types/' . $fleet->id . '/delete' }}" class="btn btn-outline">Yes</a>
+                <a href="{{ '/vehice/Manage_fleetcard_types/' . $fleet->id . '/delete' }}"
+                   class="btn btn-outline">Yes</a>
             </div>
         </div>
         <!-- /.modal-content -->

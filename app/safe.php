@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class safe extends Model
 {
-     protected $table = 'safe';
+    protected $table = 'safe';
 
-    protected $fillable = [ 'name', 'description','status'];
+    protected $fillable = ['name', 'description', 'status'];
 }
