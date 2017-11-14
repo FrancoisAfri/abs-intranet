@@ -187,7 +187,6 @@
                     location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 });
 
-
                 var moduleId;
                 //Initialize Select2 Elements
                 $(".select2").select2();
@@ -220,8 +219,7 @@
                 $('#success-action-modal').modal('show');
 
                 //
-
-                $(".js-example-basic-multiple").select2();
+				$(".js-example-basic-multiple").select2();
 
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
@@ -238,8 +236,6 @@
                         todayHighlight: true
                     });
 
-            });
-
                     $('#end_date').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
@@ -252,14 +248,11 @@
                         todayHighlight: true
                     });
 
-
                     $('#enddate').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
-
-
                 });
 
             function changetextbox() {
