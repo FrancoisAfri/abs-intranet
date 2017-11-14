@@ -156,7 +156,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-warrantie-modal">Add new Costs
+                                data-target="#add-warrantie-modal">Add new Warranty
                         </button>
                     </div>
                 </div>
