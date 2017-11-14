@@ -141,6 +141,12 @@
             @endif
 
         </div>
+   <!-- Include add new prime rate modal -->
+        @include('Vehicles.partials.upload_newnote_modal')
+        @include('Vehicles.partials.edit_notes_modal')
+          <!-- Include delete warning Modal form-->
+     
+</div>
 
 
         @endsection
@@ -217,6 +223,12 @@
 
                 $(".js-example-basic-multiple").select2();
 
+            //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '10%' // optional
+            });
 
                 $(document).ready(function () {
 
@@ -226,6 +238,7 @@
                         todayHighlight: true
                     });
 
+            });
 
                     $('#end_date').datepicker({
                         format: 'dd/mm/yyyy',
@@ -249,6 +262,14 @@
 
                 });
 
+            function changetextbox() {
+                var levID = document.getElementById("key_status").value;
+                    if (levID == 1) {
+                    $('.sex-field').hide();
+                    // $('.Sick-field').show();
+              } 
+            }    
+            
 
                 //Post perk form to server using ajax (add)
                 $('#add_reminder').on('click', function () {
@@ -262,6 +283,7 @@
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
+       // });
 
                 var reminderID;
                 $('#edit-reminder-modal').on('show.bs.modal', function (e) {
