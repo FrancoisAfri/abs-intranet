@@ -111,19 +111,19 @@
                             <th> Premium Amount(R)</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
-                        @if (count($vehiclewarranties) > 0)
-                            @foreach ($vehiclewarranties as $reminder)
+                        @if (count($vehicleinsurance) > 0)
+                            @foreach ($vehicleinsurance as $reminder)
                                 <tr id="categories-list">
                                     <td nowrap>
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-warrantie-modal"
+                                                data-toggle="modal" data-target="#edit-policy-modal"
                                                 data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}" 
                                                 data-description="{{ $reminder->description }}"  data-service_provider="{{ $reminder->service_provider }}"
                                                 data-contact_person="{{ $reminder->contact_person }}"  data-contact_number="{{ $reminder->contact_number }}"
                                                 data-contact_email="{{ $reminder->contact_email }}"  data-address="{{ $reminder->address }}"
-                                                data-policy_no="{{ $reminder->policy_no }}" 
-                                                data-warranty_period="{{ $reminder->warranty_period }}"  data-kilometers="{{ $reminder->kilometers }}" data-warranty_amount="{{ $reminder->warranty_amount }}"  data-type="{{ $reminder->type }}"
-                                                data-notes="{{ $reminder->notes }}"  data-document="{{ $reminder->document }}"
+                                                data-policy_no="{{ $reminder->policy_no }}"  data-premium_amount="{{ $reminder->premium_amount }}"  data-value_coverd="{{ $reminder->value_coverd }}"
+                                                 data-type="{{ $reminder->type }}" data-notes="{{ $reminder->notes }}" 
+                                                data-document="{{ $reminder->document }}"
                                                ><i class="fa fa-pencil-square-o"></i> Edit
                                                    
                                         </button>
@@ -133,10 +133,8 @@
                                     <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
-                                    <td>{{ !empty($reminder->exp_date) ? date(' d M Y', $reminder->exp_date) : '' }}</td>
-                                    <td>R{{ !empty($reminder->warranty_amount) ?  $reminder->warranty_amount : '' }}.00</td>
-                                    <td>{{ !empty($reminder->kilometers) ?  $reminder->kilometers : '' }}</td>
-                                    <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
+                                    <td>R{{ !empty($reminder->value_coverd) ?  $reminder->value_coverd : '' }}.00</td>
+                                    <td>{{ !empty($reminder->premium_amount) ?  $reminder->premium_amount : '' }}</td>
                                     <td>
                                         <!--   leave here  -->
                                         <button reminder="button" id="view_ribbons"
@@ -168,14 +166,14 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-warrantie-modal">Add new Warranty
+                                data-target="#add-policy-modal">Add new Warranty
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_vehicleWarranties_modal')
-        @include('Vehicles.partials.edit_vehicleWarranties_modal')
+        @include('Vehicles.partials.add_vehicleInsurance_modal')
+        @include('Vehicles.partials.edit_vehicleInsurance_modal')
         
 
         </div>
@@ -211,7 +209,7 @@
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
             <script>
                 function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/warranty_act/" + id;
+                    if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
                 }
 
@@ -271,19 +269,8 @@
                         todayHighlight: true
                     });
 
-                     $('#exp_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
 
                      $('#inceptiondate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                     $('#expdate').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -294,12 +281,12 @@
 
                
                 //Post perk form to server using ajax (add)
-                $('#add_warrantie').on('click', function () {
-                    var strUrl = '/vehicle_management/addwarranty';
-                    var formName = 'add-warrantie-form';
-                    var modalID = 'add-warrantie-modal';
-                    var submitBtnID = 'add_warrantie';
-                    var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
+                $('#add_policy').on('click', function () {
+                    var strUrl = '/vehicle_management/addpolicy';
+                    var formName = 'add-policy-form';
+                    var modalID = 'add-policy-modal';
+                    var submitBtnID = 'add_policy';
+                    var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -307,7 +294,7 @@
 
 
                 var warrantyID;
-                $('#edit-warrantie-modal').on('show.bs.modal', function (e) {
+                $('#edit-policy-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
                     warrantyID = btnEdit.data('id');
                     var service_provider = btnEdit.data('service_provider');
@@ -318,8 +305,8 @@
                     var policy_no = btnEdit.data('policy_no');
                     var inception_date = btnEdit.data('inception_date');
                     var exp_date = btnEdit.data('exp_date');
-                    var warranty_period = btnEdit.data('warranty_period');
-                    var kilometers = btnEdit.data('kilometers');
+                    var value_coverd = btnEdit.data('value_coverd');
+                    var premium_amount = btnEdit.data('premium_amount');
                     var type = btnEdit.data('type');
                     var warranty_amount = btnEdit.data('warranty_amount');
                     var description = btnEdit.data('description');
@@ -336,8 +323,8 @@
                     modal.find('#policy_no').val(policy_no);
                     modal.find('#inception_date').val(inception_date);
                     modal.find('#exp_date').val(exp_date);
-                    modal.find('#warranty_period').val(warranty_period);
-                    modal.find('#kilometers').val(kilometers);
+                    modal.find('#value_coverd').val(value_coverd);
+                    modal.find('#premium_amount').val(premium_amount);
                     modal.find('#type').val(type);
                     modal.find('#warranty_amount').val(warranty_amount);
                     modal.find('#description').val(description);

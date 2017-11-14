@@ -29,6 +29,7 @@ use App\general_cost;
 use App\fleet_fillingstation;
 use App\module_access;
 use App\DivisionLevelFive;
+use App\vehicle_insurance;
 use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Support\Facades\Auth;
@@ -625,7 +626,7 @@ class VehicleFleetController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $currentDate = time();
+        // $currentDate = time();
 
         $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
         $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
@@ -739,9 +740,9 @@ class VehicleFleetController extends Controller
             //return $ID;
 
 
-            $vehiclewarranties = DB::table('vehicle_warranties')
-                ->select('vehicle_warranties.*')
-                ->orderBy('vehicle_warranties.id')
+            $vehicleinsurance = DB::table('vehicle_insurance')
+                ->select('vehicle_insurance.*')
+                ->orderBy('vehicle_insurance.id')
                 ->get();
 
 
@@ -764,7 +765,7 @@ class VehicleFleetController extends Controller
             $data['vehiclemaker'] = $vehiclemaker;
             $data['vehicleTypes'] = $vehicleTypes;
             $data['vehiclemodeler'] = $vehiclemodeler;
-            $data['vehiclewarranties'] = $vehiclewarranties;
+            $data['vehicleinsurance'] = $vehicleinsurance;
             $data['maintenance'] = $maintenance;
             $data['active_mod'] = 'Vehicle Management';
             $data['active_rib'] = 'Manage Fleet';
@@ -774,6 +775,52 @@ class VehicleFleetController extends Controller
         } else
             return back();
     }
+
+    public function addpolicy(Request $request){
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
+        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+
+        $Vehiclewarranties = new vehicle_insurance($SysData);
+        $Vehiclewarranties->inception_date = $inceptiondate ;
+        $Vehiclewarranties->registration = 1;
+        $Vehiclewarranties->status = 1;
+        $Vehiclewarranties->save();
+
+         //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $Vehiclewarranties->document = $fileName;
+                $Vehiclewarranties->update();
+            }
+        }
+
+        return response()->json();
+
+    }
+
+     public function policyAct(Request $request, vehicle_insurance $policy)
+    {
+        if ($policy->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $policy->status = $stastus;
+        $policy->update();
+        return back();
+    }
+
+
 
 
 }
