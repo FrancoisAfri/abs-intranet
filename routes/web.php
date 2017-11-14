@@ -378,6 +378,7 @@ Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@add
 #
 Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');
 Route::post('vehicle_management/addwarranty', 'VehicleFleetController@addwarranty');
+Route::get('vehicle_management/warranty_act/{warranties}', 'VehicleFleetController@warrantyAct');
 
 
 Route::get('vehicle_management/reminders/{maintenance}', 'VehicleFleetController@reminders');

@@ -118,7 +118,7 @@
                                 <tr id="categories-list">
                                     <td nowrap>
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-costs-modal"
+                                                data-toggle="modal" data-target="#edit-warrantie-modal"
                                                 data-id="{{ $reminder->id }}" 
                                                 data-description="{{ $reminder->description }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
@@ -133,7 +133,15 @@
                                     <td>R{{ !empty($reminder->warranty_amount) ?  $reminder->warranty_amount : '' }}.00</td>
                                     <td>{{ !empty($reminder->kilometers) ?  $reminder->kilometers : '' }}</td>
                                     <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
-                                   
+                                    <td>
+                                        <!--   leave here  -->
+                                        <button reminder="button" id="view_ribbons"
+                                                class="btn {{ (!empty($reminder->status) && $reminder->status == 1) ? " btn-danger " : "btn-success " }}
+                                                        btn-xs" onclick="postData({{$reminder->id}}, 'actdeac');"><i
+                                                    class="fa {{ (!empty($reminder->status) && $reminder->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($reminder->status) && $reminder->status == 1) ? "De-Activate" : "Activate"}}
+                                        </button>
+                                    </td>
 
                                 </tr>
                             @endforeach
@@ -163,7 +171,7 @@
             </div>
             <!-- Include add new prime rate modal -->
         @include('Vehicles.partials.add_vehicleWarranties_modal')
-        @include('Vehicles.partials.edit_generalcosts_modal')
+        @include('Vehicles.partials.edit_vehicleWarranties_modal')
         
 
         </div>
@@ -199,7 +207,7 @@
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
             <script>
                 function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/reminder_act/" + id;
+                    if (data == 'actdeac') location.href = "/vehicle_management/warranty_act/" + id;
 
                 }
 

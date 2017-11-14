@@ -655,4 +655,16 @@ class VehicleFleetController extends Controller
 
     }
 
+     public function warrantyAct(Request $request, vehicle_warranties $warranties)
+    {
+        if ($warranties->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $warranties->status = $stastus;
+        $warranties->update();
+        return back();
+    }
+
 }
