@@ -667,4 +667,113 @@ class VehicleFleetController extends Controller
         return back();
     }
 
+     public function editwarranty(Request $request, vehicle_warranties $warranties)
+    {
+
+        $this->validate($request, [
+            'date' => 'required',
+            // 'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
+        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+
+        $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+        $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+
+        $warranties = new vehicle_warranties($SysData);
+        $warranties->exp_date = $Expdate;
+        $warranties->inception_date = $inceptiondate ;
+        $warranties->status = 1;
+        $warranties->update();
+
+         //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $warranties->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $warranties->document = $fileName;
+                $warranties->update();
+            }
+        }
+       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        return back();
+    }
+
+    public function viewInsurance(vehicle_maintenance $maintenance)
+    {
+        $ID = $maintenance->id;
+
+        $ContactCompany = ContactCompany::orderBy('id','asc')->get();
+        //return $ContactCompany;
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemaker = $vehiclemake->name;
+
+        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehiclemodeler = $vehicle_model->name;
+
+        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        $vehicleTypes = $vehicleType->name;
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        ###################>>>>>#################
+        $costtype = array(1 => 'Oil');
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+
+
+            $vehiclewarranties = DB::table('vehicle_warranties')
+                ->select('vehicle_warranties.*')
+                ->orderBy('vehicle_warranties.id')
+                ->get();
+
+
+            //return $vehicleDocumets;
+
+
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['ContactCompany'] = $ContactCompany;
+            $data['name'] = $name;
+            $data['costtype'] = $costtype;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['employees'] = $employees;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['vehiclewarranties'] = $vehiclewarranties;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Vehicle Management';
+            $data['active_rib'] = 'Manage Fleet';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.viewInsuarance')->with($data);
+        } else
+            return back();
+    }
+
+
 }

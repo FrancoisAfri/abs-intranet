@@ -108,11 +108,7 @@
                                 <a href="/vehicle_management/group_admin" class="btn btn-app">
                                     <i class="fa fa-comments"></i> Service Details
                                 </a>
-                                <a href="/vehicle_management/group_admin" class="btn btn-app">
-                                    <i class="fa fa-yoast"></i> Insurance
-                                </a>
-                                <a href="/vehicle_management/group_admin" class="btn btn-app">
-                                    <i class="fa fa-wpforms"></i>
+                                <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app"><i class="fa fa-bars"></i>Insurance  
                                 </a>
                                 <a href="{{ '/vehicle_management/warranties/' . $vehiclemaintenance->id }}"
                                    class="btn btn-app">

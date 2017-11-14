@@ -67,14 +67,14 @@
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Inception  Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="inception_date" name="inception_date"
+                            <input type="text" class="form-control" id="inceptiondate" name="inception_date"
                                    value="{{ old('date') }}" placeholder="Select  Inception date  ...">
                         </div>
                     </div>
                      <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Expiry   Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="exp_date" name="exp_date"
+                            <input type="text" class="form-control" id="expdate" name="exp_date"
                                    value="{{ old('date') }}" placeholder="Select Expiry date  ...">
                         </div>
                     </div>

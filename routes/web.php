@@ -374,11 +374,17 @@ Route::get('vehicle_management/keys/{maintenance}', 'FleetManagementController@k
 Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@document');
 Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
 Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@addnotes');
+Route::get('vehicle_management/insurance/{maintenance}', 'VehicleFleetController@viewInsurance');
+Route::get('vehicle_management/service_details/{maintenance}', 'VehicleFleetController@viewServiceDetails');
+Route::get('vehicle_management/fines/{maintenance}', 'VehicleFleetController@viewFines');
+Route::get('vehicle_management/incidents/{maintenance}', 'VehicleFleetController@viewIncidents');
+
 
 #
 Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');
 Route::post('vehicle_management/addwarranty', 'VehicleFleetController@addwarranty');
 Route::get('vehicle_management/warranty_act/{warranties}', 'VehicleFleetController@warrantyAct');
+Route::patch('vehicle_management/edit_warrantie/{warranties}', 'VehicleFleetController@editwarranty');
 
 
 Route::get('vehicle_management/reminders/{maintenance}', 'VehicleFleetController@reminders');

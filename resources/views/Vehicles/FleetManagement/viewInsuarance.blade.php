@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle General costs </h3>
+                    <h3 class="box-title"> Vehicle Warranties </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -103,45 +103,47 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
-                            <th>Date</th>
-                            <th>Document Number</th>
-                            <th>Supplier Name</th>
-                            <th>Cost Type</th>
-                            <th>Cost (R)</th>
-                            <th>litre</th>
-                            <th>Description</th>
-                            <th>Person Responsible</th>
+                            <th>Service Provider</th>
+                            <th>Policy/Document #</th>
+                            <th>Type</th>
+                            <th>Inception Date</th>
+                            <th> Value Covered(R)</th>
+                            <th> Premium Amount(R)</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
-                        @if (count($generalcost) > 0)
-                            @foreach ($generalcost as $reminder)
+                        @if (count($vehiclewarranties) > 0)
+                            @foreach ($vehiclewarranties as $reminder)
                                 <tr id="categories-list">
                                     <td nowrap>
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-costs-modal"
-                                                data-id="{{ $reminder->id }}" data-date="{{ $reminder->date }}"
-                                                data-document_number="{{ $reminder->document_number }}"
-                                                data-supplier_name="{{ $reminder->supplier_name }}"
-                                                data-cost_type="{{ $reminder->cost_type }}"
-                                                data-cost="{{ $reminder->cost }}" data-litres="{{ $reminder->litres }}"
-                                                data-description="{{ $reminder->description }}"><i
-                                                    class="fa fa-pencil-square-o"></i> Edit
+                                                data-toggle="modal" data-target="#edit-warrantie-modal"
+                                                data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}" 
+                                                data-description="{{ $reminder->description }}"  data-service_provider="{{ $reminder->service_provider }}"
+                                                data-contact_person="{{ $reminder->contact_person }}"  data-contact_number="{{ $reminder->contact_number }}"
+                                                data-contact_email="{{ $reminder->contact_email }}"  data-address="{{ $reminder->address }}"
+                                                data-policy_no="{{ $reminder->policy_no }}" 
+                                                data-warranty_period="{{ $reminder->warranty_period }}"  data-kilometers="{{ $reminder->kilometers }}" data-warranty_amount="{{ $reminder->warranty_amount }}"  data-type="{{ $reminder->type }}"
+                                                data-notes="{{ $reminder->notes }}"  data-document="{{ $reminder->document }}"
+                                               ><i class="fa fa-pencil-square-o"></i> Edit
+                                                   
                                         </button>
                                     </td>
-                                    <td>{{ !empty($reminder->date) ? date(' d M Y', $reminder->date) : '' }}</td>
-                                    <td>{{ !empty($reminder->document_number) ?  $reminder->document_number : '' }}</td>
-                                    <td>{{ !empty($reminder->supplier_name) ?  $reminder->supplier_name : '' }}</td>
-                                    <td>{{ (!empty($reminder->cost_type)) ?  $costtype[$reminder->cost_type] : ''}}</td>
-
-                                    <td>R{{ !empty($reminder->cost) ?  $reminder->cost : '' }}.00</td>
-                                    <td>{{ !empty($reminder->litres) ?  $reminder->litres : '' }}</td>
-                                    <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
-                                    <td>{{ !empty($reminder->first_name . ' ' . $reminder->surname) ? $reminder->first_name . ' ' . $reminder->surname : ''}}</td>
-                                    <td>{{ !empty($reminder->end_date) ? date(' d M Y', $reminder->end_date) : '' }}</td>
+                                    
+                                    <td>{{ !empty($reminder->service_provider) ? $reminder->service_provider : '' }}</td>
+                                    <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
+                                    <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
+                                    <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
+                                    <td>{{ !empty($reminder->exp_date) ? date(' d M Y', $reminder->exp_date) : '' }}</td>
+                                    <td>R{{ !empty($reminder->warranty_amount) ?  $reminder->warranty_amount : '' }}.00</td>
+                                    <td>{{ !empty($reminder->kilometers) ?  $reminder->kilometers : '' }}</td>
+                                    <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
-                                            Delete
+                                        <!--   leave here  -->
+                                        <button reminder="button" id="view_ribbons"
+                                                class="btn {{ (!empty($reminder->status) && $reminder->status == 1) ? " btn-danger " : "btn-success " }}
+                                                        btn-xs" onclick="postData({{$reminder->id}}, 'actdeac');"><i
+                                                    class="fa {{ (!empty($reminder->status) && $reminder->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($reminder->status) && $reminder->status == 1) ? "De-Activate" : "Activate"}}
                                         </button>
                                     </td>
 
@@ -166,19 +168,15 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-costs-modal">Add new Costs
+                                data-target="#add-warrantie-modal">Add new Warranty
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_generalcosts_modal')
-        @include('Vehicles.partials.edit_generalcosts_modal')
-        <!-- Include delete warning Modal form-->
-            @if (count($generalcost) > 0)
-                @include('Vehicles.warnings.costs_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Safe ? This action cannot be undone.'])
-            @endif
-
+        @include('Vehicles.partials.add_vehicleWarranties_modal')
+        @include('Vehicles.partials.edit_vehicleWarranties_modal')
+        
 
         </div>
 
@@ -213,7 +211,7 @@
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
             <script>
                 function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/reminder_act/" + id;
+                    if (data == 'actdeac') location.href = "/vehicle_management/warranty_act/" + id;
 
                 }
 
@@ -257,10 +255,35 @@
 
                 $(".js-example-basic-multiple").select2();
 
+                     //Initialize iCheck/iRadio Elements
+                $('input').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '10%' // optional
+                });
+
 
                 $(document).ready(function () {
 
-                    $('#start_date').datepicker({
+                    $('#inception_date').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                     $('#exp_date').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                     $('#inceptiondate').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                     $('#expdate').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -269,72 +292,94 @@
 
                 });
 
-                $('#ss_date').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
-                });
-
-
+               
                 //Post perk form to server using ajax (add)
-                $('#add_costs').on('click', function () {
-                    var strUrl = '/vehicle_management/addcosts';
-                    var formName = 'add-costs-form';
-                    var modalID = 'add-costs-modal';
-                    var submitBtnID = 'add_costs';
-                    var redirectUrl = '/vehicle_management/general_cost/{{ $maintenance->id }}';
+                $('#add_warrantie').on('click', function () {
+                    var strUrl = '/vehicle_management/addwarranty';
+                    var formName = 'add-warrantie-form';
+                    var modalID = 'add-warrantie-modal';
+                    var submitBtnID = 'add_warrantie';
+                    var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 
-                var costsID;
-                $('#edit-costs-modal').on('show.bs.modal', function (e) {
+                var warrantyID;
+                $('#edit-warrantie-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    costsID = btnEdit.data('id');
-                    var date = btnEdit.data('date');
-                    var document_number = btnEdit.data('document_number');
-                    var supplier_name = btnEdit.data('supplier_name');
-                    var cost_type = btnEdit.data('cost_type');
-                    var cost = btnEdit.data('cost');
-                    var litres = btnEdit.data('litres');
+                    warrantyID = btnEdit.data('id');
+                    var service_provider = btnEdit.data('service_provider');
+                    var contact_person = btnEdit.data('contact_person');
+                    var contact_number = btnEdit.data('contact_number');
+                    var contact_email = btnEdit.data('contact_email');
+                    var address = btnEdit.data('address');
+                    var policy_no = btnEdit.data('policy_no');
+                    var inception_date = btnEdit.data('inception_date');
+                    var exp_date = btnEdit.data('exp_date');
+                    var warranty_period = btnEdit.data('warranty_period');
+                    var kilometers = btnEdit.data('kilometers');
+                    var type = btnEdit.data('type');
+                    var warranty_amount = btnEdit.data('warranty_amount');
                     var description = btnEdit.data('description');
-                    var person_esponsible = btnEdit.data('person_esponsible');
+                    var notes = btnEdit.data('notes');
+                    var documents = btnEdit.data('documents');
+                    var name = btnEdit.data('name');
                     var valueID = btnEdit.data('valueID');
                     var modal = $(this);
-                    modal.find('#date').val(date);
-                    modal.find('#document_number').val(document_number);
-                    modal.find('#supplier_name').val(supplier_name);
-                    modal.find('#cost_type').val(cost_type);
-                    modal.find('#cost').val(cost);
-                    modal.find('#litres').val(litres);
+                    modal.find('#service_provider').val(service_provider);
+                    modal.find('#contact_person').val(contact_person);
+                    modal.find('#contact_number').val(contact_number);
+                    modal.find('#contact_email').val(contact_email);
+                    modal.find('#address').val(address);
+                    modal.find('#policy_no').val(policy_no);
+                    modal.find('#inception_date').val(inception_date);
+                    modal.find('#exp_date').val(exp_date);
+                    modal.find('#warranty_period').val(warranty_period);
+                    modal.find('#kilometers').val(kilometers);
+                    modal.find('#type').val(type);
+                    modal.find('#warranty_amount').val(warranty_amount);
                     modal.find('#description').val(description);
-                    modal.find('#person_esponsible').val(person_esponsible);
+                    modal.find('#notes').val(notes);
+                    modal.find('#documents').val(documents);
+                    modal.find('#name').val(name);
                     modal.find('#valueID').val(valueID);
                 });
 
-                $('#edit_costs').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_costs/' + costsID;
-                    var modalID = 'edit-costs-modal';
-                    var objData = {
-                        date: $('#' + modalID).find('#date').val(),
-                        document_number: $('#' + modalID).find('#document_number').val(),
-                        supplier_name: $('#' + modalID).find('#supplier_name').val(),
-                        cost_type: $('#' + modalID).find('#cost_type').val(),
-                        cost: $('#' + modalID).find('#cost').val(),
-                        litres: $('#' + modalID).find('#litres').val(),
-                        description: $('#' + modalID).find('#description').val(),
-                        person_esponsible: $('#' + modalID).find('#person_esponsible').val(),
-                        valueID: $('#' + modalID).find('#valueID').val(),
-                        _token: $('#' + modalID).find('input[name=_token]').val()
-                    };
-                    var submitBtnID = 'edit_costs';
-                    var redirectUrl = '/vehicle_management/general_cost/{{ $maintenance->id }}';
-                    var successMsgTitle = 'Changes Saved!';
+                // $('#edit_warrantie').on('click', function () {
+                //     var strUrl = '/vehicle_management/edit_costs/' + warrantyID;
+                //     var modalID = 'edit-warrantie-modal';
+                //     var objData = {
+                //         date: $('#' + modalID).find('#date').val(),
+                //         document_number: $('#' + modalID).find('#document_number').val(),
+                //         supplier_name: $('#' + modalID).find('#supplier_name').val(),
+                //         cost_type: $('#' + modalID).find('#cost_type').val(),
+                //         cost: $('#' + modalID).find('#cost').val(),
+                //         litres: $('#' + modalID).find('#litres').val(),
+                //         description: $('#' + modalID).find('#description').val(),
+                //         person_esponsible: $('#' + modalID).find('#person_esponsible').val(),
+                //         valueID: $('#' + modalID).find('#valueID').val(),
+                //         _token: $('#' + modalID).find('input[name=_token]').val()
+                //     };
+                //     var submitBtnID = 'edit_warrantie';
+                //     var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
+                //     var successMsgTitle = 'Changes Saved!';
+                //     var successMsg = 'The Record  has been updated successfully.';
+                //     var Method = 'PATCH';
+                //     modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                // });
+
+                 $('#edit_warrantie').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_warrantie/'+ warrantyID ;
+                    var formName = 'add-warrantie-form';
+                    var modalID = 'add-warrantie-modal';
+                    var submitBtnID = 'edit_warrantie';
+                    var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
+                    var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                    var Method = 'PATCH';
-                    modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                     var Method = 'PATCH'
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
                 });
 
 
