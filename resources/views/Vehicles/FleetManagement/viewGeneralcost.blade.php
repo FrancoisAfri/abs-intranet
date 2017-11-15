@@ -64,7 +64,7 @@
                     </div>
                     <div align="center">
                         <!--  -->
-                        <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
+                           <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
                         <a href="/vehicle_management/fleet_card" class="btn btn-app">
@@ -86,8 +86,8 @@
                         <a href="/vehicle_management/Incidents_type" class="btn btn-app">
                             <i class="fa fa-list-alt"></i> Fines
                         </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-comments"></i> Service Details
+                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-bars"></i> Service Details
                         </a>
                         <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i>Insurance
@@ -119,7 +119,7 @@
                                     <td nowrap>
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-costs-modal"
-                                                data-id="{{ $reminder->id }}" data-date="{{ $reminder->date }}"
+                                                data-id="{{ $reminder->id }}" data-ss_date="{{ date(' d M Y', $reminder->date) }}"
                                                 data-document_number="{{ $reminder->document_number }}"
                                                 data-supplier_name="{{ $reminder->supplier_name }}"
                                                 data-cost_type="{{ $reminder->cost_type }}"
@@ -293,7 +293,7 @@
                 $('#edit-costs-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
                     costsID = btnEdit.data('id');
-                    var date = btnEdit.data('date');
+                    var date = btnEdit.data('ss_date');
                     var document_number = btnEdit.data('document_number');
                     var supplier_name = btnEdit.data('supplier_name');
                     var cost_type = btnEdit.data('cost_type');

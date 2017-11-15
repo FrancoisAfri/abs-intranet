@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Insurance  </h3>
+                    <h3 class="box-title"> Service Details </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -82,9 +82,8 @@
                         <a href="/vehicle_management/Permit" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
-
-                        <a href="/vehicle_management/Incidents_type" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines
+                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines 
                         </a>
                          <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> Service Details
@@ -103,48 +102,61 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
-                            <th>Service Provider</th>
-                            <th>Policy/Document #</th>
-                            <th>Type</th>
-                            <th>Inception Date</th>
-                            <th> Value Covered(R)</th>
-                            <th> Premium Amount(R)</th>
+                            <th>Date Serviced </th>
+                            <th> Garage</th>
+                            <th>Invoice No.</th>
+                            <th>Total Cost (R)</th>
+                            <th> Next Service Date</th>
+                            <th> Next Service km</th>
+                            <th>Documents</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
-                        @if (count($vehicleinsurance) > 0)
-                            @foreach ($vehicleinsurance as $reminder)
+                        @if (count($vehicleserviceDetails) > 0)
+                            @foreach ($vehicleserviceDetails as $details)
                                 <tr id="categories-list">
                                     <td nowrap>
-                                        <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-policy-modal"
-                                                data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}" 
-                                                data-description="{{ $reminder->description }}"  data-service_provider="{{ $reminder->service_provider }}"
-                                                data-contact_person="{{ $reminder->contact_person }}"  data-contact_number="{{ $reminder->contact_number }}"
-                                                data-contact_email="{{ $reminder->contact_email }}"  data-address="{{ $reminder->address }}"   data-inceptiondate ="{{ date(' d M Y', $reminder->inception_date)}}"
-                                                data-policy_no="{{ $reminder->policy_no }}"  data-premium_amount="{{ $reminder->premium_amount }}"  data-value_coverd="{{ $reminder->value_coverd }}"
-                                                 data-type="{{ $reminder->type }}" data-notes="{{ $reminder->notes }}" 
-                                                data-document="{{ $reminder->document }}"
+                                        <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
+                                                data-toggle="modal" data-target="#edit-servicedetails-modal"
+                                                data-id="{{ $details->id }}" data-garage="{{ $details->garage }}" 
+                                                data-invoice_number="{{ $details->invoice_number }}"  data-total_cost="{{ $details->total_cost }}" data-nxt_service_km="{{ $details->nxt_service_km }}"
+                                                data-document="{{ $details->document }}" data-description="{{$details->description}}"
+                                                data-nxtservicedate ="{{ date(' d M Y', $details->nxt_service_date)}}"
+                                                data-dateserviced ="{{ date(' d M Y', $details->date_serviced)}}"
+                                                data-documents1="{{ $details->document1 }}" 
                                                ><i class="fa fa-pencil-square-o"></i> Edit
                                                    
                                         </button>
                                     </td>
-                                    
-                                    <td>{{ !empty($reminder->companyName) ? $reminder->companyName : '' }}</td>
-                                    <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
-                                    <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
-                                    <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
-                                    <td>R{{ !empty($reminder->value_coverd) ?  $reminder->value_coverd : '' }}.00</td>
-                                    <td>{{ !empty($reminder->premium_amount) ?  $reminder->premium_amount : '' }}</td>
-                                    <td>
-                                        <!--   leave here  -->
-                                        <button reminder="button" id="view_ribbons"
-                                                class="btn {{ (!empty($reminder->status) && $reminder->status == 1) ? " btn-danger " : "btn-success " }}
-                                                        btn-xs" onclick="postData({{$reminder->id}}, 'actdeac');"><i
-                                                    class="fa {{ (!empty($reminder->status) && $reminder->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($reminder->status) && $reminder->status == 1) ? "De-Activate" : "Activate"}}
-                                        </button>
+                                    <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
+                                    <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
+                                    <td>{{ !empty($details->invoice_number) ?  $details->invoice_number : '' }}</td>
+                                    <td>R {{ !empty($details->total_cost) ? $details->total_cost : '' }} .00</td>
+                                    <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
+                                    <td>R{{ !empty($details->nxt_service_km) ?  $details->nxt_service_km : '' }}.KM</td>
+                                       <td nowrap>
+                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($details->document))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ $details->document }}" target="_blank"><i
+                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i
+                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
+                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($details->document1))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ $details->document1 }}" target="_blank"><i
+                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i
+                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
                                     </td>
-
                                 </tr>
                             @endforeach
                         @else
@@ -166,14 +178,14 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-policy-modal">Add new Policy 
+                                data-target="#add-servicedetails-modal">Add new Vehicle Service Log
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_vehicleInsurance_modal')
-        @include('Vehicles.partials.edit_vehicleInsurance_modal')
+        @include('Vehicles.partials.add_service_details_modal')
+        @include('Vehicles.partials.edit_service_details_modal')
         
 
         </div>
@@ -253,24 +265,30 @@
 
                 $(".js-example-basic-multiple").select2();
 
-                     //Initialize iCheck/iRadio Elements
-                $('input').iCheck({
-                    checkboxClass: 'icheckbox_square-blue',
-                    radioClass: 'iradio_square-blue',
-                    increaseArea: '10%' // optional
-                });
-
-
                 $(document).ready(function () {
 
-                    $('#inception_date').datepicker({
+                    $('#nxt_service_date').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
 
 
-                     $('#inceptiondate').datepicker({
+                     $('#date_serviced').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+                     
+                     // 
+                      $('#nxtservice_date').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+
+                     $('#dateserviced').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -281,65 +299,51 @@
 
                
                 //Post perk form to server using ajax (add)
-                $('#add_policy').on('click', function () {
-                    var strUrl = '/vehicle_management/addpolicy';
-                    var formName = 'add-policy-form';
-                    var modalID = 'add-policy-modal';
-                    var submitBtnID = 'add_policy';
-                    var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
+                $('#add_servicedetails').on('click', function () {
+                    var strUrl = '/vehicle_management/addservicedetails';
+                    var formName = 'add-servicedetails-form';
+                    var modalID = 'add-servicedetails-modal';
+                    var submitBtnID = 'add_servicedetails';
+                    var redirectUrl = '/vehicle_management/service_details/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 
-                var warrantyID;
-                $('#edit-policy-modal').on('show.bs.modal', function (e) {
+                var serviceID;
+                $('#edit-servicedetails-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    warrantyID = btnEdit.data('id');
-                    var service_provider = btnEdit.data('service_provider');
-                    var contact_person = btnEdit.data('contact_person');
-                    var contact_number = btnEdit.data('contact_number');
-                    var contact_email = btnEdit.data('contact_email');
-                    var address = btnEdit.data('address');
-                    var policy_no = btnEdit.data('policy_no');
-                    var inception_date = btnEdit.data('inceptiondate');
-                    var exp_date = btnEdit.data('exp_date');
-                    var value_coverd = btnEdit.data('value_coverd');
-                    var premium_amount = btnEdit.data('premium_amount');
-                    var type = btnEdit.data('type');
-                    var warranty_amount = btnEdit.data('warranty_amount');
+                    serviceID = btnEdit.data('id');
+                    var invoice_number = btnEdit.data('invoice_number');
+                    var total_cost = btnEdit.data('total_cost');
+                    var dateserviced = btnEdit.data('dateserviced');
+                    var garage = btnEdit.data('garage');
+                    var nxtservice_date = btnEdit.data('nxtservicedate');
+                    var nxt_service_km = btnEdit.data('nxt_service_km');
                     var description = btnEdit.data('description');
-                    var notes = btnEdit.data('notes');
                     var documents = btnEdit.data('documents');
-                    var name = btnEdit.data('name');
+                    var documents1 = btnEdit.data('documents1');
                     var valueID = btnEdit.data('valueID');
                     var modal = $(this);
-                    modal.find('#service_provider').val(service_provider);
-                    modal.find('#contact_person').val(contact_person);
-                    modal.find('#contact_number').val(contact_number);
-                    modal.find('#contact_email').val(contact_email);
-                    modal.find('#address').val(address);
-                    modal.find('#policy_no').val(policy_no);
-                    modal.find('#inception_date').val(inception_date);
-                    modal.find('#exp_date').val(exp_date);
-                    modal.find('#value_coverd').val(value_coverd);
-                    modal.find('#premium_amount').val(premium_amount);
-                    modal.find('#type').val(type);
-                    modal.find('#warranty_amount').val(warranty_amount);
+                    modal.find('#invoice_number').val(invoice_number);
+                    modal.find('#total_cost').val(total_cost);
+                    modal.find('#dateserviced').val(dateserviced);
+                    modal.find('#garage').val(garage);
+                    modal.find('#nxtservice_date').val(nxtservice_date);
+                    modal.find('#nxt_service_km').val(nxt_service_km);
                     modal.find('#description').val(description);
-                    modal.find('#notes').val(notes);
                     modal.find('#documents').val(documents);
-                    modal.find('#name').val(name);
+                    modal.find('#documents1').val(documents1);
                     modal.find('#valueID').val(valueID);
                 });
 
-                 $('#edit_policy').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_policy/'+ warrantyID ;
-                    var formName = 'add-policy-form';
-                    var modalID = 'add-policy-modal';
-                    var submitBtnID = 'edit_policy';
-                    var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
+                 $('#edit_servicedetails').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_servicedetails/'+ serviceID ;
+                    var formName = 'add-servicedetails-form';
+                    var modalID = 'add-servicedetails-modal';
+                    var submitBtnID = 'edit_servicedetails';
+                    var redirectUrl = '/vehicle_management/service_details/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                      var Method = 'PATCH'

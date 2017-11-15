@@ -64,7 +64,7 @@
                     </div>
                     <div align="center">
                         <!--  -->
-                        <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
+                           <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
                         <a href="/vehicle_management/fleet_card" class="btn btn-app">
@@ -86,8 +86,8 @@
                         <a href="/vehicle_management/Incidents_type" class="btn btn-app">
                             <i class="fa fa-list-alt"></i> Fines
                         </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-comments"></i> Service Details
+                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-bars"></i> Service Details
                         </a>
                         <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i>Insurance
@@ -120,11 +120,10 @@
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-warrantie-modal"
                                                 data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}" 
-                                                data-description="{{ $reminder->description }}"  data-service_provider="{{ $reminder->service_provider }}"
-                                                data-contact_person="{{ $reminder->contact_person }}"  data-contact_number="{{ $reminder->contact_number }}"
-                                                data-contact_email="{{ $reminder->contact_email }}"  data-address="{{ $reminder->address }}"
-                                                data-policy_no="{{ $reminder->policy_no }}" 
-                                                data-warranty_period="{{ $reminder->warranty_period }}"  data-kilometers="{{ $reminder->kilometers }}" data-warranty_amount="{{ $reminder->warranty_amount }}"  data-type="{{ $reminder->type }}"
+                                                data-description="{{ $reminder->description }}"  data-service_provider="{{ $reminder->service_provider }}" data-contact_person="{{ $reminder->contact_person }}"
+                                                data-contact_number="{{ $reminder->contact_number }}" data-contact_email="{{ $reminder->contact_email }}"
+                                                data-address="{{ $reminder->address }}" data-inceptiondate ="{{ date(' d M Y', $reminder->inception_date)}}" data-expdate ="{{ date(' d M Y', $reminder->exp_date)}}"
+                                                data-policy_no="{{ $reminder->policy_no }}" data-warranty_period="{{ $reminder->warranty_period }}" data-kilometers="{{ $reminder->kilometers }}" data-warranty_amount="{{ $reminder->warranty_amount }}" data-type="{{ $reminder->type }}"
                                                 data-notes="{{ $reminder->notes }}"  data-document="{{ $reminder->document }}"
                                                ><i class="fa fa-pencil-square-o"></i> Edit
                                                    
@@ -318,8 +317,8 @@
                     var contact_email = btnEdit.data('contact_email');
                     var address = btnEdit.data('address');
                     var policy_no = btnEdit.data('policy_no');
-                    var inception_date = btnEdit.data('inception_date');
-                    var exp_date = btnEdit.data('exp_date');
+                    var inception_date = btnEdit.data('inceptiondate');
+                    var exp_date = btnEdit.data('expdate');
                     var warranty_period = btnEdit.data('warranty_period');
                     var kilometers = btnEdit.data('kilometers');
                     var type = btnEdit.data('type');
