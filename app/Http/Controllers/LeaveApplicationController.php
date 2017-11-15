@@ -358,7 +358,7 @@ class LeaveApplicationController extends Controller {
         #$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$current_balance ='',$leave_type ='')
         AuditReportsController::store('Leave', 'Leave day application ', "Accessed By User", 0);
         #leave history audit
-        LeaveHistoryAuditController::store("Day leave application performed by : $USername", 0, $leave_balance, $iDays, $current_balance, $levtype);
+        LeaveHistoryAuditController::store("Day leave application performed by : $USername", '', $leave_balance, $iDays, $current_balance, $levtype, $hrID);
         return back()->with('success_application', "leave application was successful.");
         //return view('leave.application')->with($levTypVar);
     }
@@ -438,7 +438,7 @@ class LeaveApplicationController extends Controller {
 
         #$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$current_balance ='',$leave_type ='')
         AuditReportsController::store('Leave', 'Leave hours application ', "Accessed By User", 0);
-        LeaveHistoryAuditController::store("Hours leave application performed by : $USername", 0, $leave_balance, 0, $leave_balance, $typID);
+        LeaveHistoryAuditController::store("Hours leave application performed by : $USername", 0, $leave_balance, 0, $leave_balance, $typID, $employees);
 
         return back()->with('success_application', "leave application was successful.");
     }
@@ -531,7 +531,7 @@ class LeaveApplicationController extends Controller {
         #send email to the user informing that the leave has been accepted
         Mail::to($email)->send(new Accept_application($firstname, $surname, $email));
 
-        LeaveHistoryAuditController::store(" leave application Approvred by : ", 0, $leave_balance, $daysApplied, $newBalance, $LevTid);
+        LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $LevTid, $hrID);
         AuditReportsController::store('Leave', 'leave_approval Informations accepted', "Edited by User: $levHist->hr_id", 0);
 
         return back()->with('success_application', "leave application was successful.");
@@ -556,5 +556,4 @@ class LeaveApplicationController extends Controller {
         #send rejection email
         Mail::to($employee->email)->send(new EmployeesTasksMail($user), $loggedInEmplID);
     }
-
 }

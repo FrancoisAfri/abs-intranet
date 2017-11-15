@@ -104,11 +104,13 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.reports.leave_report_index')->with($data);
     }
 
-    public static function store($action = '', $descriptionAction = '', $previousBalance = '', $transcation = '', $current_balance = '', $leave_type = '') {
-        $user = Auth::user();
+    public static function store($action = '', $descriptionAction = '', $previousBalance = 0, $transcation = 0, $current_balance = 0, $leave_type = 0, $hrID = 0) {
+        $user = Auth::user()->load('person');
         $leave_history = new leave_history();
         //$leave_history
-        $leave_history->hr_id = $user->id;
+        $leave_history->hr_id = $hrID;
+        $leave_history->added_by = $user->person->id;
+        $leave_history->added_by_name = $user->person->first_name." ".$user->person->surname;
         $leave_history->action = $action;
         $leave_history->description_action = $descriptionAction;
         $leave_history->previous_balance = $previousBalance;
@@ -140,8 +142,11 @@ class LeaveHistoryAuditController extends Controller {
             $actionTo = strtotime($startExplode[1]);
         }
         $historyAudit = DB::table('leave_history')
-                ->select('leave_history.*', 'hr_people.employee_number as employee_number ', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-                ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
+                ->select('leave_history.*', 'hr_people.employee_number as employee_number '
+				, 'hr_people.first_name as firstname'
+				, 'hr_people.surname as surname', 'leave_types.name as leave_type')
+                ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
+                ->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
                 ->where(function ($query) use ($actionFrom, $actionTo) {
                     if ($actionFrom > 0 && $actionTo > 0) {
                         $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
@@ -157,7 +162,7 @@ class LeaveHistoryAuditController extends Controller {
                         $query->where('leave_history.action', 'ILIKE', "%$action%");
                     }
                 })
-                ->orderBy('leave_history.hr_id')
+                ->orderBy('leave_history.id')
                 ->get();
 
         $data['actionFrom'] = $actionFrom;
@@ -178,7 +183,6 @@ class LeaveHistoryAuditController extends Controller {
     }
 
     #
-
     public function printlevhistoReport(Request $request) {
 
         $actionFrom = $actionTo = 0;
@@ -191,8 +195,9 @@ class LeaveHistoryAuditController extends Controller {
             $actionTo = strtotime($startExplode[1]);
         }
         $historyAudit = DB::table('leave_history')
-                ->select('leave_history.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->select('leave_history.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname','leave_types.name as leave_type')
                 ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
+				->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
                 ->where(function ($query) use ($actionFrom, $actionTo) {
                     if ($actionFrom > 0 && $actionTo > 0) {
                         $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
@@ -208,7 +213,7 @@ class LeaveHistoryAuditController extends Controller {
                         $query->where('leave_history.action', 'ILIKE', "%$action%");
                     }
                 })
-                ->orderBy('leave_history.hr_id')
+                ->orderBy('leave_history.id')
                 ->get();
 
         $name = $historyAudit->first()->firstname;
