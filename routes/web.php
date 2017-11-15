@@ -375,9 +375,25 @@ Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@
 Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
 Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@addnotes');
 
+Route::get('vehicle_management/service_details/{maintenance}', 'VehicleFleetController@viewServiceDetails');
+Route::post('vehicle_management/addservicedetails', 'VehicleFleetController@addServiceDetails');
+Route::patch('vehicle_management/edit_servicedetails/{details}', 'VehicleFleetController@editservicedetails');
+
+Route::get('vehicle_management/fines/{maintenance}', 'VehicleFleetController@viewFines');
+Route::post('vehicle_management/addvehiclefines', 'VehicleFleetController@addvehiclefines');
+
+Route::get('vehicle_management/incidents/{maintenance}', 'VehicleFleetController@viewIncidents');
+
+Route::get('vehicle_management/insurance/{maintenance}', 'VehicleFleetController@viewInsurance');
+Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addpolicy');
+Route::get('vehicle_management/policy_act/{policy}', 'VehicleFleetController@policyAct');
+Route::patch('vehicle_management/edit_policy/{policy}', 'VehicleFleetController@editpolicy');
+
 #
 Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');
 Route::post('vehicle_management/addwarranty', 'VehicleFleetController@addwarranty');
+Route::get('vehicle_management/warranty_act/{warranties}', 'VehicleFleetController@warrantyAct');
+Route::patch('vehicle_management/edit_warrantie/{warranties}', 'VehicleFleetController@editwarranty');
 
 
 Route::get('vehicle_management/reminders/{maintenance}', 'VehicleFleetController@reminders');

@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle General costs </h3>
+                    <h3 class="box-title"> Service Details </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -64,7 +64,7 @@
                     </div>
                     <div align="center">
                         <!--  -->
-                           <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
                         <a href="/vehicle_management/fleet_card" class="btn btn-app">
@@ -82,9 +82,8 @@
                         <a href="/vehicle_management/Permit" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
-
-                        <a href="/vehicle_management/Incidents_type" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines
+                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines 
                         </a>
                          <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> Service Details
@@ -103,48 +102,61 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
-                            <th>Date</th>
-                            <th>Document Number</th>
-                            <th>Supplier Name</th>
-                            <th>Cost Type</th>
-                            <th>Cost (R)</th>
-                            <th>litre</th>
-                            <th>Description</th>
-                            <th>Person Responsible</th>
+                            <th>Date Serviced </th>
+                            <th> Garage</th>
+                            <th>Invoice No.</th>
+                            <th>Total Cost (R)</th>
+                            <th> Next Service Date</th>
+                            <th> Next Service km</th>
+                            <th>Documents</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
-                        @if (count($generalcost) > 0)
-                            @foreach ($generalcost as $reminder)
+                        @if (count($vehicleserviceDetails) > 0)
+                            @foreach ($vehicleserviceDetails as $details)
                                 <tr id="categories-list">
                                     <td nowrap>
-                                        <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-costs-modal"
-                                                data-id="{{ $reminder->id }}" data-ss_date="{{ date(' d M Y', $reminder->date) }}"
-                                                data-document_number="{{ $reminder->document_number }}"
-                                                data-supplier_name="{{ $reminder->supplier_name }}"
-                                                data-cost_type="{{ $reminder->cost_type }}"
-                                                data-cost="{{ $reminder->cost }}" data-litres="{{ $reminder->litres }}"
-                                                data-description="{{ $reminder->description }}"><i
-                                                    class="fa fa-pencil-square-o"></i> Edit
+                                        <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
+                                                data-toggle="modal" data-target="#edit-servicedetails-modal"
+                                                data-id="{{ $details->id }}" data-garage="{{ $details->garage }}" 
+                                                data-invoice_number="{{ $details->invoice_number }}"  data-total_cost="{{ $details->total_cost }}" data-nxt_service_km="{{ $details->nxt_service_km }}"
+                                                data-document="{{ $details->document }}" data-description="{{$details->description}}"
+                                                data-nxtservicedate ="{{ date(' d M Y', $details->nxt_service_date)}}"
+                                                data-dateserviced ="{{ date(' d M Y', $details->date_serviced)}}"
+                                                data-documents1="{{ $details->document1 }}" 
+                                               ><i class="fa fa-pencil-square-o"></i> Edit
+                                                   
                                         </button>
                                     </td>
-                                    <td>{{ !empty($reminder->date) ? date(' d M Y', $reminder->date) : '' }}</td>
-                                    <td>{{ !empty($reminder->document_number) ?  $reminder->document_number : '' }}</td>
-                                    <td>{{ !empty($reminder->supplier_name) ?  $reminder->supplier_name : '' }}</td>
-                                    <td>{{ (!empty($reminder->cost_type)) ?  $costtype[$reminder->cost_type] : ''}}</td>
-
-                                    <td>R{{ !empty($reminder->cost) ?  $reminder->cost : '' }}.00</td>
-                                    <td>{{ !empty($reminder->litres) ?  $reminder->litres : '' }}</td>
-                                    <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
-                                    <td>{{ !empty($reminder->first_name . ' ' . $reminder->surname) ? $reminder->first_name . ' ' . $reminder->surname : ''}}</td>
-                                    <td>{{ !empty($reminder->end_date) ? date(' d M Y', $reminder->end_date) : '' }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
-                                            Delete
-                                        </button>
+                                    <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
+                                    <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
+                                    <td>{{ !empty($details->invoice_number) ?  $details->invoice_number : '' }}</td>
+                                    <td>R {{ !empty($details->total_cost) ? $details->total_cost : '' }} .00</td>
+                                    <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
+                                    <td>R{{ !empty($details->nxt_service_km) ?  $details->nxt_service_km : '' }}.KM</td>
+                                       <td nowrap>
+                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($details->document))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ $details->document }}" target="_blank"><i
+                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i
+                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
+                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($details->document1))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ $details->document1 }}" target="_blank"><i
+                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i
+                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
                                     </td>
-
                                 </tr>
                             @endforeach
                         @else
@@ -166,19 +178,15 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-costs-modal">Add new Costs
+                                data-target="#add-servicedetails-modal">Add new Vehicle Service Log
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_generalcosts_modal')
-        @include('Vehicles.partials.edit_generalcosts_modal')
-        <!-- Include delete warning Modal form-->
-            @if (count($generalcost) > 0)
-                @include('Vehicles.warnings.costs_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Safe ? This action cannot be undone.'])
-            @endif
-
+        @include('Vehicles.partials.add_service_details_modal')
+        @include('Vehicles.partials.edit_service_details_modal')
+        
 
         </div>
 
@@ -213,7 +221,7 @@
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
             <script>
                 function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/reminder_act/" + id;
+                    if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
                 }
 
@@ -257,10 +265,30 @@
 
                 $(".js-example-basic-multiple").select2();
 
-
                 $(document).ready(function () {
 
-                    $('#start_date').datepicker({
+                    $('#nxt_service_date').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+
+                     $('#date_serviced').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+                     
+                     // 
+                      $('#nxtservice_date').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+
+                     $('#dateserviced').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -269,72 +297,57 @@
 
                 });
 
-                $('#ss_date').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
-                });
-
-
+               
                 //Post perk form to server using ajax (add)
-                $('#add_costs').on('click', function () {
-                    var strUrl = '/vehicle_management/addcosts';
-                    var formName = 'add-costs-form';
-                    var modalID = 'add-costs-modal';
-                    var submitBtnID = 'add_costs';
-                    var redirectUrl = '/vehicle_management/general_cost/{{ $maintenance->id }}';
+                $('#add_servicedetails').on('click', function () {
+                    var strUrl = '/vehicle_management/addservicedetails';
+                    var formName = 'add-servicedetails-form';
+                    var modalID = 'add-servicedetails-modal';
+                    var submitBtnID = 'add_servicedetails';
+                    var redirectUrl = '/vehicle_management/service_details/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 
-                var costsID;
-                $('#edit-costs-modal').on('show.bs.modal', function (e) {
+                var serviceID;
+                $('#edit-servicedetails-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    costsID = btnEdit.data('id');
-                    var date = btnEdit.data('ss_date');
-                    var document_number = btnEdit.data('document_number');
-                    var supplier_name = btnEdit.data('supplier_name');
-                    var cost_type = btnEdit.data('cost_type');
-                    var cost = btnEdit.data('cost');
-                    var litres = btnEdit.data('litres');
+                    serviceID = btnEdit.data('id');
+                    var invoice_number = btnEdit.data('invoice_number');
+                    var total_cost = btnEdit.data('total_cost');
+                    var dateserviced = btnEdit.data('dateserviced');
+                    var garage = btnEdit.data('garage');
+                    var nxtservice_date = btnEdit.data('nxtservicedate');
+                    var nxt_service_km = btnEdit.data('nxt_service_km');
                     var description = btnEdit.data('description');
-                    var person_esponsible = btnEdit.data('person_esponsible');
+                    var documents = btnEdit.data('documents');
+                    var documents1 = btnEdit.data('documents1');
                     var valueID = btnEdit.data('valueID');
                     var modal = $(this);
-                    modal.find('#date').val(date);
-                    modal.find('#document_number').val(document_number);
-                    modal.find('#supplier_name').val(supplier_name);
-                    modal.find('#cost_type').val(cost_type);
-                    modal.find('#cost').val(cost);
-                    modal.find('#litres').val(litres);
+                    modal.find('#invoice_number').val(invoice_number);
+                    modal.find('#total_cost').val(total_cost);
+                    modal.find('#dateserviced').val(dateserviced);
+                    modal.find('#garage').val(garage);
+                    modal.find('#nxtservice_date').val(nxtservice_date);
+                    modal.find('#nxt_service_km').val(nxt_service_km);
                     modal.find('#description').val(description);
-                    modal.find('#person_esponsible').val(person_esponsible);
+                    modal.find('#documents').val(documents);
+                    modal.find('#documents1').val(documents1);
                     modal.find('#valueID').val(valueID);
                 });
 
-                $('#edit_costs').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_costs/' + costsID;
-                    var modalID = 'edit-costs-modal';
-                    var objData = {
-                        date: $('#' + modalID).find('#date').val(),
-                        document_number: $('#' + modalID).find('#document_number').val(),
-                        supplier_name: $('#' + modalID).find('#supplier_name').val(),
-                        cost_type: $('#' + modalID).find('#cost_type').val(),
-                        cost: $('#' + modalID).find('#cost').val(),
-                        litres: $('#' + modalID).find('#litres').val(),
-                        description: $('#' + modalID).find('#description').val(),
-                        person_esponsible: $('#' + modalID).find('#person_esponsible').val(),
-                        valueID: $('#' + modalID).find('#valueID').val(),
-                        _token: $('#' + modalID).find('input[name=_token]').val()
-                    };
-                    var submitBtnID = 'edit_costs';
-                    var redirectUrl = '/vehicle_management/general_cost/{{ $maintenance->id }}';
-                    var successMsgTitle = 'Changes Saved!';
+                 $('#edit_servicedetails').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_servicedetails/'+ serviceID ;
+                    var formName = 'add-servicedetails-form';
+                    var modalID = 'add-servicedetails-modal';
+                    var submitBtnID = 'edit_servicedetails';
+                    var redirectUrl = '/vehicle_management/service_details/{{ $maintenance->id }}';
+                    var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                    var Method = 'PATCH';
-                    modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                     var Method = 'PATCH'
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
                 });
 
 
