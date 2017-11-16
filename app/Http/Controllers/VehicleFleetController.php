@@ -1055,7 +1055,11 @@ class VehicleFleetController extends Controller
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>#################
-        $costtype = array(1 => 'Oil');
+         $fineType = array(1 => 'Speeding', 2 => 'Parking', 3 => 'Moving Violation', 4 => 'Expired Registration', 5 =>'No Drivers Licence', 6 => 'Other');
+
+         $status = array(1 => 'Captured', 2 => 'Fine Queried', 3 => 'Fine Revoked', 4 => 'Fine Paid');
+
+
 
         if ($maintenance->status == 1) {
             $ID = $maintenance->id;
@@ -1063,12 +1067,14 @@ class VehicleFleetController extends Controller
 
 
             $vehiclefines = DB::table('vehicle_fines')
-                ->select('vehicle_fines.*')
+                ->select('vehicle_fines.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
                 ->orderBy('vehicle_fines.id')
                 ->get();
 
+              
 
-            //return $vehicleinsurance;
+            //return $vehiclefines;
 
 
             $data['page_title'] = " View Fleet Details";
@@ -1080,7 +1086,8 @@ class VehicleFleetController extends Controller
 
             $data['ContactCompany'] = $ContactCompany;
             $data['name'] = $name;
-            $data['costtype'] = $costtype;
+            $data['status'] = $status;
+            $data['fineType'] = $fineType;
             $data['IssuedTo'] = $IssuedTo;
             $data['keyStatus'] = $keyStatus;
             $data['employees'] = $employees;
@@ -1156,6 +1163,147 @@ class VehicleFleetController extends Controller
 
     }
 
+    
+    public function edit_finesdetails(Request $request, vehicle_fines $fines)
+    {
+
+        $this->validate($request, [
+            //'date' => 'required',
+            // 'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $currentDate = time();
+      
+        $timeOfFine = $SysData['time_of_fine'] = strtotime($SysData['time_of_fine']);
+
+        $dateOfFine = $SysData['date_of_fine'] = str_replace('/', '-', $SysData['date_of_fine']);
+        $dateOfFine = $SysData['date_of_fine'] = strtotime($SysData['date_of_fine']);
+
+        $courtDate = $SysData['court_date'] = str_replace('/', '-', $SysData['court_date']);
+        $courtDate = $SysData['court_date'] = strtotime($SysData['court_date']);
+
+        $paidDate = $SysData['paid_date'] = str_replace('/', '-', $SysData['paid_date']);
+        $paidDate = $SysData['paid_date'] = strtotime($SysData['paid_date']);
+
+        $vehicle_fines = new vehicle_fines($SysData);
+        $vehicle_fines->date_captured = $currentDate ;
+        $vehicle_fines->time_of_fine = $timeOfFine ;
+        $vehicle_fines->date_of_fine = $dateOfFine ;
+        $vehicle_fines->court_date = $courtDate ;
+        $vehicle_fines->paid_date = $paidDate ;
+        $vehicle_fines->vehicleID =  $SysData['valueID'];
+
+        $vehicle_fines->update();
+
+         //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $vehicle_fines->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $vehicle_fines->document = $fileName;
+                $vehicle_fines->update();
+            }
+        }
+
+          //Upload supporting document
+        if ($request->hasFile('documents1')) {
+            $fileExt = $request->file('documents1')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
+                $fileName = $vehicle_fines->id . "_documents." . $fileExt;
+                $request->file('documents1')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $vehicle_fines->document1 = $fileName;
+                $vehicle_fines->update();
+            }
+        }
+
+        return response()->json();
+
+       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        return back();
+    }
+
+public function viewIncidents(vehicle_maintenance $maintenance)
+    {
+        $ID = $maintenance->id;
+
+        $ContactCompany = ContactCompany::orderBy('id','asc')->get();
+        //return $ContactCompany;
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemaker = $vehiclemake->name;
+
+        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehiclemodeler = $vehicle_model->name;
+
+        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        $vehicleTypes = $vehicleType->name;
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        ###################>>>>>#################
+         $fineType = array(1 => 'Speeding', 2 => 'Parking', 3 => 'Moving Violation', 4 => 'Expired Registration', 5 =>'No Drivers Licence', 6 => 'Other');
+
+         $status = array(1 => 'Captured', 2 => 'Fine Queried', 3 => 'Fine Revoked', 4 => 'Fine Paid');
+
+
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+
+
+            $vehiclefines = DB::table('vehicle_fines')
+                ->select('vehicle_fines.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
+                ->orderBy('vehicle_fines.id')
+                ->get();
+
+              
+
+            //return $vehiclefines;
+
+
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['ContactCompany'] = $ContactCompany;
+            $data['name'] = $name;
+            $data['status'] = $status;
+            $data['fineType'] = $fineType;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['employees'] = $employees;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['vehiclefines'] = $vehiclefines;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Vehicle Management';
+            $data['active_rib'] = 'Manage Fleet';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.viewVehicleIncidents')->with($data);
+        } else
+            return back();
+    }
 
 
 }

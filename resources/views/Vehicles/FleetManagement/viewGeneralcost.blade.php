@@ -64,39 +64,38 @@
                     </div>
                     <div align="center">
                         <!--  -->
-                           <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
-                        <a href="/vehicle_management/fleet_card" class="btn btn-app">
+                       <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-book"></i> Booking Log
                         </a>
 
-                        <a href="/vehicle_management/fillingstaion" class="btn btn-app">
+                      <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                        <a href="/vehicle_management/Document_type" class="btn btn-app">
+                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-file-o"></i> Oil Log
                         </a>
 
-                        <a href="/vehicle_management/Permit" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
-
-                        <a href="/vehicle_management/Incidents_type" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines
+                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines 
                         </a>
                          <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-bars"></i> Service Details
+                            <i class="fa fa-area-chart"></i> Service Details
                         </a>
                         <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-bars"></i>Insurance
+                            <i class="fa fa-car"></i>Insurance
                         </a>
                         <a href="{{ '/vehicle_management/warranties/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-bars"></i>Warranties
+                            <i class="fa fa-snowflake-o"></i>Warranties
                         </a>
                         <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-bars"></i> General Cost
+                            <i class="fa fa-money"></i> General Cost
                         </a>
                         <!--  -->
                     </div>

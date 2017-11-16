@@ -59,27 +59,17 @@
                                         </div>
                                     @endforeach
 
-
-                                    <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
+                                <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
                                         <label for="property_type" class="col-sm-3 control-label"> Property
                                             Type </label>
-
-                                        <div class="col-sm-9">
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          ge"
-                                                pe"
-                                                0"
-                                                ll
+                                        <div class="col-sm-7">
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_product"
+                                                name="property_type" value="1" checked> Internal                                                          
                                             </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_product"
-                                                                               name="property_type" value="1"> Internal
-                                            </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="property_type" value="2"> External
-                                            </label>
-
+                                            <label class="radio-inline"><input type="radio" id="rdo_product" name="property_type" value="2">
+                                                External </label>
                                         </div>
-                                    </div>
+                                </div>
 
                                     <div class="form-group">
                                         <label for="path" class="col-sm-3 control-label">Vehicle Type</label>
@@ -127,31 +117,25 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('promotion_type') ? ' has-error' : '' }}">
-                                        <label for="property_type" class="col-xs-3 control-label"> Status
-                                        </label>
-
-                                        <div class="col-sm-9">
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          ge"
-                                                e"
-                                                >
-                                                Inactive </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_product"
-                                                                               name="promotion_type" value="2"> Active
+                                     <div class="form-group{{ $errors->has('status_type') ? ' has-error' : '' }}">
+                                        <label for="status_type" class="col-sm-3 control-label"> Status
+                                             </label>
+                                        <div class="col-sm-7">
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_status"
+                                                name="status_type" value="1" checked> Active                                                          
                                             </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="promotion_type" value="3"> Require
+                                            <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="2">
+                                                Require
                                                 Approval </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="promotion_type" value="4"> Rejected
-                                            </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="promotion_type" value="5"> All
-                                            </label>
+                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="3">
+                                                Rejected </label>
+                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="4">
+                                                All </label>
+                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="5">
+                                                External </label>            
 
                                         </div>
-                                    </div>
+                                </div>
 
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-left"><i
@@ -170,7 +154,7 @@
             </div>
             <!-- /.box -->
         </div>
-        @include('Vehicles.partials.add_vehicledetail_modal')
+        @include('Vehicles.partials.add_vehicledetails_modal')
     </div>
 @endsection
 

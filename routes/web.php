@@ -381,6 +381,7 @@ Route::patch('vehicle_management/edit_servicedetails/{details}', 'VehicleFleetCo
 
 Route::get('vehicle_management/fines/{maintenance}', 'VehicleFleetController@viewFines');
 Route::post('vehicle_management/addvehiclefines', 'VehicleFleetController@addvehiclefines');
+Route::patch('vehicle_management/edit_fines/{fines}', 'VehicleFleetController@edit_finesdetails');
 
 Route::get('vehicle_management/incidents/{maintenance}', 'VehicleFleetController@viewIncidents');
 

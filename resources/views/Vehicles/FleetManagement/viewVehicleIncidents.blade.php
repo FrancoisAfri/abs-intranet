@@ -22,7 +22,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Fines Details </h3>
+                    <h3 class="box-title"> Vehicle Incidents  Details </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -108,14 +108,13 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
-                            <th>Fine Ref</th>
-                            <th> Fine Date</th>
-                            <th>Fine Time</th>
-                            <th>Fine Type </th>
-                            <th> Amount (R)</th>
-                            <th> Driver</th>
-                            <th>Documents</th>
-                            <th style="width: 5px; text-align: center;">Status</th>
+                            <th>Date Reported</th>
+                            <th>Reported By</th>
+                            <th>Odometer Reading</th>
+                            <th>Incident Type </th>
+                            <th> Severity </th>
+                             <th>Cost (R)</th>
+                            <th style="width: 5px; text-align: center;">Documents</th>
                         </tr>
                         @if (count($vehiclefines) > 0)
                             @foreach ($vehiclefines as $details)
@@ -181,7 +180,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-fines-modal">Add new Vehicle Fines
+                                data-target="#add-fines-modal">Add new Vehicle Incident
                         </button>
                     </div>
                 </div>

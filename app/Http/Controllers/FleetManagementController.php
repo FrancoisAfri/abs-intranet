@@ -52,13 +52,14 @@ class FleetManagementController extends Controller
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $ContactCompany = ContactCompany::orderBy('id','asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
 
         $images = images::orderBy('id','asc')->get();
         
 
-        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
+       // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type')
@@ -72,7 +73,6 @@ class FleetManagementController extends Controller
             //return $vehiclemaintenance;
 
         $data['images'] = $images;    
-        $data['DivisionLevelFive'] = $DivisionLevelFive;
         $data['hrDetails'] = $hrDetails;    
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['vehicledetail'] = $vehicledetail;
@@ -81,6 +81,7 @@ class FleetManagementController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['vehiclemodel'] = $vehiclemodel;
         $data['vehiclemake'] = $vehiclemake;
+        $data['ContactCompany'] =$ContactCompany;
 
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = " FleetManagement";

@@ -259,7 +259,7 @@
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_owner"
                                         name="vehicle_owner">
                                     <option value="0">*** Select Vehicle Owner ***</option>
-                                    @foreach($DivisionLevelFive as $owner)
+                                    @foreach($ContactCompany as $owner)
                                         <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                     @endforeach
                                 </select>
@@ -271,12 +271,10 @@
                         <label for="Leave_type" class="col-sm-2 control-label"> Title Holder </label>
                         <div class="col-sm-9">
                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fin"
-                                                                                          name="title_type" value="1"
-                                                                                          checked> Financial Institution
+                                name="title_type" value="1" checked> Financial Institution                                                         
                             </label>
                             <label class="radio-inline"><input type="radio" id="rdo_comp" name="title_type" value="2">
                                 Company </label>
-
                         </div>
                     </div>
 
@@ -307,7 +305,7 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="company" name="company">
                                     <option value="0">*** Select Company ***</option>
-                                    @foreach($DivisionLevelFive as $owner)
+                                    @foreach($ContactCompany as $owner)
                                         <option value="{{ $owner->id }}">
                                             {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
                                     @endforeach
