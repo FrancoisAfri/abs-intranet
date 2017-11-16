@@ -13,12 +13,8 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                    <!-- Collapsible section containing the amortization schedule -->
-                    <div class="box-group" id="accordion">
                         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                        <div class="panel box box-primary">
-                            <div class="box-body">
-								<table class="table table-striped">
+				<table class="table table-striped">
 									<tr>
                                         <th style="width: 10px"></th>
                                         <th>Type</th>
@@ -29,16 +25,12 @@
                                         <th>Shift Employees</th>
                                         <th>Shift Employee Max</th>
                                         <th style="width: 40px"></th>
-                                    </tr> 
-                                    </div>
-                        </div>
-                    </div>
+                                    </tr>
                     @if (count($leaveTypes) > 0)
                     @foreach($leaveTypes as $leaveType)
                     <tr id="modules-list">
                         <td nowrap>
-        <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave_days-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Edit</button>
-                       
+						<button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave_days-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Edit</button>
                         </td>
                         <td align="center">{{ $leaveType->name}}</td>
                         <td align="center"> {{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }} </td>
@@ -67,8 +59,6 @@
     @include('leave.partials.edit_leave_type_days')
     @include('leave.partials.edit_leavetype') 
 </div>
-</div>
-
         <!-- <!-- Leave CreditSettings -->
  <div class="row">
     <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
@@ -126,7 +116,7 @@
                                                    <td>Numbe of Sick negative leave Days</td>
                                                     <td >
                                                          <label for="path" class="control-label"></label>
-                                <input type="text" class="form-control" id="Escalation" name="allow_sick_negative_days" placeholder="Enter days"required >
+														<input type="text" class="form-control" id="allow_sick_negative_days" name="allow_sick_negative_days" value="{{ !empty($leave_configuration->allow_sick_negative_days) ? $leave_configuration->allow_sick_negative_days : '' }}" placeholder="Enter days"required >
                                                     </td>
                                                 </tr>
                                             </div>  
@@ -139,7 +129,7 @@
                                                    <td>Numbe of Annual negative leave Days</td>
                                                     <td >
                                                          <label for="path" class="control-label"></label>
-                                <input type="text" class="form-control" id="Escalation" name="allow_annual_negative_days" placeholder="Enter days"required >
+                                <input type="text" class="form-control" id="allow_annual_negative_days" name="allow_annual_negative_days" value="{{ !empty($leave_configuration->allow_annual_negative_days) ? $leave_configuration->allow_annual_negative_days : '' }}" placeholder="Enter days"required >
                                                     </td>
                                                 </tr>
                                             </div>  
@@ -149,7 +139,6 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="modal-footer">
-                       
                         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save leave credit settings</button> 
                     </div>
                 </div>
@@ -341,7 +330,7 @@
                                 <td>Number of Days Until Escalation</td>
                                     <td>
                                         <label for="path" class="control-label"></label>
-                                <input type="text" class="form-control" id="Escalation" name="mumber_of_days_until_escalation" placeholder="Enter  days"  >
+                                <input type="text" class="form-control" id="mumber_of_days_until_escalation" name="mumber_of_days_until_escalation" value="{{ !empty($leave_configuration->mumber_of_days_until_escalation) ? $leave_configuration->mumber_of_days_until_escalation : '' }}"placeholder="Enter  days"  >
                                     </td>
                               </tr> 
                             </div>

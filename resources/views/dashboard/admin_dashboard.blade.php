@@ -333,14 +333,11 @@
                        </thead>
 
                        <tbody>
-                       @if (!empty($balance))
-                           @foreach($balance as $task)
+                       @if (!empty($balances))
+                           @foreach($balances as $balance)
                              <tr>
-                           <td>{{ (!empty($task->leavetype)) ?  $task->leavetype : ''}}</td>
-               <!-- <td style="text-align: right;"><span class="label {{ $statusLabels[$task->leave_balance] }} pull-right"> -->
-                   <td style="text-align: right;">{{ (!empty($task->leave_balance)) ?  $task->leave_balance : ''}}</td>
-                               
-                             
+                           <td>{{ (!empty($balance->leavetype)) ?  $balance->leavetype : ''}}</td>
+							<td style="text-align: right;">{{ (!empty($balance->leave_balance)) ?  $balance->leave_balance / 8: 0}}</td>
                              </tr>
                            @endforeach
                        @endif
@@ -395,11 +392,9 @@
                            @foreach($application as $checkTask)
                              <tr>
                                <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
-                              <!--  <td>{{ (!empty($checkTask->start_date)) ?  $checkTask->start_date : ''}}</td> -->
                                 <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
                                 <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
                               <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
-                               <!-- <td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td> -->
                                <td>
                               
                                </td>

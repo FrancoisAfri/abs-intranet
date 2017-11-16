@@ -30,5 +30,6 @@ class leave_configuration extends Model
 'number_of_days_sick',
 'allow_sick_negative_days',
 'allow_annual_negative_days',
+'mumber_of_days_until_escalation',
  ];
 }

@@ -149,13 +149,13 @@ class DashboardController extends Controller {
 
 
             #leave Balance
-            $balance = DB::table('leave_credit')
+            $balances = DB::table('leave_credit')
                     ->select('leave_credit.*', 'leave_types.name as leavetype')
                     ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
                     ->where('leave_credit.hr_id', $user->person->id)
                     ->orderBy('leave_credit.id')
                     ->get();
-
+//return $balances;
             #leave Application
             $application = DB::table('leave_application')
                     ->select('leave_application.*', 'leave_types.name as leavetype', 'leave_status.name as leaveStatus')
@@ -258,7 +258,7 @@ class DashboardController extends Controller {
             $data['helpdeskTickets'] = $helpdeskTickets;
             $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;
-            $data['balance'] = $balance;
+            $data['balances'] = $balances;
             $data['application'] = $application;
             $data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
