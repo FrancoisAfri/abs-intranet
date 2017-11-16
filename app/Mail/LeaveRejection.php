@@ -1,41 +1,35 @@
 <?php
 
 namespace App\Mail;
-
+use App\CompanyIdentity;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\HRPerson;
-use App\CompanyIdentity;
-use App\MeetingMinutes;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class LeaveRejection extends Mailable
+class Accept_application extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $person;
-    public $meeting;
-    public $urls = '/';
-    public $fromAddress;
-    public $fromName;
-    public $support_email;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(HRPerson $person,$fromAddress='', $fromName='', $support_email='')
+    public $first_name;
+    public $surname;
+    public $email;
+
+    public function __construct($first_name, $surname ,$email)
     {
-        $this->person = $person;
-        //$this->activity_url .= $activity_id.'/view';
-        $this->fromAddress .= 'noreply@afrixcel.co.za';
-        $this->fromName .= 'Afrixcel Business Solutions';
-        $this->support_email .= 'support@osizweni.org.za';
+        $this->first_name = $first_name;
+        $this->surname = $surname;
+        $this->email = $email;
+
     }
+
 
     /**
      * Build the message.
@@ -44,22 +38,19 @@ class LeaveRejection extends Mailable
      */
     public function build()
     {
-            //Should get these details from setup
-        $subject = 'New Task';
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $subject = "Leave Appliaction Rejected on $companyName online system.";
 
-        $data['support_email'] = $this->support_email;
-        $data['company_name'] = $this->fromName ;
-        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.png');
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['profile_url'] = url('/users/profile');
 
-      
-            ->from($this->fromAddress, $this->fromName)
+        return $this->view('mails.rejected_leave_application')
+            ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);
-            return $this->view('mails.employeeTasks')
-      //  return $this->view('view.name');
     }
 }
-
-
-
-

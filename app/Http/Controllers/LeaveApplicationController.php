@@ -7,6 +7,7 @@ use App\Http\Controllers\AuditReportsController;
 use App\Http\Controllers\LeaveHistoryAuditController;
 use App\Mail\leave_applications;
 use App\Mail\Accept_application;
+use App\Mail\LeaveRejection;
 use App\Http\Requests;
 use App\LeaveType;
 use App\Users;
@@ -543,17 +544,21 @@ class LeaveApplicationController extends Controller {
         ]);
         $leaveData = $request->all();
         unset($leaveData['_token']);
-        $userID = $levReject->hr_id;
-        // $levReject = new leave_application(leaveData);
-        $loggedInEmplID = Auth::user()->person->id;
+		
+		$usedetails = HRPerson::where('id', $levReject->hr_id)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+        $firstname = $usedetails['first_name'];
+        $surname = $usedetails['surname'];
+        $email = $usedetails['email'];
+		
         $levReject->reject_reason = $request->input('description');
         $levReject->status = 6;
         $levReject->update();
-        AuditReportsController::store('Leave rejected by : ', 'leave rejection  Informations Edited', "Edited by User", 0);
-        return response()->json();
-        // return view('leave.application')->with($levTypVar);
-        $user = System::where('helpdesk_id', $userID)->first();
         #send rejection email
-        Mail::to($employee->email)->send(new EmployeesTasksMail($user), $loggedInEmplID);
+        Mail::to($email)->send(new LeaveRejection($firstname, $surname, $email);
+        AuditReportsController::store('Leave rejected: ', 'leave rejection  Informations Edited', "Edited by User", 0);
+        LeaveHistoryAuditController::store("leave application Approved", 0, 0, 0, , $levReject->leave_type_id, $levReject->hr_id);
+		return response()->json();
     }
 }
