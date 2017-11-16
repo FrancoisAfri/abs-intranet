@@ -53,27 +53,30 @@
 			<div class="box-body">
 				<table class="table table-striped">
 					<tr>
-						        <th>Employee Number</th>
-                    <th>User</th>
-                    <th>Action</th>
-                    <th>Action Date</th>
-                    <th>Previous Balance</th>
-                    <th>Transaction</th>
-                    <th>Current Balance</th>
-                    <th>Leave Type</th>
+						<th>Employee Number </th>
+						<th>Names</th>
+						<th>Action</th>
+						<th>Action Date</th>
+						<th>Leave Type</th>
+						<th>Previous Balance</th>
+						<th>Transaction</th>
+						<th>Current Balance</th>
+						<th>Added By</th>
 					</tr>
 					@if(count($historyAudit) > 0)
-                    @foreach($historyAudit as $audit)
-                      <tr>
-                      <!-- <td>{{ !empty($audit->module_name) ? $audit->module_name : '' }}</td> -->
-                      <td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
-                        <td>{{ !empty($audit->firstname) && !empty($audit->surname) ? $audit->firstname.' '.$audit->surname : '' }}</td>
-                        <td>{{ !empty($audit->action) ? $audit->action : '' }}</td>
-                        <td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td>
-                        <td>{{ !empty($audit->previous_balance) ? $audit->previous_balance : '' }}</td>
-                        <td>{{ !empty($audit->transcation) ? $audit->transcation : '' }}</td>
-                      </tr>
-                    @endforeach
+						@foreach($historyAudit as $audit)
+							<tr>
+							   <td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
+								<td>{{ !empty($audit->firstname) && !empty($audit->surname) ? $audit->firstname.' '.$audit->surname : '' }}</td>
+								<td>{{ !empty($audit->action) ? $audit->action : '' }}</td>
+								<td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td>
+								<td>{{ !empty($audit->leave_type) ? $audit->leave_type : '' }}</td>
+								<td>{{ !empty($audit->previous_balance) ? $audit->previous_balance / 8 : '' }}</td>
+								<td>{{ !empty($audit->transcation) ? $audit->transcation / 8 : '' }}</td>
+								<td>{{ !empty($audit->current_balance) ? $audit->current_balance / 8 : '' }}</td>
+								<td>{{ !empty($audit->added_by_name) ? $audit->added_by_name : '' }}</td>
+							</tr>
+						@endforeach
 					@endif
 				</table>
 			</div>

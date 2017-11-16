@@ -40,7 +40,7 @@ class Accept_application extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "Welcome to $companyName online system.";
+        $subject = "Leave Application Approved on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;

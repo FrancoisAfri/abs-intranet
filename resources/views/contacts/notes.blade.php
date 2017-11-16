@@ -21,19 +21,16 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                    <h3 class="box-title">Add Note for:  {{ $company->name}}</h3>
-
                 </div>
                  {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                 <!-- /.box-header -->
                 <div class="box-body">
-
                 <table class="table table-bordered">
-                     <tr><th style="width: 10px"></th>
-                      <th></th>
+                     <tr>
+					 <th style="width: 10px"></th>
                      <th>Notes</th>
                      <th>Date</th>
-                     <!-- <th>Time</th> -->
                      <th>Communication Method</th>
                      <th>Next Action </th>
                      <th>Follow up Date</th>
@@ -42,7 +39,6 @@
                     @if (count($contactnotes) > 0)
                         @foreach($contactnotes as $notes)
                          <tr id="notess-list">
-                           <td nowrap>
                           <td ><img src="{{ (!empty($notes->profile_pic)) ? Storage::disk('local')->url("avatars/$notes->profile_pic") : (($notes->gender === 0) ? $f_silhouette : $m_silhouette) }}" width="30" height="30" alt="" ></td>
                           <td>{{ (!empty($notes->notes)) ?  $notes->notes : ''}} </td>
                           <td>{{ !empty($notes->date) ? date('d M Y ', $notes->date) : '' }}</td>
@@ -56,7 +52,7 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="5">
+                        <td colspan="7">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                              No Notes to display, Begin by Adding Notes.
@@ -129,9 +125,6 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-    
-            //
-
              $('#time').datetimepicker({
                     format: 'HH:mm:ss'
                 });

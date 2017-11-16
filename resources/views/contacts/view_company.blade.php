@@ -44,7 +44,7 @@
                             </div>
                         </div>
                         <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                            <label for="phone_number" class="col-sm-2 control-label">Phone Number</label>
+                            <label for="phone_number" class="col-sm-2 control-label">Office Number</label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -240,6 +240,18 @@
                                 @endif
                             </div>
                         </div>
+						<div class="form-group{{ $errors->has('dept_id') ? ' has-error' : '' }}">
+                            <label for="dept_id" class="col-sm-2 control-label">{{$dept->name}}</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="dept_id" name="dept_id" value="{{ !empty($deparments->name) ? $deparments->name : '' }}" placeholder="Department" readonly>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">
@@ -247,9 +259,7 @@
                             <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
                             <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Deactivate" : "Activate"}}</a>
                             <a href="{{ '/contacts/add-to-company/' . $company->id }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add Contact Person</a>
-                            <a href="/contacts/company/{{ $company->id }}/notes" class="btn btn-info "><i class="fa fa-phone-square"></i> Notes </a>
-                           
-                            
+                            <a href="/contacts/company/{{ $company->id }}/notes" class="btn btn-info "><i class="fa fa-phone-square"></i> Notes </a>  
                         @endif
                     </div>
                     <!-- /.box-footer -->

@@ -44,7 +44,7 @@ class leave_applications extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "Welcome to $companyName online system.";
+        $subject = "New Leave Application on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;

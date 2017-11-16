@@ -14,7 +14,8 @@ class EmployeeTasksDocuments extends Model
         'task_id', 'employee_id', 'added_by', 'document', 'status'];
 
     //relationship between tasks and document
-    public function employeeDocs() {
+    public function employeeDocs()
+    {
         return $this->belongsTo(EmployeeTasks::class, 'task_id');
     }
 

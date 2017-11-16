@@ -241,7 +241,7 @@ class TaskManagementController extends Controller
 		# Add Task 
 		  foreach ($employeeID as $empID) {
 		$companyID = !empty($AddData['company_id']) ? $AddData['company_id'] : 0;
-		$managerDuration = $AddData['manager_duration'];
+		$managerDuration = !empty($AddData['manager_duration'])? $AddData['manager_duration']: 0;
 		$escalationPerson = HRPerson::where('id', $empID)->first();
 		$managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;			
 		$description = $AddData['description'];

@@ -40,12 +40,7 @@
                             @if (count($productsPromotions) > 0)
                               @foreach ($productsPromotions as $type)
                                <tr id="categories-list">
-                                   <!--
-                               <td style="width: 10px; text-align: center;" nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                         <!--    <a href="{{ '/Product/Promotions/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product Type</a> --
-                                    </td>
-                                   -->
+
                                     <td>{{ $type->name }}</td>
                                     <td>{{ $type->description }}</td>
                                     <td>{{ ($type->product) ? $type->product->name : '' }}</td>
@@ -59,11 +54,6 @@
                                                 data-promo_id="{{ $type->id }}" data-promo_name="{{ $type->name }}">
                                             <i class="fa fa-times"></i> End Promotion
                                         </button>
-                                        <!--
-                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
-                                        -->
                                     </td>
                                 </tr>
                                    @endforeach
@@ -124,9 +114,7 @@
     <script>
         function postData(id , data ){
             if (data == 'qual') location.href = "/hr/addqul/" + id;
-            // else if (data == 'doc') location.href = "/hr/adddoc/" + id;
-            // else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
-            // else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
+        
         }
         $(function () {
               $(".select2").select2();
@@ -206,7 +194,7 @@
                     promotion_type: $('#'+modalID).find('input:checked[name = promotion_type]').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'add_promotion';
                 var redirectUrl = '/product/Promotions';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group has been updated successfully.';
@@ -236,7 +224,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_category';
                 var redirectUrl = '/product/Categories';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Category modal has been updated successfully.';

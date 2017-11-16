@@ -177,46 +177,6 @@
         });
             // 
 
-    //         //Post module form to server using ajax (ADD)
-    //         $('#save_doc').on('click', function() {
-    //             //console.log('strUrl');
-    //             var strUrl = '/hr/category/add/' + 'doc_type_category';
-    //             var modalID = 'add-document-modal';
-    //             var objData = {
-    //                 name: $('#'+modalID).find('#name').val(),
-    //                 description: $('#'+modalID).find('#description').val(),
-    //                 _token: $('#'+modalID).find('input[name=_token]').val()
-    //             };
-    //             var submitBtnID = 'doc_module';
-    //             var redirectUrl = '/hr/category';
-    //             var successMsgTitle = 'Changes Saved!';
-    //             var successMsg = 'The group has been updated successfully.';
-    //             //var formMethod = 'PATCH';
-    //             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-    //         });
-
-    // /**/
-    // });   $('#edit_doc').on('click', function () {
-    //             var strUrl = '/hr/category/' + ID;
-    //             var modalID = 'edit-document-modal';
-    //             var objData = {
-    //                 name: $('#'+modalID).find('#name').val(),
-    //                 description: $('#'+modalID).find('#description').val(),
-    //                 _token: $('#'+modalID).find('input[name=_token]').val()
-    //             };
-    //             var submitBtnID = 'edit_doc';
-    //             var redirectUrl = '/hr/category';
-    //             var successMsgTitle = 'Changes Saved!';
-    //             var successMsg = 'Company modal has been updated successfully.';
-    //             var Method = 'PATCH';
-    //             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-             });
-
-
-          /*  $('#update-module').on('click', function() {
-                postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
-            });
-            */
 
     </script>
 @endsection

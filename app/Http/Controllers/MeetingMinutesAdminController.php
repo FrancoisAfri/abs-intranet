@@ -115,6 +115,7 @@ class meetingMinutesAdminController extends Controller
 		}
 		else
 		{
+			if (empty($MeetingData['company_id'])) $MeetingData['company_id'] = 0;
 			$meeting = new MeetingMinutes($MeetingData);
 			$meeting->save();
 		}
@@ -241,7 +242,7 @@ class meetingMinutesAdminController extends Controller
 		unset($attendeeData['_token']);
 
         $employees = $attendeeData['employee_id'];
-        $clients = $attendeeData['client_id'];
+        $clients = !empty($attendeeData['client_id']) ? $attendeeData['client_id'] : array();
         foreach ($employees as $empID) {
            $attendee = new MeetingAttendees();
            $attendee->employee_id = $empID;
@@ -350,7 +351,6 @@ class meetingMinutesAdminController extends Controller
 		$meetingDate = $request->meeting_date;
 		$companyID = $request->company_id;
 		$meetingTitle = $request->meeting_title;
-		//die('do you come ehereddd');
 		$createdBy = $request->created_by;
 
 		if (!empty($meetingDate))
@@ -360,7 +360,8 @@ class meetingMinutesAdminController extends Controller
 			$To = strtotime($dateExplode[1]);
 		}
 		$meetings = DB::table('meeting_minutes')
-		->select('meeting_minutes.*')
+		->select('meeting_minutes.*','contact_companies.name as compname')
+		->leftJoin('contact_companies', 'meeting_minutes.company_id', '=', 'contact_companies.id')
 		->where(function ($query) use ($From, $To) {
 		if ($From > 0 && $To  > 0) {
 			$query->whereBetween('meeting_minutes.meeting_date', [$From, $To]);

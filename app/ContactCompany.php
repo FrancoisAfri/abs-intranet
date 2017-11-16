@@ -15,8 +15,8 @@ class ContactCompany extends Model
 		'tax_number', 'contact_person', 'cp_cell_number', 'cp_home_number', 
 		'bee_score', 'bee_certificate_doc', 'comp_reg_doc', 'sector', 'phone_number',
 		'fax_number', 'email', 'phys_address', 'phys_city', 'phys_postal_code',
-        'phys_province', 'postal_address', 'account_number','estimated_spent','domain_name',
-        'division_level_1', 'division_level_2', 'division_level_3','division_level_4', 'division_level_5'
+        'phys_province', 'postal_address', 'account_number','estimated_spent','domain_name'
+		,'dept_id'
     ];
 
     /**

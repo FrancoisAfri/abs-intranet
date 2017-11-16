@@ -3,6 +3,7 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       rel="stylesheet">
 @endsection
 @section('content')
@@ -212,7 +213,6 @@
     @endif
 
     @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
-        @if($canViewTaskWidget)
             <div class="row">
                 <div class="col-md-7">
                     <!-- Include tasks widget -->
@@ -223,7 +223,6 @@
                     @include('dashboard.partials.widgets.tasks_to_check_widget')
                 </div>
             </div>
-        @endif
     @endif
 
     @if($activeModules->where('code_name', 'appraisal')->first())
@@ -257,7 +256,55 @@
             </div>
         </div>
     @endif
+         @if($activeModules->where('code_name', 'induction')->first())
+           <div class="row">
+             <div class="col-md-12">
+             <div class="box box-muted same-height-widget">
+               <div class="box-header with-border">
+                <i class="material-icons">school</i>
+                 <h3 class="box-title">Induction</h3>
 
+                 <div class="box-tools pull-right">
+                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                   </button>
+                   <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                 </div>
+               </div>
+               <!-- /.box-header -->
+               <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                    <table class="table table-striped table-bordered">
+
+                        <tr>
+                           <!--  <th style="width: 10px">#</th> -->
+                            <th>Induction Name</th>
+                            <th>KAM </th>
+                            <th>Client</th>
+                            <th style="text-align: center;"><i class="fa fa-info-circle"></i> Status</th>
+                        </tr> 
+                        
+                       @if (!empty($ClientInduction))
+                           @foreach($ClientInduction as $Induction)
+                             <tr>
+                               <!--  <td>{{ $Induction->completed_task }}</td> -->
+                                <td>{{ (!empty($Induction->induction_title)) ?  $Induction->induction_title : ''}}</td>
+                                <td>{{ !empty($Induction->firstname) && !empty($Induction->surname) ? $Induction->firstname.' '.$Induction->surname : '' }}</td>
+                                 <!-- <td>{{ (!empty($Induction->create_by)) ?  $Induction->create_by : ''}}</td> -->
+                           <td>{{ (!empty($Induction->company_name)) ?  $Induction->company_name : ''}}</td>
+                           <td><div class="progress xs">
+                                <div class="progress-bar progress-bar-warning  progress-bar-striped" role="progressbar"
+                                aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ $Induction->completed_task == 0 ? 0 : ($Induction->completed_task/$Induction->total_task * 100)  }}%"> {{  (round($Induction->completed_task == 0 ? 0 : ($Induction->completed_task/$Induction->total_task * 100)))}}%</div></div>
+                            </td>
+                             </tr>
+                           @endforeach
+                       @endif
+                    </table>
+                 </div>
+               <!-- </div> -->
+             </div>
+           </div>
+       </div>
+    @endif 
+    <!--  -->
     @if($activeModules->where('code_name', 'leave')->first())
         <div class="row">
            <div class="col-md-6">
@@ -286,14 +333,11 @@
                        </thead>
 
                        <tbody>
-                       @if (!empty($balance))
-                           @foreach($balance as $task)
+                       @if (!empty($balances))
+                           @foreach($balances as $balance)
                              <tr>
-                           <td>{{ (!empty($task->leavetype)) ?  $task->leavetype : ''}}</td>
-               <!-- <td style="text-align: right;"><span class="label {{ $statusLabels[$task->leave_balance] }} pull-right"> -->
-                   <td style="text-align: right;">{{ (!empty($task->leave_balance)) ?  $task->leave_balance : ''}}</td>
-                               
-                             
+                           <td>{{ (!empty($balance->leavetype)) ?  $balance->leavetype : ''}}</td>
+							<td style="text-align: right;">{{ (!empty($balance->leave_balance)) ?  $balance->leave_balance / 8: 0}}</td>
                              </tr>
                            @endforeach
                        @endif
@@ -348,11 +392,9 @@
                            @foreach($application as $checkTask)
                              <tr>
                                <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
-                              <!--  <td>{{ (!empty($checkTask->start_date)) ?  $checkTask->start_date : ''}}</td> -->
                                 <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
                                 <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
                               <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
-                               <!-- <td>{{ (!empty($checkTask->status)) ?  $taskStatus[$checkTask->status] : ''}}</td> -->
                                <td>
                               
                                </td>
@@ -386,6 +428,7 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Task timer -->
     <script src="/custom_components/js/tasktimer.js"></script>
+   
 
     <script>
         function postData(id, data)
