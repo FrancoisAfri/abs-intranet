@@ -215,13 +215,13 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that your application for a leave application has been approved.<br>
+                                                    We would like to inform you that your leave application with {{ $company_name }} has been approved.<br>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    The Afrixcel Business Solution
+                                                    The {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>
@@ -229,7 +229,7 @@
                                 </tr>
                                 <tr>
                                     <td valign="top" class="footer-cell">
-                                        Afrixcel Business Solution (PTY) LTD.<br>
+                                        {{ $full_company_name }}.<br>
                                         Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>
                                     </td>
                                 </tr>

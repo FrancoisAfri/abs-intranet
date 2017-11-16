@@ -556,9 +556,9 @@ class LeaveApplicationController extends Controller {
         $levReject->status = 6;
         $levReject->update();
         #send rejection email
-        Mail::to($email)->send(new LeaveRejection($firstname, $surname, $email);
+        //Mail::to($email)->send(new LeaveRejection($firstname, $surname, $email);
         AuditReportsController::store('Leave rejected: ', 'leave rejection  Informations Edited', "Edited by User", 0);
-        LeaveHistoryAuditController::store("leave application Approved", 0, 0, 0, , $levReject->leave_type_id, $levReject->hr_id);
+        //LeaveHistoryAuditController::store("leave application Approved", 0, 0, 0, , $levReject->leave_type_id, $levReject->hr_id);
 		return response()->json();
     }
 }
