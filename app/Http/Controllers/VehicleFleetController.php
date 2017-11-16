@@ -25,6 +25,8 @@ use App\safe;
 Use App\reminders;
 use App\vehicle_documets;
 use App\images;
+use App\vehicle_fuel_log;
+use App\vehicle_incidents;
 use App\ContactCompany;
 use App\general_cost;
 use App\fleet_fillingstation;
@@ -1109,29 +1111,32 @@ class VehicleFleetController extends Controller
         $this->validate($request, [
             // 'issued_to' => 'required_if:key,1',
         ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
+        $fineData = $request->all();
+        unset($fineData['_token']);
 
+ 		$vehicle_fines = new vehicle_fines($fineData);
         $currentDate = time();
+
+        $dateOfFine = $fineData['date_of_fine'] = str_replace('/', '-', $fineData['date_of_fine']);
+        $dateOfFine = $fineData['date_of_fine'] = strtotime($fineData['date_of_fine']);
+
+        $courtDate = $fineData['court_date'] = str_replace('/', '-', $fineData['court_date']);
+        $courtDate = $fineData['court_date'] = strtotime($fineData['court_date']);
+
+        $paidDate = $fineData['paid_date'] = str_replace('/', '-', $fineData['paid_date']);
+        $paidDate = $fineData['paid_date'] = strtotime($fineData['paid_date']);
+
+
+      	$timeOfFine = $fineData['time_of_fine'] = str_replace('/', '-', $fineData['time_of_fine']);
+        $timeOfFine = $fineData['time_of_fine'] = strtotime($fineData['time_of_fine']);
+
       
-        $timeOfFine = $SysData['time_of_fine'] = strtotime($SysData['time_of_fine']);
-
-        $dateOfFine = $SysData['date_of_fine'] = str_replace('/', '-', $SysData['date_of_fine']);
-        $dateOfFine = $SysData['date_of_fine'] = strtotime($SysData['date_of_fine']);
-
-        $courtDate = $SysData['court_date'] = str_replace('/', '-', $SysData['court_date']);
-        $courtDate = $SysData['court_date'] = strtotime($SysData['court_date']);
-
-        $paidDate = $SysData['paid_date'] = str_replace('/', '-', $SysData['paid_date']);
-        $paidDate = $SysData['paid_date'] = strtotime($SysData['paid_date']);
-
-        $vehicle_fines = new vehicle_fines($SysData);
         $vehicle_fines->date_captured = $currentDate ;
         $vehicle_fines->time_of_fine = $timeOfFine ;
         $vehicle_fines->date_of_fine = $dateOfFine ;
         $vehicle_fines->court_date = $courtDate ;
         $vehicle_fines->paid_date = $paidDate ;
-        $vehicle_fines->vehicleID =  $SysData['valueID'];
+        $vehicle_fines->vehicleID =  $fineData['valueID'];
 
         $vehicle_fines->save();
 
@@ -1255,21 +1260,19 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>#################
-         $fineType = array(1 => 'Speeding', 2 => 'Parking', 3 => 'Moving Violation', 4 => 'Expired Registration', 5 =>'No Drivers Licence', 6 => 'Other');
+         $fineType = array(1 => 'Accident', 2 => 'Mechanical Fault', 3 => 'Electronic Fault', 4 => 'Damaged' , 5=>'Attempted Hi-jacking', 6=>'Hi-jacking', 7 => 'Other');
 
-         $status = array(1 => 'Captured', 2 => 'Fine Queried', 3 => 'Fine Revoked', 4 => 'Fine Paid');
-
-
+         $status =  array(1 => 'Minor', 2 => 'Major', 3 => 'Critical');
 
         if ($maintenance->status == 1) {
             $ID = $maintenance->id;
             //return $ID;
 
 
-            $vehiclefines = DB::table('vehicle_fines')
-                ->select('vehicle_fines.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
-                ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
-                ->orderBy('vehicle_fines.id')
+            $vehicleincidents = DB::table('vehicle_incidents')
+                ->select('vehicle_incidents.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->leftJoin('hr_people', 'vehicle_incidents.reported_by', '=', 'hr_people.id')
+                ->orderBy('vehicle_incidents.id')
                 ->get();
 
               
@@ -1294,7 +1297,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $data['vehiclemaker'] = $vehiclemaker;
             $data['vehicleTypes'] = $vehicleTypes;
             $data['vehiclemodeler'] = $vehiclemodeler;
-            $data['vehiclefines'] = $vehiclefines;
+            $data['vehicleincidents'] = $vehicleincidents;
             $data['maintenance'] = $maintenance;
             $data['active_mod'] = 'Vehicle Management';
             $data['active_rib'] = 'Manage Fleet';
@@ -1303,6 +1306,253 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             return view('Vehicles.FleetManagement.viewVehicleIncidents')->with($data);
         } else
             return back();
+    }
+
+    public function addvehicleincidents(Request $request){
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $currentDate = time();
+
+        $dateofincident = $SysData['date_of_incident'] = str_replace('/', '-', $SysData['date_of_incident']);
+        $dateofincident = $SysData['date_of_incident'] = strtotime($SysData['date_of_incident']);
+
+        $vehicleincidents = new vehicle_incidents($SysData);
+        $vehicleincidents->date_of_incident = $dateofincident ;
+        $vehicleincidents->vehicleID =  $SysData['valueID'];
+        $vehicleincidents->save();
+
+         //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $vehicleincidents->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $vehicleincidents->document = $fileName;
+                $vehicleincidents->update();
+            }
+        }
+
+        return response()->json();
+
+    }
+
+      public function editvehicleincidents(Request $request, vehicle_incidents $incident)
+    {
+
+        $this->validate($request, [
+            //'date' => 'required',
+            // 'description' => 'required',
+        ]);
+        $IncuData = $request->all();
+        unset($IncuData['_token']);
+
+		$currentDate = time();
+
+        $dateofincident = $IncuData['date_of_incident'] = str_replace('/', '-', $IncuData['date_of_incident']);
+        $dateofincident = $IncuData['date_of_incident'] = strtotime($IncuData['date_of_incident']);
+
+        $vehicleincidents = new vehicle_incidents($IncuData);
+        $vehicleincidents->date_of_incident = $dateofincident ;
+        $vehicleincidents->vehicleID =  $IncuData['valueID'];
+        $vehicleincidents->Update();
+
+         //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $vehicleincidents->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $vehicleincidents->document = $fileName;
+                $vehicleincidents->update();
+            }
+        }
+
+        return response()->json();
+
+
+       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        return back();
+    }
+
+    public function viewOilLog(vehicle_maintenance $maintenance)
+    {
+        $ID = $maintenance->id;
+
+        $ContactCompany = ContactCompany::orderBy('id','asc')->get();
+        //return $ContactCompany;
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemaker = $vehiclemake->name;
+
+        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehiclemodeler = $vehicle_model->name;
+
+        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        $vehicleTypes = $vehicleType->name;
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        ###################>>>>>#################
+         $fineType = array(1 => 'Accident', 2 => 'Mechanical Fault', 3 => 'Electronic Fault', 4 => 'Damaged' , 5=>'Attempted Hi-jacking', 6=>'Hi-jacking', 7 => 'Other');
+
+         $status =  array(1 => 'Minor', 2 => 'Major', 3 => 'Critical');
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+
+
+            $vehicleoil_log = DB::table('vehicle_oil_log')
+                ->select('vehicle_oil_log.*')
+                ->orderBy('vehicle_oil_log.id')
+                ->get();
+
+              
+
+            //return $vehiclefines;
+
+
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['ContactCompany'] = $ContactCompany;
+            $data['name'] = $name;
+            $data['status'] = $status;
+            $data['fineType'] = $fineType;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['employees'] = $employees;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['vehicleoil_log'] = $vehicleoil_log;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Vehicle Management';
+            $data['active_rib'] = 'Manage Fleet';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.viewVehicleIOilLog')->with($data);
+        } else
+            return back();
+    }
+// 
+
+
+
+     public function viewFuelLog(vehicle_maintenance $maintenance)
+    {
+        $ID = $maintenance->id;
+
+        $ContactCompany = ContactCompany::orderBy('id','asc')->get();
+        //return $ContactCompany;
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemaker = $vehiclemake->name;
+
+        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehiclemodeler = $vehicle_model->name;
+
+        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        $vehicleTypes = $vehicleType->name;
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        //return $name;
+        ###################>>>>>#################
+         $fineType = array(1 => 'Accident', 2 => 'Mechanical Fault', 3 => 'Electronic Fault', 4 => 'Damaged' , 5=>'Attempted Hi-jacking', 6=>'Hi-jacking', 7 => 'Other');
+
+         $status =  array(1 => 'Tank', 2 => 'Other');
+
+        if ($maintenance->status == 1) {
+            $ID = $maintenance->id;
+            //return $ID;
+
+
+            $vehiclefuellog = DB::table('vehicle_fuel_log')
+                ->select('vehicle_fuel_log.*')
+                ->orderBy('vehicle_fuel_log.id')
+                ->get();
+
+              
+
+            //return $vehiclefines;
+
+
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['ContactCompany'] = $ContactCompany;
+            $data['loggedInEmplID'] = $loggedInEmplID;
+            $data['name'] = $name;
+            $data['status'] = $status;
+            $data['fineType'] = $fineType;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['employees'] = $employees;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+            $data['vehiclefuellog'] = $vehiclefuellog;
+            $data['maintenance'] = $maintenance;
+            $data['active_mod'] = 'Vehicle Management';
+            $data['active_rib'] = 'Manage Fleet';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
+        } else
+            return back();
+    }
+
+    public function addvehiclefuellog(Request $request){
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $fuelData = $request->all();
+        unset($fuelData['_token']);
+
+        $currentDate = time();
+
+        $dateofincident = $fuelData['date'] = str_replace('/', '-', $fuelData['date']);
+        $dateofincident = $fuelData['date'] = strtotime($fuelData['date']);
+
+        $vehiclefuellog = new vehicle_fuel_log($fuelData);
+        $vehiclefuellog->date = $dateofincident ;
+        $vehiclefuellog->vehicleID =  $fuelData['valueID'];
+        $vehiclefuellog->save();
+        return response()->json();
+
     }
 
 

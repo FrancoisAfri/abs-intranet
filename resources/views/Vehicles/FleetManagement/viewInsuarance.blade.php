@@ -335,8 +335,8 @@
 
                  $('#edit_policy').on('click', function () {
                     var strUrl = '/vehicle_management/edit_policy/'+ warrantyID ;
-                    var formName = 'add-policy-form';
-                    var modalID = 'add-policy-modal';
+                    var formName = 'editedit-policy-form';
+                    var modalID = 'edit-policy-modal';
                     var submitBtnID = 'edit_policy';
                     var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';

@@ -116,26 +116,23 @@
                              <th>Cost (R)</th>
                             <th style="width: 5px; text-align: center;">Documents</th>
                         </tr>
-                        @if (count($vehiclefines) > 0)
-                            @foreach ($vehiclefines as $details)
+                        @if (count($vehicleincidents) > 0)
+                            @foreach ($vehicleincidents as $details)
                                 <tr id="categories-list">
                                     <td nowrap>
                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-fines-modal"
-                                                data-id="{{ $details->id }}"  data-date_captured="{{ date(' d M Y', $details->date_captured)}}" 
-                                                data-fine_type="{{ $details->fine_type }}" data-fine_ref="{{ $details->fine_ref }}" data-dateoffine="{{ date(' d M Y', $details->date_of_fine) }}" data-timeoffine="{{ date('h:m:s', $details->time_of_fine) }}" data-amount="{{ $details->amount }}" data-reduced="{{ $details->reduced }}" data-additional_fee="{{ $details->additional_fee }}" data-location="{{ $details->location }}" data-speed="{{ $details->speed }}" data-zone_speed="{{ $details->zone_speed }}" data-driver="{{ $details->driver }}" data-magistrate_office="{{ $details->magistrate_office }}" data-courtdate="{{ date('d M Y ', $details->court_date) }}" data-amount_paid="{{ $details->amount_paid }}"  data-description="{{ $details->description }}"  data-fine_status="{{ $details->fine_status }}" data-paiddate ="{{ date(' d M Y', $details->paid_date)}}"
-
-                                               ><i class="fa fa-pencil-square-o"></i> Edit
-                                                   
+                                                data-toggle="modal" data-target="#edit-incidents-modal"
+                                                data-id="{{ $details->id }}" data-dateofincident="{{  $details->date_of_incident  }}"
+                                                data-incident_type="{{  $details->incident_type  }}" data-severity="{{  $details->severity  }}" data-reported_by="{{  $details->reported_by  }}"
+                                                data-odometer_reading="{{  $details->odometer_reading  }}" data-status="{{  $details->status  }}" data-description="{{  $details->description  }}"  data-claim_number="{{  $details->claim_number  }}" data-cost="{{ $details->Cost }}"><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
-                                    <td>{{ !empty($details->fine_ref) ? $details->fine_ref : '' }}</td>
-                                    <td>{{ !empty($details->date_of_fine) ? date(' d M Y', $details->date_of_fine) : '' }}</td>
-                                    <td>{{ !empty($details->time_of_fine) ? date(' H:I:S', $details->time_of_fine) : '' }}</td>
-                                    <td>{{ (!empty($details->fine_type)) ?  $fineType[$details->fine_type] : ''}}</td>
-                                    <td>R {{ !empty($details->amount) ? $details->amount : '' }} .00</td>
-                                    <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
-
+                                            <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
+                                            <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
+                                            <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : '' }}</td>
+                                            <td>{{ (!empty($details->incident_type)) ?  $fineType[$details->incident_type] : ''}}</td>
+                                            <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
+                                            <td>R {{ !empty($details->Cost) ? $details->Cost : '' }} .00</td>
                                        <td nowrap>
                                         <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
@@ -180,18 +177,16 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-fines-modal">Add new Vehicle Incident
+                                data-target="#add-incidents-modal">Add new Vehicle Incident
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_vehicleFines_modal')
-        @include('Vehicles.partials.edit_vehicleFines_modal')
+        @include('Vehicles.partials.add_vehicleIncidents_modal')
+        @include('Vehicles.partials.edit_vehicleIncidents_modal')
         
-
         </div>
-
 
         @endsection
 
@@ -273,56 +268,14 @@
 
                 $(document).ready(function () {
 
-                    // $('#date_captured').datepicker({
-                    //     format: 'dd/mm/yyyy',
-                    //     autoclose: true,
-                    //     todayHighlight: true
-                    // });
-
-                    $('#time_of_fine').datetimepicker({
-                             format: 'HH:mm:ss'
-                        });
-
-                     $('#date_of_fine').datepicker({
+                     $('#date_of_incident').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
                      
                      // 
-                      $('#court_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                     $('#paid_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                     // 
-                     $('#timeoffine').datetimepicker({
-                             format: 'HH:mm:ss'
-                        });
-
-                     $('#dateoffine').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-                     
-                     // 
-                      $('#courtdate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                     $('#paiddate').datepicker({
+                      $('#dateofincident').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -330,80 +283,62 @@
 
                 });
 
-
-
                
                 //Post perk form to server using ajax (add)
-                $('#add_fines').on('click', function () {
-                    var strUrl = '/vehicle_management/addvehiclefines';
-                    var formName = 'add-fines-form';
-                    var modalID = 'add-fines-modal';
-                    var submitBtnID = 'add_fines';
-                    var redirectUrl = '/vehicle_management/fines/{{ $maintenance->id }}';
+                $('#add_vehicleincidents').on('click', function () {
+                    var strUrl = '/vehicle_management/addvehicleincidents';
+                    var formName = 'add-incidents-form';
+                    var modalID = 'add-incidents-modal';
+                    var submitBtnID = 'add_vehicleincidents';
+                    var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 
-                var fineID;
-                $('#edit-fines-modal').on('show.bs.modal', function (e) {
+                var incidentID;
+                $('#edit-incidents-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
                     fineID = btnEdit.data('id');
-                    var date_captured = btnEdit.data('date_captured');
-                   // var contact_number = btnEdit.data('contact_number');
-                    var fine_ref = btnEdit.data('fine_ref');
-                    var date_of_fine = btnEdit.data('dateoffine');
-                    var time_of_fine = btnEdit.data('timeoffine');
-                    var amount = btnEdit.data('amount');
-                    var reduced = btnEdit.data('reduced');
-                    var additional_fee = btnEdit.data('additional_fee');
-                    var location = btnEdit.data('location');
-                    var speed = btnEdit.data('speed');
-                    var zone_speed = btnEdit.data('zone_speed');
-                    var driver = btnEdit.data('driver');
-                    var magistrate_office = btnEdit.data('magistrate_office');
-                    var court_date = btnEdit.data('courtdate');
-                    var paid_date = btnEdit.data('paiddate');
-                    var amount_paid = btnEdit.data('amount_paid');
+                    var date_of_incident = btnEdit.data('dateofincident');
+                    var incident_type = btnEdit.data('incident_type');
+                    var severity = btnEdit.data('severity');
+                    var reported_by = btnEdit.data('reported_by');
+                    var odometer_reading = btnEdit.data('odometer_reading');
+                    var status = btnEdit.data('status');
                     var description = btnEdit.data('description');
-                    var fine_status = btnEdit.data('fine_status');
+                    var claim_number = btnEdit.data('claim_number');
+                    var Cost = btnEdit.data('cost');
                     var documents = btnEdit.data('documents');
                     var documents1 = btnEdit.data('documents1');
                     var valueID = btnEdit.data('valueID');
+                    var name = btnEdit.data('name');
                     var modal = $(this);
-                    modal.find('#date_captured').val(date_captured);
-                    modal.find('#fine_ref').val(fine_ref);
-                    modal.find('#fine_ref').val(fine_ref);
-                    modal.find('#date_of_fine').val(date_of_fine);
-                    modal.find('#time_of_fine').val(time_of_fine);
-                    modal.find('#amount').val(amount);
-                    modal.find('#reduced').val(reduced);
-                    modal.find('#additional_fee').val(additional_fee);
-                    modal.find('#location').val(location);
-                    modal.find('#speed').val(speed);
-                    modal.find('#zone_speed').val(zone_speed);
-                    modal.find('#driver').val(driver);
-                    modal.find('#magistrate_office').val(magistrate_office);
-                    modal.find('#court_date').val(court_date);
-                    modal.find('#paid_date').val(paid_date);
-                    modal.find('#amount_paid').val(amount_paid);
+                    modal.find('#date_of_incident').val(date_of_incident);
+                    modal.find('#name').val(name);
+                    modal.find('#incident_type').val(incident_type);
+                    modal.find('#severity').val(severity);
+                    modal.find('#reported_by').val(reported_by);
+                    modal.find('#odometer_reading').val(odometer_reading);
+                    modal.find('#status').val(status);
                     modal.find('#description').val(description);
-                    modal.find('#fine_status').val(fine_status)
+                    modal.find('#claim_number').val(claim_number);
+                    modal.find('#Cost').val(Cost);
                     modal.find('#documents').val(documents);
                     modal.find('#documents1').val(documents1);
                     modal.find('#valueID').val(valueID);
                 });
 
-                 $('#edit_fines').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_fines/'+ fineID ;
-                    var formName = 'add-fines-form';
-                    var modalID = 'add-fines-modal';
+                 $('#edit_vehicleincidents').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_vehicleincidents/'+ incidentID ;
+                    var formName = 'edit-incidents-form';
+                    var modalID = 'edit-incidents-modal';
                     var submitBtnID = 'edit_fines';
-                    var redirectUrl = '/vehicle_management/fines/{{ $maintenance->id }}';
+                    var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                     var Method = 'PATCH'
+                    var Method = 'PATCH'
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
                 });
 

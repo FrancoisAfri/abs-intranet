@@ -10,13 +10,19 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
+          <!-- Time picker -->
+       <!--  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">     
 @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Service Details </h3>
+                    <h3 class="box-title"> Vehicle Fuel Record(s) </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -64,7 +70,7 @@
                     </div>
                     <div align="center">
                         <!--  -->
-                       <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
                        <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
@@ -102,66 +108,45 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
-                            <th>Date Serviced </th>
-                            <th> Garage</th>
-                            <th>Invoice No.</th>
-                            <th>Total Cost (R)</th>
-                            <th> Next Service Date</th>
-                            <th> Next Service km</th>
-                            <th>Documents</th>
+                            <th> Date Taken</th>
+                            <th>Transaction Type </th>
+                            <th>Filled By</th>
+                            <th>Tanks and Other </th>
+                            <th>Tank Name </th>
+                            <th>Service Station </th>
+                            <th>Fuel  in Litres</th>
+                            <th>Cost per Litres</th>
+                            <th>Cost (R)</th>
+                            <th>Hours Reading</th>
+                            <th>Hours Per Litre</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
-                        @if (count($vehicleserviceDetails) > 0)
-                            @foreach ($vehicleserviceDetails as $details)
+                        @if (count($vehiclefuellog) > 0)
+                            @foreach ($vehiclefuellog as $details)
                                 <tr id="categories-list">
                                     <td nowrap>
                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-servicedetails-modal"
-                                                data-id="{{ $details->id }}" data-garage="{{ $details->garage }}" 
-                                                data-invoice_number="{{ $details->invoice_number }}"  data-total_cost="{{ $details->total_cost }}" data-nxt_service_km="{{ $details->nxt_service_km }}"
-                                                data-document="{{ $details->document }}" data-description="{{$details->description}}"
-                                                data-nxtservicedate ="{{ date(' d M Y', $details->nxt_service_date)}}"
-                                                data-dateserviced ="{{ date(' d M Y', $details->date_serviced)}}"
-                                                data-documents1="{{ $details->document1 }}" 
-                                               ><i class="fa fa-pencil-square-o"></i> Edit
-                                                   
+                                                data-toggle="modal" data-target="#edit-incidents-modal"
+                                                data-id="{{ $details->id }}"><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
-                                    <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
-                                    <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
-                                    <td>{{ !empty($details->invoice_number) ?  $details->invoice_number : '' }}</td>
-                                    <td>R {{ !empty($details->total_cost) ? $details->total_cost : '' }} .00</td>
-                                    <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
-                                    <td>R{{ !empty($details->nxt_service_km) ?  $details->nxt_service_km : '' }}.KM</td>
-                                       <td nowrap>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($details->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($details->document1))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document1 }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
+                                            <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+                                            <td></td>
+                                             <td></td>
+                                            <td>{{ !empty($details->tank_type) ?  $status[$details->tank_type] : ''}}</td>
+                                            <td>{{ !empty($details->tank_name) ?  $details->tank_name : ''}}</td>
+                                            <td></td>
+                                            <td>{{ !empty($details->litres) ?  $details->litres : ''}} litres</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ !empty($details->hours_reading) ? $details->hours_reading : ''}}</td>
+                                            <td></td>
+
                                 </tr>
                             @endforeach
                         @else
                             <tr id="categories-list">
-                                <td colspan="10">
+                                <td colspan="12">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
@@ -173,23 +158,19 @@
                             </tr>
                         @endif
                     </table>
-                    <!--   </div> -->
-                    <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-servicedetails-modal">Add new Vehicle Service Log
+                                data-target="#add-fuel-modal">Add Fuel Record
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_service_details_modal')
-        @include('Vehicles.partials.edit_service_details_modal')
+        @include('Vehicles.partials.add_vehicleFuelRecords_modal')
+        @include('Vehicles.partials.edit_vehicleIncidents_modal')
         
-
         </div>
-
 
         @endsection
 
@@ -219,6 +200,8 @@
             <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
             <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+            <!-- time picker -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
             <script>
                 function postData(id, data) {
                     if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
@@ -265,88 +248,86 @@
 
                 $(".js-example-basic-multiple").select2();
 
-                $(document).ready(function () {
-
-                    $('#nxt_service_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
+                 //Initialize iCheck/iRadio Elements
+                    $('input').iCheck({
+                        checkboxClass: 'icheckbox_square-blue',
+                        radioClass: 'iradio_square-blue',
+                        increaseArea: '10%' // optional
                     });
 
+                $(document).ready(function () {
 
-                     $('#date_serviced').datepicker({
+                     $('#date').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
                      
                      // 
-                      $('#nxtservice_date').datepicker({
+                      $('#dateofincident').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
-
-
-                     $('#dateserviced').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
 
                 });
 
                
                 //Post perk form to server using ajax (add)
-                $('#add_servicedetails').on('click', function () {
-                    var strUrl = '/vehicle_management/addservicedetails';
-                    var formName = 'add-servicedetails-form';
-                    var modalID = 'add-servicedetails-modal';
-                    var submitBtnID = 'add_servicedetails';
-                    var redirectUrl = '/vehicle_management/service_details/{{ $maintenance->id }}';
+                $('#add_vehiclefuellog').on('click', function () {
+                    var strUrl = '/vehicle_management/addvehiclefuellog';
+                    var formName = 'add-fuel-form';
+                    var modalID = 'add-fuel-modal';
+                    var submitBtnID = 'add_vehiclefuellog';
+                    var redirectUrl = '/vehicle_management/fuel_log/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 
-                var serviceID;
-                $('#edit-servicedetails-modal').on('show.bs.modal', function (e) {
+                var incidentID;
+                $('#edit-incidents-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    serviceID = btnEdit.data('id');
-                    var invoice_number = btnEdit.data('invoice_number');
-                    var total_cost = btnEdit.data('total_cost');
-                    var dateserviced = btnEdit.data('dateserviced');
-                    var garage = btnEdit.data('garage');
-                    var nxtservice_date = btnEdit.data('nxtservicedate');
-                    var nxt_service_km = btnEdit.data('nxt_service_km');
+                    fineID = btnEdit.data('id');
+                    var date_of_incident = btnEdit.data('dateofincident');
+                    var incident_type = btnEdit.data('incident_type');
+                    var severity = btnEdit.data('severity');
+                    var reported_by = btnEdit.data('reported_by');
+                    var odometer_reading = btnEdit.data('odometer_reading');
+                    var status = btnEdit.data('status');
                     var description = btnEdit.data('description');
+                    var claim_number = btnEdit.data('claim_number');
+                    var Cost = btnEdit.data('cost');
                     var documents = btnEdit.data('documents');
                     var documents1 = btnEdit.data('documents1');
                     var valueID = btnEdit.data('valueID');
+                    var name = btnEdit.data('name');
                     var modal = $(this);
-                    modal.find('#invoice_number').val(invoice_number);
-                    modal.find('#total_cost').val(total_cost);
-                    modal.find('#dateserviced').val(dateserviced);
-                    modal.find('#garage').val(garage);
-                    modal.find('#nxtservice_date').val(nxtservice_date);
-                    modal.find('#nxt_service_km').val(nxt_service_km);
+                    modal.find('#date_of_incident').val(date_of_incident);
+                    modal.find('#name').val(name);
+                    modal.find('#incident_type').val(incident_type);
+                    modal.find('#severity').val(severity);
+                    modal.find('#reported_by').val(reported_by);
+                    modal.find('#odometer_reading').val(odometer_reading);
+                    modal.find('#status').val(status);
                     modal.find('#description').val(description);
+                    modal.find('#claim_number').val(claim_number);
+                    modal.find('#Cost').val(Cost);
                     modal.find('#documents').val(documents);
                     modal.find('#documents1').val(documents1);
                     modal.find('#valueID').val(valueID);
                 });
 
-                 $('#edit_servicedetails').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_servicedetails/'+ serviceID ;
-                    var formName = 'edit-servicedetails-form';
-                    var modalID = 'edit-servicedetails-modal';
-                    var submitBtnID = 'edit_servicedetails';
-                    var redirectUrl = '/vehicle_management/service_details/{{ $maintenance->id }}';
+                 $('#edit_vehicleincidents').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_vehicleincidents/'+ incidentID ;
+                    var formName = 'edit-incidents-form';
+                    var modalID = 'edit-incidents-modal';
+                    var submitBtnID = 'edit_fines';
+                    var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                     var Method = 'PATCH'
+                    var Method = 'PATCH'
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
                 });
 

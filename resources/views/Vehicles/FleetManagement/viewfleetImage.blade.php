@@ -307,20 +307,6 @@
                             modal.find('#images').val(images);
                         });
 
-                        // //Post perk form to server using ajax (add)
-                        //     $('#edit_image').on('click', function () {
-
-                        //         var strUrl = '/vehicle_management/edit_images/' + ImageID;
-                        //         var formName = 'add-new-vehicleImage-form';
-                        //         var modalID = 'edit-image-modal';
-                        //         //var modal = $('#'+modalID);
-                        //         var submitBtnID = 'edit_image';
-                        //         var redirectUrl = '/vehicle_management/viewImage/{{ $ID}}';
-                        //         var successMsgTitle = 'Image Modified!';
-                        //         var successMsg = 'The Image  has been updated successfully.';
-                        //         var Method = 'PATCH';
-                        //         modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                        //     });
 
                         $('#edit_image').on('click', function () {
                             var strUrl = '/vehicle_management/edit_images/' + ImageID;

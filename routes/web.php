@@ -375,6 +375,11 @@ Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@
 Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
 Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@addnotes');
 
+Route::get('vehicle_management/oil_log/{maintenance}', 'VehicleFleetController@viewOilLog');
+
+Route::get('vehicle_management/fuel_log/{maintenance}', 'VehicleFleetController@viewFuelLog');
+Route::post('vehicle_management/addvehiclefuellog', 'VehicleFleetController@addvehiclefuellog');
+
 Route::get('vehicle_management/service_details/{maintenance}', 'VehicleFleetController@viewServiceDetails');
 Route::post('vehicle_management/addservicedetails', 'VehicleFleetController@addServiceDetails');
 Route::patch('vehicle_management/edit_servicedetails/{details}', 'VehicleFleetController@editservicedetails');
@@ -384,6 +389,8 @@ Route::post('vehicle_management/addvehiclefines', 'VehicleFleetController@addveh
 Route::patch('vehicle_management/edit_fines/{fines}', 'VehicleFleetController@edit_finesdetails');
 
 Route::get('vehicle_management/incidents/{maintenance}', 'VehicleFleetController@viewIncidents');
+Route::post('vehicle_management/addvehicleincidents', 'VehicleFleetController@addvehicleincidents');
+Route::patch('vehicle_management/edit_vehicleincidents/{incident}', 'VehicleFleetController@editvehicleincidents');
 
 Route::get('vehicle_management/insurance/{maintenance}', 'VehicleFleetController@viewInsurance');
 Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addpolicy');

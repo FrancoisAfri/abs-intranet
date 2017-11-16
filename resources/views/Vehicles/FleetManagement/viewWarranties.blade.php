@@ -347,33 +347,11 @@
                     modal.find('#valueID').val(valueID);
                 });
 
-                // $('#edit_warrantie').on('click', function () {
-                //     var strUrl = '/vehicle_management/edit_costs/' + warrantyID;
-                //     var modalID = 'edit-warrantie-modal';
-                //     var objData = {
-                //         date: $('#' + modalID).find('#date').val(),
-                //         document_number: $('#' + modalID).find('#document_number').val(),
-                //         supplier_name: $('#' + modalID).find('#supplier_name').val(),
-                //         cost_type: $('#' + modalID).find('#cost_type').val(),
-                //         cost: $('#' + modalID).find('#cost').val(),
-                //         litres: $('#' + modalID).find('#litres').val(),
-                //         description: $('#' + modalID).find('#description').val(),
-                //         person_esponsible: $('#' + modalID).find('#person_esponsible').val(),
-                //         valueID: $('#' + modalID).find('#valueID').val(),
-                //         _token: $('#' + modalID).find('input[name=_token]').val()
-                //     };
-                //     var submitBtnID = 'edit_warrantie';
-                //     var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
-                //     var successMsgTitle = 'Changes Saved!';
-                //     var successMsg = 'The Record  has been updated successfully.';
-                //     var Method = 'PATCH';
-                //     modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                // });
-
+                
                  $('#edit_warrantie').on('click', function () {
                     var strUrl = '/vehicle_management/edit_warrantie/'+ warrantyID ;
-                    var formName = 'add-warrantie-form';
-                    var modalID = 'add-warrantie-modal';
+                    var formName = 'edit-warrantie-form';
+                    var modalID = 'edit-warrantie-modal';
                     var submitBtnID = 'edit_warrantie';
                     var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';

@@ -295,7 +295,6 @@ class FleetManagementController extends Controller
             $data['Vehicle_types'] = $Vehicle_types;
             $data['vehiclemodel'] = $vehiclemodel;
             $data['Vehiclemake'] = $Vehiclemake;
-
             $data['status'] = $status;
             $data['fueltype'] =  $fueltype;
             $data['vehicleTypes'] = $vehicleTypes;

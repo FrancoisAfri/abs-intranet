@@ -398,8 +398,8 @@
 
                  $('#edit_fines').on('click', function () {
                     var strUrl = '/vehicle_management/edit_fines/'+ fineID ;
-                    var formName = 'add-fines-form';
-                    var modalID = 'add-fines-modal';
+                    var formName = 'edit-fines-form';
+                    var modalID = 'edit-fines-modal';
                     var submitBtnID = 'edit_fines';
                     var redirectUrl = '/vehicle_management/fines/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
