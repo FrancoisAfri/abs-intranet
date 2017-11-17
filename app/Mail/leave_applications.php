@@ -50,7 +50,7 @@ class leave_applications extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['profile_url'] = url('/users/profile');
+        $data['dashboard_url'] = url('/');
 
         return $this->view('mails.leave_application')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
