@@ -24,7 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
@@ -35,15 +34,15 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -64,28 +63,28 @@
                     </div>
                     <div align="center">
                         <!--  -->
-                  <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
-                       <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-book"></i> Booking Log
                         </a>
 
-                      <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-file-o"></i> Oil Log
                         </a>
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
-                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines 
+                        <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines
                         </a>
-                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-area-chart"></i> Service Details
                         </a>
                         <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
@@ -118,23 +117,35 @@
                                     <td nowrap>
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-warrantie-modal"
-                                                data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}" 
-                                                data-description="{{ $reminder->description }}"  data-service_provider="{{ $reminder->service_provider }}" data-contact_person="{{ $reminder->contact_person }}"
-                                                data-contact_number="{{ $reminder->contact_number }}" data-contact_email="{{ $reminder->contact_email }}"
-                                                data-address="{{ $reminder->address }}" data-inceptiondate ="{{ date(' d M Y', $reminder->inception_date)}}" data-expdate ="{{ date(' d M Y', $reminder->exp_date)}}"
-                                                data-policy_no="{{ $reminder->policy_no }}" data-warranty_period="{{ $reminder->warranty_period }}" data-kilometers="{{ $reminder->kilometers }}" data-warranty_amount="{{ $reminder->warranty_amount }}" data-type="{{ $reminder->type }}"
-                                                data-notes="{{ $reminder->notes }}"  data-document="{{ $reminder->document }}"
-                                               ><i class="fa fa-pencil-square-o"></i> Edit
-                                                   
+                                                data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}"
+                                                data-description="{{ $reminder->description }}"
+                                                data-service_provider="{{ $reminder->service_provider }}"
+                                                data-contact_person="{{ $reminder->contact_person }}"
+                                                data-contact_number="{{ $reminder->contact_number }}"
+                                                data-contact_email="{{ $reminder->contact_email }}"
+                                                data-address="{{ $reminder->address }}"
+                                                data-inceptiondate="{{ date(' d M Y', $reminder->inception_date)}}"
+                                                data-expdate="{{ date(' d M Y', $reminder->exp_date)}}"
+                                                data-policy_no="{{ $reminder->policy_no }}"
+                                                data-warranty_period="{{ $reminder->warranty_period }}"
+                                                data-kilometers="{{ $reminder->kilometers }}"
+                                                data-warranty_amount="{{ $reminder->warranty_amount }}"
+                                                data-type="{{ $reminder->type }}"
+                                                data-notes="{{ $reminder->notes }}"
+                                                data-document="{{ $reminder->document }}"
+                                        ><i class="fa fa-pencil-square-o"></i> Edit
+
                                         </button>
                                     </td>
-                                    
+
                                     <td>{{ !empty($reminder->service_provider) ? $reminder->service_provider : '' }}</td>
                                     <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
                                     <td>{{ !empty($reminder->exp_date) ? date(' d M Y', $reminder->exp_date) : '' }}</td>
-                                    <td>R{{ !empty($reminder->warranty_amount) ?  $reminder->warranty_amount : '' }}.00</td>
+                                    <td>R{{ !empty($reminder->warranty_amount) ?  $reminder->warranty_amount : '' }}
+                                        .00
+                                    </td>
                                     <td>{{ !empty($reminder->kilometers) ?  $reminder->kilometers : '' }}</td>
                                     <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
                                     <td>
@@ -174,9 +185,9 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_vehicleWarranties_modal')
-        @include('Vehicles.partials.edit_vehicleWarranties_modal')
-        
+            @include('Vehicles.partials.add_vehicleWarranties_modal')
+            @include('Vehicles.partials.edit_vehicleWarranties_modal')
+
 
         </div>
 
@@ -255,7 +266,7 @@
 
                 $(".js-example-basic-multiple").select2();
 
-                     //Initialize iCheck/iRadio Elements
+                //Initialize iCheck/iRadio Elements
                 $('input').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
                     radioClass: 'iradio_square-blue',
@@ -271,19 +282,19 @@
                         todayHighlight: true
                     });
 
-                     $('#exp_date').datepicker({
+                    $('#exp_date').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
 
-                     $('#inceptiondate').datepicker({
+                    $('#inceptiondate').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
 
-                     $('#expdate').datepicker({
+                    $('#expdate').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -292,7 +303,7 @@
 
                 });
 
-               
+
                 //Post perk form to server using ajax (add)
                 $('#add_warrantie').on('click', function () {
                     var strUrl = '/vehicle_management/addwarranty';
@@ -309,14 +320,18 @@
                 var warrantyID;
                 $('#edit-warrantie-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    warrantyID = btnEdit.data('id');
+                    if (parseInt(btnEdit.data('id')) > 0) {
+                        warrantyID = btnEdit.data('id');
+                    }
+                    console.log('gets here: ' + warrantyID);
+
                     var service_provider = btnEdit.data('service_provider');
                     var contact_person = btnEdit.data('contact_person');
                     var contact_number = btnEdit.data('contact_number');
                     var contact_email = btnEdit.data('contact_email');
                     var address = btnEdit.data('address');
                     var policy_no = btnEdit.data('policy_no');
-                    var inception_date = btnEdit.data('inceptiondate');
+                    var inceptiondate = btnEdit.data('inceptiondate');
                     var exp_date = btnEdit.data('expdate');
                     var warranty_period = btnEdit.data('warranty_period');
                     var kilometers = btnEdit.data('kilometers');
@@ -334,8 +349,8 @@
                     modal.find('#contact_email').val(contact_email);
                     modal.find('#address').val(address);
                     modal.find('#policy_no').val(policy_no);
-                    modal.find('#inception_date').val(inception_date);
-                    modal.find('#exp_date').val(exp_date);
+                    modal.find('#inceptiondate').val(inceptiondate);
+                    modal.find('#expdate').val(exp_date);
                     modal.find('#warranty_period').val(warranty_period);
                     modal.find('#kilometers').val(kilometers);
                     modal.find('#type').val(type);
@@ -347,17 +362,17 @@
                     modal.find('#valueID').val(valueID);
                 });
 
-                
-                 $('#edit_warrantie').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_warrantie/'+ warrantyID ;
+
+                $('#edit_warrantie').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_warrantie/' + warrantyID;
                     var formName = 'edit-warrantie-form';
                     var modalID = 'edit-warrantie-modal';
                     var submitBtnID = 'edit_warrantie';
                     var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                     var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
+                    var Method = 'PATCH'
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 

@@ -792,9 +792,18 @@ class DatabaseSeeder extends Seeder
         $module->font_awesome = 'fa fa-truck';
         $module->save();
 
-        $ribbon = new module_ribbons();
+         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Create Request';
+        $ribbon->description = 'Create Request';
+        $ribbon->ribbon_path = 'vehicle_management/create_request';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Manage Fleet';
         $ribbon->description = 'Manage Fleet';
         $ribbon->ribbon_path = 'vehicle_management/manage_fleet';
@@ -803,7 +812,7 @@ class DatabaseSeeder extends Seeder
 
          $ribbon = new module_ribbons();
          $ribbon->active = 1;
-         $ribbon->sort_order = 2;
+         $ribbon->sort_order = 3;
          $ribbon->ribbon_name = 'Job Card Management';
          $ribbon->description = 'Job Card Management';
          $ribbon->ribbon_path = 'Jobcard_management/Job_card';

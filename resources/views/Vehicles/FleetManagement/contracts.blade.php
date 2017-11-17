@@ -35,16 +35,16 @@
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                 <strong class="lead">Vehicle Details</strong><br>
 
-                                @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp;
+                               @if(!empty($vehiclemaker))
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
