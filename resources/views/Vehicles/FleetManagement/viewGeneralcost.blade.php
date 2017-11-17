@@ -24,7 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
@@ -35,15 +34,15 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -67,25 +66,25 @@
                         <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
-                       <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-book"></i> Booking Log
                         </a>
 
-                      <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-file-o"></i> Oil Log
                         </a>
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
-                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines 
+                        <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines
                         </a>
-                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-area-chart"></i> Service Details
                         </a>
                         <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
@@ -118,7 +117,8 @@
                                     <td nowrap>
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-costs-modal"
-                                                data-id="{{ $reminder->id }}" data-ss_date="{{ date(' d M Y', $reminder->date) }}"
+                                                data-id="{{ $reminder->id }}"
+                                                data-ss_date="{{ date(' d M Y', $reminder->date) }}"
                                                 data-document_number="{{ $reminder->document_number }}"
                                                 data-supplier_name="{{ $reminder->supplier_name }}"
                                                 data-cost_type="{{ $reminder->cost_type }}"
@@ -291,7 +291,11 @@
                 var costsID;
                 $('#edit-costs-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    costsID = btnEdit.data('id');
+                    if (parseInt(btnEdit.data('id')) > 0) {
+                        costsID = btnEdit.data('id');
+                    }
+                    //console.log('gets here: ' + incidentID);
+                    //costsID = btnEdit.data('id');
                     var date = btnEdit.data('ss_date');
                     var document_number = btnEdit.data('document_number');
                     var supplier_name = btnEdit.data('supplier_name');
@@ -302,7 +306,7 @@
                     var person_esponsible = btnEdit.data('person_esponsible');
                     var valueID = btnEdit.data('valueID');
                     var modal = $(this);
-                    modal.find('#date').val(date);
+                    modal.find('#ss_date').val(date);
                     modal.find('#document_number').val(document_number);
                     modal.find('#supplier_name').val(supplier_name);
                     modal.find('#cost_type').val(cost_type);
@@ -317,7 +321,7 @@
                     var strUrl = '/vehicle_management/edit_costs/' + costsID;
                     var modalID = 'edit-costs-modal';
                     var objData = {
-                        date: $('#' + modalID).find('#date').val(),
+                        date: $('#' + modalID).find('#ss_date').val(),
                         document_number: $('#' + modalID).find('#document_number').val(),
                         supplier_name: $('#' + modalID).find('#supplier_name').val(),
                         cost_type: $('#' + modalID).find('#cost_type').val(),

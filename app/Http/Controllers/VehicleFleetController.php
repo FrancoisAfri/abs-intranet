@@ -36,6 +36,8 @@ use App\vehicle_insurance;
 use App\module_ribbons;
 Use App\vehicle_serviceDetails;
 use App\ribbons_access;
+use App\service_station;
+use App\tank;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
@@ -61,14 +63,14 @@ class VehicleFleetController extends Controller
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+           $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
        ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -142,14 +144,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -225,14 +227,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -295,14 +297,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -429,14 +431,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -519,8 +521,8 @@ class VehicleFleetController extends Controller
     {
 
         $this->validate($request, [
-            'date' => 'required',
-            // 'description' => 'required',
+            // 'date' => 'required',
+            // // 'description' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -536,7 +538,7 @@ class VehicleFleetController extends Controller
         $costs->litres = $SysData['litres'];
         $costs->description = $SysData['description'];
         $costs->person_esponsible = $SysData['person_esponsible'];
-        $costs->vehicleID = $SysData['valueID'];
+        $costs->vehicleID = 0;
         $costs->update();
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         return back();
@@ -566,14 +568,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -584,17 +586,11 @@ class VehicleFleetController extends Controller
 
         if ($maintenance->status == 1) {
             $ID = $maintenance->id;
-            //return $ID;
-
 
             $vehiclewarranties = DB::table('vehicle_warranties')
                 ->select('vehicle_warranties.*')
                 ->orderBy('vehicle_warranties.id')
                 ->get();
-
-
-            //return $vehicleDocumets;
-
 
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
@@ -676,21 +672,21 @@ class VehicleFleetController extends Controller
     {
 
         $this->validate($request, [
-            'date' => 'required',
+           
             // 'description' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
-        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+         $inceptiondate = $SysData['inceptiondate'] = str_replace('/', '-', $SysData['inceptiondate']);
+         $inceptiondate = $SysData['inceptiondate'] = strtotime($SysData['inceptiondate']);
 
-        $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
-        $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
         $warranties = new vehicle_warranties($SysData);
-        $warranties->exp_date = $Expdate;
-        $warranties->inception_date = $inceptiondate ;
+        $warranties->exp_date = 0;
+        $warranties->inception_date = 0 ;
         $warranties->status = 1;
         $warranties->update();
 
@@ -723,14 +719,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -875,14 +871,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+           $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -1043,14 +1039,14 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+           $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -1246,14 +1242,14 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -1351,8 +1347,6 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         $IncuData = $request->all();
         unset($IncuData['_token']);
 
-		$currentDate = time();
-
         $dateofincident = $IncuData['date_of_incident'] = str_replace('/', '-', $IncuData['date_of_incident']);
         $dateofincident = $IncuData['date_of_incident'] = strtotime($IncuData['date_of_incident']);
 
@@ -1394,14 +1388,14 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -1466,20 +1460,22 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         //return $ContactCompany;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        $servicestation = service_station::orderBy('id', 'desc')->get();
+        $fueltank = tank::orderBy('id', 'desc')->get();
 
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-        $vehiclemake = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-        $vehiclemaker = $vehiclemake->name;
+           $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        // $vehiclemaker =  $vehiclemake->name;
 
-        $vehicle_model = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-        $vehiclemodeler = $vehicle_model->name;
+         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        // $vehiclemodeler =  $vehicle_model->name;
 
-        $vehicleType = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
-        $vehicleTypes = $vehicleType->name;
+         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+         //$vehicleTypes =  $vehicleType->name;
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -1490,6 +1486,8 @@ public function viewIncidents(vehicle_maintenance $maintenance)
          $fineType = array(1 => 'Accident', 2 => 'Mechanical Fault', 3 => 'Electronic Fault', 4 => 'Damaged' , 5=>'Attempted Hi-jacking', 6=>'Hi-jacking', 7 => 'Other');
 
          $status =  array(1 => 'Tank', 2 => 'Other');
+         $transType = array(1 => 'Full Tank', 2 => 'Top Up');
+
 
         if ($maintenance->status == 1) {
             $ID = $maintenance->id;
@@ -1497,11 +1495,13 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
 
             $vehiclefuellog = DB::table('vehicle_fuel_log')
-                ->select('vehicle_fuel_log.*')
+                ->select('vehicle_fuel_log.*','hr_people.first_name as firstname', 'hr_people.surname as surname','service_station.name as Staion','tank.name as tankName')
+                ->leftJoin('tank','vehicle_fuel_log.tank_name', '=', 'tank.id')
+                ->leftJoin('service_station','vehicle_fuel_log.service_station', '=', 'service_station.id')
+                ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
                 ->orderBy('vehicle_fuel_log.id')
                 ->get();
 
-              
 
             //return $vehiclefines;
 
@@ -1516,7 +1516,10 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $data['ContactCompany'] = $ContactCompany;
             $data['loggedInEmplID'] = $loggedInEmplID;
             $data['name'] = $name;
+            $data['servicestation'] = $servicestation;
+            $data['fueltank'] = $fueltank;
             $data['status'] = $status;
+            $data['transType'] = $transType;
             $data['fineType'] = $fineType;
             $data['IssuedTo'] = $IssuedTo;
             $data['keyStatus'] = $keyStatus;
@@ -1547,9 +1550,12 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         $dateofincident = $fuelData['date'] = str_replace('/', '-', $fuelData['date']);
         $dateofincident = $fuelData['date'] = strtotime($fuelData['date']);
 
+        $loggedInEmplID = Auth::user()->person->id;
+
         $vehiclefuellog = new vehicle_fuel_log($fuelData);
         $vehiclefuellog->date = $dateofincident ;
         $vehiclefuellog->vehicleID =  $fuelData['valueID'];
+        $vehiclefuellog->captured_by = $loggedInEmplID;
         $vehiclefuellog->save();
         return response()->json();
 

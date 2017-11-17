@@ -10,19 +10,20 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
-          <!-- Time picker -->
-       <!--  -->
+    <!-- Time picker -->
+    <!--  -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Incidents  Details </h3>
+                    <h3 class="box-title"> Vehicle Incidents Details </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -30,7 +31,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
@@ -41,15 +41,15 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -73,25 +73,25 @@
                         <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
-                       <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-book"></i> Booking Log
                         </a>
 
-                      <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-file-o"></i> Oil Log
                         </a>
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
-                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines 
+                        <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines
                         </a>
-                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-area-chart"></i> Service Details
                         </a>
                         <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
@@ -111,9 +111,9 @@
                             <th>Date Reported</th>
                             <th>Reported By</th>
                             <th>Odometer Reading</th>
-                            <th>Incident Type </th>
-                            <th> Severity </th>
-                             <th>Cost (R)</th>
+                            <th>Incident Type</th>
+                            <th> Severity</th>
+                            <th>Cost (R)</th>
                             <th style="width: 5px; text-align: center;">Documents</th>
                         </tr>
                         @if (count($vehicleincidents) > 0)
@@ -122,18 +122,26 @@
                                     <td nowrap>
                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-incidents-modal"
-                                                data-id="{{ $details->id }}" data-dateofincident="{{  $details->date_of_incident  }}"
-                                                data-incident_type="{{  $details->incident_type  }}" data-severity="{{  $details->severity  }}" data-reported_by="{{  $details->reported_by  }}"
-                                                data-odometer_reading="{{  $details->odometer_reading  }}" data-status="{{  $details->status  }}" data-description="{{  $details->description  }}"  data-claim_number="{{  $details->claim_number  }}" data-cost="{{ $details->Cost }}"><i class="fa fa-pencil-square-o"></i> Edit
+                                                data-id="{{ $details->id }}"
+                                                data-date_of_incident="{{  $details->date_of_incident  }}"
+                                                data-incident_type="{{  $details->incident_type  }}"
+                                                data-severity="{{  $details->severity  }}"
+                                                data-reported_by="{{  $details->reported_by  }}"
+                                                data-odometer_reading="{{  $details->odometer_reading  }}"
+                                                data-status="{{  $details->status  }}"
+                                                data-description="{{  $details->description  }}"
+                                                data-claim_number="{{  $details->claim_number  }}"
+                                                data-cost="{{ $details->Cost }}"><i class="fa fa-pencil-square-o"></i>
+                                            Edit
                                         </button>
                                     </td>
-                                            <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
-                                            <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
-                                            <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : '' }}</td>
-                                            <td>{{ (!empty($details->incident_type)) ?  $fineType[$details->incident_type] : ''}}</td>
-                                            <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
-                                            <td>R {{ !empty($details->Cost) ? $details->Cost : '' }} .00</td>
-                                       <td nowrap>
+                                    <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
+                                    <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
+                                    <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : '' }}</td>
+                                    <td>{{ (!empty($details->incident_type)) ?  $fineType[$details->incident_type] : ''}}</td>
+                                    <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
+                                    <td>R {{ !empty($details->Cost) ? $details->Cost : '' }} .00</td>
+                                    <td nowrap>
                                         <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document))
@@ -156,7 +164,7 @@
                                                             class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
-                                         <td>{{ !empty($details->fine_status) ?  $status[$details->fine_status] : ''}}</td>
+                                    <td>{{ !empty($details->fine_status) ?  $status[$details->fine_status] : ''}}</td>
                                     </td>
                                 </tr>
                             @endforeach
@@ -183,9 +191,9 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_vehicleIncidents_modal')
-        @include('Vehicles.partials.edit_vehicleIncidents_modal')
-        
+            @include('Vehicles.partials.add_vehicleIncidents_modal')
+            @include('Vehicles.partials.edit_vehicleIncidents_modal')
+
         </div>
 
         @endsection
@@ -265,17 +273,16 @@
                 $(".js-example-basic-multiple").select2();
 
 
-
                 $(document).ready(function () {
 
-                     $('#date_of_incident').datepicker({
+                    $('#date_of_incident').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
-                     
-                     // 
-                      $('#dateofincident').datepicker({
+
+                    //
+                    $('#dateofincident').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -283,7 +290,7 @@
 
                 });
 
-               
+
                 //Post perk form to server using ajax (add)
                 $('#add_vehicleincidents').on('click', function () {
                     var strUrl = '/vehicle_management/addvehicleincidents';
@@ -300,8 +307,11 @@
                 var incidentID;
                 $('#edit-incidents-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    fineID = btnEdit.data('id');
-                    var date_of_incident = btnEdit.data('dateofincident');
+                    if (parseInt(btnEdit.data('id')) > 0) {
+                        incidentID = btnEdit.data('id');
+                    }
+                    //console.log('gets here: ' + incidentID);
+                    var date_of_incident = btnEdit.data('date_of_incident');
                     var incident_type = btnEdit.data('incident_type');
                     var severity = btnEdit.data('severity');
                     var reported_by = btnEdit.data('reported_by');
@@ -330,16 +340,16 @@
                     modal.find('#valueID').val(valueID);
                 });
 
-                 $('#edit_vehicleincidents').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_vehicleincidents/'+ incidentID ;
+                $('#edit_vehicleincidents').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
                     var formName = 'edit-incidents-form';
                     var modalID = 'edit-incidents-modal';
                     var submitBtnID = 'edit_fines';
                     var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                    var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
+                    var Method = 'PATCH';
+                    modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                 });
 
 

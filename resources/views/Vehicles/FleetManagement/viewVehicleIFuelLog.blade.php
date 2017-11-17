@@ -10,12 +10,13 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
-          <!-- Time picker -->
-       <!--  -->
+    <!-- Time picker -->
+    <!--  -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 @endsection
 @section('content')
     <div class="row">
@@ -30,7 +31,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
@@ -41,15 +41,15 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -73,25 +73,25 @@
                         <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-bars"></i> General Details
                         </a>
-                       <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-book"></i> Booking Log
                         </a>
 
-                      <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-file-o"></i> Oil Log
                         </a>
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
-                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines 
+                        <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines
                         </a>
-                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
+                        <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-area-chart"></i> Service Details
                         </a>
                         <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
@@ -109,12 +109,12 @@
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
                             <th> Date Taken</th>
-                            <th>Transaction Type </th>
+                            <th>Transaction Type</th>
                             <th>Filled By</th>
-                            <th>Tanks and Other </th>
-                            <th>Tank Name </th>
-                            <th>Service Station </th>
-                            <th>Fuel  in Litres</th>
+                            <th>Tanks and Other</th>
+                            <th>Tank Name</th>
+                            <th>Service Station</th>
+                            <th>Fuel in Litres</th>
                             <th>Cost per Litres</th>
                             <th>Cost (R)</th>
                             <th>Hours Reading</th>
@@ -126,21 +126,21 @@
                                 <tr id="categories-list">
                                     <td nowrap>
                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-incidents-modal"
+                                                data-toggle="modal" data-target="#edit-fuelRecords-modal"
                                                 data-id="{{ $details->id }}"><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
-                                            <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
-                                            <td></td>
-                                             <td></td>
-                                            <td>{{ !empty($details->tank_type) ?  $status[$details->tank_type] : ''}}</td>
-                                            <td>{{ !empty($details->tank_name) ?  $details->tank_name : ''}}</td>
-                                            <td></td>
-                                            <td>{{ !empty($details->litres) ?  $details->litres : ''}} litres</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{ !empty($details->hours_reading) ? $details->hours_reading : ''}}</td>
-                                            <td></td>
+                                    <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+                                    <td>{{ !empty($details->transaction_type) ?  $transType[$details->transaction_type] : ''}}</td>
+                                    <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
+                                    <td>{{ !empty($details->tank_type) ?  $status[$details->tank_type] : ''}}</td>
+                                    <td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
+                                    <td>{{ !empty($details->Staion) ?  $details->Staion : ''}}</td>
+                                    <td>{{ !empty($details->litres) ?  $details->litres : ''}} litres</td>
+                                     <td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre : ''}} R</td>
+                                    <td>{{ !empty($details->total_cost) ?  $details->total_cost : ''}} R</td>
+                                    <td>{{ !empty($details->hours_reading) ? $details->hours_reading : ''}}</td>
+                                    <td></td>
 
                                 </tr>
                             @endforeach
@@ -167,9 +167,9 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_vehicleFuelRecords_modal')
-        @include('Vehicles.partials.edit_vehicleIncidents_modal')
-        
+            @include('Vehicles.partials.add_vehicleFuelRecords_modal')
+            @include('Vehicles.partials.edit_vehicleFuelRecords_modal')
+
         </div>
 
         @endsection
@@ -217,6 +217,7 @@
                 //Initialize Select2 Elements
                 $(".select2").select2();
                 $('.zip-field').hide();
+                $('.transaction-field').hide();
 
 
                 //Tooltip
@@ -248,23 +249,23 @@
 
                 $(".js-example-basic-multiple").select2();
 
-                 //Initialize iCheck/iRadio Elements
-                    $('input').iCheck({
-                        checkboxClass: 'icheckbox_square-blue',
-                        radioClass: 'iradio_square-blue',
-                        increaseArea: '10%' // optional
-                    });
+                //Initialize iCheck/iRadio Elements
+                $('input').iCheck({
+                    checkboxClass: 'icheckbox_square-blue',
+                    radioClass: 'iradio_square-blue',
+                    increaseArea: '10%' // optional
+                });
 
                 $(document).ready(function () {
 
-                     $('#date').datepicker({
+                    $('#date').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
-                     
-                     // 
-                      $('#dateofincident').datepicker({
+
+                    //
+                    $('#dateofincident').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -272,7 +273,45 @@
 
                 });
 
-               
+                // 
+                  $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
+                    var allType = hideFields();
+                    
+                });
+
+                function hideFields() {
+                    var allType = $("input[name='transaction']:checked").val();
+                    if (allType == 1) {
+                        $('.transaction-field').hide();
+                        $('.Tanks-field').show();
+                    }
+                    else if (allType == 2) {
+                        $('.transaction-field').show();
+                        $('.Tanks-field').hide();
+                    }
+                    return allType;
+                }
+                // 
+                // 
+                //   $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
+                //     var allType = hideFields();
+                    
+                // });
+
+                // function hideFields() {
+                //     var allType = $("input[name='transactions']:checked").val();
+                //     if (allType == 1) {
+                //         $('.transaction-field').hide();
+                //         $('.Tanks-field').show();
+                //     }
+                //     else if (allType == 2) {
+                //         $('.transaction-field').show();
+                //         $('.Tanks-field').hide();
+                //     }
+                //     return allType;
+                // }
+
+
                 //Post perk form to server using ajax (add)
                 $('#add_vehiclefuellog').on('click', function () {
                     var strUrl = '/vehicle_management/addvehiclefuellog';
@@ -319,8 +358,8 @@
                     modal.find('#valueID').val(valueID);
                 });
 
-                 $('#edit_vehicleincidents').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_vehicleincidents/'+ incidentID ;
+                $('#edit_vehicleincidents').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
                     var formName = 'edit-incidents-form';
                     var modalID = 'edit-incidents-modal';
                     var submitBtnID = 'edit_fines';
@@ -328,7 +367,7 @@
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                 });
 
 
