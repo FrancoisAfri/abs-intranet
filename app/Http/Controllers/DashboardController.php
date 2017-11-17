@@ -27,6 +27,7 @@ use App\programme;
 use App\ContactPerson;
 use App\CRMAccount;
 use App\Quotation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -155,7 +156,7 @@ class DashboardController extends Controller {
                     ->where('leave_credit.hr_id', $user->person->id)
                     ->orderBy('leave_credit.id')
                     ->get();
-//return $balances;
+            //return $balances;
             #leave Application
             $application = DB::table('leave_application')
                     ->select('leave_application.*', 'leave_types.name as leavetype', 'leave_status.name as leaveStatus')
@@ -164,6 +165,38 @@ class DashboardController extends Controller {
                     ->where('leave_application.hr_id', $user->person->id)
                     ->orderBy('leave_application.id')
                     ->get();
+
+            //Get Employees on leave this month
+            $monthStart = new Carbon('first day of this month');
+            $monthStart->startOfDay();
+            $monthStart = $monthStart->timestamp;
+            $monthEnd = new Carbon('last day of this month');
+            $monthEnd->endOfDay();
+            $monthEnd = $monthEnd->timestamp;
+            $today = Carbon::now();
+            $todayStart = $today->copy()->startOfDay()->timestamp;
+            $todayEnd = $today->copy()->endOfDay()->timestamp;
+            $onLeaveThisMonth = HRPerson::select('hr_people.id', 'hr_people.first_name', 'hr_people.surname', 'hr_people.profile_pic',
+                    'leave_application.start_date', 'leave_application.start_time', 'leave_application.end_date', 'leave_application.end_time')
+                ->join('leave_application', 'hr_people.id', '=', 'leave_application.hr_id')
+                ->where('leave_application.status', 1)
+                ->where(function ($query) use($todayStart) {
+                    $query->whereRaw('leave_application.start_date >= ' . $todayStart);
+                    $query->orWhereRaw('leave_application.end_date >= ' . $todayStart);
+                })
+                ->where(function ($query) use($monthEnd) {
+                    $query->whereRaw('leave_application.start_date <= ' . $monthEnd);
+                    $query->orWhereRaw('leave_application.end_date <= ' . $monthEnd);
+                })
+                ->orderBy('leave_application.start_date')
+                ->get();
+            //Flag employees that are on leave today
+            foreach ($onLeaveThisMonth as $employee) {
+                $isOnLeaveToday = false;
+                if (($employee->start_date <= $todayStart && $employee->end_date >= $todayStart) || ($employee->start_date >= $todayStart && $employee->start_date <= $todayEnd)) $isOnLeaveToday = true;
+                $employee->is_on_leave_today = $isOnLeaveToday;
+            }
+            //return $onLeaveThisMonth;
 
             // check task
             $checkTasks = DB::table('employee_tasks')
@@ -231,7 +264,7 @@ class DashboardController extends Controller {
                 $package = $packages->first()->id;
             }
 
-                #induction
+            #induction
 
             $ClientInduction = ClientInduction::
                                select('client_inductions.*','hr_people.first_name as firstname', 'hr_people.surname as surname','contact_companies.name as company_name')
@@ -260,6 +293,7 @@ class DashboardController extends Controller {
             $data['statusLabels'] = $statusLabels;
             $data['balances'] = $balances;
             $data['application'] = $application;
+            $data['onLeaveThisMonth'] = $onLeaveThisMonth;
             $data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;

@@ -227,7 +227,7 @@
 
     @if($activeModules->where('code_name', 'appraisal')->first())
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <!-- Available Perks Widgets -->
                 <div class="box box-warning same-height-widget">
                     <div class="box-header with-border">
@@ -307,106 +307,147 @@
     <!--  -->
     @if($activeModules->where('code_name', 'leave')->first())
         <div class="row">
-           <div class="col-md-6">
-            <!-- /Tasks List -->
-             <div class="box box-info">
-               <div class="box-header with-border">
-                <i class="fa fa-hourglass"></i>
-                 <h3 class="box-title">Leave Balance</h3>
+            <div class="col-md-6">
+                <!-- /Tasks List -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <i class="fa fa-hourglass"></i>
+                        <h3 class="box-title">Leave Balance</h3>
 
-                 <div class="box-tools pull-right">
-                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                   </button>
-                   <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                 </div>
-               </div>
-               <!-- /.box-header -->
-               <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-                 <div class="table-responsive">
-                   <table class="table no-margin">
-                       <thead>
-                           <tr>
-                               <th>Leave Type</th>
-                               <th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave Balance</th>
-                               <th></th>
-                           </tr>
-                       </thead>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                <tr>
+                                    <th>Leave Type</th>
+                                    <th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave Balance</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
 
-                       <tbody>
-                       @if (!empty($balances))
-                           @foreach($balances as $balance)
-                             <tr>
-                           <td>{{ (!empty($balance->leavetype)) ?  $balance->leavetype : ''}}</td>
-							<td style="text-align: right;">{{ (!empty($balance->leave_balance)) ?  $balance->leave_balance / 8: 0}}</td>
-                             </tr>
-                           @endforeach
-                       @endif
-                     </tbody>
-                   </table>
-                   <div class="box-footer">
-                      <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
-                        <button id="Apply"class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Apply For Leave</button>
-                   </div>
-                 </div>
-                   @if(Session('error_starting'))
-                       @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
-                   @endif
-                   @include('tasks.partials.end_task')
-               </div>
-               <!-- /.box-body -->
-               <div class="box-footer clearfix">
-               </div>
-               <!-- /.box-footer -->
-             </div>
-             <!-- /Tasks List End -->
-           </div>
+                                <tbody>
+                                @if (!empty($balances))
+                                    @foreach($balances as $balance)
+                                        <tr>
+                                            <td>{{ (!empty($balance->leavetype)) ?  $balance->leavetype : ''}}</td>
+                                            <td style="text-align: right;">{{ (!empty($balance->leave_balance)) ?  $balance->leave_balance / 8: 0}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                            </table>
+                            <div class="box-footer">
+                                <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
+                                <button id="Apply"class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Apply For Leave</button>
+                            </div>
+                        </div>
+                        @if(Session('error_starting'))
+                            @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
+                        @endif
+                        @include('tasks.partials.end_task')
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                <!-- /Tasks List End -->
+            </div>
 
-           <div class="col-md-6">
-            <!-- /Tasks List -->
-             <div class="box box-info">
-               <div class="box-header with-border">
-                <i class="fa fa-hourglass"></i>
-                 <h3 class="box-title">Leave Applied For Status</h3>
+            <div class="col-md-6">
+                <!-- /Tasks List -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <i class="fa fa-hourglass"></i>
+                        <h3 class="box-title">Leave Applied For Status</h3>
 
-                 <div class="box-tools pull-right">
-                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                   </button>
-                   <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                 </div>
-               </div>
-               <!-- /.box-header -->
-               <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-                 <div class="table-responsive">
-                   <table class="table no-margin">
-                       
-                       <thead>
-                           <tr>
-                               <th><i class="material-icons">shop_two</i>Leave Type</th>
-                                 <th><i class="fa fa-calendar-o"></i>Date From</th>
-                                <th><i class="fa fa-calendar-o"></i>Date To</th>
-                               <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                       @if (!empty($application))
-                           @foreach($application as $checkTask)
-                             <tr>
-                               <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
-                                <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
-                                <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
-                              <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
-                               <td>
-                              
-                               </td>
-                             </tr>
-                           @endforeach
-                       @endif
-                     </tbody>
-                   </table>
-                 </div>
-               </div>
-             </div>
-           </div>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+
+                                <thead>
+                                <tr>
+                                    <th><i class="material-icons">shop_two</i>Leave Type</th>
+                                    <th><i class="fa fa-calendar-o"></i>Date From</th>
+                                    <th><i class="fa fa-calendar-o"></i>Date To</th>
+                                    <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (!empty($application))
+                                    @foreach($application as $checkTask)
+                                        <tr>
+                                            <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
+                                            <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
+                                            <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
+                                            <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <i class="ion ion-ios-people-outline"></i>
+                        <h3 class="box-title">People On Leave This Month</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding" style="max-height: 180px; overflow-y: scroll;">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Employee</th>
+                                <th class="text-center">From</th>
+                                <th class="text-center">To</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($onLeaveThisMonth as $employee)
+                                <tr>
+                                    <td style="vertical-align: middle;" class="{{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}" nowrap>{{ $loop->iteration }}.</td>
+                                    <td style="vertical-align: middle;" class="{{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">
+                                        <img src="{{ $employee->profile_pic_url }}" class="img-circle" alt="Employee's Photo"
+                                             style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
+                                        <span>{{ $employee->full_name }}</span>
+                                    </td>
+                                    <td style="vertical-align: middle;" class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->start_time) ? date('d M Y H:i', $employee->start_time) : (($employee->start_date) ? date('d M Y', $employee->start_date) : '') }}</td>
+                                    <td style="vertical-align: middle;" class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->end_time) ? date('d M Y H:i', $employee->end_time) : (($employee->end_date) ? date('d M Y', $employee->end_date) : '') }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
         </div>
     @endif
 @endsection
