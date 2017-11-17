@@ -62,7 +62,7 @@ class DashboardController extends Controller {
 
         //  return $account;
         //check if Ribbon is active
-        $Ribbon_module = modules::where('active', 1)->get();
+        //$Ribbon_module = modules::where('active', 1)->get();
         $activeModules = modules::where('active', 1)->get();
        // return $activeModules;
 
@@ -245,7 +245,7 @@ class DashboardController extends Controller {
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
             $data['account'] = $account;
-            $data['Ribbon_module'] = $Ribbon_module;
+            //$data['Ribbon_module'] = $Ribbon_module;
             $data['activeModules'] = $activeModules;
             $data['ProductCategory'] = $ProductCategory;
             $data['packages'] = $packages;
@@ -363,7 +363,7 @@ class DashboardController extends Controller {
             $data['tickets'] = $tickets;
             $data['page_title'] = "Dashboard";
             $data['page_description'] = "Main Dashboard";
-            $data['Ribbon_module'] = $Ribbon_module;
+            //$data['Ribbon_module'] = $Ribbon_module;
             $data['activeModules'] = $activeModules;
             return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }

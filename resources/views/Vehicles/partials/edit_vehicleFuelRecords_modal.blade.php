@@ -1,19 +1,20 @@
-<div id="add-fuel-modal" class="modal modal-default fade">
+<div id="edit-fuelRecords-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-fuel-form">
+            <form class="form-horizontal" method="POST" name="edit-fuelRecords-form">
                 {{ csrf_field() }}
+                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"> Add new Fuel Record</h4>
+                    <h4 class="modal-title">Edit Fuel Record</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                     <div class="form-group">
+                   <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Driver </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
@@ -42,13 +43,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group{{ $errors->has('transaction') ? ' has-error' : '' }}">
-                        <label for="transaction" class="col-sm-2 control-label"> Tanks and Other </label>
+                    <div class="form-group{{ $errors->has('transactions') ? ' has-error' : '' }}">
+                        <label for="transactions" class="col-sm-2 control-label"> Tanks and Other </label>
                             <div class="col-sm-8">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_transaction"
-                                        name="transaction" value="1" checked>Tank
+                                        name="transactions" value="1" checked>Tank
                              </label>
-                                 <label class="radio-inline"><input type="radio" id="rdo_Other" name="transaction" value="2">
+                                 <label class="radio-inline"><input type="radio" id="rdo_Other" name="transactions" value="2">
                                         Other
                                 </label>
                             </div>
@@ -158,15 +159,13 @@
 
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" id="add_vehiclefuellog" class="btn btn-warning"><i class="fa fa-cloud-upload"></i>
-                        Save
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" id="edit_fuelRecords" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-</div>
-
+        
            

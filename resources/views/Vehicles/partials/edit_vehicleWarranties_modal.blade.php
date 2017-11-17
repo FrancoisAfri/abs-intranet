@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-warrantie-form">
                 {{ csrf_field() }}
-                {{ method_field('PATCH') }}
+
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -14,7 +14,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Service Provider </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
@@ -26,28 +26,28 @@
                             </select>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Contact Person</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="contact_person" name="contact_person" value=""
                                    placeholder="Enter Contact Person" required>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Contact Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="contact_number" name="contact_number" value=""
                                    placeholder="Enter Contact Number" required>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Contact E-Mail</label>
                         <div class="col-sm-8">
                             <input type="email" class="form-control" id="contact_email" name="contact_email" value=""
                                    placeholder="Enter Contact E-Mail" required>
                         </div>
                     </div>
-                     <div class="form-group ">
+                    <div class="form-group ">
                         <label for="address" class="col-sm-2 control-label">Address</label>
                         <div class="col-sm-8">
 
@@ -65,43 +65,46 @@
                     </div>
 
                     <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label">Inception  Date </label>
+                        <label for="date" class="col-sm-2 control-label">Inception Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="inceptiondate" name="inception_date"
+                            <input type="text" class="form-control" id="inceptiondate" name="inceptiondate"
                                    value="{{ old('date') }}" placeholder="Select  Inception date  ...">
                         </div>
                     </div>
-                     <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label">Expiry   Date </label>
+                    <div class="form-group ">
+                        <label for="date" class="col-sm-2 control-label">Expiry Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="expdate" name="exp_date"
                                    value="{{ old('date') }}" placeholder="Select Expiry date  ...">
                         </div>
                     </div>
 
-                     <div class="form-group{{ $errors->has('warranty_period') ? ' has-error' : '' }}">
-                            <label for="warranty_period" class="col-sm-2 control-label"> Warranty Period</label>
-                             <div class="col-sm-8">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                    id="rdo_package" name="warranty_period" value="1"  checked>6 Months  </label>
-                                                                                                                                                                                      
-                                    <label class="radio-inline"><input type="radio" id="rdo_product"
-                                        name="warranty_period" value="2"> 12 Months 
-                                            </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_products"
-                                        name="warranty_period" value="3"> 24 Months 
-                                            </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_products"
-                                        name="warranty_period" value="4"> 36 Months 
-                                            </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_products"
-                                        name="warranty_period" value="5"> 48 Months 
-                                            </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_products"
-                                        name="warranty_period" value="6"> 60 Months 
-                                </label>        
+                    <div class="form-group{{ $errors->has('warranty_period') ? ' has-error' : '' }}">
+                        <label for="warranty_period" class="col-sm-2 control-label"> Warranty Period</label>
+                        <div class="col-sm-8">
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+                                                                                          id="rdo_package"
+                                                                                          name="warranty_period"
+                                                                                          value="1" checked>6 Months
+                            </label>
 
-                            </div>
+                            <label class="radio-inline"><input type="radio" id="rdo_product"
+                                                               name="warranty_period" value="2"> 12 Months
+                            </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_products"
+                                                               name="warranty_period" value="3"> 24 Months
+                            </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_products"
+                                                               name="warranty_period" value="4"> 36 Months
+                            </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_products"
+                                                               name="warranty_period" value="5"> 48 Months
+                            </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_products"
+                                                               name="warranty_period" value="6"> 60 Months
+                            </label>
+
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -111,7 +114,7 @@
                                    placeholder="Enter Maximum Kilometres Covered" required>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Type</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="type" name="type" value=""
@@ -122,8 +125,9 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Warranty Amount </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="warranty_amount" name="warranty_amount" value="" placeholder="Enter Warranty Amount" required>
-                                  
+                            <input type="text" class="form-control" id="warranty_amount" name="warranty_amount" value=""
+                                   placeholder="Enter Warranty Amount" required>
+
                         </div>
                     </div>
 
@@ -173,14 +177,15 @@
                         </div>
                     </div>
 
-                    
+
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_warrantie" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save
+                    <button type="button" id="edit_warrantie" class="btn btn-primary"><i class="fa fa-floppy-o"></i>
+                        Save
                     </button>
                 </div>
             </form>

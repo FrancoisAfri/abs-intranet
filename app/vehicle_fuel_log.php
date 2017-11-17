@@ -10,6 +10,9 @@ class vehicle_fuel_log extends Model
 	 protected $table = 'vehicle_fuel_log';
 
     protected $fillable = ['driver', 'document_number', 'date','tank_type','tank_name','litres',
-								'hours_reading' ,'description', 'captured_by','vehicleID', 'rensonsible_person'];
+								'hours_reading' ,'description', 'captured_by','vehicleID', 'rensonsible_person',
+								'service_station','transaction_type','cost_per_litre','total_cost'
+
+							];
     
 }
