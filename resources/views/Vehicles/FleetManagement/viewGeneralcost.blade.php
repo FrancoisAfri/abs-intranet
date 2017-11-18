@@ -24,8 +24,8 @@
                         </button>
                     </div>
                 </div>
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
+           <!--  {{ csrf_field() }}
+            {{ method_field('PATCH') }} -->
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -109,6 +109,7 @@
                             <th>litre</th>
                             <th>Description</th>
                             <th>Person Responsible</th>
+                            <th></th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($generalcost) > 0)
@@ -131,12 +132,10 @@
                                     <td>{{ !empty($reminder->document_number) ?  $reminder->document_number : '' }}</td>
                                     <td>{{ !empty($reminder->supplier_name) ?  $reminder->supplier_name : '' }}</td>
                                     <td>{{ (!empty($reminder->cost_type)) ?  $costtype[$reminder->cost_type] : ''}}</td>
-
                                     <td>R{{ !empty($reminder->cost) ?  $reminder->cost : '' }}.00</td>
                                     <td>{{ !empty($reminder->litres) ?  $reminder->litres : '' }}</td>
                                     <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
                                     <td>{{ !empty($reminder->first_name . ' ' . $reminder->surname) ? $reminder->first_name . ' ' . $reminder->surname : ''}}</td>
-                                    <td>{{ !empty($reminder->end_date) ? date(' d M Y', $reminder->end_date) : '' }}</td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
                                                 data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>

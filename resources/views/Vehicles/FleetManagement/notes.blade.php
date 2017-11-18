@@ -143,6 +143,10 @@
         @include('Vehicles.partials.upload_newnote_modal')
         @include('Vehicles.partials.edit_notes_modal')
         <!-- Include delete warning Modal form-->
+         <!-- Include delete warning Modal form-->
+            @if (count($vehiclenotes) > 0)
+                @include('Vehicles.warnings.Note_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Note? This action cannot be undone.'])
+            @endif
 
         </div>
 

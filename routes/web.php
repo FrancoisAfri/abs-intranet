@@ -279,6 +279,15 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 
 
 ##*************** Vehicle Management ************
+
+
+###----bookings
+Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
+Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
+Route::get('vehicle_management/bookingdetails/{bookings}', 'FleetManagementController@viewImage');
+
+###
+
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
 Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
 Route::patch('vehice/edit_fleet/{fleet}', 'VehicleManagemntController@editfleet');
@@ -399,7 +408,7 @@ Route::patch('vehicle_management/edit_policy/{policy}', 'VehicleFleetController@
 
 #
 Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');
-Route::post('vehicle_management/addwarranty', 'VehicleFleetController@addwarranty');
+Route::post('vehicle_management/Addwarranty', 'VehicleFleetController@addwarranty');
 Route::get('vehicle_management/warranty_act/{warranties}', 'VehicleFleetController@warrantyAct');
 Route::patch('vehicle_management/edit_warrantie/{warranties}', 'VehicleFleetController@editwarranty');
 
@@ -408,16 +417,19 @@ Route::get('vehicle_management/reminders/{maintenance}', 'VehicleFleetController
 Route::post('vehicle_management/addreminder', 'VehicleFleetController@addreminder');
 Route::patch('vehicle_management/edit_reminder/{reminder}', 'VehicleFleetController@editreminder');
 Route::get('vehicle_management/reminder_act/{reminder}', 'VehicleFleetController@reminderAct');
+Route::get('vehicle_management/reminder/{reminder}/delete', 'VehicleFleetController@deletereminder');
 
 
 Route::post('vehicle_management/add_new_document', 'FleetManagementController@newdocument');
 Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
-Route::get('vehice/{maintenance}/document/{documents}/delete', 'FleetManagementController@deleteDoc');
+Route::get('vehicle_management/document/{documents}/delete', 'FleetManagementController@deleteDoc');
 Route::patch('vehicle_management/edit_vehicledoc/{vehicledocumets}', 'FleetManagementController@editVehicleDoc');
 
 
 Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote');
 
+
+Route::get('vehicle_management/note/{note}/delete', 'FleetManagementController@deleteNote');
 
 ##
 Route::get('vehicle_management/general_cost/{maintenance}', 'VehicleFleetController@viewGeneralCost');

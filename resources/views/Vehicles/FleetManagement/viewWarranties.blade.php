@@ -23,7 +23,8 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
                         </button>
                     </div>
-                </div>
+                </div><!-- 
+                <form class="form-horizontal" method="POST" action="/hr/document"> -->
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
@@ -306,7 +307,7 @@
 
                 //Post perk form to server using ajax (add)
                 $('#add_warrantie').on('click', function () {
-                    var strUrl = '/vehicle_management/addwarranty';
+                    var strUrl = '/vehicle_management/Addwarranty';
                     var formName = 'add-warrantie-form';
                     var modalID = 'add-warrantie-modal';
                     var submitBtnID = 'add_warrantie';

@@ -24,7 +24,7 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
+                <form class="form-horizontal" method="POST" action="/hr/document">
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
@@ -170,6 +170,7 @@
                     </div>
                 </div>
             </div>
+        </form>
             <!-- Include add new prime rate modal -->
         @include('Vehicles.partials.add_vehicleInsurance_modal')
         @include('Vehicles.partials.edit_vehicleInsurance_modal')

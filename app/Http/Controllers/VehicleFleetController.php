@@ -399,6 +399,15 @@ class VehicleFleetController extends Controller
         return back();
     }
 
+     public function deletereminder(Request $request, reminders $reminder)
+    {
+        $reminder->delete();
+
+        AuditReportsController::store('Vehicle Management', 'reminder Type Deleted', "Document Type has been deleted", 0);
+        return back();
+    }
+
+
     public function viewGeneralCost(vehicle_maintenance $maintenance)
     {
         $ID = $maintenance->id;
@@ -591,7 +600,7 @@ class VehicleFleetController extends Controller
 
      public function addwarranty(Request $request){
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            'issued_to' => 'required_if:key,1',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -672,7 +681,7 @@ class VehicleFleetController extends Controller
             }
         }
        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
-        return back();
+       return response()->json();
     }
 
     public function viewInsurance(vehicle_maintenance $maintenance)

@@ -929,14 +929,13 @@ class FleetManagementController extends Controller
 
     }
 
-    public function deleteDoc(vehicle_maintenance $maintenance ,vehicle_documets $documents) {
-
-        $id = $maintenance->id;
+    public function deleteDoc(vehicle_documets $documents ) {
 
         $documents->delete();
 
         AuditReportsController::store('Vehicle Management', 'document  Deleted', "document has been deleted", 0);
-        return redirect('/vehicle_management/document/$maintenance->id');
+        return back();
+        //return redirect('/vehicle_management/document/$maintenance->id');
     }
     
     public function newnotes(Request $request ){
@@ -1015,6 +1014,15 @@ class FleetManagementController extends Controller
         AuditReportsController::store('Vehicle FleetDocumentType', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         ;
         return response()->json();
+    }
+
+    public function deleteNote(notes $note ) {
+
+        $note->delete();
+
+        AuditReportsController::store('Vehicle Management', 'note  Deleted', "document has been deleted", 0);
+        return back();
+        //return redirect('/vehicle_management/document/$maintenance->id');
     }
 
 }
