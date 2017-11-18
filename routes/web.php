@@ -335,15 +335,8 @@ Route::post('vehice/addvehicle_model', 'VehicleManagemntController@AddVehicleMod
 Route::patch('vehice/edit_vehicle_model/{vmodel}', 'VehicleManagemntController@editvehiclemodel');
 Route::get('/vehice/vehiclemodle_act/{vmodel}', 'VehicleManagemntController@vehiclemodelAct');
 Route::get('vehice/vehiclemodel/{vmodel}/delete', 'VehicleManagemntController@deleteVehiclemodel');
-
-
 // --- vehicle Search
 Route::post('vehicle_management/vehicle/Search', 'VehicleManagemntController@VehicleSearch');
-
-
-
-
-
 // ---
 Route::get('vehicle_management/group_admin', 'VehicleManagemntController@groupAdmin');
 Route::post('vehice/groupadmin', 'VehicleManagemntController@Addgroupadmin');

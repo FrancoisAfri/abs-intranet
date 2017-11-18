@@ -371,16 +371,16 @@ class LeaveApplicationController extends Controller {
         $hrID = $leaveApp['hr_person_id'];
         $time_from = $leaveApp['time_from'];
         $time_to = $leaveApp['time_to'];
-        $date = $leaveApp['date'];
         $approveDetails = array();
         unset($leaveApp['_token']);
         $ApplicationDetails = array();
         $status = array();
 
-        $start_time = strtotime($time_from);
-        $end_time = strtotime($time_to);
-        $date = str_replace('/', '-', $leaveApp['date']);
-        $date = strtotime($leaveApp['date']);
+        $date = $leaveApp['date'];
+        $start_time = strtotime($date . ' ' . $time_from);
+        $end_time = strtotime($date . ' ' . $time_to);
+        $date = strtotime($date);
+        //return $date . ' ' . $start_time .  ' ' . $end_time;
 
         //Query the Holiday table and return the days
         $public_holiday = DB::table('public_holidays')->pluck('day');
@@ -428,6 +428,7 @@ class LeaveApplicationController extends Controller {
         $levApp->notes = $request->input('description');
         $levApp->status = $applicatiionStaus;
         $levApp->start_date = $date;
+        $levApp->end_date = $date;
         $levApp->start_time = $start_time;
         $levApp->end_time = $end_time;
         $levApp->leave_hours = $diffrencetime;
