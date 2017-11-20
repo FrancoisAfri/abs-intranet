@@ -108,6 +108,7 @@ class LeaveApplicationController extends Controller {
                 ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id')
                 ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id')
                 ->where('hr_people.manager_id', $loggedInEmplID)
+				->where('leave_application.status', '!=', 1)
                 ->orderBy('leave_application.hr_id')
                 ->get();
 
@@ -141,16 +142,10 @@ class LeaveApplicationController extends Controller {
 
         if ($approvals->require_managers_approval == 1) {
             # code...
-            $approvals = DB::table('leave_configuration')
-                    ->select('require_managers_approval', 'require_department_head_approval', 'require_hr_approval', 'require_payroll_approval')
-                    ->first();
             // query the hrperon  model and bring back the values of the manager
             $managerDetails = HRPerson::where('id', $hrDetails->manager_id)->where('status', 1)
                     ->select('first_name', 'surname', 'email')
                     ->first();
-            $row = HRPerson::where('id', $hrDetails->manager_id)->where('status', 1)
-                    ->count();
-
             if ($managerDetails == null) {
                 $details = array('status' => 1, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                 return $details;
@@ -226,19 +221,11 @@ class LeaveApplicationController extends Controller {
 
         $ApplicationDetails = array();
         $status = array();
-
-        $leaveApp = $request->all();
-
-        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
-                $query->orderBy('name', 'asc');
-            }]);
         $hrID = $leaveApp['hr_person_id'];
         $typID = $leaveApp['leave_type'];
 
         $managerDetails = HRPerson::where('id', $hrID)
-                        ->select('manager_id')
-                        ->get()->first();
-
+                        ->select('manager_id')->first();
         $managerID = $managerDetails['manager_id'];
 
         $Details = leave_credit::where('hr_id', $hrID)
@@ -246,24 +233,13 @@ class LeaveApplicationController extends Controller {
                 ->first();
         $leave_balance = $Details['leave_balance'];
 
-        //Query leave holiday Tables
-        $public_holiday = DB::table('public_holidays')->pluck('day');
-
-        $public_holiday = DB::table('public_holidays')->pluck('day');
-
-        //$levApp->array(hr_id = $request->input('hr_person_id'));
         $levApp->leave_type_id = $request->input('leave_type');
-
-        // Get employeeId from dropbbox
-        $employees = $leaveApp['hr_person_id'];
-
         // Get leavetype Id from dropbbox
         $tyop = $leaveApp['leave_type'];
 
         //query the hr table based on employeeId
-        $HRpeople = HRPerson::find($employees);
+        $HRpeople = HRPerson::find($hrID);
         $USername = $HRpeople->first_name;
-
 
         // separate day range
         $day = $leaveApp['day'];
@@ -281,7 +257,7 @@ class LeaveApplicationController extends Controller {
         // calculate public holidays and weekends
         $iNonweek = 0;
         $aPublicHolidays = array();
-        $aPublicHolidays = $public_holiday;
+        $aPublicHolidays = DB::table('public_holidays')->pluck('day');
 
         # Add Easter Weekend to list of public holidays
 
@@ -321,14 +297,15 @@ class LeaveApplicationController extends Controller {
 
         // call the function
         $ApplicationDetails = LeaveApplicationController::ApplicationDetails(0, $hrID);
-
+		//return $ApplicationDetails;
+		
         $statusnames = LeaveApplicationController::status();
 
         $applicatiionStaus = $ApplicationDetails['status'];
 
         $levtype = $request->input('leave_type');
 
-        // $levApp->status = 1;
+        //$levApp->status = 1;
         $levApp->start_date = $start_date;
         $levApp->end_date = $end_date;
         $levApp->leave_days = $iDays;
