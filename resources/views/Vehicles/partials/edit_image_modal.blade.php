@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="image" name="image"
+                            <input type="text" class="form-control" id="name" name="name"
                                    value="{{ $vehicle_maintenance->vehicle_images }}" placeholder="Enter Name" required>
                         </div>
                     </div>
@@ -41,10 +41,13 @@
 
                         <div class="col-sm-9">
 
-                            <input type="file" id="images" name="images" class="file file-loading"
+                            <input type="file" id="image" name="image" class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
+
+                    <input type="hidden" id="valueID" name="valueID"
+                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 
                 </div>
                 <div class="modal-footer">

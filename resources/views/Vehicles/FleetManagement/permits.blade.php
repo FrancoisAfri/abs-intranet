@@ -23,8 +23,6 @@
                     </div>
                 </div>
                 <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="row">
@@ -78,7 +76,7 @@
                                             data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
                                             data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
                                             
-                                    <td>{{ !empty($permit->Supplier) ? $permit->Supplier : ''}}</td>
+                                    <td>{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
                                     <td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
                                     <td>{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
                                     <td>{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
@@ -102,7 +100,7 @@
                             @endforeach
                         @else
                             <tr id="categories-list">
-                                <td colspan="5">
+                                <td colspan="10">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
@@ -128,10 +126,7 @@
         @include('Vehicles.partials.add_permits_licence_modal')
         @include('Vehicles.partials.edit_permits_licence_modal')
         <!-- Include delete warning Modal form-->
-
         </div>
-
-
 
     @endsection
 
@@ -266,9 +261,15 @@
                 $('#edit-permit-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                     var btnEdit = $(e.relatedTarget);
-                    permitID = btnEdit.data('id');
-                    var permit_licence = btnEdit.data('permit_licence');
-                    var description = btnEdit.data('description');
+                     if (parseInt(btnEdit.data('id')) > 0) {
+                      permitID = btnEdit.data('id');
+                    }
+                    var Supplier = btnEdit.data('Supplier');
+                    var permits_licence_no = btnEdit.data('permits_licence_no');
+                    var date_issued = btnEdit.data('date_issued');
+                    var exp_date = btnEdit.data('exp_date');
+                    var status = btnEdit.data('status');
+                    var captured_by = btnEdit.data('captured_by');
                     var modal = $(this);
                     modal.find('#name').val(name);
                     modal.find('#Supplier').val(Supplier);
@@ -293,17 +294,7 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-                //Post perk form to server using ajax (edit)
-                $('#edit_permit').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_permit/' + permitID;
-                    var formName = 'edit-permit-form';
-                    var modalID = 'edit-permit-modal';
-                    var submitBtnID = 'edit_permit';
-                    var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
-                    var successMsgTitle = 'Changes Saved!';
-                    var successMsg = 'The  details have been updated successfully!';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+     
 
     </script>
 @endsection

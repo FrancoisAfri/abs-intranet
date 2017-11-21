@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateVehicleBookingsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('vehicle_bookings', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('capturer_id')->nullable()->unsigned()->index();
+            $table->integer('driver_id')->nullable()->unsigned()->index();
+            $table->string('purpose')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('vehicle_id')->nullable();
+            $table->string('reject_reason')->nullable();
+            $table->bigInteger('require_datetime')->nullable();
+            $table->integer('project_id')->nullable();
+            $table->string('destination')->nullable();
+            $table->integer('start_mileage_id')->nullable();
+            $table->integer('end_mileage_id')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('vehicle_bookings');
+    }
+}

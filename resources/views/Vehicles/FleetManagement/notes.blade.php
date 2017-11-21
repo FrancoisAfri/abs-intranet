@@ -24,10 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -87,8 +83,9 @@
                                     </td>
 
 
-                                    <td>{{ !empty($document->captured_by) ?  $document->captured_by : '' }}</td>
+                                    
                                     <td>{{ !empty($document->date_captured) ? date(' d M Y', $document->date_captured) : '' }}</td>
+                                    <td>{{ !empty($document->firstname . ' ' . $document->surname ) ?  $document->firstname . ' ' . $document->surname : '' }}</td>
                                     <td>{{ !empty($document->notes) ?  $document->notes : '' }}</td>
                                     <td nowrap>
                                         <div class="form-group{{ $errors->has('documents') ? ' has-error' : '' }}">
@@ -339,7 +336,10 @@ $('#add_notes').on('click', function () {
 		$('#edit-note-modal').on('show.bs.modal', function (e) {
 			//console.log('kjhsjs');
 			var btnEdit = $(e.relatedTarget);
-			noteID = btnEdit.data('id');
+			 if (parseInt(btnEdit.data('id')) > 0) {
+               noteID = btnEdit.data('id');     
+             }
+			
 			var captured_by = btnEdit.data('captured_by');
 			var date_captured = btnEdit.data('date_captured');
 			var notes = btnEdit.data('notes');
@@ -359,7 +359,7 @@ $('#add_notes').on('click', function () {
 			var formName = 'edit-note-form';
 			var modalID = 'edit-note-modal';
 			var submitBtnID = 'edit_note';
-			var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
+			var redirectUrl = '/vehicle_management/notes/{{$maintenance->id}}';
 			var successMsgTitle = 'Changes Saved!';
 			var successMsg = 'The  details have been updated successfully!';
 			var Method = 'PATCH';

@@ -1,4 +1,4 @@
-<div id="edit-vehicle-modal" class="modal modal-default fade">
+<div id="edit-vehicledetails-modal" class="modal modal-default fade">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" name="edit-vehicledetails-form" enctype="multipart/form-data">
@@ -43,7 +43,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;"
+                                    <select class="form-control" style="width: 100%;"
                                             id="responsible_for_maintenance" name="responsible_for_maintenance">
                                         <option value="0">*** Select User ***</option>
                                         @foreach($hrDetails as $employee)
@@ -61,7 +61,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-modx"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="vehicle_make"
+                                    <select class="form-control " style="width: 100%;" id="vehicle_make"
                                             name="vehicle_make">
                                         <option value="0">*** Select a Vehicle Make ***</option>
                                         @foreach($Vehiclemake as $make)
@@ -79,7 +79,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-bullseye"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="vehicle_model"
+                                    <select class="form-control " style="width: 100%;" id="vehicle_model"
                                             name="vehicle_model">
                                         <option value="0">*** Select a Vehicle Model ***</option>
                                         @foreach($vehiclemodel as $model)
@@ -98,7 +98,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-truck"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;"
+                                    <select class="form-control" style="width: 100%;"
                                             id="vehicle_type" name="vehicle_type">
                                         <option value="0">*** Select a Vehicle Type ***</option>
                                         @foreach($Vehicle_types as $type)
@@ -205,7 +205,7 @@
                                         <i class="fa fa-filter"></i>
                                     </div>
 
-                                    <select name="fuel_type" class="form-control">
+                                    <select  id="fuel_type"  name="fuel_type" class="form-control">
                                         <option value="0">*** Select Fuel Type ***</option>
                                         <option value="1"> Unleaded</option>
                                         <option value="2"> Lead replacement</option>
@@ -262,7 +262,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle-o"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="vehicle_owner"
+                                    <select class="form-control" style="width: 100%;" id="vehicle_owner"
                                             name="vehicle_owner">
                                         <option value="0">*** Select Vehicle Owner ***</option>
                                         @foreach($DivisionLevelFive as $owner)
@@ -297,7 +297,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-university"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="financial_institution"
+                                    <select class="form-control " style="width: 100%;" id="financial_institution"
                                             name="financial_institution">
                                         <option value="0">*** Select Financial Institution ***</option>
                                         @foreach($vehicle as $Vehicle)
@@ -315,7 +315,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-building"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="company"
+                                    <select class="form-control" style="width: 100%;" id="company"
                                             name="company">
                                         <option value="0">*** Select Company ***</option>
                                         @foreach($DivisionLevelFive as $owner)
@@ -380,7 +380,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-building-o"></i>
                                     </div>
-                                    <select name="property_type" class="form-control">
+                                    <select id="property_type" name="property_type" class="form-control">
                                         <option value="0">*** Select Property ***</option>
                                         <option value="1"> Internal</option>
                                         <option value="2"> External</option>

@@ -1,7 +1,7 @@
 <div id="add-key-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-new-key-form">
+            <form class="form-horizontal" method="POST" name="add-key-form">
                 {{ csrf_field() }}
 
 

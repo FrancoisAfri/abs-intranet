@@ -24,9 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -317,11 +314,11 @@
 
                 $('#edit_doc').on('click', function () {
                     var strUrl = '/vehicle_management/edit_vehicledoc/' + docID;
-                    var formName = 'add-newdoc-form';
+                    var formName = 'edit-newdoc-form';
                     var modalID = 'edit-newdoc-modal';
                     var submitBtnID = 'edit_doc';
                     var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Documents Details Added!';
+                    var successMsgTitle = 'New Documents Details have been updated!';
                     var successMsg = 'The Documents Details has been updated successfully.';
                     var Method = 'PATCH';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

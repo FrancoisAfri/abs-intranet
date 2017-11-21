@@ -24,10 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -74,6 +70,8 @@
                             <th>Issued By</th>
                             <th>Description</th>
                             <th>Key Status</th>
+                            <th>Date Lost</th>
+                            <th>Reason for loss</th>
                         </tr>
                         @if (count($keytracking) > 0)
                             @foreach ($keytracking as $key)
@@ -87,23 +85,24 @@
                                                 data-description="{{$key->description}}"
                                                 data-date_issued="{{$key->date_issued}}"
                                                 data-issued_by="{{ $key->issued_by}}"
-                                                data-issued_by="{{ $key->issued_by}}"
+                                                data-reason_loss="{{ $key->reason_loss}}" data-date_lost="{{ $key->date_lost }}"
 
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
-                                    <td>{{ (!empty( $key->firstname)) ?  $IssuedTo[$key->employee] : ''}} </td>
-
-
+                                    <td>{{ (!empty( $key->firstname)) ?  $key->employee : ''}} </td>
                                     <td>{{ (!empty( $key->firstname . ' ' . $key->surname)) ?   $key->firstname . ' ' . $key->surname : ''}} </td>
                                     <td>{{ (!empty( $key->safeName)) ?  $key->safeName : ''}} </td>
-                                    <td>{{ (!empty( $key->safe_controller)) ?  $key->safe_controller : ''}} </td>
+                                    <td>{{ (!empty( $key->safeController)) ?  $key->safeController : ''}} </td>
                                     <td>{{ !empty($key->date_issued) ? date(' d M Y', $key->date_issued) : '' }}</td>
                                     <td></td>
-                                    <td>{{ (!empty( $key->issued_by)) ?  $key->issued_by : ''}} </td>
+                                    <td>{{ (!empty( $key->issuedBy)) ?  $key->issuedBy : ''}} </td>
                                     <td>{{ (!empty( $key->description)) ?  $key->description : ''}} </td>
-
                                     <td>{{ (!empty($key->key_status)) ?  $keyStatus[$key->key_status] : ''}} </td>
+                                    @if (isset($key) && $key->key_status === 3)
+                                        <td bgcolor="red">{{ (!empty($key->date_lost)) ?  date(' d M Y', $key->date_lost) : ''}} </td>
+                                        <td bgcolor="red" >{{ (!empty($key->reason_loss)) ?  $key->reason_loss : ''}} </td>
+                                    @endif
 
                                 </tr>
                             @endforeach
@@ -275,14 +274,17 @@
                         }
                     });
 
-                    Status
+
                     $('#Status').on("click", function (event) {
                         var levID = document.getElementById("Status").value;
                         // alert (levID);
                         if (levID == 3) {
                             $('.lost-field').show();
+                            $('.notes-field').hide();
+
                         } else if (levID == 0 , 1 , 2 , 4) {
                             $('.lost-field').hide();
+                            $('.notes-field').show();
                         }
                     });
 
@@ -308,35 +310,16 @@
                     }
 
 
-                    //save Fleet
-                    //Post module form to server using ajax (ADD)
+                    //Post perk form to server using ajax (add)
                     $('#add-key-card').on('click', function () {
-                        //console.log('strUrl');
                         var strUrl = '/vehicle_management/add_keys';
-                        var modalID = 'add-key-modal';
-                        var objData = {
-                            date_issued: $('#' + modalID).find('#date_issued').val(),
-                            key_number: $('#' + modalID).find('#key_number').val(),
-                            key_type: $('#' + modalID).find('#key_type').val(),
-                            key_status: $('#' + modalID).find('#key_status').val(),
-                            description: $('#' + modalID).find('#description').val(),
-                            key: $('#' + modalID).find('input:checked[name = key]').val(),
-                            issued_by: $('#' + modalID).find('#issued_by').val(),
-                            safe_name: $('#' + modalID).find('#safe_name').val(),
-                            safe_controller: $('#' + modalID).find('#safe_controller').val(),
-                            issued_to: $('#' + modalID).find('#issued_to').val(),
-                            employee: $('#' + modalID).find('#employee').val(),
-                            date_lost: $('#' + modalID).find('#date_lost').val(),
-                            valueID: $('#' + modalID).find('#valueID').val(),
-                            reason_loss: $('#' + modalID).find('#reason_loss').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
+                        var formName = 'add-key-form';
+                        var modalID = 'add-key-modal';;
                         var submitBtnID = 'add-key-card';
                         var redirectUrl = '/vehicle_management/keys/{{ $maintenance->id }}';
-                        var successMsgTitle = 'Keys Added!';
-                        var successMsg = 'The Key Details  have been updated successfully..';
-                        //var formMethod = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                        var successMsgTitle = 'New Record Added!';
+                        var successMsg = 'The Record  has been Added successfully.';
+                        modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                     });
 
 
@@ -344,51 +327,73 @@
                     $('#edit-key-modal').on('show.bs.modal', function (e) {
                         //console.log('kjhsjs');
                         var btnEdit = $(e.relatedTarget);
-                        keyID = btnEdit.data('id');
-                        var date_issued = btnEdit.data('date_issued');
+                        if (parseInt(btnEdit.data('id')) > 0) {
+                            keyID = btnEdit.data('id');
+                        }
                         var key_number = btnEdit.data('key_number');
-                        var key_type = btnEdit.data('key_type');
-                        var key_status = btnEdit.data('key_status');
-                        var description = btnEdit.data('description');
-                        var key = btnEdit.data('key');
-                        var issued_by = btnEdit.data('issued_by');
-                        var safe_name = btnEdit.data('safe_name');
-                        var safe_controller = btnEdit.data('safe_controller');
-                        var issued_to = btnEdit.data('issued_to');
-                        var employee = btnEdit.data('employee');
-                        var date_lost = btnEdit.data('date_lost');
                         var valueID = btnEdit.data('valueID');
+                        var key_status = btnEdit.data('key_status');
                         var reason_loss = btnEdit.data('reason_loss');
+                        var date_lost = btnEdit.data('date_lost');
+                        var description = btnEdit.data('description');
+                        var date_issued = btnEdit.data('date_issued');
+                        var issued_by = btnEdit.data('issued_by');
+                        var employee = btnEdit.data('employee');
+//                        var key_type = btnEdit.data('key_type');
+//                        var key = btnEdit.data('key');
+//                        var safe_name = btnEdit.data('safe_name');
+//                        var safe_controller = btnEdit.data('safe_controller');
+//                        var issued_to = btnEdit.data('issued_to');
                         var modal = $(this);
-                        modal.find('#name').val(name);
+                        modal.find('#key_number').val(key_number);
+                        modal.find('#valueID').val(valueID);
+                        modal.find('#key_status').val(key_status);
+                        modal.find('#reason_loss').val(reason_loss);
+                        modal.find('#date_lost').val(date_lost);
+                        modal.find('#date_issued').val(date_issued);
                         modal.find('#description').val(description);
+                        modal.find('#issued_by').val(issued_by);
+
                     });
+                    {{--$('#edit_key').on('click', function () {--}}
+                        {{--var strUrl = '/vehicle_management/edit_key/' + keyID;--}}
+                        {{--var modalID = 'edit-key-modal';--}}
+                        {{--var objData = {--}}
+                            {{--date_issued: $('#' + modalID).find('#date_issued').val(),--}}
+                            {{--key_number: $('#' + modalID).find('#key_number').val(),--}}
+                            {{--key_type: $('#' + modalID).find('#key_type').val(),--}}
+                            {{--key_status: $('#' + modalID).find('#key_status').val(),--}}
+                            {{--description: $('#' + modalID).find('#description').val(),--}}
+                            {{--key: $('#' + modalID).find('input:checked[name = key]').val(),--}}
+                            {{--issued_by: $('#' + modalID).find('#issued_by').val(),--}}
+                            {{--safe_name: $('#' + modalID).find('#safe_name').val(),--}}
+                            {{--safe_controller: $('#' + modalID).find('#safe_controller').val(),--}}
+                            {{--issued_to: $('#' + modalID).find('#issued_to').val(),--}}
+                            {{--employee: $('#' + modalID).find('#employee').val(),--}}
+                            {{--date_lost: $('#' + modalID).find('#date_lost').val(),--}}
+                            {{--valueID: $('#' + modalID).find('#valueID').val(),--}}
+                            {{--reason_loss: $('#' + modalID).find('#reason_loss').val(),--}}
+                            {{--_token: $('#' + modalID).find('input[name=_token]').val()--}}
+                        {{--};--}}
+                        {{--var submitBtnID = 'edit_key';--}}
+                        {{--var redirectUrl = '/vehicle_management/key/{{ $maintenance->id }}';--}}
+                        {{--var successMsgTitle = 'Changes Saved!';--}}
+                        {{--var successMsg = 'The Key Details have been updated successfully.';--}}
+                        {{--var Method = 'PATCH';--}}
+                        {{--modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);--}}
+                    {{--});--}}
+
+                    //Post perk form to server using ajax (edit)
                     $('#edit_key').on('click', function () {
                         var strUrl = '/vehicle_management/edit_key/' + keyID;
+                        var formName = 'edit-key-form';
                         var modalID = 'edit-key-modal';
-                        var objData = {
-                            date_issued: $('#' + modalID).find('#date_issued').val(),
-                            key_number: $('#' + modalID).find('#key_number').val(),
-                            key_type: $('#' + modalID).find('#key_type').val(),
-                            key_status: $('#' + modalID).find('#key_status').val(),
-                            description: $('#' + modalID).find('#description').val(),
-                            key: $('#' + modalID).find('input:checked[name = key]').val(),
-                            issued_by: $('#' + modalID).find('#issued_by').val(),
-                            safe_name: $('#' + modalID).find('#safe_name').val(),
-                            safe_controller: $('#' + modalID).find('#safe_controller').val(),
-                            issued_to: $('#' + modalID).find('#issued_to').val(),
-                            employee: $('#' + modalID).find('#employee').val(),
-                            date_lost: $('#' + modalID).find('#date_lost').val(),
-                            valueID: $('#' + modalID).find('#valueID').val(),
-                            reason_loss: $('#' + modalID).find('#reason_loss').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
                         var submitBtnID = 'edit_key';
-                        var redirectUrl = '/vehicle_management/key/{{ $maintenance->id }}';
+                        var redirectUrl = '/vehicle_management/keys/{{$maintenance->id}}';
                         var successMsgTitle = 'Changes Saved!';
-                        var successMsg = 'The Key Details have been updated successfully.';
+                        var successMsg = 'The  details have been updated successfully!';
                         var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                        modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                     });
 
 

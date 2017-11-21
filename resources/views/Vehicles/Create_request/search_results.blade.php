@@ -16,6 +16,9 @@
                     <h3 class="box-title">Internal Vehicle Management </h3>
                 </div>
                 <!-- /.box-header -->
+
+
+
                 <!-- form start -->
 
                 <div class="box-body">
@@ -25,6 +28,7 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
+
                                     <th style="width: 5px; text-align: center;"></th>
                                     <th>Vehicle</th>
                                     <th>Type</th>
@@ -42,15 +46,11 @@
                                     @foreach ($vehiclebooking as $booking)
                                         <tr id="categories-list">
                                             <td>
-                                                <a href="{{ '/vehicle_management/bookingdetails/' . $booking->id }}"
+                                                <a href="{{ '/vehicle_management/bookingdetails/' . $booking->id . '/' . $vehicleDates}}"
                                                    id="edit_compan" class="btn btn-default  btn-xs"
                                                    data-id="{{ $booking->id }}">View</a>
 
-                                               <!--  <div id="my_div" class="hidden">
-                                                    <a href="{{ '/vehicle_management/viewImage/' . $booking->id }}"
-                                                    >booking</a>
-                                                </div> -->
-                                               
+
                                             </td>
                                             <td>{{ !empty($booking->vehicle_make . ' ' . $booking->vehicle_model . ' ' . $booking->year ) ? $booking->vehicle_make . ' ' . $booking->vehicle_model  . ' ' . $booking->year: ''}}</td>
                                             <td>{{ !empty($booking->vehicle_type) ? $booking->vehicle_type : ''}}</td>

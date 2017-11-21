@@ -1,7 +1,7 @@
 <div id="edit-key-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+            <form class="form-horizontal" method="POST" name="edit-key-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -25,7 +25,7 @@
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 
-                    <div class="form-group">
+                    <div class="form-group notes-field">
                         <label for="key_type" class="col-sm-3 control-label">Key Type</label>
                         <div class="col-sm-8">
 
@@ -86,7 +86,7 @@
                     </div>
 
 
-                    <div class="form-group ">
+                    <div class="form-group notes-field ">
                         <label for="path" class="col-sm-3 control-label">Date Issued </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_issued" name="date_issued"
@@ -94,7 +94,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group notes-field">
                         <label for="issued_by" class="col-sm-3 control-label"> Issued By</label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="issued_by" name="issued_by">

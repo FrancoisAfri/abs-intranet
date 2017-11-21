@@ -31,9 +31,7 @@
                         </button>
                     </div>
                 </div>
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
+     
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -344,12 +342,12 @@
                     var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
                     var formName = 'edit-incidents-form';
                     var modalID = 'edit-incidents-modal';
-                    var submitBtnID = 'edit_fines';
+                    var submitBtnID = 'edit_vehicleincidents';
                     var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
+                    var successMsgTitle = 'Vehicle incident Record updated';
                     var successMsg = 'The Record  has been updated successfully.';
-                    var Method = 'PATCH';
-                    modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                    var Method = 'PATCH'
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 

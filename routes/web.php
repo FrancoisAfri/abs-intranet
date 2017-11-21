@@ -284,7 +284,8 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 ###----bookings
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
-Route::get('vehicle_management/bookingdetails/{bookings}', 'FleetManagementController@viewImage');
+Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
+
 
 ###
 
@@ -375,7 +376,6 @@ Route::get('vehicle_management/viewImage/{maintenance}', 'FleetManagementControl
 Route::get('vehicle_management/keys/{maintenance}', 'FleetManagementController@keys');
 Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@document');
 Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
-Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@addnotes');
 
 Route::get('vehicle_management/oil_log/{maintenance}', 'VehicleFleetController@viewOilLog');
 
@@ -395,9 +395,9 @@ Route::post('vehicle_management/addvehicleincidents', 'VehicleFleetController@ad
 Route::patch('vehicle_management/edit_vehicleincidents/{incident}', 'VehicleFleetController@editvehicleincidents');
 
 Route::get('vehicle_management/insurance/{maintenance}', 'VehicleFleetController@viewInsurance');
-Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addpolicy');
-Route::get('vehicle_management/policy_act/{policy}', 'VehicleFleetController@policyAct');
-Route::patch('vehicle_management/edit_policy/{policy}', 'VehicleFleetController@editpolicy');
+// Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addpolicy');
+// Route::get('vehicle_management/policy_act/{policy}', 'VehicleFleetController@policyAct');
+// Route::patch('vehicle_management/edit_policy/{policy}', 'VehicleFleetController@editpolicy');
 
 #
 Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');
@@ -414,14 +414,12 @@ Route::get('vehicle_management/reminder/{reminder}/delete', 'VehicleFleetControl
 
 
 Route::post('vehicle_management/add_new_document', 'FleetManagementController@newdocument');
-Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
 Route::get('vehicle_management/document/{documents}/delete', 'FleetManagementController@deleteDoc');
 Route::patch('vehicle_management/edit_vehicledoc/{vehicledocumets}', 'FleetManagementController@editVehicleDoc');
 
-
-Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote');
-
-
+Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@viewnotes');
+Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
+Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote'); 
 Route::get('vehicle_management/note/{note}/delete', 'FleetManagementController@deleteNote');
 
 ##
@@ -440,6 +438,8 @@ Route::patch('vehicle_management/edit_permit/{permit}', 'FleetManagementControll
 Route::post('vehicle_management/add_images', 'FleetManagementController@addImages');
 Route::post('vehicle_management/add_keys', 'FleetManagementController@addkeys');
 Route::patch('vehicle_management/edit_images/{image}', 'FleetManagementController@editImage');
+
+
 Route::patch('vehicle_management/edit_key/{keytracking}', 'FleetManagementController@editKeys');
 
 

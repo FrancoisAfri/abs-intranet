@@ -25,9 +25,7 @@
                     </div>
                 </div>
                 <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
+       
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -281,7 +279,11 @@
                 var reminderID;
                 $('#edit-reminder-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    reminderID = btnEdit.data('id');
+                     var btnEdit = $(e.relatedTarget);
+                     if (parseInt(btnEdit.data('id')) > 0) {
+                     reminderID = btnEdit.data('id');
+                    }
+                
                     var name = btnEdit.data('name');
                     var description = btnEdit.data('description');
                     var start_date = btnEdit.data('start_date');

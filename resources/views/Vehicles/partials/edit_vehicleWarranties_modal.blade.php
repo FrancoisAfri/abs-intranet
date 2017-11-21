@@ -2,7 +2,8 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-warrantie-form">
-                {{ csrf_field() }}
+                 {{ csrf_field() }}
+                {{ method_field('PATCH') }}
 
 
                 <div class="modal-header">

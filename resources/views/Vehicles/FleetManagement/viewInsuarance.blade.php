@@ -24,10 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <form class="form-horizontal" method="POST" action="/hr/document">
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -174,11 +170,7 @@
             <!-- Include add new prime rate modal -->
         @include('Vehicles.partials.add_vehicleInsurance_modal')
         @include('Vehicles.partials.edit_vehicleInsurance_modal')
-        
-
         </div>
-
-
         @endsection
 
         @section('page_script')
@@ -293,10 +285,13 @@
                 });
 
 
-                var warrantyID;
+                var policyID;
                 $('#edit-policy-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    warrantyID = btnEdit.data('id');
+                    if (parseInt(btnEdit.data('id')) > 0) {
+                        policyID = btnEdit.data('id');  
+                     }
+                     
                     var service_provider = btnEdit.data('service_provider');
                     var contact_person = btnEdit.data('contact_person');
                     var contact_number = btnEdit.data('contact_number');
@@ -334,17 +329,18 @@
                     modal.find('#valueID').val(valueID);
                 });
 
-                 $('#edit_policy').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_policy/'+ warrantyID ;
-                    var formName = 'editedit-policy-form';
+                 $('#edit_insurance').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_policy/'+ policyID ;
+                    var formName = 'edit-policy-form';
                     var modalID = 'edit-policy-modal';
-                    var submitBtnID = 'edit_policy';
+                    var submitBtnID = 'edit_insurance';
                     var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                     var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
+                    var successMsgTitle = 'New Policy Details have been updated!';
+                    var successMsg = 'The Policy Details has been updated successfully.';
+                    var Method = 'PATCH';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
+
 
 
             </script>

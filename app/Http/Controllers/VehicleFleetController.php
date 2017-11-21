@@ -194,7 +194,7 @@ class VehicleFleetController extends Controller
 
     }
 
-    public function addnotes(vehicle_maintenance $maintenance)
+    public function viewnotes(vehicle_maintenance $maintenance)
     {
 
         $ID = $maintenance->id;
@@ -363,17 +363,17 @@ class VehicleFleetController extends Controller
     public function editreminder(Request $request, reminders $reminder)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
+            // 'name' => 'required',
+            // 'description' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $startdate = $SysData['start_date'] = str_replace('/', '-', $SysData['start_date']);
-        $startdate = $SysData['start_date'] = strtotime($SysData['start_date']);
+        $startdate = $SysData['startdate'] = str_replace('/', '-', $SysData['startdate']);
+        $startdate = $SysData['startdate'] = strtotime($SysData['startdate']);
 
-        $enddate = $SysData['end_date'] = str_replace('/', '-', $SysData['end_date']);
-        $enddate = $SysData['end_date'] = strtotime($SysData['end_date']);
+        $enddate = $SysData['enddate'] = str_replace('/', '-', $SysData['enddate']);
+        $enddate = $SysData['enddate'] = strtotime($SysData['enddate']);
 
         $reminders->name = $SysData['name'];
         $reminders->description = $SysData['description'];
@@ -751,85 +751,83 @@ class VehicleFleetController extends Controller
             return back();
     }
 
-    public function addpolicy(Request $request){
-        $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
+    // public function addpolicy(Request $request){
+    //     $this->validate($request, [
+    //         // 'issued_to' => 'required_if:key,1',
+    //     ]);
+    //     $SysData = $request->all();
+    //     unset($SysData['_token']);
 
-        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
-        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+    //     $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
+    //     $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
 
-        $Vehiclewarranties = new vehicle_insurance($SysData);
-       // $Vehiclewarranties->inception_date = $inceptiondate ;
-        $Vehiclewarranties->registration = 1;
-        $Vehiclewarranties->status = 1;
-        $Vehiclewarranties->save();
+    //     $Vehiclewarranties = new vehicle_insurance($SysData);
+    //    // $Vehiclewarranties->inception_date = $inceptiondate ;
+    //     $Vehiclewarranties->registration = 1;
+    //     $Vehiclewarranties->status = 1;
+    //     $Vehiclewarranties->save();
 
-         //Upload supporting document
-        if ($request->hasFile('documents')) {
-            $fileExt = $request->file('documents')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
-                $request->file('documents')->storeAs('projects/documents', $fileName);
-                //Update file name in the table
-                $Vehiclewarranties->document = $fileName;
-                $Vehiclewarranties->update();
-            }
-        }
+    //      //Upload supporting document
+    //     if ($request->hasFile('documents')) {
+    //         $fileExt = $request->file('documents')->extension();
+    //         if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+    //             $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
+    //             $request->file('documents')->storeAs('projects/documents', $fileName);
+    //             //Update file name in the table
+    //             $Vehiclewarranties->document = $fileName;
+    //             $Vehiclewarranties->update();
+    //         }
+    //     }
 
-        return response()->json();
+    //     return response()->json();
 
-    }
+    // }
 
-     public function policyAct(Request $request, vehicle_insurance $policy)
-    {
-        if ($policy->status == 1)
-            $stastus = 0;
-        else
-            $stastus = 1;
+    //  public function editpolicy(Request $request , vehicle_insurance $){
+    //     $this->validate($request, [
+    //         // 'issued_to' => 'required_if:key,1',
+    //     ]);
+    //     $SysData = $request->all();
+    //     unset($SysData['_token']);
 
-        $policy->status = $stastus;
-        $policy->update();
-        return back();
-    }
+    //     $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
+    //     $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
 
-     public function edit_policy(Request $request, vehicle_insurance $warranties)
-    {
+    //     $Vehiclewarranties = new vehicle_insurance($SysData);
+    //    // $Vehiclewarranties->inception_date = $inceptiondate ;
+    //     $Vehiclewarranties->registration = 1;
+    //     $Vehiclewarranties->status = 1;
+    //     $Vehiclewarranties->save();
 
-        $this->validate($request, [
-            'date' => 'required',
-            // 'description' => 'required',
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
+    //      //Upload supporting document
+    //     if ($request->hasFile('documents')) {
+    //         $fileExt = $request->file('documents')->extension();
+    //         if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+    //             $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
+    //             $request->file('documents')->storeAs('projects/documents', $fileName);
+    //             //Update file name in the table
+    //             $Vehiclewarranties->document = $fileName;
+    //             $Vehiclewarranties->update();
+    //         }
+    //     }
 
-        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
-        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+    //     return response()->json();
 
-        $Vehiclewarranties = new vehicle_insurance($SysData);
-        $Vehiclewarranties->inception_date = $inceptiondate ;
-        $Vehiclewarranties->registration = 1;
-        $Vehiclewarranties->status = 1;
-        $Vehiclewarranties->update();
+    // }
 
-         //Upload supporting document
-        if ($request->hasFile('documents')) {
-            $fileExt = $request->file('documents')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
-                $request->file('documents')->storeAs('projects/documents', $fileName);
-                //Update file name in the table
-                $Vehiclewarranties->document = $fileName;
-                $Vehiclewarranties->update();
-            }
-        }
+    //  public function policyAct(Request $request, vehicle_insurance $policy)
+    // {
+    //     if ($policy->status == 1)
+    //         $stastus = 0;
+    //     else
+    //         $stastus = 1;
 
+    //     $policy->status = $stastus;
+    //     $policy->update();
+    //     return back();
+    // }
 
-       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
-        return back();
-    }
+   
 
     public function viewServiceDetails(vehicle_maintenance $maintenance)
     {
@@ -948,7 +946,7 @@ class VehicleFleetController extends Controller
     {
 
         $this->validate($request, [
-            'date' => 'required',
+           // 'date' => 'required',
             // 'description' => 'required',
         ]);
         $SysData = $request->all();
@@ -1309,20 +1307,21 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         $dateofincident = $IncuData['date_of_incident'] = str_replace('/', '-', $IncuData['date_of_incident']);
         $dateofincident = $IncuData['date_of_incident'] = strtotime($IncuData['date_of_incident']);
 
-        $vehicleincidents = new vehicle_incidents($IncuData);
-        $vehicleincidents->date_of_incident = $dateofincident ;
-        $vehicleincidents->vehicleID =  $IncuData['valueID'];
-        $vehicleincidents->Update();
+        $incident = new vehicle_incidents($IncuData);
+        $incident->date_of_incident = $dateofincident ;
+        $incident->vehicleID =  $IncuData['valueID'];
+        $incident->Update();
+        
 
          //Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $vehicleincidents->id . "_documents." . $fileExt;
+                $fileName = $incident->id . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('projects/documents', $fileName);
                 //Update file name in the table
-                $vehicleincidents->document = $fileName;
-                $vehicleincidents->update();
+                $incident->document = $fileName;
+                $incident->update();
             }
         }
 

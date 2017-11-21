@@ -27,13 +27,13 @@
                         </div>
                     </div>
 
-                    <div class="form-group safe-field">
+                   <div class="form-group safe-field">
                         <label for="Supplier" class="col-sm-3 control-label">Supplier </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="Supplier" name="Supplier">
-                                <option value="">*** Select a Supplier ***</option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
+                                <option value="0">*** Select a Supplier ***</option>
+                                @foreach($companies as $company)
+                                    <option value="{{ $company->id }}"> {{$company->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -51,7 +51,7 @@
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Date Issued </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="dateissued" name="date_issued"
+                            <input type="text" class="form-control" id="date_issued" name="date_issued"
                                    value="" placeholder="Select  issue date ...">
                         </div>
                     </div>

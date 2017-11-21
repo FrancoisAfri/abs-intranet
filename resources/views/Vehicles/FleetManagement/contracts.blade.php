@@ -302,6 +302,8 @@
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
+                
+
 
             </script>
 @endsection

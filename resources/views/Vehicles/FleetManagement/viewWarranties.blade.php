@@ -24,9 +24,7 @@
                         </button>
                     </div>
                 </div><!-- 
-                <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
+        
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -324,7 +322,7 @@
                     if (parseInt(btnEdit.data('id')) > 0) {
                         warrantyID = btnEdit.data('id');
                     }
-                    console.log('gets here: ' + warrantyID);
+                   // console.log('gets here: ' + warrantyID);
 
                     var service_provider = btnEdit.data('service_provider');
                     var contact_person = btnEdit.data('contact_person');
