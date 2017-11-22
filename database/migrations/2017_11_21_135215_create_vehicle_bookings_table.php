@@ -26,6 +26,24 @@ class CreateVehicleBookingsTable extends Migration
             $table->string('destination')->nullable();
             $table->integer('start_mileage_id')->nullable();
             $table->integer('end_mileage_id')->nullable();
+            $table->integer('approver1_id')->nullable();
+            $table->bigInteger('approver1_timestamp')->nullable();
+            $table->integer('approver2_id')->nullable();
+            $table->bigInteger('approver2_timestamp')->nullable();
+            $table->integer('approver3_id')->nullable();
+            $table->bigInteger('approver3_timestamp')->nullable();
+            $table->integer('rejector_id')->nullable();
+            $table->bigInteger('rejector_timestamp')->nullable();
+            $table->bigInteger('return_datetime')->nullable();
+            $table->bigInteger('actual_from_datetime')->nullable();
+            $table->bigInteger('actual_to_datetime')->nullable();
+            $table->smallinteger('booking_type')->nullable();
+            $table->integer('approver4_id')->nullable();
+            $table->integer('collector_id')->nullable();
+            $table->integer('returner_id')->nullable();
+            $table->integer('canceller_id')->nullable();
+            $table->bigInteger('canceller_timestamp')->nullable();
+            $table->bigInteger('approver4_timestamp')->nullable();
             $table->timestamps();
         });
     }

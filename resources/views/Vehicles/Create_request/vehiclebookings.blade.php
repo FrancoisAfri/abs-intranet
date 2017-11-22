@@ -89,7 +89,7 @@
                                         <div class="col-sm-10">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
+                                                    <i class="fa fa-bullseye"></i>
                                                 </div>
                                                 <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value="{{ $vehiclemodeler->name }} " readonly>
                                             </div>
@@ -100,7 +100,7 @@
                                         <div class="col-sm-10">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
+                                                    <i class="fa fa-id-card-o"></i>
                                                 </div>
                                                 <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value="{{  $maintenance->vehicle_registration }} " readonly>
                                             </div>
@@ -172,7 +172,7 @@
                                           <div class="col-sm-10">
                                               <div class="input-group">
                                                   <div class="input-group-addon">
-                                                      <i class="fa fa-clock-o"></i>
+                                                      <i class="fa fa-ravelry"></i>
                                                   </div>
                                               <select id="status" name="status" class="form-control">
                                                   <option value="0">*** Select a Booking Type  ***</option>
@@ -186,11 +186,11 @@
                                       </div>
 
                                         <div class="form-group">
-                                            <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
+                                            <label for="path" class="col-sm-2 control-label">Vehicle Driver</label>
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
-                                                        <i class="fa fa-truck"></i>
+                                                        <i class="fa fa-user-o"></i>
                                                     </div>
                                                     <select class="form-control " style="width: 100%;"
                                                             id="service_provider" name="service_provider">
@@ -220,7 +220,7 @@
                                         <div class="col-sm-10">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
+                                                    <i class="fa fa-anchor"></i>
                                                 </div>
                                                 <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value=" " >
                                             </div>
