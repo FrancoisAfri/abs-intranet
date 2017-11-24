@@ -55,7 +55,8 @@
                                             <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
                                             <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
                                             <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
-                                            <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Cancel Booking</button></td>
+                                            <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#cancel-booking-warning-modal" data-id="{{$booking->id}}"><i class="fa fa-trash"></i> Cancel Booking</button></td>
+                                        </tr>
                                         </tr>
                                     @endforeach
                                 @endif
@@ -86,6 +87,7 @@
                         </div>
                     </div>
                     <!-- End new User Form-->
+                    @include('Vehicles.sucess.cancel_booking_modal')
                 </div>
             @endsection
 
@@ -93,6 +95,9 @@
                 <!-- DataTables -->
                     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+                    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+                    <!-- Select2 -->
+                    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
                     <!-- End Bootstrap File input -->
 
                     <script>
@@ -111,5 +116,71 @@
                             });
                         });
 
+                        function reject(id, data){
+                            alert(id)
+                            if (data == 'reject_id') location.href = "/leave/reject/" + id;
+                        }
+
+                        $(function () {
+                            var moduleId;
+                            //Initialize Select2 Elements
+                            $(".select2").select2();
+
+                            //Tooltip
+
+                            $('[data-toggle="tooltip"]').tooltip();
+                            //Vertically center modals on page
+                            function reposition() {
+                                var modal = $(this),
+                                    dialog = modal.find('.modal-dialog');
+                                modal.css('display', 'block');
+
+                                // Dividing by two centers the modal exactly, but dividing by three
+                                // or four works better for larger screens.
+                                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+                            }
+                            // Reposition when a modal is shown
+                            $('.modal').on('show.bs.modal', reposition);
+                            // Reposition when the window is resized
+                            $(window).on('resize', function() {
+                                $('.modal:visible').each(reposition);
+                            });
+
+                            //Show success action modal
+                            $('#success-action-modal').modal('show');
+
+                            //
+
+                            $(".js-example-basic-multiple").select2();
+
+                            //save Fleet
+                            //Post module form to server using ajax (ADD)
+
+                            var bookingID;
+                            $('#cancel-booking-warning-modal').on('show.bs.modal', function (e) {
+                                //console.log('kjhsjs');
+                                var btnEdit = $(e.relatedTarget);
+                                if (parseInt(btnEdit.data('id')) > 0) {
+                                    bookingID = btnEdit.data('id');
+                                }
+
+                                var modal = $(this);
+                            });
+                            $('#cancel_booking').on('click', function () {
+                                var strUrl = '/vehicle_management/cancel_booking/' + bookingID;
+                                var modalID = 'cancel-booking-warning-modal';
+                                var objData = {
+                                    _token: $('#'+modalID).find('input[name=_token]').val()
+                                };
+                                var submitBtnID = 'cancel_booking';
+                                var redirectUrl = '/vehicle_management/vehiclebooking_results';
+                                var successMsgTitle = '';
+                                var successMsg = '';
+                                var Method = 'PATCH';
+                                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                            });
+
+                        });
                     </script>
+
 @endsection

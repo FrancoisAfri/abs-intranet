@@ -288,6 +288,9 @@ Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBo
 
 Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehiclebooking');
 Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
+//cancel booking
+ Route::patch('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
+//Route::get('vehice/cancelbooking/{booking}/cancel', 'VehicleBookingController@cancel_booking');
 
 ###
 

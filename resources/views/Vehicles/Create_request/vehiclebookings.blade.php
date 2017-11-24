@@ -204,7 +204,7 @@
                                                     </div>
                                                     <select class="form-control " style="width: 100%;"
                                                             id="driver" name="driver">
-                                                        <option value=" ">*** Select Driver ***</option>
+                                                        <option value="">*** Select Driver ***</option>
                                                         @foreach($employees as $user)
                                                             <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname  }}</option>
                                                         @endforeach
