@@ -487,9 +487,7 @@ class VehicleBookingController extends Controller
         $booking->canceller_timestamp = $currentDate = time();
         $booking->cancel_status = 1;
         $booking->update();
-
         AuditReportsController::store('Vehicle Management', 'Booking   Cancelled', "Booking has been Cancelled", 0);
-        //return redirect('/vehicle_management/vehiclebooking_results');
         return response()->json();
     }
 

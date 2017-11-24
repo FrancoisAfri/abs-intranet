@@ -13,7 +13,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">Internal Vehicle Management </h3>
+                    <h3 class="box-title"> My Vehicle Booking(s) </h3>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -44,7 +44,7 @@
                                     @foreach ($vehiclebookings as $booking)
                                         <tr id="categories-list">
                                             <td nowrap>
-                                                <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $booking->id }}"  ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                                <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-booking-modal" data-id="{{ $booking->id }}"  ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                             </td>
                                             <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
                                             <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
@@ -88,6 +88,7 @@
                     </div>
                     <!-- End new User Form-->
                     @include('Vehicles.sucess.cancel_booking_modal')
+                    @include('Vehicles.Create_request.edit_vehiclebooking_modal')
                 </div>
             @endsection
 
@@ -158,12 +159,10 @@
 
                             var bookingID;
                             $('#cancel-booking-warning-modal').on('show.bs.modal', function (e) {
-                                //console.log('kjhsjs');
                                 var btnEdit = $(e.relatedTarget);
                                 if (parseInt(btnEdit.data('id')) > 0) {
                                     bookingID = btnEdit.data('id');
                                 }
-
                                 var modal = $(this);
                             });
                             $('#cancel_booking').on('click', function () {
