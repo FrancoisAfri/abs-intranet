@@ -78,8 +78,8 @@
                                                 data-id="{{ $document->id }}" data-type="{{ $document->type }}"
                                                 data-description="{{ $document->description }}"
                                                 data-role="{{ $document->role }}"
-                                                data-datefrom="{{ $document->date_from }}"
-                                                data-exp_date="{{ $document->exp_date }}"
+                                                data-date_from="{{  date(' d M Y', $document->date_from) }}"
+                                                data-exp_date="{{ date(' d M Y', $document->exp_date) }}"
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>

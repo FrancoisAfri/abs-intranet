@@ -298,14 +298,13 @@ class LeaveApplicationController extends Controller {
         // call the function
         $ApplicationDetails = LeaveApplicationController::ApplicationDetails(0, $hrID);
 		//return $ApplicationDetails;
-		
+
         $statusnames = LeaveApplicationController::status();
 
         $applicatiionStaus = $ApplicationDetails['status'];
-
+       // return $applicatiionStaus;
         $levtype = $request->input('leave_type');
 
-        //$levApp->status = 1;
         $levApp->start_date = $start_date;
         $levApp->end_date = $end_date;
         $levApp->leave_days = $iDays;
@@ -350,6 +349,7 @@ class LeaveApplicationController extends Controller {
         $time_to = $leaveApp['time_to'];
         $approveDetails = array();
         unset($leaveApp['_token']);
+		
         $ApplicationDetails = array();
         $status = array();
 
@@ -386,8 +386,10 @@ class LeaveApplicationController extends Controller {
 
         // $ApplicationDetails =  LeaveApplicationController::ApplicationDetails(0, $request->input('hr_person_id'));
         $ApplicationDetails = LeaveApplicationController::ApplicationDetails(0, $hrID);
+       // return $ApplicationDetails;
         $statusnames = LeaveApplicationController::status();
         $applicatiionStaus = $ApplicationDetails['status'];
+
 
         // $status = $statusnames[$applicatiionStaus];
         $employees = $request->input('hr_person_id');

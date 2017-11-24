@@ -29,7 +29,7 @@
                     <div class="form-group ">
                         <label for="path" class="col-sm-2 control-label"> Date Captured </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="datecaptured" name="datecaptured"
+                            <input type="text" class="form-control" id="date_captured" name="date_captured"
                                    value="{{ old('date_captured') }}" placeholder="Select  Expiry date ...">
                         </div>
                     </div>

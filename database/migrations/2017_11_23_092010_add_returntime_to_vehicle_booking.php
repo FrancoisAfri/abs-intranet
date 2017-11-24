@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVehicleBookingsTable extends Migration
+class AddReturntimeToVehicleBooking extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class CreateVehicleBookingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_bookings', function (Blueprint $table) {
-              $table->increments('id');
-
-            $table->timestamps();
+        Schema::table('vehicle_booking', function ($table) {
+            $table->string('required_time')->nullable()->unsigned()->index();
         });
     }
 
@@ -27,6 +25,8 @@ class CreateVehicleBookingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vehicle_bookings');
+        Schema::table('vehicle_booking', function ($table) {
+            $table->dropColumn('required_time');
+        });
     }
 }

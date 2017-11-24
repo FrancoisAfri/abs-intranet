@@ -286,6 +286,8 @@ Route::get('vehicle_management/create_request', 'VehicleBookingController@index'
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
 Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
 
+Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehiclebooking');
+Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
 
 ###
 
@@ -369,7 +371,7 @@ Route::post('vehicle_management/add_vehicleDetails', 'FleetManagementController@
 Route::get('vehicle_management/viewdetails/{maintenance}', 'FleetManagementController@viewDetails');
 Route::patch('vehicle_management/edit_vehicleDetails/{maintenance}', 'FleetManagementController@editvehicleDetails');
 
-Route::get('/vehicle_management/vehicles_Act/{vehicle}', 'FleetManagementController@vehiclesAct');
+Route::get('/vehicle_management/vehicles_Act/{vehiclemaintenance}', 'FleetManagementController@vehiclesAct');
 
 #******************** post redirects ****************
 Route::get('vehicle_management/viewImage/{maintenance}', 'FleetManagementController@viewImage');

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVehicleBookingsTable extends Migration
+class AddVehiclemodelToVehicleBooking extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,7 @@ class CreateVehicleBookingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_bookings', function (Blueprint $table) {
-              $table->increments('id');
 
-            $table->timestamps();
-        });
     }
 
     /**
@@ -27,6 +23,7 @@ class CreateVehicleBookingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vehicle_bookings');
+
     }
+
 }

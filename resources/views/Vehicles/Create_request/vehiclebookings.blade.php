@@ -24,166 +24,176 @@
                         </button>
                     </div>
                 </div>
-				<form class="form-horizontal" method="POST" action="/vehicle_management/vehiclesearch">
-					{{ csrf_field() }}
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                <strong class="lead">Vehicle Details</strong><br>
-
-                                @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
-                                    &nbsp;
-                                @endif
-                                @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
-                                    &nbsp; &nbsp;
-                                @endif
-                                @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
-                                    &nbsp;
-                                @endif
-                                @if(!empty($maintenance->vehicle_registration))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
-                                    <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
-                                @endif
-                                @if(!empty($maintenance->year))
-                                    -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp;
-                                    &nbsp;
-                                @endif
-                                @if(!empty($maintenance->vehicle_color))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
-                                    <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
-                                @endif
-
-                            </p>
-                        </div>
-                    </div>
-
+                <form class="form-horizontal" method="POST" action="/vehicle_management/vehiclebooking">
+                    {{ csrf_field() }}
                     <div class="box-body">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                    <strong class="lead">Vehicle Details</strong><br>
 
-                        <!--  -->
-                        <div class="col-md-8 col-md-offset-2">
-                            <div>
-                                <div class="box-header with-border" align="center">
-                                    <h3 class="box-title">Search for a Vehicle</h3>
-                                </div>
-                                <div class="box-body" id="vehicle_details">
+                                    @if(!empty($vehiclemaker))
+                                        | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
+                                        &nbsp;
+                                    @endif
+                                    @if(!empty($vehiclemodeler))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
+                                        &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($vehicleTypes))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
+                                        &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->vehicle_registration))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
+                                        <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->year))
+                                        -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp;
+                                        &nbsp;
+                                    @endif
+                                    @if(!empty($maintenance->vehicle_color))
+                                        -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
+                                        <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                    @endif
 
+                                </p>
+                            </div>
+                        </div>
 
+                        <div class="box-body">
 
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
+                            <!--  -->
+                            <div class="col-md-8 col-md-offset-2">
+                                <div>
+                                    <div class="box-header with-border" align="center">
+                                        <h3 class="box-title">Search for a Vehicle</h3>
+                                    </div>
+                                    <div class="box-body" id="vehicle_details">
+
+                                        <div class="form-group">
+                                            <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-truck"></i>
+                                                    </div>
+
+                                                    <input type="text" id ="vehicletype" class="form-control form-control-sm pull-left" name="vehicletype" value="{{ $vehicleTypes->name }} " readonly>
                                                 </div>
-                                                <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value="{{ $vehicleTypes->name }} " readonly>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-bullseye"></i>
+                                        <div class="form-group">
+                                            <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-bullseye"></i>
+                                                    </div>
+                                                    <input type="text" id ="vehiclemodel" class="form-control pull-left" name="vehiclemodel" value="{{ $vehiclemodeler->name }} " readonly>
                                                 </div>
-                                                <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value="{{ $vehiclemodeler->name }} " readonly>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Vehicle Reg. No</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-id-card-o"></i>
+                                        <div class="form-group">
+                                            <label for="path" class="col-sm-2 control-label">Vehicle Reg. No</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-id-card-o"></i>
+                                                    </div>
+                                                    <input type="text" id ="vehicle_reg" class="form-control pull-left" name="vehicle_reg" value="{{  $maintenance->vehicle_registration }} " readonly>
                                                 </div>
-                                                <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value="{{  $maintenance->vehicle_registration }} " readonly>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row emp-field" style="display: block;">
-                                        <div class="col-xs-6">
-                                            <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                                <label for="date_from" class="col-sm-4 control-label">Required From</label>
-                                                <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-calendar"></i>
+                                        <div class="row emp-field" style="display: block;">
+                                            <div class="col-xs-6">
+                                                <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
+                                                    <label for="date_from" class="col-sm-4 control-label">Required From</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </div>
+                                                            <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value="{{ $startdate }} " readonly>
                                                         </div>
-                                                        <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value="{{ $startdate }} " readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-6">
+                                                <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
+                                                    <label for="date_to" class="col-sm-3 control-label">Required Time</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <i class="fa fa-clock-o"></i>
+                                                            </div>
+                                                            <input type="text" id ="required_time" class="form-control pull-left" name="required_time" value=" {{  $requiredTime }}" readonly>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-xs-6">
-                                            <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                                <label for="date_to" class="col-sm-3 control-label">Required Time</label>
-                                                <div class="col-sm-9">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-clock-o"></i>
+                                        <div class="row emp-field" style="display: block;">
+                                            <div class="col-xs-6">
+                                                <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
+                                                    <label for="date_from" class="col-sm-4 control-label">Return At</label>
+                                                    <div class="col-sm-8">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </div>
+                                                            <input type="text" id ="return_at" class="form-control pull-left" name="return_at" value=" {{ $returnAt }} " readonly>
                                                         </div>
-                                                        <input type="text" id ="required_time" class="form-control pull-left" name="required_time" value=" {{  $requiredTime }}" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-6">
+                                                <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
+                                                    <label for="date_to" class="col-sm-3 control-label">Return At Time</label>
+                                                    <div class="col-sm-9">
+                                                        <div class="input-group">
+                                                            <div class="input-group-addon">
+                                                                <i class="fa fa-clock-o"></i>
+                                                            </div>
+                                                            <input type="text" id ="return_time" class="form-control pull-left" name="return_time" value=" {{$returnTime}} " readonly >
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="row emp-field" style="display: block;">
-                                        <div class="col-xs-6">
-                                            <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                                <label for="date_from" class="col-sm-4 control-label">Return At</label>
-                                                <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-calendar"></i>
-                                                        </div>
-                                                        <input type="text" id ="return_at" class="form-control pull-left" name="return_at" value=" {{ $returnAt }} " readonly>
+                                        <div class="form-group">
+                                            <label for="Status" class="col-sm-2 control-label">Usage Type </label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-ravelry"></i>
                                                     </div>
+                                                    <select id="Usage_type" name="Usage_type" class="form-control">
+                                                        <option value="0">*** Select a Booking Type  ***</option>
+                                                        <option value="1"> Usage</option>
+                                                        <option value="2"> Service</option>
+                                                        <option value="2"> Maintenance</option>
+                                                        <option value="2"> Repair</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-xs-6">
-                                            <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                                <label for="date_to" class="col-sm-3 control-label">Return At Time</label>
-                                                <div class="col-sm-9">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-clock-o"></i>
-                                                        </div>
-                                                        <input type="text" id ="return_time" class="form-control pull-left" name="return_time" value=" {{$returnTime}} " readonly >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                      <div class="form-group">
-                                          <label for="Status" class="col-sm-2 control-label">Usage Type </label>
-                                          <div class="col-sm-10">
-                                              <div class="input-group">
-                                                  <div class="input-group-addon">
-                                                      <i class="fa fa-ravelry"></i>
-                                                  </div>
-                                              <select id="status" name="status" class="form-control">
-                                                  <option value="0">*** Select a Booking Type  ***</option>
-                                                  <option value="1"> Usage</option>
-                                                  <option value="2"> Service</option>
-                                                  <option value="2"> Maintenance</option>
-                                                  <option value="2"> Repair</option>
-                                              </select>
-                                              </div>
-                                          </div>
-                                      </div>
 
                                         <div class="form-group">
                                             <label for="path" class="col-sm-2 control-label">Vehicle Driver</label>
@@ -193,8 +203,8 @@
                                                         <i class="fa fa-user-o"></i>
                                                     </div>
                                                     <select class="form-control " style="width: 100%;"
-                                                            id="service_provider" name="service_provider">
-                                                        <option value="0">*** Select Driver ***</option>
+                                                            id="driver" name="driver">
+                                                        <option value=" ">*** Select Driver ***</option>
                                                         @foreach($employees as $user)
                                                             <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname  }}</option>
                                                         @endforeach
@@ -202,268 +212,116 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group notes-field{{ $errors->has('extras') ? ' has-error' : '' }}">
-                                            <label for="extras" class="col-sm-2 control-label">Purpose for Request</label>
+                                        <div class="form-group notes-field{{ $errors->has('purpose') ? ' has-error' : '' }}">
+                                            <label for="purpose" class="col-sm-2 control-label">Purpose for Request</label>
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-sticky-note"></i>
                                                     </div>
-                                                    <textarea class="form-control" id="extras" name="extras"
+                                                    <textarea class="form-control" id="purpose" name="purpose"
                                                               placeholder="Enter Extras..."
                                                               rows="3">{{ old('Extras') }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Destination </label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-anchor"></i>
+                                        <div class="form-group">
+                                            <label for="path" class="col-sm-2 control-label">Destination </label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-anchor"></i>
+                                                    </div>
+                                                    <input type="text" id ="destination" class="form-control form-control-sm pull-left" name="destination" value=" " >
                                                 </div>
-                                                <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value=" " >
                                             </div>
                                         </div>
+
+                                        <input type="hidden" id="vehicle_id" name="vehicle_id"
+                                               value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+
+                                        <!-- /.box-body -->
+                                        <div class="box-footer">
+                                            <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                                            <input type="submit"  class="btn btn-primary pull-right" value="Submit Request">
+                                        </div>
                                     </div>
+                                </div>
+                                @if(Session('success_application'))
+                                    @include('Vehicles.sucess.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
+                                @endif
+                            </div>
+
+                        @endsection
+                        @section('page_script')
+                            <!-- Select2 -->
+                                <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+                                <!-- bootstrap datepicker -->
+                                <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+                                <!-- InputMask -->
+                                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+                                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+                                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+                                <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+                                <!-- the main fileinput plugin file -->
+                                <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+                                <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+                                <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+                                <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+                                <!-- the main fileinput plugin file -->
+                                <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+
+
+                                <!-- Date rane picker -->
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+                                <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+
+                                <!-- iCheck -->
+                                <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
+                                <!-- Ajax dropdown options load -->
+                                <script src="/custom_components/js/load_dropdown_options.js"></script>
+                                <!-- Date picker -->
+                                <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+                                <!-- Ajax form submit -->
+                                <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
+                                <!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+                                <!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+
+                                <script type="text/javascript">
+                                    $(function() {
+                                        //Initialize Select2 Elements
+                                        $(".select2").select2();
+                                        //Phone mask
+                                        $("[data-mask]").inputmask();
+
+                                        //Vertically center modals on page
+                                        function reposition() {
+                                            var modal = $(this),
+                                                dialog = modal.find('.modal-dialog');
+                                            modal.css('display', 'block');
+
+                                            // Dividing by two centers the modal exactly, but dividing by three
+                                            // or four works better for larger screens.
+                                            dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+                                        }
+                                        // Reposition when a modal is shown
+                                        $('.modal').on('show.bs.modal', reposition);
+                                        // Reposition when the window is resized
+                                        $(window).on('resize', function() {
+                                            $('.modal:visible').each(reposition);
+                                        });
+
+                                        //Show success action modal
+                                        $('#success-action-modal').modal('show');
+                                    });
 
 
 
-                                    <!--   </div> -->
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                        <input type="submit" id="submit" name="submit" class="btn btn-primary pull-right" value="Submit Request">
-                    </div>
-                </div>
-            </div>
-            <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.upload_newnote_modal')
-        @include('Vehicles.partials.edit_notes_modal')
-        <!-- Include delete warning Modal form-->
-
-
-        </div>
-
-@endsection
-@section('page_script')
-	<script src="/custom_components/js/modal_ajax_submit.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-	<!-- iCheck -->
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-			type="text/javascript"></script>
-	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-			type="text/javascript"></script>
-	<!-- the main fileinput plugin file -->
-	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
-	<!-- InputMask -->
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script>
-		function postData(id, data) {
-			if (data == 'actdeac') location.href = "/vehice/fleetcard_act/" + id;
-
-		}
-
-		$('#back_button').click(function () {
-			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-		});
-
-
-	// Reposition when a modal is shown
-	$('.modal').on('show.bs.modal', reposition);
-	// Reposition when the window is resized
-	$(window).on('resize', function() {
-		$('.modal:visible').each(reposition);
-	});
-
-		var moduleId;
-		//Initialize Select2 Elements
-		$(".select2").select2();
-		$('.zip-field').hide();
-
-	$(".js-example-basic-multiple").select2();
-
-		//Tooltip
-
-		$('[data-toggle="tooltip"]').tooltip();
-
-		//Vertically center modals on page
-		function reposition() {
-			var modal = $(this),
-				dialog = modal.find('.modal-dialog');
-			modal.css('display', 'block');
-
-			// Dividing by two centers the modal exactly, but dividing by three
-			// or four works better for larger screens.
-			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-		}
-
-		// Reposition when a modal is shown
-		$('.modal').on('show.bs.modal', reposition);
-		// Reposition when the window is resized
-		$(window).on('resize', function () {
-			$('.modal:visible').each(reposition);
-		});
-
-		//Show success action modal
-		$('#success-action-modal').modal('show');
-
-		//
-
-		$(".js-example-basic-multiple").select2();
-
-		$('.datepicker').datepicker({
-			format: 'dd/mm/yyyy',
-			autoclose: true,
-			todayHighlight: true
-		});
-
-		$(function () {
-			$('img').on('click', function () {
-				$('.enlargeImageModalSource').attr('src', $(this).attr('src'));
-				$('#enlargeImageModal').modal('show');
-			});
-		});
-
-		//Initialize iCheck/iRadio Elements
-		$('input').iCheck({
-			checkboxClass: 'icheckbox_square-blue',
-			radioClass: 'iradio_square-blue',
-			increaseArea: '10%' // optional
-		});
-
-		$(document).ready(function () {
-
-			$('#date_captured').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-
-
-			$('#exp_date').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-
-
-			$('#expdate').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-			$('#datecaptured').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-		});
-
-
-		$('#rdo_single, #rdo_bulke').on('ifChecked', function () {
-			var allType = hideFields();
-			if (allType == 1) $('#box-subtitle').html('Site Address');
-			else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-		});
-
-
-		function hideFields() {
-			
-			var allType = $("input[name='upload_type']:checked").val();
-			if (allType == 1) {
-				$('.zip-field').hide();
-				$('.user-field').show();
-			}
-			else if (allType == 2) {
-				$('.user-field').hide();
-				$('.zip-field').show();
-			}
-			return allType;
-		}
-
-		function changetextbox() {
-			var levID = document.getElementById("key_status").value;
-			if (levID == 1) {
-				$('.sex-field').hide();
-				// $('.Sick-field').show();
-			}
-		}
-
-	//Post perk form to server using ajax (add)
-$('#add_notes').on('click', function () {
-	var strUrl = '/vehicle_management/add_new_note';
-	var formName = 'add-note-form';
-	var modalID = 'add-note-modal';
-	var submitBtnID = 'add_notes';
-	var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
-	var successMsgTitle = 'New Note  Added!';
-	var successMsg = 'The Note  has been updated successfully.';
-	modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-});
-
-		//Post perk form to server using ajax (add)
-		$('#add_notes').on('click', function () {
-			var strUrl = '/vehicle_management/add_new_note';
-			var formName = 'add-note-form';
-			var modalID = 'add-note-modal';
-			var submitBtnID = 'add_notes';
-			var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
-			var successMsgTitle = 'New Note  Added!';
-			var successMsg = 'The Note  has been updated successfully.';
-			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-		});
-
-		// });
-
-		var noteID;
-		$('#edit-note-modal').on('show.bs.modal', function (e) {
-			//console.log('kjhsjs');
-			var btnEdit = $(e.relatedTarget);
-			 if (parseInt(btnEdit.data('id')) > 0) {
-               noteID = btnEdit.data('id');     
-             }
-			
-			var captured_by = btnEdit.data('captured_by');
-			var date_captured = btnEdit.data('date_captured');
-			var notes = btnEdit.data('notes');
-			var documents = btnEdit.data('documents');
-			var modal = $(this);
-			modal.find('#captured_by').val(captured_by);
-			modal.find('#date_captured').val(date_captured);
-			modal.find('#notes').val(notes);
-			modal.find('#documents').val(documents);
-
-		});
-
-
-		//Post perk form to server using ajax (edit)
-		$('#edit_note').on('click', function () {
-			var strUrl = '/vehicle_management/edit_note/' + noteID;
-			var formName = 'edit-note-form';
-			var modalID = 'edit-note-modal';
-			var submitBtnID = 'edit_note';
-			var redirectUrl = '/vehicle_management/notes/{{$maintenance->id}}';
-			var successMsgTitle = 'Changes Saved!';
-			var successMsg = 'The  details have been updated successfully!';
-			var Method = 'PATCH';
-			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-		});
-
-
-	</script>
+                                </script>
 @endsection

@@ -1,10 +1,5 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-    <!-- Include Date Range Picker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!-- iCheck -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
@@ -19,7 +14,6 @@
                 <div class="box-header with-border">
                     <i class="fa fa-sliders pull-right"></i>
                     <h3 class="box-title">Vehicle Configuration</h3>
-                    <!-- <p>Enter company details:</p> -->
                 </div>
                 <form class="form-horizontal" method="POST"
                       action="/vehicle_management/configuration/{{ $configuration->id }}" enctype="multipart/form-data">
@@ -37,12 +31,8 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div class="box-body" style="max-height: 600px; overflow-y: scroll;">
                             <table class="table table-striped table-bordered">
-
-                                {{--<td style="vertical-align: middle;"></td>--}}
-
                                 <tr>
                                     <td class="caption" colspan="2">Allow Sending of Messages</td>
                                     <input type="hidden" name="allow_sending_messages" value="0">

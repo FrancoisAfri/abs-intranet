@@ -75,7 +75,7 @@
                                                 data-toggle="modal" data-target="#edit-note-modal"
                                                 data-id="{{ $document->id }}"
                                                 data-captured_by="{{ date(' d M Y', $document->date_captured) }}"
-                                                data-date_captured="{{ $document->date_captured }}"
+                                                data-date_captured="{{ date(' d M Y', $document->date_captured) }}"
                                                 data-notes="{{ $document->notes }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -250,61 +250,18 @@
 
 		$(document).ready(function () {
 
-			$('#date_captured').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-
-
-			$('#exp_date').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-
-
-			$('#expdate').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-			$('#datecaptured').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-		});
-
-
-		$('#rdo_single, #rdo_bulke').on('ifChecked', function () {
-			var allType = hideFields();
-			if (allType == 1) $('#box-subtitle').html('Site Address');
-			else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-		});
-
-
-		function hideFields() {
 			
-			var allType = $("input[name='upload_type']:checked").val();
-			if (allType == 1) {
-				$('.zip-field').hide();
-				$('.user-field').show();
-			}
-			else if (allType == 2) {
-				$('.user-field').hide();
-				$('.zip-field').show();
-			}
-			return allType;
-		}
+		  $('input[name="date_captured"]').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 
-		function changetextbox() {
-			var levID = document.getElementById("key_status").value;
-			if (levID == 1) {
-				$('.sex-field').hide();
-				// $('.Sick-field').show();
-			}
-		}
+
+			
+		 });
+
+
 
 	//Post perk form to server using ajax (add)
 $('#add_notes').on('click', function () {

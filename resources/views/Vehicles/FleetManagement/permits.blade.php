@@ -73,6 +73,8 @@
                             
                                     <td nowrap>
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
+                                            data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
+                                            data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"    
                                             data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
                                             data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
                                             
@@ -198,16 +200,26 @@
                     $('#success-action-modal').modal('show');
                 });
 
-                $('.datepicker').datepicker({
+                
+
+                $('input[name="date_issued"]').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                $('input[name="exp_date"]').datepicker({
                     format: 'dd/mm/yyyy',
                     autoclose: true,
                     todayHighlight: true
                 });
-                $('#exp_date').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
-                });
+
+                $('#date_captured').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
+
 
       
 
@@ -218,29 +230,7 @@
                     increaseArea: '10%' // optional
                 });
 
-                $(document).ready(function () {
-
-                    $('#date_issued').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                    $('#dateissued').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                    $('#expdate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                });
+                
 
             
 

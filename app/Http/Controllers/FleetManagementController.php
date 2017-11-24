@@ -32,6 +32,7 @@ use App\notes;
 use App\DivisionLevelFive;
 use App\module_ribbons;
 use App\ribbons_access;
+use App\permit_licence;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
@@ -617,16 +618,17 @@ class FleetManagementController extends Controller
 
     }
 
-    public function vehiclesAct(Request $request, vehicle_maintenance $vehicle)
+    public function vehiclesAct(Request $request, vehicle_maintenance $vehiclemaintenance)
     {
-        if ($vehicle->status == 1)
+        if ($vehiclemaintenance->status == 1)
             $stastus = 0;
         else
             $stastus = 1;
 
-        $vehicle->status = $stastus;
-        $vehicle->update();
-       // return view('Vehicles.vehicle_search_results');
+        $vehiclemaintenance->status = $stastus;
+        $vehiclemaintenance->update();
+        // return view('Vehicles.vehicle_search_results');
+        //  } else
         return back();
     }
 
@@ -735,6 +737,8 @@ class FleetManagementController extends Controller
         $vehicle_image = images::orderBy('id', 'asc')->get();
         $keytracking = keytracking::orderBy('id' , 'asc')->get();
         $safe = safe::orderBy('id' , 'asc')->get();
+        $permitlicence = permit_licence::orderBy('id', 'asc')->get();
+         
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
           
@@ -777,6 +781,8 @@ class FleetManagementController extends Controller
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+
+            $data['permitlicence'] = $permitlicence;
             $data['status'] = $status;
             $data['name'] = $name;
             $data['vehicleTypes'] = $vehicleTypes;

@@ -16,9 +16,6 @@
                     <h3 class="box-title">Internal Vehicle Management </h3>
                 </div>
                 <!-- /.box-header -->
-
-
-
                 <!-- form start -->
 
                 <div class="box-body">
@@ -29,51 +26,53 @@
                                 <thead>
                                 <tr>
 
-                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th style="width: 10px; text-align: center;"></th>
                                     <th>Vehicle</th>
-                                    <th>Type</th>
                                     <th>Fleet Number</th>
-                                    <th>Registration Number</th>
-                                    <th>Company</th>
-                                    <th>Department</th>
-                                  <!--   <th>Registration</th> -->
-                                    <th>Odometer Reading</th>
-                                    <th>Notices</th>
+                                    <th>Vehicle Registration</th>
+                                    <th>Booking Type</th>
+                                    <th>Required From</th>
+                                    <th>Return By</th>
+                                    <th>Capturer</th>
+                                    <th>Driver</th>
+                                    <th>Status</th>
+                                    <th style="width: 10px; text-align: center;"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if (count($vehiclebooking) > 0)
-                                    @foreach ($vehiclebooking as $booking)
+                                @if (count($vehiclebookings) > 0)
+                                    @foreach ($vehiclebookings as $booking)
                                         <tr id="categories-list">
-                                            <td>
-                                                <a href="{{ '/vehicle_management/bookingdetails/' . $booking->id . '/' . $vehicleDates}}"
-                                                   id="edit_compan" class="btn btn-default  btn-xs"
-                                                   data-id="{{ $booking->id }}">select</a>
+                                            <td nowrap>
+                                                <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $booking->id }}"  ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                             </td>
-                                            <td>{{ !empty($booking->vehicle_make . ' ' . $booking->vehicle_model . ' ' . $booking->year ) ? $booking->vehicle_make . ' ' . $booking->vehicle_model  . ' ' . $booking->year: ''}}</td>
-                                            <td>{{ !empty($booking->vehicle_type) ? $booking->vehicle_type : ''}}</td>
+                                            <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
                                             <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
-                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
-                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
-                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
-                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
-                                            <td></td>
+                                            <td>{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : ''}}</td>
+                                            <td>{{ !empty($booking->usage_type) ? $usageType[$booking->usage_type] : ''}}</td>
+                                            <td>{{ !empty($booking->require_datetime . ' ' . $booking->required_time) ? $booking->require_datetime . ' ' . $booking->required_time : ''}}</td>
+                                            <td>{{ !empty($booking->return_datetime . ' ' . $booking->return_time) ? $booking->return_datetime . ' ' . $booking->return_time : ''}}</td>
+                                            <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
+                                            <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
+                                            <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
+                                            <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Cancel Booking</button></td>
                                         </tr>
                                     @endforeach
                                 @endif
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th style="width: 10px; text-align: center;"></th>
                                     <th>Vehicle</th>
-                                    <th>Type</th>
                                     <th>Fleet Number</th>
-                                    <th>Registration Number</th>
-                                    <th>Company</th>
-                                    <th>Department</th>
-                                    <!-- <th>Registration</th> -->
-                                    <th>Odometer Reading</th>
-                                    <th>Notices</th>
+                                    <th>Vehicle Registration</th>
+                                    <th>Booking Type</th>
+                                    <th>Required From</th>
+                                    <th>Return By</th>
+                                    <th>Capturer</th>
+                                    <th>Driver</th>
+                                    <th>Status</th>
+                                    <th style="width: 10px; text-align: center;"></th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -97,14 +96,9 @@
                     <!-- End Bootstrap File input -->
 
                     <script>
-                        function postData(id, data) {
-                            if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
-
-                        }
-
                         //Cancel button click event
                         document.getElementById("cancel").onclick = function () {
-                            location.href = "/vehicle_management/create_request";
+                            location.href = "/vehicle_management/vehiclesearch";
                         };
                         $(function () {
                             $('#example2').DataTable({

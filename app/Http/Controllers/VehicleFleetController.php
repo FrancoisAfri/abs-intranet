@@ -497,6 +497,7 @@ class VehicleFleetController extends Controller
         $generalcost->vehicleID = $SysData['valueID'];
         $generalcost->save();
 
+        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         return response()->json();
 
     }
@@ -525,7 +526,7 @@ class VehicleFleetController extends Controller
         $costs->vehicleID = 0;
         $costs->update();
         AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
-        return back();
+        return response()->json();
     }
 
     public function deletecosts(general_cost $costs)
@@ -567,9 +568,12 @@ class VehicleFleetController extends Controller
             $ID = $maintenance->id;
 
             $vehiclewarranties = DB::table('vehicle_warranties')
-                ->select('vehicle_warranties.*')
+                ->select('vehicle_warranties.*', 'contact_companies.name as serviceprovider')
+                ->leftJoin('contact_companies', 'vehicle_warranties.service_provider', '=', 'contact_companies.id')
                 ->orderBy('vehicle_warranties.id')
                 ->get();
+
+               
 
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
@@ -1308,10 +1312,10 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         $dateofincident = $IncuData['date_of_incident'] = strtotime($IncuData['date_of_incident']);
 
         $incident = new vehicle_incidents($IncuData);
-        $incident->date_of_incident = $dateofincident ;
+        $incident->date_of_incident = 454554545 ;
         $incident->vehicleID =  $IncuData['valueID'];
         $incident->Update();
-        
+
 
          //Upload supporting document
         if ($request->hasFile('documents')) {
