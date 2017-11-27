@@ -720,6 +720,9 @@ Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
 
 Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleDD')->name('contactsdropdown');
 
+//Test leave cron
+Route::get('test/cron', 'AllocateLeavedaysFamilyCronController@sickDays');
+
 //Email Test
 Route::get('testemail', function () {
     //Mail::to('smalto@afrixcel.co.za')->send(new UserCreated);

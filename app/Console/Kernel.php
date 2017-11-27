@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
         //$schedule->command('emptask:overdue')->daily();
         $schedule->command('emptask:overdue')->everyMinute();
         $schedule->command('schedule:leaveAllocationAnnual')->monthlyOn(1, '01:00');
-		$schedule->command('schedule:leaveAllocationFamily')->daily();
+		$schedule->command('schedule:leaveAllocationFamily')->dailyAt('01:00');
     }
 
     /**
