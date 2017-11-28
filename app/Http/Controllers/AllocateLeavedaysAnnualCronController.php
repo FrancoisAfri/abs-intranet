@@ -31,22 +31,28 @@ class AllocateLeavedaysAnnualCronController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function execute() {
-
-        $lev = new LeaveType();
+        //$lev = new LeaveType();
         $users = HRPerson::where('status', 1)->pluck('user_id');
         foreach ($users as $empID) {
-            $lev = new leave_credit();
+            //$lev = new leave_credit();
             $AnnualLeaveTypeID = 1;
-            $leavebalance = leave_credit::where('hr_id', $empID)
+            $leaveCredit = leave_credit::where('hr_id', $empID)
                             ->where('leave_type_id', $AnnualLeaveTypeID)
-                            ->pluck('leave_balance')->first();
-            if ($leavebalance == null) {
-                $leavebalance = 0;
-            }
+                            ->first();//pluck('leave_balance')
+            $leavebalance = ($leaveCredit && $leaveCredit->leave_balance > 0) ? $leaveCredit->leave_balance : 0;
             $newAnnualbalane = 1.25 * 8;
             $Annualbalance = $leavebalance + $newAnnualbalane;
-            $lev->leave_balance = $Annualbalance;
-            $lev->update();
+            if ($leaveCredit) {
+                $leaveCredit->leave_balance = $Annualbalance;
+                $leaveCredit->update();
+            }
+            else {
+                $leaveCredit = new leave_credit();
+                $leaveCredit->hr_id = $empID;
+                $leaveCredit->leave_type_id = $AnnualLeaveTypeID;
+                $leaveCredit->leave_balance = $Annualbalance;
+                $leaveCredit->save();
+            }
         }
 
         AuditReportsController::store('Leave Annual Management', "Cron leaveAllocationAnnual Ran", "Automatic Ran by Server", 0);

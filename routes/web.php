@@ -654,6 +654,10 @@ Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
 
+//Voucher (Guest)
+Route::get('get-voucher', 'VouchersGuestController@index');
+Route::post('get-voucher', 'VouchersGuestController@store');
+
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');
 Route::get('survey/question_activate/{question}', 'SurveysController@actDeact');
@@ -744,6 +748,9 @@ Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@upd
 Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
 
 Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleDD')->name('contactsdropdown');
+
+//Test leave cron
+Route::get('test/cron', 'AllocateLeavedaysFamilyCronController@sickDays');
 
 //Email Test
 Route::get('testemail', function () {

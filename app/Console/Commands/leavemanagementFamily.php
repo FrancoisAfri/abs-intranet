@@ -36,11 +36,11 @@ class leavemanagementFamily extends Command {
      */
     public function handle() {
         app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->execute();
-         app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->sickDays();
-          app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->maternity();
-           app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')-> sickDays();
+        app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->sickDays();
+        //app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->maternity();
+        //app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->sickDays();
          
-//        \Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
+        \Log::info('Cron - leavemanagementFamily, artisan command schedule:leaveAllocationFamily ran successfully @ ' . \Carbon\Carbon::now());
     }
 
 }
