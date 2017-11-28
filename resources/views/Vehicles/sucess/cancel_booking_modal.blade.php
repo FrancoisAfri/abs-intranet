@@ -21,7 +21,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-warning pull-left" data-dismiss="modal">No</button>
-                    <button type="button" id="cancel_booking" class="btn btn-warning"> Yes
+                    <button type="button" id="cancel_booking" class="btn btn-warning" > Yes
                     </button>
                 </div>
             </form>

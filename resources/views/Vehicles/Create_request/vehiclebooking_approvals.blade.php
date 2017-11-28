@@ -27,84 +27,65 @@
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
-                                <th>Vehicle</th>
                                 <th>Fleet Number</th>
+                                <th>Vehicle Make</th>
+                                <th>Vehicle Model</th>
                                 <th>Vehicle Registration</th>
-                                <th>Booking Type</th>
                                 <th>Required From</th>
-                                <th>Return By</th>
+                                <th>Required To</th>
+                                <th>Booking Type</th>
+                                <th>Purpose </th>
+                                <th>Destination </th>
                                 <th>Capturer</th>
                                 <th>Driver</th>
                                 <th>Status</th>
-                                <th style="width: 10px; text-align: center;"></th>
+                                <th style="width: 10px; text-align: center;">Action</th>
                                 <th style="width: 10px; text-align: center;"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @if (count($vehiclebookings) > 0)
+                            @if (count($vehicleapprovals) > 0)
                             @endif
                             <ul class="products-list product-list-in-box">
-                                @foreach ($vehiclebookings as $booking)
+                                @foreach ($vehicleapprovals as $booking)
                                     <tr>
-                                        @if (isset($booking) && $booking->status !== 10)
-                                            <td nowrap>
-                                                <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                        data-toggle="modal" data-target="#edit-booking-modal"
-                                                        data-id="{{ $booking->id }}"
-                                                        data-vehiclemodel="{{ $booking->vehicleModel }}"
-                                                        data-vehicle_reg="{{ $booking->vehicle_reg }}"
-                                                        data-required_from="{{date("y F  Y, g:i a", $booking->require_datetime)}}"
-                                                        data-required_to="{{date("y F  Y, g:i a", $booking->return_datetime)}}"
-                                                        data-usage_type="{{$booking->usage_type}}"
-                                                        data-driver="{{$booking->driver_id}}"
-                                                        data-purpose="{{$booking->purpose}}"
-                                                        data-destination="{{$booking->destination}}"
-                                                        data-vehicle_id="{{$booking->vehicle_id}}}"
-                                                ><i
-                                                            class="fa fa-pencil-square-o"></i> Edit
-                                                </button>
-                                            </td>@else
-                                            <td></td>
-                                        @endif
-                                        <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
+                                        <td></td>
                                         <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+                                        <td>{{ !empty($booking->vehicleMake) ? $booking->vehicleMake : ''}}</td>
+                                        <td>{{ !empty($booking->vehicleModel) ? $booking->vehicleModel : ''}}</td>
                                         <td>{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : ''}}</td>
-                                        <td>{{ !empty($booking->usage_type) ? $usageType[$booking->usage_type] : ''}}</td>
                                         <td>{{ !empty($booking->require_datetime ) ?  date("y F  Y, g:i a", $booking->require_datetime)  : ''}}</td>
                                         <td>{{ !empty($booking->return_datetime ) ? date("y F  Y, g:i a", $booking->return_datetime) : ''}}</td>
+                                        <td>{{ !empty($booking->booking_type) ? $usageType[$booking->booking_type]  : ''}}</td>
+                                        <td>{{ !empty($booking->purpose) ? $booking->purpose : ''}}</td>
+                                        <td>{{ !empty($booking->destination) ? $booking->destination : ''}}</td>
                                         <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
-                                        <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
+                                        <td>{{ !empty($booking->driver_id) ? $booking->driver_id : ''}}</td>
                                         <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
-                                        <td nowrap>
-                                            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                    data-target="#cancel-booking-warning-modal"
-                                                    data-id="{{$booking->id}}"><i class="fa fa-trash"></i> Cancel
-                                                Booking
-                                            </button>
+                                         <td nowrap>
+                                        <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$booking->id}}" onclick="postData({{$booking->id}}, 'approval')">Approve</button>
                                         </td>
-                                        @if (isset($booking) && $booking->status === 10)
-                                            <td>
-                                                <a href="{{ '/vehicle_management/collect/' . $booking->id }}" id="edit_compan"
-                                                   class="btn btn-success  btn-xs" data-id="{{ $booking->id }}"><i
-                                                            class="fa fa-handshake-o"></i> collect</a>
-                                            </td> @else
-                                            <td></td>
-                                        @endif
+                                         <td nowrap>
+                                            <button type="button" id="reject-reason" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#decline-booking-modal" data-id="{{ $booking->id }}" data-description ="{{ $booking->reject_reason }}">Reject</button></td>
                                     </tr>
                             @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
-                                <th>Vehicle</th>
                                 <th>Fleet Number</th>
+                                <th>Vehicle Make</th>
+                                <th>Vehicle Model</th>
                                 <th>Vehicle Registration</th>
-                                <th>Booking Type</th>
                                 <th>Required From</th>
-                                <th>Return By</th>
+                                <th>Required To</th>
+                                <th>Booking Type</th>
+                                <th>Purpose </th>
+                                <th>Destination </th>
                                 <th>Capturer</th>
                                 <th>Driver</th>
                                 <th>Status</th>
+                                <th style="width: 10px; text-align: center;">Action</th>
                                 <th style="width: 10px; text-align: center;"></th>
                             </tr>
                             </tfoot>
@@ -117,8 +98,11 @@
                         </div>
                     </div>
                 </div>
-                @include('Vehicles.sucess.cancel_booking_modal')
-                @include('Vehicles.Create_request.edit_vehiclebooking_modal')
+                @include('Vehicles.Create_request.decline_booking')
+
+                @if(Session('success_application'))ic
+                @include('Vehicles.sucess.success_action', ['modal_title' => "Vehicle booking approval was Successful!", 'modal_content' => session('success_application')])
+                @endif
             </div>
         @endsection
 
@@ -138,6 +122,10 @@
                     document.getElementById("cancel").onclick = function () {
                         location.href = "/vehicle_management/vehiclesearch";
                     };
+
+                    function postData(id, data) {
+                        if (data == 'approval') location.href = "/vehicle_management/approval/" + id;
+                    }
                     $(function () {
                         $('#example2').DataTable({
                             "paging": true,
@@ -159,10 +147,6 @@
 
                     });
 
-                    function reject(id, data) {
-                        alert(id)
-                        if (data == 'reject_id') location.href = "/leave/reject/" + id;
-                    }
 
                     $(function () {
                         var moduleId;
@@ -201,71 +185,29 @@
                         //Cancell booking
                         //Post module form to server using ajax (ADD)
 
-                        var bookingID;
-                        $('#cancel-booking-warning-modal').on('show.bs.modal', function (e) {
+                        var reject_ID;
+                        $('#decline-booking-modal').on('show.bs.modal', function (e) {
                             var btnEdit = $(e.relatedTarget);
-                            if (parseInt(btnEdit.data('id')) > 0) {
-                                bookingID = btnEdit.data('id');
-                            }
+                            reject_ID = btnEdit.data('id');
+                            var description = btnEdit.data('description');
                             var modal = $(this);
+                            modal.find('#description').val(description);
                         });
-                        $('#cancel_booking').on('click', function () {
-                            var strUrl = '/vehicle_management/cancel_booking/' + bookingID;
-                            var modalID = 'cancel-booking-warning-modal';
+                        //Post module form to server using ajax (ADD)
+                        $('#rejection-reason').on('click', function() {
+                            var strUrl = '/vehicle_management/decline_booking/' + reject_ID;
+                            var modalID = 'decline-booking-modal';
                             var objData = {
+                                description: $('#' + modalID).find('#description').val(),
                                 _token: $('#' + modalID).find('input[name=_token]').val()
                             };
-                            var submitBtnID = 'cancel_booking';
-                            var redirectUrl = '/vehicle_management/vehiclebooking_results';
-                            var successMsgTitle = '';
-                            var successMsg = '';
+                            var submitBtnID = 'rejection-reason';
+                            var redirectUrl = '/vehicle_management/approval';
+                            var successMsgTitle = 'reject reason Saved!';
+                            var successMsg = 'The reject reason has been Saved successfully.';
                             var Method = 'PATCH';
                             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                         });
-
-                        //edit booking
-                        var bookingID;
-                        $('#edit-booking-modal').on('show.bs.modal', function (e) {
-                            //console.log('kjhsjs');
-                            var btnEdit = $(e.relatedTarget);
-                            if (parseInt(btnEdit.data('id')) > 0) {
-                                bookingID = btnEdit.data('id');
-
-                            }
-                            var vehiclemodel = btnEdit.data('vehiclemodel');
-                            var vehicle_reg = btnEdit.data('vehicle_reg');
-                            var required_from = btnEdit.data('required_from');
-                            var required_to = btnEdit.data('required_to');
-                            var usage_type = btnEdit.data('usage_type');
-                            var driver = btnEdit.data('driver');
-                            var purpose = btnEdit.data('purpose');
-                            var destination = btnEdit.data('destination');
-                            var vehicle_id = btnEdit.data('vehicle_id');
-                            var modal = $(this);
-                            modal.find('#vehiclemodel').val(vehiclemodel);
-                            modal.find('#vehicle_reg').val(vehicle_reg);
-                            modal.find('#required_from').val(required_from);
-                            modal.find('#required_to').val(required_to);
-                            modal.find('#usage_type').val(usage_type);
-                            modal.find('#driver').val(driver);
-                            modal.find('#purpose').val(purpose);
-                            modal.find('#destination').val(destination);
-                            modal.find('#vehicle_id').val(vehicle_id);
-                        });
-
-                        //Post perk form to server using ajax (edit)
-                        $('#edit_booking').on('click', function () {
-                            var strUrl = '/vehicle_management/edit_booking/' + bookingID;
-                            var formName = 'edit-booking-form';
-                            var modalID = 'edit-booking-modal';
-                            var submitBtnID = 'edit_booking';
-                            var redirectUrl = '/vehicle_management/vehiclebooking_results';
-                            var successMsgTitle = 'Changes Saved!';
-                            var successMsg = 'The  details have been updated successfully!';
-                            var Method = 'PATCH';
-                            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                        });
-
 
                     });
                 </script>

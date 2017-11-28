@@ -11,11 +11,12 @@
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
     <!--Time Charger-->
-      <!--  -->
+    <!--  -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 @endsection
 
 @section('content')
@@ -25,17 +26,23 @@
             <div class="box box-warning">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <!--  <h3 class="box-title">Search for a Vehicle</h3> -->
                 </div>
-                <!-- /.box-header -->
-                <!-- form start -->
-                <!--    <form class="form-horizontal"  id="search_form" method="POST"> -->
                 <form class="form-horizontal" method="POST" action="/vehicle_management/vehiclesearch">
                     {{ csrf_field() }}
 
                     <div class="box-body">
-
-                        <!--  -->
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+                                </button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="col-md-8 col-md-offset-2">
                             <div>
                                 <div class="box-header with-border" align="center">
@@ -43,7 +50,7 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                <div class="form-group">
+                                    <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
@@ -60,7 +67,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                 @foreach($division_levels as $division_level)
+                                    @foreach($division_levels as $division_level)
                                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                             <label for="{{ 'division_level_' . $division_level->level }}"
                                                    class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -80,72 +87,42 @@
                                         </div>
                                     @endforeach
 
-                                    <div class="row emp-field" style="display: block;">
-                                        <div class="col-xs-6">
-                                            <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                                <label for="date_from" class="col-sm-4 control-label">Required From</label>
-                                                <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-calendar"></i>
-                                                        </div>
-                                                        <input type="text" id ="required_from" class="form-control pull-left" name="required_from" value=" " >
-                                                    </div>
+                                    <div class="form-group">
+                                        <label for="path" class="col-sm-2 control-label">Required From </label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-6">
-                                            <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                                <label for="date_to" class="col-sm-3 control-label">Required Time</label>
-                                                <div class="col-sm-9">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-clock-o"></i>
-                                                        </div>
-                                                        <input type="text" id ="required_time" class="form-control pull-left" name="required_time" value=" " >
-                                                    </div>
-                                                </div>
+                                                <input type='text' class="form-control" id='required_from'
+                                                       name="required_from"/>
                                             </div>
                                         </div>
                                     </div>
 
-                                     <div class="row emp-field" style="display: block;">
-                                        <div class="col-xs-6">
-                                            <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                                <label for="date_from" class="col-sm-4 control-label">Return At</label>
-                                                <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-calendar"></i>
-                                                        </div>
-                                                        <input type="text" id ="return_at" class="form-control pull-left" name="return_at" value=" " >
-                                                    </div>
+                                    <div class="form-group">
+                                        <label for="path" class="col-sm-2 control-label">Required To </label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xs-6">
-                                            <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                                <label for="date_to" class="col-sm-3 control-label">Return At Time</label>
-                                                <div class="col-sm-9">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-clock-o"></i>
-                                                        </div>
-                                                        <input type="text" id ="return_time" class="form-control pull-left" name="return_time" value=" " >
-                                                    </div>
-                                                </div>
+                                                <input type='text' class="form-control" id='required_to'
+                                                       name="required_to"/>
                                             </div>
                                         </div>
                                     </div>
 
-                        <div class="box-footer">
-                           <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-search"></i> Search</button>
-                        </div>
+                                </div>
+
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary pull-right"><i
+                                                class="fa fa-search"></i> Search
+                                    </button>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </form>
             </div>
             <!-- /.box -->
@@ -179,7 +156,7 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-     <!-- time picker -->
+    <!-- time picker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -230,87 +207,17 @@
             increaseArea: '10%' // optional
         });
 
-      $(document).ready(function () {
+        $(document).ready(function () {
 
-            $('#required_from').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
+            $(function () {
+                $('#required_from').datetimepicker();
             });
 
-
-            $('#return_at').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-
-            $('#required_time').datetimepicker({
-                             format: 'HH:mm:ss'
-              });
-
-             $('#return_time').datetimepicker({
-                             format: 'HH:mm:ss'
-              });
+            $('#required_to').datetimepicker({});
 
         });
 
-        $('#rdo_package, #rdo_product').on('ifChecked', function () {
-            var allType = hideFields();
-            if (allType == 1) $('#box-subtitle').html('Site Address');
-            else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-        });
-
-        //
-
-        $('#rdo_fin, #rdo_comp').on('ifChecked', function () {
-            var allType = hidenFields();
-            if (allType == 1) $('#box-subtitle').html('Site Address');
-            else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-        });
-
-
-        function hideFields() {
-            var allType = $("input[name='promotion_type']:checked").val();
-            if (allType == 1) {
-                $('.hours-field').hide();
-                $('.odometer-field').show();
-            }
-            else if (allType == 2) {
-                $('.odometer-field').hide();
-                $('.hours-field').show();
-            }
-            return allType;
-        }
-
-        //
-        function hidenFields() {
-            var allType = $("input[name='title_type']:checked").val();
-            if (allType == 1) {
-                $('.comp-field').hide();
-                $('.fin-field').show();
-            }
-            else if (allType == 2) {
-                $('.fin-field').hide();
-                $('.comp-field').show();
-            }
-            return allType;
-        }
-
-        //Post perk form to server using ajax (add)
-        $('#add_vehicledetails').on('click', function () {
-            var strUrl = '/vehicle_management/add_vehicleDetails';
-            var formName = 'add-new-vehicledetails-form';
-            var modalID = 'add-vehicledetails-modal';
-            var submitBtnID = 'add_vehicledetails';
-            var redirectUrl = '/vehicle_management/manage_fleet';
-            var successMsgTitle = 'New Vehicle Details Added!';
-            var successMsg = 'TheVehicle Details has been updated successfully.';
-            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
-
-         //Load divisions drop down
+        //Load divisions drop down
         var parentDDID = '';
         var loadAllDivs = 1;
         @foreach($division_levels as $division_level)
@@ -325,6 +232,6 @@
         parentDDID = ddID;
         loadAllDivs = -1;
         @endforeach
-      
+
     </script>
 @endsection

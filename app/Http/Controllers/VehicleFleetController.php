@@ -233,7 +233,7 @@ class VehicleFleetController extends Controller
 			$vehiclenotes = DB::table('notes')
 			->select('notes.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
 			->leftJoin('hr_people', 'notes.captured_by', '=', 'hr_people.id')
-            		->orderBy('notes.id')
+            ->orderBy('notes.id')
 			->get();
 		
             $data['page_title'] = " View Fleet Details";
