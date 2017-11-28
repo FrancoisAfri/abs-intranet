@@ -629,6 +629,10 @@ Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
 
+//Voucher (Guest)
+Route::get('get-voucher', 'VouchersGuestController@index');
+Route::post('get-voucher', 'VouchersGuestController@store');
+
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');
 Route::get('survey/question_activate/{question}', 'SurveysController@actDeact');
