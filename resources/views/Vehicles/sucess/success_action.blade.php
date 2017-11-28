@@ -1,20 +1,16 @@
-<div id="delete-contact-warning-modal" class="modal modal-warning  fade">
+<div id="success-action-modal" class="modal modal-success fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><i class="fa fa-warning"></i> {{ $modal_title }}</h4>
-            <!--  {{ $maintenance->id }} -->
+                <h4 class="modal-title"><i class="fa fa-check"></i> {{ $modal_title }}</h4>
             </div>
-
             <div class="modal-body">
                 <p>{{ $modal_content }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">No</button>
-                   <a href="{{ '/vehicle_management/reminder/' . $reminder->id . '/delete' }}"
-                   class="btn btn-outline">Yes</a>
+                <button type="button" class="btn btn-outline" data-dismiss="modal">OK</button>
             </div>
         </div>
         <!-- /.modal-content -->

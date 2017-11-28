@@ -25,22 +25,26 @@
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
 
-                    <div class="box-body">
+                    <div class="box-body" id="view_users">
                         @if (isset($view_by_admin) && $view_by_admin === 1)
                             @foreach($division_levels as $division_level)
-                                <div class="form-group">
-                                    <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+                                <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                            <label for="{{ 'division_level_' . $division_level->level }}"
+                                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
-                                    <div class="col-sm-10">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-black-tie"></i>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-black-tie"></i>
+                                                    </div>
+                                                    <select id="{{ 'division_level_' . $division_level->level }}"
+                                                            name="{{ 'division_level_' . $division_level->level }}"
+                                                            class="form-control"
+                                                            onchange="divDDOnChange(this, null, 'view_users')">
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
-                                            </select>
                                         </div>
-                                    </div>
-                                </div>
                             @endforeach
                         @endif
                     
@@ -541,12 +545,15 @@
                     else if(divLevel == 1) selectedOption = '{{ $user->person->division_level_1 }}';
                     var incInactive = -1;
                     var loadAll = loadAllDivs;
-                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+                     loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
                     parentDDID = ddID;
                     loadAllDivs = -1;
                 @endforeach
             @endif
         });
+
+          //Load divisions drop down
+
 		function postData(id, data)
 		{
 			if (data == 'access')

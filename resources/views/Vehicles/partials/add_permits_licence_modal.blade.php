@@ -20,8 +20,8 @@
                             <select class="form-control select2" style="width: 100%;" id="permit_licence"
                                     name="permit_licence">
                                 <option value="0">*** Select a Permit/Licence ***</option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
+                                @foreach($permitlicence as $permit)
+                                    <option value="{{ $permit->id }}"> {{ $permit->name }}</option>
                                 @endforeach
                             </select>
                         </div>

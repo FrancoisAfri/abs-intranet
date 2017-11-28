@@ -359,6 +359,7 @@ class meetingMinutesAdminController extends Controller
 			$From = strtotime($dateExplode[0]);
 			$To = strtotime($dateExplode[1]);
 		}
+
 		$meetings = DB::table('meeting_minutes')
 		->select('meeting_minutes.*','contact_companies.name as compname')
 		->leftJoin('contact_companies', 'meeting_minutes.company_id', '=', 'contact_companies.id')
@@ -374,7 +375,8 @@ class meetingMinutesAdminController extends Controller
 		})
 		->orderBy('meeting_minutes.meeting_name')
 		->get();
-		
+
+         
 		$data['page_title'] = "Meeting Minutes";
         $data['page_description'] = "Search Meeting Minutes";
         $data['breadcrumb'] = [

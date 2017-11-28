@@ -16,7 +16,7 @@
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="start_date" name="date"
+                            <input type="text" class="form-control" id="date" name="date"
                                    value="{{ old('date') }}" placeholder="Select  start date  ...">
                         </div>
                     </div>

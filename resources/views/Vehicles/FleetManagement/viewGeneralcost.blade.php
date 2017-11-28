@@ -24,8 +24,8 @@
                         </button>
                     </div>
                 </div>
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
+           <!--  {{ csrf_field() }}
+            {{ method_field('PATCH') }} -->
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -109,6 +109,7 @@
                             <th>litre</th>
                             <th>Description</th>
                             <th>Person Responsible</th>
+                            <th></th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($generalcost) > 0)
@@ -118,7 +119,7 @@
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-costs-modal"
                                                 data-id="{{ $reminder->id }}"
-                                                data-ss_date="{{ date(' d M Y', $reminder->date) }}"
+                                                data-date="{{ date(' d M Y', $reminder->date) }}"
                                                 data-document_number="{{ $reminder->document_number }}"
                                                 data-supplier_name="{{ $reminder->supplier_name }}"
                                                 data-cost_type="{{ $reminder->cost_type }}"
@@ -131,12 +132,10 @@
                                     <td>{{ !empty($reminder->document_number) ?  $reminder->document_number : '' }}</td>
                                     <td>{{ !empty($reminder->supplier_name) ?  $reminder->supplier_name : '' }}</td>
                                     <td>{{ (!empty($reminder->cost_type)) ?  $costtype[$reminder->cost_type] : ''}}</td>
-
                                     <td>R{{ !empty($reminder->cost) ?  $reminder->cost : '' }}.00</td>
                                     <td>{{ !empty($reminder->litres) ?  $reminder->litres : '' }}</td>
                                     <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
                                     <td>{{ !empty($reminder->first_name . ' ' . $reminder->surname) ? $reminder->first_name . ' ' . $reminder->surname : ''}}</td>
-                                    <td>{{ !empty($reminder->end_date) ? date(' d M Y', $reminder->end_date) : '' }}</td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
                                                 data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
@@ -259,7 +258,7 @@
 
                 $(document).ready(function () {
 
-                    $('#start_date').datepicker({
+                    $('input[name="date"]').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -296,7 +295,7 @@
                     }
                     //console.log('gets here: ' + incidentID);
                     //costsID = btnEdit.data('id');
-                    var date = btnEdit.data('ss_date');
+                    var date = btnEdit.data('date');
                     var document_number = btnEdit.data('document_number');
                     var supplier_name = btnEdit.data('supplier_name');
                     var cost_type = btnEdit.data('cost_type');
@@ -306,7 +305,7 @@
                     var person_esponsible = btnEdit.data('person_esponsible');
                     var valueID = btnEdit.data('valueID');
                     var modal = $(this);
-                    modal.find('#ss_date').val(date);
+                    modal.find('#date').val(date);
                     modal.find('#document_number').val(document_number);
                     modal.find('#supplier_name').val(supplier_name);
                     modal.find('#cost_type').val(cost_type);
@@ -317,27 +316,17 @@
                     modal.find('#valueID').val(valueID);
                 });
 
-                $('#edit_costs').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_costs/' + costsID;
+
+                 $('#edit_costs').on('click', function () {
+                     var strUrl = '/vehicle_management/edit_costs/' + costsID;
+                    var formName = 'edit-costs-form';
                     var modalID = 'edit-costs-modal';
-                    var objData = {
-                        date: $('#' + modalID).find('#ss_date').val(),
-                        document_number: $('#' + modalID).find('#document_number').val(),
-                        supplier_name: $('#' + modalID).find('#supplier_name').val(),
-                        cost_type: $('#' + modalID).find('#cost_type').val(),
-                        cost: $('#' + modalID).find('#cost').val(),
-                        litres: $('#' + modalID).find('#litres').val(),
-                        description: $('#' + modalID).find('#description').val(),
-                        person_esponsible: $('#' + modalID).find('#person_esponsible').val(),
-                        valueID: $('#' + modalID).find('#valueID').val(),
-                        _token: $('#' + modalID).find('input[name=_token]').val()
-                    };
                     var submitBtnID = 'edit_costs';
                     var redirectUrl = '/vehicle_management/general_cost/{{ $maintenance->id }}';
                     var successMsgTitle = 'Changes Saved!';
                     var successMsg = 'The Record  has been updated successfully.';
                     var Method = 'PATCH';
-                    modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
 

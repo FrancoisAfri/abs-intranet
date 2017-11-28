@@ -24,10 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">

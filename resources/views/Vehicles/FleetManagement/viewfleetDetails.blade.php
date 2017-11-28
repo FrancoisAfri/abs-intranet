@@ -45,15 +45,18 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong>
+                                    <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -72,46 +75,49 @@
                             </p>
                         </div>
                     </div>
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
                     <div class="box-body">
 
                         <table class="table table-striped table-bordered">
 
-                        @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                    <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-bars"></i> General Details
-                        </a>
-                       <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-book"></i> Booking Log
-                        </a>
+                            @foreach ($vehiclemaintenance as $vehiclemaintenance)
+                                <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-bars"></i> General Details
+                                </a>
+                                <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-book"></i> Booking Log
+                                </a>
 
-                      <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-tint"></i> Fuel Log
-                        </a>
+                                <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-tint"></i> Fuel Log
+                                </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                                <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-file-o"></i> Oil Log
+                                </a>
 
-                        <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-medkit"></i> Incidents
-                        </a>
-                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines 
-                        </a>
-                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-area-chart"></i> Service Details
-                        </a>
-                        <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-car"></i>Insurance
-                        </a>
-                        <a href="{{ '/vehicle_management/warranties/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-snowflake-o"></i>Warranties
-                        </a>
-                        <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-money"></i> General Cost
-                        </a>
+                                <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-medkit"></i> Incidents
+                                </a>
+                                <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-list-alt"></i> Fines
+                                </a>
+                                <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-area-chart"></i> Service Details
+                                </a>
+                                <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-car"></i>Insurance
+                                </a>
+                                <a href="{{ '/vehicle_management/warranties/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-snowflake-o"></i>Warranties
+                                </a>
+                                <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-money"></i> General Cost
+                                </a>
                                 <!--  -->
                                 <tr>
 
@@ -193,18 +199,14 @@
                                     <td class="caption">Status</td>
                                     <td>{{ (!empty($vehiclemaintenance->status)) ?  $status[$vehiclemaintenance->status] : ''}}</td>
                                 </tr>
-
-
                         </table>
-
-
                     </div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
                     {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
                     <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
-                            data-target="#edit-vehicle-modal" data-id="{{ $vehiclemaintenance->id }}"
+                            data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
                             data-extras="{{ $vehiclemaintenance->extras }}"
                             data-cell_number="{{$vehiclemaintenance->cell_number}}"
                             data-year="{{$vehiclemaintenance->year}}"
@@ -383,11 +385,19 @@
                 return allType;
             }
 
-
             var vehicleID;
-            $('#edit-vehicle-modal').on('show.bs.modal', function (e) {
+            $('#edit-vehicledetails-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                vehicleID = btnEdit.data('id');
+                if (parseInt(btnEdit.data('id')) > 0) {
+                    vehicleID = btnEdit.data('id');
+                }
+               //console.log('gets here: ' + vehicleID);
+                var division_level_5 = btnEdit.data('division_level_5');
+                var division_level_4 = btnEdit.data('division_level_4');
+                var division_level_3 = btnEdit.data('division_level_3');
+                var division_level_2 = btnEdit.data('division_level_2');
+                var division_level_1 = btnEdit.data('division_level_1');
+                var maintenance = btnEdit.data('responsible_for_maintenance');
                 var vehicle_make = btnEdit.data('vehicle_make');
                 var vehicle_model = btnEdit.data('vehicle_model');
                 var vehicle_type = btnEdit.data('vehicle_type');
@@ -398,14 +408,25 @@
                 var vehicle_color = btnEdit.data('vehicle_color');
                 var odometer_reading = btnEdit.data('odometer_reading');
                 var hours_reading = btnEdit.data('hours_reading');
+                var fuel_type = btnEdit.data('fuel_type');
                 var size_of_fuel_tank = btnEdit.data('size_of_fuel_tank');
+                var fleet_number = btnEdit.data('fleet_number');
                 var cell_number = btnEdit.data('cell_number');
                 var tracking_umber = btnEdit.data('tracking_umber');
+                var vehicle_owner = btnEdit.data('vehicle_owner');
+                var financial_institution = btnEdit.data('financial_institution');
                 var extras = btnEdit.data('extras');
+                var property_type = btnEdit.data('property_type');
+                var company = btnEdit.data('company');
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
                 var modal = $(this);
-
+                modal.find('#division_level_5').val(division_level_5);
+                modal.find('#division_level_4').val(division_level_4);
+                modal.find('#division_level_3').val(division_level_3);
+                modal.find('#division_level_2').val(division_level_2);
+                modal.find('#division_level_1').val(division_level_1);
+                modal.find('#responsible_for_maintenance').val(maintenance);
                 modal.find('#vehicle_make').val(vehicle_make);
                 modal.find('#vehicle_model').val(vehicle_model);
                 modal.find('#vehicle_type').val(vehicle_type);
@@ -416,26 +437,76 @@
                 modal.find('#vehicle_color').val(vehicle_color);
                 modal.find('#odometer_reading').val(odometer_reading);
                 modal.find('#hours_reading').val(hours_reading);
+                modal.find('#fuel_type').val(fuel_type);
                 modal.find('#size_of_fuel_tank').val(size_of_fuel_tank);
+                modal.find('#fleet_number').val(fleet_number);
                 modal.find('#cell_number').val(cell_number);
+                modal.find('#property_type').val(property_type);
                 modal.find('#tracking_umber').val(tracking_umber);
+                modal.find('#vehicle_owner').val(vehicle_owner);
+                modal.find('#financial_institution').val(financial_institution);
+                modal.find('#company').val(company);
                 modal.find('#extras').val(extras);
                 modal.find('#image').val(image);
                 modal.find('#registration_papers').val(registration_papers);
 
             });
 
-            //Post perk form to server using ajax (edit)
             $('#edit_vehicle').on('click', function () {
                 var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
-                var formName = 'edit-vehicledetails-form';
-                var modalID = 'edit-vehicle-modal';
+                var modalID = 'edit-vehicledetails-modal';
+                var objData = {
+                    division_level_5: $('#'+modalID).find('#division_level_5').val(),
+                    division_level_4: $('#'+modalID).find('#division_level_4').val(),
+                    division_level_3: $('#'+modalID).find('#division_level_3').val(),
+                    division_level_2: $('#'+modalID).find('#division_level_2').val(),
+                    division_level_1: $('#'+modalID).find('#division_level_1').val(),
+                    responsible_for_maintenance: $('#'+modalID).find('#responsible_for_maintenance').val(),
+                    vehicle_make: $('#'+modalID).find('#vehicle_make').val(),
+                    vehicle_model: $('#'+modalID).find('#vehicle_model').val(),
+                    vehicle_type: $('#'+modalID).find('#vehicle_type').val(),
+                    year: $('#'+modalID).find('#year').val(),
+                    vehicle_registration: $('#'+modalID).find('#vehicle_registration').val(),
+                    chassis_number: $('#'+modalID).find('#chassis_number').val(),
+                    engine_number: $('#'+modalID).find('#engine_number').val(),
+                    vehicle_color: $('#'+modalID).find('#vehicle_color').val(),
+                    odometer_reading: $('#'+modalID).find('#odometer_reading').val(),
+                    hours_reading: $('#'+modalID).find('#hours_reading').val(),
+                    fuel_type: $('#'+modalID).find('#fuel_type').val(),
+                    size_of_fuel_tank:$('#'+modalID).find('#size_of_fuel_tank').val(),
+                    fleet_number: $('#'+modalID).find('#fleet_number').val(),
+                    cell_number: $('#'+modalID).find('#cell_number').val(),
+                    tracking_umber: $('#'+modalID).find('#tracking_umber').val(),
+                    vehicle_owner: $('#'+modalID).find('#vehicle_owner').val(),
+                    financial_institution: $('#'+modalID).find('#financial_institution').val(),
+                    company: $('#'+modalID).find('#company').val(),
+                    property_type:$('#'+modalID).find('#property_type').val(),
+                    extras: $('#'+modalID).find('#extras').val(),
+                    image: $('#'+modalID).find('#image').val(),
+                    registration_papers: $('#'+modalID).find('#registration_papers').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
                 var submitBtnID = 'edit_vehicle';
                 var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Vehicle details have been updated successfully!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                var successMsg = 'The Vehicle details  has been updated successfully.';
+                var Method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+
+
+            //Post perk form to server using ajax (edit)
+            // $('#edit_vehicle').on('click', function () {
+            //     var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
+            //     var formName = 'edit-vehicledetails-form';
+            //     var modalID = 'edit-vehicledetails-modal';
+            //     var submitBtnID = 'edit_vehicle';
+            //     var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+            //     var successMsgTitle = 'Changes Saved!';
+            //     var successMsg = 'The Vehicle details have been updated successfully!';
+            //     var Method = 'PATCH'
+            //     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            // });
 
 
         });

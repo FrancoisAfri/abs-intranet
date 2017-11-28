@@ -38,10 +38,18 @@
 
                         </h3>
                     </div>
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
                     <div class="box-body">
-
+                         @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="row">
                             <div class="col-sm-12">
                                 <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
@@ -97,15 +105,48 @@
                                             </button>
                                         </td>
                                         <td>
-
-
-                                            <div id="my_div" class="hidden">
-                                                <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
-                                                   id="edit_compan" class="btn btn-default  btn-xs"
-                                                   data-id="{{ $vehiclemaintenance->id }}">image</a>
+                                            <div class="product-img">
+                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"
+                                                     alt="Product Image" width="50" height="50">
                                             </div>
 
 
+                                            <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog"
+                                                 aria-labelledby="enlargeImageModal" aria-hidden="true">
+                                                <!--  <div class="modal-dialog modal" role="document"> -->
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close"><span aria-hidden="true">x</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <img src="" class="enlargeImageModalSource"
+                                                                 style="width: 100%;">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ !empty($vehiclemaintenance->description) ? $vehiclemaintenance->description : ''}}</td>
+
+                                        <td>{{ !empty($vehiclemaintenance->currentDate) ? date(' d M Y', $vehiclemaintenance->currentDate) : '' }}</td>
+                                        <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+
+                                        <td>{{ !empty($vehiclemaintenance->name) ? $vehiclemaintenance->name : ''}}</td>
+                                    </tr>
+                                @endforeach
+                                 @foreach ($vehiclemaintenance->images as $vehiclemaintenance)
+                                    <tr id="categories-list">
+                                        <td nowrap>
+                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
+                                                    data-toggle="modal" data-target="#edit-package-modal"
+                                                    data-id="{{ $vehiclemaintenance->id }}"
+                                                    data-image="{{ $vehiclemaintenance->image }}"><i
+                                                        class="fa fa-pencil-square-o"></i> Edit
+                                            </button>
                                         </td>
                                         <td>
                                             <div class="product-img">
@@ -133,11 +174,12 @@
                                                 </div>
                                             </div>
                                         </td>
+                                        <td>{{ !empty($vehiclemaintenance->description) ? $vehiclemaintenance->description : ''}}</td>
 
-                                        <td>{{ !empty($vehiclemaintenance->currentDate) ? date(' d M Y', $vehiclemaintenance->currentDate) : '' }}</td>
+                                        <td>{{ !empty($vehiclemaintenance->upload_date) ? date(' d M Y', $vehiclemaintenance->upload_date) : '' }}</td>
                                         <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
 
-                                        <td>{{ !empty($vehiclemaintenance->currentDate) ? $vehiclemaintenance->currentDate : ''}}</td>
+                                        <td>{{ !empty($vehiclemaintenance->name) ? $vehiclemaintenance->name : ''}}</td>
                                     </tr>
                                 @endforeach
                             @else
@@ -147,7 +189,7 @@
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                                 &times;
                                             </button>
-                                            No Fleet to display, please start by adding a new Fleet..
+                                            No Record to display, please start by adding a new Fleet..
                                         </div>
                                     </td>
                                 </tr>
@@ -297,32 +339,30 @@
                         $('#edit-package-modal').on('show.bs.modal', function (e) {
                             //console.log('kjhsjs');
                             var btnEdit = $(e.relatedTarget);
-                            ImageID = btnEdit.data('id');
+                              if (parseInt(btnEdit.data('id')) > 0) {
+                              ImageID = btnEdit.data('id');
+                             }
+
                             var name = btnEdit.data('name');
                             var description = btnEdit.data('description');
                             var images = btnEdit.data('images');
                             var modal = $(this);
                             modal.find('#name').val(name);
                             modal.find('#description').val(description);
-                            modal.find('#images').val(images);
+                            modal.find('#image').val(images);
                         });
 
 
                         $('#edit_image').on('click', function () {
                             var strUrl = '/vehicle_management/edit_images/' + ImageID;
-                            var modalID = 'edit-image-modal';
-                            var objData = {
-                                name: $('#' + modalID).find('#name').val(),
-                                description: $('#' + modalID).find('#description').val(),
-                                images: $('#' + modalID).find('#images').val(),
-                                _token: $('#' + modalID).find('input[name=_token]').val()
-                            };
+                            var formName = 'edit-image-form';
+                            var modalID = 'edit-package-modal';
                             var submitBtnID = 'edit_image';
-                            var redirectUrl = '/vehicle_management/viewImage/{{ $ID}}';
+                            var redirectUrl = '/vehicle_management/viewImage/{{ $maintenance->id }}';
                             var successMsgTitle = 'Image Modified!';
                             var successMsg = 'The Image  has been updated successfully.';
                             var Method = 'PATCH'
-                            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                         });
 
 

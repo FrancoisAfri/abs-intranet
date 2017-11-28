@@ -756,6 +756,8 @@ class VehicleManagemntController extends Controller
         $registration_number = $request['registration_number'];
         $promotionID = $request['promotion_type'];
 
+        //return $propertyID;
+
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
         $vehiclemaintenance = DB::table('vehicle_details')
@@ -766,11 +768,11 @@ class VehicleManagemntController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-            ->where(function ($query) use ($propertyID) {
-                if (!empty($propertyID)) {
-                    $query->where('vehicle_details.property_type', $propertyID);
-                }
-            })
+//            ->where(function ($query) use ($propertyID) {
+//                if (!empty($propertyID)) {
+//                    $query->where('vehicle_details.property_type', $propertyID);
+//                }
+//            })
             ->where(function ($query) use ($vehicleID) {
                 if (!empty($vehicleID)) {
                     $query->where('vehicle_details.vehicle_type', $vehicleID);

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTankTable extends Migration
+class CreatePermitLicenceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTankTable extends Migration
      */
     public function up()
     {
-        Schema::create('tank', function (Blueprint $table) {
+        Schema::create('permit_licence', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
@@ -29,6 +29,6 @@ class CreateTankTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tank');
+        Schema::dropIfExists('permit_licence');
     }
 }

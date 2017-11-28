@@ -24,10 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
-            <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -79,7 +75,7 @@
                                                 data-toggle="modal" data-target="#edit-note-modal"
                                                 data-id="{{ $document->id }}"
                                                 data-captured_by="{{ date(' d M Y', $document->date_captured) }}"
-                                                data-date_captured="{{ $document->date_captured }}"
+                                                data-date_captured="{{ date(' d M Y', $document->date_captured) }}"
                                                 data-notes="{{ $document->notes }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -87,8 +83,9 @@
                                     </td>
 
 
-                                    <td>{{ !empty($document->captured_by) ?  $document->captured_by : '' }}</td>
+                                    
                                     <td>{{ !empty($document->date_captured) ? date(' d M Y', $document->date_captured) : '' }}</td>
+                                    <td>{{ !empty($document->firstname . ' ' . $document->surname ) ?  $document->firstname . ' ' . $document->surname : '' }}</td>
                                     <td>{{ !empty($document->notes) ?  $document->notes : '' }}</td>
                                     <td nowrap>
                                         <div class="form-group{{ $errors->has('documents') ? ' has-error' : '' }}">
@@ -143,6 +140,10 @@
         @include('Vehicles.partials.upload_newnote_modal')
         @include('Vehicles.partials.edit_notes_modal')
         <!-- Include delete warning Modal form-->
+         <!-- Include delete warning Modal form-->
+            @if (count($vehiclenotes) > 0)
+                @include('Vehicles.warnings.Note_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Note? This action cannot be undone.'])
+            @endif
 
         </div>
 
@@ -249,61 +250,18 @@
 
 		$(document).ready(function () {
 
-			$('#date_captured').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-
-
-			$('#exp_date').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-
-
-			$('#expdate').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-			$('#datecaptured').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-		});
-
-
-		$('#rdo_single, #rdo_bulke').on('ifChecked', function () {
-			var allType = hideFields();
-			if (allType == 1) $('#box-subtitle').html('Site Address');
-			else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-		});
-
-
-		function hideFields() {
 			
-			var allType = $("input[name='upload_type']:checked").val();
-			if (allType == 1) {
-				$('.zip-field').hide();
-				$('.user-field').show();
-			}
-			else if (allType == 2) {
-				$('.user-field').hide();
-				$('.zip-field').show();
-			}
-			return allType;
-		}
+		  $('input[name="date_captured"]').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 
-		function changetextbox() {
-			var levID = document.getElementById("key_status").value;
-			if (levID == 1) {
-				$('.sex-field').hide();
-				// $('.Sick-field').show();
-			}
-		}
+
+			
+		 });
+
+
 
 	//Post perk form to server using ajax (add)
 $('#add_notes').on('click', function () {
@@ -335,7 +293,10 @@ $('#add_notes').on('click', function () {
 		$('#edit-note-modal').on('show.bs.modal', function (e) {
 			//console.log('kjhsjs');
 			var btnEdit = $(e.relatedTarget);
-			noteID = btnEdit.data('id');
+			 if (parseInt(btnEdit.data('id')) > 0) {
+               noteID = btnEdit.data('id');     
+             }
+			
 			var captured_by = btnEdit.data('captured_by');
 			var date_captured = btnEdit.data('date_captured');
 			var notes = btnEdit.data('notes');
@@ -355,7 +316,7 @@ $('#add_notes').on('click', function () {
 			var formName = 'edit-note-form';
 			var modalID = 'edit-note-modal';
 			var submitBtnID = 'edit_note';
-			var redirectUrl = '/vehicle_management/permits_licences/{{$maintenance->id}}';
+			var redirectUrl = '/vehicle_management/notes/{{$maintenance->id}}';
 			var successMsgTitle = 'Changes Saved!';
 			var successMsg = 'The  details have been updated successfully!';
 			var Method = 'PATCH';

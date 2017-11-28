@@ -3,7 +3,6 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-warrantie-form">
                 {{ csrf_field() }}
-                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

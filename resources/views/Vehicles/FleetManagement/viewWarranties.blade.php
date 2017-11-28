@@ -23,9 +23,8 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
                         </button>
                     </div>
-                </div>
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
+                </div><!-- 
+        
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -138,7 +137,7 @@
                                         </button>
                                     </td>
 
-                                    <td>{{ !empty($reminder->service_provider) ? $reminder->service_provider : '' }}</td>
+                                    <td>{{ !empty($reminder->serviceprovider) ? $reminder->serviceprovider : '' }}</td>
                                     <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
@@ -276,13 +275,13 @@
 
                 $(document).ready(function () {
 
-                    $('#inception_date').datepicker({
+                    $('input[name="inception_date"]').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
 
-                    $('#exp_date').datepicker({
+                     $('input[name="exp_date"]').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -306,7 +305,7 @@
 
                 //Post perk form to server using ajax (add)
                 $('#add_warrantie').on('click', function () {
-                    var strUrl = '/vehicle_management/addwarranty';
+                    var strUrl = '/vehicle_management/Addwarranty';
                     var formName = 'add-warrantie-form';
                     var modalID = 'add-warrantie-modal';
                     var submitBtnID = 'add_warrantie';
@@ -323,7 +322,7 @@
                     if (parseInt(btnEdit.data('id')) > 0) {
                         warrantyID = btnEdit.data('id');
                     }
-                    console.log('gets here: ' + warrantyID);
+                   // console.log('gets here: ' + warrantyID);
 
                     var service_provider = btnEdit.data('service_provider');
                     var contact_person = btnEdit.data('contact_person');

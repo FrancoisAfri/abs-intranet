@@ -24,9 +24,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -81,8 +78,8 @@
                                                 data-id="{{ $document->id }}" data-type="{{ $document->type }}"
                                                 data-description="{{ $document->description }}"
                                                 data-role="{{ $document->role }}"
-                                                data-datefrom="{{ $document->date_from }}"
-                                                data-exp_date="{{ $document->exp_date }}"
+                                                data-date_from="{{  date(' d M Y', $document->date_from) }}"
+                                                data-exp_date="{{ date(' d M Y', $document->exp_date) }}"
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
@@ -317,11 +314,11 @@
 
                 $('#edit_doc').on('click', function () {
                     var strUrl = '/vehicle_management/edit_vehicledoc/' + docID;
-                    var formName = 'add-newdoc-form';
+                    var formName = 'edit-newdoc-form';
                     var modalID = 'edit-newdoc-modal';
                     var submitBtnID = 'edit_doc';
                     var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Documents Details Added!';
+                    var successMsgTitle = 'New Documents Details have been updated!';
                     var successMsg = 'The Documents Details has been updated successfully.';
                     var Method = 'PATCH';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
