@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         //$filePath = '/storage/logs/tasks.log';
         //$schedule->command('send:statement')->everyMinute()->appendOutputTo($filePath);
         //$schedule->command('emptask:overdue')->daily();
-        $schedule->command('emptask:overdue')->everyMinute();
+        //$schedule->command('emptask:overdue')->everyMinute();
         $schedule->command('schedule:leaveAllocationAnnual')->monthlyOn(1, '01:00');
 		$schedule->command('schedule:leaveAllocationFamily')->dailyAt('01:00');
     }
