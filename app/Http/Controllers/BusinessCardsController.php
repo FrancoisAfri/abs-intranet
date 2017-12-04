@@ -109,7 +109,6 @@ class BusinessCardsController extends Controller
 		 $person  = DB::table('hr_people')
 					->select('hr_people.*' , 'business_card.status as card_status')
 					->leftJoin('business_card','hr_people.id', '=','business_card.hr_id')
-					// ->leftJoin()
 					->where('hr_people.id' , $userLogged)
 					->orderBy('first_name')
 					->orderBy('surname')

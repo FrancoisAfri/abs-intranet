@@ -290,8 +290,16 @@ Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehic
 Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
 //cancel booking
  Route::patch('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
-//Route::get('vehice/cancelbooking/{booking}/cancel', 'VehicleBookingController@cancel_booking');
-
+// edit booking
+ Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
+// collect vehicle
+ Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
+ // View Vehicle Appprovals
+ Route::get('vehicle_management/approval', 'VehicleBookingController@vewApprovals');
+ //Decline vehicle booking
+ Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
+  //Approve Vehicle Approval
+ Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
 ###
 
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');

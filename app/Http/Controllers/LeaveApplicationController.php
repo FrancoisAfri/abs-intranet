@@ -426,7 +426,7 @@ class LeaveApplicationController extends Controller {
 
     //Function to accept leave applications
     public function AcceptLeave(Request $request, leave_application $id, leave_history $levHist, leave_credit $credit, leave_configuration $leave_conf) {
-        // get the user application  details
+
         $loggedInEmplID = Auth::user()->person->id;
         $status = $id->status;
         $iD = $id->id;
