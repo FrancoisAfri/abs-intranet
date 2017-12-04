@@ -45,7 +45,7 @@
                                     <tr>
                                         <td style="vertical-align: middle;">{{ $voucher->vch_no }}</td>
                                         <td style="vertical-align: middle;">{{ ($voucher->vch_dt && $voucher->vch_dt > 0) ? date('d-m-Y', $voucher->vch_dt) : '' }}</td>
-                                        <td style="vertical-align: middle;">{{ $voucher->clnt_name }}</td>
+                                        <td style="vertical-align: middle;">{!! html_entity_decode($voucher->clnt_name) !!}</td>
                                         <td style="vertical-align: middle;">{{ $voucher->clnt_cellno }}</td>
                                         <td style="vertical-align: middle;">{{ $voucher->dr_name_order }}</td>
                                         <td style="vertical-align: middle; width: 70px;" class="text-center" nowrap>
@@ -66,7 +66,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <a href="/get-voucher" type="button" id="back" class="btn btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="/vouchers/get-voucher" type="button" id="back" class="btn btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </form>
             </div>

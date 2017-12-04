@@ -63,7 +63,6 @@ class VouchersGuestController extends Controller
         ];
         $this->validate($request, [
             'clnt_name' => 'required',
-            'clnt_cellno' => 'required'
         ], $messages);
 
         $clientName = trim($request->input('clnt_name'));
