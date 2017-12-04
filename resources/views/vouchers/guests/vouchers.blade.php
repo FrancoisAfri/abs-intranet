@@ -66,7 +66,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <a href="/get-voucher" type="button" id="back" class="btn btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="/vouchers/get-voucher" type="button" id="back" class="btn btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </form>
             </div>
