@@ -71,8 +71,9 @@ function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll
 }
 
 /* function to load child [Division] and employee (HR Person) drop down options */
-function divDDOnChange(dropDownObj, hrPeopleDDID) {
+function divDDOnChange(dropDownObj, hrPeopleDDID, parentContainer) {
     hrPeopleDDID = hrPeopleDDID || 'hr_person_id';
+    parentContainer = $('#'+parentContainer) || $(document);
 
     var postTo = ''; var selectedOption = '';
     var ddID = dropDownObj.id;
@@ -86,26 +87,26 @@ function divDDOnChange(dropDownObj, hrPeopleDDID) {
         case 'division_level_5':
             childDDID = 'division_level_4';
             childDDLabel = $('label[for="' + childDDID + '"]').html();
-            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, parentContainer);
             loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
             break;
         case 'division_level_4':
             childDDID = 'division_level_3';
             childDDLabel = $('label[for="' + childDDID + '"]').html();
-            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, parentContainer);
             loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
             break;
         case 'division_level_3':
             childDDID = 'division_level_2';
             childDDLabel = $('label[for="' + childDDID + '"]').html();
-            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, parentContainer);
             loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
             break;
         case 'division_level_2':
             //console.log("level two div changed");
             childDDID = 'division_level_1';
             childDDLabel = $('label[for="' + childDDID + '"]').html();
-            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo);
+            loadDivDDOptions(childDDID, selectedOption, ddID, incInactive, loadAll, postTo, null, null, parentContainer);
             loadHRPeopleOptions(hrPeopleDDID, selectedOption, ddID, incInactive, loadAll, postTo);
             break;
         case 'division_level_1':

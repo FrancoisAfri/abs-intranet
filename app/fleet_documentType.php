@@ -8,6 +8,6 @@ class fleet_documentType extends Model
 {
     protected $table = 'fleet_documentType';
 
-    protected $fillable = [ 'name', 'description','status'];
+    protected $fillable = ['name', 'description', 'status'];
 
 }

@@ -8,5 +8,5 @@ class Vehicle_managemnt extends Model
 {
     protected $table = 'vehicle_managemnet';
 
-    protected $fillable = [ 'name', 'description','status'];
+    protected $fillable = ['name', 'description', 'status'];
 }

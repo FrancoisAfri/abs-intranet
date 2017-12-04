@@ -161,7 +161,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_group';
                 var redirectUrl = '/vehicle_management/group_admin';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Group has been updated successfully.';

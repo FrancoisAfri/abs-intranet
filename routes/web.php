@@ -170,7 +170,8 @@ Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
 ##reports
 Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
 Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
-
+Route::get('import/company', 'ContactsUploadController@index');
+Route::post('contacts_upload', 'ContactsUploadController@store');
 #reports
 Route::post('reports/contact_note/meetingreport', 'ContactCompaniesController@printmeetingsReport');
 Route::post('reports/contact_note/client_report', 'ContactCompaniesController@printclientReport');
@@ -187,6 +188,7 @@ Route::post('hr/searchemployees', 'Hr_Admin@search_employees');
 Route::post('hr/user_active', 'Hr_Admin@activeEmployee');
 Route::get('hr/active_user', 'Hr_Admin@cards');
 
+Route::get('hr/upload', 'EmployeeUploadController@index');
 Route::get('hr/job_title', 'EmployeeJobTitleController@index');
 Route::post('hr/categories', 'EmployeeJobTitleController@categorySave');
 Route::patch('hr/category_edit/{jobCategory}', 'EmployeeJobTitleController@editCategory');
@@ -277,6 +279,29 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 
 
 ##*************** Vehicle Management ************
+
+
+###----bookings
+Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
+Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
+Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
+
+Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehiclebooking');
+Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
+//cancel booking
+ Route::patch('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
+// edit booking
+ Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
+// collect vehicle
+ Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
+ // View Vehicle Appprovals
+ Route::get('vehicle_management/approval', 'VehicleBookingController@vewApprovals');
+ //Decline vehicle booking
+ Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
+  //Approve Vehicle Approval
+ Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
+###
+
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
 Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
 Route::patch('vehice/edit_fleet/{fleet}', 'VehicleManagemntController@editfleet');
@@ -324,15 +349,8 @@ Route::post('vehice/addvehicle_model', 'VehicleManagemntController@AddVehicleMod
 Route::patch('vehice/edit_vehicle_model/{vmodel}', 'VehicleManagemntController@editvehiclemodel');
 Route::get('/vehice/vehiclemodle_act/{vmodel}', 'VehicleManagemntController@vehiclemodelAct');
 Route::get('vehice/vehiclemodel/{vmodel}/delete', 'VehicleManagemntController@deleteVehiclemodel');
-
-
 // --- vehicle Search
 Route::post('vehicle_management/vehicle/Search', 'VehicleManagemntController@VehicleSearch');
-
-
-
-
-
 // ---
 Route::get('vehicle_management/group_admin', 'VehicleManagemntController@groupAdmin');
 Route::post('vehice/groupadmin', 'VehicleManagemntController@Addgroupadmin');
@@ -347,6 +365,14 @@ Route::get('Jobcard_management/Job_card', 'JobcardManagementController@JobcardMa
 Route::get('Jobcard_management/addJob_card', 'JobcardManagementController@addJobcard');
 Route::post('jobcard_management/add_maintenance', 'JobcardManagementController@Addmaintenance');
 ////
+#**************** SAFE ***********************
+Route::get('vehicle_management/safe', 'VehicleManagemntController@safe');
+Route::post('vehicle_management/addsafe', 'VehicleManagemntController@Addsafe');
+Route::patch('vehicle_management/edit_safe/{safe}', 'VehicleManagemntController@editsafe');
+Route::get('vehicle_management/safe_act/{safe}', 'VehicleManagemntController@safeAct');
+Route::get('vehicle_management/Manage_safe/{safe}/delete', 'VehicleManagemntController@deletesafe');
+
+
 
 ##*************** Fleet Management ************
 Route::get('vehicle_management/manage_fleet', 'FleetManagementController@fleetManagent');
@@ -356,9 +382,80 @@ Route::post('vehicle_management/add_vehicleDetails', 'FleetManagementController@
 Route::get('vehicle_management/viewdetails/{maintenance}', 'FleetManagementController@viewDetails');
 Route::patch('vehicle_management/edit_vehicleDetails/{maintenance}', 'FleetManagementController@editvehicleDetails');
 
-Route::get('/vehicle_management/vehicles_Act/{vehicle}', 'FleetManagementController@vehiclesAct');
+Route::get('/vehicle_management/vehicles_Act/{vehiclemaintenance}', 'FleetManagementController@vehiclesAct');
 
+#******************** post redirects ****************
 Route::get('vehicle_management/viewImage/{maintenance}', 'FleetManagementController@viewImage');
+Route::get('vehicle_management/keys/{maintenance}', 'FleetManagementController@keys');
+Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@document');
+Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
+
+Route::get('vehicle_management/oil_log/{maintenance}', 'VehicleFleetController@viewOilLog');
+
+Route::get('vehicle_management/fuel_log/{maintenance}', 'VehicleFleetController@viewFuelLog');
+Route::post('vehicle_management/addvehiclefuellog', 'VehicleFleetController@addvehiclefuellog');
+
+Route::get('vehicle_management/service_details/{maintenance}', 'VehicleFleetController@viewServiceDetails');
+Route::post('vehicle_management/addservicedetails', 'VehicleFleetController@addServiceDetails');
+Route::patch('vehicle_management/edit_servicedetails/{details}', 'VehicleFleetController@editservicedetails');
+
+Route::get('vehicle_management/fines/{maintenance}', 'VehicleFleetController@viewFines');
+Route::post('vehicle_management/addvehiclefines', 'VehicleFleetController@addvehiclefines');
+Route::patch('vehicle_management/edit_fines/{fines}', 'VehicleFleetController@edit_finesdetails');
+
+Route::get('vehicle_management/incidents/{maintenance}', 'VehicleFleetController@viewIncidents');
+Route::post('vehicle_management/addvehicleincidents', 'VehicleFleetController@addvehicleincidents');
+Route::patch('vehicle_management/edit_vehicleincidents/{incident}', 'VehicleFleetController@editvehicleincidents');
+
+Route::get('vehicle_management/insurance/{maintenance}', 'VehicleFleetController@viewInsurance');
+// Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addpolicy');
+// Route::get('vehicle_management/policy_act/{policy}', 'VehicleFleetController@policyAct');
+// Route::patch('vehicle_management/edit_policy/{policy}', 'VehicleFleetController@editpolicy');
+
+#
+Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');
+Route::post('vehicle_management/Addwarranty', 'VehicleFleetController@addwarranty');
+Route::get('vehicle_management/warranty_act/{warranties}', 'VehicleFleetController@warrantyAct');
+Route::patch('vehicle_management/edit_warrantie/{warranties}', 'VehicleFleetController@editwarranty');
+
+
+Route::get('vehicle_management/reminders/{maintenance}', 'VehicleFleetController@reminders');
+Route::post('vehicle_management/addreminder', 'VehicleFleetController@addreminder');
+Route::patch('vehicle_management/edit_reminder/{reminder}', 'VehicleFleetController@editreminder');
+Route::get('vehicle_management/reminder_act/{reminder}', 'VehicleFleetController@reminderAct');
+Route::get('vehicle_management/reminder/{reminder}/delete', 'VehicleFleetController@deletereminder');
+
+
+Route::post('vehicle_management/add_new_document', 'FleetManagementController@newdocument');
+Route::get('vehicle_management/document/{documents}/delete', 'FleetManagementController@deleteDoc');
+Route::patch('vehicle_management/edit_vehicledoc/{vehicledocumets}', 'FleetManagementController@editVehicleDoc');
+
+Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@viewnotes');
+Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
+Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote'); 
+Route::get('vehicle_management/note/{note}/delete', 'FleetManagementController@deleteNote');
+
+##
+Route::get('vehicle_management/general_cost/{maintenance}', 'VehicleFleetController@viewGeneralCost');
+Route::post('vehicle_management/addcosts', 'VehicleFleetController@addcosts');
+Route::patch('vehicle_management/edit_costs/{costs}', 'VehicleFleetController@editcosts');
+Route::get('vehicle_management/Manage_costs/{costs}/delete', 'VehicleFleetController@deletecosts');
+
+
+
+
+Route::get('vehicle_management/permits_licences/{maintenance}', 'FleetManagementController@permits_licences');
+Route::post('vehicle_management/addPermit', 'FleetManagementController@addPermit');
+Route::patch('vehicle_management/edit_permit/{permit}', 'FleetManagementController@editPermit');
+
+Route::post('vehicle_management/add_images', 'FleetManagementController@addImages');
+Route::post('vehicle_management/add_keys', 'FleetManagementController@addkeys');
+Route::patch('vehicle_management/edit_images/{image}', 'FleetManagementController@editImage');
+
+
+Route::patch('vehicle_management/edit_key/{keytracking}', 'FleetManagementController@editKeys');
+
+
 # Performance Appraisals Module
 
 Route::get('appraisal/setup', 'AppraisalSetupController@index');
@@ -557,6 +654,12 @@ Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
 
+//Voucher (Guest)
+Route::get('vouchers/get-voucher', 'VouchersGuestController@index');
+Route::post('vouchers/get-voucher', 'VouchersGuestController@store');
+Route::get('vouchers/view/{voucher}', 'VouchersGuestController@voucherPDF');
+Route::post('vouchers/email/{voucher}', 'VouchersGuestController@emailVoucher');
+
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');
 Route::get('survey/question_activate/{question}', 'SurveysController@actDeact');
@@ -647,6 +750,9 @@ Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@upd
 Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
 
 Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleDD')->name('contactsdropdown');
+
+//Test leave cron
+Route::get('test/cron', 'AllocateLeavedaysFamilyCronController@sickDays');
 
 //Email Test
 Route::get('testemail', function () {

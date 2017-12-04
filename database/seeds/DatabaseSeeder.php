@@ -119,56 +119,7 @@ class DatabaseSeeder extends Seeder
         $province = new Province();
         $province->name = 'Western Cape';
         $country->addProvince($province);
-        #
         
-        //  //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Approved',
-        //     'description' => 'Approved',
-        // ]);
-        //  //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Require managers approval',
-        //     'description' => 'Require managers approval',
-        // ]);
-        //  //insert leave statuses
-        //  DB::table('leave_status')->insert([
-        //     'name' => 'Require department head approval',
-        //     'description' => 'Require department head approval',
-        // ]);
-        //  //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Require hr approval',
-        //     'description' => 'Require hr approval',
-        // ]);
-        //   //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Require payroll approval',
-        //     'description' => 'Require payroll approval',
-        // ]);
-        //   //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Rejectd by managers',
-        //     'description' => 'Rejectd by managers',
-        // ]);
-        //   //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Rejectd by department head',
-        //     'description' => 'Rejectd by department head',
-        // ]);
-        //   //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Rejectd by hr',
-        //     'description' => 'rejectd_by_hr',
-        // ]);
-        //   //insert leave statuses
-        // DB::table('leave_status')->insert([
-        //     'name' => 'Rejectd by payroll',
-        //     'description' => 'rejectd_by_payroll',
-        // ]);
-
-
-
         #
         //insert marital statuses
         DB::table('marital_statuses')->insert([
@@ -795,6 +746,24 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Create Request';
+        $ribbon->description = 'Create Request';
+        $ribbon->ribbon_path = 'vehicle_management/create_request';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Approval ';
+        $ribbon->description = 'Approval/reject Request';
+        $ribbon->ribbon_path = 'vehicle_management/appoval';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Manage Fleet';
         $ribbon->description = 'Manage Fleet';
         $ribbon->ribbon_path = 'vehicle_management/manage_fleet';
@@ -803,7 +772,7 @@ class DatabaseSeeder extends Seeder
 
          $ribbon = new module_ribbons();
          $ribbon->active = 1;
-         $ribbon->sort_order = 2;
+         $ribbon->sort_order = 4;
          $ribbon->ribbon_name = 'Job Card Management';
          $ribbon->description = 'Job Card Management';
          $ribbon->ribbon_path = 'Jobcard_management/Job_card';

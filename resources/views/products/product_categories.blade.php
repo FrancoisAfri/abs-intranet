@@ -105,7 +105,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'save_category';
                 var redirectUrl = '/product/Categories';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group has been updated successfully.';
@@ -135,7 +135,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_category';
                 var redirectUrl = '/product/Categories';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Category modal has been updated successfully.';

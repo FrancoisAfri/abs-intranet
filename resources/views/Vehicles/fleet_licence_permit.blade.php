@@ -161,7 +161,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_license';
                 var redirectUrl = '/vehicle_management/Permit';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Fleet Type has been updated successfully.';

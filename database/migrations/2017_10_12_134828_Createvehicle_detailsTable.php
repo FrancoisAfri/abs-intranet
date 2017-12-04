@@ -22,7 +22,7 @@ class CreatevehicleDetailsTable extends Migration
             $table->integer('vehicle_make')->unsigned()->index()->nullable();
             $table->integer('vehicle_model')->unsigned()->index()->nullable();
             $table->integer('vehicle_type')->unsigned()->index()->nullable();
-            $table->bigInteger('year')->nullable();
+            $table->string('year')->nullable();
             $table->string('vehicle_registration')->nullable();
             $table->string('chassis_number')->nullable();
             $table->string('engine_number')->nullable();

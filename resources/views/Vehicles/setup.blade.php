@@ -51,6 +51,9 @@
 				  <a href="/vehicle_management/group_admin"  class="btn btn-app">
 					<i class="fa fa-comments"></i>  Message group admin  
 				  </a>
+                  <a href="/vehicle_management/safe"  class="btn btn-app">
+                    <i class="fa fa-ban"></i>  Add Safe  
+                  </a>
 			</div>
           <!-- /.box-body -->
 			</div>

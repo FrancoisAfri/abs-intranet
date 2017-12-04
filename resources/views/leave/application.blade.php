@@ -284,7 +284,6 @@
 <!-- Ajax dropdown options load -->
 <script src="/custom_components/js/load_dropdown_options.js"></script>
 <!-- Date picker -->
-<script src="/cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
@@ -295,157 +294,147 @@
 <!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
 
 <script type="text/javascript">
-                                    $(function() {
-                                        //Initialize Select2 Elements
-                                        $(".select2").select2();
-                                        //Cancel button click event
-                                        // changetextbox();
-                                        // $('#cancel').click(function() {
-                                        //     location.href = '/leave/application';
-                                        // });
-                                        function postData(id, data) {
-                                            alert(id);
-                                            //if (data == 'approval_id') location.href = "/leave/approval/" + id;
-                                        }
-                                        //Phone mask
-                                        $("[data-mask]").inputmask();
+$(function() {
+	//Initialize Select2 Elements
+	$(".select2").select2();
+	//Cancel button click event
+	// changetextbox();
+	// $('#cancel').click(function() {
+	//     location.href = '/leave/application';
+	// });
+	function postData(id, data) {
+		alert(id);
+		//if (data == 'approval_id') location.href = "/leave/approval/" + id;
+	}
+	//Phone mask
+	$("[data-mask]").inputmask();
 
-                                        var bal = $('#availdays').val();
-                                        var negDays = $('#negsick').val();
-                                        var negannual = $('#negannual').val();
-                                        var balance = parseInt(bal);
-                                        var NegDays = parseInt(negDays);
-                                        var Negannual = parseInt(negannual);
+	var bal = $('#availdays').val();
+	var negDays = $('#negsick').val();
+	var negannual = $('#negannual').val();
+	var balance = parseInt(bal);
+	var NegDays = parseInt(negDays);
+	var Negannual = parseInt(negannual);
 
-                                        var Sick = bal + negDays;
-                                        var Annual = bal + negannual;
-                                        // alert (bal)
-                                        //
-                                        $('input[name="date"]').daterangepicker({
-                                            singleDatePicker: true,
-                                            showDropdowns: false,
+	var Sick = bal + negDays;
+	var Annual = bal + negannual;
+	// alert (bal)
+	//
+	$('input[name="date"]').daterangepicker({
+		singleDatePicker: true,
+		showDropdowns: false,
 
-                                        });
+	});
+	$('#time_from').datetimepicker({
+		format: 'HH:mm:ss'
+	});
 
+	$('#time_to').datetimepicker({
+		format: 'HH:mm:ss'
+	});
 
-                                        $('#time_from').datetimepicker({
-                                            format: 'HH:mm:ss'
-                                        });
-
-                                        $('#time_to').datetimepicker({
-                                            format: 'HH:mm:ss'
-                                        });
-
-                                        //Initialise date range picker elements
-                                        $('input[name="day"]').daterangepicker({
-                                            timePicker: false,
-                                            //timePickerIncrement: 30,
-                                            locale: {
-                                                //format: 'MM/DD/YYYY h:mm A'
-                                                format: 'DD/MM/YYYY'
-                                            },
-                                            "dateLimit": {
-                                                "days": Annual
-                                            },
-
-                                        });
-                                        $('input[name="datetime"]').daterangepicker({
-                                            timePicker: true,
-                                            linkedCalendars: true,
+	//Initialise date range picker elements
+	$('input[name="day"]').daterangepicker({
+		timePicker: false,
+		//timePickerIncrement: 30,
+		locale: {
+			//format: 'MM/DD/YYYY h:mm A'
+			format: 'DD/MM/YYYY'
+		},
+		"dateLimit": {
+			"days": Annual
+		},
+	});
+	$('input[name="datetime"]').daterangepicker({
+		timePicker: true,
+		linkedCalendars: true,
 //                timePickerIncrement: 30,
-                                            locale: {
-                                                format: 'DD/MM/YYYY h:mm A'
-                                            },
-                                            "dateLimit": {
-                                                "days": 1
-                                            },
-                                        });
+		locale: {
+			format: 'DD/MM/YYYY h:mm A'
+		},
+		"dateLimit": {
+			"days": 1
+		},
+	});
 
-                                        $('#hr_person_id , #leave_type').on('change', function() {
-                                            //  console.log('test message');
-                                            var hr_person_id = $('#hr_person_id').val();
-                                            var leave_type = $('#leave_type').val();
-                                            if (hr_person_id > 0 && leave_type > 0) {
-                                                avilabledays(hr_person_id, leave_type, 'availdays');
-                                            }
-                                        });
-                                        //Initialize iCheck/iRadio Elements
-                                        $('input').iCheck({
-                                            checkboxClass: 'icheckbox_square-blue',
-                                            radioClass: 'iradio_square-blue',
-                                            increaseArea: '20%' // optional
-                                        });
-                                        hideFields();
-                                        //show/hide fields on radio button toggles (depending on registration type)
-                                        $('#rdo_days, #rdo_hours').on('ifChecked', function() {
-                                            var allType = hideFields();
-                                            if (allType == 1)
-                                                $('#box-subtitle').html('Days');
-                                            else if (allType == 2)
-                                                $('#box-subtitle').html('Hours');
-                                        });
+	$('#hr_person_id , #leave_type').on('change', function() {
+		//  console.log('test message');
+		var hr_person_id = $('#hr_person_id').val();
+		var leave_type = $('#leave_type').val();
+		if (hr_person_id > 0 && leave_type > 0) {
+			avilabledays(hr_person_id, leave_type, 'availdays');
+		}
+	});
+	//Initialize iCheck/iRadio Elements
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-blue',
+		radioClass: 'iradio_square-blue',
+		increaseArea: '20%' // optional
+	});
+	hideFields();
+	//show/hide fields on radio button toggles (depending on registration type)
+	$('#rdo_days, #rdo_hours').on('ifChecked', function() {
+		var allType = hideFields();
+		if (allType == 1)
+			$('#box-subtitle').html('Days');
+		else if (allType == 2)
+			$('#box-subtitle').html('Hours');
+	});
 
+	//Vertically center modals on page
+	function reposition() {
+		var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+		modal.css('display', 'block');
 
-                                        //Vertically center modals on page
-                                        function reposition() {
-                                            var modal = $(this),
-                                                    dialog = modal.find('.modal-dialog');
-                                            modal.css('display', 'block');
+		// Dividing by two centers the modal exactly, but dividing by three
+		// or four works better for larger screens.
+		dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+	}
+	// Reposition when a modal is shown
+	$('.modal').on('show.bs.modal', reposition);
+	// Reposition when the window is resized
+	$(window).on('resize', function() {
+		$('.modal:visible').each(reposition);
+	});
 
-                                            // Dividing by two centers the modal exactly, but dividing by three
-                                            // or four works better for larger screens.
-                                            dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                                        }
-                                        // Reposition when a modal is shown
-                                        $('.modal').on('show.bs.modal', reposition);
-                                        // Reposition when the window is resized
-                                        $(window).on('resize', function() {
-                                            $('.modal:visible').each(reposition);
-                                        });
-
-                                        //Show success action modal
-                                        $('#success-action-modal').modal('show');
-                                    });
+	//Show success action modal
+	$('#success-action-modal').modal('show');
+});
 
 //      hide notes field if leave type is maternity
-                                    function changetextbox() {
-                                        var levID = document.getElementById("leave_type").value;
-                                        // alert (levID);
-                                        if (levID == 1) {
-                                            $('.neg-field').hide();
-                                            $('.Sick-field').show();
-                                        } else if (levID == 2, 3, 4, 6, 7, 8) {
-                                            $('.Sick-field').hide();
-                                            $('.neg-field').hide();
-                                        } else if (levID == 5) {
-                                            $('.Sick-field').hide();
-                                            $('.neg-field').show();
-                                        }
-                                    }
+	function changetextbox() {
+		var levID = document.getElementById("leave_type").value;
+		// alert (levID);
+		if (levID == 1) {
+			$('.neg-field').hide();
+			$('.Sick-field').show();
+		} else if (levID == 2, 3, 4, 6, 7, 8) {
+			$('.Sick-field').hide();
+			$('.neg-field').hide();
+		} else if (levID == 5) {
+			$('.Sick-field').hide();
+			$('.neg-field').show();
+		}
+	}
 
-                                    //function to hide/show fields depending on the allocation  type
-                                    function hideFields() {
-                                        var allType = $("input[name='application_type']:checked").val();
-                                        if (allType == 1) { //adjsut leave
-                                            $('.hours-field').hide();
-                                            $('.day-field').show();
-                                            $('form[name="leave-application-form"]').attr('action', '/leave/application/day');
-                                            $('#load-allocation').val("Submit");
-                                        } else if (allType == 2) { //resert leave
+	//function to hide/show fields depending on the allocation  type
+	function hideFields() {
+		var allType = $("input[name='application_type']:checked").val();
+		if (allType == 1) { //adjsut leave
+			$('.hours-field').hide();
+			$('.day-field').show();
+			$('form[name="leave-application-form"]').attr('action', '/leave/application/day');
+			$('#load-allocation').val("Submit");
+		} else if (allType == 2) { //resert leave
 //
-                                            $('.day-field').hide();
-                                            $('.hours-field').show();
-                                            $('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
-                                            $('#load-allocation').val("Submit");
-                                        } else
-                                            $('form[name="leave-application-form"]').attr('action', '/leave/application/leavDetails');
-//
-                                        return allType;
-
-                                    }
-                                    // function getEmployeeBal(hr_id, levID, availdaystxt){
-
-                                    // }
-
+			$('.day-field').hide();
+			$('.hours-field').show();
+			$('form[name="leave-application-form"]').attr('action', '/leave/application/hours');
+			$('#load-allocation').val("Submit");
+		} else
+			$('form[name="leave-application-form"]').attr('action', '/leave/application/leavDetails');
+		return allType;
+	}
 </script>
 @endsection

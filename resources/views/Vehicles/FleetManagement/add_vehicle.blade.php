@@ -72,7 +72,8 @@
                                     </td>
                                     <td>
                                         <div class="product-img">
-                                            <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("image/$card->image") : 'http://placehold.it/50x50' }}"  alt="Product Image" width="50" height="50">
+                                            <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("image/$card->image") : 'http://placehold.it/50x50' }}"
+                                                 alt="Product Image" width="50" height="50">
                                         </div>
                                     </td>
                                     {{--<td>{{ (!empty( $card->image)) ?  $card->image : ''}} </td>--}}
@@ -103,7 +104,7 @@
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
                                         </button>
-                                        No Fleet to display, please start by adding a new Fleet..
+                                        No Record to display, please start by adding a new Record ..
                                     </div>
                                 </td>
                             </tr>

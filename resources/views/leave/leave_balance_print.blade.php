@@ -53,22 +53,17 @@
 					</tr>
 					@if(count($credit) > 0)
 							@foreach($credit as $audit)
-							<tr>
-						<!-- <td>{{ !empty($audit->module_name) ? $audit->module_name : '' }}</td> -->
-						<!-- <td>{{ !empty($audit->firstname) && !empty($audit->surname) ? $audit->firstname.' '.$audit->surname : '' }}</td> -->
-						<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
-						<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
-						<td>{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>
-						<!-- <td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td> -->
-						<td>{{ !empty($audit->Balance) ? $audit->Balance : '' }}</td>
-						<!-- <td>{{ !empty($audit->transcation) ? $audit->transcation : '' }}</td> -->
+						<tr>
+							<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
+							<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
+							<td>{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>
+							<td>{{ !empty($audit->Balance) ? $audit->Balance/8 : '' }}</td>
 						</tr>
 					@endforeach
 				@endif
 				</table>
 			</div>
 		</div>
-
     </div>
     <!-- /.row -->
   </section>

@@ -38,6 +38,6 @@ class leavemanagementAnnual extends Command
     public function handle()
     {
         app('App\Http\Controllers\AllocateLeavedaysAnnualCronController')->execute();
-//        \Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
+        \Log::info('Cron - leavemanagementAnnual, artisan command schedule:leaveAllocationAnnual ran successfully @ ' . \Carbon\Carbon::now());
     }
 }

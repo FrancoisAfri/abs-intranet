@@ -36,37 +36,8 @@
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Search for a Vehicle</h3>
                                 </div>
-                                <div class="box-body">
+                                <div class="box-body" id="vehicle_details">
 
-                                    <!--    <div class="form-group">
-                                      <label for="company_id" class="col-sm-3 control-label">Company</label>
-                                      <div class="col-sm-7">
-                                          <div class="input-group">
-                                              <div class="input-group-addon">
-                                                  <i class="fa fa-user"></i>
-                                              </div>
-                                              <select class="form-control select2" id="company_id" name="company_id">
-                                                  <option selected="selected" value="0">*** Select a Company ***</option>
-
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div>
-
-                                   <div class="form-group">
-                                      <label for="department_id" class="col-sm-3 control-label">Department</label>
-                                      <div class="col-sm-7">
-                                          <div class="input-group">
-                                              <div class="input-group-addon">
-                                                  <i class="fa fa-user"></i>
-                                              </div>
-                                              <select class="form-control select2" id="department_id" name="department_id">
-                                                  <option selected="selected" value="0">*** Select a Department ***</option>
-
-                                              </select>
-                                          </div>
-                                      </div>
-                                  </div> -->
 
                                     @foreach($division_levels as $division_level)
                                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
@@ -80,35 +51,25 @@
                                                     </div>
                                                     <select id="{{ 'division_level_' . $division_level->level }}"
                                                             name="{{ 'division_level_' . $division_level->level }}"
-                                                            class="form-control" onchange="divDDOnChange(this)">
+                                                            class="form-control"
+                                                            onchange="divDDOnChange(this, null, 'vehicle_details')">
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
 
-
-
-                                    <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
+                                <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
                                         <label for="property_type" class="col-sm-3 control-label"> Property
                                             Type </label>
-
-                                        <div class="col-sm-9">
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          id="rdo_package"
-                                                                                                          name="property_type"
-                                                                                                          value="0"
-                                                                                                          checked> All
+                                        <div class="col-sm-7">
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_product"
+                                                name="property_type" value="1" checked> Internal                                                          
                                             </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_product"
-                                                                               name="property_type" value="1"> Internal
-                                            </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="property_type" value="2"> External
-                                            </label>
-
+                                            <label class="radio-inline"><input type="radio" id="rdo_product" name="property_type" value="2">
+                                                External </label>
                                         </div>
-                                    </div>
+                                </div>
 
                                     <div class="form-group">
                                         <label for="path" class="col-sm-3 control-label">Vehicle Type</label>
@@ -156,39 +117,30 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('promotion_type') ? ' has-error' : '' }}">
-                                        <label for="property_type" class="col-xs-3 control-label"> Status
+                                     <div class="form-group{{ $errors->has('status_type') ? ' has-error' : '' }}">
+                                        <label for="status_type" class="col-sm-3 control-label"> Status
                                              </label>
-
-                                        <div class="col-sm-9">
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          id="rdo_package"
-                                                                                                          name="promotion_type"
-                                                                                                          value="1"
-                                                                                                          checked>
-                                                Inactive </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_product"
-                                                                               name="promotion_type" value="2"> Active
+                                        <div class="col-sm-7">
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_status"
+                                                name="status_type" value="1" checked> Active                                                          
                                             </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="promotion_type" value="3"> Require
+                                            <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="2">
+                                                Require
                                                 Approval </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="promotion_type" value="4"> Rejected
-                                            </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="promotion_type" value="5"> All
-                                            </label>
+                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="3">
+                                                Rejected </label>
+                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="4">
+                                                All </label>
+                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="5">
+                                                External </label>            
 
                                         </div>
-                                    </div>
+                                </div>
 
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-left"><i
                                                     class="fa fa-search"></i> Search
                                         </button>
-                                        <!--  <button type="button" class="btn btn-primary pull-right" id="add_vehicle" ><i class="fa fa-plus-square-o"></i> Add Vehicle</button> -->
-
                                         <button type="button" id="cat_module" class="btn btn-primary pull-right"
                                                 data-toggle="modal"
                                                 data-target="#add-vehicledetails-modal"><i
@@ -198,9 +150,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.box-body -->
-
-                        <!-- /.box-footer -->
                 </form>
             </div>
             <!-- /.box -->
@@ -341,14 +290,12 @@
             var strUrl = '/vehicle_management/add_vehicleDetails';
             var formName = 'add-new-vehicledetails-form';
             var modalID = 'add-vehicledetails-modal';
-            //var modal = $('#'+modalID);
             var submitBtnID = 'add_vehicledetails';
             var redirectUrl = '/vehicle_management/manage_fleet';
-            var successMsgTitle = 'Fleet Type Added!';
-            var successMsg = 'The Fleet Type has been updated successfully.';
+            var successMsgTitle = 'New Vehicle Details Added!';
+            var successMsg = 'TheVehicle Details has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
-
 
         //Load divisions drop down
         var parentDDID = '';
@@ -366,6 +313,22 @@
         loadAllDivs = -1;
         @endforeach
 
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        var parentContainer = $('#add-vehicledetails-modal');
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, 0, 0, parentContainer);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
 
     </script>
 @endsection

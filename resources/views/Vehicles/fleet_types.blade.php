@@ -51,7 +51,7 @@
                         <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No FleetType to display, please start by adding a new FleetType..
+                            No Vehicle Type to display, please start by adding a new Fleet Type..
                         </div>
                         </td>
                         </tr>
@@ -132,7 +132,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'add-fleet';
                 var redirectUrl = '/vehicle_management/Manage_fleet_types';
                 var successMsgTitle = 'Fleet Type Added!';
                 var successMsg = 'The Fleet Type has been updated successfully.';
@@ -159,7 +159,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_fleet';
                 var redirectUrl = '/vehicle_management/Manage_fleet_types';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Fleet Type has been updated successfully.';

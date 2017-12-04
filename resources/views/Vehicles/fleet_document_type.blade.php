@@ -16,10 +16,6 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
-                    <!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
@@ -162,7 +158,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_document';
                 var redirectUrl = '/vehicle_management/Document_type';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Fleet Type has been updated successfully.';

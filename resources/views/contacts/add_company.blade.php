@@ -56,7 +56,7 @@
 							</div>
 						</div>
                         <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                            <label for="phone_number" class="col-sm-2 control-label">Phone Number</label>
+                            <label for="phone_number" class="col-sm-2 control-label">Office Number</label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">

@@ -33,128 +33,223 @@
                 </div>
 
                 <div align="center" class="box box-default">
-                    <div class="box-header with-border">
+                <!-- <div class="box-header with-border">
                         <h3 class="box-title"> Vehicle Management-{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
 
                         </h3>
+                    </div> -->
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                <strong class="lead">Vehicle Details</strong><br>
+
+                                @if(!empty($vehiclemaker))
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
+                                    &nbsp;
+                                    &nbsp;
+                                @endif
+                                @if(!empty($vehiclemodeler))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong>
+                                    <em>{{ $vehiclemodeler->name }}</em>
+                                    &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($vehicleTypes))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em>
+                                    &nbsp;
+                                    &nbsp;
+                                @endif
+                                @if(!empty($maintenance->vehicle_registration))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
+                                    <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
+                                @endif
+                                @if(!empty($maintenance->year))
+                                    -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp;
+                                    &nbsp;
+                                @endif
+                                @if(!empty($maintenance->vehicle_color))
+                                    -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
+                                    <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                @endif
+
+                            </p>
+                        </div>
                     </div>
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
                     <div class="box-body">
-                        <a href="/Jobcard_management/addJob_card" class="btn btn-app">
-                            <i class="fa fa-bars"></i> General Details
-                        </a>
 
-                        <a href="/vehicle_management/fleet_card" class="btn btn-app">
-                            <i class="fa fa-book"></i> Booking Log
-                        </a>
+                        <table class="table table-striped table-bordered">
 
-                        <a href="/vehicle_management/fillingstaion" class="btn btn-app">
-                            <i class="fa fa-tint"></i> Fuel Log
-                        </a>
+                            @foreach ($vehiclemaintenance as $vehiclemaintenance)
+                                <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-bars"></i> General Details
+                                </a>
+                                <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-book"></i> Booking Log
+                                </a>
 
-                        <a href="/vehicle_management/Document_type" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                                <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-tint"></i> Fuel Log
+                                </a>
 
-                        <a href="/vehicle_management/Permit" class="btn btn-app">
-                            <i class="fa fa-medkit"></i> Incidents
-                        </a>
+                                <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-file-o"></i> Oil Log
+                                </a>
 
-                        <a href="/vehicle_management/Incidents_type" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-comments"></i> Service Details
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-yoast"></i> Insurance
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-wpforms"></i> Warranties
-                        </a>
-                        <a href="/vehicle_management/group_admin" class="btn btn-app">
-                            <i class="fa fa-money"></i> General Cost
-                        </a>
+                                <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-medkit"></i> Incidents
+                                </a>
+                                <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-list-alt"></i> Fines
+                                </a>
+                                <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-area-chart"></i> Service Details
+                                </a>
+                                <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
+                                    <i class="fa fa-car"></i>Insurance
+                                </a>
+                                <a href="{{ '/vehicle_management/warranties/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-snowflake-o"></i>Warranties
+                                </a>
+                                <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}"
+                                   class="btn btn-app">
+                                    <i class="fa fa-money"></i> General Cost
+                                </a>
+                                <!--  -->
+                                <tr>
 
-
-
-                        <table class = "table table-striped table-bordered">
-
-                                @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                            <tr>
-
-                                <td class="caption">Fleet Number</td><td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
-                                <td class="caption">Year</td><td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Registration</td><td>1 </td>
-                                <td class="caption">Engine Number</td><td>{{ !empty($vehiclemaintenance->engine_number) ? $vehiclemaintenance->engine_number : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption" width="25%">Make</td><td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
-                                <td class="caption">Vehicle Type</td><td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption" width="25%">Model</td><td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
-                                <td class="caption">Licence Next Renewal Date</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Chassis Number</td><td>{{ !empty($vehiclemaintenance->chassis_number) ? $vehiclemaintenance->chassis_number : ''}}</td>
-                                <td class="caption">COF Expiry Date</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Vehicle Color</td><td>{{ !empty($vehiclemaintenance->vehicle_color) ? $vehiclemaintenance->vehicle_color : ''}}</td>
-                                <td class="caption">Purchase Price</td><td>0
-                                </td></tr><tr>	<td class="caption">Machine Hours</td><td>1</td>	<td class="caption">Vehicle Cell Number</td><td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Fuel Type</td><td>{{ !empty($vehiclemaintenance->fuel_type) ? $vehiclemaintenance->fuel_type : ''}}</td>
-                                <td class="caption">Tracking Cell Number</td><td>{{ !empty($vehiclemaintenance->tracking_umber) ? $vehiclemaintenance->tracking_umber : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Tank Size</td><td>{{ !empty($vehiclemaintenance->size_of_fuel_tank) ? $vehiclemaintenance->size_of_fuel_tank : ''}}</td>
-                                <td class="caption">Fleet Card</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Division</td><td>Marhine Plant Hire</td>
-                                <td class="caption">Vehicle Owner Name</td><td>{{ !empty($vehiclemaintenance->vehicle_owner) ? $vehiclemaintenance->vehicle_owner : ''}}</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Department</td><td></td>
-                                <td class="caption">Title Holder Name</td><td>Marhine Plant Hire</td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Responsible Person</td><td></td>
-                                <td class="caption">Registration Paper</td><td></td>
-                            </tr>
-                            <tr>
-                                <td class="caption">Extras</td><td>{{ !empty($vehiclemaintenance->extras) ? $vehiclemaintenance->extras : ''}}</td>
-                                <td class="caption">Status</td><td>{{ !empty($vehiclemaintenance->status) ? $vehiclemaintenance->status : ''}}</td>
-                            </tr>
-
-
+                                    <td class="caption">Fleet Number</td>
+                                    <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
+                                    <td class="caption">Year</td>
+                                    <td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Registration</td>
+                                    <td>1</td>
+                                    <td class="caption">vehicle registration Number</td>
+                                    <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="caption" width="25%">Make</td>
+                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
+                                    <td class="caption">Vehicle Type</td>
+                                    <td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="caption" width="25%">Model</td>
+                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
+                                    <td class="caption">Licence Next Renewal Date</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Chassis Number</td>
+                                    <td>{{ !empty($vehiclemaintenance->chassis_number) ? $vehiclemaintenance->chassis_number : ''}}</td>
+                                    <td class="caption">COF Expiry Date</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Vehicle Color</td>
+                                    <td>{{ !empty($vehiclemaintenance->vehicle_color) ? $vehiclemaintenance->vehicle_color : ''}}</td>
+                                    <td class="caption">Purchase Price</td>
+                                    <td>0
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Machine Hours</td>
+                                    <td>1</td>
+                                    <td class="caption">Vehicle Cell Number</td>
+                                    <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Fuel Type</td>
+                                    <td>{{ (!empty($vehiclemaintenance->fuel_type)) ?  $fueltype[$vehiclemaintenance->fuel_type] : ''}} </td>
+                                    <td class="caption">Tracking Cell Number</td>
+                                    <td>{{ !empty($vehiclemaintenance->tracking_umber) ? $vehiclemaintenance->tracking_umber : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Tank Size</td>
+                                    <td>{{ !empty($vehiclemaintenance->size_of_fuel_tank) ? $vehiclemaintenance->size_of_fuel_tank : ''}}</td>
+                                    <td class="caption">Fleet Card</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Division</td>
+                                    <td>{{ !empty($vehiclemaintenance->company) ? $vehiclemaintenance->company : ''}}</td>
+                                    <td class="caption">Vehicle Owner Name</td>
+                                    <td>{{ !empty($vehiclemaintenance->vehicle_owner) ? $vehiclemaintenance->vehicle_owner : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Department</td>
+                                    <td>{{ !empty($vehiclemaintenance->Department) ? $vehiclemaintenance->Department : ''}}</td>
+                                    <td class="caption">Title Holder Name</td>
+                                    <td>Marhine Plant Hire</td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Responsible Person</td>
+                                    <td>{{ !empty($vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname) ? $vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname : ''}}</td>
+                                    <td class="caption">Registration Paper</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class="caption">Extras</td>
+                                    <td>{{ !empty($vehiclemaintenance->extras) ? $vehiclemaintenance->extras : ''}}</td>
+                                    <td class="caption">Status</td>
+                                    <td>{{ (!empty($vehiclemaintenance->status)) ?  $status[$vehiclemaintenance->status] : ''}}</td>
+                                </tr>
                         </table>
-
-
                     </div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
                     {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
-                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal" data-target="#edit-vehicle-modal" data-id="{{ $vehiclemaintenance->id }}" data-extras="{{ $vehiclemaintenance->extras }}" data-cell_number="{{$vehiclemaintenance->cell_number}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+                            data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
+                            data-extras="{{ $vehiclemaintenance->extras }}"
+                            data-cell_number="{{$vehiclemaintenance->cell_number}}"
+                            data-year="{{$vehiclemaintenance->year}}"
+                            data-vehicle_registration="{{$vehiclemaintenance->vehicle_registration}}"
+                            data-chassis_number="{{$vehiclemaintenance->chassis_number}}"
+                            data-engine_number="{{$vehiclemaintenance->engine_number}}"
+                            data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"
+                            data-odometer_reading="{{$vehiclemaintenance->odometer_reading}}"
+                            data-hours_reading="{{$vehiclemaintenance->hours_reading}}"
+                            data-size_of_fuel_tank="{{$vehiclemaintenance->size_of_fuel_tank}}"
+                            data-fleet_number="{{$vehiclemaintenance->fleet_number}}"
+                            data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}"
+                    ><i class="fa fa-pencil-square-o"></i> Edit
+                    </button>
 
                     <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Images</a>
 
-                    {{--<a href="/vehicle_management/viewImage/{{$vehiclemaintenance->id}}}" class="btn btn-sm btn-default btn-flat">Images</a>--}}
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Key Tracking</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Permit/Licences</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Documents</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Contracts</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Notes</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat">Reminders</a>
+                    <a href="{{ '/vehicle_management/keys/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a>
+
+                    <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>
+
+                    <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Documents</a>
+
+                    <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Contracts</a>
+
+
+                    <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Notes</a>
+
+                    <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
 
                 </div>
                 @endforeach
@@ -190,7 +285,8 @@
 
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
-
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
 
@@ -289,24 +385,19 @@
                 return allType;
             }
 
-
-
-            //Post perk form to server using ajax (edit)
-            $('#edit_vehicle').on('click', function() {
-                var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
-                var formName = 'edit-vehicledetails-form';
-                var modalID = 'edit-vehicle-modal';
-                var submitBtnID = 'edit_vehicle';
-                var redirectUrl = '/vehicle_management/viewdetails/{{ $vehiclemaintenances->id }}}';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Vehicle details have been updated successfully!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
-
             var vehicleID;
-            $('#edit-vehicle-modal').on('show.bs.modal', function (e) {
+            $('#edit-vehicledetails-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                vehicleID = btnEdit.data('id');
+                if (parseInt(btnEdit.data('id')) > 0) {
+                    vehicleID = btnEdit.data('id');
+                }
+               //console.log('gets here: ' + vehicleID);
+                var division_level_5 = btnEdit.data('division_level_5');
+                var division_level_4 = btnEdit.data('division_level_4');
+                var division_level_3 = btnEdit.data('division_level_3');
+                var division_level_2 = btnEdit.data('division_level_2');
+                var division_level_1 = btnEdit.data('division_level_1');
+                var maintenance = btnEdit.data('responsible_for_maintenance');
                 var vehicle_make = btnEdit.data('vehicle_make');
                 var vehicle_model = btnEdit.data('vehicle_model');
                 var vehicle_type = btnEdit.data('vehicle_type');
@@ -317,13 +408,25 @@
                 var vehicle_color = btnEdit.data('vehicle_color');
                 var odometer_reading = btnEdit.data('odometer_reading');
                 var hours_reading = btnEdit.data('hours_reading');
+                var fuel_type = btnEdit.data('fuel_type');
                 var size_of_fuel_tank = btnEdit.data('size_of_fuel_tank');
+                var fleet_number = btnEdit.data('fleet_number');
                 var cell_number = btnEdit.data('cell_number');
                 var tracking_umber = btnEdit.data('tracking_umber');
+                var vehicle_owner = btnEdit.data('vehicle_owner');
+                var financial_institution = btnEdit.data('financial_institution');
                 var extras = btnEdit.data('extras');
+                var property_type = btnEdit.data('property_type');
+                var company = btnEdit.data('company');
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
                 var modal = $(this);
+                modal.find('#division_level_5').val(division_level_5);
+                modal.find('#division_level_4').val(division_level_4);
+                modal.find('#division_level_3').val(division_level_3);
+                modal.find('#division_level_2').val(division_level_2);
+                modal.find('#division_level_1').val(division_level_1);
+                modal.find('#responsible_for_maintenance').val(maintenance);
                 modal.find('#vehicle_make').val(vehicle_make);
                 modal.find('#vehicle_model').val(vehicle_model);
                 modal.find('#vehicle_type').val(vehicle_type);
@@ -334,16 +437,95 @@
                 modal.find('#vehicle_color').val(vehicle_color);
                 modal.find('#odometer_reading').val(odometer_reading);
                 modal.find('#hours_reading').val(hours_reading);
+                modal.find('#fuel_type').val(fuel_type);
                 modal.find('#size_of_fuel_tank').val(size_of_fuel_tank);
+                modal.find('#fleet_number').val(fleet_number);
                 modal.find('#cell_number').val(cell_number);
+                modal.find('#property_type').val(property_type);
                 modal.find('#tracking_umber').val(tracking_umber);
+                modal.find('#vehicle_owner').val(vehicle_owner);
+                modal.find('#financial_institution').val(financial_institution);
+                modal.find('#company').val(company);
                 modal.find('#extras').val(extras);
                 modal.find('#image').val(image);
                 modal.find('#registration_papers').val(registration_papers);
 
             });
 
+            $('#edit_vehicle').on('click', function () {
+                var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
+                var modalID = 'edit-vehicledetails-modal';
+                var objData = {
+                    division_level_5: $('#'+modalID).find('#division_level_5').val(),
+                    division_level_4: $('#'+modalID).find('#division_level_4').val(),
+                    division_level_3: $('#'+modalID).find('#division_level_3').val(),
+                    division_level_2: $('#'+modalID).find('#division_level_2').val(),
+                    division_level_1: $('#'+modalID).find('#division_level_1').val(),
+                    responsible_for_maintenance: $('#'+modalID).find('#responsible_for_maintenance').val(),
+                    vehicle_make: $('#'+modalID).find('#vehicle_make').val(),
+                    vehicle_model: $('#'+modalID).find('#vehicle_model').val(),
+                    vehicle_type: $('#'+modalID).find('#vehicle_type').val(),
+                    year: $('#'+modalID).find('#year').val(),
+                    vehicle_registration: $('#'+modalID).find('#vehicle_registration').val(),
+                    chassis_number: $('#'+modalID).find('#chassis_number').val(),
+                    engine_number: $('#'+modalID).find('#engine_number').val(),
+                    vehicle_color: $('#'+modalID).find('#vehicle_color').val(),
+                    odometer_reading: $('#'+modalID).find('#odometer_reading').val(),
+                    hours_reading: $('#'+modalID).find('#hours_reading').val(),
+                    fuel_type: $('#'+modalID).find('#fuel_type').val(),
+                    size_of_fuel_tank:$('#'+modalID).find('#size_of_fuel_tank').val(),
+                    fleet_number: $('#'+modalID).find('#fleet_number').val(),
+                    cell_number: $('#'+modalID).find('#cell_number').val(),
+                    tracking_umber: $('#'+modalID).find('#tracking_umber').val(),
+                    vehicle_owner: $('#'+modalID).find('#vehicle_owner').val(),
+                    financial_institution: $('#'+modalID).find('#financial_institution').val(),
+                    company: $('#'+modalID).find('#company').val(),
+                    property_type:$('#'+modalID).find('#property_type').val(),
+                    extras: $('#'+modalID).find('#extras').val(),
+                    image: $('#'+modalID).find('#image').val(),
+                    registration_papers: $('#'+modalID).find('#registration_papers').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'edit_vehicle';
+                var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The Vehicle details  has been updated successfully.';
+                var Method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            });
+
+
+            //Post perk form to server using ajax (edit)
+            // $('#edit_vehicle').on('click', function () {
+            //     var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
+            //     var formName = 'edit-vehicledetails-form';
+            //     var modalID = 'edit-vehicledetails-modal';
+            //     var submitBtnID = 'edit_vehicle';
+            //     var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+            //     var successMsgTitle = 'Changes Saved!';
+            //     var successMsg = 'The Vehicle details have been updated successfully!';
+            //     var Method = 'PATCH'
+            //     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            // });
+
 
         });
+
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
+
     </script>
 @endsection

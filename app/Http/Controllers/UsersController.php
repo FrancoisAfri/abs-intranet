@@ -424,7 +424,8 @@ class UsersController extends Controller
         }
 		AuditReportsController::store('Security', 'User Details Updated', "By User", 0);
         //return to the edit page
-        return redirect("/users/$user->id/edit")->with('success_edit', "The user's details have been successfully updated.");
+        //return redirect("/users/$user->id/edit")->with('success_edit', "The user's details have been successfully updated.");
+        return back()->with('success_edit', "The user's details have been successfully updated.");
     }
 
     public function getSearch(Request $request) {
