@@ -757,7 +757,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Approval ';
         $ribbon->description = 'Approval/reject Request';
-        $ribbon->ribbon_path = 'vehicle_management/appoval';
+        $ribbon->ribbon_path = 'vehicle_management/approval';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 

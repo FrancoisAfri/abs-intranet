@@ -280,7 +280,6 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 
 ##*************** Vehicle Management ************
 
-
 ###----bookings
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
@@ -289,7 +288,7 @@ Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBo
 Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehiclebooking');
 Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
 //cancel booking
- Route::patch('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
+ Route::get('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
 // edit booking
  Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 // collect vehicle
@@ -300,6 +299,9 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
  Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
   //Approve Vehicle Approval
  Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
+ //
+ Route::post('vehicle_management/add_collectiondoc', 'VehicleBookingController@AddcollectionDoc');
+ Route::post('vehicle_management/add_collectionImage', 'VehicleBookingController@AddcollectionImage');
 ###
 
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');

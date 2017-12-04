@@ -14,7 +14,6 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-
                     <div class="form-group">
                         <label for="type" class="col-sm-2 control-label"> Document Type</label>
                         <div class="col-sm-8">
@@ -23,7 +22,7 @@
                                     <i class="fa fa-filter"></i>
                                 </div>
 
-                                <select id="type" name="type" class="form-control">
+                                <select id="doctype" name="doctype" class="form-control">
                                     <!-- <option value="0">*** Select Fuel Type ***</option> -->
                                     <option value="1"> Inspection</option>
                                     <option value="2"> General Documents</option>
@@ -33,12 +32,11 @@
                         </div>
                     </div>
 
-
                     <div class="form-group ">
-                        <label for="path" class="col-sm-2 control-label">Document Description </label>
+                        <label for="path" class="col-sm-2 control-label">Description </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="description" name="description"
-                                   value=" " placeholder="Enter  Description ...">
+                                   value=" " placeholder="Enter  Description ..." >
                         </div>
                     </div>
 
@@ -55,6 +53,12 @@
                             </div>
                         </div>
                     </div>
+
+                    <input type="hidden" id="vehicleID" name="vehicleID"
+                           value="{{ !empty($vehiclebookings->vehicle_id) ? $vehiclebookings->vehicle_id : ''}}">    
+                         
+                    <input type="hidden" id="bookingID" name="bookingID"
+                           value="{{ !empty($collect->id) ? $collect->id : ''}}">
 
                 </div>
                 <div class="modal-footer">

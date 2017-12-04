@@ -36,13 +36,8 @@
                             </div>
                         @endforeach
 
-                        <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">Person Responsible </label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
+                           
+                                <div  class="input-group" style="display: none;">
                                     <select class="form-control" style="width: 100%;"
                                             id="responsible_for_maintenance" name="responsible_for_maintenance">
                                         <option value="0">*** Select User ***</option>
@@ -51,8 +46,36 @@
                                         @endforeach
                                     </select>
                                 </div>
+
+                                
+                         <div class="form-group">
+                            <label for="path" class="col-sm-2 control-label">Person Responsible </label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <select class="form-control" style="width: 100%;"
+                                            id="responsible_for_maintenance" name="responsible_for_maintenance">
+                                       <option value="0">*** Please Select User ***</option>
+                                    @foreach($hrDetails as $company)
+                                        <option value="{{ $company->id }}" {{ ($company->id == $vehiclemaintenance->responsible_for_maintenance) ? ' selected' : '' }}>{{ $company->first_name . ' ' . $company->surname}}</option>
+                                    @endforeach
+                                </select>
+                                </div>
                             </div>
                         </div>
+
+                        <div  class="input-group" style="display: none;">
+                                   <select class="form-control " style="width: 100%;" id="vehicle_make"
+                                            name="vehicle_make">
+                                         <option value="0">*** Select a Vehicle Make ***</option>
+                                        @foreach($Vehiclemake as $make)
+                                            <option value="{{ $make->id }}">{{ $make->name }}</option>
+                                        @endforeach
+                                    </select>
+                        </div>
+
 
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Vehicle Make</label>
@@ -65,13 +88,25 @@
                                             name="vehicle_make">
                                         <option value="0">*** Select a Vehicle Make ***</option>
                                         @foreach($Vehiclemake as $make)
-                                            <option value="{{ $make->id }}">{{ $make->name }}</option>
+                                            <option value="{{ $make->id }}" {{ ($make->name == $vehiclemaintenance->vehicle_make) ? ' selected' : '' }}>{{ $make->name}}</option>
+
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
 
+                        
+                        <div  class="input-group" style="display: none;">
+                                   <select class="form-control " style="width: 100%;" id="vehicle_model"
+                                            name="vehicle_model">
+                                         <option value="0">*** Select a Vehicle Make ***</option>
+                                        @foreach($vehiclemodel as $make)
+                                            <option value="{{ $make->id }}">{{ $make->name }}</option>
+                                        @endforeach
+                                    </select>
+                        </div>
+                    
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
                             <div class="col-sm-8">
@@ -83,13 +118,12 @@
                                             name="vehicle_model">
                                         <option value="0">*** Select a Vehicle Model ***</option>
                                         @foreach($vehiclemodel as $model)
-                                            <option value="{{ $model->id }}">{{ $model->name }}</option>
+                                            <option value="{{ $model->id }}">{{  ($model->name == $vehiclemaintenance->vehicle_model) ? ' selected' : '' }}>{{ $model->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
@@ -108,6 +142,25 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-truck"></i>
+                                    </div>
+                                    <select class="form-control" style="width: 100%;"
+                                            id="vehicle_type" name="vehicle_type">
+                                        <option value="0">*** Select a Vehicle Type ***</option>
+                                        @foreach($Vehicle_types as $type)
+                                             <option value="{{ $type->id }}">{{  ($type->name == $vehiclemaintenance->vehicle_type) ? ' selected' : '' }}>{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
 
 
                         <div class="form-group">
@@ -246,14 +299,13 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="tracking_umber" name="tracking_umber"
-                                       value=""
-                                       placeholder="Enter Tracking Cell Number">
-                            </div>
-
+                        <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="tracking_umber" name="tracking_umber" 
+                                value="" data-inputmask='"mask": "(999) 999-9999"'  placeholder="Enter Tracking Cell Number" data-mask>
                         </div>
+
+                    </div>
 
                         <div class="form-group">
                             <label for="vehicle_owner" class="col-sm-2 control-label">Vehicle Owner</label>

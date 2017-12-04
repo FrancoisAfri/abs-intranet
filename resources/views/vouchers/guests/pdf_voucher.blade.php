@@ -193,7 +193,7 @@
                                                         <td style="padding: 0; width: 85%;">
                                                             {!! '<b>' . (($voucher->no_pax && $voucher->no_pax > 0) ? $voucher->no_pax . ' Pax: ' : '') .
                                                             $voucher->clnt_name . '</b>' . '<br>' !!}
-                                                            {!! ((!empty($voucher->clnt_cellno)) ? 'Cell: ' . $voucher->clnt_cellno : '') . ' ' .
+                                                            {!! ((!empty(trim($voucher->clnt_cellno))) ? 'Cell: ' . $voucher->clnt_cellno : '') . ' ' .
                                                             $voucher->dr_name_order !!}
                                                         </td>
                                                     </tr>
@@ -210,7 +210,7 @@
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
                                                             {!! !empty($voucher->our_ref_full) ? 'Our Ref: ' . $voucher->our_ref_full . '<br>' : '' !!}
-                                                            {!! !empty($voucher->clntref2) ? 'Your Ref: ' . $voucher->clntref2 : '' !!}
+                                                            {!! !empty(trim($voucher->clntref2)) ? 'Your Ref: ' . $voucher->clntref2 : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
