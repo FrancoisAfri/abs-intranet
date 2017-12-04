@@ -45,7 +45,7 @@
                                     <tr>
                                         <td style="vertical-align: middle;">{{ $voucher->vch_no }}</td>
                                         <td style="vertical-align: middle;">{{ ($voucher->vch_dt && $voucher->vch_dt > 0) ? date('d-m-Y', $voucher->vch_dt) : '' }}</td>
-                                        <td style="vertical-align: middle;">{{ $voucher->clnt_name }}</td>
+                                        <td style="vertical-align: middle;">{!! html_entity_decode($voucher->clnt_name) !!}</td>
                                         <td style="vertical-align: middle;">{{ $voucher->clnt_cellno }}</td>
                                         <td style="vertical-align: middle;">{{ $voucher->dr_name_order }}</td>
                                         <td style="vertical-align: middle; width: 70px;" class="text-center" nowrap>
