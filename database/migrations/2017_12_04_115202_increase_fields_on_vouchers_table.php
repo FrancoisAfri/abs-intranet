@@ -13,7 +13,7 @@ class IncreaseFieldsOnVouchersTable extends Migration
      */
     public function up()
     {
-        Schema::create('vouchers', function (Blueprint $table) {
+        Schema::table('vouchers', function (Blueprint $table) {
             $table->string('accqueries', 1500)->change();
             $table->string('arr_desc', 1500)->change();
             $table->string('arr_flt', 1500)->change();
