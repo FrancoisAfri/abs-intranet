@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\CompanyIdentity;
+use App\Mail\SendVoucher;
 use App\Voucher;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class VouchersGuestController extends Controller
 {
@@ -60,7 +63,6 @@ class VouchersGuestController extends Controller
         ];
         $this->validate($request, [
             'clnt_name' => 'required',
-            'clnt_cellno' => 'required'
         ], $messages);
 
         $clientName = trim($request->input('clnt_name'));
@@ -90,5 +92,60 @@ class VouchersGuestController extends Controller
 
         AuditReportsController::store('Vouchers', 'Search Voucher Page Accessed', "Accessed By Guest", 0);
         return view('vouchers.guests.vouchers')->with($data);
+    }
+
+    /**
+     * Show voucher in PDF format.
+     *
+     * @param  \App\Voucher  $voucher
+     * @return \Illuminate\View\View
+     */
+    public function voucherPDF(Voucher $voucher, $emailVoucher = false)
+    {
+        if (!$voucher) return "Invalid Voucher.";
+
+        $companyDetails = CompanyIdentity::systemSettings();
+
+        $data['file_name'] = 'Voucher';
+        $data['page_title'] = 'Voucher PDF';
+        $data['voucher'] = $voucher;
+        $data['companyDetails'] = $companyDetails;
+        $data['usersImg'] = public_path() . Storage::disk('local')->url('voucher_icons/users.png');
+        $data['folderImg'] = public_path() . Storage::disk('local')->url('voucher_icons/folder.png');
+        $data['calculatorImg'] = public_path() . Storage::disk('local')->url('voucher_icons/calculator.png');
+        $data['paymentImg'] = public_path() . Storage::disk('local')->url('voucher_icons/cash_payment.png');
+        $data['calendarClockImg'] = public_path() . Storage::disk('local')->url('voucher_icons/calendar-clock-icon2.png');
+        $data['starImg'] = public_path() . Storage::disk('local')->url('voucher_icons/star-icon.png');
+        $data['tcImg'] = public_path() . Storage::disk('local')->url('voucher_icons/terms-and-conditions-journals.png');
+        $data['iataImg'] = public_path() . Storage::disk('local')->url('voucher_icons/IATA.png');
+        $data['asataImg'] = public_path() . Storage::disk('local')->url('voucher_icons/ASATA.png');
+        //return public_path() . Storage::disk('local')->url('voucher_icons/users.png');
+
+        $view = view('vouchers.guests.pdf_voucher', $data)->render();
+        //return $view;
+        $pdf = resolve('dompdf.wrapper');
+        $pdf->loadHTML($view);
+        if ($emailVoucher) return $pdf->output();
+        else return $pdf->stream('voucher_' . $voucher->id . '.pdf');
+
+        //if ($printQuote) return $pdf->stream('quotation_' . $quotation->id . '.pdf');
+        //elseif ($emailQuote) return $pdf->output();
+    }
+
+    /**
+     * Email the voucher to a recipient
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function emailVoucher(Request $request, Voucher $voucher)
+    {
+        $this->validate($request, [
+            'email' => 'bail|required|email',
+        ]);
+
+        $voucherAttachment = $this->voucherPDF($voucher, true);
+        Mail::to($request->input('email'))->send(new SendVoucher($voucher->clnt_name, $voucherAttachment));
+
+        return response()->json(['success' => 'The voucher has been successfully emailed to the recipient!']);
     }
 }

@@ -24,7 +24,7 @@
                 <!-- /.box-header -->
 
                 <!-- Form Start -->
-                <form name="service-rating-form" class="form-horizontal" method="POST" action="/get-voucher">
+                <form name="service-rating-form" class="form-horizontal" method="POST" action="/vouchers/get-voucher">
                     {{ csrf_field() }}
 
                     <div class="box-body">

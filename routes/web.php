@@ -657,8 +657,10 @@ Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
 
 //Voucher (Guest)
-Route::get('get-voucher', 'VouchersGuestController@index');
-Route::post('get-voucher', 'VouchersGuestController@store');
+Route::get('vouchers/get-voucher', 'VouchersGuestController@index');
+Route::post('vouchers/get-voucher', 'VouchersGuestController@store');
+Route::get('vouchers/view/{voucher}', 'VouchersGuestController@voucherPDF');
+Route::post('vouchers/email/{voucher}', 'VouchersGuestController@emailVoucher');
 
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');

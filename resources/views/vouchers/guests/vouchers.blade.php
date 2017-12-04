@@ -32,21 +32,28 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>User</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Reason</th>
+                                    <th>Voucher #</th>
+                                    <th>Voucher Date</th>
+                                    <th>Client Name</th>
+                                    <th>Cell No.</th>
+                                    <th>Company Name</th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>183</td>
-                                    <td>John Doe</td>
-                                    <td>11-7-2014</td>
-                                    <td><span class="label label-success">Approved</span></td>
-                                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                                </tr>
+                                @foreach($vouchers as $voucher)
+                                    <tr>
+                                        <td style="vertical-align: middle;">{{ $voucher->vch_no }}</td>
+                                        <td style="vertical-align: middle;">{{ ($voucher->vch_dt && $voucher->vch_dt > 0) ? date('d-m-Y', $voucher->vch_dt) : '' }}</td>
+                                        <td style="vertical-align: middle;">{!! html_entity_decode($voucher->clnt_name) !!}</td>
+                                        <td style="vertical-align: middle;">{{ $voucher->clnt_cellno }}</td>
+                                        <td style="vertical-align: middle;">{{ $voucher->dr_name_order }}</td>
+                                        <td style="vertical-align: middle; width: 70px;" class="text-center" nowrap>
+                                            <a href="/vouchers/view/{{ $voucher->id }}" class="btn btn-xs btn-link" title="View/Print" target="_blank"><i class="fa fa-print"></i></a>
+                                            <button type="button" data-toggle="modal" data-target="#email-voucher-modal" data-id="{{ $voucher->id }}" class="btn btn-xs btn-link" title="Send"><i class="fa fa-send"></i></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         @else
@@ -59,12 +66,13 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <a href="/get-voucher" type="button" id="back" class="btn btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="/vouchers/get-voucher" type="button" id="back" class="btn btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </form>
             </div>
         </div>
         <!-- Include add new modal -->
+        @include('vouchers.guests.partials.email_voucher')
     </div>
 @endsection
 
@@ -83,10 +91,52 @@
     <!-- <script src="path/to/js/locales/<lang>.js"></script> -->
     <!-- /Star Ratting Plugin -->
 
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
     <script>
         $(function () {
+            //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                    dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
+            });
+
             //Initialize Select2 Elements
             $(".select2").select2();
+
+            //email voucher modal on show
+            var voucherID;
+            $('#email-voucher-modal').on('show.bs.modal', function (e) {
+                var btnEmail = $(e.relatedTarget);
+                voucherID = btnEmail.data('id');
+                //var modal = $(this);
+                //modal.find('#division_id').val(divID).trigger('change');
+                //show letter head image if any
+            });
+
+            //Post email voucher form to server using ajax (add)
+            $('#email-voucher-btn').on('click', function() {
+                var strUrl = '/vouchers/email/' + voucherID;
+                var formName = 'email-voucher-form';
+                var modalID = 'email-voucher-modal';
+                var submitBtnID = 'email-voucher-btn';
+                var redirectUrl = '';
+                var successMsgTitle = 'Voucher Sent!';
+                var successMsg = 'The voucher has been successfully emailed to the recipient!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
         });
     </script>
 @endsection
