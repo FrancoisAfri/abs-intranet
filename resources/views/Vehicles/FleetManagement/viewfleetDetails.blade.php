@@ -127,10 +127,11 @@
                                     <td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="caption">Registration</td>
-                                    <td>1</td>
+                                   
                                     <td class="caption">vehicle registration Number</td>
                                     <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+                                     <td class="caption">Engine Number</td>
+                                    <td>{{ !empty($vehiclemaintenance->engine_number) ? $vehiclemaintenance->engine_number : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption" width="25%">Make</td>
@@ -158,8 +159,8 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="caption">Machine Hours</td>
-                                    <td>1</td>
+                                    <td class="caption">Odometer</td>
+                                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
                                     <td class="caption">Vehicle Cell Number</td>
                                     <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
                                 </tr>
@@ -179,7 +180,7 @@
                                     <td class="caption">Division</td>
                                     <td>{{ !empty($vehiclemaintenance->company) ? $vehiclemaintenance->company : ''}}</td>
                                     <td class="caption">Vehicle Owner Name</td>
-                                    <td>{{ !empty($vehiclemaintenance->vehicle_owner) ? $vehiclemaintenance->vehicle_owner : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->Vehicle_Owner) ? $vehiclemaintenance->Vehicle_Owner : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Department</td>
@@ -191,7 +192,18 @@
                                     <td class="caption">Responsible Person</td>
                                     <td>{{ !empty($vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname) ? $vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname : ''}}</td>
                                     <td class="caption">Registration Paper</td>
-                                    <td></td>
+                                    <td>
+                                         <div class="form-group{{ $errors->has('registration_papers') ? ' has-error' : '' }}">
+                                    <label for="registration_papers" class="control-label">Registration Paper</label>
+                                    @if(!empty($registration_papers))
+                                        <br><a class="btn btn-default btn-flat btn-block btn-xs" href="{{ $registration_papers }}"
+                                               target="_blank"><i class="fa fa-file-pdf-o"></i> View  Document</a>
+                                    @else
+                                        <br><a class="btn btn-default btn-flat btn-block"><i
+                                                    class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>
+                                    @endif
+                                </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Extras</td>
@@ -207,18 +219,28 @@
                     {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
                     <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
                             data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
-                            data-extras="{{ $vehiclemaintenance->extras }}"
-                            data-cell_number="{{$vehiclemaintenance->cell_number}}"
-                            data-year="{{$vehiclemaintenance->year}}"
-                            data-vehicle_registration="{{$vehiclemaintenance->vehicle_registration}}"
-                            data-chassis_number="{{$vehiclemaintenance->chassis_number}}"
-                            data-engine_number="{{$vehiclemaintenance->engine_number}}"
-                            data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"
+                            data-division_level_5 ="{{$vehiclemaintenance->division_level_5 }}"
+                            data-division_level_4 ="{{ $vehiclemaintenance->division_level_4 }}"
+                            data-division_level_3 ="{{ $vehiclemaintenance->division_level_3 }}"
+                            data-division_level_2 ="{{ $vehiclemaintenance->division_level_2 }}"
+                            data-division_level_1 ="{{ $vehiclemaintenance->division_level_1 }}"
+                            data-responsible_for_maintenance = "responsible_for_maintenance"
+                            data-vehicle_make = "vehicle_make" data-responsible_for_maintenance = "{{$vehiclemaintenance->responsible_for_maintenance}}" data-vehicle_model ="{{$vehiclemaintenance->vehicle_model}}"
+                            data-vehicle_type ="{{'vehicle_type'}}"  data-year ="{{$vehiclemaintenance->year}}"
+                            data-vehicle_registration ="{{$vehiclemaintenance->vehicle_registration}}" data-chassis_number="{{$vehiclemaintenance->chassis_number}}"  
+                            data-engine_number="{{$vehiclemaintenance->engine_number}}" data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"
+                            data-metre_reading_type="{{$vehiclemaintenance->metre_reading_type}}"
                             data-odometer_reading="{{$vehiclemaintenance->odometer_reading}}"
                             data-hours_reading="{{$vehiclemaintenance->hours_reading}}"
+                            data-fuel_type="{{$vehiclemaintenance->fuel_type}}"
                             data-size_of_fuel_tank="{{$vehiclemaintenance->size_of_fuel_tank}}"
                             data-fleet_number="{{$vehiclemaintenance->fleet_number}}"
-                            data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}"
+                            data-cell_number="{{$vehiclemaintenance->cell_number}}"
+                            data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}" data-vehicle_owner = "vehicle_owner"
+                            data-title_type  = "title_type"  data-financial_institution = "financial_institution"
+                            data-extras="{{ $vehiclemaintenance->extras }}" data-property_type ="{{ $vehiclemaintenance->property_type }}"
+                            data-company ="{{ $vehiclemaintenance->extras }}"  
+                                         
                     ><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
 
@@ -397,7 +419,7 @@
                 var division_level_3 = btnEdit.data('division_level_3');
                 var division_level_2 = btnEdit.data('division_level_2');
                 var division_level_1 = btnEdit.data('division_level_1');
-                var maintenance = btnEdit.data('responsible_for_maintenance');
+                var responsible_for_maintenance = btnEdit.data('responsible_for_maintenance');
                 var vehicle_make = btnEdit.data('vehicle_make');
                 var vehicle_model = btnEdit.data('vehicle_model');
                 var vehicle_type = btnEdit.data('vehicle_type');
@@ -406,6 +428,7 @@
                 var chassis_number = btnEdit.data('chassis_number');
                 var engine_number = btnEdit.data('engine_number');
                 var vehicle_color = btnEdit.data('vehicle_color');
+                var metre_reading_type = btnEdit.data('metre_reading_type');
                 var odometer_reading = btnEdit.data('odometer_reading');
                 var hours_reading = btnEdit.data('hours_reading');
                 var fuel_type = btnEdit.data('fuel_type');
@@ -414,6 +437,7 @@
                 var cell_number = btnEdit.data('cell_number');
                 var tracking_umber = btnEdit.data('tracking_umber');
                 var vehicle_owner = btnEdit.data('vehicle_owner');
+                var title_type = btnEdit.data('title_type');
                 var financial_institution = btnEdit.data('financial_institution');
                 var extras = btnEdit.data('extras');
                 var property_type = btnEdit.data('property_type');
@@ -426,7 +450,7 @@
                 modal.find('#division_level_3').val(division_level_3);
                 modal.find('#division_level_2').val(division_level_2);
                 modal.find('#division_level_1').val(division_level_1);
-                modal.find('#responsible_for_maintenance').val(maintenance);
+                modal.find('#responsible_for_maintenance').val(responsible_for_maintenance);
                 modal.find('#vehicle_make').val(vehicle_make);
                 modal.find('#vehicle_model').val(vehicle_model);
                 modal.find('#vehicle_type').val(vehicle_type);
@@ -435,18 +459,20 @@
                 modal.find('#chassis_number').val(chassis_number);
                 modal.find('#engine_number').val(engine_number);
                 modal.find('#vehicle_color').val(vehicle_color);
+                modal.find('#metre_reading_type').val(metre_reading_type);
                 modal.find('#odometer_reading').val(odometer_reading);
                 modal.find('#hours_reading').val(hours_reading);
                 modal.find('#fuel_type').val(fuel_type);
                 modal.find('#size_of_fuel_tank').val(size_of_fuel_tank);
                 modal.find('#fleet_number').val(fleet_number);
                 modal.find('#cell_number').val(cell_number);
-                modal.find('#property_type').val(property_type);
                 modal.find('#tracking_umber').val(tracking_umber);
                 modal.find('#vehicle_owner').val(vehicle_owner);
+                modal.find('#title_type').val(title_type);
                 modal.find('#financial_institution').val(financial_institution);
-                modal.find('#company').val(company);
                 modal.find('#extras').val(extras);
+                modal.find('#property_type').val(property_type);
+                modal.find('#company').val(company);
                 modal.find('#image').val(image);
                 modal.find('#registration_papers').val(registration_papers);
 

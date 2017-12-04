@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Users;
 use App\ContactCompany;
@@ -35,7 +34,9 @@ use App\ribbons_access;
 use App\permit_licence;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 class FleetManagementController extends Controller
 {
     public function __construct()
@@ -63,11 +64,13 @@ class FleetManagementController extends Controller
        // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images','vehicle_managemnet.name as vehicle_type')
+                'vehicle_model.name as vehicle_model','vehicle_image.image as vehicle_images',
+                'vehicle_managemnet.name as vehicle_type' ,'contact_companies.name as Vehicle_Owner ')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_image','vehicle_details.id','=' , 'vehicle_image.vehicle_maintanace' )
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
             ->orderBy('vehicle_details.id')
             ->get();
 
@@ -170,6 +173,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->chassis_number = $SysData['chassis_number'];
         $vehicle_maintenance->engine_number = $SysData['engine_number'];
         $vehicle_maintenance->vehicle_color = $SysData['vehicle_color'];
+        $vehicle_maintenance->metre_reading_type =  $SysData['metre_reading_type'];
         $vehicle_maintenance->odometer_reading = $SysData['odometer_reading'];
         $vehicle_maintenance->hours_reading = $SysData['hours_reading'];
         $vehicle_maintenance->fuel_type = $SysData['fuel_type'];
@@ -178,7 +182,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->cell_number = $SysData['cell_number'];
         $vehicle_maintenance->tracking_umber = $SysData['tracking_umber'];
         $vehicle_maintenance->vehicle_owner = $SysData['vehicle_owner'];
-        $vehicle_maintenance->financial_institution = 0;
+        $vehicle_maintenance->financial_institution = $SysData['title_type'];
         $vehicle_maintenance->company = $SysData['company'];
         $vehicle_maintenance->extras = $SysData['extras'];
         $vehicle_maintenance->property_type = $SysData['property_type'];
@@ -331,21 +335,28 @@ class FleetManagementController extends Controller
             //return $ID;
              $vehiclemaintenance = DB::table('vehicle_details')
              ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model','vehicle_managemnet.name as vehicle_type','division_level_fives.name as company' ,'division_level_fours.name as Department','hr_people.first_name as first_name' , 'hr_people.surname as surname')
+                'vehicle_model.name as vehicle_model','vehicle_managemnet.name as vehicle_type','division_level_fives.name as company' ,'division_level_fours.name as Department','hr_people.first_name as first_name' , 'hr_people.surname as surname'
+                ,'contact_companies.name as Vehicle_Owner ')
                 ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
                 ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
                 ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
                 ->leftJoin('division_level_fives','vehicle_details.division_level_5', '=', 'division_level_fives.id' )
                 ->leftJoin('division_level_fours','vehicle_details.division_level_4', '=', 'division_level_fours.id' )
                 ->leftJoin('hr_people', 'vehicle_details.responsible_for_maintenance', '=', 'hr_people.id')
+                ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
                 ->where('vehicle_details.id', $ID)
                 ->orderBy('vehicle_details.id')
                 ->get();
 
+                //return  $vehiclemaintenance;
+
+            
+            $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
             $vehiclemaintenances = $vehiclemaintenance ->first();
 
-            //$Category->load('productCategory');
+           // $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
+            $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("projects/registration_papers/$registrationPapers") : '';
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [
@@ -618,17 +629,16 @@ class FleetManagementController extends Controller
 
     }
 
-    public function vehiclesAct(Request $request, vehicle_maintenance $vehiclemaintenance)
+
+     public function vehiclesAct(Request $request, vehicle_maintenance $vehicleDetails)
     {
-        if ($vehiclemaintenance->status == 1)
+        if ($vehicleDetails->status == 1)
             $stastus = 0;
         else
             $stastus = 1;
 
-        $vehiclemaintenance->status = $stastus;
-        $vehiclemaintenance->update();
-        // return view('Vehicles.vehicle_search_results');
-        //  } else
+        $vehicleDetails->status = $stastus;
+        $vehicleDetails->update();
         return back();
     }
 

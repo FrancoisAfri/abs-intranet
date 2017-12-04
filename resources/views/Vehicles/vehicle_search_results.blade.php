@@ -22,6 +22,7 @@
                     <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
+                            <div style="overflow-X:auto;">
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
@@ -91,13 +92,11 @@
                                             <td>{{ !empty($card->company) ? $card->company : ''}}</td>
                                             <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
                                             <td>
-                                                <!--   leave here  -->
-                                                <button card="button" id="view_ribbons"
-                                                        class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}
-                                                                btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i
-                                                            class="fa {{ (!empty($card->status) && $card->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}
-                                                </button>
+                                            
+                                        <button card="button" id="view_ribbons" class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i class="fa {{ (!empty($card->status) && $card->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}</button>
+                                                
                                             </td>
                                         </tr>
                                     @endforeach
