@@ -23,6 +23,9 @@
                                    value="{{ old('email') }}">
                         </div>
                     </div>
+                    <!--<div class="form-group has-feedback{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                        {!! app('captcha')->display() !!}
+                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Cancel</button>
