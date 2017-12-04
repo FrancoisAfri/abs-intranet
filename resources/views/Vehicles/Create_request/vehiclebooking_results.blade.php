@@ -46,7 +46,8 @@
                             <ul class="products-list product-list-in-box">
                                 @foreach ($vehiclebookings as $booking)
                                     <tr>
-                                        @if (isset($booking) && $booking->status !== 10)
+                                        {{--dnt allow editing for approved and rejected bookings--}}
+                                        @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 )
                                             <td nowrap>
                                                 <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                         data-toggle="modal" data-target="#edit-booking-modal"
@@ -75,21 +76,25 @@
                                         <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
                                         <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
                                         <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
-                                        <td nowrap>
-                                            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                    data-target="#cancel-booking-warning-modal"
-                                                    data-id="{{$booking->id}}"><i class="fa fa-trash"></i> Cancel
-                                                Booking
-                                            </button>
-                                        </td>
-                                        @if (isset($booking) && $booking->status === 10)
-                                            <td>
-                                                <a href="{{ '/vehicle_management/collect/' . $booking->id }}" id="edit_compan"
-                                                   class="btn btn-success  btn-xs" data-id="{{ $booking->id }}"><i
-                                                            class="fa fa-handshake-o"></i> collect</a>
-                                            </td> @else
+                                        @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 )
+                                            <td nowrap>
+                                                <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+                                                        data-target="#delete-contact-warning-modal"><i
+                                                            class="fa fa-trash"></i> Cancel Booking
+                                                </button>
+                                            </td>@else
                                             <td></td>
                                         @endif
+
+                                            @if (isset($booking) && $booking->status === 10)
+                                                <td>
+                                                    <a href="{{ '/vehicle_management/collect/' . $booking->id }}"
+                                                       id="edit_compan"
+                                                       class="btn btn-success  btn-xs" data-id="{{ $booking->id }}"><i
+                                                                class="fa fa-handshake-o"></i> collect</a>
+                                                </td> @else
+                                                <td></td>
+                                            @endif
                                     </tr>
                             @endforeach
                             </tbody>
@@ -119,6 +124,9 @@
                 </div>
                 @include('Vehicles.sucess.cancel_booking_modal')
                 @include('Vehicles.Create_request.edit_vehiclebooking_modal')
+                @if (count($vehiclebookings) > 0)
+                    @include('Vehicles.warnings.cancel_booking_warning_action', ['modal_title' => 'Cancel Vehicle Booking', 'modal_content' => 'Are you sure you want to Cancel this Booking ? This action cannot be undone.'])
+                @endif
             </div>
         @endsection
 
@@ -193,35 +201,12 @@
 
                         //Show success action modal
                         $('#success-action-modal').modal('show');
-
-                        //
-
+                        
                         $(".js-example-basic-multiple").select2();
 
                         //Cancell booking
                         //Post module form to server using ajax (ADD)
 
-                        var bookingID;
-                        $('#cancel-booking-warning-modal').on('show.bs.modal', function (e) {
-                            var btnEdit = $(e.relatedTarget);
-                            if (parseInt(btnEdit.data('id')) > 0) {
-                                bookingID = btnEdit.data('id');
-                            }
-                            var modal = $(this);
-                        });
-                        $('#cancel_booking').on('click', function () {
-                            var strUrl = '/vehicle_management/cancel_booking/' + bookingID;
-                            var modalID = 'cancel-booking-warning-modal';
-                            var objData = {
-                                _token: $('#' + modalID).find('input[name=_token]').val()
-                            };
-                            var submitBtnID = 'cancel_booking';
-                            var redirectUrl = '/vehicle_management/vehiclebooking_results';
-                            var successMsgTitle = '';
-                            var successMsg = '';
-                            var Method = 'PATCH';
-                            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                        });
 
                         //edit booking
                         var bookingID;

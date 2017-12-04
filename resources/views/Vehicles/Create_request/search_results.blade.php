@@ -6,25 +6,17 @@
 @endsection
 @section('content')
     <div class="row">
-        <!-- New User Form -->
         <div class="col-md-12 col-md-offset-0">
-            <!-- Horizontal Form -->
-            <!-- <form class="form-horizontal" method="get" action="/leave/approval"> -->
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                     <h3 class="box-title">Internal Vehicle Management </h3>
                 </div>
-                <!-- /.box-header -->
-
-
-
-                <!-- form start -->
-
                 <div class="box-body">
                     <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
+                            <div style="overflow-X:auto;">
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
@@ -36,7 +28,6 @@
                                     <th>Registration Number</th>
                                     <th>Company</th>
                                     <th>Department</th>
-                                  <!--   <th>Registration</th> -->
                                     <th>Odometer Reading</th>
                                     <th>Notices</th>
                                 </tr>
@@ -71,14 +62,11 @@
                                     <th>Registration Number</th>
                                     <th>Company</th>
                                     <th>Department</th>
-                                    <!-- <th>Registration</th> -->
                                     <th>Odometer Reading</th>
                                     <th>Notices</th>
                                 </tr>
                                 </tfoot>
                             </table>
-
-                            <!-- /.box-body -->
                             <div class="box-footer">
                                 <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                             class="fa fa-arrow-left"></i> Back
@@ -86,7 +74,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- End new User Form-->
                 </div>
             @endsection
 
