@@ -762,7 +762,8 @@ class VehicleManagemntController extends Controller
 
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 'division_level_fives.name as company', 'division_level_fours.name as Department')
+                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
+                'division_level_fives.name as company', 'division_level_fours.name as Department')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
@@ -791,7 +792,7 @@ class VehicleManagemntController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
-       // return $vehiclemaintenance;
+        //return $vehiclemaintenance;
 
 
         $data['hrDetails'] = $hrDetails;
