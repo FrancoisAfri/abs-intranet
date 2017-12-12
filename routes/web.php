@@ -119,6 +119,9 @@ Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
 Route::get('leave/approval', 'LeaveApplicationController@show');
 Route::post('leave/reject/{levReject}', 'LeaveApplicationController@reject');
 
+#Cancel Leave Application
+Route::patch('leave/application/{leaveApplication}/cancel', 'LeaveApplicationController@cancelApplication');
+
 #leaveHistory audit
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
 Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
