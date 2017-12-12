@@ -127,21 +127,21 @@
                                     <td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
                                 </tr>
                                 <tr>
-                                   
+
                                     <td class="caption">vehicle registration Number</td>
                                     <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
-                                     <td class="caption">Engine Number</td>
+                                    <td class="caption">Engine Number</td>
                                     <td>{{ !empty($vehiclemaintenance->engine_number) ? $vehiclemaintenance->engine_number : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption" width="25%">Make</td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
+                                    <td width="25%">{{ !empty($vehiclemaintenance->vehiclemake) ? $vehiclemaintenance->vehiclemake : ''}}</td>
                                     <td class="caption">Vehicle Type</td>
-                                    <td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->vehicletype) ? $vehiclemaintenance->vehicletype : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption" width="25%">Model</td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
+                                    <td width="25%">{{ !empty($vehiclemaintenance->vehiclemodel) ? $vehiclemaintenance->vehiclemodel : ''}}</td>
                                     <td class="caption">Licence Next Renewal Date</td>
                                     <td></td>
                                 </tr>
@@ -193,16 +193,19 @@
                                     <td>{{ !empty($vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname) ? $vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname : ''}}</td>
                                     <td class="caption">Registration Paper</td>
                                     <td>
-                                         <div class="form-group{{ $errors->has('registration_papers') ? ' has-error' : '' }}">
-                                    <label for="registration_papers" class="control-label">Registration Paper</label>
-                                    @if(!empty($registration_papers))
-                                        <br><a class="btn btn-default btn-flat btn-block btn-xs" href="{{ $registration_papers }}"
-                                               target="_blank"><i class="fa fa-file-pdf-o"></i> View  Document</a>
-                                    @else
-                                        <br><a class="btn btn-default btn-flat btn-block"><i
-                                                    class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>
-                                    @endif
-                                </div>
+                                        <div class="form-group{{ $errors->has('registration_papers') ? ' has-error' : '' }}">
+                                            <label for="registration_papers" class="control-label">Registration
+                                                Paper</label>
+                                            @if(!empty($registration_papers))
+                                                <br><a class="btn btn-default btn-flat btn-block btn-xs"
+                                                       href="{{ $registration_papers }}"
+                                                       target="_blank"><i class="fa fa-file-pdf-o"></i> View
+                                                    Document</a>
+                                            @else
+                                                <br><a class="btn btn-default btn-flat btn-block"><i
+                                                            class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -219,16 +222,22 @@
                     {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
                     <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
                             data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
-                            data-division_level_5 ="{{$vehiclemaintenance->division_level_5 }}"
-                            data-division_level_4 ="{{ $vehiclemaintenance->division_level_4 }}"
-                            data-division_level_3 ="{{ $vehiclemaintenance->division_level_3 }}"
-                            data-division_level_2 ="{{ $vehiclemaintenance->division_level_2 }}"
-                            data-division_level_1 ="{{ $vehiclemaintenance->division_level_1 }}"
-                            data-responsible_for_maintenance = "responsible_for_maintenance"
-                            data-vehicle_make = "vehicle_make" data-responsible_for_maintenance = "{{$vehiclemaintenance->responsible_for_maintenance}}" data-vehicle_model ="{{$vehiclemaintenance->vehicle_model}}"
-                            data-vehicle_type ="{{'vehicle_type'}}"  data-year ="{{$vehiclemaintenance->year}}"
-                            data-vehicle_registration ="{{$vehiclemaintenance->vehicle_registration}}" data-chassis_number="{{$vehiclemaintenance->chassis_number}}"  
-                            data-engine_number="{{$vehiclemaintenance->engine_number}}" data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"
+                            data-status="{{$vehiclemaintenance->status}}"
+                            data-division_level_5="{{$vehiclemaintenance->division_level_5 }}"
+                            data-division_level_4="{{ $vehiclemaintenance->division_level_4 }}"
+                            data-division_level_3="{{ $vehiclemaintenance->division_level_3 }}"
+                            data-division_level_2="{{ $vehiclemaintenance->division_level_2 }}"
+                            data-division_level_1="{{ $vehiclemaintenance->division_level_1 }}"
+                            data-responsible_for_maintenance="{{ $vehiclemaintenance->responsible_for_maintenance}}"
+                            data-vehicle_make="{{ $vehiclemaintenance->vehicle_make}}"
+                            data-responsible_for_maintenance="{{$vehiclemaintenance->responsible_for_maintenance}}"
+                            data-vehicle_model="{{$vehiclemaintenance->vehicle_model}}"
+                            data-vehicle_type="{{$vehiclemaintenance->vehicle_type}}"
+                            data-year="{{$vehiclemaintenance->year}}"
+                            data-vehicle_registration="{{$vehiclemaintenance->vehicle_registration}}"
+                            data-chassis_number="{{$vehiclemaintenance->chassis_number}}"
+                            data-engine_number="{{$vehiclemaintenance->engine_number}}"
+                            data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"
                             data-metre_reading_type="{{$vehiclemaintenance->metre_reading_type}}"
                             data-odometer_reading="{{$vehiclemaintenance->odometer_reading}}"
                             data-hours_reading="{{$vehiclemaintenance->hours_reading}}"
@@ -236,11 +245,14 @@
                             data-size_of_fuel_tank="{{$vehiclemaintenance->size_of_fuel_tank}}"
                             data-fleet_number="{{$vehiclemaintenance->fleet_number}}"
                             data-cell_number="{{$vehiclemaintenance->cell_number}}"
-                            data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}" data-vehicle_owner = "vehicle_owner"
-                            data-title_type  = "title_type"  data-financial_institution = "financial_institution"
-                            data-extras="{{ $vehiclemaintenance->extras }}" data-property_type ="{{ $vehiclemaintenance->property_type }}"
-                            data-company ="{{ $vehiclemaintenance->extras }}"  
-                                         
+                            data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}"
+                            data-vehicle_owner="{{$vehiclemaintenance->vehicle_owner}}"
+                            data-title_type="{{$vehiclemaintenance->title_type}}"
+                            data-financial_institution="{{$vehiclemaintenance->financial_institution}}"
+                            data-extras="{{ $vehiclemaintenance->extras }}"
+                            data-property_type="{{ $vehiclemaintenance->property_type }}"
+                            data-company="{{ $vehiclemaintenance->company }}"
+
                     ><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
 
@@ -413,14 +425,17 @@
                 if (parseInt(btnEdit.data('id')) > 0) {
                     vehicleID = btnEdit.data('id');
                 }
-               //console.log('gets here: ' + vehicleID);
+                //console.log('gets here: ' + vehicleID);
+                var status = btnEdit.data('status');
                 var division_level_5 = btnEdit.data('division_level_5');
                 var division_level_4 = btnEdit.data('division_level_4');
                 var division_level_3 = btnEdit.data('division_level_3');
                 var division_level_2 = btnEdit.data('division_level_2');
                 var division_level_1 = btnEdit.data('division_level_1');
                 var responsible_for_maintenance = btnEdit.data('responsible_for_maintenance');
+
                 var vehicle_make = btnEdit.data('vehicle_make');
+                console.log('gets here: ' + status);
                 var vehicle_model = btnEdit.data('vehicle_model');
                 var vehicle_type = btnEdit.data('vehicle_type');
                 var year = btnEdit.data('year');
@@ -444,7 +459,9 @@
                 var company = btnEdit.data('company');
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
+                var promotion_type = btnEdit.data('promotion_type');
                 var modal = $(this);
+                modal.find('#status').val(status);
                 modal.find('#division_level_5').val(division_level_5);
                 modal.find('#division_level_4').val(division_level_4);
                 modal.find('#division_level_3').val(division_level_3);
@@ -475,64 +492,66 @@
                 modal.find('#company').val(company);
                 modal.find('#image').val(image);
                 modal.find('#registration_papers').val(registration_papers);
+                modal.find('#promotion_type').val(promotion_type);
 
             });
 
+            {{--$('#edit_vehicle').on('click', function () {--}}
+                {{--var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;--}}
+                {{--var modalID = 'edit-vehicledetails-modal';--}}
+                {{--var objData = {--}}
+                    {{--status: $('#' + modalID).find('#status').val(),--}}
+                    {{--division_level_5: $('#' + modalID).find('#division_level_5').val(),--}}
+                    {{--division_level_4: $('#' + modalID).find('#division_level_4').val(),--}}
+                    {{--division_level_3: $('#' + modalID).find('#division_level_3').val(),--}}
+                    {{--division_level_2: $('#' + modalID).find('#division_level_2').val(),--}}
+                    {{--division_level_1: $('#' + modalID).find('#division_level_1').val(),--}}
+                    {{--responsible_for_maintenance: $('#' + modalID).find('#responsible_for_maintenance').val(),--}}
+                    {{--vehicle_make: $('#' + modalID).find('#vehicle_make').val(),--}}
+                    {{--vehicle_model: $('#' + modalID).find('#vehicle_model').val(),--}}
+                    {{--vehicle_type: $('#' + modalID).find('#vehicle_type').val(),--}}
+                    {{--year: $('#' + modalID).find('#year').val(),--}}
+                    {{--vehicle_registration: $('#' + modalID).find('#vehicle_registration').val(),--}}
+                    {{--chassis_number: $('#' + modalID).find('#chassis_number').val(),--}}
+                    {{--engine_number: $('#' + modalID).find('#engine_number').val(),--}}
+                    {{--vehicle_color: $('#' + modalID).find('#vehicle_color').val(),--}}
+                    {{--odometer_reading: $('#' + modalID).find('#odometer_reading').val(),--}}
+                    {{--hours_reading: $('#' + modalID).find('#hours_reading').val(),--}}
+                    {{--fuel_type: $('#' + modalID).find('#fuel_type').val(),--}}
+                    {{--size_of_fuel_tank: $('#' + modalID).find('#size_of_fuel_tank').val(),--}}
+                    {{--fleet_number: $('#' + modalID).find('#fleet_number').val(),--}}
+                    {{--cell_number: $('#' + modalID).find('#cell_number').val(),--}}
+                    {{--tracking_umber: $('#' + modalID).find('#tracking_umber').val(),--}}
+                    {{--vehicle_owner: $('#' + modalID).find('#vehicle_owner').val(),--}}
+                    {{--financial_institution: $('#' + modalID).find('#financial_institution').val(),--}}
+                    {{--company: $('#' + modalID).find('#company').val(),--}}
+                    {{--property_type: $('#' + modalID).find('#property_type').val(),--}}
+                    {{--extras: $('#' + modalID).find('#extras').val(),--}}
+                    {{--image: $('#' + modalID).find('#image').val(),--}}
+                    {{--registration_papers: $('#' + modalID).find('#registration_papers').val(),--}}
+                    {{--promotion_type: $('#' + modalID).find('#promotion_type').val(),--}}
+                    {{--_token: $('#' + modalID).find('input[name=_token]').val()--}}
+                {{--};--}}
+                {{--var submitBtnID = 'edit_vehicle';--}}
+                {{--var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';--}}
+                {{--var successMsgTitle = 'Changes Saved!';--}}
+                {{--var successMsg = 'The Vehicle details  has been updated successfully.';--}}
+                {{--var Method = 'PATCH';--}}
+                {{--modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);--}}
+            {{--});--}}
+
+
             $('#edit_vehicle').on('click', function () {
                 var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
+                var formName = 'edit-vehicledetails-form';
                 var modalID = 'edit-vehicledetails-modal';
-                var objData = {
-                    division_level_5: $('#'+modalID).find('#division_level_5').val(),
-                    division_level_4: $('#'+modalID).find('#division_level_4').val(),
-                    division_level_3: $('#'+modalID).find('#division_level_3').val(),
-                    division_level_2: $('#'+modalID).find('#division_level_2').val(),
-                    division_level_1: $('#'+modalID).find('#division_level_1').val(),
-                    responsible_for_maintenance: $('#'+modalID).find('#responsible_for_maintenance').val(),
-                    vehicle_make: $('#'+modalID).find('#vehicle_make').val(),
-                    vehicle_model: $('#'+modalID).find('#vehicle_model').val(),
-                    vehicle_type: $('#'+modalID).find('#vehicle_type').val(),
-                    year: $('#'+modalID).find('#year').val(),
-                    vehicle_registration: $('#'+modalID).find('#vehicle_registration').val(),
-                    chassis_number: $('#'+modalID).find('#chassis_number').val(),
-                    engine_number: $('#'+modalID).find('#engine_number').val(),
-                    vehicle_color: $('#'+modalID).find('#vehicle_color').val(),
-                    odometer_reading: $('#'+modalID).find('#odometer_reading').val(),
-                    hours_reading: $('#'+modalID).find('#hours_reading').val(),
-                    fuel_type: $('#'+modalID).find('#fuel_type').val(),
-                    size_of_fuel_tank:$('#'+modalID).find('#size_of_fuel_tank').val(),
-                    fleet_number: $('#'+modalID).find('#fleet_number').val(),
-                    cell_number: $('#'+modalID).find('#cell_number').val(),
-                    tracking_umber: $('#'+modalID).find('#tracking_umber').val(),
-                    vehicle_owner: $('#'+modalID).find('#vehicle_owner').val(),
-                    financial_institution: $('#'+modalID).find('#financial_institution').val(),
-                    company: $('#'+modalID).find('#company').val(),
-                    property_type:$('#'+modalID).find('#property_type').val(),
-                    extras: $('#'+modalID).find('#extras').val(),
-                    image: $('#'+modalID).find('#image').val(),
-                    registration_papers: $('#'+modalID).find('#registration_papers').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
                 var submitBtnID = 'edit_vehicle';
                 var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Vehicle details  has been updated successfully.';
                 var Method = 'PATCH';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
-
-            //Post perk form to server using ajax (edit)
-            // $('#edit_vehicle').on('click', function () {
-            //     var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
-            //     var formName = 'edit-vehicledetails-form';
-            //     var modalID = 'edit-vehicledetails-modal';
-            //     var submitBtnID = 'edit_vehicle';
-            //     var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-            //     var successMsgTitle = 'Changes Saved!';
-            //     var successMsg = 'The Vehicle details have been updated successfully!';
-            //     var Method = 'PATCH'
-            //     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-            // });
 
 
         });

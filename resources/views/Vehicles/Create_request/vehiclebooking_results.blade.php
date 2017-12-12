@@ -116,9 +116,8 @@
                         </table>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                        class="fa fa-arrow-left"></i> Back
-                            </button>
+                            <button type="button" id="cancel" class="btn btn-default pull-right"> Create a Request </button>
+                            
                         </div>
                     </div>
                 </div>
@@ -144,7 +143,7 @@
                 <script>
                     //Cancel button click event
                     document.getElementById("cancel").onclick = function () {
-                        location.href = "/vehicle_management/vehiclesearch";
+                        location.href = "/vehicle_management/vehicle_request";
                     };
                     $(function () {
                         $('#example2').DataTable({
