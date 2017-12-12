@@ -187,7 +187,7 @@
                                             <i class="fa fa-spinner"></i>
                                         </div>
                                         <input type="text" id="start_mileage_id" class="form-control pull-left"
-                                               name="start_mileage_id" value="enter actual Odometer Reading">
+                                               name="start_mileage_id" value="0">
                                     </div>
                                 </div>
                             </div>

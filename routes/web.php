@@ -284,7 +284,7 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
 Route::get('vehicle_management/vehicle_request', 'VehicleBookingController@vehiclerequest');
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
-Route::post('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
+Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
 
 Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehiclebooking');
 Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');

@@ -125,7 +125,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
-                                                    <input type='text' class="form-control" id='requiredfrom' name="requiredfrom" value="{{ !empty($startdate) ?  date("y F  Y, g:i a", trim($startdate)) : '' }}"/>
+                                                    <input type='text' class="form-control" id='requiredfrom' name="requiredfrom" value="{{ !empty($startdate) ?  date("F j, Y, g:i a", trim($startdate)) : '' }}"/>
                                                     <input type="hidden" name="required_from" id="required_from" value="{{$startdate}}">
                                                 </div>
                                             </div>
@@ -138,7 +138,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-calendar"></i>
                                                     </div>
-                                                    <input type='text' class="form-control" id='requiredto' name="requiredto" value="{{ !empty($enddate) ?  date("y F  Y, g:i a", $enddate) : '' }}"/>
+                                                    <input type='text' class="form-control" id='requiredto' name="requiredto" value="{{ !empty($enddate) ?  date("F j, Y, g:i a", $enddate) : '' }}"/>
                                                     <input type="hidden" name="required_to"  id="required_to" value="{{$enddate}}">
                                                 </div>
                                             </div>

@@ -689,7 +689,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'View Tickets';
-        $ribbon->description = 'Create Request';
+        $ribbon->description = 'My Bookings';
         $ribbon->ribbon_path = 'helpdesk/view_ticket';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);

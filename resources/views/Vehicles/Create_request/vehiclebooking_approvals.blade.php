@@ -56,7 +56,7 @@
                                         <td>{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : ''}}</td>
                                         <td>{{ !empty($booking->require_datetime ) ?  date("y F  Y, g:i a", $booking->require_datetime)  : ''}}</td>
                                         <td>{{ !empty($booking->return_datetime ) ? date("y F  Y, g:i a", $booking->return_datetime) : ''}}</td>
-                                        <td>{{ !empty($booking->booking_type) ? $usageType[$booking->booking_type]  : ''}}</td>
+                                        <td>{{ !empty($booking->usage_type) ? $usageType[$booking->usage_type]  : ''}}</td>
                                         <td>{{ !empty($booking->purpose) ? $booking->purpose : ''}}</td>
                                         <td>{{ !empty($booking->destination) ? $booking->destination : ''}}</td>
                                         <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
