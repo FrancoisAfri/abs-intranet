@@ -294,6 +294,8 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
  Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 // collect vehicle
  Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
+ // Return vehicle
+ Route::get('/vehicle_management/return_vehicle/{returnVeh}', 'VehicleBookingController@returnVehicle');
  // View Vehicle Appprovals
  Route::get('vehicle_management/approval', 'VehicleBookingController@vewApprovals');
  //Decline vehicle booking
