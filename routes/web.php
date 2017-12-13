@@ -119,6 +119,9 @@ Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
 Route::get('leave/approval', 'LeaveApplicationController@show');
 Route::post('leave/reject/{levReject}', 'LeaveApplicationController@reject');
 
+#Cancel Leave Application
+Route::patch('leave/application/{leaveApplication}/cancel', 'LeaveApplicationController@cancelApplication');
+
 #leaveHistory audit
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
 Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
@@ -134,6 +137,8 @@ Route::post('leave/reports/taken', 'LeaveHistoryAuditController@taken');
 Route::post('leave/reports/leavebal', 'LeaveHistoryAuditController@leavebalance');
 Route::post('leave/reports/leavepaOut', 'LeaveHistoryAuditController@leavepaidOut');
 Route::post('leave/reports/leaveAll', 'LeaveHistoryAuditController@leaveAllowance');
+Route::post('leave/reports/cancelled-leaves', 'LeaveHistoryAuditController@cancelledLeaves');
+Route::post('leave/reports/cancelled-leaves/print', 'LeaveHistoryAuditController@cancelledLeavesPrint');
 Route::post('leave/print', 'LeaveHistoryAuditController@printlevhistoReport');
 Route::post('leave/bal', 'LeaveHistoryAuditController@printlevbalReport');
 
