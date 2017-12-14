@@ -18,6 +18,8 @@ use App\vehiclemake;
 use App\safe;
 use App\vehicle_collect_image;
 use App\images;
+use App\vehicle_fuel_log;
+use App\service_station;
 use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Http\Request;
@@ -743,7 +745,7 @@ class VehicleBookingController extends Controller
                 ->where('vehicle_booking.id', $bookingID)
                 ->orderBy('vehicle_booking.id')
                 ->first();
-            // return $vehiclebookings;
+           
 
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
@@ -786,7 +788,7 @@ class VehicleBookingController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $collection->id . "_documents." . $fileExt;
-                $request->file('documents')->storeAs('projects/documents', $fileName);
+                $request->file('documents')->storeAs('projects/collectiondocuments', $fileName);
                 //Update file name in the table
                 $collection->document = $fileName;
                 $collection->update();
@@ -821,7 +823,7 @@ class VehicleBookingController extends Controller
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
                 $fileName = $collectionImage->id . "image." . $fileExt;
-                $request->file('image')->storeAs('image', $fileName);
+                $request->file('image')->storeAs('collectionimage', $fileName);
                 //Update file name in the database
                 $collectionImage->image = $fileName;
                 $collectionImage->update();
@@ -849,6 +851,7 @@ class VehicleBookingController extends Controller
         $confirm->collector_id = $loggedInEmplID = Auth::user()->person->id;
         $confirm->status = 11;
         $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
+        $confirm->collect_timestamp = $currentDate = time();
         $confirm->update();
         $ID = $confirm->id;
 
@@ -874,6 +877,10 @@ class VehicleBookingController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>#################
 
+         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+         $fueltank  = vehicle_fuel_log::orderBy('id', 'desc')->get();
+         $servicestation   =service_station::orderBy('id', 'desc')->get();
+
       //  if ($collect->status == 10) {
             $bookingID = $returnVeh->id;
             //return $ID;
@@ -895,8 +902,12 @@ class VehicleBookingController extends Controller
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+
+            $data['servicestation'] = $servicestation;
+            $data['fueltank'] = $fueltank;
             $data['returnVeh'] = $returnVeh;
             $data['name'] = $name;
+            $data['employees'] = $employees;
             $data['vehicleTypes'] = $vehicleTypes;
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehiclemaker'] = $vehiclemaker;
@@ -907,5 +918,73 @@ class VehicleBookingController extends Controller
             return view('Vehicles.Create_request.returnvehicle')->with($data);
     }
 
+    public function AddreturnDoc(Request $request)
+    {
+        $this->validate($request, [
+//            'type' => 'required',
+            //  'document' => 'required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $returnVehicle = new vehicle_return_documents();
+        $returnVehicle->type = $docData['doctype'];
+        $returnVehicle->description = $docData['description'];
+        $returnVehicle->upload_date = $currentDate = time();
+        $returnVehicle->user_name = $loggedInEmplID = Auth::user()->person->id;
+        $returnVehicle->vehicleID = $docData['vehicleID'];
+        $returnVehicle->bookingID = $docData['bookingID'];
+        $returnVehicle->save();
+        //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $returnVehicle->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/returndocuments', $fileName);
+                //Update file name in the table
+                $returnVehicle->document = $fileName;
+                $returnVehicle->update();
+            }
+        }
+
+        AuditReportsController::store('Vehicle Management', 'vehicle return Document Uploaded ', "vehicle return Document Uploaded ", 0);
+        return response()->json();
+    }
+
+    public function AddreturnImage(Request $request)
+    {
+        $this->validate($request, [
+//            'type' => 'required',
+//            'description' => 'required',
+            //  'image' => 'required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $returnImage = new vehicle_return_images();
+        $returnImage->name = $docData['name'];
+        $returnImage->description = $docData['description'];
+        $returnImage->upload_date = $currentDate = time();
+        $returnImage->user_name = $loggedInEmplID = Auth::user()->person->id;
+        $returnImage->vehicleID = $docData['vehicleID'];
+        $returnImage->bookingID = $docData['bookingID'];
+        $returnImage->save();
+
+        //Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = $returnImage->id . "image." . $fileExt;
+                $request->file('image')->storeAs('vehiclereturnImage', $fileName);
+                //Update file name in the database
+                $returnImage->image = $fileName;
+                $returnImage->update();
+            }
+        }
+
+
+        AuditReportsController::store('Vehicle Management', 'Return vehicle Image Uploaded ', "Return vehicle Image Uploaded ", 0);
+        return response()->json();
+    }
 
 }
