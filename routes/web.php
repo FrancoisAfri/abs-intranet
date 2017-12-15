@@ -277,7 +277,6 @@ Route::post('help_desk/unresolved_tickets', 'HelpdeskController@unresolved_ticke
 Route::post('help_desk/auto_responder_messages', 'HelpdeskController@auto_responder_messages');
 Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 
-
 ##*************** Vehicle Management ************
 
 ###----bookings
