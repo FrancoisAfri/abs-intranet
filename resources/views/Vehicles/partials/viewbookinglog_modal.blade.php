@@ -48,7 +48,7 @@
                                     </div>
                                     <input type="text" id="vehicle_reg" class="form-control pull-left"
                                     name="vehicle_reg"
-                                    value="{{ $booking->vehicle_reg }}" readonly>
+                                    value="{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : '' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                                     </div>
                                     <input type="text" id="capturer_id" class="form-control pull-left"
                                     name="capturer_id"
-                                    value="{{  $booking->capturer_id }}" readonly>
+                                    value="{{ !empty($booking->capturer_id) ? $booking->capturer_id : '' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                     </div>
                                     <input type="text" id="driver_id" class="form-control pull-left"
                                     name="driver_id"
-                                    value="{{  $booking->firstname . ' ' . $booking->surname }}"
+                                    value="{{ !empty($booking->firstname) && !empty($booking->surname) ? $booking->firstname . ' ' . $booking->surname : '' }}"
                                     readonly>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                                     </div>
                                     <input type="text" id="require_datetime"
                                     class="form-control pull-left" name="require_datetime"
-                                    value="{{ date("F j, Y, g:i a", $booking->require_datetime)  }}"
+                                    value="{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}"
                                     readonly>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@
                                     </div>
                                     <input type="text" id="require_datetime"
                                     class="form-control pull-left" name="require_datetime"
-                                    value="{{ date("F j, Y, g:i a", $booking->return_datetime)  }}"
+                                    value="{{ !empty($booking->return_datetime ) ?  date("F j, Y, g:i a", $booking->return_datetime)  : ''}}"
                                     readonly>
                                 </div>
                             </div>
@@ -114,9 +114,9 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" id="collect_timestamp"
-                                    class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $usageType[$booking->usage_type] }}"
+                                    <input type="text" id="usage_type"
+                                    class="form-control pull-left" name="usage_type"
+                                    value="{{ !empty($booking->usage_type) ? $usageType[$booking->usage_type] : '' }}"
                                     readonly>
                                 </div>
                             </div>
@@ -129,9 +129,9 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" id="collect_timestamp"
-                                    class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $booking->purpose }}"
+                                    <input type="text" id="purpose"
+                                    class="form-control pull-left" name="purpose"
+                                    value="{{ !empty($booking->purpose) ? $booking->purpose : '' }}"
                                     readonly>
                                 </div>
                             </div>
@@ -144,9 +144,9 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" id="collect_timestamp"
-                                    class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $booking->destination }}"
+                                    <input type="text" id="destination"
+                                    class="form-control pull-left" name="destination"
+                                    value="{{ !empty($booking->destination) ? $booking->destination : '' }}"
                                     readonly>
                                 </div>
                             </div>
@@ -161,7 +161,7 @@
                                     </div>
                                     <input type="text" id="collect_timestamp"
                                     class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $bookingStatus[$booking->status] }}"
+                                    value="{{ !empty($booking->status) ? $bookingStatus[$booking->status] : '' }}"
                                     readonly>
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
                                     </div>
                                     <input type="text" id="start_mileage_id" class="form-control pull-left"
                                     name="start_mileage_id"
-                                    value="{{  $booking->start_mileage_id }}" readonly>
+                                    value="{{ !empty($booking->start_mileage_id) ? $booking->start_mileage_id : '' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -220,10 +220,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                            <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents Collect </label>
                            <div class="col-sm-8">

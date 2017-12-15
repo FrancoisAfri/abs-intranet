@@ -201,7 +201,7 @@ class VehicleBookingController extends Controller
                     $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
                 }
             })
-            ->where('vehicle_details.booking_status', '!=', 0)
+            //->where('vehicle_details.status', '!=', 0)
             // ->where('vehicle_booking.status' , '=', 12 )
             ->orderBy('vehicle_details.id')
             ->get();
