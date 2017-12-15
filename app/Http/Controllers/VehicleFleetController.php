@@ -1472,7 +1472,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
-            10 => "Aproved",
+            10 => "Approved",
             11 => "Collected",
             12 => "Returned",
             13 => "Cancelled",
@@ -1483,15 +1483,20 @@ public function viewIncidents(vehicle_maintenance $maintenance)
              $vehiclebookinglog = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
                 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
-                'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                'hr_people.first_name as firstname', 'hr_people.surname as surname',
+                'vehicle_collect_documents.document as collectDoc' ,'vehicle_return_documents.document as returnDoc'
+            )
             ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('vehicle_collect_documents' ,'vehicle_booking.id' , '=' , 'vehicle_collect_documents.bookingID' )
+            ->leftJoin('vehicle_return_documents' ,'vehicle_booking.id' , '=' , 'vehicle_return_documents.bookingID' )
             ->orderBy('vehicle_booking.id', 'desc')
             ->where('vehicle_booking.vehicle_id', $ID)
             //->where('vehicle_booking.status', '!=', 13)
             // ->where('vehicle_booking.status', '!=', 12)
+
             ->get();
             
             //return $vehiclebookinglog;
