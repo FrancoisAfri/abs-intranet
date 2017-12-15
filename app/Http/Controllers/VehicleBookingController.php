@@ -24,6 +24,7 @@ use App\module_ribbons;
 use App\ribbons_access;
 use Illuminate\Http\Request;
 use App\Mail\vehicle_bookings;
+use App\Mail\confirm_collection;
 use App\Mail\vehiclebooking_approval;
 use App\Mail\vehiclebooking_cancellation;
 use App\Mail\vehiclebooking_rejection;
@@ -865,10 +866,6 @@ class VehicleBookingController extends Controller
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
-        //  return $vehicleData;
-
-
-        // return $ID;
         $confirm->collector_id = $loggedInEmplID = Auth::user()->person->id;
         $confirm->status = 11;
         $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
@@ -876,6 +873,22 @@ class VehicleBookingController extends Controller
         $confirm->update();
         $ID = $confirm->id;
 
+        $loggedInEmplID = Auth::user()->person->id;
+        $BookingDetail = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+
+        $vehicmodel = $confirm->vehicle_model;
+        $vehicleypes = $confirm->vehicle_type;
+        $vehmake = $confirm->vehicle_make;
+        $year = $confirm->year;
+
+        $vehicle_model1 = vehiclemodel::where('id', $vehicmodel)->get()->first();
+        $vehiclemaker = vehiclemake::where('id', $vehmake)->get()->first();
+        $vehicleTypes = Vehicle_managemnt::where('id', $vehicleypes)->get()->first();
+
+        $vehicle_model = $vehiclemaker->name . ' ' . $vehicle_model1->name . ' ' . $vehicleTypes->name . ' ' . $year;
+
+         #mail to manager
+        // Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'],$vehicle_model ));
 
         AuditReportsController::store('Vehicle Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
         return redirect()->to('/vehicle_management/collect/' . $ID);
