@@ -31,8 +31,7 @@
                         </button>
                     </div>
                 </div>
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
+        
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -169,6 +168,7 @@
             <!-- Include add new prime rate modal -->
             @include('Vehicles.partials.add_vehicleFuelRecords_modal')
             @include('Vehicles.partials.edit_vehicleFuelRecords_modal')
+            
 
         </div>
 

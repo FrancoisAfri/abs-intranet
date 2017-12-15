@@ -36,7 +36,6 @@
                                     <th>Odometer/Hours</th>
                                     <th>Company</th>
                                     <th>Department</th>
-                                    <th style="width: 5px; text-align: center;"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -91,13 +90,13 @@
                                             <td>{{ !empty($card->odometer_reading . ' ' . $card->hours_reading ) ? $card->odometer_reading  . ' ' . $card->hours_reading: ''}}</td>
                                             <td>{{ !empty($card->company) ? $card->company : ''}}</td>
                                             <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
-                                            <td>
+                                           <!--  <td>
                                             
                                         <button card="button" id="view_ribbons" class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}
                                       btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i class="fa {{ (!empty($card->status) && $card->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}</button>
                                                 
-                                            </td>
+                                            </td> -->
                                         </tr>
                                     @endforeach
                                 @endif
@@ -114,7 +113,7 @@
                                     <th>Odometer/Hours</th>
                                     <th>Company</th>
                                     <th>Department</th>
-                                    <th style="width: 5px; text-align: center;"></th>
+                                    
                                 </tr>
                                 </tfoot>
                             </table>

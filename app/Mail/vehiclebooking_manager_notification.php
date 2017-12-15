@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class vehiclebooking_cancellation extends Mailable
+class vehiclebooking_manager_notification extends Mailable
 {
    use Queueable, SerializesModels;
 
@@ -23,13 +23,15 @@ class vehiclebooking_cancellation extends Mailable
     public $destination;
     public $purpose;
     public $vehicle_model;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-     public function __construct($first_name, $surname, $email,$required_from , $required_to ,$Usage_type ,
+     public function __construct($first_name, $surname, $email, $required_from , $required_to ,$Usage_type ,
         $driver ,$destination , $purpose , $vehicle_model)
+
     {
         $this->first_name = $first_name;
         $this->surname = $surname;
@@ -41,8 +43,6 @@ class vehiclebooking_cancellation extends Mailable
         $this->destination = $destination;
         $this->purpose = $purpose;
         $this->vehicle_model = $vehicle_model;
-
-
     }
 
     /**
@@ -54,7 +54,7 @@ class vehiclebooking_cancellation extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = " vehicle Cancellation on $companyName online system.";
+        $subject = "New vehicle booking Applicationon $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
@@ -62,7 +62,7 @@ class vehiclebooking_cancellation extends Mailable
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['dashboard_url'] = url('/');
 
-        return $this->view('mails.Vehicle_cancellation')
+        return $this->view('mails.manager_notification')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);

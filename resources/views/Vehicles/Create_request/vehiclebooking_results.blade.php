@@ -67,12 +67,12 @@
                                             </td>@else
                                             <td></td>
                                         @endif
-                                        <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
+                                       <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
                                         <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
                                         <td>{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : ''}}</td>
                                         <td>{{ !empty($booking->usage_type) ? $usageType[$booking->usage_type] : ''}}</td>
-                                        <td>{{ !empty($booking->require_datetime ) ?  date("y F  Y, g:i a", $booking->require_datetime)  : ''}}</td>
-                                        <td>{{ !empty($booking->return_datetime ) ? date("y F  Y, g:i a", $booking->return_datetime) : ''}}</td>
+                                        <td>{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}</td>
+                                        <td>{{ !empty($booking->return_datetime ) ? date("F j, Y, g:i a", $booking->return_datetime) : ''}}</td>
                                         <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
                                         <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
                                         <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
@@ -116,9 +116,8 @@
                         </table>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                        class="fa fa-arrow-left"></i> Back
-                            </button>
+                            <button type="button" id="cancel" class="btn btn-default pull-right"> Create a Request </button>
+                            
                         </div>
                     </div>
                 </div>
@@ -144,7 +143,7 @@
                 <script>
                     //Cancel button click event
                     document.getElementById("cancel").onclick = function () {
-                        location.href = "/vehicle_management/vehiclesearch";
+                        location.href = "/vehicle_management/vehicle_request";
                     };
                     $(function () {
                         $('#example2').DataTable({

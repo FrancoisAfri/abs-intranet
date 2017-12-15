@@ -13,4 +13,10 @@ class vehicle_detail extends Model
         'metre_reading_type', 'odometer_reading', 'hours_reading', 'fuel_type', 'size_of_fuel_tank', 'fleet_number',
         'cell_number', 'tracking_umber', 'vehicle_owner', 'title_type', 'financial_institution', 'company', 'extras',
         'image', 'registration_papers', 'property_type'];
+
+    public function vehiclebooking() {
+        return $this->hasMany(vehicle_booking::class, 'vehicle_id');
+    }
+
+
 }

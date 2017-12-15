@@ -100,7 +100,7 @@ class LeaveApplicationController extends Controller {
         // left join between leaveApplication & HRPerson & LeaveType
         $loggedInEmplID = Auth::user()->person->id;
 
-        $leaveStatus = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejectd', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll');
+        $leaveStatus = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejectd', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll', 10 => 'Cancelled');
 
         $leaveApplication = DB::table('leave_application')
                 ->select('leave_application.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'leave_types.name as leavetype', 'hr_people.manager_id as manager', 'leave_credit.leave_balance as leave_Days')
@@ -123,12 +123,27 @@ class LeaveApplicationController extends Controller {
         return view('leave.leave_approval')->with($data);
     }
 
-    public function status($status = 0) {
+    public function cancelApplication(Request $request, leave_application $leaveApplication) {
+        if ($leaveApplication && in_array($leaveApplication->status, [2, 3, 4, 5])) {
+            $this->validate($request, [
+                'cancellation_reason' => 'required'
+            ]);
+            $user = Auth::user()->load('person');
+            $leaveApplication->status = 10;
+            $leaveApplication->canceller_id = $user->person->id;
+            $leaveApplication->cancellation_reason = $request->input('cancellation_reason');
+            $leaveApplication->update();
 
-        $approvalstatus = array(1 => 'Approved', 2 => 'require_managers_approval ', 3 => 'require_department_head_approval', 4 => 'require_hr_approval', 5 => 'require_payroll_approval', 6 => 'Approved', 7 => 'Rejected');
+            return response()->json(['success' => 'Leave application successfully cancelled.'], 200);
+        }
+    }
 
-        $rejectstatus = array(7 => 'rejectd_by_managers ', 8 => 'rejectd_by_department_head', 9 => 'rejectd_by_hr', 10 => 'rejectd_by_payroll');
-        return $approvalstatus;
+    public static function status($status = 0) {
+        //$approvalstatus = array(1 => 'Approved', 2 => 'require_managers_approval ', 3 => 'require_department_head_approval', 4 => 'require_hr_approval', 5 => 'require_payroll_approval', 6 => 'Approved', 7 => 'Rejected');
+        //$rejectstatus = array(7 => 'rejectd_by_managers ', 8 => 'rejectd_by_department_head', 9 => 'rejectd_by_hr', 10 => 'rejectd_by_payroll');
+        $leaveStatusNames = [1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require HR approval', 5 => 'Require payroll approval', 6 => 'Rejected', 7 => 'Rejected by department head', 8 => 'Rejected by HR', 9 => 'Rejected by payroll', 10 => 'Cancelled'];
+        if ($status && $status > 0) return $leaveStatusNames[$status];
+        else return $leaveStatusNames;
     }
 
     public function ApplicationDetails($status = 0, $hrID = 0) {

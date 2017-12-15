@@ -119,6 +119,9 @@ Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
 Route::get('leave/approval', 'LeaveApplicationController@show');
 Route::post('leave/reject/{levReject}', 'LeaveApplicationController@reject');
 
+#Cancel Leave Application
+Route::patch('leave/application/{leaveApplication}/cancel', 'LeaveApplicationController@cancelApplication');
+
 #leaveHistory audit
 Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
 Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
@@ -134,6 +137,8 @@ Route::post('leave/reports/taken', 'LeaveHistoryAuditController@taken');
 Route::post('leave/reports/leavebal', 'LeaveHistoryAuditController@leavebalance');
 Route::post('leave/reports/leavepaOut', 'LeaveHistoryAuditController@leavepaidOut');
 Route::post('leave/reports/leaveAll', 'LeaveHistoryAuditController@leaveAllowance');
+Route::post('leave/reports/cancelled-leaves', 'LeaveHistoryAuditController@cancelledLeaves');
+Route::post('leave/reports/cancelled-leaves/print', 'LeaveHistoryAuditController@cancelledLeavesPrint');
 Route::post('leave/print', 'LeaveHistoryAuditController@printlevhistoReport');
 Route::post('leave/bal', 'LeaveHistoryAuditController@printlevbalReport');
 
@@ -281,6 +286,7 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 
 ###----bookings
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
+Route::get('vehicle_management/vehicle_request', 'VehicleBookingController@vehiclerequest');
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
 Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
 
@@ -292,15 +298,23 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
  Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 // collect vehicle
  Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
+ // Return vehicle
+ Route::get('/vehicle_management/return_vehicle/{returnVeh}', 'VehicleBookingController@returnVehicle');
  // View Vehicle Appprovals
  Route::get('vehicle_management/approval', 'VehicleBookingController@vewApprovals');
  //Decline vehicle booking
  Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
   //Approve Vehicle Approval
  Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
- //
+ // confirm collection
  Route::post('vehicle_management/add_collectiondoc', 'VehicleBookingController@AddcollectionDoc');
  Route::post('vehicle_management/add_collectionImage', 'VehicleBookingController@AddcollectionImage');
+ Route::patch('vehicle_management/{confirm}/confirmbooking', 'VehicleBookingController@confrmCollection');
+// confirm return
+Route::post('vehicle_management/return_document', 'VehicleBookingController@AddreturnDoc');
+Route::post('vehicle_management/return_Image', 'VehicleBookingController@AddreturnImage');
+Route::patch('vehicle_management/{confirm}/confirmreturn', 'VehicleBookingController@confirmReturn');
+
 ###
 
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
@@ -381,7 +395,7 @@ Route::get('vehicle_management/add_vehicle', 'FleetManagementController@addvehic
 // 
 Route::post('vehicle_management/add_vehicleDetails', 'FleetManagementController@addvehicleDetails');
 Route::get('vehicle_management/viewdetails/{maintenance}', 'FleetManagementController@viewDetails');
-Route::patch('vehicle_management/edit_vehicleDetails/{maintenance}', 'FleetManagementController@editvehicleDetails');
+Route::patch('vehicle_management/edit_vehicleDetails/{vehicle_maintenance}', 'FleetManagementController@editvehicleDetails');
 
 Route::get('/vehicle_management/vehicles_Act/{vehiclemaintenance}', 'FleetManagementController@vehiclesAct');
 

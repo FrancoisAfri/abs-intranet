@@ -755,83 +755,7 @@ class VehicleFleetController extends Controller
             return back();
     }
 
-    // public function addpolicy(Request $request){
-    //     $this->validate($request, [
-    //         // 'issued_to' => 'required_if:key,1',
-    //     ]);
-    //     $SysData = $request->all();
-    //     unset($SysData['_token']);
-
-    //     $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
-    //     $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
-
-    //     $Vehiclewarranties = new vehicle_insurance($SysData);
-    //    // $Vehiclewarranties->inception_date = $inceptiondate ;
-    //     $Vehiclewarranties->registration = 1;
-    //     $Vehiclewarranties->status = 1;
-    //     $Vehiclewarranties->save();
-
-    //      //Upload supporting document
-    //     if ($request->hasFile('documents')) {
-    //         $fileExt = $request->file('documents')->extension();
-    //         if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-    //             $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
-    //             $request->file('documents')->storeAs('projects/documents', $fileName);
-    //             //Update file name in the table
-    //             $Vehiclewarranties->document = $fileName;
-    //             $Vehiclewarranties->update();
-    //         }
-    //     }
-
-    //     return response()->json();
-
-    // }
-
-    //  public function editpolicy(Request $request , vehicle_insurance $){
-    //     $this->validate($request, [
-    //         // 'issued_to' => 'required_if:key,1',
-    //     ]);
-    //     $SysData = $request->all();
-    //     unset($SysData['_token']);
-
-    //     $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
-    //     $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
-
-    //     $Vehiclewarranties = new vehicle_insurance($SysData);
-    //    // $Vehiclewarranties->inception_date = $inceptiondate ;
-    //     $Vehiclewarranties->registration = 1;
-    //     $Vehiclewarranties->status = 1;
-    //     $Vehiclewarranties->save();
-
-    //      //Upload supporting document
-    //     if ($request->hasFile('documents')) {
-    //         $fileExt = $request->file('documents')->extension();
-    //         if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-    //             $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
-    //             $request->file('documents')->storeAs('projects/documents', $fileName);
-    //             //Update file name in the table
-    //             $Vehiclewarranties->document = $fileName;
-    //             $Vehiclewarranties->update();
-    //         }
-    //     }
-
-    //     return response()->json();
-
-    // }
-
-    //  public function policyAct(Request $request, vehicle_insurance $policy)
-    // {
-    //     if ($policy->status == 1)
-    //         $stastus = 0;
-    //     else
-    //         $stastus = 1;
-
-    //     $policy->status = $stastus;
-    //     $policy->update();
-    //     return back();
-    // }
-
-   
+    
 
     public function viewServiceDetails(vehicle_maintenance $maintenance)
     {
@@ -1443,8 +1367,6 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
         if ($maintenance->status == 1) {
             $ID = $maintenance->id;
-            //return $ID;
-
 
             $vehiclefuellog = DB::table('vehicle_fuel_log')
                 ->select('vehicle_fuel_log.*','hr_people.first_name as firstname', 'hr_people.surname as surname','service_station.name as Staion','tank.name as tankName')
@@ -1454,10 +1376,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
                 ->orderBy('vehicle_fuel_log.id')
                 ->get();
 
-
-            //return $vehiclefines;
-
-
+            //return $vehiclefine
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [

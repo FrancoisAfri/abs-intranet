@@ -1,7 +1,7 @@
-<div id="add-image-modal" class="modal modal-default fade">
+<div id="add-returnimage-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" name="add-new-collectImage-form" enctype="multipart/form-data">
+            <form class="form-horizontal" name="add-new-returnimage-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
 
@@ -78,12 +78,12 @@
                            value="{{ !empty($vehiclebookings->vehicle_id) ? $vehiclebookings->vehicle_id : ''}}">    
                          
                     <input type="hidden" id="bookingID" name="bookingID"
-                           value="{{ !empty($collect->id) ? $collect->id : ''}}">
+                           value="{{ !empty($returnVeh->id) ? $returnVeh->id : ''}}">
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-collection_image" class="btn btn-warning"><i
+                    <button type="button" id="add-return_image" class="btn btn-warning"><i
                                 class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>

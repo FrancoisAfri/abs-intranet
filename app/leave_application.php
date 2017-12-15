@@ -37,7 +37,12 @@ class leave_application extends Model
     
     //Relationship leave_application and hr people
     public function person() {
-        return $this->hasMany(HRPerson::class, 'hr_id');
+        return $this->belongsTo(HRPerson::class, 'hr_id');
+    }
+
+    //Relationship leave_application and canceller (hr people)
+    public function canceller() {
+        return $this->belongsTo(HRPerson::class, 'canceller_id');
     }
 
     // //Return leave status string valu
