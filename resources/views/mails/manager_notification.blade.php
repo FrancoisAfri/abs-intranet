@@ -214,11 +214,9 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that your Vehicle Cancellation with {{ $company_name }}  for vehicle [ {{ $vehicle_model }}] has been successful! For more details See below .
-                                                    <p>
-                                                    Vehicle Details....
-                                                    <p>
+                                                    Good Day {{ $first_name }},<br><br>
+                                                    This email is to inform you that a booking request for vehicle [ {{ $vehicle_model }} ] has been made with {{ $company_name }}.
+                                                     <p>
                                                     Required From: {{ date("F j, Y, g:i a",trim ($required_from)) }}
                                                  
                                                     <p>
@@ -228,10 +226,13 @@
                                                      <p>
                                                     Driver: {{ $driver}}
                                                      <p>
+                                                    Requested By: {{ $driver}}
+                                                     <p>
                                                     Destination:{{ $destination}}
                                                      <p>
                                                     Purpose:{{ $purpose}}
                                                      <p>
+                                                     For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
                                                 </td>
                                             </tr>
                                             <tr>

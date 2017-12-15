@@ -314,7 +314,7 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
 // confirm return
 Route::post('vehicle_management/return_document', 'VehicleBookingController@AddreturnDoc');
 Route::post('vehicle_management/return_Image', 'VehicleBookingController@AddreturnImage');
- // Route::patch('vehicle_management/{confirm}/confirmbooking', 'VehicleBookingController@confrmCollection');
+Route::patch('vehicle_management/{confirm}/confirmreturn', 'VehicleBookingController@confirmReturn');
 
 ###
 

@@ -1,5 +1,6 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
+    <!-- bootstrap datepicker -->
     <!-- Include Date Range Picker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
@@ -9,7 +10,8 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
-    <!--Time Charger-->
+    <!-- Time picker -->
+    <!--  -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
@@ -29,8 +31,8 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form name="leave-application-form" class="form-horizontal" method="POST"
-                      action="/vehicle_management/{{ $returnVeh->id }}/confirmreturn"
-                      enctype="multipart/form-data">
+                      action="/vehicle_management/{{ $returnVeh->id }}/confirmreturn" enctype="multipart/form-data">
+
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
 
@@ -326,6 +328,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
     <!-- iCheck -->
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+            type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
@@ -333,9 +342,9 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <!-- Ajax form submit -->
-    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <!-- <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
     <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
