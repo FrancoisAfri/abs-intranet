@@ -1466,7 +1466,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
 
        
-            $ID = $maintenance->id;
+            $vehicleID = $maintenance->id;
 
            $bookingStatus = array(2 => "Pending Capturer Manager Approval",
             1 => "Pending Driver Manager Approval",
@@ -1494,9 +1494,6 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             ->leftJoin('vehicle_return_documents' ,'vehicle_booking.id' , '=' , 'vehicle_return_documents.bookingID' )
             ->orderBy('vehicle_booking.id', 'desc')
             ->where('vehicle_booking.vehicle_id', $ID)
-            //->where('vehicle_booking.status', '!=', 13)
-            // ->where('vehicle_booking.status', '!=', 12)
-
             ->get();
             
             //return $vehiclebookinglog;

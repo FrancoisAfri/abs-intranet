@@ -201,12 +201,12 @@ class VehicleBookingController extends Controller
                     $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
                 }
             })
-            //->where('vehicle_details.status', '!=', 0)
+            ->where('vehicle_details.booking_status', '!=', 1)
             // ->where('vehicle_booking.status' , '=', 12 )
             ->orderBy('vehicle_details.id')
             ->get();
 
-        //return $vehiclebookings;
+       // return $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 
@@ -608,7 +608,7 @@ class VehicleBookingController extends Controller
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
-            10 => "Aproved",
+            10 => "Approved",
             11 => "Collected",
             12 => "Returned",
             13 => "Cancelled",

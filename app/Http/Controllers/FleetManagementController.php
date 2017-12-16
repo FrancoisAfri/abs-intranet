@@ -393,9 +393,7 @@ class FleetManagementController extends Controller
         //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewfleetDetails')->with($data);
     }
-    //     } else
-    //         return back();
-    // }
+ 
 
 
     public function viewImage(vehicle_maintenance $maintenance)
@@ -422,7 +420,7 @@ class FleetManagementController extends Controller
         ################## WELL DETAILS ###############
 
 
-        if ($maintenance->status == 1) {
+ 
             $ID = $maintenance->id;
 
             $vehiclemaintenance = vehicle_maintenance::where('id', $ID)->get();
@@ -458,10 +456,7 @@ class FleetManagementController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewfleetImage')->with($data);
-        } else
-            return back();
-
-    }
+        } 
 
     public function addImages(Request $request)
     {
@@ -577,7 +572,7 @@ class FleetManagementController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
-        if ($maintenance->status == 1) {
+        
             $ID = $maintenance->id;
             //return $ID;
 
@@ -623,10 +618,7 @@ class FleetManagementController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.key_tracking')->with($data);
-        } else
-            return back();
-
-    }
+        }
 
 
     public function vehiclesAct(Request $request, vehicle_maintenance $vehicleDetails)
@@ -768,7 +760,7 @@ class FleetManagementController extends Controller
 
         $status = array(1 => 'Active', 2 => 'InActive');
 
-        if ($maintenance->status == 1) {
+     
             $ID = $maintenance->id;
             //return $ID;
 
@@ -817,10 +809,7 @@ class FleetManagementController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.permits')->with($data);
-        } else
-            return back();
-
-    }
+        } 
 
     public function addPermit(Request $request)
     {

@@ -156,27 +156,28 @@ rel="stylesheet">
                      <tfoot>
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
-                            <th>Vehicle</th>
-                            <th>Fleet Number</th>
-                            <th>Vehicle Registration</th>
-                            <th>Booking Type</th>
-                            <th>Required From</th>
-                            <th>Return By</th>
-                            <th>Capturer</th>
-                            <th>Driver</th>
-                            <th>Status</th>
-                            <th style="width: 10px; text-align: center;"></th>
+                                <th>Vehicle</th>
+                                <th>Requested From</th>
+                                <th>Return By</th>
+                                <th>Capturer</th>
+                                <th>Driver</th>
+                                <th>Status</th>
+                                <th>km Out</th>
+                                <th>km In</th>
+                                <th>Total km Travelled</th>
+                                <th style="width: 10px; text-align: center;">Action</th>
+                                <th style="width: 10px; text-align: center;">Inspection</th>
                         </tr>
                     </tfoot>
                 </table>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="button" id="cancel" class="btn btn-default pull-right"> Create a Request </button>
+                 
 
                 </div>
             </div>
         </div>
-          @include('Vehicles.partials.viewbookinglog_modal')
+       
     </div>
     @endsection
 
