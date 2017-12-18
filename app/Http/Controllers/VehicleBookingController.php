@@ -22,6 +22,7 @@ use App\vehicle_fuel_log;
 use App\service_station;
 use App\module_ribbons;
 use App\ribbons_access;
+use App\ContactCompany;
 use Illuminate\Http\Request;
 use App\Mail\vehicle_bookings;
 use App\Mail\confirm_collection;
@@ -45,9 +46,7 @@ class VehicleBookingController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        //my bookings controller
+    public function index(){
 
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
@@ -75,7 +74,6 @@ class VehicleBookingController extends Controller
         $loggedInEmplID = Auth::user()->person->id;
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
-        ###################>>>>>#################
 
         $vehiclebookings = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
@@ -1042,5 +1040,107 @@ class VehicleBookingController extends Controller
         return redirect()->to('/vehicle_management/return_vehicle/' . $ID);
 
     }
+
+     public function viewVehicleIspectionDocs(vehicle_booking $ispection){
+
+              $ID = $ispection->id;
+
+        $vehicleID = $ispection->vehicle_id;
+
+        $ContactCompany = ContactCompany::orderBy('id','asc')->get();
+        //return $ContactCompany;
+
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        $servicestation = service_station::orderBy('id', 'desc')->get();
+       // $fueltank = tank::orderBy('id', 'desc')->get();
+
+        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
+        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
+        $currentDate = time();
+        ################## WELL DETAILS ###############
+          $vehiclemaker = vehiclemake::where('id', $ispection->vehicle_make)->get()->first();
+          $vehiclemodeler = vehiclemodel::where('id', $ispection->vehicle_model)->get()->first();
+          $vehicleTypes = Vehicle_managemnt::where('id', $ispection->vehicle_type)->get()->first();
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        //return $name;
+        ###################>>>>>#################
+         $fineType = array(1 => 'Accident', 2 => 'Mechanical Fault', 3 => 'Electronic Fault', 4 => 'Damaged' , 5=>'Attempted Hi-jacking', 6=>'Hi-jacking', 7 => 'Other');
+
+         $status =  array(1 => 'Tank', 2 => 'Other');
+         $transType = array(1 => 'Full Tank', 2 => 'Top Up');
+
+
+       
+           //  $vehicleID = $maintenance->id;
+
+           // $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+           //  1 => "Pending Driver Manager Approval",
+           //  3 => "Pending HOD Approval",
+           //  4 => "Pending Admin Approval",
+           //  10 => "Approved",
+           //  11 => "Collected",
+           //  12 => "Returned",
+           //  13 => "Cancelled",
+           //  14 => "Rejected");
+
+           //  $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
+
+           //   $vehiclebookinglog = DB::table('vehicle_booking')
+           //  ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
+           //      'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
+           //      'hr_people.first_name as firstname', 'hr_people.surname as surname',
+           //      'vehicle_collect_documents.document as collectDoc' ,'vehicle_return_documents.document as returnDoc'
+           //  )
+           //  ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
+           //  ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
+           //  ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
+           //  ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
+           //  ->leftJoin('vehicle_collect_documents' ,'vehicle_booking.id' , '=' , 'vehicle_collect_documents.bookingID' )
+           //  ->leftJoin('vehicle_return_documents' ,'vehicle_booking.id' , '=' , 'vehicle_return_documents.bookingID' )
+           //  ->orderBy('vehicle_booking.id', 'desc')
+           //  ->where('vehicle_booking.vehicle_id', $ID)
+           //  ->get();
+            
+            //return $vehiclebookinglog;
+    
+
+            //return $vehiclefine
+            $data['page_title'] = " View Fleet Details";
+            $data['page_description'] = "FleetManagement";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ];
+
+
+           // $data['bookingStatus'] = $bookingStatus;
+            $data['ContactCompany'] = $ContactCompany;
+            $data['loggedInEmplID'] = $loggedInEmplID;
+            $data['name'] = $name;
+            $data['servicestation'] = $servicestation;
+           // $data['usageType'] = $usageType;
+            $data['status'] = $status;
+            $data['vehicleID'] = $vehicleID;
+            $data['fineType'] = $fineType;
+            $data['IssuedTo'] = $IssuedTo;
+            $data['keyStatus'] = $keyStatus;
+            $data['employees'] = $employees;
+            $data['vehiclemaker'] = $vehiclemaker;
+            $data['vehicleTypes'] = $vehicleTypes;
+            $data['vehiclemodeler'] = $vehiclemodeler;
+           // $data['vehiclebookinglog'] = $vehiclebookinglog;
+            $data['ispection'] = $ispection;
+            $data['active_mod'] = 'Vehicle Management';
+            $data['active_rib'] = 'Manage Fleet';
+            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+            //return view('products.products')->with($data);
+            return view('Vehicles.FleetManagement.ViewispectionDocs')->with($data);
+
+        }
 
 }

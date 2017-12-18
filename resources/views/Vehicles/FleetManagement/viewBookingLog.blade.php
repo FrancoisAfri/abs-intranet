@@ -149,7 +149,12 @@ rel="stylesheet">
                              @else
                              <td></td>
                              @endif
-                             <td></td>
+                             <td>
+                                <a href="{{ '/vehicle_management/vehicle_ispection/' . $booking->id }}"
+                                 id="collect"
+                                 class="btn btn-primary  btn-xs" data-id="{{ $booking->id }}"><i
+                                 class="fa fa-hand-lizard-o"></i> Inspection</a>  
+                             </td>
                          </tr>
                          @endforeach
                      </tbody>
@@ -172,8 +177,7 @@ rel="stylesheet">
                 </table>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                 
-
+                     @include('Vehicles.partials.viewbookinglog_modal')
                 </div>
             </div>
         </div>

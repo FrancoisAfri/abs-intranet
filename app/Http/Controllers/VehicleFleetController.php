@@ -1532,5 +1532,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             return view('Vehicles.FleetManagement.viewBookingLog')->with($data);
         } 
 
+       
+        
 
 }

@@ -1,7 +1,7 @@
-<div id="add-vehiclebookinglog-modal" class="modal modal-default fade">
+<div id="add-booking-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-vehiclebookinglog-form">
+            <form class="form-horizontal" method="POST" name="add-booking-form">
                 {{ csrf_field() }}
 
                 <div class="modal-header">
@@ -61,7 +61,7 @@
                                     </div>
                                     <input type="text" id="capturer_id" class="form-control pull-left"
                                     name="capturer_id"
-                                    value="{{  $vehiclebookinglog->capturer_id }}" readonly>
+                                    value="{{  $booking->capturer_id }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                     </div>
                                     <input type="text" id="driver_id" class="form-control pull-left"
                                     name="driver_id"
-                                    value="{{  $vehiclebookinglog->firstname . ' ' . $vehiclebookinglog->surname }}"
+                                    value="{{  $booking->firstname . ' ' . $booking->surname }}"
                                     readonly>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@
                                     </div>
                                     <input type="text" id="require_datetime"
                                     class="form-control pull-left" name="require_datetime"
-                                    value="{{ date("F j, Y, g:i a", $vehiclebookinglog->require_datetime)  }}"
+                                    value="{{ date("F j, Y, g:i a", $booking->require_datetime)  }}"
                                     readonly>
                                 </div>
                             </div>
@@ -102,13 +102,13 @@
                                     </div>
                                     <input type="text" id="require_datetime"
                                     class="form-control pull-left" name="require_datetime"
-                                    value="{{ date("F j, Y, g:i a", $vehiclebookinglog->return_datetime)  }}"
+                                    value="{{ date("F j, Y, g:i a", $booking->return_datetime)  }}"
                                     readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">vehiclebookinglog Type </label>
+                            <label for="path" class="col-sm-2 control-label">booking Type </label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -116,7 +116,7 @@
                                     </div>
                                     <input type="text" id="collect_timestamp"
                                     class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $usageType[$vehiclebookinglog->usage_type] }}"
+                                    value="{{ $usageType[$booking->usage_type] }}"
                                     readonly>
                                 </div>
                             </div>
@@ -131,7 +131,7 @@
                                     </div>
                                     <input type="text" id="collect_timestamp"
                                     class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $vehiclebookinglog->purpose }}"
+                                    value="{{ $booking->purpose }}"
                                     readonly>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                                     </div>
                                     <input type="text" id="collect_timestamp"
                                     class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $vehiclebookinglog->destination }}"
+                                    value="{{ $booking->destination }}"
                                     readonly>
                                 </div>
                             </div>
@@ -161,7 +161,7 @@
                                     </div>
                                     <input type="text" id="collect_timestamp"
                                     class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ $vehiclebookinglogStatus[$vehiclebookinglog->status] }}"
+                                    value="{{ $bookingStatus[$booking->status] }}"
                                     readonly>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
                                     </div>
                                     <input type="text" id="collect_timestamp"
                                     class="form-control pull-left" name="collect_timestamp"
-                                    value="{{ !empty($vehiclebookinglog->collect_timestamp ) ?  date("F j, Y, g:i a", $vehiclebookinglog->collect_timestamp)  : ''}}"
+                                    value="{{ !empty($booking->collect_timestamp ) ?  date("F j, Y, g:i a", $booking->collect_timestamp)  : ''}}"
                                     readonly>
                                 </div>
                             </div>
@@ -191,7 +191,7 @@
                                     </div>
                                     <input type="text" id="start_mileage_id" class="form-control pull-left"
                                     name="start_mileage_id"
-                                    value="{{  $vehiclebookinglog->start_mileage_id }}" readonly>
+                                    value="{{  $booking->start_mileage_id }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -227,9 +227,9 @@
                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                            <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents Collect </label>
                            <div class="col-sm-8">
-                            @if(!empty($vehiclebookinglog->collectDoc))
+                            @if(!empty($booking->collectDoc))
                             <a class="btn btn-default btn-flat btn-block pull-right "
-                            href="{{  (!empty($vehiclebookinglog->collectDoc)) ? Storage::disk('local')->url("projects/collectiondocuments/$vehiclebookinglog->collectDoc") : '' }}" target="_blank"><i
+                            href="{{  (!empty($booking->collectDoc)) ? Storage::disk('local')->url("projects/collectiondocuments/$booking->collectDoc") : '' }}" target="_blank"><i
                             class="fa fa-file-pdf-o"></i> View Document</a>
                             @else
                             <a class="btn btn-default pull-centre "><i
@@ -242,9 +242,9 @@
                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                            <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents Return  </label>
                            <div class="col-sm-8">
-                            @if(!empty($vehiclebookinglog->returnDoc))
+                            @if(!empty($booking->returnDoc))
                             <a class="btn btn-default btn-flat btn-block pull-right "
-                            href="{{ $vehiclebookinglog->returnDoc}}" target="_blank"><i
+                            href="{{ $booking->returnDoc}}" target="_blank"><i
                             class="fa fa-file-pdf-o"></i> View Document</a>
                             @else
                             <a class="btn btn-default pull-centre "><i
