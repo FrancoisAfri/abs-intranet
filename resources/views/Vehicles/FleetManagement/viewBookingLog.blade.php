@@ -112,7 +112,6 @@ rel="stylesheet">
                         </thead>
                         <tbody>
                             @if (count($vehiclebookinglog) > 0)
-                            @endif
                             <ul class="products-list product-list-in-box">
                                 @foreach ($vehiclebookinglog as $booking)
                                 <tr>
@@ -157,6 +156,7 @@ rel="stylesheet">
                              </td>
                          </tr>
                          @endforeach
+						  @endif
                      </tbody>
                      <tfoot>
                         <tr>
