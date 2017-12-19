@@ -59,20 +59,9 @@
                         </div>
                     </div>
                     <!--  -->
-                    <table class="table table-bordered">
-                        <tr>
-                            <th style="width: 10px; text-align: center;"></th>
-                            <th>Date Serviced </th>
-                            <th> Garage</th>
-                            <th>Invoice No.</th>
-                            <th>Total Cost (R)</th>
-                            <th> Next Service Date</th>
-                            <th> Next Service km</th>
-                            <th>Documents</th>
-                            <th style="width: 5px; text-align: center;"></th>
-                        </tr>
-                       
-                    </table>
+                    <div id="upleft"></div>
+<div id="upright"></div>
+<div id="below"></div>
                     <!--   </div> -->
                     <!-- /.box-body -->
                     <div class="box-footer">

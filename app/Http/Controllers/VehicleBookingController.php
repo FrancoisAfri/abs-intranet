@@ -616,7 +616,7 @@ class VehicleBookingController extends Controller
         $vehicleapprovals = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
                 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
-                'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                'hr_people.first_name as driver_firstname', 'hr_people.surname as driver_surname')
             ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
@@ -627,6 +627,8 @@ class VehicleBookingController extends Controller
             ->where('vehicle_booking.status', '!=', 13)// check if the booking is not cancelled
             ->where('vehicle_booking.status', '!=', 14)// check if the booking is not declined
             ->get();
+
+            //return $vehicleapprovals;
 
 
         $data['page_title'] = " View Fleet Details";

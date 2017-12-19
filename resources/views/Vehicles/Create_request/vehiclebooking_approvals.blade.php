@@ -60,7 +60,7 @@
                                         <td>{{ !empty($booking->purpose) ? $booking->purpose : ''}}</td>
                                         <td>{{ !empty($booking->destination) ? $booking->destination : ''}}</td>
                                         <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
-                                        <td>{{ !empty($booking->driver_id) ? $booking->driver_id : ''}}</td>
+                                        <td>{{ !empty($booking->driver_firstname . ' ' . $booking->driver_surname ) ? $booking->driver_firstname . ' ' . $booking->driver_surname : ''}}</td>
                                         <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
                                          <td nowrap>
                                         <button type= "button" id="Accept" class="btn btn-success btn-xs btn-detail open-modal" value="{{$booking->id}}" onclick="postData({{$booking->id}}, 'approval')">Approve</button>
