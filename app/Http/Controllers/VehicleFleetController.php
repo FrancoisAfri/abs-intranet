@@ -73,7 +73,7 @@ class VehicleFleetController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
-        if ($maintenance->status == 1) {
+        
             $ID = $maintenance->id;
 
             $vehicleDocumets = DB::table('vehicle_documets')
@@ -111,10 +111,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.document')->with($data);
-        } else
-            return back();
-
-    }
+        } 
 
     public function contracts(vehicle_maintenance $maintenance)
     {
@@ -149,7 +146,7 @@ class VehicleFleetController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
-        if ($maintenance->status == 1) {
+       
             $ID = $maintenance->id;
             //return $ID;
 
@@ -189,10 +186,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.contracts')->with($data);
-        } else
-            return back();
-
-    }
+        } 
 
     public function viewnotes(vehicle_maintenance $maintenance)
     {
@@ -227,7 +221,7 @@ class VehicleFleetController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
-        if ($maintenance->status == 1) {
+       
             $ID = $maintenance->id;
             //return $ID;
 			$vehiclenotes = DB::table('notes')
@@ -266,9 +260,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.notes')->with($data);
-        } else
-            return back();
-    }
+        } 
 
     public function reminders(vehicle_maintenance $maintenance)
     {
@@ -292,7 +284,7 @@ class VehicleFleetController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
-        if ($maintenance->status == 1) {
+       
             $ID = $maintenance->id;
             //return $ID;
 
@@ -327,9 +319,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.reminders')->with($data);
-        } else
-            return back();
-    }
+        } 
 
     public function addreminder(Request $request)
     {
@@ -431,7 +421,7 @@ class VehicleFleetController extends Controller
         ###################>>>>>#################
         $costtype = array(1 => 'Oil');
 
-        if ($maintenance->status == 1) {
+        
             $ID = $maintenance->id;
             //return $ID;
 
@@ -468,9 +458,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewGeneralcost')->with($data);
-        } else
-            return back();
-    }
+        } 
 
     public function addcosts(Request $request)
     {
@@ -564,7 +552,7 @@ class VehicleFleetController extends Controller
         ###################>>>>>#################
         $costtype = array(1 => 'Oil');
 
-        if ($maintenance->status == 1) {
+        
             $ID = $maintenance->id;
 
             $vehiclewarranties = DB::table('vehicle_warranties')
@@ -598,9 +586,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewWarranties')->with($data);
-        } else
-            return back();
-    }
+        } 
 
      public function addwarranty(Request $request){
         $this->validate($request, [
@@ -713,7 +699,7 @@ class VehicleFleetController extends Controller
         ###################>>>>>#################
         $costtype = array(1 => 'Oil');
 
-        if ($maintenance->status == 1) {
+        
             $ID = $maintenance->id;
             //return $ID;
 
@@ -751,9 +737,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewInsuarance')->with($data);
-        } else
-            return back();
-    }
+        } 
 
     
 
@@ -782,7 +766,7 @@ class VehicleFleetController extends Controller
         ###################>>>>>#################
         $costtype = array(1 => 'Oil');
 
-        if ($maintenance->status == 1) {
+        
             $ID = $maintenance->id;
             //return $ID;
 
@@ -819,9 +803,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewServiceDetails')->with($data);
-        } else
-            return back();
-    }
+        } 
 
 
     public function addServiceDetails(Request $request){
@@ -949,7 +931,7 @@ class VehicleFleetController extends Controller
 
 
 
-        if ($maintenance->status == 1) {
+        
             $ID = $maintenance->id;
             //return $ID;
 
@@ -989,9 +971,7 @@ class VehicleFleetController extends Controller
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewVehicleFines')->with($data);
-        } else
-            return back();
-    }
+        } 
 
     public function addvehiclefines(Request $request){
         $this->validate($request, [
@@ -1145,7 +1125,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
          $status =  array(1 => 'Minor', 2 => 'Major', 3 => 'Critical');
 
-        if ($maintenance->status == 1) {
+       
             $ID = $maintenance->id;
             //return $ID;
 
@@ -1185,9 +1165,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewVehicleIncidents')->with($data);
-        } else
-            return back();
-    }
+        } 
 
     public function addvehicleincidents(Request $request){
         $this->validate($request, [
@@ -1287,7 +1265,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
          $status =  array(1 => 'Minor', 2 => 'Major', 3 => 'Critical');
 
-        if ($maintenance->status == 1) {
+       
             $ID = $maintenance->id;
             //return $ID;
 
@@ -1326,9 +1304,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewVehicleIOilLog')->with($data);
-        } else
-            return back();
-    }
+        } 
 // 
 
 
@@ -1365,7 +1341,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
          $transType = array(1 => 'Full Tank', 2 => 'Top Up');
 
 
-        if ($maintenance->status == 1) {
+       
             $ID = $maintenance->id;
 
             $vehiclefuellog = DB::table('vehicle_fuel_log')
@@ -1405,9 +1381,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
-        } else
-            return back();
-    }
+        } 
 
     public function addvehiclefuellog(Request $request){
         $this->validate($request, [
@@ -1496,7 +1470,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             ->where('vehicle_booking.vehicle_id', $ID)
             ->get();
             
-            //return $vehiclebookinglog;
+           // return $vehiclebookinglog;
     
 
             //return $vehiclefine
