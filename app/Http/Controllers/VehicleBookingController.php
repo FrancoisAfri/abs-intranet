@@ -193,16 +193,16 @@ class VehicleBookingController extends Controller
                     $query->where('vehicle_details.division_level_4', $Department);
                 }
             })
-            // ->where(function ($query) use ($startDate) {
-            //     if (!empty($startDate)) {
-            //         $query->where('vehicle_booking.require_datetime', '!=', $startDate);
-            //     }
-            // })
-            // ->where(function ($query) use ($EndDate) {
-            //     if (!empty($EndDate)) {
-            //         $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
-            //     }
-            // })
+            ->where(function ($query) use ($startDate) {
+                if (!empty($startDate)) {
+                    $query->where('vehicle_booking.require_datetime', '!=', $startDate);
+                }
+            })
+            ->where(function ($query) use ($EndDate) {
+                if (!empty($EndDate)) {
+                    $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
+                }
+            })
             ->where('vehicle_details.booking_status', '!=', 1)
             // ->where('vehicle_booking.status' , '=', 12 )
             ->orderBy('vehicle_details.id')
@@ -628,6 +628,7 @@ class VehicleBookingController extends Controller
             ->where('vehicle_booking.status', '!=', 10)//check if the booking is not approved
             ->where('vehicle_booking.status', '!=', 11)//check if the vehicle is not collected
             ->where('vehicle_booking.status', '!=', 13)// check if the booking is not cancelled
+            ->where('vehicle_booking.status', '!=', 12)// check if the booking is not cancelled
             ->where('vehicle_booking.status', '!=', 14)// check if the booking is not declined
             ->get();
 
@@ -1045,6 +1046,11 @@ class VehicleBookingController extends Controller
         $confirm->update();
         $ID = $confirm->id;
 
+        $ID = $confirm->vehicle_id;
+        DB::table('vehicle_details')
+            ->where('id', $ID)
+            ->update(['booking_status' => 0]);
+
         AuditReportsController::store('Vehicle Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
         return redirect()->to('/vehicle_management/return_vehicle/' . $ID);
 
@@ -1054,13 +1060,14 @@ class VehicleBookingController extends Controller
     {
 
         $ID = $ispection->id;
-        
+     
 
         $vehicleID = $ispection->vehicle_id;
 
-       // return $vehicleID;
 
-        $vehicle = vehicle_maintenance::where('id', $vehicleID )->get()->first();
+      
+
+        $vehicle = vehicle_maintenance::where('id', $ID )->get()->first();
 
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
@@ -1074,15 +1081,14 @@ class VehicleBookingController extends Controller
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         #vehicle collect documents
-        $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $vehicleID )->get()->first();
-
-        #vehicle collect images
-        // $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $vehicleID)->get()->first();
-        // return $vehiclecollectimage;
-        // #vehicle return documents
-        // $vehiclereturndocuments = vehicle_return_documents::where('vehicleID', $vehicleID)->get()->first();
-        // #vehicle return documents
-        // $vehiclereturnimages = vehicle_return_images::where('vehicleID', $vehicleID)->get()->first();
+        $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $ID )->get()->first();
+         #vehicle collect images
+        $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $ID)->get()->first();
+        return $vehiclecollectimage;
+        #vehicle return documents
+        $vehiclereturndocuments = vehicle_return_documents::where('vehicleID', $ID)->get()->first();
+        #vehicle return documents
+        $vehiclereturnimages = vehicle_return_images::where('vehicleID', $ID)->get()->first();
 
         $currentDate = time();
         ################## WELL DETAILS ###############
@@ -1150,9 +1156,9 @@ class VehicleBookingController extends Controller
         $data['name'] = $name;
         $data['servicestation'] = $servicestation;
         $data['vehiclecollectdocuments'] = $vehiclecollectdocuments;
-        // $data['vehiclecollectimage'] = $vehiclecollectimage;
-        // $data['vehiclereturndocuments'] = $vehiclereturndocuments;
-        // $data['vehiclereturnimages'] = $vehiclereturnimages;
+        $data['vehiclecollectimage'] = $vehiclecollectimage;
+        $data['vehiclereturndocuments'] = $vehiclereturndocuments;
+        $data['vehiclereturnimages'] = $vehiclereturnimages;
         $data['status'] = $status;
         $data['vehicleID'] = $vehicleID;
         $data['fineType'] = $fineType;

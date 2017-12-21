@@ -1471,6 +1471,8 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             ->get();
             
            // return $vehiclebookinglog;
+
+              $vehiclebooking = $vehiclebookinglog->unique('id');
     
 
             //return $vehiclefine
@@ -1497,7 +1499,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $data['vehiclemaker'] = $vehiclemaker;
             $data['vehicleTypes'] = $vehicleTypes;
             $data['vehiclemodeler'] = $vehiclemodeler;
-            $data['vehiclebookinglog'] = $vehiclebookinglog;
+            $data['vehiclebooking'] = $vehiclebooking;
             $data['maintenance'] = $maintenance;
             $data['active_mod'] = 'Vehicle Management';
             $data['active_rib'] = 'Manage Fleet';

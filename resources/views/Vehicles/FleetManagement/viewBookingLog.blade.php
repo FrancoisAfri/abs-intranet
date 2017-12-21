@@ -111,9 +111,9 @@ rel="stylesheet">
                             </tr>
                         </thead>
                         <tbody>
-                            @if (count($vehiclebookinglog) > 0)
+                            @if (count($vehiclebooking) > 0)
                             <ul class="products-list product-list-in-box">
-                                @foreach ($vehiclebookinglog as $booking)
+                                @foreach ($vehiclebooking as $booking)
                                 <tr>
                                    <td nowrap>
                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"

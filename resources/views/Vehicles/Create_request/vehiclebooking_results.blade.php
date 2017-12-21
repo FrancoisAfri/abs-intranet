@@ -19,7 +19,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> My Vehicle Booking(s) </h3>
+                    <h3 class="box-title"> My Vehicle Booking(s)</h3>
                 </div>
                 <div class="box-body">
                     <div style="overflow-X:auto;">
@@ -47,7 +47,7 @@
                                 @foreach ($vehiclebookings as $booking)
                                     <tr>
                                         {{--dnt allow editing for approved and rejected bookings--}}
-                                        @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 )
+                                        @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 && $booking->status !== 12 )
                                             <td nowrap>
                                                 <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                         data-toggle="modal" data-target="#edit-booking-modal"
@@ -76,7 +76,7 @@
                                         <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
                                         <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
                                         <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
-                                        @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 )
+                                        @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 && $booking->status !== 12 )
                                             <td nowrap>
                                                 <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-contact-warning-modal"><i
@@ -116,7 +116,7 @@
                         </table>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="button" id="cancel" class="btn btn-default pull-right"> Create a Request </button>
+                           <!--  <button type="button" id="cancel" class="btn btn-default pull-right"> Create a Request </button> -->
                             
                         </div>
                     </div>
