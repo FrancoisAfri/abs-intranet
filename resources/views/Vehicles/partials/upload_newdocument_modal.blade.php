@@ -21,8 +21,8 @@
 
                         <div class="col-sm-8">
                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_single" name="upload_type" value="1" checked>                                     
-                                Bulk  </label>
-                            <label class="radio-inline"><input type="radio" id="rdo_bulke" name="upload_type" value="2"> Safe
+                                Single  </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_bulke" name="upload_type" value="2"> Bulk
                             </label>
                         </div>
 

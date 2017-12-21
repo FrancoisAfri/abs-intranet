@@ -23,6 +23,8 @@ use App\service_station;
 use App\module_ribbons;
 use App\ribbons_access;
 use App\ContactCompany;
+use App\vehicle_return_images;
+use App\vehicle_return_documents;
 use Illuminate\Http\Request;
 use App\Mail\vehicle_bookings;
 use App\Mail\confirm_collection;
@@ -828,17 +830,16 @@ class VehicleBookingController extends Controller
         return response()->json();
     }
 
-    public function AddcollectionImage( Request $request)
+    public function AddcollectionImage( Request $request , vehicle_collect_image $collectionImage)
     {
         $this->validate($request, [
-//            'type' => 'required',
-//            'description' => 'required',
+           // 'type' => 'required',
+           'description' => 'required',
             //  'image' => 'required',
         ]);
         $docData = $request->all();
         unset($docData['_token']);
 
-        $collectionImage = new vehicle_collect_image();
         $collectionImage->name = $docData['name'];
         $collectionImage->description = $docData['description'];
         $collectionImage->upload_date = $currentDate = time();
@@ -991,7 +992,7 @@ class VehicleBookingController extends Controller
         return response()->json();
     }
 
-    public function AddreturnImage(Request $request)
+    public function AddreturnImage(Request $request , vehicle_return_images  $returnImage )
     {
         $this->validate($request, [
 //            'type' => 'required',
@@ -1001,7 +1002,6 @@ class VehicleBookingController extends Controller
         $docData = $request->all();
         unset($docData['_token']);
 
-        $returnImage = new vehicle_return_images();
         $returnImage->name = $docData['name'];
         $returnImage->description = $docData['description'];
         $returnImage->upload_date = $currentDate = time();
@@ -1075,7 +1075,7 @@ class VehicleBookingController extends Controller
 
         #vehicle collect documents
         $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $vehicleID )->get()->first();
-        
+
         #vehicle collect images
         // $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $vehicleID)->get()->first();
         // return $vehiclecollectimage;

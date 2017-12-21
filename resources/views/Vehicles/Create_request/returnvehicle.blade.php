@@ -342,9 +342,11 @@
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <!-- Ajax form submit -->
-    <!-- <script src="/custom_components/js/modal_ajax_submit.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
+    <!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+    <!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+
     <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements

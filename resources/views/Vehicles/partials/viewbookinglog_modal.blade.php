@@ -223,7 +223,7 @@
                             </div>
                         </div>
 
-
+<!-- 
 
 
                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
@@ -254,7 +254,7 @@
                                 @endif
                             </div>
                         </div>
-
+ -->
                         
 
                         <input type="hidden" id="valueID" name="valueID"
