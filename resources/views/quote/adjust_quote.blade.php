@@ -144,7 +144,7 @@
                                                 </td>
                                                 <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ $servicesSettings->service_unit_name }}</th>
                                                 <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
-                                                    <input type="number" name="quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
+                                                    <input type="number" name="service_quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
                                                 </td>
                                                 <td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>
                                             </tr>
@@ -304,9 +304,9 @@
                             <td>
                                 <textarea name="description[]" rows="2" class="form-control" required></textarea>
                             </td>
-                            <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ $servicesSettings->service_unit_name }}</th>
+                            <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ ($servicesSettings) ? $servicesSettings->service_unit_name : '' }}</th>
                             <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
-                                <input type="number" name="quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
+                                <input type="number" name="service_quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
                             </td>
                             <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">
                                 <button type="button" class="btn btn-link btn-xs remove_row" title="Remove"><i class="fa fa-times"></i></button>

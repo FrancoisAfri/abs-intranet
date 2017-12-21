@@ -449,6 +449,7 @@ class QuotesController extends Controller
         });
 
         $validator->validate();
+        //return $request->all();
 
         $currentTime = time();
 
@@ -534,6 +535,7 @@ class QuotesController extends Controller
         $data['products'] = $products;
         $data['packages'] = $packages;
         $data['servicesSettings'] = $servicesSettings;
+        //return $data;
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
 
         return view('quote.adjust_quote')->with($data);
@@ -548,10 +550,19 @@ class QuotesController extends Controller
     public function saveQuote(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'quote_type' => 'bail|required|integer|min:1',
             'division_id' => 'bail|required|integer|min:1',
             'contact_person_id' => 'bail|required|integer|min:1',
+            //'quantity' => 'bail|required',
             'quantity.*' => 'bail|required|integer|min:1',
+            'package_quantity.*' => 'bail|required|integer|min:1',
+            'service_quantity.*' => 'bail|required|integer|min:1',
+            //'price' => 'bail|required_if:quote_type,1',
             'price.*' => 'bail|required|integer|min:1',
+            'package_price.*' => 'bail|required|integer|min:1',
+            'service_rate' => 'bail|required_if:quote_type,2|numeric',
+            'description' => 'bail|required_if:quote_type,2',
+            'description.*' => 'bail|required|max:1000',
             'discount_percent' => 'numeric',
         ]);
         $validator->validate();
@@ -567,6 +578,8 @@ class QuotesController extends Controller
         //save quote
         $quote = new Quotation();
         DB::transaction(function () use ($quote, $request, $highestLvl, $user) {
+            $quoteType = $request->input('quote_type');
+            $quote->quote_type = ($quoteType > 0) ? $quoteType : null;
             $quote->company_id = ($request->input('company_id') > 0) ? $request->input('company_id') : null;
             $quote->client_id = $request->input('contact_person_id');
             $quote->division_id = $request->input('division_id');
@@ -584,21 +597,42 @@ class QuotesController extends Controller
             $quote->quote_number = $quoteNumber;
             $quote->update();
 
-            //save quote's products
-            $prices = $request->input('price');
-            $quantities = $request->input('quantity');
-            if ($prices) {
-                foreach ($prices as $productID => $price) {
-                    $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
-                }
-            }
+            if ($quoteType == 1) {
 
-            //save quote's packages
-            $packagePrices = $request->input('package_price');
-            $packageQuantities = $request->input('package_quantity');
-            if ($packagePrices) {
-                foreach ($packagePrices as $packageID => $packagePrice) {
-                    $quote->packages()->attach($packageID, ['price' => $packagePrice, 'quantity' => $packageQuantities[$packageID]]);
+                //save quote's products
+                $prices = $request->input('price');
+                $quantities = $request->input('quantity');
+                if ($prices) {
+                    foreach ($prices as $productID => $price) {
+                        $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
+                    }
+                }
+
+                //save quote's packages
+                $packagePrices = $request->input('package_price');
+                $packageQuantities = $request->input('package_quantity');
+                if ($packagePrices) {
+                    foreach ($packagePrices as $packageID => $packagePrice) {
+                        $quote->packages()->attach($packageID, ['price' => $packagePrice, 'quantity' => $packageQuantities[$packageID]]);
+                    }
+                }
+            } elseif ($quoteType == 2) {
+
+                $serviceSettings = ProductServiceSettings::first();
+                $serviceRate = ($serviceSettings) ? $serviceSettings->service_rate : 0;
+
+                //save quote's services
+                $serviceDescription = $request->input('description');
+                $serviceQuantity = $request->input('service_quantity');
+                if ($serviceDescription) {
+                    foreach ($serviceDescription as $key => $description) {
+                        $service = new ProductService();
+                        $service->quotation_id = $quote->id;
+                        $service->description = $description;
+                        $service->quantity = $serviceQuantity[$key];
+                        $service->rate = $serviceRate;
+                        $service->save();
+                    }
                 }
             }
 
