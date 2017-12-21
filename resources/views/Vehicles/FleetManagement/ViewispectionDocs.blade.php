@@ -106,18 +106,20 @@
                                 </div>
                             </td>
                         </tr>
+                        <p>
+                            
                         <tr>
                             <td>
                                 <div class="product-img">
-                                    <img src="{{ (!empty($vehiclecollectimage->image)) ? Storage::disk('local')->url("image/$vehiclecollectimage->image") : 'http://placehold.it/60x50' }}"
-                                  alt="Product Image" width="75" height="50">
+                                    <img src="{{ (!empty($vehiclecollectimage->image)) ? Storage::disk('local')->url("collectionimage/$vehiclecollectimage->image") : 'http://placehold.it/60x50' }}"
+                                  alt="Product Image" width="125" height="85">
                                 </div>
                             </td>
 
                             <td>
                                <div class="product-img">
-                                    <img src="{{ (!empty($vehiclereturnimages->image)) ? Storage::disk('local')->url("image/$vehiclereturnimages->image") : 'http://placehold.it/60x50' }}"
-                                  alt="Product Image" width="75" height="50">
+                                    <img src="{{ (!empty($vehiclereturnimages->image)) ? Storage::disk('local')->url("vehiclereturnImage/$vehiclereturnimages->image") : 'http://placehold.it/60x50' }}"
+                                  alt="Product Image"width="125" height="85">
                                 </div>
                             </td>
                         </tr>

@@ -1458,7 +1458,8 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
                 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname',
-                'vehicle_collect_documents.document as collectDoc' ,'vehicle_return_documents.document as returnDoc'
+                'vehicle_collect_documents.document as collectDoc' ,
+                'vehicle_return_documents.document as returnDoc'
             )
             ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
@@ -1472,9 +1473,8 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             
            // return $vehiclebookinglog;
 
-              $vehiclebooking = $vehiclebookinglog->unique('id');
+            $vehiclebooking = $vehiclebookinglog->unique('id');
     
-
             //return $vehiclefine
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";

@@ -1084,7 +1084,7 @@ class VehicleBookingController extends Controller
         $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $ID )->get()->first();
          #vehicle collect images
         $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $ID)->get()->first();
-        return $vehiclecollectimage;
+       // return $vehiclecollectimage;
         #vehicle return documents
         $vehiclereturndocuments = vehicle_return_documents::where('vehicleID', $ID)->get()->first();
         #vehicle return documents
