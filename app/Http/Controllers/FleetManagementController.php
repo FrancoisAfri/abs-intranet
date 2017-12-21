@@ -195,6 +195,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->currentDate = $currentDate;
         $vehicle_maintenance->title_type = 0;
         $vehicle_maintenance->name = $Username;
+        $vehicle_maintenance->booking_status = 0;
         $vehicle_maintenance->save();
 
         $loggedInEmplID = Auth::user()->person->id;

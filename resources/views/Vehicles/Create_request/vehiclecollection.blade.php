@@ -377,7 +377,7 @@
 
         //Post perk form to server using ajax (add)
         $('#add-collection_image').on('click', function () {
-            var strUrl = '/vehicle_management/add_collectionImage';
+            var strUrl = '/vehicle_management/addcollectionImage';
             var formName = 'add-new-collectImage-form';
             var modalID = 'add-image-modal';
             var submitBtnID = 'add-collection_image';

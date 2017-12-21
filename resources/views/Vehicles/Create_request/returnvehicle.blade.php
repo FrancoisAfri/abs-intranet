@@ -353,7 +353,7 @@
             $('.transaction-field').hide();
             //Cancel button click event
             $('#cancel').click(function () {
-                location.href = '/leave/application';
+                location.href = '/vehicle_management/bookin_log/{$vehicle->id}';
             });
 
             //Phone mask

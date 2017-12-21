@@ -31,15 +31,18 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong>
+                                    <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($ispection->vehicle_registration))
@@ -59,19 +62,75 @@
                         </div>
                     </div>
                     <!--  -->
-                    <div id="upleft"></div>
-<div id="upright"></div>
-<div id="below"></div>
+                    <table class="table table-striped table-bordered">
+                        <tr>
+
+                            <td class="caption">Inspection In</td>
+
+                            <td class="caption">Inspection Out</td>
+
+                        </tr>
+                        <tr>
+
+                            <td class="caption">
+                                <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                    <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents
+                                        Collect </label>
+                                    <div class="col-sm-8">
+                                        @if(!empty($booking->collectDoc))
+                                            <a class="btn btn-default btn-flat btn-block pull-right "
+                                               href="{{  (!empty($vehiclecollectdocuments)) ? Storage::disk('local')->url("projects/collectiondocuments/$vehiclecollectdocuments") : '' }}"
+                                               target="_blank"><i
+                                                        class="fa fa-file-pdf-o"></i> View Document</a>
+                                        @else
+                                            <a class="btn btn-default pull-centre "><i
+                                                        class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                    <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents
+                                        Return </label>
+                                    <div class="col-sm-8">
+                                        @if(!empty($booking->returnDoc))
+                                            <a class="btn btn-default btn-flat btn-block pull-right "
+                                               href="{{ $booking->returnDoc}}" target="_blank"><i
+                                                        class="fa fa-file-pdf-o"></i> View Document</a>
+                                        @else
+                                            <a class="btn btn-default pull-centre "><i
+                                                        class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                {{--<div class="product-img">--}}
+                                    {{--<img src="{{ (!empty($vehiclereturnimages)) ? Storage::disk('local')->url("image/$vehiclereturnimages") : 'http://placehold.it/60x50' }}"--}}
+                                         {{--alt="Product Image" width="50" height="50">--}}
+                                {{--</div>--}}
+                            </td>
+
+                            <td>
+                                picb
+                            </td>
+                        </tr>
+
+
+                    </table>
                     <!--   </div> -->
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                       
+
                         </button>
                     </div>
                 </div>
             </div>
-       
+
 
         </div>
 
@@ -159,21 +218,21 @@
                     });
 
 
-                     $('#date_serviced').datepicker({
+                    $('#date_serviced').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
-                     
-                     // 
-                      $('#nxtservice_date').datepicker({
+
+                    //
+                    $('#nxtservice_date').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
 
 
-                     $('#dateserviced').datepicker({
+                    $('#dateserviced').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
@@ -182,7 +241,7 @@
 
                 });
 
-               
+
                 //Post perk form to server using ajax (add)
                 $('#add_servicedetails').on('click', function () {
                     var strUrl = '/vehicle_management/addservicedetails';
@@ -223,16 +282,16 @@
                     modal.find('#valueID').val(valueID);
                 });
 
-                 $('#edit_servicedetails').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_servicedetails/'+ serviceID ;
+                $('#edit_servicedetails').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_servicedetails/' + serviceID;
                     var formName = 'edit-servicedetails-form';
                     var modalID = 'edit-servicedetails-modal';
                     var submitBtnID = 'edit_servicedetails';
                     var redirectUrl = '/vehicle_management/service_details/{{ $ispection->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                     var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
+                    var Method = 'PATCH'
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                 });
 
 

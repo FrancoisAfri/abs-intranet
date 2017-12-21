@@ -148,6 +148,7 @@ rel="stylesheet">
                              @else
                              <td></td>
                              @endif
+                                        @if (isset($booking) && $booking->status === 12)
                              <td>
                                 <a href="{{ '/vehicle_management/vehicle_ispection/' . $booking->id }}"
                                  id="collect"
@@ -155,6 +156,7 @@ rel="stylesheet">
                                  class="fa fa-hand-lizard-o"></i> Inspection</a>  
                              </td>
                          </tr>
+                            @endif
                          @endforeach
 						  @endif
                      </tbody>

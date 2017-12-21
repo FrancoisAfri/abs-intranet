@@ -298,6 +298,7 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
  Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 // collect vehicle
  Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
+
  // Return vehicle
  Route::get('/vehicle_management/return_vehicle/{returnVeh}', 'VehicleBookingController@returnVehicle');
  // View Vehicle Appprovals
@@ -308,7 +309,7 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
  Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
  // confirm collection
  Route::post('vehicle_management/add_collectiondoc', 'VehicleBookingController@AddcollectionDoc');
- Route::post('vehicle_management/add_collectionImage', 'VehicleBookingController@AddcollectionImage');
+ Route::post('vehicle_management/addcollectionImage', 'VehicleBookingController@AddcollectionImage');
  Route::patch('vehicle_management/{confirm}/confirmbooking', 'VehicleBookingController@confrmCollection');
 // confirm return
 Route::post('vehicle_management/return_document', 'VehicleBookingController@AddreturnDoc');
