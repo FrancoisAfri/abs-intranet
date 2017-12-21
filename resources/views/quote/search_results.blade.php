@@ -139,7 +139,7 @@
 
         //Cancel button
         $('#cancel').click(function () {
-            location.href = '/quote/create';
+            location.href = '/quote/search';
         });
 
         //Vertically center modals on page

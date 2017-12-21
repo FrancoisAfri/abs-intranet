@@ -31,4 +31,14 @@ class CRMSetupController extends Controller
 
         return view('crm.setup')->with($data);
     }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function search()
+    {
+        return 'CRM search page';
+    }
 }

@@ -32,6 +32,15 @@
                             </div>
                         @endif
 
+                        <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                            <label for="Leave_type" class="col-sm-2 control-label"> Quote Type</label>
+
+                            <div class="col-sm-9">
+                                <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Products/Packages</label>
+                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2">  Services</label>
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
                             <label for="{{ 'division_id' }}" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
 
@@ -73,9 +82,9 @@
                             </div>
                         </div>
 
-                        <hr class="hr-text" data-content="SELECT PRODUCTS">
+                        <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
 
-                        <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                        <div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>
 
                             <div class="col-sm-10">
@@ -88,9 +97,9 @@
                             </div>
                         </div>
 
-                        <hr class="hr-text" data-content="OR SELECT PACKAGES">
+                        <hr class="hr-text packages-field" data-content="OR SELECT PACKAGES">
 
-                        <div class="form-group{{ $errors->has('package_id') ? ' has-error' : '' }}">
+                        <div class="form-group packages-field{{ $errors->has('package_id') ? ' has-error' : '' }}">
                             <label for="package_id" class="col-sm-2 control-label">Package</label>
 
                             <div class="col-sm-10">
@@ -203,10 +212,33 @@
                 $('.modal:visible').each(reposition);
             });
 
+            //show / hide fields
+            hideFields();
+
+            $('#rdo_products, #rdo_services').on('ifChecked', function(){
+                var allType = hideFields();
+            });
+
             //Show success action modal
             @if(Session('changes_saved'))
                 $('#success-action-modal').modal('show');
             @endif
         });
+
+        //function to hide/show fields depending on the quote  type
+        function hideFields() {
+            var quoteType = $("input[name='quote_type']:checked").val();
+            if (quoteType == 1) { //products and packages
+                $('.products-field').show();
+                $('.packages-field').show();
+                $('.services-field').hide();
+            }
+            else if (quoteType == 2) { //services
+                $('.products-field').hide();
+                $('.packages-field').hide();
+                $('.services-field').show();
+            }
+            return quoteType;      
+        }
     </script>
 @endsection
