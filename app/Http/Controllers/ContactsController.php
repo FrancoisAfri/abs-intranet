@@ -463,7 +463,7 @@ class ContactsController extends Controller
 		})
 		->orderBy('first_name')
 		->orderBy('surname')
-		->limit(100)
+		//->limit(100)
         ->with('company')
 		->get();
 			

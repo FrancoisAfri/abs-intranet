@@ -1,5 +1,6 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
+    <!-- bootstrap datepicker -->
     <!-- Include Date Range Picker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
@@ -9,7 +10,13 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
-    <!--Time Charger-->
+    <!-- Time picker -->
+    <!--  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 @endsection
 @section('content')
     <div class="row">
@@ -19,12 +26,13 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-anchor pull-right"></i>
-                    <h3 class="box-title">Confirm Booking</h3>
+                    <h3 class="box-title">Confirm Return</h3>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form name="leave-application-form" class="form-horizontal" method="POST" action="/vehicle_management/{{ $collect->id }}/confirmbooking"
-                      enctype="multipart/form-data">
+                <form name="leave-application-form" class="form-horizontal" method="POST"
+                      action="/vehicle_management/{{ $returnVeh->id }}/confirmreturn" enctype="multipart/form-data">
+
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
 
@@ -50,16 +58,17 @@
                                         &nbsp;
                                     @endif
                                     @if(!empty($maintenance->vehicle_registration))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
-                                    <em>{{ $vehiclebookings->vehicle_reg }}</em> &nbsp; &nbsp;
+                                        -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
+                                        <em>{{ $vehiclebookings->vehicle_reg }}</em> &nbsp; &nbsp;
                                     @endif
                                     @if(!empty($maintenance->year))
-                                    -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $vehiclebookings->vehicle_reg->year }}</em> &nbsp;
-                                    &nbsp;
+                                        -| &nbsp; &nbsp; <strong>Year:</strong>
+                                        <em>{{ $vehiclebookings->vehicle_reg->year }}</em> &nbsp;
+                                        &nbsp;
                                     @endif
                                     @if(!empty($maintenance->vehicle_color))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
-                                    <em>{{ $vehiclebookings->vehicle_reg->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                        -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
+                                        <em>{{ $vehiclebookings->vehicle_reg->vehicle_color }}</em> &nbsp; &nbsp; -|
                                     @endif
 
                                 </p>
@@ -115,7 +124,22 @@
                                         </div>
                                         <input type="text" id="require_datetime"
                                                class="form-control pull-left" name="require_datetime"
-                                               value="{{ date("y F  Y, g:i a", $vehiclebookings->require_datetime) }}"
+                                               value="{{ date("F j, Y, g:i a", $vehiclebookings->require_datetime) }}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="path" class="col-sm-2 control-label">Collected </label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input type="text" id="collect_timestamp"
+                                               class="form-control pull-left" name="collect_timestamp"
+                                               value="{{ !empty($vehiclebookings->collect_timestamp ) ?  date("F j, Y, g:i a", $vehiclebookings->collect_timestamp)  : ''}}"
                                                readonly>
                                     </div>
                                 </div>
@@ -130,8 +154,9 @@
                                         </div>
                                         <input type="text" id="return_datetime"
                                                class="form-control pull-left" name="return_datetime"
-                                               value="{{ date("y F  Y, g:i a", $vehiclebookings->return_datetime) }}"
+                                               value="{{ date("F j, Y, g:i a", $vehiclebookings->return_datetime) }}"
                                                readonly>
+
                                     </div>
                                 </div>
                             </div>
@@ -164,66 +189,77 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label"> Default Odometer
-                                    Reading </label>
+                                <label for="path" class="col-sm-2 control-label">Returned At </label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-spinner"></i>
+                                            <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" id="driver_id" class="form-control pull-left"
-                                               name="driver_id"
-                                               value="{{  $vehiclebookings->odometer_reading }}" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label"> Actual Odometer
-                                    Reading </label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-spinner"></i>
-                                        </div>
-                                        <input type="text" id="start_mileage_id" class="form-control pull-left"
-                                               name="start_mileage_id" value="0">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label">Destination </label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-car"></i>
-                                        </div>
-                                        <input type="text" id="destination" class="form-control pull-left"
-                                               name="destination"
-                                               value="{{  $vehiclebookings->destination }}" readonly>
+                                        <input type='text' class="form-control" id='return_timestamp'
+                                               name="return_timestamp"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label">Purpose </label>
+                                <label for="path" class="col-sm-2 control-label"> Start Odometer
+                                    Reading </label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">
-                                            <i class="fa fa-anchor"></i>
+                                            <i class="fa fa-tachometer"></i>
                                         </div>
-                                        <input type="text" id="purpose" class="form-control pull-left"
-                                               name="purpose" value="{{  $vehiclebookings->purpose }}"
-                                               readonly>
+                                        <input type="text" id="start_mileage_id" class="form-control pull-left"
+                                               name="start_mileage_id"
+                                               value="{{  $vehiclebookings->start_mileage_id }}" readonly>
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="end_mileage_id" class="col-sm-2 control-label"> End Odometer
+                                    Reading </label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-tachometer"></i>
+                                        </div>
+                                        <input type="text" id="end_mileage_id" class="form-control pull-left"
+                                               name="end_mileage_id" value="0">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="end_mileage_id" class="col-sm-2 control-label"> Additional Actions </label>
+                                <div class="col-sm-10">
+                                    <button type="button" id="cat_module"
+                                            class="btn btn-muted " data-toggle="modal"
+                                            data-target="#add-fuel-modal">Add Fuel Log
+                                    </button>
+                                    <button type="button" id="cat_module"
+                                            class="btn btn-muted " data-toggle="modal"
+                                            data-target="#add-fines-modal">Add Fine
+                                    </button>
+                                    <button type="button" id="cat_module"
+                                            class="btn btn-muted " data-toggle="modal"
+                                            data-target="#add-incidents-modal">Add Incident
+                                    </button>
+                                    <button type="button" id="cat_module"
+                                            class="btn btn-muted " data-toggle="modal"
+                                            data-target="#add-costs-modal">Add General Cost
+                                    </button>
+                                </div>
+                            </div>
+
 
                             <div class="row">
                                 <div class="col-xs-8 text-left">
                                     <button type="button" id="cat_module"
                                             class="btn btn-muted btn-xs pull-left" data-toggle="modal"
-                                            data-target="#add-document-modal">Inspection Documents
+                                            data-target="#add-returndocument-modal">Inspection Documents
                                     </button>
 
                                 </div>
@@ -231,7 +267,7 @@
                                 <div class="col-xs-4 text-right">
                                     <button type="button" id="cat_module"
                                             class="btn btn-info btn-xs pull-right" data-toggle="modal"
-                                            data-target="#add-image-modal">Inspection Images
+                                            data-target="#add-returnimage-modal">Inspection Images
                                     </button>
                                 </div>
                             </div>
@@ -251,10 +287,15 @@
         </div>
         <!-- /.box -->
     </div>
-    <!-- End new User Form-->
-    @include('Vehicles.Create_request.inspection_document_modal')
-    @include('Vehicles.Create_request.inspection_image_modal')
-    {{--@include('Vehicles.partials.edit_document_modal')--}}
+
+
+    @include('Vehicles.Create_request.return_document_modal')
+    @include('Vehicles.Create_request.return_image_modal')
+    <!-- Addition Actions -->
+    @include('Vehicles.Create_request.add_vehicleFuelRecords_modal')
+    @include('Vehicles.Create_request.add_vehicleFines_modal')
+    @include('Vehicles.Create_request.add_vehicleIncidents_modal')
+    @include('Vehicles.Create_request.add_generalcosts_modal')
 
     @if(Session('success_application'))
     @include('Vehicles.sucess.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
@@ -268,12 +309,12 @@
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-
     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <!--  Date Picker -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <!-- File Input-->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
     <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js"
             type="text/javascript"></script>
     <!-- the main fileinput plugin file -->
@@ -283,20 +324,23 @@
     <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
     <!-- the main fileinput plugin file -->
     <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-
     <!-- Date rane picker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
-
     <!-- iCheck -->
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+            type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Date picker -->
     <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
@@ -308,9 +352,10 @@
             //Initialize Select2 Elements
             $(".select2").select2();
             $('.zip-field').hide();
+            $('.transaction-field').hide();
             //Cancel button click event
             $('#cancel').click(function () {
-                location.href = '/leave/application';
+                location.href = '/vehicle_management/bookin_log/{$vehicle->id}';
             });
 
             //Phone mask
@@ -350,6 +395,16 @@
             else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
         });
 
+        $(document).ready(function () {
+
+            $(function () {
+                $('#return_timestamp').datetimepicker();
+            });
+
+            // $('#required_to').datetimepicker({});
+
+        });
+
 
         function hideFields() {
             var allType = $("input[name='image_type']:checked").val();
@@ -364,30 +419,47 @@
             return allType;
         }
 
-        $('#add_document').on('click', function () {
-            var strUrl = '/vehicle_management/add_collectiondoc';
-            var formName = 'add-document-form';
-            var modalID = 'add-document-modal';
-            var submitBtnID = 'add_document';
-            var redirectUrl = '/vehicle_management/collect/{{ $collect->id}}';
+        // 
+        $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
+            var allType = hideFields();
+
+        });
+
+        function hideFields() {
+            var allType = $("input[name='transaction']:checked").val();
+            if (allType == 1) {
+                $('.transaction-field').hide();
+                $('.Tanks-field').show();
+            }
+            else if (allType == 2) {
+                $('.transaction-field').show();
+                $('.Tanks-field').hide();
+            }
+            return allType;
+        }
+
+        $('#returndocument').on('click', function () {
+            var strUrl = '/vehicle_management/return_document';
+            var formName = 'add-returndocument-form';
+            var modalID = 'add-returndocument-modal';
+            var submitBtnID = 'returndocument';
+            var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id}}';
             var successMsgTitle = 'Document Added!';
             var successMsg = 'The Document  has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
         //Post perk form to server using ajax (add)
-        $('#add-collection_image').on('click', function () {
-            var strUrl = '/vehicle_management/addcollectionImage';
-            var formName = 'add-new-collectImage-form';
-            var modalID = 'add-image-modal';
-            var submitBtnID = 'add-collection_image';
-            var redirectUrl = '/vehicle_management/collect/{{ $collect->id }}';
+        $('#add-return_image').on('click', function () {
+            var strUrl = '/vehicle_management/return_Image';
+            var formName = 'add-new-returnimage-form';
+            var modalID = 'add-returnimage-modal';
+            var submitBtnID = 'add-return_image';
+            var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
             var successMsgTitle = 'Image Added!';
             var successMsg = 'The Image  has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
-
-
 
 
     </script>

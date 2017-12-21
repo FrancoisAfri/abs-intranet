@@ -696,7 +696,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'View Tickets';
-        $ribbon->description = 'Create Request';
+        $ribbon->description = 'My Bookings';
         $ribbon->ribbon_path = 'helpdesk/view_ticket';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
@@ -792,14 +792,23 @@ class DatabaseSeeder extends Seeder
         // $ribbon->access_level = 3;
         // $module->addRibbon($ribbon);
 
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 3;
-        // $ribbon->ribbon_name = 'Manage Fleet License Permit ';
-        // $ribbon->description = 'Manage Fleet License Type/Permit ';
-        // $ribbon->ribbon_path = 'vehicle_management/Permit';
-        // $ribbon->access_level = 3;
-        // $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Driver Administration';
+        $ribbon->description = 'Driver Admin';
+        $ribbon->ribbon_path = 'vehicle_management/driver_admin';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
+        $ribbon->ribbon_name = 'Manage Fuel Tanks';
+        $ribbon->description = 'Manage Fuel Tanks';
+        $ribbon->ribbon_path = 'vehicle_management/fuel_tank';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
 
         // $ribbon = new module_ribbons();
         // $ribbon->active = 1;

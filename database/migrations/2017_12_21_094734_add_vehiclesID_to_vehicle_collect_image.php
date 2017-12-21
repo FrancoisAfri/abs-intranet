@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddVehicleIDToVehicleCollectImage extends Migration
+class AddVehiclesIDToVehicleCollectImage extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +26,7 @@ class AddVehicleIDToVehicleCollectImage extends Migration
      */
     public function down()
     {
-      Schema::table('vehicle_collect_image', function (Blueprint $table) {
+        Schema::table('vehicle_collect_image', function (Blueprint $table) {
           $table->integer('vehicleID')->nullable()->unsigned()->index();
           $table->integer('bookingID')->nullable()->unsigned()->index();
         });

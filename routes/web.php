@@ -286,7 +286,7 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
 Route::get('vehicle_management/vehicle_request', 'VehicleBookingController@vehiclerequest');
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
-Route::post('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
+Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
 
 Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehiclebooking');
 Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
@@ -296,17 +296,27 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
  Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 // collect vehicle
  Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
+
+ // Return vehicle
+ Route::get('/vehicle_management/return_vehicle/{returnVeh}', 'VehicleBookingController@returnVehicle');
  // View Vehicle Appprovals
  Route::get('vehicle_management/approval', 'VehicleBookingController@vewApprovals');
  //Decline vehicle booking
  Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
   //Approve Vehicle Approval
- Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking');
- //
+ Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
+ // confirm collection
  Route::post('vehicle_management/add_collectiondoc', 'VehicleBookingController@AddcollectionDoc');
- Route::post('vehicle_management/add_collectionImage', 'VehicleBookingController@AddcollectionImage');
+ Route::post('vehicle_management/addcollectionImage', 'VehicleBookingController@AddcollectionImage');
  Route::patch('vehicle_management/{confirm}/confirmbooking', 'VehicleBookingController@confrmCollection');
-//##
+// confirm return
+Route::post('vehicle_management/return_document', 'VehicleBookingController@AddreturnDoc');
+Route::post('vehicle_management/return_Image', 'VehicleBookingController@AddreturnImage');
+Route::patch('vehicle_management/{confirm}/confirmreturn', 'VehicleBookingController@confirmReturn');
+// vehicle_ispection
+Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingController@viewVehicleIspectionDocs'); 
+
+###
 
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
 Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
@@ -398,6 +408,10 @@ Route::get('vehicle_management/oil_log/{maintenance}', 'VehicleFleetController@v
 
 Route::get('vehicle_management/fuel_log/{maintenance}', 'VehicleFleetController@viewFuelLog');
 Route::post('vehicle_management/addvehiclefuellog', 'VehicleFleetController@addvehiclefuellog');
+
+#
+Route::get('vehicle_management/bookin_log/{maintenance}', 'VehicleFleetController@viewBookingLog');
+
 
 Route::get('vehicle_management/service_details/{maintenance}', 'VehicleFleetController@viewServiceDetails');
 Route::post('vehicle_management/addservicedetails', 'VehicleFleetController@addServiceDetails');

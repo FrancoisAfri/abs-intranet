@@ -215,23 +215,8 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that your Vehicle Cancellation with {{ $company_name }}  for vehicle [ {{ $vehicle_model }}] has been successful! For more details See below .
-                                                    <p>
-                                                    Vehicle Details....
-                                                    <p>
-                                                    Required From: {{ date("F j, Y, g:i a",trim ($required_from)) }}
-                                                 
-                                                    <p>
-                                                    Required TO: {{ date("F j, Y, g:i a", trim($required_to)) }}
-                                                     <p>
-                                                    Booking Type: {{ $Usage_type}}
-                                                     <p>
-                                                    Driver: {{ $driver}}
-                                                     <p>
-                                                    Destination:{{ $destination}}
-                                                     <p>
-                                                    Purpose:{{ $purpose}}
-                                                     <p>
+                                                    We would like to inform you that your Vehicle Collection with {{ $company_name }}  for vehicle [ {{ $vehicle_model }}] has been successful! For more details See below .
+                                                    
                                                 </td>
                                             </tr>
                                             <tr>
