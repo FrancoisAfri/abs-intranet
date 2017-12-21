@@ -1083,12 +1083,13 @@ class VehicleBookingController extends Controller
         #vehicle collect documents
         $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $ID )->get()->first();
          #vehicle collect images
-        $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $ID)->get()->first();
-       // return $vehiclecollectimage;
+        $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $ID)->get();
+        //return $vehiclecollectimage;
         #vehicle return documents
         $vehiclereturndocuments = vehicle_return_documents::where('vehicleID', $ID)->get()->first();
         #vehicle return documents
-        $vehiclereturnimages = vehicle_return_images::where('vehicleID', $ID)->get()->first();
+        $vehiclereturnimages = vehicle_return_images::where('vehicleID', $ID)->get();
+       //return  $vehiclereturnimages;
 
         $currentDate = time();
         ################## WELL DETAILS ###############

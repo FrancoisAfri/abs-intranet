@@ -107,21 +107,36 @@
                             </td>
                         </tr>
                         <p>
-                            
+
                         <tr>
+
+                            @foreach ($vehiclecollectimage as $booking)
+ 
                             <td>
                                 <div class="product-img">
-                                    <img src="{{ (!empty($vehiclecollectimage->image)) ? Storage::disk('local')->url("collectionimage/$vehiclecollectimage->image") : 'http://placehold.it/60x50' }}"
-                                  alt="Product Image" width="125" height="85">
+                                    <img src="{{ (!empty($booking->image)) ? Storage::disk('local')->url("collectionimage/$booking->image") : 'http://placehold.it/60x50' }}"
+                                  alt="Product Image"width="250" height="120">
                                 </div>
+                               <!--  <br>
+                                <div class="product-img">
+                                    <img src="{{ (!empty($booking->image)) ? Storage::disk('local')->url("collectionimage/$booking->image") : 'http://placehold.it/60x50' }}"
+                                  alt="Product Image"width="250" height="120">
+                                </div> -->
                             </td>
+                        </tr>
+                            @endforeach
 
+                              @foreach ($vehiclereturnimages as $bookings)
                             <td>
                                <div class="product-img">
-                                    <img src="{{ (!empty($vehiclereturnimages->image)) ? Storage::disk('local')->url("vehiclereturnImage/$vehiclereturnimages->image") : 'http://placehold.it/60x50' }}"
-                                  alt="Product Image"width="125" height="85">
+                                    <img src="{{ (!empty($bookings->image)) ? Storage::disk('local')->url("vehiclereturnImage/$bookings->image") : 'http://placehold.it/60x50' }}"
+                                  alt="Product Image"width="250" height="120">
                                 </div>
+                               
                             </td>
+                              @endforeach
+
+
                         </tr>
 
 
