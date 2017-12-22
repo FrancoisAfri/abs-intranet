@@ -45,8 +45,8 @@ class DatabaseSeeder extends Seeder
         $user->type = 3;
         $user->status = 1;
         $user->save();
-		
-		//insert default user's hr record
+
+        //insert default user's hr record
         $person = new HRPerson();
         $person->first_name = 'Francois';
         $person->surname = 'keou';
@@ -70,7 +70,6 @@ class DatabaseSeeder extends Seeder
         $person->status = 1;
         $user->addPerson($person);
 
-
         //insert default country
         $country = new Country;
         $country->name = 'South Africa';
@@ -80,7 +79,7 @@ class DatabaseSeeder extends Seeder
         $country->dialing_code = '27';
         $country->abbreviation = 'RSA';
         $country->save();
-        
+
         //insert default country's provinces
         $province = new Province();
         $province->name = 'Eastern Cape';
@@ -119,8 +118,8 @@ class DatabaseSeeder extends Seeder
         $province = new Province();
         $province->name = 'Western Cape';
         $country->addProvince($province);
-        
-        #
+
+        //
         //insert marital statuses
         DB::table('marital_statuses')->insert([
             'value' => 'Single',
@@ -160,73 +159,74 @@ class DatabaseSeeder extends Seeder
             'value' => 'Indian',
             'status' => 1,
         ]);
-		//insert public Holidays
+        //insert public Holidays
         DB::table('public_holidays')->insert([
             'day' => 1482789600,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Public Holiday',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1293228000,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Christmas Day',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1285279200,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Heritage Day',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1293314400,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Day of Goodwill',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1269122400,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Human Rights Day',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1272319200,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Freedom Day',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1272664800,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Workers Day',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1276639200,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Youth Day',
-        ]);DB::table('public_holidays')->insert([
+        ]);
+        DB::table('public_holidays')->insert([
             'day' => 1281304800,
             'country_id' => 197,
             'year' => 0,
             'name' => "National Women's Day",
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1292450400,
             'country_id' => 197,
             'year' => 0,
             'name' => 'Day of Reconciliation',
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1262296800,
             'country_id' => 197,
             'year' => 0,
             'name' => "New Year's Day",
         ]);
-		DB::table('public_holidays')->insert([
+        DB::table('public_holidays')->insert([
             'day' => 1399413600,
             'country_id' => 197,
             'year' => 2014,
@@ -238,7 +238,7 @@ class DatabaseSeeder extends Seeder
         $groupLevel->level = 1;
         $groupLevel->active = 0;
         $groupLevel->save();
-        
+
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 2;
         $groupLevel->active = 0;
@@ -251,15 +251,15 @@ class DatabaseSeeder extends Seeder
 
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 4;
-        $groupLevel->name = "Department";
-        $groupLevel->plural_name = "Departments";
+        $groupLevel->name = 'Department';
+        $groupLevel->plural_name = 'Departments';
         $groupLevel->active = 1;
         $groupLevel->save();
 
         $groupLevel = new DivisionLevel();
         $groupLevel->level = 5;
-        $groupLevel->name = "Division";
-        $groupLevel->plural_name = "Divisions";
+        $groupLevel->name = 'Division';
+        $groupLevel->plural_name = 'Divisions';
         $groupLevel->active = 1;
         $groupLevel->save();
 
@@ -271,8 +271,8 @@ class DatabaseSeeder extends Seeder
         $module->path = 'contacts';
         $module->font_awesome = 'fa-users';
         $module->save();
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Add Company';
@@ -280,8 +280,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'contacts/company/create';
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Add Client';
@@ -289,8 +289,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'contacts/create';
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Search Clients';
@@ -298,8 +298,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'contacts';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Search Company';
@@ -352,8 +352,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'quote/create';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Authorisation';
@@ -361,8 +361,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'quotes/authorisation';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Term & Conditions';
@@ -415,7 +415,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'crm/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
+
         $module = new modules(); // Security
         $module->active = 1;
         $module->name = 'Security';
@@ -459,8 +459,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'users/users-access';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
@@ -468,16 +468,16 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'users/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-		
-		$module = new modules(); //Employee Records
+
+        $module = new modules(); //Employee Records
         $module->active = 1;
         $module->name = 'Employee Records';
         $module->code_name = 'hr';
         $module->path = 'hr ';
         $module->font_awesome = 'fa-users';
         $module->save();
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Job Titles';
@@ -557,16 +557,16 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'hr/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
-		$module = new modules(); //Leave Management
+
+        $module = new modules(); //Leave Management
         $module->active = 1;
         $module->name = 'Leave Management';
         $module->code_name = 'leave';
         $module->path = 'leave';
         $module->font_awesome = 'fa-glass';
         $module->save();
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Apply';
@@ -592,8 +592,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'leave/reports';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Leave Types';
@@ -601,7 +601,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'leave/types';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-		
+
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
@@ -611,8 +611,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-
-		$ribbon = new module_ribbons();
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
@@ -621,9 +620,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-
-        #
-        $module = new modules(); 
+        //
+        $module = new modules();
         $module->active = 1;
         $module->name = 'Products';
         $module->code_name = 'products';
@@ -640,8 +638,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'product/Categories';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-        
-         $ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Search';
@@ -650,7 +648,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-         $ribbon = new module_ribbons();
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Packages';
@@ -659,12 +657,21 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-          $ribbon = new module_ribbons();
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Promotions';
         $ribbon->description = 'Promotions';
         $ribbon->ribbon_path = 'product/Promotions';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Products/Services Setup';
+        $ribbon->ribbon_path = 'product/services';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
         //  $ribbon = new module_ribbons();
@@ -676,8 +683,8 @@ class DatabaseSeeder extends Seeder
         // $ribbon->access_level = 5;
         // $module->addRibbon($ribbon);
 
-        #Help Desk
-        $module = new modules(); 
+        //Help Desk
+        $module = new modules();
         $module->active = 1;
         $module->name = 'Help Desk';
         $module->code_name = 'helpdesk';
@@ -693,9 +700,9 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'helpdesk/view_ticket';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-        
-        // 
-         $ribbon = new module_ribbons();
+
+        //
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Create Ticket';
@@ -713,7 +720,7 @@ class DatabaseSeeder extends Seeder
         // $ribbon->access_level = 5;
         // $module->addRibbon($ribbon);
 
-         $ribbon = new module_ribbons();
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Search';
@@ -722,9 +729,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
 
-        
-
-         $ribbon = new module_ribbons();
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
@@ -732,9 +737,9 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'helpdesk/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-        #end
+        //end
 
-          //Insert navigation menus
+        //Insert navigation menus
         $module = new modules(); //Vehicle Management
         $module->active = 1;
         $module->name = 'Vehicle Management';
@@ -746,8 +751,8 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'My Bookings';
-        $ribbon->description = 'My Bookings';
+        $ribbon->ribbon_name = 'Create Request';
+        $ribbon->description = 'Create Request';
         $ribbon->ribbon_path = 'vehicle_management/create_request';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
@@ -755,7 +760,7 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Approval ';
+        $ribbon->ribbon_name = 'Approval';
         $ribbon->description = 'Approval/reject Request';
         $ribbon->ribbon_path = 'vehicle_management/approval';
         $ribbon->access_level = 3;
@@ -770,14 +775,22 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
-         $ribbon = new module_ribbons();
-         $ribbon->active = 1;
-         $ribbon->sort_order = 4;
-         $ribbon->ribbon_name = 'Job Card Management';
-         $ribbon->description = 'Job Card Management';
-         $ribbon->ribbon_path = 'Jobcard_management/Job_card';
-         $ribbon->access_level = 3;
-         $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Job Card Management';
+        $ribbon->description = 'Job Card Management';
+        $ribbon->ribbon_path = 'Jobcard_management/Job_card';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 3;
+        // $ribbon->ribbon_name = 'Manage Fleet Filling Station';
+        // $ribbon->description = 'Manage Fleet Filling Station damage categories';
+        // $ribbon->ribbon_path = 'vehicle_management/fillingstaion';
+        // $ribbon->access_level = 3;
+        // $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
@@ -815,7 +828,6 @@ class DatabaseSeeder extends Seeder
         // $ribbon->access_level = 3;
         // $module->addRibbon($ribbon);
 
-
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
@@ -824,17 +836,17 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'vehicle_management/setup';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-         #end
-		
-		$module = new modules();//Audit Management
+        //end
+
+        $module = new modules();//Audit Management
         $module->active = 1;
         $module->name = 'Audit Management';
         $module->code_name = 'audit';
         $module->path = 'audit';
         $module->font_awesome = 'fa-eye';
         $module->save();
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Audit Report';
@@ -842,16 +854,16 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'audit/reports';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
-		$module = new modules(); //Performance Appraisal
+
+        $module = new modules(); //Performance Appraisal
         $module->active = 1;
         $module->name = 'Performance Appraisal';
         $module->code_name = 'appraisal';
         $module->path = 'appraisal';
         $module->font_awesome = 'fa-line-chart';
         $module->save();
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Templates';
@@ -859,8 +871,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/templates';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Categories';
@@ -868,8 +880,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/categories';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Appraisals';
@@ -895,8 +907,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/perks';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Search';
@@ -904,8 +916,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/search';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 7;
         $ribbon->ribbon_name = 'Reports';
@@ -913,8 +925,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/reports';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 8;
         $ribbon->ribbon_name = 'Setup';
@@ -922,16 +934,16 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'appraisal/setup';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
-		
-		$module = new modules(); //Induction/Tasks
+
+        $module = new modules(); //Induction/Tasks
         $module->active = 1;
         $module->name = 'Induction';
         $module->code_name = 'induction';
         $module->path = 'induction';
         $module->font_awesome = 'fa-tasks';
         $module->save();
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Create Induction';
@@ -939,8 +951,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'induction/create';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Tasks Library';
@@ -948,8 +960,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'induction/tasks_library';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Induction Search';
@@ -966,8 +978,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'induction/reports';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
@@ -975,16 +987,16 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'induction/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
-		$module = new modules(); //Meeting Munites/Tasks
+
+        $module = new modules(); //Meeting Munites/Tasks
         $module->active = 1;
         $module->name = 'Meeting Minutes';
         $module->code_name = 'meeting';
         $module->path = 'meeting=minutes';
         $module->font_awesome = 'fa-calendar-check-o';
         $module->save();
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Create Minutes';
@@ -992,8 +1004,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'meeting_minutes/create';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Search Minutes';
@@ -1010,8 +1022,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'meeting_minutes/reports';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Setup';
@@ -1027,7 +1039,7 @@ class DatabaseSeeder extends Seeder
         $module->path = 'survey';
         $module->font_awesome = 'fa-list-alt';
         $module->save();
-        
+
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
@@ -1036,13 +1048,13 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'survey/rating-links';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Survey Questions';
         $ribbon->description = 'Survey Questions';
-        $ribbon->ribbon_path = '	survey/questions';
+        $ribbon->ribbon_path = 'survey/questions';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
@@ -1055,17 +1067,16 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-        #
-      
-		
-		$module = new modules(); //Task Management
+        //
+
+        $module = new modules(); //Task Management
         $module->active = 1;
         $module->name = 'Task Management';
         $module->code_name = 'tasks';
         $module->path = 'tasks';
         $module->font_awesome = 'fa-tasks';
         $module->save();
-        
+
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
@@ -1074,8 +1085,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'tasks/add_task';
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Search Task';
@@ -1083,8 +1094,8 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'tasks/search_task';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
+
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Report';
@@ -1092,56 +1103,56 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'tasks/task_report';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-		
+
         $leave_config = new leave_configuration();
         $leave_config->save();
-        
+
         //#leave_types
         $type = new LeaveType();
         $type->name = 'Annual';
-        $type->status =1;
+        $type->status = 1;
         $type->description = 'Annual Leave Type' ;
         $type->save();
 
         $type = new LeaveType();
         $type->name = 'Family';
-        $type->status =1;
+        $type->status = 1;
         $type->description = 'Family Leave Type' ;
         $type->save();
 
         $type = new LeaveType();
         $type->name = 'Maternity';
-        $type->status =1;
+        $type->status = 1;
         $type->description = 'Maternity Leave Type' ;
         $type->save();
 
         $type = new LeaveType();
         $type->name = 'Other/Special';
-        $type->status ='1';
+        $type->status = '1';
         $type->description = 'Other/Special Leave Type' ;
         $type->save();
-        
+
         $type = new LeaveType();
         $type->name = 'Sick';
-        $type->status =1;
+        $type->status = 1;
         $type->description = 'Sick Leave Type' ;
         $type->save();
-        
+
         $type = new LeaveType();
         $type->name = 'Study';
-        $type->status =1;
+        $type->status = 1;
         $type->description = 'Study Leave Type' ;
         $type->save();
-        
+
         $type = new LeaveType();
         $type->name = 'Unpaid';
-        $type->status =1;
+        $type->status = 1;
         $type->description = 'Unpaid Leave Type' ;
         $type->save();
-        
+
         $type = new LeaveType();
         $type->name = 'Special Leave 2';
-        $type->status =1;
+        $type->status = 1;
         $type->description = 'Special Leave Type' ;
         $type->save();
 
@@ -1165,8 +1176,5 @@ class DatabaseSeeder extends Seeder
         $profile->name = 'Shift Worker';
         $profile->description = 'Shift Worker Employee leave' ;
         $profile->save();
-
-         
-
     }
 }
