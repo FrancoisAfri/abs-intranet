@@ -810,14 +810,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 3;
-        // $ribbon->ribbon_name = 'Manage Document Type';
-        // $ribbon->description = 'Manage Document Type';
-        // $ribbon->ribbon_path = 'vehicle_management/Document_type';
-        // $ribbon->access_level = 3;
-        // $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Fleet Cards';
+        $ribbon->description = 'Manage Fleet Cards';
+        $ribbon->ribbon_path = 'vehicle_management/fleet_cards';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
 
         // $ribbon = new module_ribbons();
         // $ribbon->active = 1;

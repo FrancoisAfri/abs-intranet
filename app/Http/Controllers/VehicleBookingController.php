@@ -32,6 +32,7 @@ use App\Mail\vehiclebooking_approval;
 use App\Mail\vehiclebooking_cancellation;
 use App\Mail\vehiclebooking_rejection;
 use App\Mail\vehiclebooking_manager_notification;
+use App\Mail\vehicle_confirm_collection;
 use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -891,8 +892,11 @@ class VehicleBookingController extends Controller
 
         $vehicle_model = $vehiclemaker->name . ' ' . $vehicle_model1->name . ' ' . $vehicleTypes->name . ' ' . $year;
 
+        #check if the images have beeen uploaded
+        $vehiclecollectimage = vehicle_collect_image::where()->first();
+        $vehiclecollectdocuments = vehicle_collect_documents::where()->first();
         #mail to manager
-        // Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'],$vehicle_model ));
+         Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'],$vehicle_model ));
 
         AuditReportsController::store('Vehicle Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
         return redirect()->to('/vehicle_management/collect/' . $ID);
@@ -1078,12 +1082,13 @@ class VehicleBookingController extends Controller
         #vehicle collect documents
         $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $ID )->get()->first();
          #vehicle collect images
-        $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $ID)->get()->first();
-       // return $vehiclecollectimage;
+        $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $ID)->get();
+        //return $vehiclecollectimage;
         #vehicle return documents
         $vehiclereturndocuments = vehicle_return_documents::where('vehicleID', $ID)->get()->first();
         #vehicle return documents
-        $vehiclereturnimages = vehicle_return_images::where('vehicleID', $ID)->get()->first();
+        $vehiclereturnimages = vehicle_return_images::where('vehicleID', $ID)->get();
+       //return  $vehiclereturnimages;
 
         $currentDate = time();
         ################## WELL DETAILS ###############
