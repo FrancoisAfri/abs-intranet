@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CompanyIdentity;
+use App\ProductService;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\CRMAccount;
@@ -170,12 +171,13 @@ class QuotesController extends Controller
             ->load(['divisionLevelGroup' => function ($query) {
                 $query->has('quoteProfile');
             }]);
+		
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
-
+//return $contactPeople;
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Create a quotation';
         $data['breadcrumb'] = [
