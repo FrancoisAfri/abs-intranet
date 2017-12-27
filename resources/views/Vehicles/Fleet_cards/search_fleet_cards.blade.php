@@ -118,6 +118,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
+                                        <label for="property_type" class="col-sm-2 control-label"> Status
+                                             </label>
+
+                                        <div class="col-sm-10">
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+                                                id="rdo_package" name="property_type" value="1" checked> Active                                                            
+                                            </label>
+                                            <label class="radio-inline"><input type="radio" id="rdo_product"
+                                                                               name="property_type" value="2"> Inactive
+                                            </label>
+                                            <label class="radio-inline"><input type="radio" id="rdo_products"
+                                                                               name="property_type" value="3"> Both
+                                            </label>
+
+                                        </div>
+                                    </div>
+
                                   
                                     
                                 <div class="box-footer">
