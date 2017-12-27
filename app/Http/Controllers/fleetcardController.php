@@ -66,13 +66,12 @@ class fleetcardController extends Controller
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
         
 
-        $data['page_title'] = "Fleet Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Fleet Cards";
+        $data['page_description'] = "Fleet Cards Management";
         $data['breadcrumb'] = [
             ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Fleet Cards ', 'active' => 1, 'is_module' => 0]
         ];
-
 
         $data['vehicle_detail'] = $vehicle_detail;
         $data['fleetcardtype'] = $fleetcardtype;

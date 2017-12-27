@@ -621,15 +621,14 @@ class VehicleBookingController extends Controller
             ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
             ->orderBy('vehicle_booking.id', 'desc')
-            ->where('vehicle_booking.status', '!=', 10)//check if the booking is not approved
+            ->whereNotIn('vehicle_booking.status', [10, 11, 12, 13, 14])//check if the booking is not approved
+            /*->where('vehicle_booking.status', '!=', 10)//check if the booking is not approved
             ->where('vehicle_booking.status', '!=', 11)//check if the vehicle is not collected
             ->where('vehicle_booking.status', '!=', 13)// check if the booking is not cancelled
             ->where('vehicle_booking.status', '!=', 12)// check if the booking is not cancelled
             ->where('vehicle_booking.status', '!=', 14)// check if the booking is not declined
-            ->get();
-
-        //return $vehicleapprovals;
-
+            */
+			->get();
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -644,7 +643,7 @@ class VehicleBookingController extends Controller
         $data['bookingStatus'] = $bookingStatus;
 
         $data['active_mod'] = 'Vehicle Management';
-        $data['active_rib'] = 'Approval';
+        $data['active_rib'] = 'Booking Approval';
         AuditReportsController::store('Vehicle Management', 'Vehicle Approvals Page Accessed ', "Accessed by User", 0);
         return view('Vehicles.Create_request.vehiclebooking_approvals')->with($data);
     }
