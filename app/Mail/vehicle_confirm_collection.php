@@ -11,7 +11,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class vehicle_confirm_collection extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public $first_name;
+    public $surname;
+    public $email;
+    public $vehicle_model;
     /**
      * Create a new message instance.
      *
