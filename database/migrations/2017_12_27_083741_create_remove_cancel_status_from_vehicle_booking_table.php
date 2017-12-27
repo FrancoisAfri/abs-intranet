@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCancelToVehicledetails extends Migration
+class CreateRemoveCancelStatusFromVehicleBookingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddCancelToVehicledetails extends Migration
      */
     public function up()
     {
-      Schema::table('vehicle_booking', function (Blueprint $table) {
-           $table->integer('cancel_status')->nullable();
-        });
+        Schema::table('vehicle_booking', function($table) {
+             $table->dropColumn('cancel_status');
+          });
     }
 
     /**
@@ -25,8 +25,6 @@ class AddCancelToVehicledetails extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-           $table->integer('cancel_status')->nullable();
-        });
+        //
     }
 }
