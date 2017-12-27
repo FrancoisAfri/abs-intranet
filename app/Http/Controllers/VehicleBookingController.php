@@ -122,7 +122,6 @@ class VehicleBookingController extends Controller
 
     public function vehiclerequest()
     {
-
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
@@ -163,10 +162,8 @@ class VehicleBookingController extends Controller
         $Department = $request['division_level_4'];
         $requiredFrom = $vehicleData['required_from'];
         $requiredTo = $vehicleData['required_to'];
-
         $startDate = strtotime($requiredFrom);
         $EndDate = strtotime($requiredTo);
-
 
         $vehiclebookings = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ',
@@ -194,7 +191,7 @@ class VehicleBookingController extends Controller
                     $query->where('vehicle_details.division_level_4', $Department);
                 }
             })
-            ->where(function ($query) use ($startDate) {
+            /*->where(function ($query) use ($startDate) {
                 if (!empty($startDate)) {
                     $query->where('vehicle_booking.require_datetime', '!=', $startDate);
                 }
@@ -203,13 +200,11 @@ class VehicleBookingController extends Controller
                 if (!empty($EndDate)) {
                     $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
                 }
-            })
+            })*/
             ->where('vehicle_details.booking_status', '!=', 1)
             // ->where('vehicle_booking.status' , '=', 12 )
             ->orderBy('vehicle_details.id')
             ->get();
-
-        //return $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 

@@ -23,7 +23,7 @@
                                 </div>
 
                                 <select id="status" name="status" class="form-control">
-                                    <option value="0">*** Select Fuel Type ***</option>
+                                    <option value="0">*** Select Status ***</option>
                                     <option value="1"> Active  </option>
                                     <option value="2"> Require Approval </option>
                                     <option value="3"> Rejected</option>
