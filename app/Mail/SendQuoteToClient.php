@@ -41,7 +41,7 @@ class SendQuoteToClient extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-
+		
         return $this->view('mails.send_quote_to_client')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)

@@ -37,7 +37,7 @@
 
                             <div class="col-sm-9">
                                 <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Products/Packages</label>
-                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2">  Services</label>
+                                <!--<label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2">  Services</label>-->
                             </div>
                         </div>
 

@@ -259,6 +259,7 @@ class QuotesController extends Controller
         $quote->status = $stastus;
         $changedStatus = 'Status Changed To: ' . $quote->quote_status;
         //$quote->update();
+		
         if ($stastus == 5) {
             //Email Client to confirm success
             $quote->load('client');
@@ -270,7 +271,8 @@ class QuotesController extends Controller
             }
             $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
             $quoteAttachment = $this->viewQuote($quote, true, false, true);
-            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+			if (!empty($quote->client->email))
+				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             $quote->status = 5;
 
             //Create an account for the client or add quote to his existing account
@@ -351,21 +353,28 @@ class QuotesController extends Controller
                 }
             });
             $changedStatus .= ', Email sent to client, to welcome them';
-        } elseif ($stastus == 2) {
+        } 
+		elseif ($stastus == 2) {
             //if authorization not required: email quote to client and update status to awaiting client approval
             $quote->load('client');
             $messageContents = EmailTemplate::where('template_key', 'send_quote')->first();
-            if (!empty($messageContents)) {
+			if (!empty($messageContents)) {
                 $messageContent = $messageContents->template_content;
-            } else {
+				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+				$quoteAttachment = $this->viewQuote($quote, true, false, true);
+				if (!empty($quote->client->email))
+				{
+					Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+					$changedStatus .= ', , Email sent to Manager, to notify them';
+				}
+            } 
+			/*else 
+			{
                 $messageContent = '';
-            }
-            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-            $quoteAttachment = $this->viewQuote($quote, true, false, true);
-            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
-            $quote->status = $stastus;
-            $quote->update();
-            $changedStatus .= ', , Email sent to client, to notify them';
+            }*/
+            
+			$quote->status = $stastus;
+            $quote->update();    
         }
         // Add to quote history
         $QuoteApprovalHistory = new QuoteApprovalHistory();
@@ -703,7 +712,7 @@ class QuotesController extends Controller
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
 
         $data['page_title'] = 'Quotes';
-        $data['page_description'] = 'Create a quotation';
+        $data['page_description'] = 'Search quotation';
         $data['breadcrumb'] = [
             ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
             ['title' => 'Create', 'active' => 1, 'is_module' => 0]
@@ -732,7 +741,7 @@ class QuotesController extends Controller
             ->orderBy('level', 'desc')->limit(1)->get()->first();
         $quoteApplications = Quotation::where(function ($query) use ($companyID) {
             if ($companyID) {
-                $query->where('id', $companyID);
+                $query->where('company_id', $companyID);
             }
         })
         ->whereIn('status', [1, 2])
