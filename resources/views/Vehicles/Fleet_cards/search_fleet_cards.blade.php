@@ -1,6 +1,7 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- Include Date Range Picker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
@@ -27,7 +28,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/vehicle_management/vehiclesearch">
+                <form class="form-horizontal" method="POST" action="/vehicle_management/fleet_card_search">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -58,7 +59,7 @@
                                                     <i class="fa fa-truck"></i>
                                                 </div>
                                                 <select class="form-control select2" style="width: 100%;"
-                                                        id="vehicle_type" name="vehicle_type">
+                                                        id="card_type_id" name="card_type_id">
                                                     <option value="">*** Select a Card Type ***</option>
                                                     @foreach($fleetcardtype as $card)
                                                         <option value="{{ $card->id }}">{{ $card->name }}</option>
@@ -67,6 +68,21 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- <div class="form-group">
+                                        <label for="path" class="col-sm-2 control-label">Card Type</label>
+                                        <div class="col-sm-10">
+                                            <select id="card_type_id" name="card_type_id" class="form-control">
+                                                <option value="0">*** Select a Card Type ***</option>
+                                                <option value="1"> Fuel & Toll</option>
+                                                <option value="2"> E Wallet Pro </option>
+                                                <option value="3"> Credit Card </option>
+                                                <option value="4"> Petrol/Garage Card </option>
+                                                <option value="5"> Toll Only </option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>
                                         <div class="col-sm-10">
@@ -75,8 +91,8 @@
                                                     <i class="fa fa-truck"></i>
                                                 </div>
                                                 <select class="form-control select2" style="width: 100%;"
-                                                        id="vehicle_type" name="vehicle_type">
-                                                    <option value="">*** Select a Vehicle  ***</option>
+                                                        id="fleet_number" name="fleet_number">
+                                                    <option value="">*** Select a Vehicle ***</option>
                                                     @foreach($vehicle_detail as $Fleet)
                                                         <option value="{{ $Fleet->id }}">{{ $Fleet->fleet_number }}</option>
                                                     @endforeach
@@ -84,7 +100,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                     <div class="form-group">
+                                    <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Issued By</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
@@ -92,7 +108,7 @@
                                                     <i class="fa fa-truck"></i>
                                                 </div>
                                                 <select class="form-control select2" style="width: 100%;"
-                                                        id="vehicle_type" name="vehicle_type">
+                                                        id="company_id" name="company_id">
                                                     <option value="">*** Select a Company ***</option>
                                                     @foreach($contactcompanies as $Company)
                                                         <option value="{{ $Company->id }}">{{ $Company->name }}</option>
@@ -101,7 +117,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                       <div class="form-group">
+                                    <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label"> Card Holder</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
@@ -109,7 +125,7 @@
                                                     <i class="fa fa-truck"></i>
                                                 </div>
                                                 <select class="form-control select2" style="width: 100%;"
-                                                        id="vehicle_type" name="vehicle_type">
+                                                        id="holder_id" name="holder_id">
                                                     <option value="">*** Select an Employee ***</option>
                                                     @foreach($hrDetails as $user)
                                                         <option value="{{ $user->id }}">{{ $user->first_name . ' ' .  $user->surname}}</option>
@@ -118,37 +134,45 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
-                                        <label for="property_type" class="col-sm-2 control-label"> Status
-                                             </label>
+                                    <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+                                        <label for="status" class="col-sm-2 control-label"> Status
+                                        </label>
 
                                         <div class="col-sm-10">
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                id="rdo_package" name="property_type" value="1" checked> Active                                                            
+                                                                                                          id="rdo_package"
+                                                                                                          name="status"
+                                                                                                          value="1"
+                                                                                                          checked>
+                                                Active
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_product"
-                                                                               name="property_type" value="2"> Inactive
+                                                                               name="status" value="2"> Inactive
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="property_type" value="3"> Both
+                                                                               name="status" value="3"> All
                                             </label>
 
                                         </div>
                                     </div>
 
-                                  
-                                    
-                                <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary pull-right"><i
-                                                class="fa fa-search"></i> Search
-                                    </button>
+
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn btn-primary pull-left"><i
+                                                    class="fa fa-search"></i> Search
+                                        </button>
+                                        <button type="button" id="cat_module" class="btn btn-primary pull-right"
+                                                data-toggle="modal" data-target="#add-fleetcard-modal"><i
+                                                    class="fa fa-plus-square-o"></i> Add Fleet Card
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </form>
             </div>
             <!-- /.box -->
+            @include('Vehicles.Fleet_cards.add_vehiclefleetcard_modal')
         </div>
     </div>
 @endsection
@@ -184,9 +208,6 @@
     <script type="text/javascript">
         $(function () {
             $(".select2").select2();
-            $('.hours-field').hide();
-            $('.comp-field').hide();
-            var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -217,12 +238,6 @@
             $('#success-action-modal').modal('show');
         });
 
-        $('.required_from').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
-
         //Initialize iCheck/iRadio Elements
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
@@ -232,29 +247,20 @@
 
         $(document).ready(function () {
 
-            $(function () {
-                $('#required_from').datetimepicker();
+            $('#issued_date').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
             });
 
-            $('#required_to').datetimepicker({});
+            $('#expiry_date').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
 
         });
 
-        //Load divisions drop down
-        var parentDDID = '';
-        var loadAllDivs = 1;
-        @foreach($division_levels as $division_level)
-        //Populate drop down on page load
-        var ddID = '{{ 'division_level_' . $division_level->level }}';
-        var postTo = '{!! route('divisionsdropdown') !!}';
-        var selectedOption = '';
-        var divLevel = parseInt('{{ $division_level->level }}');
-        var incInactive = -1;
-        var loadAll = loadAllDivs;
-        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-        parentDDID = ddID;
-        loadAllDivs = -1;
-        @endforeach
 
     </script>
 @endsection

@@ -1,0 +1,113 @@
+<div id="add-fleetcard-modal" class="modal modal-default fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" method="POST" name="edit-module-form">
+                {{ csrf_field() }}
+                {{ method_field('PATCH') }}
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add Fleet Card Type</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="invalid-input-alert"></div>
+                    <div id="success-alert"></div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Card Type</label>
+                        <div class="col-sm-8">
+                            <select id="card_type_id" name="card_type_id" class="form-control">
+                                <option value="0">*** Select a Card Type ***</option>
+                                <option value="1"> Fuel & Toll</option>
+                                <option value="2"> E Wallet Pro</option>
+                                <option value="3"> Credit Card</option>
+                                <option value="4"> Petrol/Garage Card</option>
+                                <option value="5"> Toll Only</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>
+                        <div class="col-sm-8">
+
+                            <select class="form-control select2" style="width: 100%;"
+                                    id="fleet_number" name="fleet_number">
+                                <option value="">*** Select a Vehicle ***</option>
+                                @foreach($vehicle_detail as $Fleet)
+                                    <option value="{{ $Fleet->id }}">{{ $Fleet->fleet_number }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Issued By</label>
+                        <div class="col-sm-8">
+
+                            <select class="form-control select2" style="width: 100%;"
+                                    id="company_id" name="company_id">
+                                <option value="">*** Select a Company ***</option>
+                                @foreach($contactcompanies as $Company)
+                                    <option value="{{ $Company->id }}">{{ $Company->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label"> Card Holder</label>
+                        <div class="col-sm-8">
+
+                            <select class="form-control select2" style="width: 100%;"
+                                    id="holder_id" name="holder_id">
+                                <option value="">*** Select an Employee ***</option>
+                                @foreach($hrDetails as $user)
+                                    <option value="{{ $user->id }}">{{ $user->first_name . ' ' .  $user->surname}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Card Number</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="card_number" name="card_number" value=""
+                                   placeholder="Enter card_number" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">CSV Number</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cvs_number" name="cvs_number" value="0"
+                                   placeholder="Enter cvs_number" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label"> Date Issued</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="issued_date" name="issued_date" value=""
+                                   placeholder="Enter Capture Date" required >
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Expiry Date</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="expiry_date" name="expiry_date" value=""
+                                   placeholder="Enter expiry date" required>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        <button type="button" id="add-fleet-card" class="btn btn-warning"><i
+                                    class="fa fa-cloud-upload"></i>
+                            Save
+                        </button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>

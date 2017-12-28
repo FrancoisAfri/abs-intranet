@@ -67,10 +67,10 @@ class fleetcardController extends Controller
         
 
         $data['page_title'] = "Fleet Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_description'] = "Fleet Cards Search";
         $data['breadcrumb'] = [
             ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
 
@@ -89,24 +89,83 @@ class fleetcardController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Search Fleet cards.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function fleetcardSearch(Request $request)
     {
-        //
+         $this->validate($request, [
+            // 'required_from' => 'bail|required',
+            // 'required_to' => 'bail|required',
+        ]);
+        $vehicleData = $request->all();
+        unset($vehicleData['_token']);
+
+        //return $vehicleData;  
+        $cardtype = $request['card_type_id'];
+        $fleetnumber = $request['fleet_number'];
+        $company = $request['company_id'];
+        $holder = $vehicleData['holder_id'];
+        $status = $vehicleData['status'];
+
+         $vehiclebooking = DB::table('vehicle_details')
+            ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ',
+                'vehicle_booking.return_datetime as return_date ', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
+                'division_level_fives.name as company', 'division_level_fours.name as Department')
+            ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
+            // ->where(function ($query) use ($vehicletype) {
+            //     if (!empty($vehicletype)) {
+            //         $query->where('vehicle_details.vehicle_type', $vehicletype);
+            //     }
+            // })
+            // ->where(function ($query) use ($Company) {
+            //     if (!empty($Company)) {
+            //         $query->where('vehicle_details.division_level_5', $Company);
+            //     }
+            // })
+            // ->where(function ($query) use ($Department) {
+            //     if (!empty($Department)) {
+            //         $query->where('vehicle_details.division_level_4', $Department);
+            //     }
+            // })
+            /*->where(function ($query) use ($startDate) {
+                if (!empty($startDate)) {
+                    $query->where('vehicle_booking.require_datetime', '!=', $startDate);
+                }
+            })
+            ->where(function ($query) use ($EndDate) {
+                if (!empty($EndDate)) {
+                    $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
+                }
+            })*/
+            ->where('vehicle_details.booking_status', '!=', 1)
+            // ->where('vehicle_booking.status' , '=', 12 )
+            ->orderBy('vehicle_details.id')
+            ->get();
+
+       
+        $data['vehiclebooking'] = $vehiclebooking;
+        $data['page_title'] = " Vehicle Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Manage Fleet';
+        AuditReportsController::store('Vehicle Management', 'View Vehicle Search Results', "view Audit Results", 0);
+        
+         return view('Vehicles.Fleet_cards.fleetcard_results')->with($data);
+
     }
 
     /**
