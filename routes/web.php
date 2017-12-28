@@ -742,6 +742,7 @@ Route::get('crm/search', 'CRMSetupController@search');
 Route::get('crm/invoice/view/{quotation}/pdf', 'CRMInvoiceController@viewPDFInvoice');
 Route::get('crm/invoice/mail/{quotation}', 'CRMInvoiceController@emailInvoice');
 Route::post('crm/capture-payment/{quotation}/{invoice}', 'CRMAccountController@capturePayment');
+Route::post('crm/accounts/search', 'CRMSetupController@searchResults');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

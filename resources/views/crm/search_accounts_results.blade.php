@@ -13,10 +13,10 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
-            <form class="form-horizontal" method="POST" action="/quote/authorise-quote">
+            <form class="form-horizontal" method="POST" action="">
                 {{ csrf_field() }}
                 <div class="box-header with-border">
-                    <h3 class="box-title">Quote Search Results</h3>
+                    <h3 class="box-title">CRM Search Results</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -38,34 +38,30 @@
                     <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>{{ $highestLvl->name }}</th>
-                            <th>contact Person</th>
-                            <th>Creator</th>
+                            <th>Account Number</th>
+                            <th>Company</th>
+                            <th>Contact Person</th>
                             <th>Date</th>
-                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($quoteApplications as $quoteApplication)
+                        @foreach($accounts as $account)
                             <tr>
-                                <td><button type="button" class="btn btn-primary" id="view_quote" onclick="postData({{$quoteApplication->id}}, 'view_quote');">View Quote</button></td>
-                                <td>{{$quoteApplication->company->name}}</td>
-                                <td>{{$quoteApplication->client->first_name." ".$quoteApplication->client->surname}}</td>
-                                <td>{{$quoteApplication->person->first_name." ".$quoteApplication->person->surname}}</td>
-                                <td>{{$quoteApplication->created_at}}</td>
-                                <td>{{$quoteApplication->quote_status}}</td>
+                                <td><a href="/crm/account/{{ $account->id }}" target="_blank">
+                                                {{ ($account->account_number) ? $account->account_number : $account->id }}
+                                </a></td>
+                                <td>{{!empty($account->company->name) ? $account->company->name : ''}}</td>
+                                <td>{{!empty($account->client->first_name) && !empty($account->client->surname) ? $account->client->first_name." ".$account->client->surname : '' }}</td>
+                                <td>{{$account->created_at}}</td>
                             </tr>
                         @endforeach
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th>#</th>
-                            <th>{{ $highestLvl->name }}</th>
-                            <th>contact Person</th>
-                            <th>Creator</th>
+                            <th>Account Number</th>
+                            <th>Company</th>
+                            <th>Contact Person</th>
                             <th>Date</th>
-                            <th>Status</th>
                         </tr>
                         </tfoot>
                     </table>
@@ -139,7 +135,7 @@
 
         //Cancel button
         $('#cancel').click(function () {
-            location.href = '/quote/search';
+            location.href = '/crm/search';
         });
 
         //Vertically center modals on page
@@ -166,8 +162,8 @@
     });
 	function postData(id, data)
 	{
-		if (data == 'view_quote')
-			location.href = "/quote/view/" + id;
+		if (data == 'view_account')
+			location.href = "/crm/account/" + id;
 	}
 </script>
 @endsection
