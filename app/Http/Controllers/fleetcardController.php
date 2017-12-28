@@ -11,14 +11,7 @@ use App\vehicle;
 Use App\vehicle_booking;
 use App\HRPerson;
 use App\vehicle_detail;
-use App\vehiclemodel;
-use App\vehicle_maintenance;
-use App\vehicle_collect_documents;
-use App\vehiclemake;
-use App\safe;
-use App\vehicle_collect_image;
-use App\images;
-use App\vehicle_fuel_log;
+use App\vehicle_fleet_cards;
 use App\fleetcard_type;
 use App\module_ribbons;
 use App\ribbons_access;
@@ -103,24 +96,21 @@ class fleetcardController extends Controller
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
-        //return $vehicleData;  
+        //return $vehicleData;
         $cardtype = $request['card_type_id'];
         $fleetnumber = $request['fleet_number'];
         $company = $request['company_id'];
         $holder = $vehicleData['holder_id'];
         $status = $vehicleData['status'];
 
-         $vehiclebooking = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ',
-                'vehicle_booking.return_datetime as return_date ', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
-                'division_level_fives.name as company', 'division_level_fours.name as Department')
-            ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
-            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
+        $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
+        $status = array(1 => ' Active', 2 => ' InActive');
+        //return $vehiclefleetcards;
+
+         $fleetcard = DB::table('vehicle_fleet_cards')
+            ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner','hr_people.first_name as first_name', 'hr_people.surname as surname')
+             ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
+             ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
             // ->where(function ($query) use ($vehicletype) {
             //     if (!empty($vehicletype)) {
             //         $query->where('vehicle_details.vehicle_type', $vehicletype);
@@ -146,13 +136,13 @@ class fleetcardController extends Controller
                     $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
                 }
             })*/
-            ->where('vehicle_details.booking_status', '!=', 1)
-            // ->where('vehicle_booking.status' , '=', 12 )
-            ->orderBy('vehicle_details.id')
+            ->orderBy('vehicle_fleet_cards.id')
             ->get();
 
-       
-        $data['vehiclebooking'] = $vehiclebooking;
+           // return $fleetcard;
+
+        $data['status'] = $status;
+        $data['fleetcard'] = $fleetcard;
         $data['page_title'] = " Vehicle Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
@@ -174,9 +164,28 @@ class fleetcardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function Addfleetcard(Request $request)
     {
-        //
+        $this->validate($request, [
+            'holder_id' => 'bail|required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+        $expiry = strtotime($docData['expiry_date']);
+        $vehiclefleetcards = new vehicle_fleet_cards();
+        $vehiclefleetcards->card_type_id = $docData['card_type_id'];
+        $vehiclefleetcards->fleet_number = $docData['fleet_number'];
+        $vehiclefleetcards->company_id = $docData['company_id'];
+        $vehiclefleetcards->holder_id = $docData['holder_id'];
+        $vehiclefleetcards->card_number = $docData['card_number'];
+        $vehiclefleetcards->cvs_number = $docData['cvs_number'];
+        $vehiclefleetcards->issued_date = strtotime($docData['issued_date']);
+        $vehiclefleetcards->expiry_date = $expiry;
+        $vehiclefleetcards->status = $docData['status'];
+        $vehiclefleetcards->save();
+
+        AuditReportsController::store('Vehicle Management', 'Add Vehicle Fleet Card', "Add Vehicle Fleet Card", 0);
+        return response()->json();
     }
 
     /**

@@ -51,25 +51,25 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Card Type</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
-                                                </div>
-                                                <select class="form-control select2" style="width: 100%;"
-                                                        id="card_type_id" name="card_type_id">
-                                                    <option value="">*** Select a Card Type ***</option>
-                                                    @foreach($fleetcardtype as $card)
-                                                        <option value="{{ $card->id }}">{{ $card->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {{--<div class="form-group">--}}
+                                        {{--<label for="path" class="col-sm-2 control-label">Card Type</label>--}}
+                                        {{--<div class="col-sm-10">--}}
+                                            {{--<div class="input-group">--}}
+                                                {{--<div class="input-group-addon">--}}
+                                                    {{--<i class="fa fa-truck"></i>--}}
+                                                {{--</div>--}}
+                                                {{--<select class="form-control select2" style="width: 100%;"--}}
+                                                        {{--id="card_type_id" name="card_type_id">--}}
+                                                    {{--<option value="">*** Select a Card Type ***</option>--}}
+                                                    {{--@foreach($fleetcardtype as $card)--}}
+                                                        {{--<option value="{{ $card->id }}">{{ $card->name }}</option>--}}
+                                                    {{--@endforeach--}}
+                                                {{--</select>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <!-- <div class="form-group">
+                                    <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Card Type</label>
                                         <div class="col-sm-10">
                                             <select id="card_type_id" name="card_type_id" class="form-control">
@@ -81,32 +81,23 @@
                                                 <option value="5"> Toll Only </option>
                                             </select>
                                         </div>
-                                    </div> -->
+                                    </div>
 
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>
                                         <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
-                                                </div>
                                                 <select class="form-control select2" style="width: 100%;"
                                                         id="fleet_number" name="fleet_number">
                                                     <option value="">*** Select a Vehicle ***</option>
                                                     @foreach($vehicle_detail as $Fleet)
-                                                        <option value="{{ $Fleet->id }}">{{ $Fleet->fleet_number }}</option>
+                                                        <option value="{{ $Fleet->fleet_number }}">{{ $Fleet->fleet_number }}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Issued By</label>
                                         <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
-                                                </div>
                                                 <select class="form-control select2" style="width: 100%;"
                                                         id="company_id" name="company_id">
                                                     <option value="">*** Select a Company ***</option>
@@ -114,16 +105,11 @@
                                                         <option value="{{ $Company->id }}">{{ $Company->name }}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label"> Card Holder</label>
                                         <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-truck"></i>
-                                                </div>
                                                 <select class="form-control select2" style="width: 100%;"
                                                         id="holder_id" name="holder_id">
                                                     <option value="">*** Select an Employee ***</option>
@@ -131,7 +117,6 @@
                                                         <option value="{{ $user->id }}">{{ $user->first_name . ' ' .  $user->surname}}</option>
                                                     @endforeach
                                                 </select>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
@@ -253,13 +238,29 @@
                 todayHighlight: true
             });
 
-            $('#expiry_date').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
+
 
         });
+
+        $('#expiry_date').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        //Post perk form to server using ajax (add)
+        $('#add-fleet-card').on('click', function () {
+            var strUrl = '/vehicle_management/add_vehiclefleetcard';
+            var formName = 'add-fleetcard-form';
+            var modalID = 'add-fleetcard-modal';
+            var submitBtnID = 'add-fleet-card';
+            var redirectUrl = '/vehicle_management/fleet_cards';
+            var successMsgTitle = 'New Record Added!';
+            var successMsg = 'The Record  has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+
+
 
 
     </script>

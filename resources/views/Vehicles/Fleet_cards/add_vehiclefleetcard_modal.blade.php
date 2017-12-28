@@ -1,9 +1,9 @@
 <div id="add-fleetcard-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+            <form class="form-horizontal" method="POST" name="add-fleetcard-form">
                 {{ csrf_field() }}
-                {{ method_field('PATCH') }}
+                {{--{{ method_field('PATCH') }}--}}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -34,7 +34,7 @@
                                     id="fleet_number" name="fleet_number">
                                 <option value="">*** Select a Vehicle ***</option>
                                 @foreach($vehicle_detail as $Fleet)
-                                    <option value="{{ $Fleet->id }}">{{ $Fleet->fleet_number }}</option>
+                                    <option value="{{ $Fleet->fleet_number }}">{{ $Fleet->fleet_number }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -97,6 +97,25 @@
                                    placeholder="Enter expiry date" required>
                         </div>
                     </div>
+                    <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+                        <label for="status" class="col-sm-2 control-label"> Status
+                        </label>
+
+                        <div class="col-sm-10">
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+                                                                                          id="rdo_package"
+                                                                                          name="status"
+                                                                                          value="1"
+                                                                                          checked>
+                                Active
+                            </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_product"
+                                                               name="status" value="2"> Inactive
+                            </label>
+
+                        </div>
+                    </div>
+
 
 
                     <div class="modal-footer">

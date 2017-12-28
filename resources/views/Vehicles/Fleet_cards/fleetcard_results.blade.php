@@ -30,22 +30,22 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @if (count($vehiclebooking) > 0)
-                                    @foreach ($vehiclebooking as $booking)
+                                @if (count($fleetcard) > 0)
+                                    @foreach ($fleetcard as $booking)
                                         <tr id="categories-list">
                                             <td>
                                                 <a href="{{ '/vehicle_management/bookingdetails/' . $booking->id }}"
                                                    id="edit_compan" class="btn btn-default  btn-xs"
                                                    data-id="{{ $booking->id }}">Edit</a>
                                             </td>
-                                            <td>{{ !empty($booking->vehicle_make . ' ' . $booking->vehicle_model . ' ' . $booking->year ) ? $booking->vehicle_make . ' ' . $booking->vehicle_model  . ' ' . $booking->year: ''}}</td>
-                                            <td>{{ !empty($booking->vehicle_type) ? $booking->vehicle_type : ''}}</td>
-                                            <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
-                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
-                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
-                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
-                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
-                                            <td></td>
+                                            <td>{{ !empty($booking->fleet_number ) ? $booking->fleet_number : '' }}</td>
+                                            <td>{{ !empty($booking->first_name . '' . $booking->surname ) ? $booking->first_name . '' . $booking->surname : ''}}</td>
+                                            <td>{{ !empty($booking->card_number) ? $booking->card_number : ''}}</td>
+                                            <td>{{ !empty($booking->cvs_number) ? $booking->cvs_number : ''}}</td>
+                                            <td>{{ !empty($booking->Vehicle_Owner) ? $booking->Vehicle_Owner : ''}}</td>
+                                            <td>{{ !empty($booking->issued_date ) ? date("y F  Y, g:i a", $booking->issued_date) : ''}}</td>
+                                            <td>{{ !empty($booking->expiry_date ) ? date("y F  Y, g:i a",  $booking->expiry_date) : ''}}</td>
+                                            <td>{{ !empty($booking->status) ? $status[$booking->status] : ''}}</td>
                                         </tr>
                                     @endforeach
                                 @endif
@@ -80,13 +80,11 @@
                     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
                     <!-- End Bootstrap File input -->
                     <script>
-                        function postData(id, data) {
-                            if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
-                        }
+                       
 
                         //Cancel button click event
                         document.getElementById("cancel").onclick = function () {
-                            location.href = "/vehicle_management/create_request";
+                            location.href = "/vehicle_management/fleet_cards";
                         };
                         $(function () {
                             $('#example2').DataTable({

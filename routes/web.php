@@ -287,6 +287,8 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 //#*************** Vehicle Management ************
 Route::get('vehicle_management/fleet_cards', 'fleetcardController@index');
 Route::post('vehicle_management/fleet_card_search', 'fleetcardController@fleetcardSearch');
+Route::post('vehicle_management/add_vehiclefleetcard', 'fleetcardController@Addfleetcard');
+
 
 
 //##----bookings
