@@ -103,6 +103,15 @@ class fleetcardController extends Controller
         $holder = $vehicleData['holder_id'];
         $status = $vehicleData['status'];
 
+        $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+
+        $hrDetails = HRPerson::where('status', 1)->get();
+        $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
+        $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
+        $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
+
         $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
         $status = array(1 => ' Active', 2 => ' InActive');
         //return $vehiclefleetcards;
@@ -141,6 +150,13 @@ class fleetcardController extends Controller
 
            // return $fleetcard;
 
+        $data['vehicle_detail'] = $vehicle_detail;
+        $data['fleetcardtype'] = $fleetcardtype;
+        $data['hrDetails'] = $hrDetails;
+        $data['contactcompanies'] = $contactcompanies;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['division_levels'] = $divisionLevels;
+        $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['status'] = $status;
         $data['fleetcard'] = $fleetcard;
         $data['page_title'] = " Vehicle Management ";
@@ -194,9 +210,27 @@ class fleetcardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function editfleetcard(Request $request, vehicle_fleet_cards $vehiclefleetcard)
     {
-        //
+        $this->validate($request, [
+            'holder_id' => 'bail|required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+        $expiry = strtotime($docData['expiry_date']);
+        $vehiclefleetcard->card_type_id = $docData['card_type_id'];
+        $vehiclefleetcard->fleet_number = $docData['fleet_number'];
+        $vehiclefleetcard->company_id = $docData['company_id'];
+        $vehiclefleetcard->holder_id = $docData['holder_id'];
+        $vehiclefleetcard->card_number = $docData['card_number'];
+        $vehiclefleetcard->cvs_number = $docData['cvs_number'];
+        $vehiclefleetcard->issued_date = strtotime($docData['issued_date']);
+        $vehiclefleetcard->expiry_date = $expiry;
+        $vehiclefleetcard->status = $docData['status'];
+        $vehiclefleetcard->update();
+
+        AuditReportsController::store('Vehicle Management', 'Update Vehicle Fleet Card', "Update Vehicle Fleet Card", 0);
+        return response()->json();
     }
 
     /**

@@ -288,8 +288,8 @@ Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
 Route::get('vehicle_management/fleet_cards', 'fleetcardController@index');
 Route::post('vehicle_management/fleet_card_search', 'fleetcardController@fleetcardSearch');
 Route::post('vehicle_management/add_vehiclefleetcard', 'fleetcardController@Addfleetcard');
-
-
+Route::patch('vehicle_management/edit_vehiclefleetcard/{vehiclefleetcard}' ,'fleetcardController@editfleetcard');
+//Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 
 //##----bookings
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
