@@ -13,6 +13,7 @@ use App\HRPerson;
 use App\vehicle_detail;
 use App\vehicle_fleet_cards;
 use App\fleetcard_type;
+use App\fleetType;
 use App\module_ribbons;
 use App\ribbons_access;
 use App\ContactCompany;
@@ -52,9 +53,9 @@ class fleetcardController extends Controller
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-
+        
         $hrDetails = HRPerson::where('status', 1)->get();
-        $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
+        $fleetcardtype = fleetType::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
         

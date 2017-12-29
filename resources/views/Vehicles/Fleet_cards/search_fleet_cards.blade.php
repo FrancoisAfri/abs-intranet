@@ -51,25 +51,22 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                    {{--<div class="form-group">--}}
-                                    {{--<label for="path" class="col-sm-2 control-label">Card Type</label>--}}
-                                    {{--<div class="col-sm-10">--}}
-                                    {{--<div class="input-group">--}}
-                                    {{--<div class="input-group-addon">--}}
-                                    {{--<i class="fa fa-truck"></i>--}}
-                                    {{--</div>--}}
-                                    {{--<select class="form-control select2" style="width: 100%;"--}}
-                                    {{--id="card_type_id" name="card_type_id">--}}
-                                    {{--<option value="">*** Select a Card Type ***</option>--}}
-                                    {{--@foreach($fleetcardtype as $card)--}}
-                                    {{--<option value="{{ $card->id }}">{{ $card->name }}</option>--}}
-                                    {{--@endforeach--}}
-                                    {{--</select>--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
-                                    {{--</div>--}}
-
                                     <div class="form-group">
+                                    <label for="path" class="col-sm-2 control-label">Card Type</label>
+                                    <div class="col-sm-10">
+                                    
+                                    <select class="form-control select2" style="width: 100%;"
+                                    id="card_type_id" name="card_type_id">
+                                    <option value="">*** Select a Card Type ***</option>
+                                    @foreach($fleetcardtype as $card)
+                                    <option value="{{ $card->id }}">{{ $card->name }}</option>
+                                   @endforeach
+                                    </select>
+                                    </div>
+                                    </div>
+                                
+
+                                    <!-- <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Card Type</label>
                                         <div class="col-sm-10">
                                             <select id="card_type_id" name="card_type_id" class="form-control">
@@ -81,7 +78,7 @@
                                                 <option value="5"> Toll Only</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>

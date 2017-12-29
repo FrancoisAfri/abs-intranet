@@ -133,7 +133,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'add-fleet-card';
                 var redirectUrl = '/vehicle_management/fleet_card';
                 var successMsgTitle = 'Fleet Type Added!';
                 var successMsg = 'The Fleet Type has been updated successfully.';

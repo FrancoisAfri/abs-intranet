@@ -13,18 +13,18 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Card Type</label>
-                        <div class="col-sm-8">
-                            <select id="card_type_id" name="card_type_id" class="form-control">
-                                <option value="0">*** Select a Card Type ***</option>
-                                <option value="1"> Fuel & Toll</option>
-                                <option value="2"> E Wallet Pro</option>
-                                <option value="3"> Credit Card</option>
-                                <option value="4"> Petrol/Garage Card</option>
-                                <option value="5"> Toll Only</option>
-                            </select>
-                        </div>
-                    </div>
+                    <label for="path" class="col-sm-2 control-label">Card Type</label>
+                    <div class="col-sm-8">
+                        
+                        <select class="form-control select2" style="width: 100%;"
+                        id="card_type_id" name="card_type_id">
+                        <option value="">*** Select a Card Type ***</option>
+                        @foreach($fleetcardtype as $card)
+                        <option value="{{ $card->id }}">{{ $card->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>
                         <div class="col-sm-8">
