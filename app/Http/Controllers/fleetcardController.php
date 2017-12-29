@@ -113,42 +113,42 @@ class fleetcardController extends Controller
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
         $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
-        $status = array(1 => ' Active', 2 => ' InActive');
+        
         //return $vehiclefleetcards;
 
          $fleetcard = DB::table('vehicle_fleet_cards')
             ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner','hr_people.first_name as first_name', 'hr_people.surname as surname')
              ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
              ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
-            // ->where(function ($query) use ($vehicletype) {
-            //     if (!empty($vehicletype)) {
-            //         $query->where('vehicle_details.vehicle_type', $vehicletype);
-            //     }
-            // })
-            // ->where(function ($query) use ($Company) {
-            //     if (!empty($Company)) {
-            //         $query->where('vehicle_details.division_level_5', $Company);
-            //     }
-            // })
-            // ->where(function ($query) use ($Department) {
-            //     if (!empty($Department)) {
-            //         $query->where('vehicle_details.division_level_4', $Department);
-            //     }
-            // })
-            /*->where(function ($query) use ($startDate) {
-                if (!empty($startDate)) {
-                    $query->where('vehicle_booking.require_datetime', '!=', $startDate);
+             ->where(function ($query) use ($cardtype) {
+                 if (!empty($cardtype)) {
+                    $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
+                 }
+             })
+             ->where(function ($query) use ($fleetnumber) {
+                 if (!empty($fleetnumber)) {
+                     $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
+                 }
+             })
+            ->where(function ($query) use ($company) {
+                if (!empty($company)) {
+                    $query->where('vehicle_fleet_cards.company_id', $company);
                 }
             })
-            ->where(function ($query) use ($EndDate) {
-                if (!empty($EndDate)) {
-                    $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
+            ->where(function ($query) use ($holder) {
+                if (!empty($holder)) {
+                    $query->where('vehicle_fleet_cards.holder_id', $holder);
                 }
-            })*/
+            })
+            ->where(function ($query) use ($status) {
+                if (!empty($status)) {
+                    $query->where('vehicle_fleet_cards.status', $status);
+                }
+            })
             ->orderBy('vehicle_fleet_cards.id')
             ->get();
 
-           // return $fleetcard;
+        $status = array(1 => ' Active', 2 => ' InActive');
 
         $data['vehicle_detail'] = $vehicle_detail;
         $data['fleetcardtype'] = $fleetcardtype;

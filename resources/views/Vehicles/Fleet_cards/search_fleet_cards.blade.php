@@ -135,7 +135,7 @@
                                                                                name="status" value="2"> Inactive
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_products"
-                                                                               name="status" value="3"> All
+                                                                               name="status" value=""> All
                                             </label>
 
                                         </div>
