@@ -240,9 +240,39 @@ class fleetcardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function driverAdmin()
     {
-        //
+     
+        $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+
+        $hrDetails = HRPerson::where('status', 1)->get();
+        $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
+        $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
+        $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
+        
+
+        $data['page_title'] = "Fleet Types";
+        $data['page_description'] = "Fleet Cards Search";
+        $data['breadcrumb'] = [
+            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+
+        $data['vehicle_detail'] = $vehicle_detail;
+        $data['fleetcardtype'] = $fleetcardtype;
+        $data['hrDetails'] = $hrDetails;
+        $data['contactcompanies'] = $contactcompanies;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['division_levels'] = $divisionLevels;
+        $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Driver Administration';
+
+        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Driver Admin.search_drivers')->with($data);
     }
 
     /**
