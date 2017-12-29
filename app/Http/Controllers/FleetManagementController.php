@@ -61,7 +61,6 @@ class FleetManagementController extends Controller
 
         $images = images::orderBy('id', 'asc')->get();
 
-
         // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -95,7 +94,6 @@ class FleetManagementController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        // $data['incidentType'] = $incidentType;
         $data['active_mod'] = 'Vehicle Management';
         $data['active_rib'] = 'Manage Fleet';
 
@@ -391,7 +389,7 @@ class FleetManagementController extends Controller
         $data['active_mod'] = 'Vehicle Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
+        
         return view('Vehicles.FleetManagement.viewfleetDetails')->with($data);
     }
  
@@ -419,8 +417,6 @@ class FleetManagementController extends Controller
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-
  
             $ID = $maintenance->id;
 
@@ -472,8 +468,7 @@ class FleetManagementController extends Controller
         $currentDate = time();
 
         $userLogged = Auth::user()->load('person');
-        //$leave_history->added_by_name = $user->person->first_name." ".$user->person->surname;
-
+        
         $vehicleImages = new images();
 
         //$vehicleImages->vehicle_maintanace = $ID;
@@ -575,19 +570,13 @@ class FleetManagementController extends Controller
 
         
             $ID = $maintenance->id;
-            //return $ID;
-
-
+            
             $keytracking = DB::table('keytracking')
                 ->select('keytracking.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'hr_people.manager_id as manager', 'safe.name as safeName')
                 ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
                 ->leftJoin('safe', 'keytracking.safe_name', '=', 'safe.id')
                 ->orderBy('keytracking.id')
                 ->get();
-
-
-            // return $keytracking;
-
 
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
