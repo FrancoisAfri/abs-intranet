@@ -61,7 +61,7 @@
                                                                 class="fa fa-pencil-square-o"></i> Edit
                                                     </button>
                                                 </td>
-                                                <td>{{ !empty($fleet->fleet_number ) ? $fleet->fleet_number : '' }}</td>
+                                                <td>{{ !empty($fleet->fleetnumber ) ? $fleet->fleetnumber : '' }}</td>
                                                 <td>{{ !empty($fleet->first_name . '' . $fleet->surname ) ? $fleet->first_name . '' . $fleet->surname : ''}}</td>
                                                 <td>{{ !empty($fleet->card_number) ? $fleet->card_number : ''}}</td>
                                                 <td>{{ !empty($fleet->cvs_number) ? $fleet->cvs_number : ''}}</td>
