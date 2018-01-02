@@ -16,6 +16,11 @@
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
+                <form name="leave-application-form" class="form-horizontal" method="POST" action="/vehicle_management/vehicleApproval"
+                      enctype="multipart/form-data">
+                      {{ csrf_field() }}
+                    {{ method_field('PATCH') }}
+                      
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
@@ -45,13 +50,12 @@
                                      <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
                                      <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
                                     <td>
-                                    <input type="hidden" name="include_division_report" value="0">
-                                    <input type="checkbox" name="include_division_report"
-                                                           value="1" {{ $filling->status === 1 ? 'checked ="checked"' : 0 }} >
+                                   <input class="rdo-iCheck" type="checkbox" id="{{ $filling->id . '_rdo_status_active' }}" name="{{ $filling->id }}" value="1" {{ $filling->status == 1 ? ' checked' : '' }}> 
+                                    <input type="hidden" id="{{ $filling->id . '_rdo_status_inactive' }}" name="{{ "status[" . $filling->id . "]" }}" value="0" {{ $filling->status == 1 ? ' disabled' : '' }}>
                                     </td>
                                     <td>
-                                    <input type="hidden" name="include_division_report" value="0">
-                                    <input type="checkbox" name="include_division_report"
+                                    <input type="hidden" name="vehicle_reject_{{$filling->id}}" value="0">
+                                    <input type="checkbox" name="vehicle_reject"
                                                            value="1" {{ $filling->status === 3 ? 'checked ="checked"' : 0 }} >
                                     </td>
             
@@ -78,7 +82,7 @@
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-       
+       </form>
 
 </div>
 
@@ -100,6 +104,8 @@
         $('#back_button').click(function () {
                 location.href = '/vehicle_management/setup';
             });
+
+            
 
         $(function () {
             var moduleId;

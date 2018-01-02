@@ -111,11 +111,12 @@ class fleetcardController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
 
         $hrDetails = HRPerson::where('status', 1)->get();
-        $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
+        $fleetcardtype = fleetType::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
         $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
+       // return $fleetcardtype;
 
         //return $vehiclefleetcards;
 
@@ -407,5 +408,15 @@ class fleetcardController extends Controller
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         //return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
         return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
+    }
+
+    public function vehicleApprovals(Request $request) {
+
+        $this->validate($request, [
+            // 'driver_id' => 'bail|required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+        return $docData;
     }
 }
