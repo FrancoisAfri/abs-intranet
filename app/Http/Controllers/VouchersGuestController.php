@@ -59,7 +59,7 @@ class VouchersGuestController extends Controller
     {
         $messages = [
             'clnt_name.required' => 'The Full Name field is required.',
-            'clnt_cellno.required' => 'The Cell Number field is required.'
+            'get_voucher.required' => 'The Ref No field is required.'
         ];
         $this->validate($request, [
             'clnt_name' => 'required',

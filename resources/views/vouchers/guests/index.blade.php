@@ -26,7 +26,6 @@
                 <!-- Form Start -->
                 <form name="service-rating-form" class="form-horizontal" method="POST" action="/vouchers/get-voucher">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -39,7 +38,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         @if (session('success_add'))
                             <div class="alert alert-success alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -47,7 +45,6 @@
                                 {{ session('success_add') }}
                             </div>
                         @endif
-
                         <div class="form-group {{ $errors->has('clnt_name') ? ' has-error' : '' }}">
                             <label for="clnt_name" class="col-sm-2 control-label">Full Name</label>
                             <div class="col-sm-10">
@@ -59,8 +56,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group {{ $errors->has('clnt_cellno') ? ' has-error' : '' }}">
+                        <!--<div class="form-group {{ $errors->has('clnt_cellno') ? ' has-error' : '' }}">
                             <label for="clnt_cellno" class="col-sm-2 control-label">Cell Number</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -70,8 +66,18 @@
                                     <input type="text" class="form-control" id="clnt_cellno" name="clnt_cellno" value="{{ old('client_name') }}" placeholder="Cell Number">
                                 </div>
                             </div>
+                        </div> -->
+						<div class="form-group {{ $errors->has('sup_ref') ? ' has-error' : '' }}">
+                            <label for="sup_ref" class="col-sm-2 control-label">Ref No</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="sup_ref" name="sup_ref" value="{{ old('sup_ref') }}" placeholder="Ref No">
+                                </div>
+                            </div>
                         </div>
-
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
