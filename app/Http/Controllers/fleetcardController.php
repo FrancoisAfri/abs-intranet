@@ -363,8 +363,8 @@ class fleetcardController extends Controller
 
     public function vehicle_approval(Request $request) {
 
-        $Vehiclemanagemnt = vehicle_maintenance::orderBy('id', 'asc')->get();
-       // return $Vehiclemanagemnt;
+        //$Vehiclemanagemnt = vehicle_maintenance::orderBy('id', 'asc')->get();
+       //return $Vehiclemanagemnt;
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
 
@@ -372,6 +372,19 @@ class fleetcardController extends Controller
         $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
+
+        $Vehiclemanagemnt = DB::table('vehicle_details')
+            ->select('vehicle_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department' 
+            , 'vehicle_model.name as vehiclemodel')
+            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
+            ->leftJoin('vehicle_model','vehicle_details.vehicle_model', '=' , 'vehicle_model.id')
+            ->orderBy('vehicle_details.id')
+            ->get();
+
+            //return $Vehiclemanagemnt;
+
+
 
         $data['page_title'] = "Vehicle Approval";
         $data['page_description'] = "Vehicle Approvals";

@@ -39,11 +39,11 @@
                                                      alt="Product Image" width="50" height="50">
                                             </div>
                                             </td>
-                                     <td>{{ (!empty( $filling->vehicle_model . ' ' . $filling->year )) ?   $filling->vehicle_model . ' ' . $filling->year : ''}} </td>
+                                     <td>{{ (!empty( $filling->vehiclemodel . ' ' . $filling->year )) ?   $filling->vehiclemodel . ' ' . $filling->year : ''}} </td>
                                      <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                      <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
-                                     <td>{{ (!empty( $filling->division_level_4)) ?  $filling->division_level_4 : ''}} </td>
-                                     <td>{{ (!empty( $filling->division_level_5)) ?  $filling->division_level_5 : ''}} </td>
+                                     <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
+                                     <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
                                      <td></td>
                                      <td></td>
             
