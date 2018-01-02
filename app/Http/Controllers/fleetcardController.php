@@ -395,8 +395,6 @@ class fleetcardController extends Controller
             ['title' => 'Manage Vehicle Approvals ', 'active' => 1, 'is_module' => 0]
         ];
 
-
-        $data['vehicle_detail'] = $vehicle_detail;
         $data['fleetcardtype'] = $fleetcardtype;
         $data['hrDetails'] = $hrDetails;
         $data['contactcompanies'] = $contactcompanies;

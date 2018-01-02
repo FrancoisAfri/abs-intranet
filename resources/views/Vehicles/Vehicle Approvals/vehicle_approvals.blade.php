@@ -52,7 +52,7 @@
                                     <td>
                                     <input type="hidden" name="include_division_report" value="0">
                                     <input type="checkbox" name="include_division_report"
-                                                           value="1" {{ $filling->status === 1 ? 'checked ="checked"' : 0 }} >
+                                                           value="1" {{ $filling->status === 3 ? 'checked ="checked"' : 0 }} >
                                     </td>
             
                                 </tr>
