@@ -78,8 +78,8 @@
                                     <tfoot>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
-										<th>Fleet Card Type</th>
-										<th>Vehicle Fleet Number</th>
+					<th>Fleet Card Type</th>
+					<th>Vehicle Fleet Number</th>
                                         <th>Holder</th>
                                         <th>Card Number</th>
                                         <th>CVS Number</th>
@@ -227,7 +227,7 @@
                                 var Status = btnEdit.data('status');
                                 var modal = $(this);
                                 modal.find('#fleet_number').val(fleet_number);
-								modal.find('select#card_type_id').val(cardTypeId).trigger("change");
+				modal.find('select#card_type_id').val(cardTypeId).trigger("change");
                                 modal.find('#company_id').val(company_id);
                                 modal.find('#holder_id').val(holder_id);
                                 modal.find('#card_number').val(card_number);

@@ -115,17 +115,19 @@ class fleetcardController extends Controller
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
         $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
+       // return $fleetcardtype;
 
         //return $vehiclefleetcards;
 
         $fleetcard = DB::table('vehicle_fleet_cards')
             ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner'
 			, 'hr_people.first_name as first_name', 'hr_people.surname as surname'
-			, 'fleet_type.name as type_name')
+			, 'fleet_type.name as type_name', 'vehicle_details.fleet_number as fleetnumber')
             ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
             ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
             ->leftJoin('fleet_type', 'vehicle_fleet_cards.card_type_id', '=', 'fleet_type.id')
-            ->where(function ($query) use ($cardtype) {
+          ->leftJoin('vehicle_details', 'vehicle_fleet_cards.fleet_number', '=', 'vehicle_details.id')
+ ->where(function ($query) use ($cardtype) {
                 if (!empty($cardtype)) {
                     $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
                 }
@@ -418,5 +420,15 @@ class fleetcardController extends Controller
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         //return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
         return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
+    }
+
+    public function vehicleApprovals(Request $request) {
+
+        $this->validate($request, [
+            // 'driver_id' => 'bail|required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+        return $docData;
     }
 }
