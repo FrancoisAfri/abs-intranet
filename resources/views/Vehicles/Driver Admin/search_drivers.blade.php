@@ -11,13 +11,6 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
-    <!--Time Charger-->
-    <!--  -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-          rel="stylesheet">
 @endsection
 
 @section('content')
@@ -28,7 +21,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/vehicle_management/fleet_card_search">
+                <form class="form-horizontal" method="POST" action="/vehicle_management/driver_search">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -47,60 +40,45 @@
                         <div class="col-md-8 col-md-offset-2">
                             <div>
                                 <div class="box-header with-border" align="center">
-                                    <h3 class="box-title">Fleet Card Search</h3>
+                                    <h3 class="box-title">Search for an Employee</h3>
                                 </div>
-                                <div class="box-body" id="vehicle_details">
+                                <div class="box-body" id="view_users">
+
+                                    @foreach($division_levels as $division_level)
+                                        <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                            <label for="{{ 'division_level_' . $division_level->level }}"
+                                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-black-tie"></i>
+                                                    </div>
+                                                    <select id="{{ 'division_level_' . $division_level->level }}"
+                                                            name="{{ 'division_level_' . $division_level->level }}"
+                                                            class="form-control"
+                                                            onchange="divDDOnChange(this, null, 'view_users')">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
 
                                     <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Card Type</label>
-                                        <div class="col-sm-10">
+                                        <label for="employee" class="col-sm-2 control-label">Employee</label>
 
-                                            <select class="form-control select2" style="width: 100%;"
-                                                    id="card_type_id" name="card_type_id">
-                                                <option value="">*** Select a Card Type ***</option>
-                                                @foreach($fleetcardtype as $card)
-                                                    <option value="{{ $card->id }}">{{ $card->name }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                                <input type="text" class="form-control" id="employee" name="employee"
+                                                       value="" placeholder="employee" required>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control select2" style="width: 100%;"
-                                                    id="fleet_number" name="fleet_number">
-                                                <option value="">*** Select a Vehicle ***</option>
-                                                @foreach($vehicle_detail as $Fleet)
-                                                    <option value="{{ $Fleet->fleet_number }}">{{ $Fleet->fleet_number }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Issued By</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control select2" style="width: 100%;"
-                                                    id="company_id" name="company_id">
-                                                <option value="">*** Select a Company ***</option>
-                                                @foreach($contactcompanies as $Company)
-                                                    <option value="{{ $Company->id }}">{{ $Company->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label"> Card Holder</label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control select2" style="width: 100%;"
-                                                    id="holder_id" name="holder_id">
-                                                <option value="">*** Select an Employee ***</option>
-                                                @foreach($hrDetails as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->first_name . ' ' .  $user->surname}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+
                                     <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
                                         <label for="status" class="col-sm-2 control-label"> Status
                                         </label>
@@ -125,13 +103,13 @@
 
 
                                     <div class="box-footer">
-                                        <button type="submit" class="btn btn-primary pull-left"><i
+                                        <button type="submit" class="btn btn-primary pull-right"><i
                                                     class="fa fa-search"></i> Search
                                         </button>
-                                        <button type="button" id="cat_module" class="btn btn-primary pull-right"
+                                        <!-- <button type="button" id="cat_module" class="btn btn-primary pull-right"
                                                 data-toggle="modal" data-target="#add-fleetcard-modal"><i
                                                     class="fa fa-plus-square-o"></i> Add Fleet Card
-                                        </button>
+                                        </button> -->
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +149,7 @@
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <!-- time picker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
     <script type="text/javascript">
         $(function () {
             $(".select2").select2();
@@ -229,17 +207,28 @@
             todayHighlight: true
         });
 
-        //Post perk form to server using ajax (add)
-        $('#add-fleet-card').on('click', function () {
-            var strUrl = '/vehicle_management/add_vehiclefleetcard';
-            var formName = 'add-fleetcard-form';
-            var modalID = 'add-fleetcard-modal';
-            var submitBtnID = 'add-fleet-card';
-            var redirectUrl = '/vehicle_management/fleet_cards';
-            var successMsgTitle = 'New Record Added!';
-            var successMsg = 'The Record  has been updated successfully.';
-            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @if (isset($view_by_admin) && $view_by_admin === 1)
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        if (divLevel == 5) selectedOption = '{{ $user->person->division_level_5 }}';
+        else if (divLevel == 4) selectedOption = '{{ $user->person->division_level_4 }}';
+        else if (divLevel == 3) selectedOption = '{{ $user->person->division_level_3 }}';
+        else if (divLevel == 2) selectedOption = '{{ $user->person->division_level_2 }}';
+        else if (divLevel == 1) selectedOption = '{{ $user->person->division_level_1 }}';
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
+        @endif
 
 
     </script>

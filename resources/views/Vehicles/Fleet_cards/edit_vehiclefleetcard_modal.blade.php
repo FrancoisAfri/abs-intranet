@@ -1,30 +1,33 @@
-<div id="add-fleetcard-modal" class="modal modal-default fade">
+<div id="edit-vehiclefleet-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-fleetcard-form">
+            <form class="form-horizontal" method="POST" name="edit-vehiclefleet-form">
                 {{ csrf_field() }}
+                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Fleet Card Type</h4>
+                    <h4 class="modal-title">Edit Fleet Card Type</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Card Type</label>
-                        <div class="col-sm-8">
 
-                            <select class="form-control select2" style="width: 100%;"
-                                    id="card_type_id" name="card_type_id">
-                                <option value="">*** Select a Card Type ***</option>
-                                @foreach($fleetcardtype as $card)
-                                    <option value="{{ $card->id }}">{{ $card->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    <div class="form-group">
+                    <label for="path" class="col-sm-2 control-label">Card Type</label>
+                    
+                    <div class="col-sm-8">
+                        
+                        <select class="form-control select2" style="width: 100%;"
+                        id="card_type_id" name="card_type_id">
+                        <option value="">*** Select a Card Type ***</option>
+                        @foreach($fleetcardtype as $card)
+                        <option value="{{ $card->id }}">{{ $card->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>
                         <div class="col-sm-8">
@@ -32,12 +35,13 @@
                             <select class="form-control select2" style="width: 100%;"
                                     id="fleet_number" name="fleet_number">
                                 <option value="">*** Select a Vehicle ***</option>
-                                @foreach($vehicle_detail as $Fleet)
-                                    <option value="{{ $Fleet->id }}">{{ $Fleet->fleet_number }}</option>
+                                @foreach($vehicle_detail as $Fleetcard)
+                                    <option value="{{ $Fleetcard->id }}" {{ ($fleet->fleet_number == $Fleetcard->id) ? ' selected' : '' }}>{{ $Fleetcard->fleet_number }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
+
 
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Issued By</label>
@@ -47,7 +51,7 @@
                                     id="company_id" name="company_id">
                                 <option value="">*** Select a Company ***</option>
                                 @foreach($contactcompanies as $Company)
-                                    <option value="{{ $Company->id }}">{{ $Company->name }}</option>
+                                    <option value="{{ $Company->id }}" {{ ($fleet->company_id == $Company->id) ? ' selected' : '' }}>{{ $Company->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -61,7 +65,7 @@
                                     id="holder_id" name="holder_id">
                                 <option value="">*** Select an Employee ***</option>
                                 @foreach($hrDetails as $user)
-                                    <option value="{{ $user->id }}">{{ $user->first_name . ' ' .  $user->surname}}</option>
+                                    <option value="{{ $user->id }}" {{ ($fleet->holder_id == $user->id) ? ' selected' : '' }}>{{ $user->first_name . ' ' .  $user->surname }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -85,7 +89,7 @@
                         <label for="path" class="col-sm-2 control-label"> Date Issued</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="issued_date" name="issued_date" value=""
-                                   placeholder="Enter Capture Date" required>
+                                   placeholder="Enter Capture Date" required >
                         </div>
                     </div>
 
@@ -96,6 +100,7 @@
                                    placeholder="Enter expiry date" required>
                         </div>
                     </div>
+
                     <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
                         <label for="status" class="col-sm-2 control-label"> Status
                         </label>
@@ -116,15 +121,16 @@
                     </div>
 
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                        <button type="button" id="add-fleet-card" class="btn btn-warning"><i
-                                    class="fa fa-cloud-upload"></i>
-                            Save
-                        </button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" id="edit_vehiclefleetcard" class="btn btn-primary"><i class="fa fa-floppy-o"></i>
+                        Save
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 </div>
-</div>
+        
+           

@@ -18,7 +18,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> Fleet Cards Report </h3>
+                    <h3 class="box-title"> Driver Details Report </h3>
                 </div>
                 <div class="box-body">
                     <div class="box">
@@ -29,46 +29,49 @@
                                     <thead>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
-                                        <th>Vehicle Fleet Number</th>
-                                        <th>Holder</th>
-                                        <th>Card Number</th>
-                                        <th>CVS Number</th>
-                                        <th>Issued By</th>
-                                        <th>Issued Date</th>
-                                        <th>Expiry Date</th>
-                                        <th>Active</th>
+                                        <th>Firstname</th>
+                                        <th>Surname</th>
+                                        <th>Is Driver</th>
+                                        <th>Company</th>
+                                        <th>Department </th>
+                                        <th>Licence Code</th>
+                                        <th>Licence No.</th>
+                                        <th>Licence Expiry Date</th>
+                                        <th>Prof. Driving Permit </th>
+                                        <th>PDP Expiry Date</th>
+                                        <th style="width: 5px; text-align: center;">Document</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($fleetcard) > 0)
-                                        @foreach ($fleetcard as $fleet)
+                                    @if (count($drverdetails) > 0)
+                                        @foreach ($drverdetails as $drverdetails)
                                             <tr id="categories-list">
                                                 <td nowrap>
                                                     <button vehice="button" id="edit_compan"
                                                             class="btn btn-warning  btn-xs" data-toggle="modal"
                                                             data-target="#edit-vehiclefleet-modal"
-                                                            data-id="{{ $fleet->id }}"
-                                                            data-fleet_number="{{ $fleet->fleet_number }}"
-                                                            data-cvs_number="{{ $fleet->cvs_number }}"
-                                                            data-holder_id="{{ $fleet->holder_id }}"
-                                                            data-company_id="{{ $fleet->company_id }}"
-                                                            data-card_number="{{$fleet->card_number}}"
-                                                            data-card_type_id="{{ $fleet->card_type_id }}"
-                                                            data-issued_date="{{ date("y F  Y, g:i a", $fleet->issued_date)}}"
-                                                            data-expiry_date="{{date("y F  Y, g:i a",  $fleet->expiry_date)}}"
-                                                            data-status="{{ $fleet->status }}"
+                                                            data-id="{{ $drverdetails->id }}"
+                                                            data-fleet_number="{{ $drverdetails->fleet_number }}"
+                                                            data-cvs_number="{{ $drverdetails->cvs_number }}"
+                                                            data-holder_id="{{ $drverdetails->holder_id }}"
+                                                            data-company_id="{{ $drverdetails->company_id }}"
+                                                            data-card_number="{{$drverdetails->card_number}}"
+                                                            data-card_type_id="{{ $drverdetails->card_type_id }}"
+                                                            data-issued_date="{{ date("y F  Y, g:i a", $drverdetails->issued_date)}}"
+                                                            data-expiry_date="{{date("y F  Y, g:i a",  $drverdetails->expiry_date)}}"
+                                                            data-status="{{ $drverdetails->status }}"
                                                     ><i
                                                                 class="fa fa-pencil-square-o"></i> Edit
                                                     </button>
                                                 </td>
-                                                <td>{{ !empty($fleet->fleet_number ) ? $fleet->fleet_number : '' }}</td>
-                                                <td>{{ !empty($fleet->first_name . '' . $fleet->surname ) ? $fleet->first_name . '' . $fleet->surname : ''}}</td>
-                                                <td>{{ !empty($fleet->card_number) ? $fleet->card_number : ''}}</td>
-                                                <td>{{ !empty($fleet->cvs_number) ? $fleet->cvs_number : ''}}</td>
-                                                <td>{{ !empty($fleet->Vehicle_Owner) ? $fleet->Vehicle_Owner : ''}}</td>
-                                                <td>{{ !empty($fleet->issued_date ) ? date("y F  Y, g:i a", $fleet->issued_date) : ''}}</td>
-                                                <td>{{ !empty($fleet->expiry_date ) ? date("y F  Y, g:i a",  $fleet->expiry_date) : ''}}</td>
-                                                <td>{{ !empty($fleet->status) ? $status[$fleet->status] : ''}}</td>
+                                                <td>{{ !empty($drverdetails->fleet_number ) ? $drverdetails->fleet_number : '' }}</td>
+                                                <td>{{ !empty($drverdetails->first_name . '' . $drverdetails->surname ) ? $drverdetails->first_name . '' . $drverdetails->surname : ''}}</td>
+                                                <td>{{ !empty($drverdetails->card_number) ? $drverdetails->card_number : ''}}</td>
+                                                <td>{{ !empty($drverdetails->cvs_number) ? $drverdetails->cvs_number : ''}}</td>
+                                                <td>{{ !empty($drverdetails->Vehicle_Owner) ? $drverdetails->Vehicle_Owner : ''}}</td>
+                                                <td>{{ !empty($drverdetails->issued_date ) ? date("y F  Y, g:i a", $drverdetails->issued_date) : ''}}</td>
+                                                <td>{{ !empty($drverdetails->expiry_date ) ? date("y F  Y, g:i a",  $drverdetails->expiry_date) : ''}}</td>
+                                                <td>{{ !empty($drverdetails->status) ? $status[$drverdetails->status] : ''}}</td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -76,30 +79,26 @@
                                     <tfoot>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
-                                        <th>Vehicle Fleet Number</th>
-                                        <th>Holder</th>
-                                        <th>Card Number</th>
-                                        <th>CVS Number</th>
-                                        <th>Issued By</th>
-                                        <th>Issued Date</th>
-                                        <th>Expiry Date</th>
-                                        <th>Active</th>
+                                        <th>Firstname</th>
+                                        <th>Surname</th>
+                                        <th>Is Driver</th>
+                                        <th>Company</th>
+                                        <th>Department </th>
+                                        <th>Licence Code</th>
+                                        <th>Licence No.</th>
+                                        <th>Licence Expiry Date</th>
+                                        <th>Prof. Driving Permit </th>
+                                        <th>PDP Expiry Date</th>
+                                        <th style="width: 5px; text-align: center;">Document</th>
                                     </tr>
                                     </tfoot>
                                 </table>
                                 <div class="box-footer">
                                     <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                 class="fa fa-arrow-left"></i> Back
-                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">
-                                            import to PDF
-                                        </button>
-
-                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">
-                                            import to EXCEL
-                                        </button>
                                 </div>
                             </div>
-                            @include ('Vehicles.Fleet_cards.edit_vehiclefleetcard_modal')
+                        
                         </div>
                     </div>
                 @endsection

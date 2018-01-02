@@ -10,40 +10,51 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Fleet Cards Types</h3>
+                    <h3 class="box-title"> Vehicle Approval  </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
-                    <!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-                                <th style="width: 10px; text-align: center;"></th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th style="width: 5px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;"></th>
+                                <th style="width: 10px; text-align: center;"></th>						  	 
+                                <th>Vehicle Model/Year</th>
+                                <th>Fleet Number</th>
+                                <th>Vehicle Registration</th>
+                                <thOdometer></th>
+                                <th>Company</th>
+                                <th>Department</th>
+                                <th style="width: 5px; text-align: center;">Accept</th>
+                                <th style="width: 5px; text-align: center;">Decline</th>
                             </tr>
-                            @if (count($FleetType) > 0)
-                              @foreach ($FleetType as $fleet)
+                            @if (count($Vehiclemanagemnt) > 0)
+                              @foreach ($Vehiclemanagemnt as $filling)
                                <tr id="categories-list">
-                               <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $fleet->id }}" data-name="{{ $fleet->name }}" data-description="{{$fleet->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                              
+                                  <td nowrap>
+                                            <div class="product-img">
+                                                <img src="{{ (!empty($filling->image)) ? Storage::disk('local')->url("image/$filling->image") : 'http://placehold.it/60x50' }}"
+                                                     alt="Product Image" width="75" height="50">
+                                            </div>
+                                            </td>
+                                     <td>{{ (!empty( $filling->vehiclemodel . ' ' . $filling->year )) ?   $filling->vehiclemodel . ' ' . $filling->year : ''}} </td>
+                                     <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
+                                     <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
+                                     <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
+                                     <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
+                                    <td>
+                                    <input type="hidden" name="include_division_report" value="0">
+                                    <input type="checkbox" name="include_division_report"
+                                                           value="1" {{ $filling->status === 1 ? 'checked ="checked"' : 0 }} >
                                     </td>
-                                     <td>{{ (!empty( $fleet->name)) ?  $fleet->name : ''}} </td>
-                                     <td>{{ (!empty( $fleet->description)) ?  $fleet->description : ''}} </td>
-                                  <td>
-                                    <!--   leave here  -->
-                                    <button vehice="button" id="view_ribbons" class="btn {{ (!empty($fleet->status) && $fleet->status == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$fleet->id}}, 'actdeac');"><i class="fa {{ (!empty($fleet->status) && $fleet->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($fleet->status) && $fleet->status == 1) ? "De-Activate" : "Activate"}}</button>
-                                 </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                    <td>
+                                    <input type="hidden" name="include_division_report" value="0">
+                                    <input type="checkbox" name="include_division_report"
+                                                           value="1" {{ $filling->status === 3 ? 'checked ="checked"' : 0 }} >
+                                    </td>
+            
                                 </tr>
                                    @endforeach
                                @else
@@ -51,27 +62,24 @@
                         <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No Fleet Cards Types to display, please start by adding a new Fleet Cards Types...
+                            No Fleet Filling Station damage categories  to display, please start by adding a new Filling Station..
                         </div>
                         </td>
                         </tr>
                            @endif
-                            </table>
+                        </table>
                       <!--   </div> -->
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-fleet-modal">Add new Fleet Cards</button>
+                    <button type="submit" class="btn btn-primary pull-right"> Submit</button>
+                                                
+                     <!-- <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-station-modal">Add new  Filling Station </button> -->
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_fleetcard_modal')
-        @include('Vehicles.partials.edit_fleetcard_modal')
-          <!-- Include delete warning Modal form-->
-     @if (count($FleetType) > 0)
-         @include('Vehicles.warnings.fleetcard_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])
-    @endif
+       
+
 </div>
 
 
@@ -81,12 +89,15 @@
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
 <!-- Select2 -->
 <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+<!-- iCheck -->
+<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
 <script>
        function postData(id , data ){   
-            if(data == 'actdeac') location.href = "/vehice/fleetcard_act/" + id; 
+            if(data == 'actdeac') location.href = "/vehice/station_act/" + id;
           
         }
-         $('#back_button').click(function () {
+        $('#back_button').click(function () {
                 location.href = '/vehicle_management/setup';
             });
 
@@ -119,22 +130,28 @@
             $('#success-action-modal').modal('show');
     
             //
+             //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '10%' // optional
+            });
 
             $(".js-example-basic-multiple").select2();
 
             //save Fleet
             //Post module form to server using ajax (ADD)
-            $('#add-fleet-card').on('click', function() {
+            $('#add-filling-station').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/vehice/add_fleetcard';
-                var modalID = 'add-fleet-modal';
+                var strUrl = '/vehice/add_fillingstation';
+                var modalID = 'add-station-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'add-fleet-card';
-                var redirectUrl = '/vehicle_management/fleet_card';
+                var submitBtnID = 'cat_module';
+                var redirectUrl = '/vehicle_management/fillingstaion';
                 var successMsgTitle = 'Fleet Type Added!';
                 var successMsg = 'The Fleet Type has been updated successfully.';
                 //var formMethod = 'PATCH';
@@ -152,16 +169,16 @@
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
              });
-            $('#edit_fleetcard').on('click', function () {
-                var strUrl = '/vehice/edit_fleetcard/' + fleetID;
+            $('#edit_station').on('click', function () {
+                var strUrl = '/vehice/edit_station/' + fleetID;
                 var modalID = 'edit-package-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'edit_fleetcard';
-                var redirectUrl = '/vehicle_management/Manage_fleet_types';
+                var submitBtnID = 'edit_station';
+                var redirectUrl = '/vehicle_management/fillingstaion';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Fleet Type has been updated successfully.';
                 var Method = 'PATCH';
