@@ -33,7 +33,7 @@
                                     id="fleet_number" name="fleet_number">
                                 <option value="">*** Select a Vehicle ***</option>
                                 @foreach($vehicle_detail as $Fleet)
-                                    <option value="{{ $Fleet->fleet_number }}">{{ $Fleet->fleet_number }}</option>
+                                    <option value="{{ $Fleet->id }}">{{ $Fleet->fleet_number }}</option>
                                 @endforeach
                             </select>
                         </div>
