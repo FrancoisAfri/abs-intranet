@@ -44,8 +44,16 @@
                                      <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                      <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
                                      <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
-                                     <td></td>
-                                     <td></td>
+                                    <td>
+                                    <input type="hidden" name="include_division_report" value="0">
+                                    <input type="checkbox" name="include_division_report"
+                                                           value="1" {{ $filling->status === 1 ? 'checked ="checked"' : 0 }} >
+                                    </td>
+                                    <td>
+                                    <input type="hidden" name="include_division_report" value="0">
+                                    <input type="checkbox" name="include_division_report"
+                                                           value="1" {{ $filling->status === 1 ? 'checked ="checked"' : 0 }} >
+                                    </td>
             
                                 </tr>
                                    @endforeach
@@ -81,6 +89,9 @@
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
 <!-- Select2 -->
 <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+<!-- iCheck -->
+<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
 <script>
        function postData(id , data ){   
             if(data == 'actdeac') location.href = "/vehice/station_act/" + id;
@@ -119,6 +130,12 @@
             $('#success-action-modal').modal('show');
     
             //
+             //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '10%' // optional
+            });
 
             $(".js-example-basic-multiple").select2();
 
