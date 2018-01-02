@@ -77,7 +77,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">CSV Number</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="cvs_number" name="cvs_number" value="0"
+                            <input type="text" class="form-control" id="cvs_number" name="cvs_number" value=""
                                    placeholder="Enter cvs_number" required>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                         <label for="path" class="col-sm-2 control-label"> Date Issued</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="issued_date" name="issued_date" value=""
-                                   placeholder="Enter Capture Date" required>
+                                   placeholder="Enter Issued Date" required>
                         </div>
                     </div>
 

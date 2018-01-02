@@ -29,6 +29,7 @@
                                     <thead>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
+                                        <th>Fleet Card Type</th>
                                         <th>Vehicle Fleet Number</th>
                                         <th>Holder</th>
                                         <th>Card Number</th>
@@ -54,20 +55,21 @@
                                                             data-company_id="{{ $fleet->company_id }}"
                                                             data-card_number="{{$fleet->card_number}}"
                                                             data-card_type_id="{{ $fleet->card_type_id }}"
-                                                            data-issued_date="{{ date("y F  Y, g:i a", $fleet->issued_date)}}"
-                                                            data-expiry_date="{{date("y F  Y, g:i a",  $fleet->expiry_date)}}"
+                                                            data-issued_date="{{ date("d/m/Y", $fleet->issued_date)}}"
+                                                            data-expiry_date="{{date("d/m/Y",  $fleet->expiry_date)}}"
                                                             data-status="{{ $fleet->status }}"
                                                     ><i
                                                                 class="fa fa-pencil-square-o"></i> Edit
                                                     </button>
                                                 </td>
+                                                <td>{{ !empty($fleet->type_name ) ? $fleet->type_name : '' }}</td>
                                                 <td>{{ !empty($fleet->fleet_number ) ? $fleet->fleet_number : '' }}</td>
                                                 <td>{{ !empty($fleet->first_name . '' . $fleet->surname ) ? $fleet->first_name . '' . $fleet->surname : ''}}</td>
                                                 <td>{{ !empty($fleet->card_number) ? $fleet->card_number : ''}}</td>
                                                 <td>{{ !empty($fleet->cvs_number) ? $fleet->cvs_number : ''}}</td>
                                                 <td>{{ !empty($fleet->Vehicle_Owner) ? $fleet->Vehicle_Owner : ''}}</td>
-                                                <td>{{ !empty($fleet->issued_date ) ? date("y F  Y, g:i a", $fleet->issued_date) : ''}}</td>
-                                                <td>{{ !empty($fleet->expiry_date ) ? date("y F  Y, g:i a",  $fleet->expiry_date) : ''}}</td>
+                                                <td>{{ !empty($fleet->issued_date ) ? date("d/m/Y", $fleet->issued_date) : ''}}</td>
+                                                <td>{{ !empty($fleet->expiry_date ) ? date("d/m/Y",  $fleet->expiry_date) : ''}}</td>
                                                 <td>{{ !empty($fleet->status) ? $status[$fleet->status] : ''}}</td>
                                             </tr>
                                         @endforeach
@@ -76,7 +78,8 @@
                                     <tfoot>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
-                                        <th>Vehicle Fleet Number</th>
+										<th>Fleet Card Type</th>
+										<th>Vehicle Fleet Number</th>
                                         <th>Holder</th>
                                         <th>Card Number</th>
                                         <th>CVS Number</th>
@@ -135,8 +138,6 @@
                         <script src="/custom_components/js/modal_ajax_submit.js"></script>
                         <!-- End Bootstrap File input -->
                         <script>
-
-
                             //Cancel button click event
                             document.getElementById("cancel").onclick = function () {
                                 location.href = "/vehicle_management/fleet_cards";
@@ -187,20 +188,12 @@
                                 $('#success-action-modal').modal('show');
                             });
 
-                            $('.datepicker').datepicker({
-                                format: 'dd/mm/yyyy',
-                                autoclose: true,
-                                todayHighlight: true
-                            });
-
-
                             //Initialize iCheck/iRadio Elements
                             $('input').iCheck({
                                 checkboxClass: 'icheckbox_square-blue',
                                 radioClass: 'iradio_square-blue',
                                 increaseArea: '10%' // optional
                             });
-
 
                             $(document).ready(function () {
 
@@ -217,7 +210,6 @@
                                 });
                             });
 
-
                             var fleetID;
                             $('#edit-vehiclefleet-modal').on('show.bs.modal', function (e) {
                                 var btnEdit = $(e.relatedTarget);
@@ -225,24 +217,24 @@
                                     fleetID = btnEdit.data('id');
                                 }
                                 var fleet_number = btnEdit.data('fleet_number');
-                                var card_type_id = btnEdit.data('card_type_id');
+                                var cardTypeId = btnEdit.data('card_type_id');
                                 var company_id = btnEdit.data('company_id');
                                 var holder_id = btnEdit.data('holder_id');
                                 var card_number = btnEdit.data('card_number');
                                 var cvs_number = btnEdit.data('cvs_number');
-                                var issued_date = btnEdit.data('issued_date');
-                                var expiry_date = btnEdit.data('expiry_date');
-                                var status = btnEdit.data('status');
+                                var issuedDate = btnEdit.data('issued_date');
+                                var expiryDate = btnEdit.data('expiry_date');
+                                var Status = btnEdit.data('status');
                                 var modal = $(this);
                                 modal.find('#fleet_number').val(fleet_number);
-                                modal.find('#card_type_id').val(card_type_id);
+								modal.find('select#card_type_id').val(cardTypeId).trigger("change");
                                 modal.find('#company_id').val(company_id);
                                 modal.find('#holder_id').val(holder_id);
                                 modal.find('#card_number').val(card_number);
                                 modal.find('#cvs_number').val(cvs_number);
-                                modal.find('#issued_date').val(issued_date);
-                                modal.find('#expiry_date').val(expiry_date);
-                                modal.find('#status').val(status);
+                                modal.find('#issued_date').val(issuedDate);
+                                modal.find('#expiry_date').val(expiryDate);
+                                modal.find('#status').val(Status);
                             });
 
                             $('#edit_vehiclefleetcard').on('click', function () {

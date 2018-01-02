@@ -15,7 +15,7 @@
                     <div id="success-alert"></div>
 
                     <div class="form-group">
-                    <label for="path" class="col-sm-2 control-label">Card Type</label>
+                    <label for="card_type_id" class="col-sm-2 control-label">Card Type</label>
                     
                     <div class="col-sm-8">
                         
@@ -72,21 +72,21 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Card Number</label>
+                        <label for="card_number" class="col-sm-2 control-label">Card Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="card_number" name="card_number" value=""
                                    placeholder="Enter card_number" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">CSV Number</label>
+                        <label for="cvs_number" class="col-sm-2 control-label">CSV Number</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="cvs_number" name="cvs_number" value="0"
-                                   placeholder="Enter cvs_number" required>
+                            <input type="text" class="form-control" id="cvs_number" name="cvs_number" value=""
+                                   placeholder="Enter CVS Number" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Date Issued</label>
+                        <label for="issued_date" class="col-sm-2 control-label"> Date Issued</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="issued_date" name="issued_date" value=""
                                    placeholder="Enter Capture Date" required >
@@ -94,33 +94,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Expiry Date</label>
+                        <label for="expiry_date" class="col-sm-2 control-label">Expiry Date</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="expiry_date" name="expiry_date" value=""
                                    placeholder="Enter expiry date" required>
                         </div>
                     </div>
-
                     <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
                         <label for="status" class="col-sm-2 control-label"> Status
                         </label>
-
                         <div class="col-sm-10">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                          id="rdo_package"
-                                                                                          name="status"
-                                                                                          value="1"
-                                                                                          checked>
-                                Active
+                            <label class="radio-inline" style="padding-left: 0px;">
+							<input type="radio" name="status" value="1" checked> Active
                             </label>
-                            <label class="radio-inline"><input type="radio" id="rdo_product"
-                                                               name="status" value="2"> Inactive
+                            <label class="radio-inline">
+							<input type="radio" id="rdo_product" name="status" value="2"> Inactive
                             </label>
-
                         </div>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

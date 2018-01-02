@@ -110,7 +110,7 @@ class fleetcardController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
 
         $hrDetails = HRPerson::where('status', 1)->get();
-        $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
+        $fleetcardtype = fleetType::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
@@ -119,9 +119,12 @@ class fleetcardController extends Controller
         //return $vehiclefleetcards;
 
         $fleetcard = DB::table('vehicle_fleet_cards')
-            ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
+            ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner'
+			, 'hr_people.first_name as first_name', 'hr_people.surname as surname'
+			, 'fleet_type.name as type_name')
             ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
             ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
+            ->leftJoin('fleet_type', 'vehicle_fleet_cards.card_type_id', '=', 'fleet_type.id')
             ->where(function ($query) use ($cardtype) {
                 if (!empty($cardtype)) {
                     $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
@@ -189,7 +192,16 @@ class fleetcardController extends Controller
         ]);
         $docData = $request->all();
         unset($docData['_token']);
-        $expiry = strtotime($docData['expiry_date']);
+		//convert dates to unix time stamp
+        if (isset($docData['issued_date'])) {
+            $docData['issued_date'] = str_replace('/', '-', $docData['issued_date']);
+            $docData['issued_date'] = strtotime($docData['issued_date']);
+        }
+        if (isset($docData['expiry_date'])) {
+            $docData['expiry_date'] = str_replace('/', '-', $docData['expiry_date']);
+            $docData['expiry_date'] = strtotime($docData['expiry_date']);
+        }
+        
         $vehiclefleetcards = new vehicle_fleet_cards();
         $vehiclefleetcards->card_type_id = $docData['card_type_id'];
         $vehiclefleetcards->fleet_number = $docData['fleet_number'];
@@ -197,8 +209,8 @@ class fleetcardController extends Controller
         $vehiclefleetcards->holder_id = $docData['holder_id'];
         $vehiclefleetcards->card_number = $docData['card_number'];
         $vehiclefleetcards->cvs_number = $docData['cvs_number'];
-        $vehiclefleetcards->issued_date = strtotime($docData['issued_date']);
-        $vehiclefleetcards->expiry_date = $expiry;
+        $vehiclefleetcards->issued_date = $docData['issued_date'];
+        $vehiclefleetcards->expiry_date = $docData['expiry_date'];
         $vehiclefleetcards->status = $docData['status'];
         $vehiclefleetcards->save();
 
@@ -215,7 +227,7 @@ class fleetcardController extends Controller
     public function editfleetcard(Request $request, vehicle_fleet_cards $vehiclefleetcard)
     {
         $this->validate($request, [
-            'holder_id' => 'bail|required',
+            //'holder_id' => 'bail|required',
         ]);
         $docData = $request->all();
         unset($docData['_token']);
