@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Fleet Filling Station damage categories  </h3>
+                    <h3 class="box-title"> Vehicle Approval  </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -39,15 +39,14 @@
                                                      alt="Product Image" width="50" height="50">
                                             </div>
                                             </td>
-                                     <td>{{ (!empty( $filling->name)) ?  $filling->name : ''}} </td>
-                                     <td>{{ (!empty( $filling->description)) ?  $filling->description : ''}} </td>
-                                  <td>
-                                    <!--   leave here  -->
-                                    <button vehice="button" id="view_ribbons" class="btn {{ (!empty($filling->status) && $filling->status == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$filling->id}}, 'actdeac');"><i class="fa {{ (!empty($filling->status) && $filling->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($filling->status) && $filling->status == 1) ? "De-Activate" : "Activate"}}</button>
-                                 </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                     <td>{{ (!empty( $filling->vehicle_model . ' ' . $filling->year )) ?   $filling->vehicle_model . ' ' . $filling->year : ''}} </td>
+                                     <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
+                                     <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
+                                     <td>{{ (!empty( $filling->division_level_4)) ?  $filling->division_level_4 : ''}} </td>
+                                     <td>{{ (!empty( $filling->division_level_5)) ?  $filling->division_level_5 : ''}} </td>
+                                     <td></td>
+                                     <td></td>
+            
                                 </tr>
                                    @endforeach
                                @else
@@ -64,8 +63,9 @@
                       <!--   </div> -->
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-station-modal">Add new  Filling Station </button>
+                    <button type="submit" class="btn btn-primary pull-right"> Submit</button>
+                                                
+                     <!-- <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-station-modal">Add new  Filling Station </button> -->
                     </div>
              </div>
         </div>

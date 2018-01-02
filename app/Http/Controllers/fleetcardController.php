@@ -364,7 +364,7 @@ class fleetcardController extends Controller
     public function vehicle_approval(Request $request) {
 
         $Vehiclemanagemnt = vehicle_maintenance::orderBy('id', 'asc')->get();
-        return $Vehiclemanagemnt;
+       // return $Vehiclemanagemnt;
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
 
@@ -373,11 +373,11 @@ class fleetcardController extends Controller
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
-        $data['page_title'] = "Fleet Types";
-        $data['page_description'] = "Fleet Cards Search";
+        $data['page_title'] = "Vehicle Approval";
+        $data['page_description'] = "Vehicle Approvals";
         $data['breadcrumb'] = [
             ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Vehicle Approvals ', 'active' => 1, 'is_module' => 0]
         ];
 
 
@@ -389,7 +389,7 @@ class fleetcardController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Vehicle Management';
-        $data['active_rib'] = 'Driver Administration';
+        $data['active_rib'] = 'Vehicle Approval';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         //return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
