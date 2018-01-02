@@ -44,8 +44,8 @@
                                 </div>
                                 <div class="box-body" id="view_users">
 
-                                @foreach($division_levels as $division_level)
-                                <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                    @foreach($division_levels as $division_level)
+                                        <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                             <label for="{{ 'division_level_' . $division_level->level }}"
                                                    class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
@@ -62,22 +62,22 @@
                                                 </div>
                                             </div>
                                         </div>
-                            @endforeach
+                                    @endforeach
 
-                            <div class="form-group">
-                            <label for="employee" class="col-sm-2 control-label">Employee</label>
+                                    <div class="form-group">
+                                        <label for="employee" class="col-sm-2 control-label">Employee</label>
 
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                                <input type="text" class="form-control" id="employee" name="employee"
+                                                       value="" placeholder="employee" required>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <input type="text" class="form-control" id="employee" name="employee" value="" placeholder="employee" required>
-                                </div>
-                            </div>
-                        </div>
-                                    
-                                   
+
 
                                     <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
                                         <label for="status" class="col-sm-2 control-label"> Status
@@ -143,7 +143,7 @@
 
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-    
+
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Ajax form submit -->
@@ -207,31 +207,28 @@
             todayHighlight: true
         });
 
-         //Load divisions drop down
-         var parentDDID = '';
-            var loadAllDivs = 1;
-            @if (isset($view_by_admin) && $view_by_admin === 1)
-                @foreach($division_levels as $division_level)
-                    //Populate drop down on page load
-                    var ddID = '{{ 'division_level_' . $division_level->level }}';
-                    var postTo = '{!! route('divisionsdropdown') !!}';
-                    var selectedOption = '';
-                    var divLevel = parseInt('{{ $division_level->level }}');
-                    if (divLevel == 5) selectedOption = '{{ $user->person->division_level_5 }}';
-                    else if(divLevel == 4) selectedOption = '{{ $user->person->division_level_4 }}';
-                    else if(divLevel == 3) selectedOption = '{{ $user->person->division_level_3 }}';
-                    else if(divLevel == 2) selectedOption = '{{ $user->person->division_level_2 }}';
-                    else if(divLevel == 1) selectedOption = '{{ $user->person->division_level_1 }}';
-                    var incInactive = -1;
-                    var loadAll = loadAllDivs;
-                     loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                    parentDDID = ddID;
-                    loadAllDivs = -1;
-                @endforeach
-            @endif
-        
-
-        
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @if (isset($view_by_admin) && $view_by_admin === 1)
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        if (divLevel == 5) selectedOption = '{{ $user->person->division_level_5 }}';
+        else if (divLevel == 4) selectedOption = '{{ $user->person->division_level_4 }}';
+        else if (divLevel == 3) selectedOption = '{{ $user->person->division_level_3 }}';
+        else if (divLevel == 2) selectedOption = '{{ $user->person->division_level_2 }}';
+        else if (divLevel == 1) selectedOption = '{{ $user->person->division_level_1 }}';
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
+        @endif
 
 
     </script>

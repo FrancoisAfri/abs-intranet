@@ -16,6 +16,7 @@
 
                     <div class="form-group">
                     <label for="path" class="col-sm-2 control-label">Card Type</label>
+                    
                     <div class="col-sm-8">
                         
                         <select class="form-control select2" style="width: 100%;"

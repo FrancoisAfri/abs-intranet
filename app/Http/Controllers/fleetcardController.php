@@ -53,12 +53,12 @@ class fleetcardController extends Controller
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        
+
         $hrDetails = HRPerson::where('status', 1)->get();
         $fleetcardtype = fleetType::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
-        
+
 
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Cards Search";
@@ -85,12 +85,12 @@ class fleetcardController extends Controller
     /**
      * Search Fleet cards.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function fleetcardSearch(Request $request)
     {
-         $this->validate($request, [
+        $this->validate($request, [
             // 'required_from' => 'bail|required',
             // 'required_to' => 'bail|required',
         ]);
@@ -114,23 +114,23 @@ class fleetcardController extends Controller
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
         $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
-        
+
         //return $vehiclefleetcards;
 
-         $fleetcard = DB::table('vehicle_fleet_cards')
-            ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner','hr_people.first_name as first_name', 'hr_people.surname as surname')
-             ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
-             ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
-             ->where(function ($query) use ($cardtype) {
-                 if (!empty($cardtype)) {
+        $fleetcard = DB::table('vehicle_fleet_cards')
+            ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
+            ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
+            ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
+            ->where(function ($query) use ($cardtype) {
+                if (!empty($cardtype)) {
                     $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
-                 }
-             })
-             ->where(function ($query) use ($fleetnumber) {
-                 if (!empty($fleetnumber)) {
-                     $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
-                 }
-             })
+                }
+            })
+            ->where(function ($query) use ($fleetnumber) {
+                if (!empty($fleetnumber)) {
+                    $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
+                }
+            })
             ->where(function ($query) use ($company) {
                 if (!empty($company)) {
                     $query->where('vehicle_fleet_cards.company_id', $company);
@@ -170,21 +170,21 @@ class fleetcardController extends Controller
         $data['active_mod'] = 'Vehicle Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Vehicle Management', 'View Vehicle Search Results', "view Audit Results", 0);
-        
-         return view('Vehicles.Fleet_cards.fleetcard_results')->with($data);
+
+        return view('Vehicles.Fleet_cards.fleetcard_results')->with($data);
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function Addfleetcard(Request $request)
     {
         $this->validate($request, [
-           // 'holder_id' => 'bail|required',
+            // 'holder_id' => 'bail|required',
         ]);
         $docData = $request->all();
         unset($docData['_token']);
@@ -208,7 +208,7 @@ class fleetcardController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function editfleetcard(Request $request, vehicle_fleet_cards $vehiclefleetcard)
@@ -237,13 +237,13 @@ class fleetcardController extends Controller
     /**
      *Driver Admin Page
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function driverAdmin()
     {
-     
+
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
@@ -252,7 +252,7 @@ class fleetcardController extends Controller
         $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
-        
+
 
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Cards Search";
@@ -279,56 +279,55 @@ class fleetcardController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function driversearch(Request $request)
     {
         $this->validate($request, [
             // 'driver_id' => 'bail|required',
-         ]);
-         $docData = $request->all();
-         unset($docData['_token']);
-         return $docData;
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+        return $docData;
 
-       $division_level_5 =  !empty($docData['division_level_5']) ? $docData['division_level_5'] : 0;
-       $division_level_4 = !empty($SysData['division_level_4']) ? $SysData['division_level_4'] : 0;
-       $employee = $SysData['employee'];
-       $status = $SysData['status'];
+        $division_level_5 = !empty($docData['division_level_5']) ? $docData['division_level_5'] : 0;
+        $division_level_4 = !empty($SysData['division_level_4']) ? $SysData['division_level_4'] : 0;
+        $employee = $SysData['employee'];
+        $status = $SysData['status'];
 
-    //    $fleetcard = DB::table('vehicle_fleet_cards')
-    //         ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner','hr_people.first_name as first_name', 'hr_people.surname as surname')
-    //          ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
-    //          ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
-    //          ->where(function ($query) use ($cardtype) {
-    //              if (!empty($cardtype)) {
-    //                 $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
-    //              }
-    //          })
-    //          ->where(function ($query) use ($fleetnumber) {
-    //              if (!empty($fleetnumber)) {
-    //                  $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
-    //              }
-    //          })
-    //         ->where(function ($query) use ($company) {
-    //             if (!empty($company)) {
-    //                 $query->where('vehicle_fleet_cards.company_id', $company);
-    //             }
-    //         })
-    //         ->where(function ($query) use ($holder) {
-    //             if (!empty($holder)) {
-    //                 $query->where('vehicle_fleet_cards.holder_id', $holder);
-    //             }
-    //         })
-    //         ->where(function ($query) use ($status) {
-    //             if (!empty($status)) {
-    //                 $query->where('vehicle_fleet_cards.status', $status);
-    //             }
-    //         })
-    //         ->orderBy('vehicle_fleet_cards.id')
-    //         ->get();
+        //    $fleetcard = DB::table('vehicle_fleet_cards')
+        //         ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner','hr_people.first_name as first_name', 'hr_people.surname as surname')
+        //          ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
+        //          ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
+        //          ->where(function ($query) use ($cardtype) {
+        //              if (!empty($cardtype)) {
+        //                 $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
+        //              }
+        //          })
+        //          ->where(function ($query) use ($fleetnumber) {
+        //              if (!empty($fleetnumber)) {
+        //                  $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
+        //              }
+        //          })
+        //         ->where(function ($query) use ($company) {
+        //             if (!empty($company)) {
+        //                 $query->where('vehicle_fleet_cards.company_id', $company);
+        //             }
+        //         })
+        //         ->where(function ($query) use ($holder) {
+        //             if (!empty($holder)) {
+        //                 $query->where('vehicle_fleet_cards.holder_id', $holder);
+        //             }
+        //         })
+        //         ->where(function ($query) use ($status) {
+        //             if (!empty($status)) {
+        //                 $query->where('vehicle_fleet_cards.status', $status);
+        //             }
+        //         })
+        //         ->orderBy('vehicle_fleet_cards.id')
+        //         ->get();
 
 
-         
     }
 }

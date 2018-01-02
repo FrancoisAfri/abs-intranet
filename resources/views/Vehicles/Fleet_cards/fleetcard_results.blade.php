@@ -46,7 +46,8 @@
                                                 <td nowrap>
                                                     <button vehice="button" id="edit_compan"
                                                             class="btn btn-warning  btn-xs" data-toggle="modal"
-                                                            data-target="#edit-vehiclefleet-modal" data-id="{{ $fleet->id }}"
+                                                            data-target="#edit-vehiclefleet-modal"
+                                                            data-id="{{ $fleet->id }}"
                                                             data-fleet_number="{{ $fleet->fleet_number }}"
                                                             data-cvs_number="{{ $fleet->cvs_number }}"
                                                             data-holder_id="{{ $fleet->holder_id }}"
@@ -56,7 +57,7 @@
                                                             data-issued_date="{{ date("y F  Y, g:i a", $fleet->issued_date)}}"
                                                             data-expiry_date="{{date("y F  Y, g:i a",  $fleet->expiry_date)}}"
                                                             data-status="{{ $fleet->status }}"
-                                                            ><i
+                                                    ><i
                                                                 class="fa fa-pencil-square-o"></i> Edit
                                                     </button>
                                                 </td>
@@ -89,9 +90,13 @@
                                 <div class="box-footer">
                                     <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                 class="fa fa-arrow-left"></i> Back
-                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">import to PDF</button>
+                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">
+                                            import to PDF
+                                        </button>
 
-                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">import to EXCEL</button>
+                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">
+                                            import to EXCEL
+                                        </button>
                                 </div>
                             </div>
                             @include ('Vehicles.Fleet_cards.edit_vehiclefleetcard_modal')
@@ -211,7 +216,6 @@
                                     todayHighlight: true
                                 });
                             });
-
 
 
                             var fleetID;

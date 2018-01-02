@@ -13,18 +13,18 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="form-group">
-                    <label for="path" class="col-sm-2 control-label">Card Type</label>
-                    <div class="col-sm-8">
-                        
-                        <select class="form-control select2" style="width: 100%;"
-                        id="card_type_id" name="card_type_id">
-                        <option value="">*** Select a Card Type ***</option>
-                        @foreach($fleetcardtype as $card)
-                        <option value="{{ $card->id }}">{{ $card->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+                        <label for="path" class="col-sm-2 control-label">Card Type</label>
+                        <div class="col-sm-8">
+
+                            <select class="form-control select2" style="width: 100%;"
+                                    id="card_type_id" name="card_type_id">
+                                <option value="">*** Select a Card Type ***</option>
+                                @foreach($fleetcardtype as $card)
+                                    <option value="{{ $card->id }}">{{ $card->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Fleet Number</label>
                         <div class="col-sm-8">
@@ -85,10 +85,10 @@
                         <label for="path" class="col-sm-2 control-label"> Date Issued</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="issued_date" name="issued_date" value=""
-                                   placeholder="Enter Capture Date" required >
+                                   placeholder="Enter Capture Date" required>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Expiry Date</label>
                         <div class="col-sm-8">
@@ -114,7 +114,6 @@
 
                         </div>
                     </div>
-
 
 
                     <div class="modal-footer">
