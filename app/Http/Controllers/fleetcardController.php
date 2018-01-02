@@ -6,6 +6,7 @@ use App\DivisionLevelFour;
 use App\Http\Requests;
 use App\Users;
 use App\DivisionLevel;
+use App\vehicle_maintenance;
 use App\Vehicle_managemnt;
 use App\vehicle;
 Use App\vehicle_booking;
@@ -253,7 +254,6 @@ class fleetcardController extends Controller
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
-
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Cards Search";
         $data['breadcrumb'] = [
@@ -289,45 +289,110 @@ class fleetcardController extends Controller
         ]);
         $docData = $request->all();
         unset($docData['_token']);
-        return $docData;
+       // return $docData;
 
-        $division_level_5 = !empty($docData['division_level_5']) ? $docData['division_level_5'] : 0;
-        $division_level_4 = !empty($SysData['division_level_4']) ? $SysData['division_level_4'] : 0;
-        $employee = $SysData['employee'];
-        $status = $SysData['status'];
+        $Company = !empty($docData['division_level_5']) ? $docData['division_level_5'] : 0;
+        $Department = !empty($docData['division_level_4']) ? $docData['division_level_4'] : 0;
+        $employee = $docData['employee'];
+        $status = $docData['status'];
 
-        //    $fleetcard = DB::table('vehicle_fleet_cards')
-        //         ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner','hr_people.first_name as first_name', 'hr_people.surname as surname')
-        //          ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
-        //          ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
-        //          ->where(function ($query) use ($cardtype) {
-        //              if (!empty($cardtype)) {
-        //                 $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
-        //              }
-        //          })
-        //          ->where(function ($query) use ($fleetnumber) {
-        //              if (!empty($fleetnumber)) {
-        //                  $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
-        //              }
-        //          })
-        //         ->where(function ($query) use ($company) {
-        //             if (!empty($company)) {
-        //                 $query->where('vehicle_fleet_cards.company_id', $company);
-        //             }
-        //         })
-        //         ->where(function ($query) use ($holder) {
-        //             if (!empty($holder)) {
-        //                 $query->where('vehicle_fleet_cards.holder_id', $holder);
-        //             }
-        //         })
-        //         ->where(function ($query) use ($status) {
-        //             if (!empty($status)) {
-        //                 $query->where('vehicle_fleet_cards.status', $status);
-        //             }
-        //         })
-        //         ->orderBy('vehicle_fleet_cards.id')
-        //         ->get();
+        $users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+
+        //
+        $drverdetails = DB::table('drver_details')
+            ->select('drver_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department',
+             'hr_people.first_name as first_name', 'hr_people.surname as surname')
+            ->leftJoin('hr_people', 'drver_details.hr_person_id', '=', 'hr_people.id')
+            ->leftJoin('division_level_fives', 'drver_details.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'drver_details.division_level_4', '=', 'division_level_fours.id')
+            // ->where(function ($query) use ($cardtype) {
+            //     if (!empty($cardtype)) {
+            //         $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
+            //     }
+            // })
+            // ->where(function ($query) use ($Company) {
+            //     if (!empty($Company)) {
+            //         $query->where('drver_details.division_level_5', $Company);
+            //     }
+            // })
+            // ->where(function ($query) use ($Department) {
+            //     if (!empty($Department)) {
+            //         $query->where('drver_details.division_level_4', $Department);
+            //     }
+            // })
+            // ->where(function ($query) use ($employee) {
+            //     if (!empty($employee)) {
+            //         $query->where('vehicle_fleet_cards.holder_id', $employee);
+            //     }
+            // })
+            ->where(function ($query) use ($status) {
+                if (!empty($status)) {
+                    $query->where('drver_details.status', $status);
+                }
+            })
+            ->orderBy('drver_details.id')
+            ->get();
+
+            return $drverdetails;
+
+        $status = array(1 => ' Active', 2 => ' InActive');
+
+        //$data['vehicle_detail'] = $vehicle_detail;
+       // $data['fleetcardtype'] = $fleetcardtype;
+        // $data['hrDetails'] = $hrDetails;
+        // $data['contactcompanies'] = $contactcompanies;
+        // $data['Vehicle_types'] = $Vehicle_types;
+        // $data['division_levels'] = $divisionLevels;
+        // $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
+        $data['status'] = $status;
+        $data['drverdetails'] = $drverdetails;
+        $data['page_title'] = " Vehicle Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Driver Administration';
+        AuditReportsController::store('Vehicle Management', 'View Vehicle Search Results', "view Audit Results", 0);
+
+        return view('Vehicles.Driver Admin.drivers_results')->with($data);
+
+    }
+
+    public function vehicle_approval(Request $request) {
+
+        $Vehiclemanagemnt = vehicle_maintenance::orderBy('id', 'asc')->get();
+        return $Vehiclemanagemnt;
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+
+        $hrDetails = HRPerson::where('status', 1)->get();
+        $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
+        $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
+        $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
+
+        $data['page_title'] = "Fleet Types";
+        $data['page_description'] = "Fleet Cards Search";
+        $data['breadcrumb'] = [
+            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
+        ];
 
 
+        $data['vehicle_detail'] = $vehicle_detail;
+        $data['fleetcardtype'] = $fleetcardtype;
+        $data['hrDetails'] = $hrDetails;
+        $data['contactcompanies'] = $contactcompanies;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['division_levels'] = $divisionLevels;
+        $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
+        $data['active_mod'] = 'Vehicle Management';
+        $data['active_rib'] = 'Driver Administration';
+
+        AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
+        //return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
+        return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
     }
 }

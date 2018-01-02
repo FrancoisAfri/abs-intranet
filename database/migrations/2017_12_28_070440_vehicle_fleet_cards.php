@@ -25,7 +25,6 @@ class VehicleFleetCards extends Migration
             $table->integer('registration_number')->nullable();
             $table->integer('fleet_number')->nullable();
             $table->smallInteger('status')->nullable(); 
-            $table->double('rate')->nullable();
             $table->timestamps();
         });
     }
