@@ -17,6 +17,7 @@ use App\fleetcard_type;
 use App\fleetType;
 use App\module_ribbons;
 use App\ribbons_access;
+use App\vehicle_config;
 use App\ContactCompany;
 use App\vehicle_return_images;
 use App\vehicle_return_documents;
@@ -371,7 +372,8 @@ class fleetcardController extends Controller
         $hrDetails = HRPerson::where('status', 1)->get();
         $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
-        $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
+       // $vehicleConfig = vehicle_config::orderBy('id', 'desc')->get();
+      
 
         $Vehiclemanagemnt = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department' 

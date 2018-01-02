@@ -61,6 +61,10 @@ class FleetManagementController extends Controller
 
         $images = images::orderBy('id', 'asc')->get();
 
+         //check  vehicle_configuration table if new_vehicle_approval is active 
+         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+         $vehicleConfig = $vehicleConfigs->first();
+
         // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -75,7 +79,7 @@ class FleetManagementController extends Controller
             ->get();
 
         //return $vehiclemaintenance;
-
+        $data['vehicleConfig'] = $vehicleConfig;
         $data['images'] = $images;
         $data['hrDetails'] = $hrDetails;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
@@ -160,7 +164,8 @@ class FleetManagementController extends Controller
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
-
+       
+       
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = $SysData['status'];
         $vehicle_maintenance->responsible_for_maintenance = $SysData['responsible_for_maintenance'];

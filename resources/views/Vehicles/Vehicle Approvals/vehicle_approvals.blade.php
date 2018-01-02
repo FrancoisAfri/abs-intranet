@@ -36,7 +36,7 @@
                                   <td nowrap>
                                             <div class="product-img">
                                                 <img src="{{ (!empty($filling->image)) ? Storage::disk('local')->url("image/$filling->image") : 'http://placehold.it/60x50' }}"
-                                                     alt="Product Image" width="50" height="50">
+                                                     alt="Product Image" width="75" height="50">
                                             </div>
                                             </td>
                                      <td>{{ (!empty( $filling->vehiclemodel . ' ' . $filling->year )) ?   $filling->vehiclemodel . ' ' . $filling->year : ''}} </td>
