@@ -1,16 +1,10 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <!-- Include Date Range Picker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap datepicker -->
+
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-    <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
-    <!--Time Charger-->
 @endsection
 @section('content')
     <div class="row">
@@ -115,25 +109,8 @@
                         <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
                         <!-- bootstrap datepicker -->
                         <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-
-                        <!-- InputMask -->
-                        <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-                        <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-                        <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
-                        <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
-                        <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                                type="text/javascript"></script>
-                        <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-
-                        <!-- the main fileinput plugin file -->
-                        <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-
                         <!-- iCheck -->
                         <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
-                        <!-- Ajax dropdown options load -->
-                        <script src="/custom_components/js/load_dropdown_options.js"></script>
                         <!-- Ajax form submit -->
                         <script src="/custom_components/js/modal_ajax_submit.js"></script>
                         <!-- End Bootstrap File input -->
@@ -154,17 +131,12 @@
                             });
 
                             $(function () {
-                                $(".select2").select2();
-                                $('.hours-field').hide();
-                                $('.comp-field').hide();
+                               
                                 var moduleId;
                                 //Tooltip
                                 $('[data-toggle="tooltip"]').tooltip();
 
                                 //Vertically center modals on page
-
-                                //Phone mask
-                                $("[data-mask]").inputmask();
 
                                 //Vertically center modals on page
                                 function reposition() {
@@ -195,27 +167,16 @@
                                 increaseArea: '10%' // optional
                             });
 
-                            $(document).ready(function () {
-
-                                $('input[name="issued_date"]').datepicker({
+                             $('.datepicker').datepicker({
                                     format: 'dd/mm/yyyy',
                                     autoclose: true,
                                     todayHighlight: true
                                 });
-
-                                $('input[name="expiry_date"]').datepicker({
-                                    format: 'dd/mm/yyyy',
-                                    autoclose: true,
-                                    todayHighlight: true
-                                });
-                            });
-
-                            var fleetID;
+                                
+                           var fleetID;
                             $('#edit-vehiclefleet-modal').on('show.bs.modal', function (e) {
                                 var btnEdit = $(e.relatedTarget);
-                                if (parseInt(btnEdit.data('id')) > 0) {
-                                    fleetID = btnEdit.data('id');
-                                }
+                                fleetID = btnEdit.data('id');
                                 var fleet_number = btnEdit.data('fleet_number');
                                 var cardTypeId = btnEdit.data('card_type_id');
                                 var company_id = btnEdit.data('company_id');
@@ -227,7 +188,7 @@
                                 var Status = btnEdit.data('status');
                                 var modal = $(this);
                                 modal.find('#fleet_number').val(fleet_number);
-				modal.find('select#card_type_id').val(cardTypeId).trigger("change");
+				                modal.find('select#card_type_id').val(cardTypeId).trigger("change");
                                 modal.find('#company_id').val(company_id);
                                 modal.find('#holder_id').val(holder_id);
                                 modal.find('#card_number').val(card_number);
@@ -237,16 +198,29 @@
                                 modal.find('#status').val(Status);
                             });
 
-                            $('#edit_vehiclefleetcard').on('click', function () {
+                          
+                             $('#edit_vehiclefleetcard').on('click', function () {
                                 var strUrl = '/vehicle_management/edit_vehiclefleetcard/' + fleetID;
-                                var formName = 'edit-vehiclefleet-form';
+                                //var formName = 'edit-vehiclefleet-form';
                                 var modalID = 'edit-vehiclefleet-modal';
+                                var objData = {
+                                    card_type_id: $('#'+modalID).find('#card_type_id').val(),
+                                    fleet_number: $('#'+modalID).find('#fleet_number').val(),
+                                    company_id: $('#'+modalID).find('#company_id').val(),
+                                    holder_id: $('#'+modalID).find('#holder_id').val(),
+                                    card_number: $('#'+modalID).find('#card_number').val(),
+                                    cvs_number: $('#'+modalID).find('#cvs_number').val(),
+                                    issued_date: $('#'+modalID).find('#issued_date').val(),
+                                    expiry_date: $('#'+modalID).find('#expiry_date').val(),
+                                    status: $('#'+modalID).find('input:checked[name = status]').val(),
+                                    _token: $('#'+modalID).find('input[name=_token]').val()
+                                };
                                 var submitBtnID = 'edit_vehiclefleetcard';
                                 var redirectUrl = '/vehicle_management/fleet_card_search';
                                 var successMsgTitle = 'Record has been updated!';
                                 var successMsg = 'The Record has been updated successfully.';
                                 var Method = 'PATCH';
-                                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                             });
 
                         </script>

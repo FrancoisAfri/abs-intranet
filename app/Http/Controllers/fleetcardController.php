@@ -127,26 +127,26 @@ class fleetcardController extends Controller
             ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
             ->leftJoin('fleet_type', 'vehicle_fleet_cards.card_type_id', '=', 'fleet_type.id')
           ->leftJoin('vehicle_details', 'vehicle_fleet_cards.fleet_number', '=', 'vehicle_details.id')
-            // ->where(function ($query) use ($cardtype) {
-            //     if (!empty($cardtype)) {
-            //         $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
-            //     }
-            // })
-            // ->where(function ($query) use ($fleetnumber) {
-            //     if (!empty($fleetnumber)) {
-            //         $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
-            //     }
-            // })
-            // ->where(function ($query) use ($company) {
-            //     if (!empty($company)) {
-            //         $query->where('vehicle_fleet_cards.company_id', $company);
-            //     }
-            // })
-            // ->where(function ($query) use ($holder) {
-            //     if (!empty($holder)) {
-            //         $query->where('vehicle_fleet_cards.holder_id', $holder);
-            //     }
-            // })
+            ->where(function ($query) use ($cardtype) {
+                if (!empty($cardtype)) {
+                    $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
+                }
+            })
+            ->where(function ($query) use ($fleetnumber) {
+                if (!empty($fleetnumber)) {
+                    $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
+                }
+            })
+            ->where(function ($query) use ($company) {
+                if (!empty($company)) {
+                    $query->where('vehicle_fleet_cards.company_id', $company);
+                }
+            })
+            ->where(function ($query) use ($holder) {
+                if (!empty($holder)) {
+                    $query->where('vehicle_fleet_cards.holder_id', $holder);
+                }
+            })
             // ->where(function ($query) use ($status) {
             //     if (!empty($status)) {
             //         $query->where('vehicle_fleet_cards.status', $status);

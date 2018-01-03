@@ -236,7 +236,7 @@
                 var strUrl = '/vehicle_management/add_vehiclefleetcard';
                 var modalID = 'add-fleetcard-modal';
                 var objData = {
-                     card_type_id: $('#'+modalID).find('#card_type_id').val(),
+                    card_type_id: $('#'+modalID).find('#card_type_id').val(),
                     fleet_number: $('#'+modalID).find('#fleet_number').val(),
                     company_id: $('#'+modalID).find('#company_id').val(),
                     holder_id: $('#'+modalID).find('#holder_id').val(),
