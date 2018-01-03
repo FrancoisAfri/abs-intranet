@@ -127,33 +127,35 @@ class fleetcardController extends Controller
             ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
             ->leftJoin('fleet_type', 'vehicle_fleet_cards.card_type_id', '=', 'fleet_type.id')
           ->leftJoin('vehicle_details', 'vehicle_fleet_cards.fleet_number', '=', 'vehicle_details.id')
- ->where(function ($query) use ($cardtype) {
-                if (!empty($cardtype)) {
-                    $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
-                }
-            })
-            ->where(function ($query) use ($fleetnumber) {
-                if (!empty($fleetnumber)) {
-                    $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
-                }
-            })
-            ->where(function ($query) use ($company) {
-                if (!empty($company)) {
-                    $query->where('vehicle_fleet_cards.company_id', $company);
-                }
-            })
-            ->where(function ($query) use ($holder) {
-                if (!empty($holder)) {
-                    $query->where('vehicle_fleet_cards.holder_id', $holder);
-                }
-            })
-            ->where(function ($query) use ($status) {
-                if (!empty($status)) {
-                    $query->where('vehicle_fleet_cards.status', $status);
-                }
-            })
-            ->orderBy('vehicle_fleet_cards.id')
+            // ->where(function ($query) use ($cardtype) {
+            //     if (!empty($cardtype)) {
+            //         $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
+            //     }
+            // })
+            // ->where(function ($query) use ($fleetnumber) {
+            //     if (!empty($fleetnumber)) {
+            //         $query->where('vehicle_fleet_cards.fleet_number', $fleetnumber);
+            //     }
+            // })
+            // ->where(function ($query) use ($company) {
+            //     if (!empty($company)) {
+            //         $query->where('vehicle_fleet_cards.company_id', $company);
+            //     }
+            // })
+            // ->where(function ($query) use ($holder) {
+            //     if (!empty($holder)) {
+            //         $query->where('vehicle_fleet_cards.holder_id', $holder);
+            //     }
+            // })
+            // ->where(function ($query) use ($status) {
+            //     if (!empty($status)) {
+            //         $query->where('vehicle_fleet_cards.status', $status);
+            //     }
+            // })
+            ->orderBy('vehicle_fleet_cards.id', 'asc')
             ->get();
+
+            //return $fleetcard;
 
         $status = array(1 => ' Active', 2 => ' InActive');
 
@@ -399,8 +401,6 @@ class fleetcardController extends Controller
 
             //return $Vehiclemanagemnt;
 
-
-
         $data['page_title'] = "Vehicle Approval";
         $data['page_description'] = "Vehicle Approvals";
         $data['breadcrumb'] = [
@@ -418,7 +418,6 @@ class fleetcardController extends Controller
         $data['active_rib'] = 'Vehicle Approval';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
-        //return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
         return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
     }
 
@@ -429,6 +428,7 @@ class fleetcardController extends Controller
         ]);
         $docData = $request->all();
         unset($docData['_token']);
+        
         return $docData;
     }
 }

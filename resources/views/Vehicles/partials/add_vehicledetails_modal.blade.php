@@ -14,7 +14,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                    @if (isset($vehicleConfig) && $vehicleConfig == 0  )
+                    @if (isset($vehicleConfig) && $vehicleConfig == 0)
                     <div class="form-group">
                     <label for="status" class="col-sm-2 control-label">Status</label>
                     <div class="col-sm-8">
