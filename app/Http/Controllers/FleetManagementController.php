@@ -583,6 +583,8 @@ class FleetManagementController extends Controller
                 ->orderBy('keytracking.id')
                 ->get();
 
+                //return $keytracking;
+
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [

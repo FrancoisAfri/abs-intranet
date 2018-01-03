@@ -229,17 +229,31 @@
             todayHighlight: true
         });
 
-        //Post perk form to server using ajax (add)
-        $('#add-fleet-card').on('click', function () {
-            var strUrl = '/vehicle_management/add_vehiclefleetcard';
-            var formName = 'add-fleetcard-form';
-            var modalID = 'add-fleetcard-modal';
-            var submitBtnID = 'add-fleet-card';
-            var redirectUrl = '/vehicle_management/fleet_cards';
-            var successMsgTitle = 'New Record Added!';
-            var successMsg = 'The Record  has been updated successfully.';
-            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
+       
+
+         //Post module form to server using ajax (ADD)
+           $('#add-fleet-card').on('click', function () {
+                var strUrl = '/vehicle_management/add_vehiclefleetcard';
+                var modalID = 'add-fleetcard-modal';
+                var objData = {
+                    card_type_id: $('#'+modalID).find('#card_type_id').val(),
+                    fleet_number: $('#'+modalID).find('#fleet_number').val(),
+                    company_id: $('#'+modalID).find('#company_id').val(),
+                    holder_id: $('#'+modalID).find('#holder_id').val(),
+                    card_number: $('#'+modalID).find('#card_number').val(),
+                    cvs_number: $('#'+modalID).find('#cvs_number').val(),
+                    issued_date: $('#'+modalID).find('#issued_date').val(),
+                    expiry_date: $('#'+modalID).find('#expiry_date').val(),
+                    status: $('#'+modalID).find('input:checked[name = status]').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'add-fleet-card';
+                var redirectUrl = '/vehicle_management/fleet_cards';
+                var successMsgTitle = 'New Record Added!';
+                var successMsg = 'The Record  has been updated successfully.';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
 
 
     </script>

@@ -83,9 +83,10 @@
                                                 data-key_type="{{$key->key_type}}"
                                                 data-key_status="{ {$key->key_status}}"
                                                 data-description="{{$key->description}}"
-                                                data-date_issued="{{$key->date_issued}}"
+                                                data-date_issued="{{date(' d M Y', $key->date_issued)}}"
                                                 data-issued_by="{{ $key->issued_by}}"
-                                                data-reason_loss="{{ $key->reason_loss}}" data-date_lost="{{ $key->date_lost }}"
+                                                data-reason_loss="{{ $key->reason_loss}}"
+                                                data-date_lost="{{ date(' d M Y', $key->date_lost) }}"
 
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -218,6 +219,14 @@
                         autoclose: true,
                         todayHighlight: true
                     });
+                     $(document).ready(function () {
+                        $('input[name="date_issued"]').datepicker({
+                                format: 'dd/mm/yyyy',
+                                autoclose: true,
+                                todayHighlight: true
+                            });	
+		                });
+
 
                     $(function () {
                         $('img').on('click', function () {
