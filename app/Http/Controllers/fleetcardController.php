@@ -456,8 +456,7 @@ class fleetcardController extends Controller
                     $status = $sValue[3];
                 } else $status = $sValue[0];
                 $vehID = $vehicleID;
-                 $status = 3;
-               // return  $status;
+                $status = 3;
                 $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
             }
         }

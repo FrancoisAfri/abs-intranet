@@ -31,22 +31,22 @@
                                 <th>Vehicle Model/Year</th>
                                 <th>Fleet Number</th>
                                 <th>Vehicle Registration</th>
-                                <thOdometer></th>
+                                <th>Odometer</th>
                                 <th>Company</th>
                                 <th>Department</th>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
                                                     id="checkallaccept" onclick="checkAllboxAccept()"/>
-                                                                                              
+
                                         <br/></th>
                                     <th style="width: 5px; text-align: center;">Decline <input type="checkbox"
-                                                    id="checkallaccept" onclick="checkAllboxAccept()"/><br/>
-                                                                                               
+                                                    id="checkallreject" onclick="checkAllboxreject()"/><br/>
+
                                     </th>
                             </tr>
 
                             @if (count($Vehiclemanagemnt) > 0)
                                 @foreach ($Vehiclemanagemnt as $filling)
-                                    <tr id="categories-list">
+                                    <tr style="text-align:center">
 
                                         <td nowrap>
                                             <div class="product-img">
@@ -57,16 +57,17 @@
                                         <td>{{ (!empty( $filling->vehiclemodel . ' ' . $filling->year )) ?   $filling->vehiclemodel . ' ' . $filling->year : ''}} </td>
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
+                                        <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
                                         <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
                                         <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
-                                        <td>
+                                        <td style='text-align:center'>
                                         <input type="hidden" class="checkbox selectall" id="vehicleappprove_{{ $filling->id }}" name="vehicleappprove_{{ $filling->id }}" value="0">
                                         <input type="checkbox" class="checkbox selectall" id="vehicleappprove_{{ $filling->id }}" name="vehicleappprove_{{ $filling->id }}" value="1"  {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
-                                        
+
                                         <td>
-                                        <input type="hidden" class="checkbox selectall" id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="0">
-                                        <input type="checkbox" class="checkbox selectall" id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="1"  {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
+                                        <input type="hidden" class="checkbox reject" id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="0">
+                                        <input type="checkbox" class="checkbox reject" id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="1"  {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
 
                                     </tr>
@@ -89,7 +90,7 @@
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary pull-right"> Submit</button>
 
-                           
+
                         </div>
                     </div>
             </div>
@@ -134,6 +135,15 @@
                     }
                     else {
                         $('.selectall').prop('checked', false);
+                    }
+                }
+
+                function checkAllboxreject() {
+                    if ($('#checkallreject:checked').val() == 'on') {
+                        $('.reject').prop('checked', true);
+                    }
+                    else {
+                        $('.reject').prop('checked', false);
                     }
                 }
                 $(function () {
