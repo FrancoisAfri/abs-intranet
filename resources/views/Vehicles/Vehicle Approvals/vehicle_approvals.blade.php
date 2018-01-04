@@ -67,7 +67,8 @@
 
                                         <td>
                                         <input type="hidden" class="checkbox reject" id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="0">
-                                        <input type="checkbox" class="checkbox reject" id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="1"  {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
+                                        <input type="checkbox" class="checkbox reject" data-toggle="modal" data-target="#decline-vehicle-modal"
+                                         id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="1">
                                         </td>
 
                                     </tr>
@@ -95,7 +96,7 @@
                     </div>
             </div>
             <!-- Include add new prime rate modal -->
-            {{--  @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')  --}}
+            @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')
             </form>
 
         </div>
@@ -181,48 +182,34 @@
                     //Cancell booking
                     //Post module form to server using ajax (ADD)
 
+                    //save reject reason
+            
 
-                    //edit booking
-                    var bookingID;
-                    $('#edit-booking-modal').on('show.bs.modal', function (e) {
-                        //console.log('kjhsjs');
-                        var btnEdit = $(e.relatedTarget);
-                        if (parseInt(btnEdit.data('id')) > 0) {
-                            bookingID = btnEdit.data('id');
-
-                        }
-                        var vehiclemodel = btnEdit.data('vehiclemodel');
-                        var vehicle_reg = btnEdit.data('vehicle_reg');
-                        var required_from = btnEdit.data('required_from');
-                        var required_to = btnEdit.data('required_to');
-                        var usage_type = btnEdit.data('usage_type');
-                        var driver = btnEdit.data('driver');
-                        var purpose = btnEdit.data('purpose');
-                        var destination = btnEdit.data('destination');
-                        var vehicle_id = btnEdit.data('vehicle_id');
+                    var reasonID;
+                    $('#decline-vehicle-modal').on('show.bs.modal', function (e) {
+                         var btnEdit = $(e.relatedTarget);
+                              if (parseInt(btnEdit.data('id')) > 0) {
+                              reasonID = btnEdit.data('id');
+                             }
+                        console.log('gets here: ' + reasonID);
+                        var description = btnEdit.data('description');
                         var modal = $(this);
-                        modal.find('#vehiclemodel').val(vehiclemodel);
-                        modal.find('#vehicle_reg').val(vehicle_reg);
-                        modal.find('#required_from').val(required_from);
-                        modal.find('#required_to').val(required_to);
-                        modal.find('#usage_type').val(usage_type);
-                        modal.find('#driver').val(driver);
-                        modal.find('#purpose').val(purpose);
-                        modal.find('#destination').val(destination);
-                        modal.find('#vehicle_id').val(vehicle_id);
+                        modal.find('#description').val(description);
                     });
 
-                    //Post perk form to server using ajax (edit)
-                    $('#edit_booking').on('click', function () {
-                        var strUrl = '/vehicle_management/edit_booking/' + bookingID;
-                        var formName = 'edit-booking-form';
-                        var modalID = 'edit-booking-modal';
-                        var submitBtnID = 'edit_booking';
-                        var redirectUrl = '/vehicle_management/vehiclebooking_results';
-                        var successMsgTitle = 'Changes Saved!';
-                        var successMsg = 'The  details have been updated successfully!';
+                     $('#rejection-reason').on('click', function() {
+                        var strUrl = '/vehicle_management/reject_vehicle/' + reasonID;
+                        var modalID = 'decline-vehicle-modal';
+                        var objData = {
+                            description: $('#'+modalID).find('#description').val(),
+                            _token: $('#'+modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'rejection-reason';
+                        var redirectUrl = '/vehicle_management/vehicle_approval';
+                        var successMsgTitle = 'Reason Added!';
+                        var successMsg = 'The reject reason has been updated successfully.';
                         var Method = 'PATCH';
-                        modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                     });
 
 

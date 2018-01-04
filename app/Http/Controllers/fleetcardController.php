@@ -426,9 +426,6 @@ class fleetcardController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-
-        //return $results;
-
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
                 unset($results[$key]);
@@ -446,21 +443,36 @@ class fleetcardController extends Controller
                 $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
             }
         }
-        //
-        foreach ($results as $key => $sValue) {
-            if (strlen(strstr($key, 'vehiclereject'))) {
-                $aValue = explode("_", $key);
-                $name = $aValue[0];
-                $vehicleID = $aValue[1];
-                if (count($sValue) > 1) {
-                    $status = $sValue[3];
-                } else $status = $sValue[0];
-                $vehID = $vehicleID;
-                $status = 3;
-                $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
-            }
-        }
 
+        // foreach ($results as $key => $sValue) {
+        //     if (strlen(strstr($key, 'vehiclereject'))) {
+        //         $aValue = explode("_", $key);
+        //         $name = $aValue[0];
+        //         $vehicleID = $aValue[1];
+        //         if (count($sValue) > 1) {
+        //             $status = $sValue[3];
+        //         } else $status = $sValue[0];
+        //         $vehID = $vehicleID;
+        //         $status = 3;
+        //         $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
+        //     }
+        // }
+        AuditReportsController::store('Vehicle Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
+    }
+    public function rejectReason (Request $request, vehicle_maintenance $reason){
+        $this->validate($request, [
+            //'description' => 'numeric',
+        ]);
+        $vehicleData = $request->all();
+        unset($vehicleData['_token']);
+
+        $reason->rejector_id = $loggedInEmplID = Auth::user()->person->id;
+        $reason->reject_reason = $vehicleData['description'];
+        $reason->reject_timestamp = $currentDate = time();
+        $reason->status = 3;
+        $reason->update();
+        AuditReportsController::store('Vehicle Management', 'Reject Vehicle', "Vehicle has been Declined", 0);
+        return response()->json();
     }
 }

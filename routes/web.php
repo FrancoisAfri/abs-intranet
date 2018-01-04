@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
   |--------------------------------------------------------------------------
   | Web Routes
@@ -297,6 +299,7 @@ Route::post('vehicle_management/driver_search', 'fleetcardController@driversearc
 #******************** Vehicle Approval *************************
 Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 Route::post('vehicle_management/vehicleApproval', 'fleetcardController@vehicleApprovals');
+Route::patch('vehicle_management/reject_vehicle/{reason}','fleetcardController@rejectReason' );
 
 //##----bookings
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');

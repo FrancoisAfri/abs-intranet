@@ -71,10 +71,7 @@
         </div>
    <!-- Include add new prime rate modal -->
         @include('Vehicles.FuelTanks.partials.add_tank_modal')
-        @include('Vehicles.partials.edit_fleet_modal')
-        {{--  add_tank_modal.blade  --}}
-          <!-- Include delete warning Modal form-->
-    
+        {{--  @include('Vehicles.partials.edit_fleet_modal')  --}}
 </div>
 
 
