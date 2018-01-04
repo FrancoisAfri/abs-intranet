@@ -4,20 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCReturn2ToCarVoucherTable extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    <?php
-
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class AddCReturn2ToCarVoucherTable extends Migration
+class AddCReturn2ToCasrVoucherTable extends Migration
 {
     /**
      * Run the migrations.
@@ -26,7 +13,9 @@ class AddCReturn2ToCarVoucherTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('car_vouchers', function (Blueprint $table) {
+            $table->string('c_return_addr2')->nullable();
+			});
     }
 
     /**
@@ -36,8 +25,8 @@ class AddCReturn2ToCarVoucherTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('car_vouchers', function (Blueprint $table) {
+            $table->dropColumn('c_return_addr2');
+        });
     }
-}
-
 }
