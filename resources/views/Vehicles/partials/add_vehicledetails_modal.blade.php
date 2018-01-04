@@ -14,7 +14,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                    @if (isset($vehicleConfig) && $vehicleConfig == 0)
+                    @if (isset($vehicleConfig) && $vehicleConfig == 1)
                     <div class="form-group">
                     <label for="status" class="col-sm-2 control-label">Status</label>
                     <div class="col-sm-8">
@@ -25,10 +25,10 @@
                             
                             <select id="status" name="status" class="form-control">
                                 <option value="0">*** Select Status ***</option>
-                                <option value="1"> Active  </option>
+                                {{--  <option value="1"> Active  </option>  --}}
                                 <option value="2"> Require Approval </option>
-                                <option value="3"> Rejected</option>
-                                <option value="4"> Inactive </option>
+                                {{--  <option value="3"> Rejected</option>
+                                <option value="4"> Inactive </option>  --}}
                             </select>
                         </div>
                     </div>
@@ -44,7 +44,10 @@
                             
                             <select id="status" name="status" class="form-control">
                                 <option value="0">*** Select Status ***</option>
-                                <option value="1"> Active  </option>
+                                 <option value="1"> Active  </option>
+                                <option value="2"> Require Approval </option>
+                                <option value="3"> Rejected</option>
+                                <option value="4"> Inactive </option>
                             </select>
                         </div>
                     </div>
