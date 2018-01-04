@@ -103,7 +103,7 @@ class fleetcardController extends Controller
         $fleetnumber = $request['fleet_number'];
         $company = $request['company_id'];
         $holder = $vehicleData['holder_id'];
-        $status = $vehicleData['status'];
+        //$status = $vehicleData['status'];
 
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -115,18 +115,18 @@ class fleetcardController extends Controller
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
         $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
-       // return $fleetcardtype;
+        // return $fleetcardtype;
 
         //return $vehiclefleetcards;
 
         $fleetcard = DB::table('vehicle_fleet_cards')
             ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner'
-			, 'hr_people.first_name as first_name', 'hr_people.surname as surname'
-			, 'fleet_type.name as type_name', 'vehicle_details.fleet_number as fleetnumber')
+                , 'hr_people.first_name as first_name', 'hr_people.surname as surname'
+                , 'fleet_type.name as type_name', 'vehicle_details.fleet_number as fleetnumber')
             ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
             ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
             ->leftJoin('fleet_type', 'vehicle_fleet_cards.card_type_id', '=', 'fleet_type.id')
-          ->leftJoin('vehicle_details', 'vehicle_fleet_cards.fleet_number', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_details', 'vehicle_fleet_cards.fleet_number', '=', 'vehicle_details.id')
             ->where(function ($query) use ($cardtype) {
                 if (!empty($cardtype)) {
                     $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
@@ -155,7 +155,7 @@ class fleetcardController extends Controller
             ->orderBy('vehicle_fleet_cards.id', 'asc')
             ->get();
 
-            //return $fleetcard;
+        //return $fleetcard;
 
         $status = array(1 => ' Active', 2 => ' InActive');
 
@@ -196,7 +196,7 @@ class fleetcardController extends Controller
         ]);
         $docData = $request->all();
         unset($docData['_token']);
-		//convert dates to unix time stamp
+        //convert dates to unix time stamp
         if (isset($docData['issued_date'])) {
             $docData['issued_date'] = str_replace('/', '-', $docData['issued_date']);
             $docData['issued_date'] = strtotime($docData['issued_date']);
@@ -205,7 +205,7 @@ class fleetcardController extends Controller
             $docData['expiry_date'] = str_replace('/', '-', $docData['expiry_date']);
             $docData['expiry_date'] = strtotime($docData['expiry_date']);
         }
-        
+
         $vehiclefleetcards = new vehicle_fleet_cards();
         $vehiclefleetcards->card_type_id = $docData['card_type_id'];
         $vehiclefleetcards->fleet_number = $docData['fleet_number'];
@@ -305,7 +305,7 @@ class fleetcardController extends Controller
         ]);
         $docData = $request->all();
         unset($docData['_token']);
-       // return $docData;
+        // return $docData;
 
         $Company = !empty($docData['division_level_5']) ? $docData['division_level_5'] : 0;
         $Department = !empty($docData['division_level_4']) ? $docData['division_level_4'] : 0;
@@ -317,7 +317,7 @@ class fleetcardController extends Controller
         //
         $drverdetails = DB::table('drver_details')
             ->select('drver_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department',
-             'hr_people.first_name as first_name', 'hr_people.surname as surname')
+                'hr_people.first_name as first_name', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'drver_details.hr_person_id', '=', 'hr_people.id')
             ->leftJoin('division_level_fives', 'drver_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'drver_details.division_level_4', '=', 'division_level_fours.id')
@@ -349,12 +349,12 @@ class fleetcardController extends Controller
             ->orderBy('drver_details.id')
             ->get();
 
-            return $drverdetails;
+        return $drverdetails;
 
         $status = array(1 => ' Active', 2 => ' InActive');
 
         //$data['vehicle_detail'] = $vehicle_detail;
-       // $data['fleetcardtype'] = $fleetcardtype;
+        // $data['fleetcardtype'] = $fleetcardtype;
         // $data['hrDetails'] = $hrDetails;
         // $data['contactcompanies'] = $contactcompanies;
         // $data['Vehicle_types'] = $Vehicle_types;
@@ -377,29 +377,26 @@ class fleetcardController extends Controller
 
     }
 
-    public function vehicle_approval(Request $request) {
+    public function vehicle_approval(Request $request)
+    {
 
-        //$Vehiclemanagemnt = vehicle_maintenance::orderBy('id', 'asc')->get();
-       //return $Vehiclemanagemnt;
+
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-
         $hrDetails = HRPerson::where('status', 1)->get();
-        $fleetcardtype = fleetcard_type::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
-       // $vehicleConfig = vehicle_config::orderBy('id', 'desc')->get();
-      
 
         $Vehiclemanagemnt = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department' 
-            , 'vehicle_model.name as vehiclemodel')
+            ->select('vehicle_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department'
+                , 'vehicle_model.name as vehiclemodel')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-            ->leftJoin('vehicle_model','vehicle_details.vehicle_model', '=' , 'vehicle_model.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->orderBy('vehicle_details.id')
+            ->where('vehicle_details.status', '!=', 1)
             ->get();
 
-            //return $Vehiclemanagemnt;
+        //return $Vehiclemanagemnt;
 
         $data['page_title'] = "Vehicle Approval";
         $data['page_description'] = "Vehicle Approvals";
@@ -408,7 +405,7 @@ class fleetcardController extends Controller
             ['title' => 'Manage Vehicle Approvals ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['fleetcardtype'] = $fleetcardtype;
+        // $data['fleetcardtype'] = $fleetcardtype;
         $data['hrDetails'] = $hrDetails;
         $data['contactcompanies'] = $contactcompanies;
         $data['Vehicle_types'] = $Vehicle_types;
@@ -421,14 +418,34 @@ class fleetcardController extends Controller
         return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
     }
 
-    public function vehicleApprovals(Request $request) {
-
+    public function vehicleApprovals(Request $request, vehicle_maintenance $vehicle_maintenance)
+    {
         $this->validate($request, [
-            // 'driver_id' => 'bail|required',
+            // 'date_uploaded' => 'required',
         ]);
-        $docData = $request->all();
-        unset($docData['_token']);
-        
-        return $docData;
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+
+        //return $results;
+
+        foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
+        foreach ($results as $key => $sValue) {
+            if (strlen(strstr($key, 'vehicleappprove'))) {
+                $aValue = explode("_", $key);
+                $name = $aValue[0];
+                $vehicleID = $aValue[1];
+                if (count($sValue) > 1) {
+                    $status = $sValue[1];
+                } else $status = $sValue[0];
+                $vehID = $vehicleID;
+                $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
+            }
+        }
+        return back();
     }
 }
