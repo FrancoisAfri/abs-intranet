@@ -393,7 +393,7 @@ class fleetcardController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->orderBy('vehicle_details.id')
-            ->where('vehicle_details.status', '!=', 1)
+            ->whereNotIn('vehicle_details.status', [1, 3])
             ->get();
 
         //return $Vehiclemanagemnt;
@@ -446,6 +446,22 @@ class fleetcardController extends Controller
                 $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
             }
         }
+        //
+        foreach ($results as $key => $sValue) {
+            if (strlen(strstr($key, 'vehiclereject'))) {
+                $aValue = explode("_", $key);
+                $name = $aValue[0];
+                $vehicleID = $aValue[1];
+                if (count($sValue) > 1) {
+                    $status = $sValue[3];
+                } else $status = $sValue[0];
+                $vehID = $vehicleID;
+                 $status = 3;
+               // return  $status;
+                $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
+            }
+        }
+
         return back();
     }
 }

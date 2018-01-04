@@ -14,7 +14,7 @@ class AddVehiclesIDToVehicleReturnImage extends Migration
     public function up()
     {
        Schema::table('vehicle_return_images', function (Blueprint $table) {
-           $table->integer('vehicleID')->nullable()->unsigned()->index();
+           //$table->integer('vehicleID')->nullable()->unsigned()->index();
           $table->integer('bookingID')->nullable()->unsigned()->index();
         });
     }
@@ -27,7 +27,7 @@ class AddVehiclesIDToVehicleReturnImage extends Migration
     public function down()
     {
         Schema::table('vehicle_return_images', function (Blueprint $table) {
-          $table->integer('vehicleID')->nullable()->unsigned()->index();
+         // $table->integer('vehicleID')->nullable()->unsigned()->index();
           $table->integer('bookingID')->nullable()->unsigned()->index();
         });
     }

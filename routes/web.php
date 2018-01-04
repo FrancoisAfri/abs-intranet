@@ -293,7 +293,7 @@ Route::post('vehicle_management/driver_search', 'fleetcardController@driversearc
 
 #******************** Vehicle Approval *************************
 Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
-Route::patch('vehicle_management/vehicleApproval', 'fleetcardController@vehicleApprovals');
+Route::post('vehicle_management/vehicleApproval', 'fleetcardController@vehicleApprovals');
 
 //##----bookings
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
