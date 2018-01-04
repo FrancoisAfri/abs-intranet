@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RemoveCReturn2FromCarVoucherTable extends Migration
+class DropCReturn2ToCarVoucherTable extends Migration
 {
     /**
      * Run the migrations.
