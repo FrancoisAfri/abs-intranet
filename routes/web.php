@@ -287,6 +287,9 @@ Route::post('vehicle_management/add_vehiclefleetcard', 'fleetcardController@Addf
 Route::patch('vehicle_management/edit_vehiclefleetcard/{vehiclefleetcard}' ,'fleetcardController@editfleetcard');
 //Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 
+#//************Manage Fuel Tanks *******************
+Route::get('vehicle_management/fuel_tank', 'FuelManagementController@fueltankIndex');
+
 #******************** Driver Admin *************************
 Route::get('vehicle_management/driver_admin', 'fleetcardController@driverAdmin');
 Route::post('vehicle_management/driver_search', 'fleetcardController@driversearch');

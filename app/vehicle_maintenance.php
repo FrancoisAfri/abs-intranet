@@ -13,7 +13,7 @@ class vehicle_maintenance extends Model
         'vehicle_color', 'metre_reading_type', 'odometer_reading', 'hours_reading', 'fuel_type',
         'size_of_fuel_tank', 'fleet_number', 'cell_number', 'tracking_umber', 'vehicle_owner',
         'title_type', 'financial_institution', 'company', 'extras', 'image', 'property_type',
-        'division_level_1', 'division_level_2', 'division_level_3', 'division_level_4', 'division_level_5'];
+        'division_level_1', 'division_level_2', 'division_level_3', 'division_level_4', 'division_level_5','reject_reason'];
 
     public function images()
     {

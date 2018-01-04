@@ -74,7 +74,7 @@
                                 @endforeach
                             @else
                                 <tr id="categories-list">
-                                    <td colspan="8">
+                                    <td colspan="9">
                                         <div class="alert alert-danger alert-dismissable">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                                 &times;

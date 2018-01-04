@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddRejectReasonToVehicleDetails extends Migration
+class AddReasonToVehicleDetails extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddRejectReasonToVehicleDetails extends Migration
      */
     public function up()
     {
-        Schema::table('drver_details', function (Blueprint $table) {
+        Schema::table('vehicle_details', function (Blueprint $table) {
             $table->string('reject_reason')->unsigned()->nullable();
         });
     }
@@ -25,8 +25,9 @@ class AddRejectReasonToVehicleDetails extends Migration
      */
     public function down()
     {
-        Schema::table('drver_details', function (Blueprint $table) {
+        Schema::table('vehicle_details', function (Blueprint $table) {
             $table->dropColumn('reject_reason');
         });
     }
 }
+
