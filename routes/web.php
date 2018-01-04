@@ -683,7 +683,9 @@ Route::get('vouchers/get-voucher', 'VouchersGuestController@index');
 Route::post('vouchers/get-voucher', 'VouchersGuestController@store');
 Route::get('vouchers/view/{voucher}', 'VouchersGuestController@voucherPDF');
 Route::post('vouchers/email/{voucher}', 'VouchersGuestController@emailVoucher');
-
+Route::post('vouchers/get-car-voucher', 'VouchersGuestController@carVoucher');
+Route::get('vouchers/view-car/{voucher}', 'VouchersGuestController@carVvoucherPDF');
+Route::post('vouchers/email-car/{voucher}', 'VouchersGuestController@carEmailVoucher');
 //Survey
 Route::get('survey/reports', 'SurveysController@indexReports');
 Route::get('survey/question_activate/{question}', 'SurveysController@actDeact');

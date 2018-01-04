@@ -49,7 +49,7 @@
                                         <td style="vertical-align: middle;">{{ $voucher->clnt_cellno }}</td>
                                         <td style="vertical-align: middle;">{{ $voucher->dr_name_order }}</td>
                                         <td style="vertical-align: middle; width: 70px;" class="text-center" nowrap>
-                                            <a href="/vouchers/view/{{ $voucher->id }}" class="btn btn-xs btn-link" title="View/Print" target="_blank"><i class="fa fa-print"></i></a>
+                                            <a href="/vouchers/view-car/{{ $voucher->id }}" class="btn btn-xs btn-link" title="View/Print" target="_blank"><i class="fa fa-print"></i></a>
                                             <button type="button" data-toggle="modal" data-target="#email-voucher-modal" data-id="{{ $voucher->id }}" class="btn btn-xs btn-link" title="Send"><i class="fa fa-send"></i></button>
                                         </td>
                                     </tr>
@@ -128,7 +128,7 @@
 
             //Post email voucher form to server using ajax (add)
             $('#email-voucher-btn').on('click', function() {
-                var strUrl = '/vouchers/email/' + voucherID;
+                var strUrl = '/vouchers/email-car/' + voucherID;
                 var formName = 'email-voucher-form';
                 var modalID = 'email-voucher-modal';
                 var submitBtnID = 'email-voucher-btn';
