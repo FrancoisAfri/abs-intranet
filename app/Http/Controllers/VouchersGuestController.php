@@ -193,7 +193,7 @@ class VouchersGuestController extends Controller
         $data['asataImg'] = public_path() . Storage::disk('local')->url('voucher_icons/ASATA.png');
         //return public_path() . Storage::disk('local')->url('voucher_icons/users.png');
 
-        $view = view('vouchers.guests.pdf_voucher', $data)->render();
+        $view = view('vouchers.guests.pdf_car_voucher', $data)->render();
         //return $view;
         $pdf = resolve('dompdf.wrapper');
         $pdf->loadHTML($view);
