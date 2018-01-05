@@ -129,8 +129,8 @@
                 termConditionID = btnEdit.data('id');
                 var divID = btnEdit.data('division_id');
                 var modal = $(this);
-                modal.find('#division_id').val(divID).trigger('change');
-                modal.find('#registration_number').val(regNumber);
+				var termName = btnEdit.data('term_name');
+                modal.find('#term_name').val(termName);
             });
 
             //Post perk form to server using ajax (add)

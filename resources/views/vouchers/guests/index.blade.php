@@ -24,7 +24,7 @@
                 <!-- /.box-header -->
 
                 <!-- Form Start -->
-                <form name="service-rating-form" class="form-horizontal" method="POST" action="/vouchers/get-voucher">
+                <form id="voucher_form" class="form-horizontal" method="POST">
                     {{ csrf_field() }}
                     <div class="box-body">
                         @if (count($errors) > 0)
@@ -45,6 +45,20 @@
                                 {{ session('success_add') }}
                             </div>
                         @endif
+						<div class="form-group">
+                            <label for="search_type" class="col-sm-2 control-label">Voucher Type</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<select class="form-control" name="search_type" id="search_type" placeholder="Select Appliction Type"  onchange="changetype(this.value)"  required>
+									<option value="1">Accomodation</option>
+									<option value="2">Car</option>
+								</select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group {{ $errors->has('clnt_name') ? ' has-error' : '' }}">
                             <label for="clnt_name" class="col-sm-2 control-label">Full Name</label>
                             <div class="col-sm-10">
@@ -56,18 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<div class="form-group {{ $errors->has('clnt_cellno') ? ' has-error' : '' }}">
-                            <label for="clnt_cellno" class="col-sm-2 control-label">Cell Number</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-mobile-phone"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="clnt_cellno" name="clnt_cellno" value="{{ old('client_name') }}" placeholder="Cell Number">
-                                </div>
-                            </div>
-                        </div> -->
-						<div class="form-group {{ $errors->has('sup_ref') ? ' has-error' : '' }}">
+						<div class="form-group {{ $errors->has('sup_ref') ? ' has-error' : '' }} voucher">
                             <label for="sup_ref" class="col-sm-2 control-label">Ref No</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -75,6 +78,17 @@
                                         <i class="fa fa-user"></i>
                                     </div>
                                     <input type="text" class="form-control" id="sup_ref" name="sup_ref" value="{{ old('sup_ref') }}" placeholder="Ref No">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group {{ $errors->has('c_sup_vouch_no') ? ' has-error' : '' }} car">
+                            <label for="c_sup_vouch_no" class="col-sm-2 control-label">Voucher No</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="c_sup_vouch_no" name="c_sup_vouch_no" value="{{ old('c_sup_vouch_no') }}" placeholder="Voucher No">
                                 </div>
                             </div>
                         </div>
@@ -109,6 +123,24 @@
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
+			$('.voucher').show();
+			$('.car').hide();
         });
+		function changetype(type)
+		{
+			if (type == 1)
+			{
+				$('.car').hide();
+				$('.voucher').show();
+				$('#voucher_form').attr('action', '/vouchers/get-voucher');
+			}
+			else if (type == 2)
+			{
+				$('.voucher').hide();
+				$('.car').show();
+				$('#voucher_form').attr('action', '/vouchers/get-car-voucher');
+			}
+				
+		}
     </script>
 @endsection
