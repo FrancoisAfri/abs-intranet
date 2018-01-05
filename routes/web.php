@@ -291,6 +291,8 @@ Route::patch('vehicle_management/edit_vehiclefleetcard/{vehiclefleetcard}' ,'fle
 
 #//************Manage Fuel Tanks *******************
 Route::get('vehicle_management/fuel_tank', 'FuelManagementController@fueltankIndex');
+Route::post('vehicle_management/addfueltank', 'FuelManagementController@Addfueltank');
+
 
 #******************** Driver Admin *************************
 Route::get('vehicle_management/driver_admin', 'fleetcardController@driverAdmin');

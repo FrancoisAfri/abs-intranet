@@ -52,10 +52,25 @@ class FuelManagementController extends Controller
 
     public function fueltankIndex(Request $request)
     {
-        $Fueltanks = Fueltanks::orderBy('id', 'asc')->get();
+     
+
+       
+        $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-       
+        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+
+        $Fueltanks = DB::table('fuel_tanks')
+        ->select('fuel_tanks.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname',
+        'division_level_fives.name as company', 'division_level_fours.name as Department')
+        ->leftJoin('hr_people', 'fuel_tanks.tank_manager', '=', 'hr_people.id')
+        ->leftJoin('division_level_fives', 'fuel_tanks.division_level_5', '=', 'division_level_fives.id')
+        ->leftJoin('division_level_fours', 'fuel_tanks.division_level_4', '=', 'division_level_fours.id')
+        ->orderBy('fuel_tanks.id')
+        ->get();
+        
+        Fueltanks::orderBy('id', 'asc')->get();
+
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Types Management";
         $data['breadcrumb'] = [
@@ -63,15 +78,42 @@ class FuelManagementController extends Controller
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['Fueltanks'] = $Fueltanks;
-        $data['divisionLevels'] = $divisionLevels;
         $data['employees'] = $employees;
+        $data['Fueltanks'] = $Fueltanks;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['division_levels'] = $divisionLevels;
+        $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Vehicle Management';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+          AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.fueltanks')->with($data);
+
     }
 
-    
+    public function Addfueltank(Request $request){
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $FueltankData = $request->all();
+        unset($FueltankData['_token']);  
+
+        $Fueltanks = new Fueltanks();
+        $Fueltanks->division_level_1 = !empty($FueltankData['division_level_1']) ? $FueltankData['division_level_1'] : 0;
+        $Fueltanks->division_level_2 = !empty($FueltankData['division_level_2']) ? $FueltankData['division_level_2'] : 0;
+        $Fueltanks->division_level_3 = !empty($FueltankData['division_level_3']) ? $FueltankData['division_level_3'] : 0;
+        $Fueltanks->division_level_4 = !empty($FueltankData['division_level_4']) ? $FueltankData['division_level_4'] : 0;
+        $Fueltanks->division_level_5 = !empty($FueltankData['division_level_5']) ? $FueltankData['division_level_5'] : 0;
+        $Fueltanks->tank_name = $FueltankData['tank_name'];
+        $Fueltanks->tank_location = $FueltankData['tank_location'];
+        $Fueltanks->tank_description = $FueltankData['tank_description'];
+        $Fueltanks->tank_capacity = !empty($FueltankData['tank_capacity']) ? $FueltankData['tank_capacity'] : 0;
+        $Fueltanks->tank_manager = !empty($FueltankData['tank_manager']) ? $FueltankData['tank_manager'] : 0;
+        $Fueltanks->status = 1;    
+        $Fueltanks->save(); 
+        
+        AuditReportsController::store('Fuel Management', 'Fuel Tank added', "Accessed By User", 0);
+        return back();
+    }
+
 }
