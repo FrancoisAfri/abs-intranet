@@ -70,7 +70,7 @@
                             </td>
                             <td width="65%" style="">
                                 <h4 class="text-primary"><em><b>{{ $voucher->brn_name }}</b></em></h4>
-                                <p>{!! html_entity_decode($voucher->co_fulldetails . $voucher->sup_addblock2) !!}</p>
+                                <p>{!! html_entity_decode($voucher->c_agency_full_addr . $voucher->c_agency_reg . $voucher->c_agency_tel . $voucher->c_agency_tel_fax) !!}</p>
                             </td>
                         </tr>
                     </table>
@@ -79,9 +79,11 @@
                 <!-- Voucher details -->
                 <td>
                     <br>
-                    <h4 class="text-center text-primary"><em><b>Transfer<br>{{ $voucher->vch_no_full }}</b></em></h4>
+                    <h4 class="text-center text-primary"><em><b>Vourcher No<br>{{ $voucher->c_sup_vouch_no }}</b></em></h4>
                     <br>
-                    <h4 class="text-center text-primary"><em><b>{{ ($voucher->vch_dt) ? date('d/m/Y', $voucher->vch_dt) : '' }}</b></em></h4>
+                    <h4 class="text-center text-primary"><em><b>{{ $voucher->c_date }}</b></em></h4>
+                    <br>
+                    <h4 class="text-center text-primary"><em><b>{{ $voucher->c_voucher_title }}</b></em></h4>
                     <br>
                 </td>
                 <!-- ./Voucher details -->
@@ -92,18 +94,20 @@
                         <tr>
                             <td width="50%" class="no-padding" style="border-right: 0 none #fff; border-left: 0 none #fff;">
                                 <table class="table table-bordered" style="margin: -1px;">
-                                    @if(!empty($voucher->sup_name) || !empty($voucher->sup_addblock1) || !empty($voucher->sup_addblock2 || !empty($voucher->sup_contactblock)))
+                                    @if(!empty($voucher->c_bill_name) || !empty($voucher->c_bill_postal_address_code) || !empty($voucher->c_bill_account_no))
                                         <tr>
                                             <!-- Supplier details -->
                                             <td>
-                                                <h4 style="margin-top: 0;"><em><b>{{ $voucher->sup_name }}</b></em></h4>
+                                                <h4 style="margin-top: 0;"><em><b>{{ $voucher->c_bill_name }}</b></em></h4>
                                                 <table class="table" style="margin-bottom: 0;">
                                                     <tr>
                                                         <td>
-                                                            <h5><em><b>{!! html_entity_decode($voucher->sup_addblock1 . $voucher->sup_addblock2) !!}</b></em></h5>
+                                                            <h5><em><b>{!! html_entity_decode($voucher->c_bill_postal_address_code . $voucher->sup_addblock2) !!}</b></em></h5>
                                                         </td>
                                                         <td nowrap>
-                                                            <h5><em><b>{!! html_entity_decode($voucher->sup_contactblock) !!}</b></em></h5>
+                                                            <h5><em><b>{!! ($voucher->c_bill_account_no) ? 'Acc No: ' $voucher->c_bill_account_no : '' !!}</b>
+															
+															</em></h5>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -111,21 +115,24 @@
                                             <!-- ./Supplier details -->
                                         </tr>
                                     @endif
-                                    @if(($voucher->arr_date && $voucher->arr_date > 0) || ($voucher->dep_date && $voucher->dep_date > 0))
+                                    @if($voucher->c_rental_addr1)
                                         <tr>
                                             <!-- Dates and Times -->
                                             <td>
-                                                <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Dates & Times</b></em></h4>
+                                                <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Rental Dates, Times & Location</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
                                                         <td style="padding: 0; width: 15%;">
                                                             <img width="50px" src="{{ $calendarClockImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! ($voucher->arr_date && $voucher->arr_date > 0) ? $voucher->arr_desc . ': '
-                                                            . date('D d/m/Y', $voucher->arr_date) . '<br>' : '' !!}
-                                                            {!! ($voucher->dep_date && $voucher->dep_date > 0) ? $voucher->dep_desc . ': '
-                                                            . date('D d/m/Y', $voucher->dep_date) : '' !!}
+                                                            {!! ($voucher->c_rental_addr1) ? 'Rental Location: ' .$voucher->c_rental_addr1 . '<br>' : '' !!}
+                                                            {!! ($voucher->c_rental_date) ? 'Date & Time: ' .$voucher->c_rental_date . '<br>' : '' !!}
+                                                            {!! ($voucher->c_return_addr1) ? 'Return Location: ' .$voucher->c_return_addr1 . '<br>' : '' !!}
+                                                            {!! ($voucher->c_return_date	) ? 'Date & Time: ' .$voucher->c_return_date . '<br>' : '' !!}
+                                                            {!! ($voucher->c_duration) ? 'Rental Length (days): ' $voucher->c_duration : '' !!}
+                                                            {!! ($voucher->c_flight_no) ? 'Flight: ' $voucher->c_flight_no : '' !!}
+                                                            {!! ($voucher->c_tour_code) ? 'Tour Code: ' $voucher->c_tour_code : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -133,18 +140,18 @@
                                             <!-- ./Dates and Times -->
                                         </tr>
                                     @endif
-                                    @if(!empty($voucher->msg_ins))
+                                    @if(!empty($voucher->c_disclaimer))
                                         <tr>
                                             <!-- Special Instructions -->
                                             <td>
-                                                <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Special Instructions</b></em></h4>
+                                                <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Insurance Disclaimer</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
                                                         <td style="padding: 0; width: 15%;">
                                                             <img width="50px" src="{{ $starImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->msg_ins) ? html_entity_decode($voucher->msg_ins)  : '' !!}
+                                                            {!! !empty($voucher->c_disclaimer) ? html_entity_decode($voucher->c_disclaimer)  : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -152,7 +159,7 @@
                                             <!-- ./Special Instructions -->
                                         </tr>
                                     @endif
-                                    @if(!empty($voucher->msg_terms))
+                                    @if(!empty($voucher->c_ct_card_warning))
                                         <tr>
                                             <!-- General Ts & Cs -->
                                             <td style="border-bottom: 0 none #fff;">
@@ -163,7 +170,7 @@
                                                             <img width="50px" src="{{ $tcImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            <p style="font-size: 12px;">{!! !empty($voucher->msg_terms) ? html_entity_decode($voucher->msg_terms)  : '' !!}</p>
+                                                            <p style="font-size: 12px;">{!! !empty($voucher->c_ct_card_warning) ? html_entity_decode($voucher->c_ct_card_warning)  : '' !!}</p>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -179,7 +186,7 @@
                                         <!-- Client details / Booking Refs / Services Required / Payment -->
                                         <td style="border-right: 0 none #fff; border-left: 0 none #fff;">
                                             <!-- Client details -->
-                                            @if(!empty($voucher->clnt_name) || !empty($voucher->dr_name_order))
+                                            @if(!empty($voucher->c_pax_name))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Client Details</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
@@ -187,17 +194,16 @@
                                                             <img width="50px" src="{{ $usersImg }}" alt="clientsicon">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! '<b>' . (($voucher->no_pax && $voucher->no_pax > 0) ? $voucher->no_pax . ' Pax: ' : '') .
-                                                            $voucher->clnt_name . '</b>' . '<br>' !!}
-                                                            {!! ((!empty(trim($voucher->clnt_cellno))) ? 'Cell: ' . $voucher->clnt_cellno : '') . ' ' .
-                                                            $voucher->dr_name_order !!}
+                                                            {!! $voucher->c_pax_name . '</b>' . '<br>' !!}
+                                                            {!! ((!empty(trim($voucher->c_pax_cell_no))) ? 'Cell: ' . $voucher->c_pax_cell_no : '') . ' ' .
+                                                             ((!empty(trim($voucher->c_pax_email))) ? 'Email: ' . $voucher->c_pax_email : '') !!}
                                                         </td>
                                                     </tr>
                                                 </table>
                                             @endif
                                             <!-- ./Client details -->
                                             <!-- Booking Refs -->
-                                            @if(!empty($voucher->our_ref_full) || !empty($voucher->clntref2))
+                                            @if(!empty($voucher->c_reservation_no) || !empty($voucher->c_issued_by))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Booking References</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
@@ -205,15 +211,18 @@
                                                             <img width="50px" src="{{ $folderImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->our_ref_full) ? 'Our Ref: ' . $voucher->our_ref_full . '<br>' : '' !!}
-                                                            {!! !empty(trim($voucher->clntref2)) ? 'Your Ref: ' . $voucher->clntref2 : '' !!}
+                                                            {!! !empty($voucher->c_issued_by) ? 'Our Ref: ' . $voucher->c_issued_by . '<br>' : '' !!}
+                                                            {!! !empty(trim($voucher->c_reservation_no)) ? 'Reservation No: ' . $voucher->c_reservation_no : '' !!}
+                                                            {!! !empty(trim($voucher->c_currency)) ? 'Currency: ' . $voucher->c_currency : '' !!}
+                                                            {!! !empty(trim($voucher->c_voucher_value)) ? 'Voucher Value: ' . $voucher->c_voucher_value : '' !!}
+                                                            {!! !empty(trim($voucher->c_car_description)) ? 'Car Group/Code: ' . $voucher->c_car_description : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
                                             @endif
                                             <!-- ./Booking Refs -->
                                             <!-- Services Required -->
-                                            @if(!empty($voucher->serv_full) || !empty($voucher->rate_full))
+                                            @if(!empty($voucher->c_rate_name) || !empty($voucher->c_insurance))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Services Required</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
@@ -221,24 +230,26 @@
                                                             <img width="50px" src="{{ $calculatorImg }}" alt="calculatorImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->serv_full) ? $voucher->serv_full . '<br>' : '' !!}
-                                                            {!! !empty($voucher->rate_full) ? $voucher->rate_full : '' !!}
+                                                            {!! !empty($voucher->c_rate_name) ?  'Rate Code/Daily Rate: ' .$voucher->c_rate_name . '<br>' : '' !!}
+                                                            {!! !empty($voucher->c_insurance) ? 'Insurances Required: ' . $voucher->c_insurance : '' !!}
+                                                            {!! !empty($voucher->c_remarks) ? 'Remarks: ' . $voucher->c_remarks : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
                                             @endif
                                             <!-- ./Services Required -->
                                             <!-- Payment -->
-                                            @if(!empty($voucher->pmt_serv) || !empty($voucher->pmt_extras))
-                                                <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Payment</b></em></h4>
+                                            @if(!empty($voucher->c_client_code) || !empty($voucher->pmt_extras))
+                                                <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Account Infomartion</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
                                                         <td style="padding: 0; width: 15%;">
                                                             <img width="50px" src="{{ $paymentImg }}" alt="calculatorImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->pmt_serv) ? 'Booked Services: ' . $voucher->pmt_serv . '<br>' : '' !!}
-                                                            {!! !empty($voucher->pmt_extras) ? 'Client Extras: ' . $voucher->pmt_extras : '' !!}
+                                                            {!! !empty($voucher->c_client_code) ? 'Acc No: ' . $voucher->c_client_code . '<br>' : '' !!}
+                                                            {!! !empty($voucher->c_client_code) ? 'CC No: ' . '' . '<br>' : '' !!}
+                                                            {!! !empty($voucher->pmt_extras) ? 'Order No: ' . $voucher->c_cl_ord_no : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -271,9 +282,9 @@
                                                     <td style="padding: 0;">
                                                         ...................................................................................................
                                                         <br>
-                                                        <b><em>Authorized by</em></b> <span class="pull-right"><b><em>(Signed)</em></b></span>
+                                                        <b><em>Issued by</em></b> <span class="pull-right"><b><em>{{ $voucher->c_issued_by }}</em></b></span>
                                                         <br>
-                                                        {{ !empty($voucher->footer) ? $voucher->footer : '' }}
+                                                        {{ !empty($voucher->c_voucher_message) ? $voucher->c_voucher_message : '' }}
                                                     </td>
                                                 </tr>
                                             </table>
