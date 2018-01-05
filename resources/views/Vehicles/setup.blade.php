@@ -25,9 +25,9 @@
                     <i class="fa fa-modx"></i>  Vehicle Make
                   </a>
 
-                  <a href="/vehicle_management/vehice_model" class="btn btn-app">
+                  {{--  <a href="/vehicle_management/vehice_model" class="btn btn-app">
                     <i class="fa fa-bullseye"></i>  Vehicle Model
-                  </a>
+                  </a>  --}}
 
 				  <a href="/vehicle_management/fleet_card" class="btn btn-app">
 					<i class="fa fa-car" ></i> Fleet Card Types 

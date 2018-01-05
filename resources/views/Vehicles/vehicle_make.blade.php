@@ -26,6 +26,7 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
+                            <th style="width: 10px; text-align: center;"></th>
                             <th>Name</th>
                             <th>Description</th>
                             <th style="width: 5px; text-align: center;"></th>
@@ -42,6 +43,10 @@
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
+                                    <td>
+                                      <a href="{{ '/vehicle_management/vehice_model/' . $vehice->id }}" id="edit_compan" 
+                                      class="btn btn-primary  btn-xs"   data-id="{{ $vehice->id }}" data-name="{{ $vehice->name }}"
+                                       data-description="{{$vehice->description}}"  ><i class="fa fa-bullseye"></i> Vehicle Model</a></td></td>
                                     <td>{{ (!empty( $vehice->name)) ?  $vehice->name : ''}} </td>
                                     <td>{{ (!empty( $vehice->description)) ?  $vehice->description : ''}} </td>
                                     <td>

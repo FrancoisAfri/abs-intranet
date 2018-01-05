@@ -8,7 +8,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Vehicle Model</h4>
+                    <h4 class="modal-title">Edit Vehicle Model for - {{$vehiclemodels}}</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -28,6 +28,11 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
+
+                    {{--  <input type="hidden" id="valueID" name="valueID"
+                           value="{{ !empty($vehicleID) ? $vehicleID : ''}}">  --}}
+
+                            <input type="hidden" id='valueID' name="valueID" value="0">
 
                 </div>
                 <div class="modal-footer">
