@@ -22,7 +22,7 @@
                       action="/vehicle_management/vehicleApproval"
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
-                    {{--  {{ method_field('PATCH') }}  --}}
+                    {{ method_field('PATCH') }}
 
                     <div class="box-body">
                         <table class="table table-bordered">
@@ -35,13 +35,10 @@
                                 <th>Company</th>
                                 <th>Department</th>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
-                                                    id="checkallaccept" onclick="checkAllboxAccept()"/>
-
-                                        <br/></th>
-                                    <th style="width: 5px; text-align: center;">Decline <input type="checkbox"
-                                                    id="checkallreject" onclick="checkAllboxreject()"/><br/>
-
-                                    </th>
+                                                                                          id="checkallaccept"
+                                                                                          onclick="checkAllboxAccept()"/>
+                                </th>
+                                <th style="width: 5px; text-align: center;">Decline</th>
                             </tr>
 
                             @if (count($Vehiclemanagemnt) > 0)
@@ -61,14 +58,22 @@
                                         <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
                                         <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
                                         <td style='text-align:center'>
-                                        <input type="hidden" class="checkbox selectall" id="vehicleappprove_{{ $filling->id }}" name="vehicleappprove_{{ $filling->id }}" value="0">
-                                        <input type="checkbox" class="checkbox selectall" id="vehicleappprove_{{ $filling->id }}" name="vehicleappprove_{{ $filling->id }}" value="1"  {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
+                                            <input type="hidden" class="checkbox selectall"
+                                                   id="vehicleappprove_{{ $filling->id }}"
+                                                   name="vehicleappprove_{{ $filling->id }}" value="0">
+                                            <input type="checkbox" class="checkbox selectall"
+                                                   id="vehicleappprove_{{ $filling->id }}"
+                                                   name="vehicleappprove_{{ $filling->id }}"
+                                                   value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
 
                                         <td>
-                                        <input type="hidden" class="checkbox reject" id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="0">
-                                        <input type="checkbox" class="checkbox reject" data-toggle="modal" data-target="#decline-vehicle-modal"
-                                         id="vehiclereject_{{ $filling->id }}" name="vehiclereject_{{ $filling->id }}" value="1">
+                                            <input type="hidden" class="checkbox reject"
+                                                   id="vehiclereject_{{ $filling->id }}"
+                                                   name="vehiclereject_{{ $filling->id }}" value="0">
+                                            <input type="checkbox" class="checkbox reject" data-toggle="modal"
+                                                   data-target="#decline-vehicle-modal" data-id="{{ $filling->id }}"
+                                                   data-description="{{$filling->description}}" value="1">
                                         </td>
 
                                     </tr>
@@ -97,6 +102,7 @@
             </div>
             <!-- Include add new prime rate modal -->
             @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')
+
             </form>
 
         </div>
@@ -147,6 +153,7 @@
                         $('.reject').prop('checked', false);
                     }
                 }
+
                 $(function () {
                     var moduleId;
                     //Initialize Select2 Elements
@@ -183,33 +190,33 @@
                     //Post module form to server using ajax (ADD)
 
                     //save reject reason
-            
+
 
                     var reasonID;
                     $('#decline-vehicle-modal').on('show.bs.modal', function (e) {
-                         var btnEdit = $(e.relatedTarget);
-                              if (parseInt(btnEdit.data('id')) > 0) {
-                              reasonID = btnEdit.data('id');
-                             }
+                        var btnEdit = $(e.relatedTarget);
+                        if (parseInt(btnEdit.data('id')) > 0) {
+                            reasonID = btnEdit.data('id');
+                        }
                         console.log('gets here: ' + reasonID);
                         var description = btnEdit.data('description');
                         var modal = $(this);
                         modal.find('#description').val(description);
                     });
 
-                     $('#rejection-reason').on('click', function() {
+                    $('#rejection-reason').on('click', function () {
                         var strUrl = '/vehicle_management/reject_vehicle/' + reasonID;
                         var modalID = 'decline-vehicle-modal';
                         var objData = {
-                            description: $('#'+modalID).find('#description').val(),
-                            _token: $('#'+modalID).find('input[name=_token]').val()
+                            description: $('#' + modalID).find('#description').val(),
+                            _token: $('#' + modalID).find('input[name=_token]').val()
                         };
                         var submitBtnID = 'rejection-reason';
                         var redirectUrl = '/vehicle_management/vehicle_approval';
                         var successMsgTitle = 'Reason Added!';
                         var successMsg = 'The reject reason has been updated successfully.';
                         var Method = 'PATCH';
-                         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                     });
 
 

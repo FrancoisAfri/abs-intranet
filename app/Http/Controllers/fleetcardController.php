@@ -460,7 +460,9 @@ class fleetcardController extends Controller
         AuditReportsController::store('Vehicle Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
     }
-    public function rejectReason (Request $request, vehicle_maintenance $reason){
+
+    public function rejectReason(Request $request, vehicle_maintenance $reason)
+    {
         $this->validate($request, [
             //'description' => 'numeric',
         ]);
