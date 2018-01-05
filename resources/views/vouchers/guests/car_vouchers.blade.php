@@ -33,21 +33,23 @@
                                 <thead>
                                 <tr>
                                     <th>Voucher #</th>
-                                    <th>Voucher Date</th>
+                                    <th>Reservation No</th>
                                     <th>Client Name</th>
-                                    <th>Cell No.</th>
-                                    <th>Company Name</th>
+                                    <th>Collect Address</th>
+                                    <th>Return Address</th>
+                                    <th>Issued By</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($vouchers as $voucher)
                                     <tr>
-                                        <td style="vertical-align: middle;">{{ $voucher->vch_no }}</td>
-                                        <td style="vertical-align: middle;">{{ ($voucher->vch_dt && $voucher->vch_dt > 0) ? date('d-m-Y', $voucher->vch_dt) : '' }}</td>
-                                        <td style="vertical-align: middle;">{!! html_entity_decode($voucher->clnt_name) !!}</td>
-                                        <td style="vertical-align: middle;">{{ $voucher->clnt_cellno }}</td>
-                                        <td style="vertical-align: middle;">{{ $voucher->dr_name_order }}</td>
+                                        <td style="vertical-align: middle;">{{ $voucher->c_sup_vouch_no }}</td>
+                                        <td style="vertical-align: middle;">{{ $voucher->c_reservation_no }}</td>
+                                        <td style="vertical-align: middle;">{!! html_entity_decode($voucher->c_pax_name) !!}</td>
+                                        <td style="vertical-align: middle;">{{ $voucher->c_rental_addr1}}</td>
+                                        <td style="vertical-align: middle;">{{ $voucher->c_return_addr1 }}</td>
+                                        <td style="vertical-align: middle;">{{ $voucher->c_issued_by }}</td>
                                         <td style="vertical-align: middle; width: 70px;" class="text-center" nowrap>
                                             <a href="/vouchers/view-car/{{ $voucher->id }}" class="btn btn-xs btn-link" title="View/Print" target="_blank"><i class="fa fa-print"></i></a>
                                             <button type="button" data-toggle="modal" data-target="#email-voucher-modal" data-id="{{ $voucher->id }}" class="btn btn-xs btn-link" title="Send"><i class="fa fa-send"></i></button>
