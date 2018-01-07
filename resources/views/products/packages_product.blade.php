@@ -17,9 +17,6 @@
                      <tr><th style="width: 10px"></th>
                      <th>Name</th>
                      <th>Description</th>
-                     <th>Price</th>
-                     <!-- <th>Discount</th> -->
-                     dd
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($products) > 0)

@@ -19,7 +19,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> My Vehicle Booking(s) </h3>
+                    <h3 class="box-title">Vehicle Booking(s) Approval</h3>
                 </div>
                 <div class="box-body">
                     <div style="overflow-X:auto;">
@@ -99,7 +99,6 @@
                     </div>
                 </div>
                 @include('Vehicles.Create_request.decline_booking')
-
                 @if(Session('success_application'))ic
                 @include('Vehicles.sucess.success_action', ['modal_title' => "Vehicle booking approval was Successful!", 'modal_content' => session('success_application')])
                 @endif

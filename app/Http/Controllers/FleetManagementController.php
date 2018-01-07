@@ -61,6 +61,9 @@ class FleetManagementController extends Controller
 
         $images = images::orderBy('id', 'asc')->get();
 
+         //check  vehicle_configuration table if new_vehicle_approval is active 
+         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+         $vehicleConfig = $vehicleConfigs->first();
 
         // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
@@ -76,7 +79,7 @@ class FleetManagementController extends Controller
             ->get();
 
         //return $vehiclemaintenance;
-
+        $data['vehicleConfig'] = $vehicleConfig;
         $data['images'] = $images;
         $data['hrDetails'] = $hrDetails;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
@@ -95,7 +98,6 @@ class FleetManagementController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        // $data['incidentType'] = $incidentType;
         $data['active_mod'] = 'Vehicle Management';
         $data['active_rib'] = 'Manage Fleet';
 
@@ -162,7 +164,8 @@ class FleetManagementController extends Controller
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
-
+       
+       
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = $SysData['status'];
         $vehicle_maintenance->responsible_for_maintenance = $SysData['responsible_for_maintenance'];
@@ -391,7 +394,7 @@ class FleetManagementController extends Controller
         $data['active_mod'] = 'Vehicle Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
+        
         return view('Vehicles.FleetManagement.viewfleetDetails')->with($data);
     }
  
@@ -419,8 +422,6 @@ class FleetManagementController extends Controller
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-
  
             $ID = $maintenance->id;
 
@@ -472,8 +473,7 @@ class FleetManagementController extends Controller
         $currentDate = time();
 
         $userLogged = Auth::user()->load('person');
-        //$leave_history->added_by_name = $user->person->first_name." ".$user->person->surname;
-
+        
         $vehicleImages = new images();
 
         //$vehicleImages->vehicle_maintanace = $ID;
@@ -575,9 +575,7 @@ class FleetManagementController extends Controller
 
         
             $ID = $maintenance->id;
-            //return $ID;
-
-
+            
             $keytracking = DB::table('keytracking')
                 ->select('keytracking.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'hr_people.manager_id as manager', 'safe.name as safeName')
                 ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
@@ -585,9 +583,7 @@ class FleetManagementController extends Controller
                 ->orderBy('keytracking.id')
                 ->get();
 
-
-            // return $keytracking;
-
+                //return $keytracking;
 
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
