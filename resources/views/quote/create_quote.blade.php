@@ -144,7 +144,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right">Create Quote</button>
+                        <button type="submit" class="btn btn-primary pull-right">Next <i class="fa fa-arrow-right"></i></button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -238,7 +238,7 @@
                 $('.packages-field').hide();
                 $('.services-field').show();
             }
-            return quoteType;      
+            return quoteType;
         }
     </script>
 @endsection

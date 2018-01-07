@@ -13,9 +13,11 @@
             <div class="box box-primary">
                 <form class="form-horizontal" method="POST" action="/quote/update/{{ $quote->id }}">
                     {{ csrf_field() }}
+                    <input type="hidden" name="quote_type" id="quote_type" value="{{ $quoteType }}">
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
                     <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">
+                    <input type="hidden" name="service_rate" id="service_rate" value="{{ ($servicesSettings && $servicesSettings->service_rate > 0) ? $servicesSettings->service_rate : 0 }}">
                     @foreach($tcIDs as $tcID)
                         <input type="hidden" name="tc_id[]" value="{{ $tcID }}">
                     @endforeach
@@ -37,71 +39,136 @@
                         @endif
 
                         <div style="overflow-x:auto;">
-                            <table class="table table-striped table-bordered">
-                                <tr>
-                                    <th style="width: 10px">#</th>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th style="text-align: right;">Unit Price</th>
-                                </tr>
-                                @foreach ($products as $product)
-                                    @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
-                                        <?php $prevCategory = 0; ?>
-                                        <tr>
-                                            <th class="success" colspan="4" style="text-align: center;">
-                                                <i>{{ $product->ProductPackages->name }}</i>
-                                            </th>
-                                        </tr>
-                                    @endif
+                            @if($quoteType == 1)
+                                <table class="table table-striped table-bordered">
                                     <tr>
-                                        <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                        <td style="vertical-align: middle;">{{ $product->name }}</td>
-                                        <td style="vertical-align: middle; width: 80px;">
-                                            <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
-                                                   value="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->quantity : 1 }}" data-price="{{ $product->current_price }}" onchange="subtotal()" required>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: right;">
-                                            {{ $product->current_price ? 'R ' . number_format($product->current_price, 2) : '' }}
-                                        </td>
+                                        <th style="width: 10px">#</th>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th style="text-align: right;">Unit Price</th>
                                     </tr>
-                                    <input type="hidden" name="price[{{ $product->id }}]"
-                                           value="{{ ($product->current_price) ? $product->current_price : '' }}">
-                                    <?php $prevCategory = $product->category_id; ?>
-                                @endforeach
-                                @foreach ($packages as $package)
-                                    <tr>
-                                        <td class="success" style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
-                                        <th class="success" style="vertical-align: middle;">
-                                            Package: {{ $package->name }}
-                                        </th>
-                                        <td class="success" style="vertical-align: middle; width: 80px;">
-                                            <input type="number" class="form-control input-sm item-quantity" name="package_quantity[{{ $package->id }}]"
-                                                   value="{{ ($quote->packages && $quote->packages->contains('id', $package->id)) ? $quote->packages->find($package->id)->pivot->quantity : 1 }}" data-price="{{ $package->price }}"
-                                                   onchange="subtotal()" required>
-                                        </td>
-                                        <td class="success" style="vertical-align: middle; text-align: right;">
-                                            {{ ($package->price) ? 'R ' . number_format($package->price, 2) : '' }}
-                                        </td>
-                                    </tr>
-                                    <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
-                                    @foreach($package->products_type as $product)
+                                    @foreach ($products as $product)
+                                        @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
+                                            <?php $prevCategory = 0; ?>
+                                            <tr>
+                                                <th class="success" colspan="4" style="text-align: center;">
+                                                    <i>{{ $product->ProductPackages->name }}</i>
+                                                </th>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
                                             <td style="vertical-align: middle;">{{ $product->name }}</td>
-                                            <td style="text-align: center; vertical-align: middle; width: 80px;">
-                                                &mdash;
+                                            <td style="vertical-align: middle; width: 80px;">
+                                                <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
+                                                       value="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->quantity : 1 }}" data-price="{{ $product->current_price }}" onchange="subtotal()" required>
                                             </td>
                                             <td style="vertical-align: middle; text-align: right;">
-                                                &mdash;
+                                                {{ $product->current_price ? 'R ' . number_format($product->current_price, 2) : '' }}
                                             </td>
                                         </tr>
+                                        <input type="hidden" name="price[{{ $product->id }}]"
+                                               value="{{ ($product->current_price) ? $product->current_price : '' }}">
+                                        <?php $prevCategory = $product->category_id; ?>
                                     @endforeach
-                                @endforeach
-                            </table>
+                                    @foreach ($packages as $package)
+                                        <tr>
+                                            <td class="success" style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
+                                            <th class="success" style="vertical-align: middle;">
+                                                Package: {{ $package->name }}
+                                            </th>
+                                            <td class="success" style="vertical-align: middle; width: 80px;">
+                                                <input type="number" class="form-control input-sm item-quantity" name="package_quantity[{{ $package->id }}]"
+                                                       value="{{ ($quote->packages && $quote->packages->contains('id', $package->id)) ? $quote->packages->find($package->id)->pivot->quantity : 1 }}" data-price="{{ $package->price }}"
+                                                       onchange="subtotal()" required>
+                                            </td>
+                                            <td class="success" style="vertical-align: middle; text-align: right;">
+                                                {{ ($package->price) ? 'R ' . number_format($package->price, 2) : '' }}
+                                            </td>
+                                        </tr>
+                                        <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
+                                        @foreach($package->products_type as $product)
+                                            <tr>
+                                                <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
+                                                <td style="vertical-align: middle;">{{ $product->name }}</td>
+                                                <td style="text-align: center; vertical-align: middle; width: 80px;">
+                                                    &mdash;
+                                                </td>
+                                                <td style="vertical-align: middle; text-align: right;">
+                                                    &mdash;
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+                                </table>
+                            @elseif($quoteType == 2)
+                                @if($servicesSettings)
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10px" nowrap>#</th>
+                                                <th>Description</th>
+                                                <th style="width: 10px" nowrap class="text-center">Unit</th>
+                                                <th nowrap>Quantity</th>
+                                                <th style="width: 10px" nowrap class="text-center"></th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="input-fields-wrap">
+                                            @foreach($quote->services as $service)
+                                                <tr>
+                                                    <td style="width: 10px; vertical-align: middle;" nowrap>{{ $loop->iteration }}</td>
+                                                    <td>
+                                                        <textarea name="description[]" rows="2" class="form-control" required>{{ $service->description }}</textarea>
+                                                    </td>
+                                                    <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ $servicesSettings->service_unit_name }}</th>
+                                                    <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
+                                                        <input type="number" name="service_quantity[]" class="form-control item-quantity" onchange="subtotal()" value="{{ $service->quantity }}" required>
+                                                    </td>
+                                                    @if(! $loop->first)
+                                                        <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">
+                                                            <button type="button" class="btn btn-link btn-xs remove_row" title="Remove"><i class="fa fa-times"></i></button>
+                                                        </td>
+                                                    @else
+                                                        <td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>
+                                                    @endif
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="3" class="text-right">Total</th>
+                                                <th colspan="2" nowrap><span id="total_service_units"></span> <i>{{ $servicesSettings->service_unit_plural_name }}</i></th>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <button id="add_row" type="button" class="btn btn-primary btn-flat btn-block"><i class="fa fa-files-o"></i> Add New Row</button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                @else
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-database"></i> Services Settings Not Found!</h4>
+                                        Please go to Products > Setup and enter the Services Settings.
+                                    </div>
+                                @endif
+                            @endif
 
                             <!-- Total cost section -->
                             <div class="col-sm-6 col-sm-offset-6 no-padding">
                                 <table class="table">
+                                    @if($servicesSettings)
+                                        <tr>
+                                            <td></td>
+                                            <th style="text-align: left;">Rate Per {{ ucfirst($servicesSettings->service_unit_name) }}:</th>
+                                            <td style="text-align: right;" nowrap>
+                                                {{ ($servicesSettings->service_rate && $servicesSettings->service_rate > 0) ? 'R ' . number_format($servicesSettings->service_rate, 2) : '' }}
+                                            </td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <td></td>
                                         <th style="text-align: left;">Subtotal:</th>
@@ -148,7 +215,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Send Quote</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -208,6 +275,37 @@
                 $('#success-action-modal').modal('show');
             @endif
 
+            //Add more modules
+            var max_fields      = 15; //maximum input boxes allowed
+            var wrapper         = $(".input-fields-wrap"); //Fields wrapper
+            var add_button      = $("#add_row"); //Add button ID
+            var x = {{ ($quote->services) ? count($quote->services) : 1 }}; //initial text box count
+            $(add_button).click(function(e){ //on add input button click
+                e.preventDefault();
+                if(x < max_fields){ //max input box allowed
+                    x++; //text box increment
+                    $(wrapper).append(`
+                        <tr>
+                            <td style="width: 10px; vertical-align: middle;" nowrap>${x}</td>
+                            <td>
+                                <textarea name="description[]" rows="2" class="form-control" required></textarea>
+                            </td>
+                            <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ ($servicesSettings) ? $servicesSettings->service_unit_name : '' }}</th>
+                            <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
+                                <input type="number" name="service_quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
+                            </td>
+                            <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">
+                                <button type="button" class="btn btn-link btn-xs remove_row" title="Remove"><i class="fa fa-times"></i></button>
+                            </td>
+                        </tr>
+                    `); //add input box
+                }
+            });
+
+            $(wrapper).on("click",".remove_row", function(e){ //user click on remove text
+                e.preventDefault(); $(this).parent('td').parent('tr').remove(); x--; subtotal();
+            });
+
             //call the function to calculate the subtotal
             subtotal();
 
@@ -220,15 +318,28 @@
 
         //function to calculate the subtotal
         function subtotal() {
+            var quoteType = parseInt($('#quote_type').val());
             var subtotal = 0;
             var discountAmount = 0;
-            $( ".item-quantity" ).each(function( index ) {
-                //console.log( index + ": " + $( this ).data('price') );
-                var qty = $( this ).val();
-                var price = $( this ).data('price');
-                subtotal += (qty * price);
-                $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
-            });
+            if (quoteType == 1) { //products
+                $( ".item-quantity" ).each(function( index ) {
+                    //console.log( index + ": " + $( this ).data('price') );
+                    var qty = $( this ).val();
+                    var price = $( this ).data('price');
+                    subtotal += (qty * price);
+                    $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
+                });
+            } else if (quoteType == 2) { //services
+                var serviceRate = parseInt($('#service_rate').val());
+                var totalServiceUnits = 0;
+                $( ".item-quantity" ).each(function( index ) {
+                    var qty = parseInt($( this ).val()) || 0;
+                    totalServiceUnits += qty;
+                    subtotal += (qty * serviceRate);
+                    $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
+                });
+                $('#total_service_units').html(totalServiceUnits);
+            }
 
             var discountPercent = $('#discount_percent').val();
             discountAmount = (subtotal * discountPercent) / 100;

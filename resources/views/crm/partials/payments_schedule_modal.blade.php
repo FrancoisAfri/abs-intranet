@@ -1,5 +1,5 @@
 <div id="payments-schedule-modal" class="modal modal-default fade">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="payments-schedule-form">
                 {{ csrf_field() }}
@@ -15,8 +15,8 @@
                     <table class="table no-margin">
                         <thead>
                         <tr>
-                            <th>Payment Due</th>
                             <th>Invoice #</th>
+                            <th>Payment Due</th>
                             <th>Status</th>
                             <th class="text-right">Amount</th>
                             <th class="text-right">Balance</th>

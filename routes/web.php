@@ -304,7 +304,7 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
  //Decline vehicle booking
  Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
   //Approve Vehicle Approval
- Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
+ Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking');
  // confirm collection
  Route::post('vehicle_management/add_collectiondoc', 'VehicleBookingController@AddcollectionDoc');
  Route::post('vehicle_management/addcollectionImage', 'VehicleBookingController@AddcollectionImage');
@@ -314,7 +314,7 @@ Route::post('vehicle_management/return_document', 'VehicleBookingController@Addr
 Route::post('vehicle_management/return_Image', 'VehicleBookingController@AddreturnImage');
 Route::patch('vehicle_management/{confirm}/confirmreturn', 'VehicleBookingController@confirmReturn');
 // vehicle_ispection
-Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingController@viewVehicleIspectionDocs'); 
+Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingController@viewVehicleIspectionDocs');
 
 ###
 
@@ -733,7 +733,9 @@ Route::get('crm/account/quote/{quote}', 'CRMAccountController@viewAccountFromQuo
 Route::get('crm/setup', 'CRMSetupController@index');
 Route::get('crm/search', 'CRMSetupController@search');
 Route::get('crm/invoice/view/{quotation}/pdf', 'CRMInvoiceController@viewPDFInvoice');
+Route::get('crm/invoice/view/{quotation}/{invoice}/pdf', 'CRMInvoiceController@viewPDFMonthlyInvoice');
 Route::get('crm/invoice/mail/{quotation}', 'CRMInvoiceController@emailInvoice');
+Route::get('crm/invoice/mail/{quotation}/{invoice}', 'CRMInvoiceController@emailMonthlyInvoice');
 Route::post('crm/capture-payment/{quotation}/{invoice}', 'CRMAccountController@capturePayment');
 
 //Email Template
