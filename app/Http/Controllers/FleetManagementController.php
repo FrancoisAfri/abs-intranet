@@ -156,8 +156,7 @@ class FleetManagementController extends Controller
     public function addvehicleDetails(Request $request)
     {
         $this->validate($request, [
-            'vehicle_make' => 'required',
-            'vehicle_model' => 'required',
+            
             'vehicle_type' => 'required',
             // 'name' => 'required',
             // 'description' => 'required',
@@ -173,8 +172,8 @@ class FleetManagementController extends Controller
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = $SysData['status'];
         $vehicle_maintenance->responsible_for_maintenance = $SysData['responsible_for_maintenance'];
-        $vehicle_maintenance->vehicle_make = $SysData['vehicle_make'];
-        $vehicle_maintenance->vehicle_model = $SysData['vehicle_model'];
+        $vehicle_maintenance->vehicle_make = $SysData['vehiclemodel_id'];
+        $vehicle_maintenance->vehicle_model = $SysData['vehiclemake_id'];
         $vehicle_maintenance->vehicle_type = $SysData['vehicle_type'];
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
