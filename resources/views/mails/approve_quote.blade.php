@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $manager->first_name }},<br><br>
-                                                    We would like to inform you that a new quotation has been loaded and requires your approval. To view approve the quotation please <a target="_blank" href="{{ $quote_url }}">click here.</a>
+                                                    We would like to inform you that a new quotation has been loaded and requires your approval. To view  and approve the quotation please <a target="_blank" href="{{ $quote_url }}">click here.</a>
                                                 </td>
                                             </tr>
 

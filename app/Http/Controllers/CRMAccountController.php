@@ -31,7 +31,7 @@ class CRMAccountController extends Controller
      */
     public function viewAccount(CRMAccount $account)
     {
-        $account->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type', 'quotations.invoices.payments');
+        $account->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type', 'quotations.invoices.payments', 'quotations.services');
 
         $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
         $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
@@ -43,13 +43,17 @@ class CRMAccountController extends Controller
             //calculate the quote cost
             $productsSubtotal = 0;
             $packagesSubtotal = 0;
+            $servicesSubtotal = 0;
             foreach ($quotation->products as $product) {
                 $productsSubtotal += ($product->pivot->price * $product->pivot->quantity);
             }
             foreach ($quotation->packages as $package) {
                 $packagesSubtotal += ($package->pivot->price * $package->pivot->quantity);
             }
-            $subtotal = $productsSubtotal + $packagesSubtotal;
+            foreach ($quotation->services as $service) {
+                $servicesSubtotal += ($service->quantity * $service->rate);
+            }
+            $subtotal = ($quotation->quote_type == 2) ? $servicesSubtotal : $productsSubtotal + $packagesSubtotal;
             $discountPercent = $quotation->discount_percent;
             $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
             $discountedAmount = $subtotal - $discountAmount;
@@ -63,16 +67,22 @@ class CRMAccountController extends Controller
 
             //load invoices
             if ($quotation->payment_option == 1) { //once-off purchases load the first invoice.
-                $quotation->load(['invoices' => function($query) {
+                $quotation->load(['invoices' => function ($query) {
                     $query->first();
                 }]);
             }
 
             //Action buttons
-            if (in_array($quotation->status, [6, 7])) $quotation->can_capture_payment = true;
-            else $quotation->can_capture_payment = false;
-            if ($quotation->status == 8) $quotation->can_send_invoice = false;
-            else $quotation->can_send_invoice = true;
+            if (in_array($quotation->status, [6, 7])) {
+                $quotation->can_capture_payment = true;
+            } else {
+                $quotation->can_capture_payment = false;
+            }
+            if ($quotation->status == 8) {
+                $quotation->can_send_invoice = false;
+            } else {
+                $quotation->can_send_invoice = true;
+            }
         }
 
 //        return $account;
@@ -120,14 +130,36 @@ class CRMAccountController extends Controller
             'amount_paid' => 'bail|required|numeric|min:0'
         ]);
 
+        //calculate the quote cost
+        $quotation->load('products.ProductPackages', 'packages.products_type', 'services');
+        $productsSubtotal = 0;
+        $packagesSubtotal = 0;
+        $servicesSubtotal = 0;
+        foreach ($quotation->products as $product) {
+            $productsSubtotal += ($product->pivot->price * $product->pivot->quantity);
+        }
+        foreach ($quotation->packages as $package) {
+            $packagesSubtotal += ($package->pivot->price * $package->pivot->quantity);
+        }
+        foreach ($quotation->services as $service) {
+            $servicesSubtotal += ($service->quantity * $service->rate);
+        }
+        $subtotal = ($quotation->quote_type == 2) ? $servicesSubtotal : $productsSubtotal + $packagesSubtotal;
+        $discountPercent = $quotation->discount_percent;
+        $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
+        $discountedAmount = $subtotal - $discountAmount;
+        $vatAmount = ($quotation->add_vat == 1) ? $discountedAmount * 0.14 : 0;
+        $quoteCost = $discountedAmount + $vatAmount;
+
         $paymentDate = trim($request->input('payment_date'));
         $paymentDate = str_replace('/', '-', $paymentDate);
         $paymentDate = strtotime($paymentDate);
 
         $payment = null;
-        DB::transaction(function () use ($payment, $quotation, $invoice, $request, $paymentDate) {
+        DB::transaction(function () use ($payment, $quotation, $invoice, $request, $paymentDate, $quoteCost) {
             //get the sum of the previous payments
-            $sumPaid = CRMPayment::where('invoice_id', $invoice->id)->sum('amount');
+            $invoiceTotalPaid = CRMPayment::where('invoice_id', $invoice->id)->sum('amount');
+            $quoteTotalPaid = CRMPayment::where('quote_id', $quotation->id)->sum('amount');
 
             //save new payment
             $payment = new CRMPayment();
@@ -150,9 +182,9 @@ class CRMAccountController extends Controller
             }
 
             //update statuses
-            $quotation->status = (($invoice->amount - $sumPaid - $request->input('amount_paid')) > 0) ? 7 : 8;
+            $quotation->status = (($quoteCost - round($quoteTotalPaid + $request->input('amount_paid'), 2)) > 0) ? 7 : 8;
             $quotation->update();
-            $invoice->status = (($invoice->amount - $sumPaid - $request->input('amount_paid')) > 0) ? 3 : 4;
+            $invoice->status = (($invoice->amount - round($invoiceTotalPaid + $request->input('amount_paid'), 2)) > 0) ? 3 : 4;
             $invoice->update();
 
             //audit the action

@@ -104,7 +104,7 @@
                                     <option value="">*** Please Select a Vehicle Make ***</option>
                                     <option value="0"></option>
                                     @foreach($vehiclemake as $vehiclemodel)
-                                        <option value="{{ $vehiclemodel->id }}" {{ ($vehiclemodel->id == old('vehiclemodel_id')) ? 'selected' : '' }}>{{ $vehiclemodel->name }}</option>
+                                        <option value="{{ $vehiclemodel->id }}" >{{ $vehiclemodel->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

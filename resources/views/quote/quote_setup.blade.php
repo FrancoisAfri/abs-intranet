@@ -33,7 +33,7 @@
                                     <th>Acc. Name</th>
                                     <th>Acc. Number</th>
                                     <th style="text-align: center;">Quote Val. Period</th>
-                                    <th>Authorisation Required</th>
+                                    <th class="text-center">Authorisation Required</th>
                                 </tr>
                                 @foreach($quoteProfiles as $quoteProfile)
                                     <tr>
@@ -123,7 +123,7 @@
                 <form class="form-horizontal" method="POST" action="/email-template/save">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
-                        <h3 class="box-title">Approved Quote Email Template</h3>
+                        <h3 class="box-title">Client Approved Quote Email Template</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                             <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>

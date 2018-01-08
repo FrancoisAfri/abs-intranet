@@ -174,7 +174,7 @@
                             <!-- Total cost section -->
                             <div class="col-sm-6 col-sm-offset-6 no-padding">
                                 <table class="table">
-                                    @if($servicesSettings)
+                                    @if($quoteType == 2 && $servicesSettings)
                                         <tr>
                                             <td></td>
                                             <th style="text-align: left;">Rate Per {{ ucfirst($servicesSettings->service_unit_name) }}:</th>

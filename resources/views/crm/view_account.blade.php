@@ -83,7 +83,7 @@
                                         <td>{{ $quotation->str_payment_option }}</td>
                                         <td><span class="label label-{{ $labelColors[$quotation->status] }}">{{ $purchaseStatus[$quotation->status] }}</span></td>
                                         <td class="text-right" nowrap>{{ ($quotation->cost) ? 'R ' . number_format($quotation->cost, 2) : '' }}</td>
-                                        <td class="text-right" nowrap>{{ ($quotation->balance) ? 'R ' . number_format($quotation->balance, 2) : '' }}</td>
+                                        <td class="text-right" nowrap>{{ is_numeric($quotation->balance) ? 'R ' . number_format(round($quotation->balance, 2), 2) : '' }}</td>
                                         <td class="text-right" nowrap>
                                             @if($quotation->payment_option == 1)
                                                 @if($quotation->can_capture_payment)
@@ -137,7 +137,7 @@
                                 </tbody>
                             </table>
 
-                            <hr class="hr-text" data-content="SUBSCRIPTIONS">
+                            <!--<hr class="hr-text" data-content="SUBSCRIPTIONS">-->
                         </div>
 
                     </div>
@@ -155,8 +155,8 @@
         </div>
 
         <!-- Include modals -->
-        @include('crm.partials.capture_payment_modal')
         @include('crm.partials.payments_schedule_modal')
+        @include('crm.partials.capture_payment_modal')
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
         @endif
@@ -252,35 +252,51 @@
                 modal.find('#invoices').empty();
                 var invoiceStatuses = ['', 'Client Waiting Invoice', 'Invoice Sent To Client', 'Invoice Partially Paid', 'Invoice Paid'];
                 var labelColors = ['label-danger', 'label-warning', 'label-primary', 'label-primary', 'label-success'];
+                var showActionButtons = true;
                 $(invoices).each(function( index ) {
                     var invoiceRow = $('<tr></tr>');
                     var dueDate = new Date(this.payment_due_date * 1000);
-                    var dueDateCell = $('<td></td>').html(dueDate.getDate() + '/' + dueDate.getMonth() + '/' + dueDate.getFullYear());
-                    var invoiceNumCell = $('<td></td>').html(this.invoice_number);
+                    var invoiceNumCell = $('<td nowrap></td>').html(this.invoice_number);
+                    var dueDateCell = $('<td nowrap></td>').html(dueDate.getDate() + '/' + parseInt(dueDate.getMonth() + 1) + '/' + dueDate.getFullYear());
                     var statusLabelColor = labelColors[this.status];
                     var statusLabel = $('<span></span>').addClass('label').addClass(statusLabelColor).html(invoiceStatuses[this.status]);
                     var statusCell = $('<td></td>').html(statusLabel);
                     var invoiceAmount = parseFloat(this.amount);
                     var formattedAmount = 'R ' + invoiceAmount.formatMoney(2);
-                    var amountCell = $('<td class="text-right"></td>').html(formattedAmount);
+                    var amountCell = $('<td class="text-right" nowrap></td>').html(formattedAmount);
                     var totalPaid = 0;
                     var payments = this.payments;
                     $(payments).each(function( index ) {
                         totalPaid += parseFloat(this.amount);
                     });
-                    var balance = invoiceAmount.formatMoney(2) - totalPaid;
+                    var balance = invoiceAmount - totalPaid;
                     var formattedBalance = 'R ' + balance.formatMoney(2);
-                    var balanceCell = $('<td class="text-right"></td>').html(formattedBalance);
-                    var captutePaymentBtn = $('<button type="button" class="btn btn-success btn-flat btn-xs"></button>')
-                        .attr('data-toggle', 'modal').attr('data-target', '#capture-payment-modal').attr('data-quote_id', "{{ $quotation->id }}");
-                    /*var captutePaymentBtn = '<button type="button" class="btn btn-success btn-flat btn-xs" data-toggle="modal"
-                    data-target="#capture-payment-modal" data-quote_id="{{ $quotation->id }}"
-                    data-invoice_id="{{ ($quotation->invoices->first()) ? $quotation->invoices->first()->id : 0 }}"
-                    data-balance="{{ $quotation->balance }}">
-                        <i class="fa fa-credit-card"></i> Capture Payment
-                    </button>';*/
-                    //console.log( index + ": " + $( this ).id );
-                    invoiceRow.append(dueDateCell, invoiceNumCell, statusCell, amountCell, balanceCell);
+                    var balanceCell = $('<td class="text-right" nowrap></td>').html(formattedBalance);
+
+                    var actionButtonsCell = $('<td class="text-right" nowrap></td>');
+                    var captutePaymentBtn = $('<button type="button" class="btn btn-success btn-flat btn-xs"><i class="fa fa-credit-card"></i> Capture Payment</button>')
+                        .attr('data-toggle', 'modal').attr('data-target', '#capture-payment-modal').attr('data-quote_id', this.quotation_id)
+                        .attr('data-invoice_id', this.id).attr('data-balance', balance);
+                    var sendIvoiceBtn = $('<a class="btn btn-primary btn-flat btn-xs"><i class="fa fa-send"></i> Send Invoice</a>')
+                        .attr('href', '/crm/invoice/mail/' + quoteID + '/' + this.id);
+                    var printInvoiceBtn = $('<a target="_blank" class="btn btn-primary btn-flat btn-xs"><i class="fa fa-print"></i> Print Invoice</a>')
+                        .attr('href', '/crm/invoice/view/' + quoteID + '/' + this.id + '/pdf');
+                    var invoiceStatus = parseInt(this.status);
+
+                    //console.log( index + ": " + this.payments + ' => total paid = ' + totalPaid + ' => bal = ' + balance );
+                    invoiceRow.append(invoiceNumCell, dueDateCell, statusCell, amountCell, balanceCell);
+
+                    if (showActionButtons && (invoiceStatus !== 4 || (invoiceStatus === 4 && index === (invoices.length - 1)))) {
+                        if (invoiceStatus === 2 || invoiceStatus === 3) {
+                            actionButtonsCell.append(captutePaymentBtn, ' ');
+                        }
+                        if (invoiceStatus !== 4) {
+                            actionButtonsCell.append(sendIvoiceBtn);
+                        }
+                        actionButtonsCell.append(' ', printInvoiceBtn);
+                        showActionButtons = false;
+                    }
+                    invoiceRow.append(actionButtonsCell);
                     modal.find('#invoices').append(invoiceRow);
                 });
             });
