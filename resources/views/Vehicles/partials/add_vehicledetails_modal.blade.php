@@ -96,42 +96,29 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Vehicle Make</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-modx"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;" id="vehicle_make"
-                                        name="vehicle_make">
-                                    <option value="0">*** Select a Vehicle Make ***</option>
-                                    @foreach($vehiclemake as $make)
-                                        <option value="{{ $make->id }}">{{ $make->name }}</option>
+                    <div class="form-group{{ $errors->has('vehiclemodel_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
+
+                            <div class="col-sm-8">
+                                <select id="vehiclemodel_id" name="vehiclemodel_id" class="form-control select2" style="width: 100%;" onchange="vehiclemakeDDOnChange(this)">
+                                    <option value="">*** Please Select a Vehicle Make ***</option>
+                                    <option value="0"></option>
+                                    @foreach($vehiclemake as $vehiclemodel)
+                                        <option value="{{ $vehiclemodel->id }}" {{ ($vehiclemodel->id == old('vehiclemodel_id')) ? 'selected' : '' }}>{{ $vehiclemodel->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="form-group{{ $errors->has('vehiclemake_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'vehiclemake_id' }}" class="col-sm-2 control-label">Vehicle Model</label>
 
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-bullseye"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;" id="vehicle_model"
-                                        name="vehicle_model">
-                                    <option value="0">*** Select a Vehicle Model ***</option>
-                                    @foreach($vehiclemodel as $model)
-                                        <option value="{{ $model->id }}">{{ $model->name }}</option>
-                                    @endforeach
+                            <div class="col-sm-8">
+                                <select id="vehiclemake_id" name="vehiclemake_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">*** Please Select a Vehicle Make First ***</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
 
 
                     <div class="form-group">

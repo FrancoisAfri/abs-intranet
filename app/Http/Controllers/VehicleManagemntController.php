@@ -66,6 +66,9 @@ class VehicleManagemntController extends Controller
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
 
+
+
+        $data['vehiclemodel'] = $vehiclemodel;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Vehicle Management';
         $data['active_rib'] = 'Setup';
@@ -682,7 +685,6 @@ class VehicleManagemntController extends Controller
         
         
         
-
         $data['vehicleID'] = $vehicleID;
         $data['vehiclemodels'] = $vehiclemodels;   
         $data['vehiclemodel'] = $vehiclemodel;
@@ -770,6 +772,8 @@ class VehicleManagemntController extends Controller
         $promotionID = $request['promotion_type'];
 
         //return $propertyID;
+        //  $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get(); 
+        // return $vehiclemodel;
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 

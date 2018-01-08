@@ -29,11 +29,6 @@
                         </div>
                     </div>
 
-                    {{--  <input type="hidden" id="valueID" name="valueID"
-                           value="{{ !empty($vehicleID) ? $vehicleID : ''}}">  --}}
-
-                            <input type="hidden" id='valueID' name="valueID" value="0">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

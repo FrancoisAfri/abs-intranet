@@ -764,6 +764,7 @@ Route::post('crm/accounts/search', 'CRMSetupController@searchResults');
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
 //General Use (API)
+Route::post('api/vehiclemodeldropdown', 'DropDownAPIController@vehiclemomdeDDID')->name('Vmmdropdown');
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
 Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
@@ -785,6 +786,9 @@ Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@upd
 Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
 
 Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleDD')->name('contactsdropdown');
+
+//
+
 
 //Test leave cron
 Route::get('test/cron', 'AllocateLeavedaysFamilyCronController@sickDays');
