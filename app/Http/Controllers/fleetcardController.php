@@ -385,6 +385,8 @@ class fleetcardController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
+        $vehicle_maintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
+        // return $vehicle_maintenance;
 
         $Vehiclemanagemnt = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department'
@@ -426,6 +428,8 @@ class fleetcardController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
+        //return $results;
+
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
                 unset($results[$key]);
@@ -443,20 +447,22 @@ class fleetcardController extends Controller
                 $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
             }
         }
+// Reject Reason
+        foreach ($results as $sKey => $sValue) {
+            if (strlen(strstr($sKey, 'declined_'))) {
+                list($sUnit, $iID) = explode("_", $sKey);
+                if ($sUnit == 'declined' && !empty($sValue)) {
+                    if (empty($sValue)) $sValue = $sReasonToReject;
 
-        // foreach ($results as $key => $sValue) {
-        //     if (strlen(strstr($key, 'vehiclereject'))) {
-        //         $aValue = explode("_", $key);
-        //         $name = $aValue[0];
-        //         $vehicleID = $aValue[1];
-        //         if (count($sValue) > 1) {
-        //             $status = $sValue[3];
-        //         } else $status = $sValue[0];
-        //         $vehID = $vehicleID;
-        //         $status = 3;
-        //         $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
-        //     }
-        // }
+                    $vehicle_maintenance->updateOrCreate(['id' => $iID], ['status' => 3]);
+                    $vehicle_maintenance->updateOrCreate(['id' => $iID], ['reject_reason' => $sValue]);
+                    $vehicle_maintenance->updateOrCreate(['id' => $iID], ['reject_timestamp' => time()]);
+                    $vehicle_maintenance->updateOrCreate(['id' => $iID], ['rejector_id' => Auth::user()->person->id]);
+                    // $vehicle_maintenance->where('id',$iID)->update(['status' => 3],['reject_reason' => $sValue],['reject_timestamp' => time()]);
+                }
+            }
+        }
+        $sReasonToReject = '';
         AuditReportsController::store('Vehicle Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
     }

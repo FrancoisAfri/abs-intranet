@@ -22,7 +22,7 @@
                       action="/vehicle_management/vehicleApproval"
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
+
 
                     <div class="box-body">
                         <table class="table table-bordered">
@@ -39,6 +39,7 @@
                                                                                           onclick="checkAllboxAccept()"/>
                                 </th>
                                 <th style="width: 5px; text-align: center;">Decline</th>
+                                <td></td>
                             </tr>
 
                             @if (count($Vehiclemanagemnt) > 0)
@@ -66,15 +67,18 @@
                                                    name="vehicleappprove_{{ $filling->id }}"
                                                    value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
-
-                                        <td>
-                                            <input type="hidden" class="checkbox reject"
-                                                   id="vehiclereject_{{ $filling->id }}"
-                                                   name="vehiclereject_{{ $filling->id }}" value="0">
-                                            <input type="checkbox" class="checkbox reject" data-toggle="modal"
-                                                   data-target="#decline-vehicle-modal" data-id="{{ $filling->id }}"
-                                                   data-description="{{$filling->description}}" value="1">
+                                        <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
+                                                                             id="decline_$aVehicles[id]"
+                                                                             onclick="$('#comment_id_{{$filling->id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
                                         </td>
+                                        <td>
+                                            {{--  <input type="text" size="30" id="comment_id_{{$filling->id}}" name="declined_{{$filling->id}}" style="display:none">         --}}
+                                            <textarea class="form-control" id="comment_id_{{$filling->id}}"
+                                                      name="declined_{{$filling->id}}"
+                                                      placeholder="Enter rejection reason ..." rows="2"
+                                                      style="display:none"></textarea>
+                                        </td>
+
 
                                     </tr>
                                 @endforeach
@@ -101,7 +105,7 @@
                     </div>
             </div>
             <!-- Include add new prime rate modal -->
-            @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')
+            {{--  @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')  --}}
 
             </form>
 
