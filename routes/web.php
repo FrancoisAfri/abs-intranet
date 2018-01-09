@@ -1488,7 +1488,7 @@ Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 //Survey (Guest)
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
-
+//
 //Voucher (Guest)
 Route::get('vouchers/get-voucher', 'VouchersGuestController@index');
 Route::post('vouchers/get-voucher', 'VouchersGuestController@store');
