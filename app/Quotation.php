@@ -11,9 +11,10 @@ class Quotation extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id', 'approval_person_id', 'status',
-        'send_date', 'approval_date', 'discount_percent', 'add_vat', 'payment_option', 'payment_term',
-        'first_payment_date', 'account_id', 'quote_number', 'quote_type'
+        'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id'
+		, 'approval_person_id', 'status','send_date', 'approval_date', 'discount_percent'
+		, 'add_vat', 'payment_option', 'payment_term','first_payment_date', 'account_id'
+		, 'quote_number', 'quote_type', 'quote_title', 'quote_remarks'
     ];
 
     //quotation status

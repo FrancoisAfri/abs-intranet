@@ -175,7 +175,8 @@ class QuotesController extends Controller
             }]);
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-        $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
+       // return $contactPeople;
+		$products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
 
@@ -554,6 +555,8 @@ class QuotesController extends Controller
         $data['contactPersonId'] = $request->input('contact_person_id');
         $data['companyID'] = $request->input('company_id');
         $data['tcIDs'] = $request->input('tc_id');
+        $data['quote_title'] = $request->input('quote_title');
+        $data['quote_remarks'] = $request->input('quote_remarks');
         $data['products'] = $products;
         $data['packages'] = $packages;
         $data['servicesSettings'] = $servicesSettings;
@@ -575,7 +578,7 @@ class QuotesController extends Controller
             'quote_type' => 'bail|required|integer|min:1',
             'division_id' => 'bail|required|integer|min:1',
             'contact_person_id' => 'bail|required|integer|min:1',
-            //'quantity' => 'bail|required',
+            'quote_title' => 'bail|required',
             'quantity.*' => 'bail|required|integer|min:1',
             'package_quantity.*' => 'bail|required|integer|min:1',
             'service_quantity.*' => 'bail|required|integer|min:1',
@@ -605,6 +608,8 @@ class QuotesController extends Controller
             $quote->company_id = ($request->input('company_id') > 0) ? $request->input('company_id') : null;
             $quote->client_id = $request->input('contact_person_id');
             $quote->division_id = $request->input('division_id');
+            $quote->quote_title = $request->input('quote_title');
+            $quote->quote_remarks = $request->input('quote_remarks');
             $quote->division_level = $highestLvl;
             $quote->hr_person_id = $user->person->id;
             $quote->discount_percent = ($request->input('discount_percent')) ? $request->input('discount_percent') : null;
@@ -676,7 +681,9 @@ class QuotesController extends Controller
             $QuoteApprovalHistory->comment = 'New Quote Created, Manager Approval';
             $QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
             $QuoteApprovalHistory->save();
-        } else {
+        } 
+		else 
+		{
             $status = 2;
             //if authorization not required: email quote to client and update status to awaiting client approval
             $quote->load('client');
@@ -684,10 +691,14 @@ class QuotesController extends Controller
             if (!empty($messageContent)) {
                 $messageContent = $messageContent->template_content;
             }
-            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-            $quoteAttachment = $this->viewQuote($quote, true, false, true);
-            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
-            $quote->status = 2;
+
+			if (!empty($quote->client->full_name) && !empty($quote->client->email))
+			{
+				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+				$quoteAttachment = $this->viewQuote($quote, true, false, true);
+				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+            }
+			$quote->status = 2;
             $quote->update();
             //Add to quote history
             $QuoteApprovalHistory = new QuoteApprovalHistory();
@@ -780,11 +791,13 @@ class QuotesController extends Controller
      */
     public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false, CRMInvoice $paramInvoice = null)
     {
+		
         $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services');
         $invoice = null;
         $totalPaid = 0;
         $paymentTerm = null;
         $remainingTerm = null;
+		//return $quotation;
         if ($isInvoice) {
             $quotation->load('invoices', 'account');
 

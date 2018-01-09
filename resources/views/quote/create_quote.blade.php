@@ -37,10 +37,26 @@
 
                             <div class="col-sm-9">
                                 <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Products/Packages</label>
-                                <!--<label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2">  Services</label>-->
+                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2">  Services</label>
                             </div>
                         </div>
-
+						<div class="form-group">
+                        <label for="quote_title" class="col-sm-2 control-label">Quote Title</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<input type="text" class="form-control" id="quote_title" name="quote_title" value="" placeholder="Enter Quote Title" required>
+								</div>
+							</div>
+						</div>
+						<div class="form-group existing_one">
+							<label for="name" class="col-sm-2 control-label">Remark</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<textarea class="form-control" rows="3" cols="70" id="quote_remarks" name="quote_remarks"
+											  placeholder="Enter Quote Remark"></textarea>
+								</div>
+							</div>
+						</div>
                         <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
                             <label for="{{ 'division_id' }}" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
 
