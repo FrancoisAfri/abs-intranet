@@ -10,7 +10,8 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Model </h3>
+                    <h3 class="box-title"> Vehicle Model(s) for - {{ $vehiclemodels}}</h3>
+
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -87,7 +88,7 @@
           
         }
         $('#back_button').click(function () {
-                location.href = '/vehicle_management/setup';
+                location.href = '/vehicle_management/vehice_make';
             });
         $(function () {
             var moduleId;
@@ -125,7 +126,7 @@
             //Post module form to server using ajax (ADD)
             $('#add-vehicle_model').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/vehice/addvehicle_model';
+                var strUrl = '/vehice/addvehicle_model/{{$vehicleID}}';
                 var modalID = 'add-vehicle_model-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -133,7 +134,7 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-vehicle_model';
-                var redirectUrl = '/vehicle_management/vehice_model';
+                var redirectUrl = '/vehicle_management/vehice_model/{{$vehicleID}}';
                 var successMsgTitle = 'Vehicles Model Added!';
                 var successMsg = 'The vehice Model has been updated successfully.';
                 //var formMethod = 'PATCH';
@@ -147,9 +148,11 @@
                 fleetID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
+                var valueID = btnEdit.data('valueID');
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
+                modal.find('#valueID').val(valueID);
              });
             $('#edit_vehicle_model').on('click', function () {
                 var strUrl = '/vehice/edit_vehicle_model/' + fleetID;
@@ -157,10 +160,11 @@
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
+                    valueID: $('#'+modalID).find('#valueID').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_vehicle_model';
-                var redirectUrl = '/vehicle_management/vehice_model';
+                var redirectUrl = '/vehicle_management/vehice_model/{{$vehicleID}}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The vehice model has been updated successfully.';
                 var Method = 'PATCH';

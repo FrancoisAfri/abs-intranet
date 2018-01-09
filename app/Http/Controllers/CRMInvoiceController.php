@@ -20,7 +20,7 @@ class CRMInvoiceController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function viewInvoice(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false)
+    public function viewInvoice(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, CRMInvoice $paramInvoice = null)
     {
         $isInvoice = true;
         $quotation->load('invoices', 'products.ProductPackages', 'packages.products_type');
@@ -29,8 +29,7 @@ class CRMInvoiceController extends Controller
             if (count($quotation->invoices) > 0) {
                 //view invoice
                 return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, $isPDF, $printQuote, $emailQuote, $isInvoice);
-            }
-            else {
+            } else {
                 //create invoice
                 DB::transaction(function () use ($quotation) {
                     $invoice = new CRMInvoice();
@@ -70,10 +69,9 @@ class CRMInvoiceController extends Controller
                 //view invoice
                 return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, $isPDF, $printQuote, $emailQuote, $isInvoice);
             }
-        }
-        //monthly payment
-        elseif ($quotation->payment_option == 2) {
-            //amortize the payment
+        } elseif ($quotation->payment_option == 2) { //monthly payment
+            //view monthly invoice
+            return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, $isPDF, $printQuote, $emailQuote, $isInvoice, $paramInvoice);
         }
     }
 
@@ -85,6 +83,16 @@ class CRMInvoiceController extends Controller
     public function viewPDFInvoice(Quotation $quotation)
     {
         return $this->viewInvoice($quotation, true, true);
+    }
+
+    /**
+     * Show the monthly invoice PDF view
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function viewPDFMonthlyInvoice(Quotation $quotation, CRMInvoice $invoice)
+    {
+        return $this->viewInvoice($quotation, true, true, false, $invoice);
     }
 
     /**
@@ -100,6 +108,24 @@ class CRMInvoiceController extends Controller
         $messageContent = ($messageContent) ? $messageContent->template_content : '';
         $messageContent = str_replace('[client name]', $quotation->client->full_name, $messageContent);
         $invoiceAttachment = $this->viewInvoice($quotation, true, false, true);
+        Mail::to($quotation->client->email)->send(new SendInvoiceToClient($messageContent, $invoiceAttachment));
+
+        return back()->with(['invoice_emailed' => 'The Invoice has been successfully emailed to the client!']);
+    }
+
+    /**
+     * Email the monthly invoice to the client
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function emailMonthlyInvoice(Quotation $quotation, CRMInvoice $invoice)
+    {
+        $quotation->load('client');
+
+        $messageContent = EmailTemplate::where('template_key', 'send_invoice')->first();
+        $messageContent = ($messageContent) ? $messageContent->template_content : '';
+        $messageContent = str_replace('[client name]', $quotation->client->full_name, $messageContent);
+        $invoiceAttachment = $this->viewInvoice($quotation, true, false, true, $invoice);
         Mail::to($quotation->client->email)->send(new SendInvoiceToClient($messageContent, $invoiceAttachment));
 
         return back()->with(['invoice_emailed' => 'The Invoice has been successfully emailed to the client!']);

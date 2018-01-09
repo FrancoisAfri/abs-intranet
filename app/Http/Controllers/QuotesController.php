@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\CompanyIdentity;
-use App\ProductService;
-use App\ContactCompany;
-use App\ContactPerson;
+use App\modules;
+use App\HRPerson;
+use App\Quotation;
+use Carbon\Carbon;
 use App\CRMAccount;
 use App\CRMInvoice;
 use App\CRMPayment;
+use App\ContactPerson;
 use App\DivisionLevel;
 use App\EmailTemplate;
-use App\HRPerson;
-use App\Mail\ApproveQuote;
-use App\Mail\SendQuoteToClient;
+use App\module_access;
+use App\ContactCompany;
+use App\ProductService;
+use App\CompanyIdentity;
+use Barryvdh\DomPDF\PDF;
 use App\product_packages;
 use App\product_products;
-use App\ProductServiceSettings;
-use App\Quotation;
-use App\QuoteApprovalHistory;
+use App\Mail\ApproveQuote;
 use App\QuoteCompanyProfile;
-use App\QuotesTermAndConditions;
-use Barryvdh\DomPDF\PDF;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\QuoteApprovalHistory;
+use App\Mail\SendQuoteToClient;
+use App\ProductServiceSettings;
+use App\QuotesTermAndConditions;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -171,13 +173,12 @@ class QuotesController extends Controller
             ->load(['divisionLevelGroup' => function ($query) {
                 $query->has('quoteProfile');
             }]);
-		
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
-//return $contactPeople;
+
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Create a quotation';
         $data['breadcrumb'] = [
@@ -201,8 +202,21 @@ class QuotesController extends Controller
     {
         $highestLvl = DivisionLevel::where('active', 1)
             ->orderBy('level', 'desc')->limit(1)->get()->first();
-        $quoteApplications = Quotation::whereHas('person', function ($query) {
-            $query->where('manager_id', Auth::user()->person->id);
+
+        //Check if logged in person is a superuser
+        $user = Auth::user()->load('person');
+        $quoteModule = modules::where('code_name', 'quote')->first();
+        $moduleID = ($quoteModule) ? $quoteModule->id : 0;
+        $objQuoteModAccess = module_access::where('module_id', $moduleID)->where('user_id', $user->id)->first();
+        $quoteModAccess = $objQuoteModAccess ? $objQuoteModAccess->access_level : 0;
+        $isSuperUser = ($quoteModAccess >= 5) ? true : false;
+
+        $quoteApplications = Quotation::where(function ($query) use ($isSuperUser) {
+            if (! $isSuperUser) {
+                $query->whereHas('person', function ($query) {
+                    $query->where('manager_id', $user->person->id);
+                });
+            }
         })
         ->whereIn('status', [1, 2])
         ->with('products', 'packages', 'person', 'company', 'client', 'divisionName')
@@ -249,6 +263,7 @@ class QuotesController extends Controller
     // Approve Quote
     public function approveQuote(Quotation $quote, $isClientApproval = false, $paymentOption = null, $paymentTerm = null, $firstPaymentDate = null)
     {
+        $quote->load('products', 'packages', 'services');
         $stastus = $quote->status;
         if ($quote->status == 1) {
             $stastus = 2;
@@ -259,7 +274,6 @@ class QuotesController extends Controller
         $quote->status = $stastus;
         $changedStatus = 'Status Changed To: ' . $quote->quote_status;
         //$quote->update();
-		
         if ($stastus == 5) {
             //Email Client to confirm success
             $quote->load('client');
@@ -315,13 +329,17 @@ class QuotesController extends Controller
                     //calculate quotation total cost
                     $productsSubtotal = 0;
                     $packagesSubtotal = 0;
+                    $servicesSubtotal = 0;
                     foreach ($quote->products as $product) {
                         $productsSubtotal += ($product->pivot->price * $product->pivot->quantity);
                     }
                     foreach ($quote->packages as $package) {
                         $packagesSubtotal += ($package->pivot->price * $package->pivot->quantity);
                     }
-                    $subtotal = $productsSubtotal + $packagesSubtotal;
+                    foreach ($quote->services as $service) {
+                        $servicesSubtotal += ($service->quantity * $service->rate);
+                    }
+                    $subtotal = ($quote->quote_type == 2) ? $servicesSubtotal : $productsSubtotal + $packagesSubtotal;
                     $discountPercent = $quote->discount_percent;
                     $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
                     $discountedAmount = $subtotal - $discountAmount;
@@ -353,28 +371,21 @@ class QuotesController extends Controller
                 }
             });
             $changedStatus .= ', Email sent to client, to welcome them';
-        } 
-		elseif ($stastus == 2) {
+        } elseif ($stastus == 2) {
             //if authorization not required: email quote to client and update status to awaiting client approval
             $quote->load('client');
             $messageContents = EmailTemplate::where('template_key', 'send_quote')->first();
-			if (!empty($messageContents)) {
+            if (!empty($messageContents)) {
                 $messageContent = $messageContents->template_content;
-				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-				$quoteAttachment = $this->viewQuote($quote, true, false, true);
-				if (!empty($quote->client->email))
-				{
-					Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
-					$changedStatus .= ', , Email sent to Manager, to notify them';
-				}
-            } 
-			/*else 
-			{
+            } else {
                 $messageContent = '';
-            }*/
-            
-			$quote->status = $stastus;
-            $quote->update();    
+            }
+            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+            $quoteAttachment = $this->viewQuote($quote, true, false, true);
+            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+            $quote->status = $stastus;
+            $quote->update();
+            $changedStatus .= ', Email sent to client, to notify them';
         }
         // Add to quote history
         $QuoteApprovalHistory = new QuoteApprovalHistory();
@@ -527,7 +538,7 @@ class QuotesController extends Controller
             }
         }
         //return $packages;
-        
+
         $servicesSettings = ProductServiceSettings::first();
 
         $data['page_title'] = 'Quotes';
@@ -628,7 +639,6 @@ class QuotesController extends Controller
                     }
                 }
             } elseif ($quoteType == 2) {
-
                 $serviceSettings = ProductServiceSettings::first();
                 $serviceRate = ($serviceSettings) ? $serviceSettings->service_rate : 0;
 
@@ -768,47 +778,55 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false)
+    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false, CRMInvoice $paramInvoice = null)
     {
-        $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions');
+        $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services');
         $invoice = null;
         $totalPaid = 0;
+        $paymentTerm = null;
+        $remainingTerm = null;
         if ($isInvoice) {
             $quotation->load('invoices', 'account');
-            //once-off purchases
-            if ($quotation->payment_option == 1) {
-                //specify invoice
-                $invoice = $quotation->invoices->first();
 
-                //get the sum of the previous payments
-                $totalPaid = CRMPayment::where('quote_id', $quotation->id)->sum('amount');
+            //get the sum of the previous payments
+            $totalPaid = CRMPayment::where('quote_id', $quotation->id)->sum('amount');
 
-                //update statuses if invoice is being emailed to the client
-                if ($emailQuote) {
-                    DB::transaction(function () use ($quotation, $invoice) {
-                        if ($quotation->status < 6) {
-                            $quotation->status = 6;
-                            $quotation->update();
-                        }
-                        if ($invoice->status < 2) {
-                            $invoice->status = 2;
-                            $invoice->update();
-                        }
-                    });
-                }
-            } else {
-                //calculate invoice payment due date $invoice->payment_due_date
+            //specify invoice
+            $invoice = ($quotation->payment_option == 1) ? $quotation->invoices->first() : $paramInvoice;
+
+            //update statuses if invoice is being emailed to the client
+            if ($emailQuote) {
+                DB::transaction(function () use ($quotation, $invoice) {
+                    if ($quotation->status < 6) {
+                        $quotation->status = 6;
+                        $quotation->update();
+                    }
+                    if ($invoice->status < 2) {
+                        $invoice->status = 2;
+                        $invoice->update();
+                    }
+                });
             }
+
+            //get the payment term
+            $paymentTerm = $quotation->invoices->count();
+            $remainingTerm = $quotation->invoices->where('status', '<>', 4)->count();
         }
         $productsSubtotal = 0;
         $packagesSubtotal = 0;
+        $servicesSubtotal = 0;
+        $totalServiceQty = 0;
         foreach ($quotation->products as $product) {
             $productsSubtotal += ($product->pivot->price * $product->pivot->quantity);
         }
         foreach ($quotation->packages as $package) {
             $packagesSubtotal += ($package->pivot->price * $package->pivot->quantity);
         }
-        $subtotal = $productsSubtotal + $packagesSubtotal;
+        foreach ($quotation->services as $service) {
+            $totalServiceQty += $service->quantity;
+            $servicesSubtotal += ($service->quantity * $service->rate);
+        }
+        $subtotal = ($quotation->quote_type == 2) ? $servicesSubtotal : $productsSubtotal + $packagesSubtotal;
         $discountPercent = $quotation->discount_percent;
         $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
         $discountedAmount = $subtotal - $discountAmount;
@@ -816,6 +834,7 @@ class QuotesController extends Controller
         $total = $discountedAmount + $vatAmount;
 
         //return $quotation;
+        $servicesSettings = ProductServiceSettings::first();
 
         $data['page_title'] = ($isInvoice) ? 'Invoice' : 'Quotes';
         $data['page_description'] = 'View a quotation';
@@ -825,6 +844,8 @@ class QuotesController extends Controller
         ];
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'search';
+        $data['servicesSettings'] = $servicesSettings;
+        $data['totalServiceQty'] = $totalServiceQty;
         $data['quotation'] = $quotation;
         $data['invoice'] = $invoice;
         $data['totalPaid'] = $totalPaid;
@@ -834,9 +855,11 @@ class QuotesController extends Controller
         $data['vatAmount'] = $vatAmount;
         $data['total'] = $total;
         $data['balanceDue'] = $total - $totalPaid;
+        $data['paymentTerm'] = $paymentTerm;
+        $data['remainingTerm'] = $remainingTerm;
         AuditReportsController::store('Quote', 'View Quote Page Accessed', 'Accessed By User', 0);
 
-        if ($isPDF) {
+        if ($isPDF === true) {
             $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first()->level;
             $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $quotation->division_id)
                 ->first()->load('divisionLevelGroup');
@@ -847,6 +870,7 @@ class QuotesController extends Controller
 
             $view = ($isInvoice) ? view('crm.pdf_invoice', $data)->render() : view('quote.pdf_quote', $data)->render();
             $pdf = resolve('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option('enable_html5_parser', true);
             $pdf->loadHTML($view);
             if ($printQuote) {
                 return $pdf->stream('quotation_' . $quotation->id . '.pdf');
@@ -895,7 +919,7 @@ class QuotesController extends Controller
      */
     public function updateQuoteIndex(Quotation $quote)
     {
-        $quote->load('products', 'packages', 'termsAndConditions');
+        $quote->load('products', 'packages', 'termsAndConditions', 'services');
         $highestLvl = DivisionLevel::where('active', 1)
             ->orderBy('level', 'desc')->limit(1)->get()->first()
             ->load(['divisionLevelGroup' => function ($query) {
@@ -938,15 +962,17 @@ class QuotesController extends Controller
         $quote->load('products', 'packages');
         //return $quote;
         $validator = Validator::make($request->all(), [
+            'quote_type' => 'bail|required|integer|min:1',
             'division_id' => 'bail|required|integer|min:1',
             'contact_person_id' => 'bail|required|integer|min:1',
         ]);
+        $quoteType = $request->input('quote_type');
 
-        $validator->after(function ($validator) use ($request) {
+        $validator->after(function ($validator) use ($request, $quoteType) {
             $products = $request->input('product_id');
             $packages = $request->input('package_id');
 
-            if (!$products && !$packages) {
+            if (($quoteType == 1) && !$products && !$packages) {
                 $validator->errors()->add('product_id', 'Please make sure you select at least a product or a package.');
                 $validator->errors()->add('package_id', 'Please make sure you select at least a product or a package.');
             }
@@ -999,6 +1025,8 @@ class QuotesController extends Controller
         }
         //return $packages;
 
+        $servicesSettings = ProductServiceSettings::first();
+
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Create a quotation';
         $data['breadcrumb'] = [
@@ -1007,6 +1035,8 @@ class QuotesController extends Controller
         ];
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'create quote';
+        $data['servicesSettings'] = $servicesSettings;
+        $data['quoteType'] = $quoteType;
         $data['divisionID'] = $request->input('division_id');
         $data['contactPersonId'] = $request->input('contact_person_id');
         $data['companyID'] = $request->input('company_id');
@@ -1027,10 +1057,19 @@ class QuotesController extends Controller
     public function updateQuote(Request $request, Quotation $quote)
     {
         $validator = Validator::make($request->all(), [
+            'quote_type' => 'bail|required|integer|min:1',
             'division_id' => 'bail|required|integer|min:1',
             'contact_person_id' => 'bail|required|integer|min:1',
+            //'quantity' => 'bail|required',
             'quantity.*' => 'bail|required|integer|min:1',
+            'package_quantity.*' => 'bail|required|integer|min:1',
+            'service_quantity.*' => 'bail|required|integer|min:1',
+            //'price' => 'bail|required_if:quote_type,1',
             'price.*' => 'bail|required|integer|min:1',
+            'package_price.*' => 'bail|required|integer|min:1',
+            'service_rate' => 'bail|required_if:quote_type,2|numeric',
+            'description' => 'bail|required_if:quote_type,2',
+            'description.*' => 'bail|required|max:1000',
             'discount_percent' => 'numeric',
         ]);
         $validator->validate();
@@ -1046,6 +1085,8 @@ class QuotesController extends Controller
         //save quote
         //$quote = new Quotation();
         DB::transaction(function () use ($quote, $request, $highestLvl, $user) {
+            $quoteType = $request->input('quote_type');
+            $quote->quote_type = ($quoteType > 0) ? $quoteType : null;
             $quote->company_id = ($request->input('company_id') > 0) ? $request->input('company_id') : null;
             $quote->client_id = $request->input('contact_person_id');
             $quote->division_id = $request->input('division_id');
@@ -1056,23 +1097,44 @@ class QuotesController extends Controller
             $quote->status = 1;
             $quote->update();
 
-            //save quote's products
-            $prices = $request->input('price');
-            $quantities = $request->input('quantity');
-            $quote->products()->detach();
-            if ($prices) {
-                foreach ($prices as $productID => $price) {
-                    $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
-                }
-            }
+            if ($quoteType == 1) {
 
-            //save quote's packages
-            $packagePrices = $request->input('package_price');
-            $packageQuantities = $request->input('package_quantity');
-            $quote->packages()->detach();
-            if ($packagePrices) {
-                foreach ($packagePrices as $packageID => $packagePrice) {
-                    $quote->packages()->attach($packageID, ['price' => $packagePrice, 'quantity' => $packageQuantities[$packageID]]);
+                //save quote's products
+                $prices = $request->input('price');
+                $quantities = $request->input('quantity');
+                $quote->products()->detach();
+                if ($prices) {
+                    foreach ($prices as $productID => $price) {
+                        $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
+                    }
+                }
+
+                //save quote's packages
+                $packagePrices = $request->input('package_price');
+                $packageQuantities = $request->input('package_quantity');
+                $quote->packages()->detach();
+                if ($packagePrices) {
+                    foreach ($packagePrices as $packageID => $packagePrice) {
+                        $quote->packages()->attach($packageID, ['price' => $packagePrice, 'quantity' => $packageQuantities[$packageID]]);
+                    }
+                }
+            } elseif ($quoteType == 2) {
+                $serviceSettings = ProductServiceSettings::first();
+                $serviceRate = ($serviceSettings) ? $serviceSettings->service_rate : 0;
+
+                //save quote's services
+                $serviceDescription = $request->input('description');
+                $serviceQuantity = $request->input('service_quantity');
+                if ($serviceDescription) {
+                    $deleterRows = ProductService::where('quotation_id', $quote->id)->delete();
+                    foreach ($serviceDescription as $key => $description) {
+                        $service = new ProductService();
+                        $service->quotation_id = $quote->id;
+                        $service->description = $description;
+                        $service->quantity = $serviceQuantity[$key];
+                        $service->rate = $serviceRate;
+                        $service->save();
+                    }
                 }
             }
 
