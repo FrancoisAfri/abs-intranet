@@ -69,8 +69,8 @@
                                 <img width="200px" src="{{ public_path() . $companyDetails['company_logo_url'] }}" alt="letterhead">
                             </td>
                             <td width="65%" style="">
-                                <h4 class="text-primary"><em><b>{{ $voucher->brn_name }}</b></em></h4>
-                                <p>{!! html_entity_decode($voucher->c_agency_full_addr . $voucher->c_agency_reg . $voucher->c_agency_tel . $voucher->c_agency_tel_fax) !!}</p>
+                                <h4 class="text-primary"><em><b>{{ $carVoucher->brn_name }}</b></em></h4>
+                                <p>{!! html_entity_decode($carVoucher->c_agency_full_addr . '<br>' . $carVoucher->c_agency_reg . '<br>' .$carVoucher->c_agency_tel. '<br>' .$carVoucher->c_agency_tel_fax) !!}</p>
                             </td>
                         </tr>
                     </table>
@@ -79,11 +79,11 @@
                 <!-- Voucher details -->
                 <td>
                     <br>
-                    <h4 class="text-center text-primary"><em><b>Vourcher No<br>{{ $voucher->c_sup_vouch_no }}</b></em></h4>
+                    <h4 class="text-center text-primary"><em><b>Vourcher No<br>{{ $carVoucher->c_sup_vouch_no }}</b></em></h4>
                     <br>
-                    <h4 class="text-center text-primary"><em><b>{{ $voucher->c_date }}</b></em></h4>
+                    <h4 class="text-center text-primary"><em><b>{{ $carVoucher->c_date }}</b></em></h4>
                     <br>
-                    <h4 class="text-center text-primary"><em><b>{{ $voucher->c_voucher_title }}</b></em></h4>
+                    <h4 class="text-center text-primary"><em><b>{{ $carVoucher->c_carVoucher_title }}</b></em></h4>
                     <br>
                 </td>
                 <!-- ./Voucher details -->
@@ -94,18 +94,17 @@
                         <tr>
                             <td width="50%" class="no-padding" style="border-right: 0 none #fff; border-left: 0 none #fff;">
                                 <table class="table table-bordered" style="margin: -1px;">
-                                    @if(!empty($voucher->c_bill_name) || !empty($voucher->c_bill_postal_address_code) || !empty($voucher->c_bill_account_no))
                                         <tr>
                                             <!-- Supplier details -->
                                             <td>
-                                                <h4 style="margin-top: 0;"><em><b>{{ $voucher->c_bill_name }}</b></em></h4>
+                                                <h4 style="margin-top: 0;"><em><b>{{ $carVoucher->c_bill_name }}</b></em></h4>
                                                 <table class="table" style="margin-bottom: 0;">
                                                     <tr>
                                                         <td>
-                                                            <h5><em><b>{!! html_entity_decode($voucher->c_bill_postal_address_code . $voucher->sup_addblock2) !!}</b></em></h5>
+                                                            <h5><em><b>{!! html_entity_decode($carVoucher->c_bill_postal_address1 . '<br>'. $carVoucher->c_bill_postal_address2. '<br>'. $carVoucher->c_bill_postal_address3. '<br>'. $carVoucher->c_bill_postal_address_code . '<br>'  . $carVoucher->sup_addblock2). '<br>'  !!}</b></em></h5>
                                                         </td>
                                                         <td nowrap>
-                                                            <h5><em><b>{!! ($voucher->c_bill_account_no) ? 'Acc No: ' $voucher->c_bill_account_no : '' !!}</b>
+                                                            <h5><em><b>{!! ($carVoucher->c_bill_account_no) ? 'Acc No: ' . $carVoucher->c_bill_account_no : '' !!}</b>
 															
 															</em></h5>
                                                         </td>
@@ -114,8 +113,7 @@
                                             </td>
                                             <!-- ./Supplier details -->
                                         </tr>
-                                    @endif
-                                    @if($voucher->c_rental_addr1)
+                                    @if($carVoucher->c_rental_addr1)
                                         <tr>
                                             <!-- Dates and Times -->
                                             <td>
@@ -126,13 +124,13 @@
                                                             <img width="50px" src="{{ $calendarClockImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! ($voucher->c_rental_addr1) ? 'Rental Location: ' .$voucher->c_rental_addr1 . '<br>' : '' !!}
-                                                            {!! ($voucher->c_rental_date) ? 'Date & Time: ' .$voucher->c_rental_date . '<br>' : '' !!}
-                                                            {!! ($voucher->c_return_addr1) ? 'Return Location: ' .$voucher->c_return_addr1 . '<br>' : '' !!}
-                                                            {!! ($voucher->c_return_date	) ? 'Date & Time: ' .$voucher->c_return_date . '<br>' : '' !!}
-                                                            {!! ($voucher->c_duration) ? 'Rental Length (days): ' $voucher->c_duration : '' !!}
-                                                            {!! ($voucher->c_flight_no) ? 'Flight: ' $voucher->c_flight_no : '' !!}
-                                                            {!! ($voucher->c_tour_code) ? 'Tour Code: ' $voucher->c_tour_code : '' !!}
+                                                            {!! ($carVoucher->c_rental_addr1) ? 'Rental Location: ' . $carVoucher->c_rental_addr1 . '<br>' : '' !!}
+                                                            {!! ($carVoucher->c_rental_date) ? 'Date & Time: ' . $carVoucher->c_rental_date . '<br>' : '' !!}
+                                                            {!! ($carVoucher->c_return_addr1) ? 'Return Location: ' . $carVoucher->c_return_addr1 . '<br>' : '' !!}
+                                                            {!! ($carVoucher->c_return_date	) ? 'Date & Time: ' . $carVoucher->c_return_date . '<br>' : '' !!}
+                                                            {!! ($carVoucher->c_duration) ? 'Rental Length (days): ' . $carVoucher->c_duration : '' !!}
+                                                            {!! ($carVoucher->c_flight_no) ? 'Flight: ' . $carVoucher->c_flight_no : '' !!}
+                                                            {!! ($carVoucher->c_tour_code) ? 'Tour Code: ' . $carVoucher->c_tour_code : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -140,7 +138,7 @@
                                             <!-- ./Dates and Times -->
                                         </tr>
                                     @endif
-                                    @if(!empty($voucher->c_disclaimer))
+                                    @if(!empty($carVoucher->c_disclaimer))
                                         <tr>
                                             <!-- Special Instructions -->
                                             <td>
@@ -151,7 +149,7 @@
                                                             <img width="50px" src="{{ $starImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->c_disclaimer) ? html_entity_decode($voucher->c_disclaimer)  : '' !!}
+                                                            {!! !empty($carVoucher->c_disclaimer) ? html_entity_decode($carVoucher->c_disclaimer)  : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -159,7 +157,7 @@
                                             <!-- ./Special Instructions -->
                                         </tr>
                                     @endif
-                                    @if(!empty($voucher->c_ct_card_warning))
+                                    @if(!empty($carVoucher->c_ct_card_warning))
                                         <tr>
                                             <!-- General Ts & Cs -->
                                             <td style="border-bottom: 0 none #fff;">
@@ -170,7 +168,7 @@
                                                             <img width="50px" src="{{ $tcImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            <p style="font-size: 12px;">{!! !empty($voucher->c_ct_card_warning) ? html_entity_decode($voucher->c_ct_card_warning)  : '' !!}</p>
+                                                            <p style="font-size: 12px;"><b>{!! !empty($carVoucher->c_ct_card_warning) ? html_entity_decode($carVoucher->c_ct_card_warning)  : '' !!}</b></p>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -186,7 +184,7 @@
                                         <!-- Client details / Booking Refs / Services Required / Payment -->
                                         <td style="border-right: 0 none #fff; border-left: 0 none #fff;">
                                             <!-- Client details -->
-                                            @if(!empty($voucher->c_pax_name))
+                                            @if(!empty($carVoucher->c_pax_name))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Client Details</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
@@ -194,16 +192,16 @@
                                                             <img width="50px" src="{{ $usersImg }}" alt="clientsicon">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! $voucher->c_pax_name . '</b>' . '<br>' !!}
-                                                            {!! ((!empty(trim($voucher->c_pax_cell_no))) ? 'Cell: ' . $voucher->c_pax_cell_no : '') . ' ' .
-                                                             ((!empty(trim($voucher->c_pax_email))) ? 'Email: ' . $voucher->c_pax_email : '') !!}
+                                                            {!! $carVoucher->c_pax_name . '</b>' . '<br>' !!}
+                                                            {!! ((!empty(trim($carVoucher->c_pax_cell_no))) ? 'Cell: ' . $carVoucher->c_pax_cell_no : '') . ' ' .
+                                                             ((!empty(trim($carVoucher->c_pax_email))) ? 'Email: ' . $carVoucher->c_pax_email : '') !!}
                                                         </td>
                                                     </tr>
                                                 </table>
                                             @endif
                                             <!-- ./Client details -->
                                             <!-- Booking Refs -->
-                                            @if(!empty($voucher->c_reservation_no) || !empty($voucher->c_issued_by))
+                                            @if(!empty($carVoucher->c_reservation_no) || !empty($carVoucher->c_issued_by))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Booking References</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
@@ -211,18 +209,18 @@
                                                             <img width="50px" src="{{ $folderImg }}" alt="folderImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->c_issued_by) ? 'Our Ref: ' . $voucher->c_issued_by . '<br>' : '' !!}
-                                                            {!! !empty(trim($voucher->c_reservation_no)) ? 'Reservation No: ' . $voucher->c_reservation_no : '' !!}
-                                                            {!! !empty(trim($voucher->c_currency)) ? 'Currency: ' . $voucher->c_currency : '' !!}
-                                                            {!! !empty(trim($voucher->c_voucher_value)) ? 'Voucher Value: ' . $voucher->c_voucher_value : '' !!}
-                                                            {!! !empty(trim($voucher->c_car_description)) ? 'Car Group/Code: ' . $voucher->c_car_description : '' !!}
+                                                            {!! !empty($carVoucher->c_issued_by) ? 'Our Ref: ' . $carVoucher->c_issued_by . '<br>' : '' !!}
+                                                            {!! !empty(trim($carVoucher->c_reservation_no)) ? 'Reservation No: ' . $carVoucher->c_reservation_no. '<br>' : '' !!}
+                                                            {!! !empty(trim($carVoucher->c_currency)) ? 'Currency: ' . $carVoucher->c_currency. '<br>' : '' !!}
+                                                            {!! !empty(trim($carVoucher->c_carVoucher_value)) ? 'Voucher Value: ' . $carVoucher->c_carVoucher_value. '<br>' : '' !!}
+                                                            {!! !empty(trim($carVoucher->c_car_description)) ? 'Car Group/Code: ' . $carVoucher->c_car_description. '<br>' : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
                                             @endif
                                             <!-- ./Booking Refs -->
                                             <!-- Services Required -->
-                                            @if(!empty($voucher->c_rate_name) || !empty($voucher->c_insurance))
+                                            @if(!empty($carVoucher->c_rate_name) || !empty($carVoucher->c_insurance))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Services Required</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
@@ -230,26 +228,26 @@
                                                             <img width="50px" src="{{ $calculatorImg }}" alt="calculatorImg">
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->c_rate_name) ?  'Rate Code/Daily Rate: ' .$voucher->c_rate_name . '<br>' : '' !!}
-                                                            {!! !empty($voucher->c_insurance) ? 'Insurances Required: ' . $voucher->c_insurance : '' !!}
-                                                            {!! !empty($voucher->c_remarks) ? 'Remarks: ' . $voucher->c_remarks : '' !!}
+                                                            {!! !empty($carVoucher->c_rate_name) ?  'Rate Code/Daily Rate: ' .$carVoucher->c_rate_name . '<br>' : '' !!}
+                                                            {!! !empty($carVoucher->c_insurance) ? 'Insurances Required: ' . $carVoucher->c_insurance : '' !!}
+                                                            {!! !empty($carVoucher->c_remarks) ? 'Remarks: ' . $carVoucher->c_remarks : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
                                             @endif
                                             <!-- ./Services Required -->
                                             <!-- Payment -->
-                                            @if(!empty($voucher->c_client_code) || !empty($voucher->pmt_extras))
+                                            @if(!empty($carVoucher->c_client_code) || !empty($carVoucher->c_cl_ord_no))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Account Infomartion</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
                                                         <td style="padding: 0; width: 15%;">
-                                                            <img width="50px" src="{{ $paymentImg }}" alt="calculatorImg">
+                                                            
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
-                                                            {!! !empty($voucher->c_client_code) ? 'Acc No: ' . $voucher->c_client_code . '<br>' : '' !!}
-                                                            {!! !empty($voucher->c_client_code) ? 'CC No: ' . '' . '<br>' : '' !!}
-                                                            {!! !empty($voucher->pmt_extras) ? 'Order No: ' . $voucher->c_cl_ord_no : '' !!}
+                                                            {!! !empty($carVoucher->c_client_code) ? 'Acc No: ' . $carVoucher->c_client_code . '<br>' : '' !!}
+                                                            {!! !empty($carVoucher->c_client_code) ? 'CC No: ' . '' . '<br>' : '' !!}
+                                                            {!! !empty($carVoucher->c_cl_ord_no) ? 'Order No: ' . $carVoucher->c_cl_ord_no : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -264,15 +262,11 @@
                                             <table class="table" style="margin: 0;">
                                                 <tr>
                                                     <td style="padding: 0; width: 20%;">
-                                                        <img width="70px" src="{{ $iataImg }}" alt="iataImg">
-                                                        <p>{{ !empty($voucher->co_iata) ? $voucher->co_iata : '' }}</p>
-                                                    </td>
+                                                         </td>
                                                     <td style="padding: 0; width: 60%;">
-                                                        <p class="text-center">{{ !empty($voucher->co_vat) ? 'Vat Reg No ' . $voucher->co_vat : '' }}</p>
-                                                    </td>
+                                                       </td>
                                                     <td style="padding: 0; width: 20%; text-align: right;">
-                                                        <img width="80px" src="{{ $asataImg }}" alt="asataImg">
-                                                        <p>Member</p>
+                                                        
                                                     </td>
                                                 </tr>
                                             </table>
@@ -282,9 +276,9 @@
                                                     <td style="padding: 0;">
                                                         ...................................................................................................
                                                         <br>
-                                                        <b><em>Issued by</em></b> <span class="pull-right"><b><em>{{ $voucher->c_issued_by }}</em></b></span>
+                                                        <b><em>Issued by</em></b> <span class="pull-right"><b><em>{{ $carVoucher->c_issued_by }}</em></b></span>
                                                         <br>
-                                                        {{ !empty($voucher->c_voucher_message) ? $voucher->c_voucher_message : '' }}
+                                                        {{ !empty($carVoucher->c_voucher_message) ? $carVoucher->c_voucher_message : '' }}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -298,33 +292,7 @@
                 </td>
             </tr>
         </table>
-        <!--<div class="row no-gutter">
-            <br><br>
-            <div class="col-xs-8">
-                <table class="table" style="margin-bottom: 0;">
-                    <tr>
-                        <td width="35%">
-                            <br><br>
-                            <img width="180px" src="{{ public_path() . $companyDetails['company_logo_url'] }}" alt="letterhead">
-                        </td>
-                        <td width="65%" style="">
-                            <h4 class="text-primary"><em><b>XL Nexus Travel</b></em></h4>
-                            <p>Postnet Suite 136 Private Bag X2600 Houghton 2041<br>
-                                52 Engelworld Drive Saxonworld 2132 South Africa<br>
-                                Tel : +27 11 486 9000 Fax : 086 570 3112<br>
-                                Email: Web: www.nexustravel.co.za</p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="col-xs-3">
-                <br>
-                <h4 class="text-center text-primary"><em><b>Transfer<br>{{ $voucher->vch_no_full }}</b></em></h4>
-                <br>
-                <h4 class="text-center text-primary"><em><b>{{ ($voucher->vch_dt) ? date('d/m/Y', $voucher->vch_dt) : '' }}</b></em></h4>
-                <br>
-            </div>
-        </div>-->
+        
     </div>
     <!-- ./wrapper -->
 

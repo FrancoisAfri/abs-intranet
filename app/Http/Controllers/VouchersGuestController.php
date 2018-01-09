@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use App\CompanyIdentity;
 use App\Mail\SendVoucher;
 use App\Voucher;
+use App\carVoucher;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -172,15 +173,15 @@ class VouchersGuestController extends Controller
         //if ($printQuote) return $pdf->stream('quotation_' . $quotation->id . '.pdf');
         //elseif ($emailQuote) return $pdf->output();
     }
-	public function carVvoucherPDF(Voucher $voucher, $emailVoucher = false)
+	public function carVvoucherPDF(carVoucher $voucher, $emailVoucher = false)
     {
         if (!$voucher) return "Invalid Voucher.";
 
         $companyDetails = CompanyIdentity::systemSettings();
-
+//return $voucher;
         $data['file_name'] = 'Voucher';
         $data['page_title'] = 'Voucher PDF';
-        $data['voucher'] = $voucher;
+        $data['carVoucher'] = $voucher;
         $data['companyDetails'] = $companyDetails;
         $data['usersImg'] = public_path() . Storage::disk('local')->url('voucher_icons/users.png');
         $data['folderImg'] = public_path() . Storage::disk('local')->url('voucher_icons/folder.png');

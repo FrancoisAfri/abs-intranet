@@ -74,7 +74,7 @@
                             </td>
                             <td width="65%" style="">
                                 <h4 class="text-primary"><em><b>{{ $voucher->brn_name }}</b></em></h4>
-                                <p>{!! html_entity_decode($voucher->co_fulldetails . $voucher->sup_addblock2) !!}</p>
+                                <p>{!! html_entity_decode($voucher->co_fulldetails ) !!}</p>
                             </td>
                         </tr>
                     </table>
@@ -83,7 +83,7 @@
                 <!-- Voucher details -->
                 <td>
                     <br>
-                    <h4 class="text-center text-primary"><em><b>Transfer<br>{{ $voucher->vch_no_full }}</b></em></h4>
+                    <h4 class="text-center text-primary"><em><b>Accommodation<br>{{ $voucher->vch_no_full }}</b></em></h4>
                     <br>
                     <h4 class="text-center text-primary"><em><b>{{ ($voucher->vch_dt) ? date('d/m/Y', $voucher->vch_dt) : '' }}</b></em></h4>
                     <br>
@@ -104,7 +104,7 @@
                                                 <table class="table" style="margin-bottom: 0;">
                                                     <tr>
                                                         <td>
-                                                            <h5><em><b>{!! html_entity_decode($voucher->sup_addblock1 . $voucher->sup_addblock2) !!}</b></em></h5>
+                                                            <h5><em><b>{!! html_entity_decode($voucher->sup_addblock2) !!}</b></em></h5>
                                                         </td>
                                                         <td nowrap>
                                                             <h5><em><b>{!! html_entity_decode($voucher->sup_contactblock) !!}</b></em></h5>
@@ -201,7 +201,7 @@
                                             @endif
                                             <!-- ./Client details -->
                                             <!-- Booking Refs -->
-                                            @if(!empty($voucher->our_ref_full) || !empty($voucher->clntref2))
+                                            @if(!empty($voucher->our_ref_full) || !empty($voucher->sup_ref))
                                                 <h4 class="text-primary" style="margin-bottom: 0;"><em><b>Booking References</b></em></h4>
                                                 <table class="table" style="margin: 0;">
                                                     <tr>
@@ -210,7 +210,7 @@
                                                         </td>
                                                         <td style="padding: 0; width: 85%;">
                                                             {!! !empty($voucher->our_ref_full) ? 'Our Ref: ' . $voucher->our_ref_full . '<br>' : '' !!}
-                                                            {!! !empty(trim($voucher->clntref2)) ? 'Your Ref: ' . $voucher->clntref2 : '' !!}
+                                                            {!! !empty(trim($voucher->sup_ref)) ? 'Your Ref: ' . $voucher->sup_ref : '' !!}
                                                         </td>
                                                     </tr>
                                                 </table>
