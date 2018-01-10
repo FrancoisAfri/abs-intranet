@@ -421,6 +421,7 @@ class VehicleManagemntController extends Controller
     public function IncidentType(Request $request)
     {
         $incidentType = incident_type::orderBy('id', 'asc')->get();
+       // return $incidentType;
 
         $data['page_title'] = " Manage Incidents Type ";
         $data['page_description'] = "Fleet Types Management";

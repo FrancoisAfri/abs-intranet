@@ -1,6 +1,7 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- iCheck -->
@@ -72,8 +73,8 @@
                                     <tfoot>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
-					<th>Fleet Card Type</th>
-					<th>Vehicle Fleet Number</th>
+                                        <th>Fleet Card Type</th>
+                                        <th>Vehicle Fleet Number</th>
                                         <th>Holder</th>
                                         <th>Card Number</th>
                                         <th>CVS Number</th>
@@ -111,6 +112,7 @@
                         <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
                         <!-- iCheck -->
                         <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+                        
                         <!-- Ajax form submit -->
                         <script src="/custom_components/js/modal_ajax_submit.js"></script>
                         <!-- End Bootstrap File input -->
@@ -167,12 +169,56 @@
                                 increaseArea: '10%' // optional
                             });
 
-                             $('.datepicker').datepicker({
-                                    format: 'dd/mm/yyyy',
-                                    autoclose: true,
-                                    todayHighlight: true
-                                });
-                                
+                         
+
+                            {{--  date  --}}
+                                $(function () {
+                                    var bindDatePicker = function() {
+                                            $(".date").datetimepicker({
+                                            format:'YYYY-MM-DD',
+                                                icons: {
+                                                    time: "fa fa-clock-o",
+                                                    date: "fa fa-calendar",
+                                                    up: "fa fa-arrow-up",
+                                                    down: "fa fa-arrow-down"
+                                                }
+                                            }).find('input:first').on("blur",function () {
+                                                // check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
+                                                // update the format if it's yyyy-mm-dd
+                                                var date = parseDate($(this).val());
+
+                                                if (! isValidDate(date)) {
+                                                    //create date based on momentjs (we have that)
+                                                    date = moment().format('YYYY-MM-DD');
+                                                }
+
+                                                $(this).val(date);
+                                            });
+                                        }
+                                    
+                                    var isValidDate = function(value, format) {
+                                            format = format || false;
+                                            // lets parse the date to the best of our knowledge
+                                            if (format) {
+                                                value = parseDate(value);
+                                            }
+
+                                            var timestamp = Date.parse(value);
+
+                                            return isNaN(timestamp) == false;
+                                    }
+                                    
+                                    var parseDate = function(value) {
+                                            var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
+                                            if (m)
+                                                value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
+
+                                            return value;
+                                    }
+                                    
+                                    bindDatePicker();
+                                    });
+
                            var fleetID;
                             $('#edit-vehiclefleet-modal').on('show.bs.modal', function (e) {
                                 var btnEdit = $(e.relatedTarget);

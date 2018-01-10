@@ -116,4 +116,17 @@ class FuelManagementController extends Controller
         return back();
     }
 
+
+    public function FuelTankAct(Request $request, Fueltanks $fuel)
+    {
+        if ($fuel->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $fuel->status = $stastus;
+        $fuel->update();
+        return back();
+    }
+
 }

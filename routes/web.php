@@ -1092,9 +1092,11 @@ Route::post('vehicle_management/add_vehiclefleetcard', 'fleetcardController@Addf
 Route::patch('vehicle_management/edit_vehiclefleetcard/{vehiclefleetcard}' ,'fleetcardController@editfleetcard');
 //Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 
+#//************Fleet Card *******************
 #//************Manage Fuel Tanks *******************
 Route::get('vehicle_management/fuel_tank', 'FuelManagementController@fueltankIndex');
 Route::post('vehicle_management/addfueltank', 'FuelManagementController@Addfueltank');
+Route::get('/vehicle_management/fueltank_act/{fuel}', 'FuelManagementController@FuelTankAct');
 
 
 #******************** Driver Admin *************************

@@ -1,37 +1,42 @@
-<div id="add-tank-modal" class="modal modal-default fade">
+<div id="edit-tank-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+            <form class="form-horizontal" method="POST" name="edit-tank-form">
                 {{ csrf_field() }}
-               
+                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Fuel Tank</h4>
+                    <h4 class="modal-title">Edit safe</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-                     <div class="box-body" id="view_users">
+                   
+
                      @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                             <label for="{{ 'division_level_' . $division_level->level }}"
-                                class="col-sm-2 control-label">{{ $division_level->name }}</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-black-tie"></i>
-                                                    </div>
-                                                    <select id="{{ 'division_level_' . $division_level->level }}"
-                                                            name="{{ 'division_level_' . $division_level->level }}"
-                                                            class="form-control"
-                                                            onchange="divDDOnChange(this, null, 'view_users')">
-                                                    </select>
+                            <label for="{{ 'division_level_' . $division_level->level }}"
+                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-black-tie"></i>
                                     </div>
-                             </div>
+                                    <select id="{{ 'division_level_' . $division_level->level }}"
+                                            name="{{ 'division_level_' . $division_level->level }}"
+                                            class="form-control select2"
+                                            onchange="divDDOnChange(this, null, 'edit-tank-modal')"
+                                            style="width: 100%;">
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                @endforeach
+                    @endforeach
+
+                    
                     <div class="form-group">
                         <label for="tank_name" class="col-sm-2 control-label">Tank Name</label>
                         <div class="col-sm-8">
@@ -71,16 +76,16 @@
                             </select>
                         </div>
                     </div>
-                
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-fueltank" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
+                    <button type="button" id="edit_safe" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-</div>
+        
            

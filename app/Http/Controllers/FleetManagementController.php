@@ -650,33 +650,32 @@ class FleetManagementController extends Controller
         $datelost = $SysData['date_lost'] = str_replace('/', '-', $SysData['date_lost']);
         $datelost = $SysData['date_lost'] = strtotime($SysData['date_lost']);
 
-        $issuedby = $SysData['issued_by'];
-        $Employee = HRPerson::where('id', $issuedby)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
+        // $issuedby = $SysData['issued_by'];
+        // $Employee = HRPerson::where('id', $issuedby)->orderBy('id', 'desc')->get()->first();
+        // $name = $Employee->first_name . ' ' . $Employee->surname;
 
-        $controller = $SysData['safe_controller'];
-        $Employee = HRPerson::where('id', $controller)->orderBy('id', 'desc')->get()->first();
-        $safecontroller = $Employee->first_name . ' ' . $Employee->surname;
+        // $controller = $SysData['safe_controller'];
+        // $Employee = HRPerson::where('id', $controller)->orderBy('id', 'desc')->get()->first();
+        // $safecontroller = $Employee->first_name . ' ' . $Employee->surname;
 
 
         $keytracking = new keytracking();
         $keytracking->key_number = $SysData['key_number'];
-        $keytracking->key_type = $SysData['key_type'];
+        $keytracking->key_type = !empty($SysData['key_type']) ? $SysData['key_type'] : 0; 
         $keytracking->key_status = $SysData['key_status'];
         $keytracking->description = $SysData['description'];
         $keytracking->employee = $SysData['key'];
         $keytracking->date_issued = $dates;
-        $keytracking->issued_by = $SysData['issued_by'];
-        $keytracking->safe_name = $SysData['safe_name'];
-        $keytracking->safe_controller = $SysData['safe_controller'];
-        $keytracking->issued_to = $SysData['issued_to'];
+        $keytracking->issued_by = !empty($SysData['issued_by']) ? $SysData['issued_by'] : 0; 
+        $keytracking->safe_name = !empty($SysData['safe_name']) ? $SysData['safe_name'] : 0;
+        $keytracking->safe_controller = !empty($SysData['safe_controller']) ? $SysData['safe_controller'] : 0; 
+        $keytracking->issued_to =  !empty($SysData['issued_to']) ? $SysData['issued_to'] : 0; 
         $keytracking->date_lost = $datelost;
         $keytracking->reason_loss = $SysData['reason_loss'];
         $keytracking->vehicle_type = 0;
         $keytracking->vehicle_id = $SysData['valueID'];
         $keytracking->captured_by = $SysData['employee'];
-        $keytracking->issuedBy = $name;
-        $keytracking->safeController = $safecontroller;
+        $keytracking->safeController = !empty($SysData['safe_controller']) ? $SysData['safe_controller'] :'' ;
         $keytracking->save();
 
         return response()->json();
@@ -843,7 +842,7 @@ class FleetManagementController extends Controller
         $permits->exp_date = $Expdate;
         $permits->date_issued = $dates;
         $permits->status = $SysData['status'];
-        $permits->permits_licence_no = $SysData['permits_licence_no'];
+        $permits->permits_licence_no =  !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0; 
         $permits->captured_by = $name;
         $permits->date_captured = $currentDate;
         $permits->save();
@@ -1020,7 +1019,7 @@ class FleetManagementController extends Controller
         $notes = new notes();
         //$notes->captured_by = $datecaptured;
         $notes->date_captured = $datecaptured;
-        $notes->captured_by = $SysData['captured_by'];
+        $notes->captured_by =  !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0; 
         $notes->notes = $SysData['notes'];
         $notes->vehicleID = 0;
         $notes->save();
@@ -1060,7 +1059,7 @@ class FleetManagementController extends Controller
 
 
         $note->date_captured = $currentDate;
-        $note->captured_by = $SysData['captured_by'];
+        $note->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0; 
         $note->notes = $SysData['notes'];
         $note->vehicleID = 0;
         $note->update();

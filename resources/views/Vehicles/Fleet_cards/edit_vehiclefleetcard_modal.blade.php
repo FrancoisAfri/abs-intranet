@@ -87,7 +87,7 @@
                     </div>
                     
 
-                    <div class="form-group">
+                  <div class="form-group">
                         <label for="issued_date" class="col-sm-2 control-label">Date Issued</label>
                         <div class="col-sm-8">
                             
@@ -95,18 +95,16 @@
                                 <input type="text" class="form-control datepicker" id="issued_date" name="issued_date" value="" placeholder="Click to Select a Date...">
                             </div>
                 
-                    </div>
+                    </div>  
 
                     <div class="form-group">
                         <label for="expiry_date" class="col-sm-2 control-label">Expiry Date</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-8" "input-group date">
                             
-                                <input type="text" class="form-control datepicker" id="expiry_date" name="expiry_date" value="" placeholder="Click to Select a Date...">
+                                <input type="date" class="form-control datepicker" id="datetimepicker1" name="datetimepicker1" value="" placeholder="Click to Select a Date...">
                            
                         </div>
                     </div>
-
-                   
 
 
                     <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
