@@ -76,13 +76,23 @@
                                 </tr>
                                 </tfoot>
                             </table>
-                            <div class="box-footer">
-                                <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                            class="fa fa-arrow-left"></i> Back
-                                </button>
-                            </div>
-                        </div>
+                        <div class="box-footer" style="text-align: center;">
+                        <button type="button" id="cancel" class="btn btn-default pull-left"> <i
+                                            class="fa fa-arrow-left"></i>Cancel</button>
+                         <button type="button" id="cat_module" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add-topUp-modal"><i
+                                            class="fa fa-caret-square-o-up"></i> Top Up </button>
+						 <button type="button" id="cat_module" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add-gauge-modal"><i
+                                            class="fa fa-tachometer"></i> Gauge </button>
+                         <button type="button" id="cat_module" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add-private-modal"><i
+                                            class="fa fa-tag"></i> Private Usage</button>
+                    
+					
                     </div>
+                </div>
+                     @include('Vehicles.FuelTanks.partials.topUp_modal')
+                     @include('Vehicles.FuelTanks.partials.gauge_modal')
+                     @include('Vehicles.FuelTanks.partials.privateUsage_modal')
+             </div>
                 </div>
             @endsection
 
@@ -90,6 +100,19 @@
                 <!-- DataTables -->
                     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+                     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+                    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+                    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+                            type="text/javascript"></script>
+                    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+                    <!-- iCheck -->
+                    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
+                    <!-- Ajax dropdown options load -->
+                    <script src="/custom_components/js/load_dropdown_options.js"></script>
+                    <!-- Ajax form submit -->
+                    <script src="/custom_components/js/modal_ajax_submit.js"></script>
                     <!-- End Bootstrap File input -->
                     <script>
                         function postData(id, data) {
@@ -111,5 +134,77 @@
                             });
                         });
 
-                    </script>
+                   $(function () {
+            $(".select2").select2();
+            $('.hours-field').hide();
+            $('.comp-field').hide();
+            var moduleId;
+            //Tooltip
+            $('[data-toggle="tooltip"]').tooltip();
+
+            
+
+            //Vertically center modals on page
+
+            //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                    dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function () {
+                $('.modal:visible').each(reposition);
+            });
+
+            //Show success action modal
+            $('#success-action-modal').modal('show');
+        });
+
+
+        //Initialize iCheck/iRadio Elements
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '10%' // optional
+        });
+
+      
+    
+
+        //
+         //save Fuel Tank
+            //Post module form to server using ajax (ADD)
+            $('#add-fueltank').on('click', function() {
+                var strUrl = '/vehicle_management/addfueltank';
+                var modalID = 'add-tank-modal';
+                var objData = {
+                    division_level_1: $('#'+modalID).find('#division_level_1').val(),
+                    division_level_2: $('#'+modalID).find('#division_level_2').val(),
+                    division_level_3: $('#'+modalID).find('#division_level_3').val(),
+                    division_level_4: $('#'+modalID).find('#division_level_4').val(),
+                    division_level_5: $('#'+modalID).find('#division_level_5').val(),
+                    tank_name: $('#'+modalID).find('#tank_name').val(),
+                    tank_location: $('#'+modalID).find('#tank_location').val(),
+                    tank_description: $('#'+modalID).find('#tank_description').val(),
+                    tank_capacity: $('#'+modalID).find('#tank_capacity').val(),
+                    tank_manager: $('#'+modalID).find('#tank_manager').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'add-fueltank';
+                var redirectUrl = '/vehicle_management/fuel_tank';
+                var successMsgTitle = 'Fuel Tank Added!';
+                var successMsg = 'The Fuel Tank has been added successfully.';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+
+    </script>
 @endsection

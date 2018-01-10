@@ -44,10 +44,17 @@
                                         data-tank_description="{{ $tanks->tank_description }}" data-tank_capacity="{{$tanks->tank_capacity}}" 
                                         data-tank_manager="{{$tanks->tank_manager}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
-                                    <td>
-                                      <a href="{{ '/vehicle_management/vehice_tank/' . $tanks->id }}" id="edit_compan" 
+                                       @if (isset($tanks) && $tanks->status === 1)
+                                                <td>
+                                    <a href="{{ '/vehicle_management/vehice_tank/' . $tanks->id }}" id="edit_compan" 
                                       class="btn btn-primary  btn-xs"   data-id="{{ $tanks->id }}" 
-                                        ><i class="fa fa-bullseye"></i> View Tank</a></td></td>
+                                        ><i class="fa fa-bullseye"></i> View Tank</a>
+                                                </td> @else
+                                                <td></td>
+                                            @endif
+
+                                    
+                                      </td></td>
                                      <td>{{ (!empty( $tanks->tank_name)) ?  $tanks->tank_name : ''}} </td>
                                      <td>{{ (!empty( $tanks->tank_description)) ?  $tanks->tank_description : ''}} </td>
                                      <td>{{ (!empty( $tanks->tank_capacity)) ?  $tanks->tank_capacity : ''}} </td>
