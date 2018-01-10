@@ -8,12 +8,11 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit safe</h4>
+                    <h4 class="modal-title">Edit Fleet Type</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-                   
 
                      @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
@@ -28,7 +27,7 @@
                                     <select id="{{ 'division_level_' . $division_level->level }}"
                                             name="{{ 'division_level_' . $division_level->level }}"
                                             class="form-control select2"
-                                            onchange="divDDOnChange(this, null, 'edit-tank-modal')"
+                                            onchange="divDDOnChange(this, null)"
                                             style="width: 100%;">
                                     </select>
                                 </div>
@@ -71,7 +70,7 @@
                             <select class="form-control select2" style="width: 100%;" id="tank_manager" name="tank_manager">
                                 <option value="0">*** Select a Employee ***</option>
                                 @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
+                                 <option value="{{ $employee->id }}" {{ ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -80,7 +79,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_safe" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save
+                    <button type="button" id="edit_tank" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
             </form>

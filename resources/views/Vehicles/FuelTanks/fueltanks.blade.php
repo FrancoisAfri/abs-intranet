@@ -36,8 +36,13 @@
                               @foreach ($Fueltanks as $tanks)
                                <tr id="categories-list">
                                <td nowrap>
-                                        <button tanks="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-tank-modal" data-id="{{ $tanks->id }}" data-tank_name="{{ $tanks->tank_name }}" 
-                                        data-tank_description="{{$tanks->tank_description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button tanks="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal"
+                                        data-target="#edit-tank-modal" data-id="{{ $tanks->id }}" data-tank_name="{{ $tanks->tank_name }}" 
+                                        data-division_level_1="{{ $tanks->division_level_1 }}" data-division_level_2="{{ $tanks->division_level_2 }}"
+                                        data-division_level_3="{{ $tanks->division_level_3 }}"  data-division_level_4="{{ $tanks->division_level_4 }}"
+                                        data-division_level_5="{{ $tanks->division_level_5 }}" data-tank_location="{{ $tanks->tank_location }}" 
+                                        data-tank_description="{{ $tanks->tank_description }}" data-tank_capacity="{{$tanks->tank_capacity}}" 
+                                        data-tank_manager="{{$tanks->tank_manager}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
                                     <td>
                                       <a href="{{ '/vehicle_management/vehice_tank/' . $tanks->id }}" id="edit_compan" 
@@ -175,6 +180,52 @@
                 var successMsg = 'The Fuel Tank has been added successfully.';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+             var tankID;
+                $('#edit-tank-modal').on('show.bs.modal', function (e) {
+                    var btnEdit = $(e.relatedTarget);
+                     if (parseInt(btnEdit.data('id')) > 0) {
+                      tankID = btnEdit.data('id');
+                    }
+                    var division_level_5 = btnEdit.data('division_level_5');
+                    var division_level_4 = btnEdit.data('division_level_4');
+                    var division_level_3 = btnEdit.data('division_level_3');
+                    var division_level_2 = btnEdit.data('division_level_2');
+                    var division_level_1 = btnEdit.data('division_level_1');
+                    var tank_name = btnEdit.data('tank_name');
+                    var tank_location = btnEdit.data('tank_location');
+                    var tank_description = btnEdit.data('tank_description');
+                    var tank_capacity = btnEdit.data('tank_capacity');
+                    var tank_manager = btnEdit.data('tank_manager');
+                    var modal = $(this);
+                    modal.find('#division_level_5').val(division_level_5);
+                    modal.find('#division_level_4').val(division_level_4);
+                    modal.find('#division_level_3').val(division_level_3);
+                    modal.find('#division_level_2').val(division_level_2);
+                    modal.find('#division_level_1').val(division_level_1);
+                    modal.find('#tank_name').val(tank_name);
+                    modal.find('#tank_location').val(tank_location);
+                    modal.find('#tank_description').val(tank_description);
+                    modal.find('#tank_capacity').val(tank_capacity);
+                    modal.find('#tank_manager').val(tank_manager);
+                });
+
+   
+            //Post perk form to server using ajax (edit)
+            $('#edit_tank').on('click', function() {
+                var strUrl = '/vehicle_management/edit_fueltank/' + tankID;
+                var formName = 'edit-tank-form';
+                 var modalID = 'edit-tank-modal';
+                var submitBtnID = 'edit_tank';
+                var redirectUrl = '/vehicle_management/fuel_tank';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The  details have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+
+
+
          //Load divisions drop down
         var parentDDID = '';
         var loadAllDivs = 1;
