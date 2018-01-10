@@ -33,6 +33,17 @@
                         @endif
 
                         <div style="overflow-x:auto;">
+						<table class="table table-striped table-bordered">
+                                <tr>
+								<th colspan="2" style="text-align:center">Quote Details: </th>
+								</tr>
+								<tr>
+                                    <td><b>Quote Title</b>: </td><td>{{ ($quotation->quote_title) ? $quotation->quote_title : '' }}</td>
+                                </tr>
+								<tr>
+									<td><b>Quote Remark</b>: </td><td>{{ ($quotation->quote_remarks) ? $quotation->quote_remarks : '' }}</td>
+                                </tr>
+                            </table>
 							<table class="table table-striped table-bordered">
                                 <tr>
                                     <th>Company</th>
@@ -43,7 +54,7 @@
                                 </tr>
 								<tr>
                                     <td>{{ ($quotation->company) ? $quotation->company->name : '[Individual]' }}</td>
-                                    <td>{{$quotation->client->first_name." ".$quotation->client->surname}}</td>
+                                    <td>{{!empty($quotation->client->first_name) && !empty($quotation->client->surname) ? $quotation->client->first_name." ".$quotation->client->surname : ''}}</td>
                                     <td>{{$quotation->person->first_name." ".$quotation->person->surname}}</td>
 									<td>{{$quotation->created_at}}</td>
 									<td>{{$quotation->quote_status}}</td>

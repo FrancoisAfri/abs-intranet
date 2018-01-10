@@ -161,7 +161,7 @@
                         <div class="row no-margin">
                             <!-- banking details section -->
                             <div class="col-xs-5 no-padding">
-                                <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                                <p class="no-shadow" style="margin-top: 10px;">
                                     <b>Banking Details</b><br><br>
                                     Bank Name: {{ $quoteProfile->bank_name }}<br>
                                     Branch Code: {{ $quoteProfile->bank_branch_code }}<br>
@@ -221,6 +221,9 @@
                             <li class="text-justify">{!! $condition->term_name !!}</li>
                         @endforeach
                     </ul>
+					<br>
+					<p><b>By signing this quotation you agree to all terms and conditions and the rates quoted.</b><br></br></p>
+					<p><b>Name:__________________________ Signature:_____________________</b></p>
                 </div>
                 <!-- /.box-body -->
             </div>

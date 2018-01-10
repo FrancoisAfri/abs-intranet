@@ -17,6 +17,8 @@
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
                     <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">
+                    <input type="hidden" name="quote_remarks" value="{{ $quote_remarks }}">
+                    <input type="hidden" name="quote_title" value="{{ $quote_title }}">
                     <input type="hidden" name="service_rate" id="service_rate" value="{{ ($servicesSettings && $servicesSettings->service_rate > 0) ? $servicesSettings->service_rate : 0 }}">
                     @if($tcIDs && count($tcIDs) > 0)
                         @foreach($tcIDs as $tcID)

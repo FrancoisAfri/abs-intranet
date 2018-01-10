@@ -383,11 +383,11 @@ function vehiclemakeDDOnChange(dropDownObj, vehiclemomdeDDID, selectedOption) {
     var makeID = dropDownObj.value;
     var incInactive = -1;
     var loadAll = -1;
-    loadContactPeopleOptions(vehiclemomdeDDID, selectedOption, makeID);
+    loadVehicleModelOptions(vehiclemomdeDDID, selectedOption, makeID);
 }
 
 /* function to load Contact People drop down options */
-function loadContactPeopleOptions(ddID, selectedOption, makeID, incInactive, loadAll, postTo) {
+function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, loadAll, postTo) {
     loadAll = loadAll || -1;
     incInactive = incInactive || -1;
     postTo = postTo || '/api/vehiclemodeldropdown';
