@@ -293,6 +293,15 @@ Route::patch('vehicle_management/edit_vehiclefleetcard/{vehiclefleetcard}' ,'fle
 #//************Manage Fuel Tanks *******************
 Route::get('vehicle_management/fuel_tank', 'FuelManagementController@fueltankIndex');
 Route::post('vehicle_management/addfueltank', 'FuelManagementController@Addfueltank');
+                            //tanktop up
+Route::post('vehicle_management/tank_topup', 'FuelManagementController@TanktopUp');    
+                            //tank private use
+Route::post('vehicle_management/tank_privateuse', 'FuelManagementController@TankprivateUse'); 
+
+#******************** Tanks Approval *************************
+Route::get('vehicle_management/tank_approval', 'FuelManagementController@tank_approval');
+Route::post('vehicle_management/tanksearch_approval', 'FuelManagementController@ApproveTank');
+// Route::patch('vehicle_management/reject_vehicle/{reason}','fleetcardController@rejectReason' );                          
 
 
 #******************** Driver Admin *************************
@@ -1100,7 +1109,6 @@ Route::get('/vehicle_management/fueltank_act/{fuel}', 'FuelManagementController@
 Route::patch('vehicle_management/edit_fueltank/{Fueltanks}' ,'FuelManagementController@editfueltank');
 Route::get('/vehicle_management/vehice_tank/{fuel}', 'FuelManagementController@ViewTank');
 Route::post('vehicle_management/tanksearch/{tank}', 'FuelManagementController@tanksearch');
-
 
 #******************** Driver Admin *************************
 Route::get('vehicle_management/driver_admin', 'fleetcardController@driverAdmin');

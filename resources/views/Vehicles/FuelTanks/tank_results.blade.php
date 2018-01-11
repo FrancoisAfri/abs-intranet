@@ -1,6 +1,7 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 @endsection
 @section('content')
     <div class="row">
@@ -10,6 +11,7 @@
                     <i class="fa fa-truck pull-right"></i>
                     <h3 class="box-title">{{$tank}} </h3>
                 </div>
+                {{ csrf_field() }}
                 <div class="box-body">
                     <div class="box">
                         <!-- /.box-header -->
@@ -78,7 +80,7 @@
                             </table>
                         <div class="box-footer" style="text-align: center;">
                         <button type="button" id="cancel" class="btn btn-default pull-left"> <i
-                                            class="fa fa-arrow-left"></i>Cancel</button>
+                                            class="fa fa-arrow-left"></i> Cancel</button>
                          <button type="button" id="cat_module" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add-topUp-modal"><i
                                             class="fa fa-caret-square-o-up"></i> Top Up </button>
 						 <button type="button" id="cat_module" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#add-gauge-modal"><i
@@ -97,6 +99,12 @@
             @endsection
 
             @section('page_script')
+                     <!-- bootstrap datepicker -->
+                    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+                    <!-- InputMask -->
+                    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+                    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+                    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
                 <!-- DataTables -->
                     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -176,8 +184,21 @@
             increaseArea: '10%' // optional
         });
 
-      
-    
+         $(document).ready(function () {
+
+            $(function () {
+                $('#document_date').datepicker();
+                $('#topup_date').datepicker();
+                $('#documents_date').datepicker();
+                $('#usage_date').datepicker();
+            });
+
+           });
+
+
+
+   
+  
 
         //
          //save Fuel Tank
@@ -204,6 +225,32 @@
                 var successMsg = 'The Fuel Tank has been added successfully.';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+            // vehicle Tank Top Up
+             //Post Top Up form to server using ajax (add)
+                $('#add-tanktopUp').on('click', function () {
+                    var strUrl = '/vehicle_management/tank_topup';
+                    var formName = 'add-topUp-form';
+                    var modalID = 'add-topUp-modal';
+                    var submitBtnID = 'add-tanktopUp';
+                    var redirectUrl = '/vehicle_management/tanksearch/{{ $ID }}';
+                    var successMsgTitle = 'New Record  Added!';
+                    var successMsg = 'The Tank Top Up Details has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
+
+                 // vehicle Tank Private Usage
+             //Post Private Usageform to server using ajax (add)
+                $('#add_privateUse').on('click', function () {
+                    var strUrl = '/vehicle_management/tank_privateuse';
+                    var formName = 'add-private-form';
+                    var modalID = 'add-private-modal';
+                    var submitBtnID = 'add_privateUse';
+                    var redirectUrl = '/vehicle_management/tanksearch/{{ $ID }}';
+                    var successMsgTitle = 'New Record  Added!';
+                    var successMsg = 'The Tank private Usage Details has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
 
 
     </script>

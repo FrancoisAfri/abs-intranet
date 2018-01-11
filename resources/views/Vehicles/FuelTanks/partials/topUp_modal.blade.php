@@ -1,53 +1,129 @@
 <div id="add-topUp-modal" class="modal modal-default fade">
-    <div class="modal-dialog">
+    {{--  <div class="modal-dialog">  --}}
+     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+            <form class="form-horizontal" method="POST" name="add-topUp-form">
                 {{ csrf_field() }}
-               
-
+            
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Fuel Tank</h4>
+                    <h4 class="modal-title">Top Up {{$tank}}</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                      <div class="box-body" id="view_users">
                      
-                    <div class="form-group">
-                        <label for="tank_name" class="col-sm-2 control-label">Tank Name</label>
+                      <div class="form-group safe-field">
+                        <label for="supplier_id" class="col-sm-2 control-label">Supplier</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="tank_name" name="tank_name" value=""
-                                   placeholder="Enter Tank name" required>
+                            <select class="form-control select2" style="width: 100%;" id="supplier_id" name="supplier_id">
+                                <option value="0">*** Select a Safe ***</option>
+                                @foreach($ContactCompany as $Supplier)
+                                    <option value="{{ $Supplier->id }}">{{ !empty($Supplier->name) ? $Supplier->name : ''}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tank_location" class="col-sm-2 control-label">Tank Location</label>
+                        <label for="document_no" class="col-sm-2 control-label">Document Number </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="tank_location" name="tank_location" value=""
-                                   placeholder="Enter tank location" required>
+                            <input type="text" class="form-control" id="document_no" name="document_no" value=""
+                                   placeholder="Enter Document Number" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tank_description" class="col-sm-2 control-label">Tank Description</label>
+                        <label for="document_date" class="col-sm-2 control-label">Document Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="tank_description" name="tank_description" value=""
-                                   placeholder="Enter tank description" required>
+                            <input type="text" class="form-control" id="document_date" name="document_date" value=""
+                                   placeholder="Enter document date " required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tank_capacity" class="col-sm-2 control-label">Tank Capacity</label>
+                        <label for="topup_date" class="col-sm-2 control-label">Top Up Date </label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="tank_capacity" name="tank_capacity" value=""
+                            <input type="text" class="form-control" id="topup_date" name="topup_date" value=""
+                                   placeholder="Enter top up date " required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="type" class="col-sm-2 control-label">Type</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="type" name="type" value=""
                                    placeholder="Enter tank capacity" required>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="reading_before_filling" class="col-sm-2 control-label">Reading before filling</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="reading_before_filling" name="reading_before_filling" value=""
+                                   placeholder="Enter reading before filling" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reading_after_filling" class="col-sm-2 control-label">Reading After filling</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="reading_after_filling" name="reading_after_filling" value=""
+                                   placeholder="Enter reading after filling" required>
+                        </div>
+                    </div>
                    
+                    <div class="form-group">
+                        <label for="litres" class="col-sm-2 control-label">Litres</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="litres" name="litres" value="0"
+                                   placeholder="Enter litres " required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost_per_litre" class="col-sm-2 control-label">Cost per Litre</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="cost_per_litre" name="cost_per_litre" value="0"
+                                   placeholder="Enter cost per litre " required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="total_cost" class="col-sm-2 control-label">Total Cost</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="total_cost" name="total_cost" value="0"
+                                   placeholder="Enter tank capacity" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="description" name="description" value=""
+                                   placeholder="Enter description " required>
+                        </div>
+                    </div>
+                       <div class="form-group safe-field">
+                        <label for="received_by" class="col-sm-2 control-label">Received By</label>
+                        <div class="col-sm-8">
+                            <select class="form-control select2" style="width: 100%;" id="received_by" name="received_by">
+                                <option value="0">*** Select a Safe ***</option>
+                                @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="captured_by" class="col-sm-2 control-label">Captured By</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="captured_by" name="descaptured_bycription" value="{{$name}}"
+                                   placeholder="" readonly="">
+                        </div>
+                    </div>  
+
+                    <input type="hidden" id="tank_id" name="tank_id" value="{{$ID}}">
+                 
+                   
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-fueltank" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
+                    <button type="button" id="add-tanktopUp" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>
             </form>

@@ -364,13 +364,7 @@ class fleetcardController extends Controller
 
         $status = array(1 => ' Active', 2 => ' InActive');
 
-        //$data['vehicle_detail'] = $vehicle_detail;
-        // $data['fleetcardtype'] = $fleetcardtype;
-        // $data['hrDetails'] = $hrDetails;
-        // $data['contactcompanies'] = $contactcompanies;
-        // $data['Vehicle_types'] = $Vehicle_types;
-        // $data['division_levels'] = $divisionLevels;
-        // $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
+      
         $data['status'] = $status;
         $data['drverdetails'] = $drverdetails;
         $data['page_title'] = " Vehicle Management ";

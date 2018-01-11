@@ -1,8 +1,6 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
-    <!-- Include Date Range Picker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- iCheck -->
@@ -11,12 +9,7 @@
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
     <!--Time Charger-->
-    <!--  -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-          rel="stylesheet">
+   
 @endsection
 
 @section('content')
@@ -132,7 +125,7 @@
                                                         id="vehicle_type" name="vehicle_type">
                                                     <option value="">*** Select a User ***</option>
                                                     @foreach($employees as $User)
-                                                       <option value="{{ $User->id }}"> {{ !empty($User->first_name . ' ' . $User->surname) ? $employee->User . ' ' . $User->surname : ''}}</option>
+                                                       <option value="{{ $User->id }}"> {{ !empty($User->first_name . ' ' . $User->surname) ? $User->first_name . ' ' . $User->surname : ''}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -161,7 +154,6 @@
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-
     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
@@ -172,9 +164,6 @@
             type="text/javascript"></script>
     <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
 
-    <!-- the main fileinput plugin file -->
-    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
@@ -182,8 +171,7 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-    <!-- time picker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+   
     <script type="text/javascript">
         $(function () {
             $(".select2").select2();
