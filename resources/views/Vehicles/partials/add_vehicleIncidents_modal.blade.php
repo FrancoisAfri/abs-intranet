@@ -22,7 +22,7 @@
                     </div>
 
 
-                    <div class="form-group">
+                    {{--  <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Incident Type  </label>
                         <div class="col-sm-8">
                             <select id="incident_type" name="incident_type" class="form-control">
@@ -36,7 +36,21 @@
                                 <option value="7"> Other</option>
                             </select>
                         </div>
+                    </div>  --}}
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Incident Type  </label>
+                        <div class="col-sm-8">
+                            <select class="form-control select2" style="width: 100%;"
+                                    id="incident_type" name="incident_type">
+                                <option value="0">*** Select Type  ***</option>
+                                @foreach($incidentType as $incident)
+                                    <option value="{{ $incident->id }}">{{ $incident->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
+
+                    
 
 
                     <div class="form-group">

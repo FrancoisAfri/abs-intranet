@@ -36,10 +36,25 @@
                               @foreach ($Fueltanks as $tanks)
                                <tr id="categories-list">
                                <td nowrap>
-                                        <button tanks="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $tanks->id }}" data-tank_name="{{ $tanks->tank_name }}" 
-                                        data-tank_description="{{$tanks->tank_description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button tanks="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal"
+                                        data-target="#edit-tank-modal" data-id="{{ $tanks->id }}" data-tank_name="{{ $tanks->tank_name }}" 
+                                        data-division_level_1="{{ $tanks->division_level_1 }}" data-division_level_2="{{ $tanks->division_level_2 }}"
+                                        data-division_level_3="{{ $tanks->division_level_3 }}"  data-division_level_4="{{ $tanks->division_level_4 }}"
+                                        data-division_level_5="{{ $tanks->division_level_5 }}" data-tank_location="{{ $tanks->tank_location }}" 
+                                        data-tank_description="{{ $tanks->tank_description }}" data-tank_capacity="{{$tanks->tank_capacity}}" 
+                                        data-tank_manager="{{$tanks->tank_manager}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
-                                    <td></td>
+                                       @if (isset($tanks) && $tanks->status === 1)
+                                                <td>
+                                    <a href="{{ '/vehicle_management/vehice_tank/' . $tanks->id }}" id="edit_compan" 
+                                      class="btn btn-primary  btn-xs"   data-id="{{ $tanks->id }}" 
+                                        ><i class="fa fa-bullseye"></i> View Tank</a>
+                                                </td> @else
+                                                <td></td>
+                                            @endif
+
+                                    
+                                      </td></td>
                                      <td>{{ (!empty( $tanks->tank_name)) ?  $tanks->tank_name : ''}} </td>
                                      <td>{{ (!empty( $tanks->tank_description)) ?  $tanks->tank_description : ''}} </td>
                                      <td>{{ (!empty( $tanks->tank_capacity)) ?  $tanks->tank_capacity : ''}} </td>
@@ -77,7 +92,7 @@
         </div>
    <!-- Include add new prime rate modal -->
         @include('Vehicles.FuelTanks.partials.add_tank_modal')
-        {{--  @include('Vehicles.partials.edit_fleet_modal')  --}}
+        @include('Vehicles.FuelTanks.partials.edit_tank_modal')
 </div>
 @endsection
 @section('page_script')
@@ -97,6 +112,11 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
     <script type="text/javascript">
+
+        function postData(id , data ){   
+            if(data == 'actdeac') location.href = "/vehicle_management/fueltank_act/" + id; 
+        }
+
         $(function () {
             $(".select2").select2();
             $('.hours-field').hide();
@@ -104,6 +124,8 @@
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
+
+            
 
             //Vertically center modals on page
 
@@ -138,21 +160,7 @@
         });
 
       
-        //Load divisions drop down
-        var parentDDID = '';
-        var loadAllDivs = 1;
-        @foreach($division_levels as $division_level)
-        //Populate drop down on page load
-        var ddID = '{{ 'division_level_' . $division_level->level }}';
-        var postTo = '{!! route('divisionsdropdown') !!}';
-        var selectedOption = '';
-        var divLevel = parseInt('{{ $division_level->level }}');
-        var incInactive = -1;
-        var loadAll = loadAllDivs;
-        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-        parentDDID = ddID;
-        loadAllDivs = -1;
-        @endforeach
+    
 
         //
          //save Fuel Tank
@@ -179,7 +187,67 @@
                 var successMsg = 'The Fuel Tank has been added successfully.';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-        
+
+             var tankID;
+                $('#edit-tank-modal').on('show.bs.modal', function (e) {
+                    var btnEdit = $(e.relatedTarget);
+                     if (parseInt(btnEdit.data('id')) > 0) {
+                      tankID = btnEdit.data('id');
+                    }
+                    var division_level_5 = btnEdit.data('division_level_5');
+                    var division_level_4 = btnEdit.data('division_level_4');
+                    var division_level_3 = btnEdit.data('division_level_3');
+                    var division_level_2 = btnEdit.data('division_level_2');
+                    var division_level_1 = btnEdit.data('division_level_1');
+                    var tank_name = btnEdit.data('tank_name');
+                    var tank_location = btnEdit.data('tank_location');
+                    var tank_description = btnEdit.data('tank_description');
+                    var tank_capacity = btnEdit.data('tank_capacity');
+                    var tank_manager = btnEdit.data('tank_manager');
+                    var modal = $(this);
+                    modal.find('#division_level_5').val(division_level_5);
+                    modal.find('#division_level_4').val(division_level_4);
+                    modal.find('#division_level_3').val(division_level_3);
+                    modal.find('#division_level_2').val(division_level_2);
+                    modal.find('#division_level_1').val(division_level_1);
+                    modal.find('#tank_name').val(tank_name);
+                    modal.find('#tank_location').val(tank_location);
+                    modal.find('#tank_description').val(tank_description);
+                    modal.find('#tank_capacity').val(tank_capacity);
+                    modal.find('#tank_manager').val(tank_manager);
+                });
+
+   
+            //Post perk form to server using ajax (edit)
+            $('#edit_tank').on('click', function() {
+                var strUrl = '/vehicle_management/edit_fueltank/' + tankID;
+                var formName = 'edit-tank-form';
+                 var modalID = 'edit-tank-modal';
+                var submitBtnID = 'edit_tank';
+                var redirectUrl = '/vehicle_management/fuel_tank';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The  details have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+
+
+
+         //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
 
     </script>
 @endsection

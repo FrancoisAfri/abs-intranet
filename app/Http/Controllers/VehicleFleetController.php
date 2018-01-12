@@ -25,6 +25,7 @@ use App\safe;
 Use App\reminders;
 use App\vehicle_documets;
 use App\images;
+use App\incident_type;
 use App\vehicle_fuel_log;
 use App\vehicle_incidents;
 use App\ContactCompany;
@@ -1111,6 +1112,9 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         $ContactCompany = ContactCompany::orderBy('id','asc')->get();
         //return $ContactCompany;
 
+        $incidentType = incident_type::orderBy('id', 'asc')->get();
+       // return $incidentType;
+
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
@@ -1154,6 +1158,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+            $data['incidentType'] = $incidentType;
             $data['ContactCompany'] = $ContactCompany;
             $data['name'] = $name;
             $data['status'] = $status;

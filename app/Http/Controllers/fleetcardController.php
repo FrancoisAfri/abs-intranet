@@ -192,7 +192,9 @@ class fleetcardController extends Controller
     public function Addfleetcard(Request $request)
     {
         $this->validate($request, [
-            // 'holder_id' => 'bail|required',
+         'cvs_number' => 'bail|required|max:3',
+         'issued_date' => 'required',
+         'expiry_date' => 'required',
         ]);
         $docData = $request->all();
         unset($docData['_token']);
@@ -207,10 +209,10 @@ class fleetcardController extends Controller
         }
 
         $vehiclefleetcards = new vehicle_fleet_cards();
-        $vehiclefleetcards->card_type_id = $docData['card_type_id'];
-        $vehiclefleetcards->fleet_number = $docData['fleet_number'];
-        $vehiclefleetcards->company_id = $docData['company_id'];
-        $vehiclefleetcards->holder_id = $docData['holder_id'];
+        $vehiclefleetcards->card_type_id = !empty($docData['card_type_id']) ? $docData['card_type_id'] : 0; 
+        $vehiclefleetcards->fleet_number = !empty($docData['fleet_number']) ? $docData['fleet_number'] : 0;  
+        $vehiclefleetcards->company_id = !empty($docData['company_id']) ? $docData['company_id'] : 0;
+        $vehiclefleetcards->holder_id = !empty($docData['holder_id']) ? $docData['holder_id'] : 0;
         $vehiclefleetcards->card_number = $docData['card_number'];
         $vehiclefleetcards->cvs_number = $docData['cvs_number'];
         $vehiclefleetcards->issued_date = $docData['issued_date'];
@@ -235,16 +237,25 @@ class fleetcardController extends Controller
         ]);
         $docData = $request->all();
         unset($docData['_token']);
-        $expiry = strtotime($docData['expiry_date']);
-        $vehiclefleetcard->card_type_id = $docData['card_type_id'];
-        $vehiclefleetcard->fleet_number = $docData['fleet_number'];
-        $vehiclefleetcard->company_id = $docData['company_id'];
-        $vehiclefleetcard->holder_id = $docData['holder_id'];
-        $vehiclefleetcard->card_number = $docData['card_number'];
-        $vehiclefleetcard->cvs_number = $docData['cvs_number'];
-        $vehiclefleetcard->issued_date = strtotime($docData['issued_date']);
-        $vehiclefleetcard->expiry_date = $expiry;
-        $vehiclefleetcard->status = $docData['status'];
+        //convert dates to unix time stamp
+        if (isset($docData['issued_date'])) {
+            $docData['issued_date'] = str_replace('/', '-', $docData['issued_date']);
+            $docData['issued_date'] = strtotime($docData['issued_date']);
+        }
+        if (isset($docData['expiry_date'])) {
+            $docData['expiry_date'] = str_replace('/', '-', $docData['expiry_date']);
+            $docData['expiry_date'] = strtotime($docData['expiry_date']);
+        }
+
+        $vehiclefleetcards->card_type_id = !empty($docData['card_type_id']) ? $docData['card_type_id'] : 0; 
+        $vehiclefleetcards->fleet_number = !empty($docData['fleet_number']) ? $docData['fleet_number'] : 0;  
+        $vehiclefleetcards->company_id = !empty($docData['company_id']) ? $docData['company_id'] : 0;
+        $vehiclefleetcards->holder_id = !empty($docData['holder_id']) ? $docData['holder_id'] : 0;
+        $vehiclefleetcards->card_number = $docData['card_number'];
+        $vehiclefleetcards->cvs_number = $docData['cvs_number'];
+        $vehiclefleetcards->issued_date = $docData['issued_date'];
+        $vehiclefleetcards->expiry_date = $docData['expiry_date'];
+        $vehiclefleetcards->status = $docData['status'];
         $vehiclefleetcard->update();
 
         AuditReportsController::store('Vehicle Management', 'Update Vehicle Fleet Card', "Update Vehicle Fleet Card", 0);
@@ -353,13 +364,7 @@ class fleetcardController extends Controller
 
         $status = array(1 => ' Active', 2 => ' InActive');
 
-        //$data['vehicle_detail'] = $vehicle_detail;
-        // $data['fleetcardtype'] = $fleetcardtype;
-        // $data['hrDetails'] = $hrDetails;
-        // $data['contactcompanies'] = $contactcompanies;
-        // $data['Vehicle_types'] = $Vehicle_types;
-        // $data['division_levels'] = $divisionLevels;
-        // $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
+      
         $data['status'] = $status;
         $data['drverdetails'] = $drverdetails;
         $data['page_title'] = " Vehicle Management ";
