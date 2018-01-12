@@ -4,7 +4,7 @@
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- iCheck -->
-   
+
 @endsection
 
 @section('content')
@@ -15,7 +15,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/vehicle_management/tanksearch_approval" >
+                <form class="form-horizontal" method="POST" action="/vehicle_management/tanksearch_approval">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -38,25 +38,24 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                 
 
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Fleet Number</label>
-                                        <div class="col-sm-10"> 
+                                        <div class="col-sm-10">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-truck"></i>
                                                 </div>
-                                               <input type='text' class="form-control" id='fleet_no'
-                                                       name="fleet_no" required="" />
+                                                <input type='text' class="form-control" id='fleet_no'
+                                                       name="fleet_no" required=""/>
                                             </div>
                                         </div>
                                     </div>
 
-                                    
+
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Vehicle</label>
-                                        <div class="col-sm-10"> 
+                                        <div class="col-sm-10">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-truck"></i>
@@ -125,24 +124,24 @@
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 
-   
+
     <script type="text/javascript">
         $(function () {
             $(".select2").select2();
             var moduleId;
             //Tooltip
-           
 
-        $('.required_from').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
+
+            $('.required_from').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
             });
         });
 
 
         //Initialize iCheck/iRadio Elements
-        
+
         $(document).ready(function () {
 
             $(function () {
@@ -153,7 +152,6 @@
 
         });
 
-       
 
     </script>
 @endsection

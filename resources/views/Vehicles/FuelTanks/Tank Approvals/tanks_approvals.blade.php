@@ -27,15 +27,15 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-                                
+
                                 <th>Transaction Date</th>
                                 <th>Transaction Type</th>
                                 <th>Supplier/Employee</th>
                                 <th>Fleet No.</th>
-                                <th>Reg. No. </th>
+                                <th>Reg. No.</th>
                                 <th>Reading before filling</th>
                                 <th>Reading after filling</th>
-                                <th> Litres </th>
+                                <th> Litres</th>
                                 <th>Rate Per Litre</th>
                                 <th>Cost</th>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
@@ -50,7 +50,7 @@
                                 @foreach ($Fueltank as $filling)
                                     <tr style="text-align:center">
 
-                                       
+
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                         <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>

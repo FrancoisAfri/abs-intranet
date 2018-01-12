@@ -937,7 +937,7 @@
                 "laravel sweet alert",
                 "sweet-alert"
             ],
-            "time": "2016-09-18 15:07:52"
+            "time": "2016-09-18T15:07:52+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",

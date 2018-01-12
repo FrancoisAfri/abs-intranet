@@ -14,7 +14,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                     @foreach($division_levels as $division_level)
+                    @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
                                    class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -35,7 +35,7 @@
                         </div>
                     @endforeach
 
-                    
+
                     <div class="form-group">
                         <label for="tank_name" class="col-sm-2 control-label">Tank Name</label>
                         <div class="col-sm-8">
@@ -53,7 +53,8 @@
                     <div class="form-group">
                         <label for="tank_description" class="col-sm-2 control-label">Tank Description</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="tank_description" name="tank_description" value=""
+                            <input type="text" class="form-control" id="tank_description" name="tank_description"
+                                   value=""
                                    placeholder="Enter tank description" required>
                         </div>
                     </div>
@@ -64,13 +65,22 @@
                                    placeholder="Enter tank capacity" required>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="tank_capacity" class="col-sm-2 control-label">Add Litres</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="current_fuel_litres"
+                                   name="current_fuel_litres" value=""
+                                   placeholder="Enter Fuel Litres" required>
+                        </div>
+                    </div>
                     <div class="form-group safe-field">
                         <label for="tank_manager" class="col-sm-2 control-label">Employee </label>
                         <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;" id="tank_manager" name="tank_manager">
+                            <select class="form-control select2" style="width: 100%;" id="tank_manager"
+                                    name="tank_manager">
                                 <option value="0">*** Select a Employee ***</option>
                                 @foreach($employees as $employee)
-                                 <option value="{{ $employee->id }}" {{ ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    <option value="{{ $employee->id }}" {{ ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                 @endforeach
                             </select>
                         </div>
