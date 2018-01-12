@@ -24,24 +24,8 @@ class DatabaseSeeder extends Seeder
     {
         //insert default user
         $user = new User;
-        $user->email = 'smalto@afrixcel.co.za';
-        $user->password = Hash::make('sptusr1');
-        $user->type = 3;
-        $user->status = 1;
-        $user->save();
-
-        //insert default user's hr record
-        $person = new HRPerson();
-        $person->first_name = 'Admin';
-        $person->surname = 'User';
-        $person->email = 'smalto@afrixcel.co.za';
-        $person->status = 1;
-        $user->addPerson($person);
-
-        //insert default user
-        $user = new User;
         $user->email = 'francois@afrixcel.co.za';
-        $user->password = Hash::make('sptusr@!');
+        $user->password = Hash::make('absusr@!');
         $user->type = 3;
         $user->status = 1;
         $user->save();
