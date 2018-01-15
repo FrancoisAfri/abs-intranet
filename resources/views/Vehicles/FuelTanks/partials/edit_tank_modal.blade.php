@@ -81,7 +81,7 @@
                                     name="tank_manager">
                                 <option value="0">*** Select a Employee ***</option>
                                 @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}" {{ ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    <option value="{{ $employee->id }}" {{ !empty($tanks->tank_manager) && ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                 @endforeach
                             </select>
                         </div>
