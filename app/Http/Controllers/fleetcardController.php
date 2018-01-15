@@ -2,34 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\DivisionLevelFour;
 use App\Http\Requests;
 use App\Users;
 use App\DivisionLevel;
 use App\vehicle_maintenance;
 use App\Vehicle_managemnt;
-use App\vehicle;
-Use App\vehicle_booking;
 use App\HRPerson;
 use App\vehicle_detail;
 use App\vehicle_fleet_cards;
 use App\fleetcard_type;
 use App\fleetType;
-use App\module_ribbons;
-use App\ribbons_access;
-use App\vehicle_config;
 use App\ContactCompany;
-use App\vehicle_return_images;
-use App\vehicle_return_documents;
 use Illuminate\Http\Request;
-use App\Mail\vehicle_bookings;
 use App\Mail\confirm_collection;
-use App\Mail\vehiclebooking_approval;
-use App\Mail\vehiclebooking_cancellation;
-use App\Mail\vehiclebooking_rejection;
-use App\Mail\vehiclebooking_manager_notification;
-use App\Mail\vehicle_confirm_collection;
-use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -230,7 +215,7 @@ class fleetcardController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function editfleetcard(Request $request, vehicle_fleet_cards $vehiclefleetcard)
+    public function editfleetcard(Request $request, vehicle_fleet_cards $vehiclefleetcards)
     {
         $this->validate($request, [
             //'holder_id' => 'bail|required',
@@ -254,12 +239,14 @@ class fleetcardController extends Controller
         $vehiclefleetcards->card_number = $docData['card_number'];
         $vehiclefleetcards->cvs_number = $docData['cvs_number'];
         $vehiclefleetcards->issued_date = $docData['issued_date'];
-        $vehiclefleetcards->expiry_date = $docData['expiry_date'];
+       // $vehiclefleetcards->expiry_date = $docData['expiry_date'];
         $vehiclefleetcards->status = $docData['status'];
-        $vehiclefleetcard->update();
+        $vehiclefleetcards->update();
 
         AuditReportsController::store('Vehicle Management', 'Update Vehicle Fleet Card', "Update Vehicle Fleet Card", 0);
         return response()->json();
+       // return redirect()->to('/vehicle_management/fleet_card_search');
+
     }
 
     /**

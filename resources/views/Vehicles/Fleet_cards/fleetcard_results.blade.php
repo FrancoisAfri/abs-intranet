@@ -85,19 +85,19 @@
                                     </tr>
                                     </tfoot>
                                 </table>
-                                <div class="box-footer">
+                                <div class="box-footer" style="text-align: center;">
                                     <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                 class="fa fa-arrow-left"></i> Back
-                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">
+                                        <button type="button" id="cancel" class="btn btn-primary btn-xs ">
                                             import to PDF
                                         </button>
 
-                                        <button type="button" id="cancel" class="btn btn-primary btn-xs pull-right">
+                                        <button type="button" id="cancel" class="btn btn-primary btn-xs ">
                                             import to EXCEL
                                         </button>
                                 </div>
                             </div>
-                            @include ('Vehicles.Fleet_cards.edit_vehiclefleetcard_modal')
+                            {{--@include ('Vehicles.Fleet_cards.edit_vehiclefleetcard_modal')--}}
                         </div>
                     </div>
                 @endsection
@@ -262,7 +262,7 @@
                                     _token: $('#'+modalID).find('input[name=_token]').val()
                                 };
                                 var submitBtnID = 'edit_vehiclefleetcard';
-                                var redirectUrl = '/vehicle_management/fleet_card_search';
+                                var redirectUrl = '/vehicle_management/fleet_cards';
                                 var successMsgTitle = 'Record has been updated!';
                                 var successMsg = 'The Record has been updated successfully.';
                                 var Method = 'PATCH';

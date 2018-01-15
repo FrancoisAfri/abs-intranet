@@ -9,7 +9,7 @@
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
     <!--Time Charger-->
-   
+
 @endsection
 
 @section('content')
@@ -20,7 +20,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/vehicle_management/tanksearch/{{ $ID }}" >
+                <form class="form-horizontal" method="POST" action="/vehicle_management/tanksearch/{{ $ID }}">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                 <div class="form-group">
+                                    <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Tank Name </label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
@@ -51,13 +51,14 @@
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
                                                 <input type='text' class="form-control" id='tank_name'
-                                                       name="tank_name" value="{{$fuel->tank_name . ' ' . $company . ' ' . $Department}}" readonly="" />
+                                                       name="tank_name"
+                                                       value="{{$fuel->tank_name . ' ' . $company . ' ' . $Department}}"
+                                                       readonly=""/>
                                             </div>
                                         </div>
                                     </div>
 
-                                    
-                                    
+
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Date From </label>
                                         <div class="col-sm-10">
@@ -86,35 +87,45 @@
 
                                     <div class="form-group{{ $errors->has('transaction_type') ? ' has-error' : '' }}">
                                         <label for="transaction_type" class="col-sm-2 control-label"> Transaction Type
-                                             </label>
-                                        <div class="col-sm-10"> 
-                                            
-                                             <label class="radio-inline"><input type="radio" id="rdo_transaction" name="transaction_type" value="1">
-                                                Incoming  </label>
-
-                                             <label class="radio-inline"><input type="radio" id="rdo_transaction" name="transaction_type" value="2">
-                                                Outgoing  </label>
-
-                                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="transaction_type"
-                                                name="rdo_transaction" value="3" checked> Both                                                           
-                                            </label>  
-                                        </div>
-                                </div>
-
-                                 <div class="form-group usage-field{{ $errors->has('usage_type') ? ' has-error' : '' }}">
-                                        <label for="usage_type" class="col-sm-2 control-label"> Usage </label>       
+                                        </label>
                                         <div class="col-sm-10">
-                                            <label class="radio-inline"><input type="radio" id="rdo_usage" name="usage_type" value="1">
-                                                Business  </label>  
-                                            <label class="radio-inline"><input type="radio" id="rdo_usage" name="usage_type" value="2">
-                                                Private  </label>   
-                                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_usage"
-                                                name="usage_type" value="3" checked> Both                                                           
+
+                                            <label class="radio-inline"><input type="radio" id="rdo_transaction"
+                                                                               name="transaction_type" value="1">
+                                                Incoming </label>
+
+                                            <label class="radio-inline"><input type="radio" id="rdo_transaction"
+                                                                               name="transaction_type" value="2">
+                                                Outgoing </label>
+
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+                                                                                                          id="transaction_type"
+                                                                                                          name="rdo_transaction"
+                                                                                                          value="3"
+                                                                                                          checked> Both
                                             </label>
                                         </div>
-                                </div>
+                                    </div>
 
-                                <div class="form-group">
+                                    <div class="form-group usage-field{{ $errors->has('usage_type') ? ' has-error' : '' }}">
+                                        <label for="usage_type" class="col-sm-2 control-label"> Usage </label>
+                                        <div class="col-sm-10">
+                                            <label class="radio-inline"><input type="radio" id="rdo_usage"
+                                                                               name="usage_type" value="1">
+                                                Business </label>
+                                            <label class="radio-inline"><input type="radio" id="rdo_usage"
+                                                                               name="usage_type" value="2">
+                                                Private </label>
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+                                                                                                          id="rdo_usage"
+                                                                                                          name="usage_type"
+                                                                                                          value="3"
+                                                                                                          checked> Both
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">employee</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
@@ -125,7 +136,7 @@
                                                         id="vehicle_type" name="vehicle_type">
                                                     <option value="">*** Select a User ***</option>
                                                     @foreach($employees as $User)
-                                                       <option value="{{ $User->id }}"> {{ !empty($User->first_name . ' ' . $User->surname) ? $User->first_name . ' ' . $User->surname : ''}}</option>
+                                                        <option value="{{ $User->id }}"> {{ !empty($User->first_name . ' ' . $User->surname) ? $User->first_name . ' ' . $User->surname : ''}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -171,7 +182,7 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-   
+
     <script type="text/javascript">
         $(function () {
             $(".select2").select2();
@@ -220,7 +231,7 @@
         });
 
         //show/hide fields on radio button toggles (depending on registration type)
-        $('#rdo_transaction, #rdo_usage').on('ifChecked', function() {
+        $('#rdo_transaction, #rdo_usage').on('ifChecked', function () {
             var allType = hideFields();
             if (allType == 1)
                 $('#box-subtitle').html('Days');
@@ -229,15 +240,15 @@
         });
 
         //function to hide/show fields depending on the allocation  type
-	function hideFields() {
-		var allType = $("input[name='transaction_type']:checked").val();
-		if (allType == 1) { //adjsut leave
-			$('.usage-field').hide();
-		
-		}  else
-			
-		return allType;
-	}
+        function hideFields() {
+            var allType = $("input[name='transaction_type']:checked").val();
+            if (allType == 1) { //adjsut leave
+                $('.usage-field').hide();
+
+            } else
+
+                return allType;
+        }
 
         $(document).ready(function () {
 
@@ -249,7 +260,6 @@
 
         });
 
-       
 
     </script>
 @endsection

@@ -14,7 +14,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                     @foreach($division_levels as $division_level)
+                    @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
                                    class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -35,7 +35,7 @@
                         </div>
                     @endforeach
 
-                    
+
                     <div class="form-group">
                         <label for="tank_name" class="col-sm-2 control-label">Tank Name</label>
                         <div class="col-sm-8">
@@ -53,24 +53,35 @@
                     <div class="form-group">
                         <label for="tank_description" class="col-sm-2 control-label">Tank Description</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="tank_description" name="tank_description" value=""
+                            <input type="text" class="form-control" id="tank_description" name="tank_description"
+                                   value=""
                                    placeholder="Enter tank description" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="tank_capacity" class="col-sm-2 control-label">Tank Capacity</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="tank_capacity" name="tank_capacity" value=""
-                                   placeholder="Enter tank capacity" required>
+                            <input type="text" class="form-control" id="tank_capacity" name="tank_capacity"
+                                   value="{{ old('tank_capacity') }}" onchange="convert(this.value, 1);"
+                                   placeholder="Enter the tank capacity...">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="current_fuel_litres" class="col-sm-2 control-label">Add Litres</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="current_fuel_litres"
+                                   name="current_fuel_litres" value="" onchange="convert(this.value, 2);"
+                                   placeholder="Enter Fuel Litres" required>
                         </div>
                     </div>
                     <div class="form-group safe-field">
                         <label for="tank_manager" class="col-sm-2 control-label">Employee </label>
                         <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;" id="tank_manager" name="tank_manager">
+                            <select class="form-control select2" style="width: 100%;" id="tank_manager"
+                                    name="tank_manager">
                                 <option value="0">*** Select a Employee ***</option>
                                 @foreach($employees as $employee)
-                                 <option value="{{ $employee->id }}" {{ ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    <option value="{{ $employee->id }}" {{ ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,5 +97,28 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function convert(value, type) {
+        if (value.length > 1) {
+            var str = value.toString().split('.');
+            if (str[0].length >= 4) {
+                str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+            }
+            if (str[1] && str[1].length >= 5) {
+                str[1] = str[1].replace(/(\d{3})/g, '$1 ');
+            }
+            value = str + '. 00';
+        }
+        else value = value + '. 00';
+        if (type == 1) $('#tank_capacity').val(value);
+        else if (type == 2) $('#current_fuel_litres').val(value);
+
+        //console.log(value);
+    }
+
+</script>
+
+
         
            
