@@ -61,8 +61,8 @@
                                                 data-division_level_5="{{ $tanks->division_level_5 }}"
                                                 data-tank_location="{{ $tanks->tank_location }}"
                                                 data-tank_description="{{ $tanks->tank_description }}"
-                                                data-tank_capacity="{{$tanks->tank_capacity}}"
-                                                data-current_fuel_litres="{{$tanks->current_fuel_litres}}"
+                                                data-tank_capacity="{{number_format($tanks->tank_capacity, 2) }}"
+                                                data-current_fuel_litres="{{ number_format($tanks->current_fuel_litres, 2)}}"
                                                 data-tank_manager="{{$tanks->tank_manager}}"
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -76,13 +76,12 @@
                                         </td> @else
                                         <td></td>
                                         @endif
-
-
                                         </td></td>
+
                                         <td>{{ (!empty( $tanks->tank_name)) ?  $tanks->tank_name : ''}} </td>
                                         <td>{{ (!empty( $tanks->tank_description)) ?  $tanks->tank_description : ''}} </td>
-                                        <td>{{ (!empty( $tanks->tank_capacity)) ?  $tanks->tank_capacity : ''}} </td>
-                                        <td>{{ (!empty( $tanks->current_fuel_litres)) ?  $tanks->current_fuel_litres : ''}} </td>
+                                        <td>{{ (!empty( $tanks->tank_capacity)) ? number_format($tanks->tank_capacity, 2) : ''}} </td>
+                                        <td>{{ !empty($tanks->current_fuel_litres) ?  number_format($tanks->current_fuel_litres, 2) : '' }}</td>
                                         <td>{{ (!empty( $tanks->Department)) ?  $tanks->Department : ''}} </td>
                                         <td>{{ (!empty( $tanks->company)) ?  $tanks->company : ''}} </td>
                                         <td>{{ (!empty( $tanks->tank_location)) ?  $tanks->tank_location : ''}} </td>
@@ -188,6 +187,24 @@
                     radioClass: 'iradio_square-blue',
                     increaseArea: '10%' // optional
                 });
+
+                function convertMoney(value, type) {
+                    if (value.length > 1) {
+                        var str = value.toString().split('.');
+                        if (str[0].length >= 4) {
+                            str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+                        }
+                        if (str[1] && str[1].length >= 5) {
+                            str[1] = str[1].replace(/(\d{3})/g, '$1 ');
+                        }
+                        value = str + '. 00';
+                    }
+                    else value = value + '. 00';
+                    if (type == 1) $('#tank_capacity').val(value);
+                    else if (type == 2) $('#current_fuel_litres').val(value);
+
+                    //console.log(value);
+                }
 
 
                 //

@@ -61,15 +61,16 @@
                     <div class="form-group">
                         <label for="tank_capacity" class="col-sm-2 control-label">Tank Capacity</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="tank_capacity" name="tank_capacity" value=""
-                                   placeholder="Enter tank capacity" required>
+                            <input type="text" class="form-control" id="tank_capacity" name="tank_capacity"
+                                   value="{{ old('tank_capacity') }}" onchange="convert(this.value, 1);"
+                                   placeholder="Enter the tank capacity...">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tank_capacity" class="col-sm-2 control-label">Add Litres</label>
+                        <label for="current_fuel_litres" class="col-sm-2 control-label">Add Litres</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="current_fuel_litres"
-                                   name="current_fuel_litres" value=""
+                            <input type="text" class="form-control" id="current_fuel_litres"
+                                   name="current_fuel_litres" value="" onchange="convert(this.value, 2);"
                                    placeholder="Enter Fuel Litres" required>
                         </div>
                     </div>
@@ -96,5 +97,28 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function convert(value, type) {
+        if (value.length > 1) {
+            var str = value.toString().split('.');
+            if (str[0].length >= 4) {
+                str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+            }
+            if (str[1] && str[1].length >= 5) {
+                str[1] = str[1].replace(/(\d{3})/g, '$1 ');
+            }
+            value = str + '. 00';
+        }
+        else value = value + '. 00';
+        if (type == 1) $('#tank_capacity').val(value);
+        else if (type == 2) $('#current_fuel_litres').val(value);
+
+        //console.log(value);
+    }
+
+</script>
+
+
         
            

@@ -60,7 +60,7 @@
                                 filling</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" id="reading_before_filling"
-                                       name="reading_before_filling" value="{{$current}}"
+                                       name="reading_before_filling" value="{{$current }}"
                                        placeholder="Enter reading before filling" readonly="">
                             </div>
                         </div>

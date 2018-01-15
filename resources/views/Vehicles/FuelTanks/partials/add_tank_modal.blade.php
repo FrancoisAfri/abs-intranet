@@ -54,19 +54,27 @@
                                        placeholder="Enter tank description" required>
                             </div>
                         </div>
+                        {{--  <div class="form-group">
+                            <label for="tank_capacity" class="col-sm-2 control-label">Tank Capacity</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" min="0" step="0.001" id="tank_capacity"
+                                       name="tank_capacity" value="" onchange="convertMoney(this.value, 4);"
+                                       placeholder="Enter tank capacity" required>
+                            </div>
+                        </div>  --}}
                         <div class="form-group">
                             <label for="tank_capacity" class="col-sm-2 control-label">Tank Capacity</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" min="0" step="0.001" id="tank_capacity"
-                                       name="tank_capacity" value=""
-                                       placeholder="Enter tank capacity" required>
+                                <input type="text" class="form-control" id="tank_capacity" name="tank_capacity"
+                                       value="{{ old('tank_capacity') }}" onchange="convertMoney(this.value, 1);"
+                                       placeholder="Enter the tank capacity...">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="tank_capacity" class="col-sm-2 control-label">Add Litres</label>
+                            <label for="current_fuel_litres" class="col-sm-2 control-label">Add Litres</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="current_fuel_litres"
-                                       name="current_fuel_litres" value=""
+                                <input type="text" class="form-control" id="current_fuel_litres"
+                                       name="current_fuel_litres" value="" onchange="convertMoney(this.value, 2);"
                                        placeholder="Enter Fuel Litres" required>
                             </div>
                         </div>
@@ -95,4 +103,7 @@
     </div>
 </div>
 </div>
+
+
+
            

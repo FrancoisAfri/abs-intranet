@@ -56,16 +56,17 @@
                                                        id="edit_compan" class="btn btn-default  btn-xs"
                                                        data-id="{{ $booking->id }}">select</a>
                                                 </td>
+                                               
+                                                <td>{{ !empty($booking->topup_date) ? date(' d M Y', $booking->topup_date) : '' }}</td>
+                                                <td>{{ (!empty($booking->type)) ?  $keyStatus[$booking->type] : ''}}</td>
+                                                <td>{{ (!empty($booking->Supplier)) ?  $booking->Supplier : ''}}</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>{{ (!empty($booking->reading_before_filling)) ?  $booking->reading_before_filling : ''}}</td>
+                                                <td>{{ (!empty($booking->current_fuel_litres)) ?  $booking->current_fuel_litres : ''}}</td>
+                                                <td>{{ (!empty($booking->litres)) ?  $booking->litres : ''}}</td>
+                                                <td>{{ (!empty($booking->cost_per_litre)) ?  'R' .number_format($booking->cost_per_litre, 2) : ''}}</td>
+                                                <td>{{ !empty($booking->total_cost) ? 'R' .number_format($booking->total_cost, 2) : '' }}</td>
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -232,6 +233,7 @@
                                 });
 
                             });
+
 
                             $(document).ready(function () {
                                 $('#litres').change(function () {
