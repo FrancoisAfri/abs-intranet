@@ -68,17 +68,15 @@
 
                         </div>
                     </div>
-
-                    <!--                        <div class="form-group ">-->
-                    <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                        <label for="leave_types_id" class="col-sm-2 control-label">Leave Types</label>
+                     <div class="form-group {{ $errors->has('leave_type') ? ' has-error' : '' }}">
+                        <label for="leave_type" class="col-sm-2 control-label">Leave Types</label>
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <div class="input-group-addon">
-                                    <i class="fa fa-black-tie"></i>
+                                     <i class="fa fa-black-tie"></i>
                                 </div>
                                 <select id="leave_type" name="leave_type" onChange= "changetextbox();" class="form-control">
-                                    <option value="leavetyes">*** Select leave Type ***</option>
+                                    <option value=" ">*** Select leave Type ***</option>
                                     @foreach($leaveTypes as $leaveType)
                                     <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
                                     @endforeach
@@ -86,6 +84,8 @@
                             </div>
                         </div>
                     </div>
+
+                   
                     <!-- This is the dropbox which must receive a value from the leave dropbox via jquery -->
                     <!--   <div class="form-group  ">
                           <label for="days" class="col-sm-2 control-label">Available/Taken:</label>

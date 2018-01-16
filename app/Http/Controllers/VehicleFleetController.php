@@ -38,7 +38,8 @@ use App\module_ribbons;
 Use App\vehicle_serviceDetails;
 use App\ribbons_access;
 use App\service_station;
-use App\tank;
+use App\Fueltanks;
+use App\vehicle_config;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 
@@ -1328,8 +1329,15 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         //return $ContactCompany;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-        $servicestation = service_station::orderBy('id', 'desc')->get();
-        $fueltank = tank::orderBy('id', 'desc')->get();
+        $servicestation = fleet_fillingstation::orderBy('id', 'desc')->get();
+        $fueltank = Fueltanks::orderBy('id', 'desc')->get();
+       // return $fueltank;
+
+    
+         $vehicle_fuel_log = vehicle_fuel_log::orderBy('id', 'desc')->get();
+         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
+        
+
 
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
@@ -1356,14 +1364,14 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $ID = $maintenance->id;
 
             $vehiclefuellog = DB::table('vehicle_fuel_log')
-                ->select('vehicle_fuel_log.*','hr_people.first_name as firstname', 'hr_people.surname as surname','service_station.name as Staion','tank.name as tankName')
-                ->leftJoin('tank','vehicle_fuel_log.tank_name', '=', 'tank.id')
-                ->leftJoin('service_station','vehicle_fuel_log.service_station', '=', 'service_station.id')
+                ->select('vehicle_fuel_log.*','hr_people.first_name as firstname', 'hr_people.surname as surname','fleet_fillingstation.name as Staion','fuel_tanks.tank_name as tankName')
+                ->leftJoin('fuel_tanks','vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
+                ->leftJoin('fleet_fillingstation','vehicle_fuel_log.tank_name', '=', 'fleet_fillingstation.id')
                 ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
                 ->orderBy('vehicle_fuel_log.id')
                 ->get();
 
-            //return $vehiclefine
+    //    return $vehiclefuellog;
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [
@@ -1371,9 +1379,18 @@ public function viewIncidents(vehicle_maintenance $maintenance)
                 ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
             ];
 
+            $bookingStatus = array(1 => "Pending Capturer Ceo Approval",
+            4 => "Pending Tank Manager",
+            10 => "Approved",
+            14 => "Rejected");
+
+            //1st query the tank 
+           
+
             $data['ContactCompany'] = $ContactCompany;
             $data['loggedInEmplID'] = $loggedInEmplID;
             $data['name'] = $name;
+            $data['bookingStatus'] = $bookingStatus;
             $data['servicestation'] = $servicestation;
             $data['fueltank'] = $fueltank;
             $data['status'] = $status;
@@ -1394,24 +1411,110 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
         } 
 
+        public function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
+        {
+    
+            // query the vehicle_configuration  table and bring back the values
+            $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
+            $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
+            $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
+            $fueltanks = Fueltanks::where('id',$tankID)->orderBy('id', 'desc')->get();
+    
+            $managerID = HRPerson::where('id', $hrID)->where('status', 1)->first();
+            $driverHead = $managerID->manager_id;
+    
+            if ($approvals->fuel_auto_approval == 1) {
+                # code...
+                // query the hrperon  model and bring back the values of the manager
+                $loggedInEmplID = Auth::user()->person->id;
+
+    
+                // $User = HRPerson::where('id', $tank)->select('id')->first();
+               
+                $details = array('status' => 14, 'first_name' => $User->first_name, 'surname' => $User->surname, 'email' => $User->email);
+                    return $details;
+              
+            } elseif ($approvals->fuel_require_tank_manager_approval == 1) {
+                
+                //
+             
+                $userID =  $fueltanks->first()->tank_manager;
+                $UserDetails =  HRPerson::where('id', $userID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
+                //
+                //riverHeadDetails = HRPerson::where('id', $driverHead)->where('status', 1)->select('first_name', 'surname', 'email')->first();
+    
+                if ($UserDetails == null) {
+                    $details = array('status' => 4, 'first_name' => $UserDetails->first_name, 'surname' => $UserDetails->surname, 'email' => $UserDetails->email);
+                    return $details;
+                } else {
+    
+                    $details = array('status' =>4, 'first_name' => $UserDetails->first_name, 'surname' => $UserDetails->surname, 'email' => $UserDetails->email);
+                    return $details;
+                }
+            } elseif ($approvals->fuel_require_ceo_approval == 1) {
+    
+                $Dept = DivisionLevelFour::where('manager_id', $hrDetails->division_level_4)->get()->first();
+    
+                $hodmamgerDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)->select('first_name', 'surname', 'email')->first();
+    
+                if ($hodmamgerDetails == null) {
+                    $details = array('status' => 1, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
+                    return $details;
+                } else {
+    
+                    $details = array('status' => 1, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
+                    return $details;
+                }
+            } else {
+    
+                $details = array('status' => 4, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
+                return $details;
+            }
+        }
+
     public function addvehiclefuellog(Request $request){
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+        'tank_name' => 'bail|required',
+        'document_number' => 'required|unique:vehicle_fuel_log,document_number',
+
         ]);
         $fuelData = $request->all();
         unset($fuelData['_token']);
 
         $currentDate = time();
 
+        $bookingStatus = array(1 => "Pending Capturer Ceo Approval",
+        4 => "Pending Tank Manager",
+        10 => "Approved",
+        14 => "Rejected");
+
+        $hrID = Auth::user()->person->id;
+        $tankID = $fuelData['tank_name'];
+
+        $BookingDetails = array();
+        $BookingDetail = VehicleFleetController::BookingDetails(0, $hrID, $hrID,$tankID);
+
+
         $dateofincident = $fuelData['date'] = str_replace('/', '-', $fuelData['date']);
         $dateofincident = $fuelData['date'] = strtotime($fuelData['date']);
+
+        $totalcost = $fuelData['total_cost'] = str_replace(',', '', $fuelData['total_cost']);
+        $totalcost = $fuelData['total_cost'] = str_replace('. 00', '', $fuelData['total_cost']);
 
         $loggedInEmplID = Auth::user()->person->id;
 
         $vehiclefuellog = new vehicle_fuel_log($fuelData);
         $vehiclefuellog->date = $dateofincident ;
-        $vehiclefuellog->vehicleID =  $fuelData['valueID'];
+        $vehiclefuellog->vehicleID =  !empty($fuelData['valueID']) ? $fuelData['valueID'] : 0;
+        $vehiclefuellog->driver =  !empty($fuelData['driver']) ? $fuelData['driver'] : 0;
+        $vehiclefuellog->tank_name =  !empty($fuelData['tank_name']) ? $fuelData['tank_name'] : 0;
+        $vehiclefuellog->service_station =  !empty($fuelData['service_station']) ? $fuelData['service_station'] : 0;
+        $vehiclefuellog->rensonsible_person =  !empty($fuelData['rensonsible_person']) ? $fuelData['rensonsible_person'] : 0;
         $vehiclefuellog->captured_by = $loggedInEmplID;
+        $vehiclefuellog->total_cost = !empty ($totalcost) ?  $totalcost: 0;
+        $vehiclefuellog->tank_and_other = !empty($fuelData['transaction']) ? $fuelData['transaction'] : 0;
+        $vehiclefuellog->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
+        $vehiclefuellog->status  = $BookingDetail['status'];
         $vehiclefuellog->save();
         return response()->json();
 
@@ -1518,6 +1621,14 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             //return view('products.products')->with($data);
             return view('Vehicles.FleetManagement.viewBookingLog')->with($data);
         } 
+
+          public function deletefuelLog(Request $request, vehicle_fuel_log $fuel){
+
+                $fuel->delete();
+
+        AuditReportsController::store('Vehicle Management', 'Vehicle Fuel Log  Deleted', "Document Type has been deleted", 0);
+        return back();
+    }
 
        
         

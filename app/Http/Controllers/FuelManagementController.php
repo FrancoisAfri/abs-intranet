@@ -76,6 +76,9 @@ class FuelManagementController extends Controller
     {
         $this->validate($request, [
             'tank_capacity' => 'required',
+            'tank_name' => 'required',
+            'tank_manager' => 'required',
+
         ]);
         $FueltankData = $request->all();
         unset($FueltankData['_token']);

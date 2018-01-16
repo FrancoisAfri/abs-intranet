@@ -56,12 +56,11 @@
                     <div class="form-group transaction-field{{ $errors->has('transaction_type') ? ' has-error' : '' }}">
                         <label for="transaction_type" class="col-sm-2 control-label"> Transaction Type </label>
                         <div class="col-sm-8">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fulltank"
-                                                                                          name="transaction_type" value="1" checked>Full Tank
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="empty"
+                                                                                          name="transaction_type" value="0" checked disabled>
                             </label>
-                            <label class="radio-inline"><input type="radio" id="rdo_topup" name="transaction_type" value="2">
-                                Top Up
-                            </label>
+                            <label class="radio-inline" ><input type="radio" id="rdo_fulltank"  name="transaction_type" value="1">Full Tank </label> 
+                            <label class="radio-inline"><input type="radio" id="rdo_topup" name="transaction_type" value="2"> Top Up </label>  
                         </div>
                     </div>
 
@@ -103,7 +102,7 @@
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Cost per Litre </label>
                         <div class="col-sm-8">
-                            <input type="teXt" class="form-control" id="cost_per_litre" name="cost_per_litre" value=" "  min="0" step="0.01"
+                            <input type="teXt" class="form-control" id="cost_per_litre" name="cost_per_litre" value=""  min="0" step="0.01"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
@@ -117,7 +116,7 @@
                     </div>
 
                       <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Hours Reading </label>
+                        <label for="path" class="col-sm-2 control-label">Odometer Reading </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
                                    placeholder="Enter Hours Reading" required>
