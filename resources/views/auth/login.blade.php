@@ -43,8 +43,7 @@
             </div>
         @endif
         <form role="form" method="POST" action="{{ url('/login') }}">
-            {{ csrf_field() }}
-
+           {{ csrf_field() }}
             <div class="form-group has-feedback{{ $errors->has('email') ? ' has-error' : '' }}">
                 <input id="email" type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required autofocus>
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>

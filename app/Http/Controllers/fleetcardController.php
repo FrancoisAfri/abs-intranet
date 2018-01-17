@@ -11,7 +11,7 @@ use App\HRPerson;
 use App\vehicle_detail;
 use App\vehicle_fleet_cards;
 use App\fleetcard_type;
-use App\fleetType;
+use App\FleetType;
 use App\ContactCompany;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
@@ -42,7 +42,7 @@ class fleetcardController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
 
         $hrDetails = HRPerson::where('status', 1)->get();
-        $fleetcardtype = fleetType::orderBy('id', 'desc')->get();
+        $fleetcardtype = FleetType::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
@@ -95,7 +95,7 @@ class fleetcardController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
 
         $hrDetails = HRPerson::where('status', 1)->get();
-        $fleetcardtype = fleetType::orderBy('id', 'desc')->get();
+        $fleetcardtype = FleetType::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
