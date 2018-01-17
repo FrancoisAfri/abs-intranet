@@ -55,7 +55,7 @@ class FuelManagementController extends Controller
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Types Management";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/fuel_tank', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -64,10 +64,10 @@ class FuelManagementController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fuel Tanks';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.fueltanks')->with($data);
 
     }
@@ -194,10 +194,10 @@ class FuelManagementController extends Controller
         $data['Department'] = $Department;
         $data['employees'] = $employees;
         $data['fuel'] = $fuel;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fuel Tanks';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Viewtank')->with($data);
 
     }
@@ -266,10 +266,10 @@ class FuelManagementController extends Controller
         $data['tank'] = $tank;
         $data['ID'] = $ID;
         $data['Fueltank'] = $Fueltank;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fuel Tanks';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.tank_results')->with($data);
     }
 
@@ -402,10 +402,10 @@ class FuelManagementController extends Controller
         // $data['Department'] = $Department;
         // $data['employees'] = $employees;
         $data['vehiclemodel'] = $vehiclemodel;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fuel Tanks';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Tank Approvals.tanksearch')->with($data);
 
     }
@@ -432,7 +432,7 @@ class FuelManagementController extends Controller
         $data['page_title'] = "Fuel Tank Approval";
         $data['page_description'] = "Fuel Tank Approvals";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fuel Tank Approvals ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -442,7 +442,7 @@ class FuelManagementController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Fueltank'] = $Fueltank;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Vehicle Approval';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
@@ -493,7 +493,7 @@ class FuelManagementController extends Controller
             }
         }
         $sReasonToReject = '';
-        AuditReportsController::store('Vehicle Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
+        AuditReportsController::store('Fleet Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
     }
 }

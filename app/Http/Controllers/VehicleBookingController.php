@@ -113,9 +113,9 @@ class VehicleBookingController extends Controller
         $data['divisionLevels'] = $divisionLevels;
         $data['vehicledetail'] = $vehicledetail;
         $data['vehiclemake'] = $vehiclemake;
-        $data['active_mod'] = 'Vehicle Management';
-        $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed ', "Accessed by User", 0);
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'My Bookings';
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed ', "Accessed by User", 0);
         return view('Vehicles.Create_request.myvehiclebooking')->with($data);
 
     }
@@ -129,17 +129,17 @@ class VehicleBookingController extends Controller
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Types Management";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Create_request.search_vehicle')->with($data);
     }
 
@@ -217,16 +217,16 @@ class VehicleBookingController extends Controller
         $data['hrDetails'] = $hrDetails;
         $data['vehicleDates'] = $vehicleDates;
         $data['vehiclebooking'] = $vehiclebooking;
-        $data['page_title'] = " Vehicle Management ";
-        $data['page_description'] = "Internal Vehicle Management Search Results";
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Internal Fleet Management Search Results";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Vehicle Management', 'View Vehicle Search Results', "view Audit Results", 0);
+        AuditReportsController::store('Fleet Management', 'View Vehicle Search Results', "view Audit Results", 0);
         return view('Vehicles.Create_request.search_results')->with($data);
     }
 
@@ -302,9 +302,9 @@ class VehicleBookingController extends Controller
         $data['vehicledetail'] = $vehicledetail;
         $data['vehiclemake'] = $vehiclemake;
         $data['maintenance'] = $bookings;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed ', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed ', "Accessed by User", 0);
         return view('Vehicles.Create_request.vehiclebookings')->with($data);
     }
 
@@ -482,7 +482,7 @@ class VehicleBookingController extends Controller
         Mail::to($BookingDetail['email'])->send(new vehicle_bookings($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
 
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed by User", 0);
         return redirect('/vehicle_management/vehiclebooking_results')->with('success_application', "Vehicle Booking application was successful.");
     }
 
@@ -521,7 +521,7 @@ class VehicleBookingController extends Controller
         $Vehicebookings->cancel_status = 0;
         $Vehicebookings->update();
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Booking edited ', "Edited by User", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Booking edited ', "Edited by User", 0);
         return response()->json();
     }
 
@@ -591,9 +591,9 @@ class VehicleBookingController extends Controller
         $data['divisionLevels'] = $divisionLevels;
         $data['vehicledetail'] = $vehicledetail;
         $data['vehiclemake'] = $vehiclemake;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed ', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed ', "Accessed by User", 0);
         return view('Vehicles.Create_request.vehiclebooking_results')->with($data);
     }
 
@@ -642,9 +642,9 @@ class VehicleBookingController extends Controller
         $data['usageType'] = $usageType;
         $data['bookingStatus'] = $bookingStatus;
 
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Booking Approval';
-        AuditReportsController::store('Vehicle Management', 'Vehicle Approvals Page Accessed ', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Approvals Page Accessed ', "Accessed by User", 0);
         return view('Vehicles.Create_request.vehiclebooking_approvals')->with($data);
     }
 
@@ -689,7 +689,7 @@ class VehicleBookingController extends Controller
         $driver = $drivers->first_name . ' ' . $drivers->surname;
 
         Mail::to($BookingDetail['email'])->send(new vehiclebooking_cancellation($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'], $required_from, $required_to, $usageType[$Usage_type], $driver, $destination, $purpose, $vehicle_model));
-        AuditReportsController::store('Vehicle Management', 'Booking   Cancelled', "Booking has been Cancelled", 0);
+        AuditReportsController::store('Fleet Management', 'Booking   Cancelled', "Booking has been Cancelled", 0);
         return back();
 
     }
@@ -712,7 +712,7 @@ class VehicleBookingController extends Controller
 
         Mail::to($BookingDetail['email'])->send(new vehiclebooking_approval($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
 
-        AuditReportsController::store('Vehicle Management', 'Booking   Approved', "Booking has been Approved", 0);
+        AuditReportsController::store('Fleet Management', 'Booking   Approved', "Booking has been Approved", 0);
         return back()->with('success_application', "vehiclebooking Booking Approval was successful.");
 
     }
@@ -741,7 +741,7 @@ class VehicleBookingController extends Controller
         $BookingDetail = VehicleBookingController::BookingDetails(0, $hrID, $hrID);
         Mail::to($BookingDetail['email'])->send(new vehiclebooking_rejection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
 
-        AuditReportsController::store('Vehicle Management', 'Booking   Declined', "Booking has been Declined", 0);
+        AuditReportsController::store('Fleet Management', 'Booking   Declined', "Booking has been Declined", 0);
         return response()->json();
     }
 
@@ -787,9 +787,9 @@ class VehicleBookingController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehiclebookings'] = $vehiclebookings;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed ', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed ', "Accessed by User", 0);
         return view('Vehicles.Create_request.vehiclecollection')->with($data);
     }
 
@@ -822,7 +822,7 @@ class VehicleBookingController extends Controller
             }
         }
 
-        AuditReportsController::store('Vehicle Management', 'Collection Document Uploaded ', "Collection Document Uploaded ", 0);
+        AuditReportsController::store('Fleet Management', 'Collection Document Uploaded ', "Collection Document Uploaded ", 0);
         return response()->json();
     }
 
@@ -857,7 +857,7 @@ class VehicleBookingController extends Controller
         }
 
 
-        AuditReportsController::store('Vehicle Management', 'Collection Document Uploaded ', "Collection Document Uploaded ", 0);
+        AuditReportsController::store('Fleet Management', 'Collection Document Uploaded ', "Collection Document Uploaded ", 0);
         return response()->json();
     }
 
@@ -897,7 +897,7 @@ class VehicleBookingController extends Controller
         #mail to manager
          Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'],$vehicle_model ));
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
         return redirect()->to('/vehicle_management/collect/' . $ID);
 
     }
@@ -952,9 +952,9 @@ class VehicleBookingController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehiclebookings'] = $vehiclebookings;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed ', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed ', "Accessed by User", 0);
         return view('Vehicles.Create_request.returnvehicle')->with($data);
     }
 
@@ -987,7 +987,7 @@ class VehicleBookingController extends Controller
             }
         }
 
-        AuditReportsController::store('Vehicle Management', 'vehicle return Document Uploaded ', "vehicle return Document Uploaded ", 0);
+        AuditReportsController::store('Fleet Management', 'vehicle return Document Uploaded ', "vehicle return Document Uploaded ", 0);
         return response()->json();
     }
 
@@ -1022,7 +1022,7 @@ class VehicleBookingController extends Controller
         }
 
 
-        AuditReportsController::store('Vehicle Management', 'Return vehicle Image Uploaded ', "Return vehicle Image Uploaded ", 0);
+        AuditReportsController::store('Fleet Management', 'Return vehicle Image Uploaded ', "Return vehicle Image Uploaded ", 0);
         return response()->json();
     }
 
@@ -1049,7 +1049,7 @@ class VehicleBookingController extends Controller
             ->where('id', $ID)
             ->update(['booking_status' => 0]);
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
         return redirect()->to('/vehicle_management/return_vehicle/' . $ID);
 
     }
@@ -1169,7 +1169,7 @@ class VehicleBookingController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         // $data['vehiclebookinglog'] = $vehiclebookinglog;
         $data['ispection'] = $ispection;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
         //return view('products.products')->with($data);

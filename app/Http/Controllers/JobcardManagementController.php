@@ -38,10 +38,10 @@ class JobcardManagementController extends Controller {
         ];
 
         // $data['incidentType'] = $incidentType;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Job Card Management';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.JobcardManagement.jobcardIndex')->with($data);
     }
 
@@ -67,10 +67,10 @@ class JobcardManagementController extends Controller {
 
         $data['jobcardMaintance'] = $jobcardMaintance;
         $data['Vehicle_managemnt'] = $Vehicle_managemnt;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Job Card Management';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.JobcardManagement.jobCard')->with($data);
     }
 
@@ -143,7 +143,7 @@ class JobcardManagementController extends Controller {
         }
 
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         ;
         return response()->json();
     }

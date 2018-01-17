@@ -114,7 +114,7 @@ class VehicleFleetController extends Controller
             $data['vehicledetail'] = $vehicledetail;
             $data['vehiclemake'] = $vehiclemake;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -189,7 +189,7 @@ class VehicleFleetController extends Controller
             $data['vehicledetail'] = $vehicledetail;
             $data['vehiclemake'] = $vehiclemake;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -263,7 +263,7 @@ class VehicleFleetController extends Controller
             $data['vehicledetail'] = $vehicledetail;
             $data['vehiclemake'] = $vehiclemake;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -322,7 +322,7 @@ class VehicleFleetController extends Controller
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['reminders'] = $reminders;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -381,7 +381,7 @@ class VehicleFleetController extends Controller
         $reminders->status = 1;
         $reminders->update();
 
-        AuditReportsController::store('Vehicle Management', 'Group Admin Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Fleet Management', 'Group Admin Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }
 
@@ -401,7 +401,7 @@ class VehicleFleetController extends Controller
     {
         $reminder->delete();
 
-        AuditReportsController::store('Vehicle Management', 'reminder Type Deleted', "Document Type has been deleted", 0);
+        AuditReportsController::store('Fleet Management', 'reminder Type Deleted', "Document Type has been deleted", 0);
         return back();
     }
 
@@ -461,7 +461,7 @@ class VehicleFleetController extends Controller
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['generalcost'] = $generalcost;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -493,7 +493,7 @@ class VehicleFleetController extends Controller
         $generalcost->vehicleID = $SysData['valueID'];
         $generalcost->save();
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
 
     }
@@ -521,7 +521,7 @@ class VehicleFleetController extends Controller
         $costs->person_esponsible = $SysData['person_esponsible'];
         $costs->vehicleID = 0;
         $costs->update();
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
     }
 
@@ -530,7 +530,7 @@ class VehicleFleetController extends Controller
 
         $costs->delete();
 
-        AuditReportsController::store('Vehicle Management', 'document  Deleted', "document has been deleted", 0);
+        AuditReportsController::store('Fleet Management', 'document  Deleted', "document has been deleted", 0);
         return back();
         //return redirect('/vehicle_management/general_cost/$maintenance->id');
     }
@@ -589,7 +589,7 @@ class VehicleFleetController extends Controller
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehiclewarranties'] = $vehiclewarranties;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -678,7 +678,7 @@ class VehicleFleetController extends Controller
                 $warranties->update();
             }
         }
-       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+       AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
        return response()->json();
     }
 
@@ -740,7 +740,7 @@ class VehicleFleetController extends Controller
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehicleinsurance'] = $vehicleinsurance;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -806,7 +806,7 @@ class VehicleFleetController extends Controller
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehicleserviceDetails'] = $vehicleserviceDetails;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -906,7 +906,7 @@ class VehicleFleetController extends Controller
         }
 
 
-       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+       AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return back();
     }
 
@@ -974,7 +974,7 @@ class VehicleFleetController extends Controller
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehiclefines'] = $vehiclefines;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -1102,7 +1102,7 @@ class VehicleFleetController extends Controller
 
         return response()->json();
 
-       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+       AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return back();
     }
 
@@ -1172,7 +1172,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehicleincidents'] = $vehicleincidents;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -1246,7 +1246,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         return response()->json();
 
 
-       AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+       AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return back();
     }
 
@@ -1311,7 +1311,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehicleoil_log'] = $vehicleoil_log;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -1404,7 +1404,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehiclefuellog'] = $vehiclefuellog;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -1613,7 +1613,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
             $data['vehiclemodeler'] = $vehiclemodeler;
             $data['vehiclebooking'] = $vehiclebooking;
             $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Vehicle Management';
+            $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Manage Fleet';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
             //return view('products.products')->with($data);
@@ -1624,7 +1624,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
                 $fuel->delete();
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Fuel Log  Deleted', "Document Type has been deleted", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Fuel Log  Deleted', "Document Type has been deleted", 0);
         return back();
     }
 
