@@ -505,12 +505,13 @@ class FuelManagementController extends Controller
         $data['contactcompanies'] = $contactcompanies;
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
-        $data['Fueltank'] = $Fueltank;
+        $data['Approvals'] = $Approvals;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Fuel Approvals';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Tank Approvals.tanks_approvals')->with($data);
+        
       
     }
 
@@ -658,6 +659,6 @@ class FuelManagementController extends Controller
         $sReasonToReject = '';
         AuditReportsController::store('Vehicle Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
        // return back();
-        return redirect('/vehicle_management/other');
+        return redirect('/vehicle_management/tank_approval');
     }
 }
