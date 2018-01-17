@@ -33,16 +33,15 @@ class ContactsUploadController extends Controller
     }
     public function index()
     {
-        //phpinfo();
         $data['page_title'] = "Contacts Upload";
         $data['page_description'] = "Upload Contacts From Excel Sheet";
         $data['breadcrumb'] = [
             ['title' => 'Contacts', 'path' => '/import/company', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Import Company', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Import Contacts', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Import Company';
-        AuditReportsController::store('Performance Appraisal', 'Upload page accessed', "Accessed by User", 0);
+        $data['active_rib'] = 'Import Contacts';
+        AuditReportsController::store('Contacts', 'Import Contacts Page Accessed', "Accessed by User", 0);
         return view('contacts.contacts_upload')->with($data);
     }
 
@@ -80,7 +79,10 @@ class ContactsUploadController extends Controller
 								$company->phys_address = !empty($value['physical_address']) ? $value['physical_address'] : '';
 								$company->postal_address = !empty($value['postal_address']) ? $value['postal_address'] : '';
 								$company->cp_home_number = !empty($value['office_number']) ? $value['office_number'] : '';
+								if (!starts_with($company->cp_home_number, '0') && !empty($company->cp_home_number)) $company->cp_home_number = '0'.$company->cp_home_number;
 								$company->fax_number = !empty($value['fax_number']) ? $value['fax_number'] : '';
+								if (!starts_with($company->fax_number, '0') && !empty($company->fax_number)) $company->fax_number = '0'.$company->fax_number;
+								
 								$company->save();
 								
 								AuditReportsController::store('Contacts', 'New Company Created', "Company Name: $company->name", 0);
@@ -115,6 +117,9 @@ class ContactsUploadController extends Controller
 								$contact->phone_number = !empty($value['office_number']) ? $value['office_number'] : '';
 								$contact->res_address = !empty($value['postal_address']) ? $value['postal_address'] : '';
 								$contact->company_id = !empty($companyName->id) ? $companyName->id : 0;
+								if (!starts_with($company->cell_number, '0') && !empty($company->cell_number)) $company->cell_number = '0'.$company->cell_number;
+								if (!starts_with($company->phone_number, '0') && !empty($company->phone_number)) $company->phone_number = '0'.$company->phone_number;
+								
 								$contact->save();
 								
 								AuditReportsController::store('Contacts', 'New Company Rep Created', "Contact Name: $contact->first_name $contact->surname ", 0);
@@ -124,14 +129,14 @@ class ContactsUploadController extends Controller
 				}
 			}
 		}
-        $data['page_title'] = "Employee Appraisals";
-        $data['page_description'] = "Load Appraisals KPI's";
+        $data['page_title'] = "Contacts Import";
+        $data['page_description'] = "Import Contacts Details";
         $data['breadcrumb'] = [
             ['title' => 'Performance Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Import Contacts';
         ///AuditReportsController::store('Performance Appraisal', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
     }
 	

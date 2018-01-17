@@ -313,6 +313,15 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Import Contacts';
+        $ribbon->description = 'Contacts Import';
+        $ribbon->ribbon_path = 'import/company';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 8;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Contacts Related Settings';
         $ribbon->ribbon_path = 'contacts/setup';
