@@ -9,8 +9,8 @@
                     <h4 class="modal-title">Add New Term & Condition</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="kpi-invalid-input-alert"></div>
-                    <div id="kpi-success-alert"></div>
+                    <div id="term-invalid-input-alert"></div>
+                    <div id="term-success-alert"></div>
                     <div class="form-group">
                         <label for="term_name" class="col-sm-3 control-label">Term & Condition</label>
                         <div class="col-sm-9">
