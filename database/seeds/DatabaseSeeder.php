@@ -753,7 +753,7 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Approval';
+        $ribbon->ribbon_name = 'Bookings Approval';
         $ribbon->description = 'Approval/reject Request';
         $ribbon->ribbon_path = 'vehicle_management/approval';
         $ribbon->access_level = 3;

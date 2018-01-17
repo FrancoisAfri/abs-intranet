@@ -65,7 +65,7 @@ class FuelManagementController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Manage Fuel Tanks';
+        $data['active_rib'] = 'Fuel Management';
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.fueltanks')->with($data);
@@ -195,7 +195,7 @@ class FuelManagementController extends Controller
         $data['employees'] = $employees;
         $data['fuel'] = $fuel;
         $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Manage Fuel Tanks';
+        $data['active_rib'] = 'Fuel Management';
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Viewtank')->with($data);
@@ -267,7 +267,7 @@ class FuelManagementController extends Controller
         $data['ID'] = $ID;
         $data['Fueltank'] = $Fueltank;
         $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Manage Fuel Tanks';
+        $data['active_rib'] = 'Fuel Management';
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.tank_results')->with($data);
@@ -403,7 +403,7 @@ class FuelManagementController extends Controller
         // $data['employees'] = $employees;
         $data['vehiclemodel'] = $vehiclemodel;
         $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Manage Fuel Tanks';
+        $data['active_rib'] = 'Fuel Approvals';
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Tank Approvals.tanksearch')->with($data);
@@ -443,7 +443,7 @@ class FuelManagementController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['Fueltank'] = $Fueltank;
         $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Vehicle Approval';
+        $data['active_rib'] = 'Fuel Approvals';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Tank Approvals.tanks_approvals')->with($data);

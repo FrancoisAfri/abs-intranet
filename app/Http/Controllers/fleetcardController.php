@@ -406,7 +406,7 @@ class fleetcardController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Vehicle Approval';
+        $data['active_rib'] = 'Fleet Approval';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
