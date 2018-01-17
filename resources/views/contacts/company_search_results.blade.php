@@ -39,7 +39,7 @@
 					  <td><a href="{{ '/contacts/company/'.$company->id.'/view'}}" >{{ !empty($company->name)  ? $company->name  : '' }}</a></td>
 					  <td>{{ !empty($company->registration_number) ? $company->registration_number : '' }}</td>
 					  <td>{{ !empty($company->vat_number) ? $company->vat_number : '' }}</td>
-					  <td>{{ !empty($company->phone_number) ? $company->phone_number : '' }}</td>
+					  <td>{{ !empty($company->cp_home_number) ? $company->cp_home_number : '' }}</td>
 					  <td>{{ !empty($company->email) ? $company->email : '' }}</td>
 					  <td>{{ !empty($company->phys_address) ? $company->phys_address : '' }}</td>
 					  </tr>

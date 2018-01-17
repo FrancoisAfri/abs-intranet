@@ -50,7 +50,7 @@ class fleetcardController extends Controller
         $data['page_title'] = "Fleet Cards";
         $data['page_description'] = "Fleet Cards Search";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/vehicle_management/fleet_cards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/fleet_cards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -61,10 +61,10 @@ class fleetcardController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Fleet Cards';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Fleet_cards.search_fleet_cards')->with($data);
     }
 
@@ -153,16 +153,16 @@ class fleetcardController extends Controller
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['status'] = $status;
         $data['fleetcard'] = $fleetcard;
-        $data['page_title'] = " Vehicle Management ";
+        $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Vehicle Management', 'View Vehicle Search Results', "view Audit Results", 0);
+        AuditReportsController::store('Fleet Management', 'View Vehicle Search Results', "view Audit Results", 0);
 
         return view('Vehicles.Fleet_cards.fleetcard_results')->with($data);
 
@@ -205,7 +205,7 @@ class fleetcardController extends Controller
         $vehiclefleetcards->status = $docData['status'];
         $vehiclefleetcards->save();
 
-        AuditReportsController::store('Vehicle Management', 'Add Vehicle Fleet Card', "Add Vehicle Fleet Card", 0);
+        AuditReportsController::store('Fleet Management', 'Add Vehicle Fleet Card', "Add Vehicle Fleet Card", 0);
         return response()->json();
     }
 
@@ -243,7 +243,7 @@ class fleetcardController extends Controller
         $vehiclefleetcards->status = $docData['status'];
         $vehiclefleetcards->update();
 
-        AuditReportsController::store('Vehicle Management', 'Update Vehicle Fleet Card', "Update Vehicle Fleet Card", 0);
+        AuditReportsController::store('Fleet Management', 'Update Vehicle Fleet Card', "Update Vehicle Fleet Card", 0);
         return response()->json();
        // return redirect()->to('/vehicle_management/fleet_card_search');
 
@@ -271,7 +271,7 @@ class fleetcardController extends Controller
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Cards Search";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -283,10 +283,10 @@ class fleetcardController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Driver Administration';
 
-        AuditReportsController::store('Vehicle Management', 'Vehicle Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Driver Admin.search_drivers')->with($data);
     }
 
@@ -354,16 +354,16 @@ class fleetcardController extends Controller
       
         $data['status'] = $status;
         $data['drverdetails'] = $drverdetails;
-        $data['page_title'] = " Vehicle Management ";
+        $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Vehicle Management';
+        $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Driver Administration';
-        AuditReportsController::store('Vehicle Management', 'View Vehicle Search Results', "view Audit Results", 0);
+        AuditReportsController::store('Fleet Management', 'View Vehicle Search Results', "view Audit Results", 0);
 
         return view('Vehicles.Driver Admin.drivers_results')->with($data);
 
@@ -395,7 +395,7 @@ class fleetcardController extends Controller
         $data['page_title'] = "Vehicle Approval";
         $data['page_description'] = "Vehicle Approvals";
         $data['breadcrumb'] = [
-            ['title' => 'Vehicle Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Vehicle Approvals ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -405,8 +405,8 @@ class fleetcardController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
-        $data['active_mod'] = 'Vehicle Management';
-        $data['active_rib'] = 'Vehicle Approval';
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Fleet Approval';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
@@ -455,7 +455,7 @@ class fleetcardController extends Controller
             }
         }
         $sReasonToReject = '';
-        AuditReportsController::store('Vehicle Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
+        AuditReportsController::store('Fleet Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
     }
 
@@ -472,7 +472,7 @@ class fleetcardController extends Controller
         $reason->reject_timestamp = $currentDate = time();
         $reason->status = 3;
         $reason->update();
-        AuditReportsController::store('Vehicle Management', 'Reject Vehicle', "Vehicle has been Declined", 0);
+        AuditReportsController::store('Fleet Management', 'Reject Vehicle', "Vehicle has been Declined", 0);
         return response()->json();
     }
 }

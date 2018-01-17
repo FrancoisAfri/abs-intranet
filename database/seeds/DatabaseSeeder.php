@@ -313,6 +313,15 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Import Contacts';
+        $ribbon->description = 'Contacts Import';
+        $ribbon->ribbon_path = 'import/company';
+        $ribbon->access_level = 5;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 8;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Contacts Related Settings';
         $ribbon->ribbon_path = 'contacts/setup';
@@ -724,9 +733,9 @@ class DatabaseSeeder extends Seeder
         //end
 
         //Insert navigation menus
-        $module = new modules(); //Vehicle Management
+        $module = new modules(); //Fleet Management
         $module->active = 1;
-        $module->name = 'Vehicle Management';
+        $module->name = 'Fleet Management';
         $module->code_name = 'vehicle';
         $module->path = 'vehicle_management';
         $module->font_awesome = 'fa fa-truck';
@@ -735,8 +744,8 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'Create Request';
-        $ribbon->description = 'Create Request';
+        $ribbon->ribbon_name = 'My Bookings';
+        $ribbon->description = 'User Bookings';
         $ribbon->ribbon_path = 'vehicle_management/create_request';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
@@ -744,7 +753,7 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Approval';
+        $ribbon->ribbon_name = 'Bookings Approval';
         $ribbon->description = 'Approval/reject Request';
         $ribbon->ribbon_path = 'vehicle_management/approval';
         $ribbon->access_level = 3;

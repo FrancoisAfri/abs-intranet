@@ -55,27 +55,27 @@
 								</div>
 							</div>
 						</div>
-                        <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                            <label for="phone_number" class="col-sm-2 control-label">Office Number</label>
+                        <div class="form-group{{ $errors->has('cp_home_number') ? ' has-error' : '' }}">
+                            <label for="cp_home_number" class="col-sm-2 control-label">Office Number</label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-phone"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Phone Number" data-mask>
+                                    <input type="text" class="form-control" id="cp_home_number" name="cp_home_number" value="{{ old('cp_home_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Office Number" data-mask>
                                 </div>
                             </div>
                         </div>
 						<div class="form-group{{ $errors->has('fax_number') ? ' has-error' : '' }}">
-							<label for="phone_number" class="col-sm-2 control-label">Fax Number</label>
+							<label for="fax_number" class="col-sm-2 control-label">Fax Number</label>
 
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">
 										<i class="fa fa-fax"></i>
 									</div>
-									<input type="text" class="form-control" id="fax_number" name="fax_number" value="{{ old('phone_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Fax Number" data-mask>
+									<input type="text" class="form-control" id="fax_number" name="fax_number" value="{{ old('fax_number') }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Fax Number" data-mask>
 								</div>
 							</div>
 						</div>
