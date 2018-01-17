@@ -104,9 +104,16 @@
                         </a>
                         <!--  -->
                     </div>
+
+                    <div class="box-changedate">
+                        <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-caret-square-o-left"></i> Previous Month</button>
+                        <button type="button" class="btn btn-default pull-right" id="back_button"><i class="fa fa-caret-square-o-right"></i> Next Month</button>
+                    </div>
+                
+                
                     <table class="table table-bordered">
                         <tr>
-                            <th style="width: 10px; text-align: center;"></th>
+                            <!-- <th style="width: 10px; text-align: center;"></th> -->
                             <th> Date Taken</th>
                             <th>Transaction Type</th>
                             <th>Filled By</th>
@@ -118,28 +125,31 @@
                             <th>Cost (R)</th>
                             <th>Hours Reading</th>
                             <th>Hours Per Litre</th>
+                            <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($vehiclefuellog) > 0)
                             @foreach ($vehiclefuellog as $details)
                                 <tr id="categories-list">
-                                    <td nowrap>
+                                    {{--  <td nowrap>
                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-fuelRecords-modal"
                                                 data-id="{{ $details->id }}"><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
-                                    </td>
+                                    </td>  --}}
                                     <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
                                     <td>{{ !empty($details->transaction_type) ?  $transType[$details->transaction_type] : ''}}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
-                                    <td>{{ !empty($details->tank_type) ?  $status[$details->tank_type] : ''}}</td>
+                                    <td>{{ !empty($details->tank_and_other) ?  $status[$details->tank_and_other] : ''}}</td>
                                     <td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
                                     <td>{{ !empty($details->Staion) ?  $details->Staion : ''}}</td>
-                                    <td>{{ !empty($details->litres) ?  $details->litres : ''}} litres</td>
-                                     <td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre : ''}} R</td>
-                                    <td>{{ !empty($details->total_cost) ?  $details->total_cost : ''}} R</td>
-                                    <td>{{ !empty($details->hours_reading) ? $details->hours_reading : ''}}</td>
+                                    <td>{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
+                                     <td>{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
+                                    <td>{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
+                                    <td>{{ !empty($details->hours_reading) ? $details->hours_reading. ' hrs' : ''}}</td>
                                     <td></td>
+                                    <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
+                                    <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
 
                                 </tr>
                             @endforeach
@@ -166,8 +176,14 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-            @include('Vehicles.partials.add_vehicleFuelRecords_modal')
-            @include('Vehicles.partials.edit_vehicleFuelRecords_modal')
+          
+            @include('Vehicles.partials.add_fuelrecord_modal')
+           <!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
+           <!--  @include('Vehicles.partials.edit_vehicleFuelRecords_modal') -->
+
+            @if (count($vehiclefuellog) > 0)
+              @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Vehicle Fuel Log? This action cannot be undone.'])
+            @endif
             
 
         </div>
@@ -256,6 +272,53 @@
                     increaseArea: '10%' // optional
                 });
 
+                 $(document).ready(function () {
+                                $('#litres').change(function () {
+                                    var litres = $('#litres').val();
+                                    var total_cost = $('#total_cost').val();
+                                    var litre_cost = $('#cost_per_litre').val();
+
+                                    if (litre_cost > 0 && litres > 0) {
+                                        var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        document.getElementById('total_cost').value = total_cost;
+                                    }
+                                    else if (litres > 0 && total_cost > 0) {
+                                        var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        document.getElementById('cost_per_litre').value = litre_cost;
+                                    }
+                                });
+
+                                $('#cost_per_litre').change(function () {
+                                    var litres = $('#litres').val();
+                                    var total_cost = $('#total_cost').val();
+                                    var litre_cost = $('#cost_per_litre').val();
+                                    if (litre_cost > 0 && litres > 0) {
+                                        var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        document.getElementById('total_cost').value = total_cost;
+                                    }
+                                    else if (litre_cost > 0 && total_cost > 0) {
+                                        var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        document.getElementById('litres').value = litres;
+                                    }
+                                });
+
+                                $('#total_cost').change(function () {
+                                    var litres = $('#litres').val();
+                                    var total_cost = $('#total_cost').val();
+                                    var litre_cost = $('#cost_per_litre').val();
+                                    if (litre_cost > 0 && total_cost) {
+                                        var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        document.getElementById('litres').value = litres;
+                                    }
+                                    else if (litres > 0 && total_cost) {
+                                        var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        document.getElementById('cost_per_litre').value = litre_cost;
+                                    }
+                                });
+
+                            });
+
+
                 $(document).ready(function () {
 
                     $('#date').datepicker({
@@ -273,11 +336,14 @@
 
                 });
 
+               
                 // 
                   $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
                     var allType = hideFields();
                     
                 });
+
+
 
                 function hideFields() {
                     var allType = $("input[name='transaction']:checked").val();

@@ -85,7 +85,7 @@
                             <select class="form-control select2" style="width: 100%;"
                                     id="service_station" name="service_station">
                                 <option value="0">*** Select tank  ***</option>
-                                @foreach($servicestation as $station)
+                                @foreach($fueltank as $station)
                                     <option value="{{ $station->id }}">{{ $station->name }}</option>
                                 @endforeach
                             </select>

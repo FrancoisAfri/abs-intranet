@@ -210,12 +210,17 @@ class LeaveApplicationController extends Controller {
     public function day(Request $request, leave_application $levApp) {
         $this->validate($request, [
             'hr_person_id' => 'bail|required',
-            "leave_type" => 'bail|required',
-            'day' => 'required',
+            'leave_type' => 'bail|required',
+            'application_type'=> 'bail|required',
+            //'day' => 'bail|required',
+            'description'  => 'bail|required',
         ]);
 
         $leaveApp = $request->all();
         unset($leaveApp['_token']);
+
+       // return  $leaveApp;
+
 
         $negDays = leave_configuration::where('id', 1)->first();
         $study = $negDays->document_compulsory_on_Study_leave_application;
