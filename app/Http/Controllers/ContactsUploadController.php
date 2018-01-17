@@ -117,8 +117,8 @@ class ContactsUploadController extends Controller
 								$contact->phone_number = !empty($value['office_number']) ? $value['office_number'] : '';
 								$contact->res_address = !empty($value['postal_address']) ? $value['postal_address'] : '';
 								$contact->company_id = !empty($companyName->id) ? $companyName->id : 0;
-								if (!starts_with($company->cell_number, '0') && !empty($company->cell_number)) $company->cell_number = '0'.$company->cell_number;
-								if (!starts_with($company->phone_number, '0') && !empty($company->phone_number)) $company->phone_number = '0'.$company->phone_number;
+								if (!starts_with($contact->cell_number, '0') && !empty($contact->cell_number)) $contact->cell_number = '0'.$contact->cell_number;
+								if (!starts_with($contact->phone_number, '0') && !empty($contact->phone_number)) $contact->phone_number = '0'.$contact->phone_number;
 								
 								$contact->save();
 								
@@ -137,7 +137,6 @@ class ContactsUploadController extends Controller
         ];
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Import Contacts';
-        AuditReportsController::store('Contacts', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
 		return back();
     }
 	

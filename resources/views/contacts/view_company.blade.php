@@ -43,18 +43,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
-                            <label for="phone_number" class="col-sm-2 control-label">Office Number</label>
+                        <div class="form-group{{ $errors->has('cp_home_number') ? ' has-error' : '' }}">
+                            <label for="cp_home_number" class="col-sm-2 control-label">Office Number</label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-phone"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ !empty($company->phone_number) ? $company->phone_number : '' }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Phone Number" data-mask readonly>
+                                    <input type="text" class="form-control" id="cp_home_number" name="cp_home_number" value="{{ !empty($company->cp_home_number) ? $company->cp_home_number : '' }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Office Number" data-mask readonly>
                                 </div>
                             </div>
                         </div>
+						<div class="form-group{{ $errors->has('fax_number') ? ' has-error' : '' }}">
+							<label for="fax_number" class="col-sm-2 control-label">Fax Number</label>
+
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-fax"></i>
+									</div>
+									<input type="text" class="form-control" id="fax_number" name="fax_number" value="{{ !empty($company->fax_number) ? $company->fax_number : '' }}" data-inputmask='"mask": "(999) 999-9999"' placeholder="Fax Number" data-mask readonly>
+								</div>
+							</div>
+						</div>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-sm-2 control-label">Email</label>
 
