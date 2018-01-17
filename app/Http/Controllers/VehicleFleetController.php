@@ -1427,11 +1427,9 @@ public function viewIncidents(vehicle_maintenance $maintenance)
                 # code...
                 // query the hrperon  model and bring back the values of the manager
                 $loggedInEmplID = Auth::user()->person->id;
+                $User =  HRPerson::where('id', $loggedInEmplID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
 
-    
-                // $User = HRPerson::where('id', $tank)->select('id')->first();
-               
-                $details = array('status' => 14, 'first_name' => $User->first_name, 'surname' => $User->surname, 'email' => $User->email);
+                $details = array('status' => 10, 'first_name' => $User->first_name, 'surname' => $User->surname, 'email' => $User->email);
                     return $details;
               
             } elseif ($approvals->fuel_require_tank_manager_approval == 1) {

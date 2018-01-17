@@ -104,6 +104,13 @@
                         </a>
                         <!--  -->
                     </div>
+
+                    <div class="box-changedate">
+                        <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-caret-square-o-left"></i> Previous Month</button>
+                        <button type="button" class="btn btn-default pull-right" id="back_button"><i class="fa fa-caret-square-o-right"></i> Next Month</button>
+                    </div>
+                
+                
                     <table class="table table-bordered">
                         <tr>
                             <!-- <th style="width: 10px; text-align: center;"></th> -->
