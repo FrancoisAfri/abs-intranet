@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Fuel Tank Approval(s) </h3>
+                    <h3 class="box-title">Fuel Tank </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -27,30 +27,25 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-
+                                <th style="width: 5px; text-align: center;"></th>
                                 <th>Transaction Date</th>
                                 <th>Transaction Type</th>
-                                <th>Supplier/Employee</th>
                                 <th>Fleet No.</th>
                                 <th>Reg. No.</th>
+                                <th>Supplier/Employee</th>
                                 <th>Reading before filling</th>
                                 <th>Reading after filling</th>
                                 <th> Litres</th>
                                 <th>Rate Per Litre</th>
                                 <th>Cost</th>
-                                <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
-                                                                                          id="checkallaccept"
-                                                                                          onclick="checkAllboxAccept()"/>
-                                </th>
-                                <th style="width: 5px; text-align: center;">Decline</th>
-                                <td></td>
+                                
                             </tr>
 
                             @if (count($Approvals) > 0)
                                 @foreach ($Approvals as $filling)
                                     <tr style="text-align:center">
 
-
+                                        <td></td>    
                                         <td>{{ (!empty( $filling->date)) ?  $filling->date : ''}} </td>
                                         <td>{{ (!empty( $filling->transaction_type)) ?  $filling->transaction_type : ''}} </td>
                                         <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
@@ -61,27 +56,7 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td style='text-align:center'>
-                                            <input type="hidden" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}" value="0">
-                                            <input type="checkbox" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}"
-                                                   value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
-                                        </td>
-                                        <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
-                                                                             id="decline_$aVehicles[id]"
-                                                                             onclick="$('#comment_id_{{$filling->id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
-                                        </td>
-                                        <td>
-                                            {{--  <input type="text" size="30" id="comment_id_{{$filling->id}}" name="declined_{{$filling->id}}" style="display:none">         --}}
-                                            <textarea class="form-control" id="comment_id_{{$filling->id}}"
-                                                      name="declined_{{$filling->id}}"
-                                                      placeholder="Enter rejection reason ..." rows="2"
-                                                      style="display:none"></textarea>
-                                        </td>
-
+                                        
 
                                     </tr>
                                 @endforeach

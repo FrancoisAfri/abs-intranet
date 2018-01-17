@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Fuel Tank Approval(s) </h3>
+                    <h3 class="box-title">Other Fuel Approval(s)</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <form name="leave-application-form" class="form-horizontal" method="POST"
-                      action="/vehicle_management/vehicleApproval"
+                      action="/vehicle_management/otherApproval"
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
 
@@ -28,14 +28,13 @@
                         <table class="table table-bordered">
                             <tr>
 
-                                <th>Transaction Date</th>
-                                <th>Transaction Type</th>
-                                <th>Supplier/Employee</th>
-                                <th>Fleet No.</th>
-                                <th>Reg. No.</th>
-                                <th>Reading before filling</th>
-                                <th>Reading after filling</th>
-                                <th> Litres</th>
+                                <th> Date Taken</th>
+                                <th>Vehicle Fleet No. </th>
+                                <th>Vehicle Reg. No.</th>
+                                <th>Odometer Reading</th>
+                                <th>Hours Reading</th>
+                                <th>Service Station</th>
+                                <th>Litres</th>
                                 <th>Rate Per Litre</th>
                                 <th>Cost</th>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
@@ -51,33 +50,32 @@
                                     <tr style="text-align:center">
 
 
-                                        <td>{{ (!empty( $filling->date)) ?  $filling->date : ''}} </td>
-                                        <td>{{ (!empty( $filling->transaction_type)) ?  $filling->transaction_type : ''}} </td>
+                                        <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
+                                        <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
+                                        <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                         <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
-                                        <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
-                                        <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{ (!empty( $filling->Hoursreading)) ?  $filling->Hoursreading : ''}} </td>
+                                        <td>{{ (!empty( $filling->Staion)) ?  $filling->Staion : ''}} </td>
+                                        <td>{{ (!empty( $filling->litres)) ?  number_format($filling->litres, 2) : ''}} </td>
+                                        <td>{{ (!empty( $filling->cost_per_litre)) ?   'R '.number_format($filling->cost_per_litre, 2) : ''}} </td>
+                                        <td>{{ (!empty( $filling->total_cost)) ? 'R '.number_format($filling->total_cost, 2) : ''}} </td>          
                                         <td style='text-align:center'>
                                             <input type="hidden" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}" value="0">
+                                                   id="vehicleappprove_{{ $filling->fuelLogID }}"
+                                                   name="vehicleappprove_{{ $filling->fuelLogID }}" value="0">
                                             <input type="checkbox" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}"
+                                                   id="vehicleappprove_{{ $filling->fuelLogID }}"
+                                                   name="vehicleappprove_{{ $filling->fuelLogID }}"
                                                    value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
                                         <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
                                                                              id="decline_$aVehicles[id]"
-                                                                             onclick="$('#comment_id_{{$filling->id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
+                                                                             onclick="$('#comment_id_{{$filling->fuelLogID}}').toggle(); uncheckCheckBoxes({{$filling->fuelLogID}}, 0);">
                                         </td>
                                         <td>
                                             {{--  <input type="text" size="30" id="comment_id_{{$filling->id}}" name="declined_{{$filling->id}}" style="display:none">         --}}
-                                            <textarea class="form-control" id="comment_id_{{$filling->id}}"
-                                                      name="declined_{{$filling->id}}"
+                                            <textarea class="form-control" id="comment_id_{{$filling->fuelLogID}}"
+                                                      name="declined_{{$filling->fuelLogID}}"
                                                       placeholder="Enter rejection reason ..." rows="2"
                                                       style="display:none"></textarea>
                                         </td>

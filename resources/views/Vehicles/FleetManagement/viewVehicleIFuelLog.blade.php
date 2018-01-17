@@ -146,7 +146,7 @@
                                     <td>{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
                                      <td>{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td>{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
-                                    <td>{{ !empty($details->hours_reading) ? $details->hours_reading. ' hrs' : ''}}</td>
+                                    <td>{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' hrs' : ''}}</td>
                                     <td></td>
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
