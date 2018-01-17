@@ -55,8 +55,8 @@ class ContactsUploadController extends Controller
     {
 		$uploadData = $request->all();
 		$uploadType = $uploadData['upload_type'];
-		//echo $uploadType;
-		//die;
+		$uploadTypes = [1 => "Company", 2 => 'Company Rep'];
+
 		if ($uploadType == 1)
 		{
 			if($request->hasFile('input_file'))
@@ -132,12 +132,13 @@ class ContactsUploadController extends Controller
         $data['page_title'] = "Contacts Import";
         $data['page_description'] = "Import Contacts Details";
         $data['breadcrumb'] = [
-            ['title' => 'Performance Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Contacts', 'path' => '/import/company', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Contacts', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Import Contacts';
-        ///AuditReportsController::store('Performance Appraisal', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
+        AuditReportsController::store('Contacts', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
+		return back();
     }
 	
     public function create()
