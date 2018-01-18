@@ -270,11 +270,11 @@ class DashboardController extends Controller {
                                select('client_inductions.*','hr_people.first_name as firstname', 'hr_people.surname as surname','contact_companies.name as company_name')
                                ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
                                ->leftJoin('contact_companies', 'client_inductions.company_id', '=' ,'contact_companies.id' )
-                               ->get();
+                               //->where('client_inductions.id', 13)
+							   ->get();
 
-                                $ClientTask = $ClientInduction->load('TasksList');
-
-                            
+            $ClientTask = $ClientInduction->load('TasksList');
+ 			
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
             $data['account'] = $account;
