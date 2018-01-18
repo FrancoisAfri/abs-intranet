@@ -9,15 +9,11 @@
     <div class="row">
 		<!-- terms And Conditions types -->
 		<div class="col-md-12">
-            <div class="box box-primary collapsed-box">
+            <div class="box box-primary">
                 <form class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
                         <h3 class="box-title">Terms and Conditions</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                        </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -31,14 +27,12 @@
 								@foreach($termConditions as $termCondition)
 									<tr>
 										<td style="text-align: center;">
-											<button type="button" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-quotes-term-modal"
-													data-id="{{ $termCondition->id }}"
-													data-term_name="{{ $termCondition->term_name }}">
+											<button type="button" class="btn btn-primary  btn-xs" onclick="postData({{$termCondition->id}}, 'edit');">
 												<i class="fa fa-pencil-square-o"></i> Edit
 											</button>
 										</td>
 										<td>{!!$termCondition->term_name!!}</td>
-										<td style="text-align: center;"> <button type="button" id="act_deact" class="btn {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($termCondition->status) && $termCondition->status == 1) ? "De-Activate" : "Activate"}}</button></td>
+										<td style="text-align: center;"> <button type="button" id="act_deact" onclick="postData({{$termCondition->id}}, 'actdeac');" class="btn {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($termCondition->status) && $termCondition->status == 1) ? "De-Activate" : "Activate"}}</button></td>
 									</tr>
 								@endforeach
 							</table>
@@ -82,6 +76,14 @@
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
+	function postData(id, data)
+		{
+			if (data == 'actdeac')
+				location.href = "/quote/term-actdeact/" + id;
+			else if (data == 'edit')
+				location.href = "/quote/term-edit/" + id;
+			
+		}
         $(function () {
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
@@ -89,6 +91,7 @@
             // Replace the <textarea id="send_quote_message"> with a CKEditor
             // instance, using default configuration.
 			CKEDITOR.replace('term_name');
+			//CKEDITOR.replace();
 
             //Vertically center modals on page
             function reposition() {
@@ -124,15 +127,7 @@
             });
 
             var termConditionID;
-            $('#edit-quotes-term-modal').on('show.bs.modal', function (e) {
-                var btnEdit = $(e.relatedTarget);
-                termConditionID = btnEdit.data('id');
-                var divID = btnEdit.data('division_id');
-                var modal = $(this);
-				var termName = btnEdit.data('term_name');
-                modal.find('#term_name').val(termName);
-            });
-
+            
             //Post perk form to server using ajax (add)
             $('#update-quote-profile').on('click', function() {
                 var strUrl = '/quote/setup/update-quote-profile/' + termConditionID;
