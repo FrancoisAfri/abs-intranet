@@ -23,13 +23,12 @@
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
 
-
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
 
                                 <th> Date Taken</th>
-                                <th>Vehicle Fleet No. </th>
+                                <th>Vehicle Fleet No.</th>
                                 <th>Vehicle Reg. No.</th>
                                 <th>Odometer Reading</th>
                                 <th>Hours Reading</th>
@@ -58,7 +57,7 @@
                                         <td>{{ (!empty( $filling->Staion)) ?  $filling->Staion : ''}} </td>
                                         <td>{{ (!empty( $filling->litres)) ?  number_format($filling->litres, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->cost_per_litre)) ?   'R '.number_format($filling->cost_per_litre, 2) : ''}} </td>
-                                        <td>{{ (!empty( $filling->total_cost)) ? 'R '.number_format($filling->total_cost, 2) : ''}} </td>          
+                                        <td>{{ (!empty( $filling->total_cost)) ? 'R '.number_format($filling->total_cost, 2) : ''}} </td>
                                         <td style='text-align:center'>
                                             <input type="hidden" class="checkbox selectall"
                                                    id="vehicleappprove_{{ $filling->fuelLogID }}"
@@ -195,34 +194,6 @@
                     //Post module form to server using ajax (ADD)
 
                     //save reject reason
-
-
-                    var reasonID;
-                    $('#decline-vehicle-modal').on('show.bs.modal', function (e) {
-                        var btnEdit = $(e.relatedTarget);
-                        if (parseInt(btnEdit.data('id')) > 0) {
-                            reasonID = btnEdit.data('id');
-                        }
-                        console.log('gets here: ' + reasonID);
-                        var description = btnEdit.data('description');
-                        var modal = $(this);
-                        modal.find('#description').val(description);
-                    });
-
-                    $('#rejection-reason').on('click', function () {
-                        var strUrl = '/vehicle_management/reject_vehicle/' + reasonID;
-                        var modalID = 'decline-vehicle-modal';
-                        var objData = {
-                            description: $('#' + modalID).find('#description').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'rejection-reason';
-                        var redirectUrl = '/vehicle_management/vehicle_approval';
-                        var successMsgTitle = 'Reason Added!';
-                        var successMsg = 'The reject reason has been updated successfully.';
-                        var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                    });
 
 
                 });

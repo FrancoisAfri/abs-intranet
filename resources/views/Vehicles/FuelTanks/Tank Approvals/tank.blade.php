@@ -23,7 +23,6 @@
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
 
-
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
@@ -38,14 +37,14 @@
                                 <th> Litres</th>
                                 <th>Rate Per Litre</th>
                                 <th>Cost</th>
-                                
+
                             </tr>
 
                             @if (count($Approvals) > 0)
                                 @foreach ($Approvals as $filling)
                                     <tr style="text-align:center">
 
-                                        <td></td>    
+                                        <td></td>
                                         <td>{{ (!empty( $filling->date)) ?  $filling->date : ''}} </td>
                                         <td>{{ (!empty( $filling->transaction_type)) ?  $filling->transaction_type : ''}} </td>
                                         <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
@@ -56,7 +55,7 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        
+
 
                                     </tr>
                                 @endforeach
@@ -174,32 +173,6 @@
                     //save reject reason
 
 
-                    var reasonID;
-                    $('#decline-vehicle-modal').on('show.bs.modal', function (e) {
-                        var btnEdit = $(e.relatedTarget);
-                        if (parseInt(btnEdit.data('id')) > 0) {
-                            reasonID = btnEdit.data('id');
-                        }
-                        console.log('gets here: ' + reasonID);
-                        var description = btnEdit.data('description');
-                        var modal = $(this);
-                        modal.find('#description').val(description);
-                    });
-
-                    $('#rejection-reason').on('click', function () {
-                        var strUrl = '/vehicle_management/reject_vehicle/' + reasonID;
-                        var modalID = 'decline-vehicle-modal';
-                        var objData = {
-                            description: $('#' + modalID).find('#description').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'rejection-reason';
-                        var redirectUrl = '/vehicle_management/vehicle_approval';
-                        var successMsgTitle = 'Reason Added!';
-                        var successMsg = 'The reject reason has been updated successfully.';
-                        var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                    });
 
 
                 });

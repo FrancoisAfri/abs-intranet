@@ -307,6 +307,7 @@ Route::post('vehicle_management/otherApproval', 'FuelManagementController@otherA
 Route::post('vehicle_management/search', 'FuelManagementController@search');
 Route::post('vehicle_management/tankApproval', 'FuelManagementController@tankApproval');
 Route::post('vehicle_management/other', 'FuelManagementController@other');
+Route::post('vehicle_management/fueltankApproval', 'FuelManagementController@fueltankApproval');
 // Route::patch('vehicle_management/reject_vehicle/{reason}','fleetcardController@rejectReason' );                          
 
 
