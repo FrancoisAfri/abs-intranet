@@ -136,8 +136,8 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Captured By</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="captured_by" name="captured_by" value="{{ $name }}"
-                                   placeholder="{{ $name }}" required readonly="">
+                            <input type="text" class="form-control" id="captured_by" name="captured_by" value=" "
+                                   placeholder=" " required readonly="">
                         </div>
                     </div>
 
