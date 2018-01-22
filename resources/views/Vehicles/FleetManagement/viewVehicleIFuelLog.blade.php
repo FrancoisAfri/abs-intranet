@@ -106,14 +106,13 @@
                     </div>
 
                     <div class="box-changedate">
-                        <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-caret-square-o-left"></i> Previous Month</button>
-                        <button type="button" class="btn btn-default pull-right" id="back_button"><i class="fa fa-caret-square-o-right"></i> Next Month</button>
+                        <button type="button" class="btn btn-default pull-left" id="previous_button"><i class="fa fa-caret-square-o-left"></i> Previous Month</button>
+                        <button type="button" class="btn btn-default pull-right" id="next_button"><i class="fa fa-caret-square-o-right"></i> Next Month</button>
                     </div>
                 
                 
                     <table class="table table-bordered">
                         <tr>
-                            <!-- <th style="width: 10px; text-align: center;"></th> -->
                             <th> Date Taken</th>
                             <th>Transaction Type</th>
                             <th>Filled By</th>
@@ -179,7 +178,7 @@
           
             @include('Vehicles.partials.add_fuelrecord_modal')
            <!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
-           <!--  @include('Vehicles.partials.edit_vehicleFuelRecords_modal') -->
+           <!--  @include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal') -->
 
             @if (count($vehiclefuellog) > 0)
               @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Vehicle Fuel Log? This action cannot be undone.'])

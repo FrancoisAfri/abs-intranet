@@ -8,22 +8,15 @@ use App\Http\Requests;
 use App\Users;
 use App\DivisionLevel;
 use App\vehicle_warranties;
-use App\FleetType;
-use App\Vehicle_managemnt;
-use App\fleet_licence_permit;
-use App\vehicle;
-Use App\job_maintanace;
-use App\HRPerson;
-use App\vehicle_detail;
 use App\vehiclemodel;
-use App\modules;
+use App\Vehicle_managemnt;
 use App\vehicle_maintenance;
 use App\vehiclemake;
 use App\keytracking;
 use App\vehicle_fines;
 use App\safe;
 Use App\reminders;
-use App\vehicle_documets;
+use App\HRPerson;
 use App\images;
 use App\incident_type;
 use App\vehicle_fuel_log;
@@ -1319,7 +1312,45 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         } 
 // 
 
+    public function getLastMonthReadings($iMonth, $iYear)
+    {
+        global $sSelectColumn,$iVehicleID,$aFuelinLitre,$aFTReadings,$nLMTopupLitres;
 
+        $sSQL = "SELECT date_taken, $sSelectColumn AS previous_reading FROM vehicle_fuel
+			WHERE vehicle_id=$iVehicleID 
+			AND FROM_UNIXTIME(date_taken, '%Y')='$iYear'
+			AND FROM_UNIXTIME(date_taken, '%m')<='$iMonth'
+			ORDER BY date_taken DESC LIMIT 1";
+        $aLastMonthReading = database::query($sSQL)->fetchrow();
+        $iLastMonthReading = isset($aLastMonthReading['previous_reading']) ? $aLastMonthReading['previous_reading'] : 0;
+        $iLastMonthReadingDT = isset($aLastMonthReading['date_taken']) ? $aLastMonthReading['date_taken'] : 0;
+
+        //Get previous Full tank reading
+        $sSQL = "SELECT date_taken, $sSelectColumn AS previous_reading FROM vehicle_fuel
+			WHERE vehicle_id=$iVehicleID 
+			AND (transaction_type = 1 OR transaction_type IS NULL)
+			AND FROM_UNIXTIME(date_taken, '%Y')='$iYear'
+			AND FROM_UNIXTIME(date_taken, '%m')<='$iMonth'
+			ORDER BY date_taken DESC LIMIT 1";
+        $aLastMonthFTReading = database::query($sSQL)->fetchrow();
+        $iLastMonthFTReading = isset($aLastMonthFTReading['previous_reading']) ? $aLastMonthFTReading['previous_reading'] : 0;
+        $iLastMonthFTReadingDT = isset($aLastMonthFTReading['date_taken']) ? $aLastMonthFTReading['date_taken'] : 0;
+        //get total top up fuel liters from last month
+        //print('iLastMonthReadingDT: ' . date('Y-m-d', $iLastMonthReadingDT) . ' - iLastMonthFTReadingDT: ' . date('Y-m-d', $iLastMonthFTReadingDT) . '<br>');
+        if ($iLastMonthReadingDT > $iLastMonthFTReadingDT) {
+            $sSQL = "SELECT SUM(litres) AS total_litres FROM vehicle_fuel 
+				WHERE vehicle_id = $iVehicleID 
+				AND date_taken > $iLastMonthFTReadingDT 
+				AND date_taken <= $iLastMonthReadingDT
+				AND transaction_type = 2";
+            //print $sSQL . '<br>';
+            $aLMTopupLitres = database::query($sSQL)->fetchrow();
+            $nLMTopupLitres = isset($aLMTopupLitres['total_litres']) ? $aLMTopupLitres['total_litres'] : 0;
+        }
+
+        array_push($aFuelinLitre,$iLastMonthReading);
+        array_push($aFTReadings,$iLastMonthFTReading);
+    }
 
      public function viewFuelLog(vehicle_maintenance $maintenance)
     {
@@ -1333,8 +1364,12 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
        // return $servicestation;
 
-    
-         $vehicle_fuel_log = vehicle_fuel_log::orderBy('id', 'desc')->get();
+            //
+
+
+        //
+         //$vehicle_fuel_log = vehicle_fuel_log::orderBy('id', 'desc')->get();
+        // return $vehicle_fuel_log;
          $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
         
 
