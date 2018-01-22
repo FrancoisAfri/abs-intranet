@@ -565,7 +565,7 @@ class FuelManagementController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('fuel_tank_topUp', 'fuel_tanks.id', '=', 'fuel_tank_topUp.tank_id')
             ->leftJoin('contact_companies', 'fuel_tank_topUp.supplier_id', '=', 'contact_companies.id')//CONTACT COMPANY
-           // ->where('vehicle_fuel_log.tank_and_other', 1)
+            ->where('vehicle_fuel_log.tank_and_other', 1)
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
             ->get();
 
@@ -620,7 +620,7 @@ class FuelManagementController extends Controller
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
             ->orderBy('vehicle_details.id')
-           // ->where('vehicle_fuel_log.tank_and_other', 2)
+            ->where('vehicle_fuel_log.tank_and_other', 2)
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
             ->get();
 

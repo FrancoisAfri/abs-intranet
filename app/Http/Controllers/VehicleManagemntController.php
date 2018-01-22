@@ -67,7 +67,6 @@ class VehicleManagemntController extends Controller
         ];
 
 
-
         //$data['vehiclemodel'] = $vehiclemodel;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Fleet Management';
@@ -421,7 +420,7 @@ class VehicleManagemntController extends Controller
     public function IncidentType(Request $request)
     {
         $incidentType = incident_type::orderBy('id', 'asc')->get();
-       // return $incidentType;
+        // return $incidentType;
 
         $data['page_title'] = " Manage Incidents Type ";
         $data['page_description'] = "Fleet Types Management";
@@ -556,9 +555,8 @@ class VehicleManagemntController extends Controller
     public function VehicleConfiguration(Request $request)
     {
         $row = vehicle_config::count();
-        if ($row > 0) {
-            $configuration = DB::table('vehicle_configuration')->where("id", 1)->get()->first();
-        } else {
+        //return $row;
+        if ($row == 0) {
             $vehicleconfig = new vehicle_config();
             $vehicleconfig->permit_days = 0;
             $vehicleconfig->currency = 0;
@@ -568,12 +566,12 @@ class VehicleManagemntController extends Controller
             $vehicleconfig->service_overdue_km = 0;
             $vehicleconfig->no_bookings_days = 0;
             $vehicleconfig->no_bookings_km = 0;
+            $vehicleconfig->fuel_auto_approval = 0;
             $vehicleconfig->save();
-        }
+        } elseif($row > 1)
+            $configuration = DB::table('vehicle_configuration')->get()->first();
 
-        $configuration = DB::table('vehicle_configuration')->where("id", 1)->get()->first();
-
-
+        $configuration = DB::table('vehicle_configuration')->get()->first();
         $data['page_title'] = " Vehicle Configuration ";
         $data['page_description'] = "Fleet Types Management";
         $data['breadcrumb'] = [
@@ -584,9 +582,16 @@ class VehicleManagemntController extends Controller
         $data['configuration'] = $configuration;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Setup';
-
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.vehicle_setup')->with($data);
+
+        //}
+
+        //$configuration = DB::table('vehicle_configuration')->where("id", 1)->get()->first();
+        //return $configuration;
+
+
+
     }
 
     public function Configuration(Request $request, vehicle_config $configuration)
@@ -670,24 +675,23 @@ class VehicleManagemntController extends Controller
         return redirect('/vehicle_management/vehice_make');
     }
 
-    public function vehicemodel(vehiclemake $model )
+    public function vehicemodel(vehiclemake $model)
     {
         $modelID = $model->id;
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->where('vehiclemake_id', $modelID)->get();
         $vehiclemodelz = vehiclemake::orderBy('id', 'asc')->where('id', $modelID)->first();
         $vehiclemodels = $vehiclemodelz->name;
-        $vehicleID = $modelID ;
+        $vehicleID = $modelID;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehice_make', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
-        
-        
-        
+
+
         $data['vehicleID'] = $vehicleID;
-        $data['vehiclemodels'] = $vehiclemodels;   
+        $data['vehiclemodels'] = $vehiclemodels;
         $data['vehiclemodel'] = $vehiclemodel;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Setup';
@@ -696,7 +700,7 @@ class VehicleManagemntController extends Controller
         return view('Vehicles.vehicle_model')->with($data);
     }
 
-    public function AddVehicleModel(Request $request ,vehiclemake $vehiclemake )
+    public function AddVehicleModel(Request $request, vehiclemake $vehiclemake)
     {
         $this->validate($request, [
             'name' => 'required',
@@ -706,10 +710,10 @@ class VehicleManagemntController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $vehiclemakeID =  $vehiclemake->id;
+        $vehiclemakeID = $vehiclemake->id;
         $vehiclemodel = new vehiclemodel($SysData);
         $vehiclemodel->status = 1;
-        $vehiclemodel->vehiclemake_id = $vehiclemakeID; 
+        $vehiclemodel->vehiclemake_id = $vehiclemakeID;
         $vehiclemodel->save();
         AuditReportsController::store('Fleet Management', 'Group Admin Page Accessed', "Accessed By User", 0);;
         return response()->json();
@@ -744,9 +748,9 @@ class VehicleManagemntController extends Controller
         return back();
     }
 
-    public function deleteVehiclemodel(Request $request, vehiclemodel $vmodel  )
+    public function deleteVehiclemodel(Request $request, vehiclemodel $vmodel)
     {
-       
+
         $vmodel->delete();
 
         AuditReportsController::store('Vehicle Model', 'Vehicle Model Deleted', "Vehicle Model has been deleted", 0);
