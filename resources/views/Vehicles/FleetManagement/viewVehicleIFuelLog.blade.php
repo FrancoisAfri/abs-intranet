@@ -148,10 +148,15 @@
                                     <td>{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' hrs' : ''}}</td>
                                     <td></td>
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
-                                    <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                    <td style="text-align:center;" colspan="2">
+
+
 
                                 </tr>
                             @endforeach
+                                <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
+                                <   class="caption"><td colspan="6" style="text-align:right">Total</td><td style="text-align: right">$iTotalLitres</td><td style="text-align: right">&nbsp;</td><td style="text-align: right" nowrap>$sCurrency $iTotalCost</td> <td style="text-align: right"><span style="float:right"></span></br><span style="float:right"></span></td><td style="text-align: right">$iAvgKMperLitre</td><td>&nbsp;</td><td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
+
                         @else
                             <tr id="categories-list">
                                 <td colspan="12">
@@ -223,9 +228,14 @@
 
                 }
 
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+                $('#previous_button').click(function () {
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/0';
                 });
+
+                $('#next_button').click(function () {
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/1';
+                });
+
 
 
                 var moduleId;

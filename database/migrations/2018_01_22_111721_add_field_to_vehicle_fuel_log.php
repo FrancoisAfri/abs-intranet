@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTankAndOtherToFuellogtable extends Migration
+class AddFieldToVehicleFuelLog extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,10 @@ class AddTankAndOtherToFuellogtable extends Migration
     public function up()
     {
         Schema::table('vehicle_fuel_log', function (Blueprint $table) {
-            $table->integer('tank_and_other')->nullable();
-            $table->integer('transaction_type')->nullable();
+            $table->smallInteger('status');
+            $table->string('reject_reason')->nullable();
+            $table->bigInteger('reject_timestamp')->nullable();
+            $table->integer('rejector_id')->nullable();
         });
     }
 
@@ -27,9 +29,10 @@ class AddTankAndOtherToFuellogtable extends Migration
     public function down()
     {
         Schema::table('vehicle_fuel_log', function (Blueprint $table) {
-            $table->dropColumn('tank_and_other');
-            $table->dropColumn('transaction_type');
+            $table->string('status')->nullable();
+            $table->string('reject_reason')->nullable();
+            $table->bigInteger('reject_timestamp')->nullable();
+            $table->integer('rejector_id')->nullable();
         });
     }
 }
- 

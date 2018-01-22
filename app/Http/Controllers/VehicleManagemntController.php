@@ -68,7 +68,7 @@ class VehicleManagemntController extends Controller
 
 
 
-        $data['vehiclemodel'] = $vehiclemodel;
+        //$data['vehiclemodel'] = $vehiclemodel;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Setup';

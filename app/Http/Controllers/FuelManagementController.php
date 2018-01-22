@@ -475,23 +475,24 @@ class FuelManagementController extends Controller
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
 
         $Approvals = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Statas', 'fuel_tank_topUp.*', 'contact_companies.name as Supplier', 'vehicle_fuel_log.id as fuelLogID', 'vehicle_details.*', 'hr_people.first_name as firstname',
-                'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName',
+            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Statas', 'fuel_tank_topUp.*', 'contact_companies.name as Supplier', 'vehicle_fuel_log.id as fuelLogID', 'vehicle_details.*'
+                ,'fuel_tanks.*', 'fuel_tanks.tank_name as tankName',
                 'division_level_fives.name as company', 'division_level_fours.name as Department')
             ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
-            ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
-            ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
+           // ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('fuel_tank_topUp', 'fuel_tanks.id', '=', 'fuel_tank_topUp.tank_id')
             ->leftJoin('contact_companies', 'fuel_tank_topUp.supplier_id', '=', 'contact_companies.id')//CONTACT COMPANY
-            ->where('vehicle_fuel_log.tank_and_other', 1)
+            //->where('vehicle_fuel_log.tank_and_other', 1)
 //            ->whereNotIn('vehicle_fuel_log.status', [1, 14])
             ->get();
 
-           $company = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*','vehicle_fuel_log.status as iStatus', 'vehicle_fuel_log.id as fuelLogID', 'vehicle_details.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
+            $company = DB::table('vehicle_fuel_log')
+            ->select('vehicle_fuel_log.*','vehicle_fuel_log.status as iStatus', 'vehicle_fuel_log.id as fuelLogID',
+                'vehicle_details.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname',
+                'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
             ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('hr_people', 'vehicle_fuel_log.captured_by', '=', 'hr_people.id')
@@ -564,7 +565,7 @@ class FuelManagementController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('fuel_tank_topUp', 'fuel_tanks.id', '=', 'fuel_tank_topUp.tank_id')
             ->leftJoin('contact_companies', 'fuel_tank_topUp.supplier_id', '=', 'contact_companies.id')//CONTACT COMPANY
-            ->where('vehicle_fuel_log.tank_and_other', 1)
+           // ->where('vehicle_fuel_log.tank_and_other', 1)
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
             ->get();
 
@@ -610,6 +611,7 @@ class FuelManagementController extends Controller
         $vehicle_maintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
         // return $vehicle_maintenance;
 
+        //$Approval = DB::table('vehicle_fuel_log')->get();
 
         $Approvals = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.id as fuelLogID', 'vehicle_details.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
@@ -617,11 +619,12 @@ class FuelManagementController extends Controller
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
-            //->orderBy('vehicle_details.id')
-            ->where('vehicle_fuel_log.tank_and_other', 2)
+            ->orderBy('vehicle_details.id')
+           // ->where('vehicle_fuel_log.tank_and_other', 2)
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
             ->get();
 
+       // return $Approvals;
 
         //$status =  array(1 => 'Tank', 2 => 'Other'); tank_and_other
 

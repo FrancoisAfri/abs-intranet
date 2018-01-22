@@ -63,8 +63,8 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td>{{ (!empty($booking->reading_before_filling)) ?  $booking->reading_before_filling : ''}}</td>
-                                                <td>{{ (!empty($booking->current_fuel_litres)) ?  $booking->current_fuel_litres : ''}}</td>
-                                                <td>{{ (!empty($booking->litres)) ?  $booking->litres : ''}}</td>
+                                                <td>{{ (!empty($booking->current_fuel_litres)) ?  number_format($booking->current_fuel_litres, 2) : ''}}</td>
+                                                <td>{{ (!empty($booking->litres)) ?  number_format($booking->litres, 2) : ''}}</td>
                                                 <td>{{ (!empty($booking->cost_per_litre)) ?  'R' .number_format($booking->cost_per_litre, 2) : ''}}</td>
                                                 <td>{{ !empty($booking->total_cost) ? 'R' .number_format($booking->total_cost, 2) : '' }}</td>
                                                 <td></td>

@@ -15,7 +15,7 @@ class AddVehicleIDToVehicleCollectImage extends Migration
     {
         Schema::table('vehicle_collect_image', function (Blueprint $table) {
            $table->integer('vehicleID')->nullable()->unsigned()->index();
-          $table->integer('bookingID')->nullable()->unsigned()->index();
+         $table->integer('bookingID')->nullable()->unsigned()->index();
         });
     }
 

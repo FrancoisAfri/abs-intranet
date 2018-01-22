@@ -14,9 +14,9 @@ class AddDateToTopuptank extends Migration
     public function up()
     {
         Schema::table('fuel_tank_topUp', function (Blueprint $table) {
-           // $table->bigInteger('trans_date')->nullable();
-           // $table->double('current_fuel_litres')->nullable();
-			});
+            $table->bigInteger('trans_date')->nullable();
+            $table->double('current_fuel_litres')->nullable();
+        });
     }
 
     /**
@@ -26,9 +26,9 @@ class AddDateToTopuptank extends Migration
      */
     public function down()
     {
-         Schema::table('fuel_tank_topUp', function (Blueprint $table) {
-           // $table->dropColumn('trans_date');
-            //$table->dropColumn('current_fuel_litres');
+        Schema::table('fuel_tank_topUp', function (Blueprint $table) {
+            $table->dropColumn('trans_date');
+           $table->dropColumn('current_fuel_litres');
         });
     }
 }

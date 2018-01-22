@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCReturnAddr2FromCarVoucherTable extends Migration
+class AddBOOKINGSTAToVehicke extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCReturnAddr2FromCarVoucherTable extends Migration
      */
     public function up()
     {
-        Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->smallInteger('c_return_addr2')->nullable();
+        Schema::table('vehicle_details', function (Blueprint $table) {
+            $table->string('booking_status')->unsigned()->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddCReturnAddr2FromCarVoucherTable extends Migration
      */
     public function down()
     {
-        Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->dropColumn('c_return_addr2');
+        Schema::table('vehicle_details', function (Blueprint $table) {
+            $table->dropColumn('booking_status');
         });
     }
 }

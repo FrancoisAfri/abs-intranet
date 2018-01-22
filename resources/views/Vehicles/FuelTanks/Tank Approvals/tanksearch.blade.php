@@ -231,6 +231,7 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
+
             hideFields();
             //Date Range picker
             $('.daterangepicker').daterangepicker({

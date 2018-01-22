@@ -1394,7 +1394,8 @@ public function viewIncidents(vehicle_maintenance $maintenance)
          $status =  array(1 => 'Tank', 2 => 'Other');
          $transType = array(1 => 'Full Tank', 2 => 'Top Up');
 
-
+        $vehiclefuel = DB::table('vehicle_fuel_log')->get();
+       // return $vehiclefuel;
        
             $ID = $maintenance->id;
 
@@ -1408,7 +1409,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
                // ->where('vehicle_fuel_log.status','!=', 1)
                 ->get();
 
-               //return $vehiclefuellog;
+              // return $vehiclefuellog;
 
                 
      
@@ -1426,7 +1427,7 @@ public function viewIncidents(vehicle_maintenance $maintenance)
 
             //1st query the tank 
            
-
+            $data['ID'] = $ID;
             $data['ContactCompany'] = $ContactCompany;
             $data['loggedInEmplID'] = $loggedInEmplID;
             $data['name'] = $name;
@@ -1455,7 +1456,10 @@ public function viewIncidents(vehicle_maintenance $maintenance)
         {
     
             // query the vehicle_configuration  table and bring back the values
+
             $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
+            if(!empty($approvals))
+                $approvals = 0;
             $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
             $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
             $fueltanks = Fueltanks::where('id',$tankID)->orderBy('id', 'desc')->get();
