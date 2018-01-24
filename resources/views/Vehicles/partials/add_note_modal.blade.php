@@ -60,9 +60,11 @@
                             </div>
                         </div>
                     </div>
+					
+					<input type="hidden" id="valueID" name="valueID"
+                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 
-                  
-
+                 
 
                 </div>
                 <div class="modal-footer">

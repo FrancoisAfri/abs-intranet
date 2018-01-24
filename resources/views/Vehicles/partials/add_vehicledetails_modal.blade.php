@@ -318,8 +318,9 @@
                                 <select class="form-control select2" style="width: 100%;" id="financial_institution"
                                         name="financial_institution">
                                     <option value="0">*** Select Financial Institution ***</option>
-                                    @foreach($vehicle as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ (!empty( $vehice->name)) ?  $vehice->name : ''}}</option>
+                                    @foreach($ContactCompany as $owner)
+                                        <option value="{{ $owner->id }}">
+                                            {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -335,7 +336,7 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="company" name="company">
                                     <option value="0">*** Select Company ***</option>
-                                    @foreach($ContactCompany as $owner)
+                                    @foreach($DivisionLevelFive as $owner)
                                         <option value="{{ $owner->id }}">
                                             {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
                                     @endforeach

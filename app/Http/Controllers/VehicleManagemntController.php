@@ -375,6 +375,7 @@ class VehicleManagemntController extends Controller
 
         $fleetdocument = new fleet_documentType($SysData);
         $fleetdocument->status = 1;
+        $fleetdocument->vehicleID = $SysData['valueID'];
         $fleetdocument->save();
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);;
         return response()->json();

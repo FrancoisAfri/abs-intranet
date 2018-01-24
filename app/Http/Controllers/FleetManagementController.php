@@ -58,16 +58,17 @@ class FleetManagementController extends Controller
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
-        //return $vehiclemodel;
-        
+        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
+       // return $DivisionLevelFive;
+
 
         $images = images::orderBy('id', 'asc')->get();
 
-         //check  vehicle_configuration table if new_vehicle_approval is active 
-         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
-         $vehicleConfig = $vehicleConfigs->first();
+        //check  vehicle_configuration table if new_vehicle_approval is active
+        $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = $vehicleConfigs->first();
 
-         //return $vehicleConfig;
+        //return $vehicleConfig;
 
         // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
@@ -82,8 +83,9 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
-        //return $vehiclemaintenance;
+
         $data['vehicleConfig'] = $vehicleConfig;
+        $data['DivisionLevelFive'] = $DivisionLevelFive;
         $data['images'] = $images;
         $data['hrDetails'] = $hrDetails;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
@@ -154,7 +156,7 @@ class FleetManagementController extends Controller
     public function addvehicleDetails(Request $request)
     {
         $this->validate($request, [
-            
+
             'vehicle_type' => 'required',
             // 'name' => 'required',
             // 'description' => 'required',
@@ -165,13 +167,13 @@ class FleetManagementController extends Controller
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
-       
-       
+
+
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
-        $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
-        $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
+        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
+        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
@@ -188,7 +190,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->tracking_umber = $SysData['tracking_umber'];
         $vehicle_maintenance->vehicle_owner = !empty($SysData['vehicle_owner']) ? $SysData['vehicle_owner'] : 0;
         $vehicle_maintenance->financial_institution = !empty($SysData['financial_institution']) ? $SysData['financial_institution'] : 0;
-        $vehicle_maintenance->company =!empty($SysData['company']) ? $SysData['company'] : 0;
+        $vehicle_maintenance->company = !empty($SysData['company']) ? $SysData['company'] : 0;
         $vehicle_maintenance->extras = $SysData['extras'];
         $vehicle_maintenance->property_type = !empty($SysData['property_type']) ? $SysData['property_type'] : 0;
         $vehicle_maintenance->division_level_5 = !empty($SysData['division_level_5']) ? $SysData['division_level_5'] : 0;
@@ -247,8 +249,8 @@ class FleetManagementController extends Controller
 
         $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
-        $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
-        $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
+        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
+        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
@@ -265,7 +267,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->tracking_umber = $SysData['tracking_umber'];
         $vehicle_maintenance->vehicle_owner = !empty($SysData['vehicle_owner']) ? $SysData['vehicle_owner'] : 0;
         $vehicle_maintenance->financial_institution = !empty($SysData['financial_institution']) ? $SysData['financial_institution'] : 0;
-        $vehicle_maintenance->company =!empty($SysData['company']) ? $SysData['company'] : 0;
+        $vehicle_maintenance->company = !empty($SysData['company']) ? $SysData['company'] : 0;
         $vehicle_maintenance->extras = $SysData['extras'];
         $vehicle_maintenance->property_type = !empty($SysData['property_type']) ? $SysData['property_type'] : 0;
         $vehicle_maintenance->division_level_5 = !empty($SysData['division_level_5']) ? $SysData['division_level_5'] : 0;
@@ -315,10 +317,10 @@ class FleetManagementController extends Controller
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
-        $ContactCompany  = ContactCompany::orderBy('id', 'asc')->get();
+        $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake  = vehiclemake::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
@@ -351,15 +353,14 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
-        // return  $vehiclemaintenance;
+          // return  $vehiclemaintenance;
 
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
         $vehiclemaintenances = $vehiclemaintenance->first();
 
-        // $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
-        $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("projects/registration_papers/$registrationPapers") : '';
+        $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("Vehicle/registration_papers/$registrationPapers") : '';
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -395,10 +396,9 @@ class FleetManagementController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        
+
         return view('Vehicles.FleetManagement.viewfleetDetails')->with($data);
     }
- 
 
 
     public function viewImage(vehicle_maintenance $maintenance)
@@ -423,43 +423,43 @@ class FleetManagementController extends Controller
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
- 
-            $ID = $maintenance->id;
 
-            $vehiclemaintenance = vehicle_maintenance::where('id', $ID)->get();
-            if (!empty($vehiclemaintenance))
-                $vehiclemaintenance = $vehiclemaintenance->load('images');
-            //return $vehiclemaintenance;
+        $ID = $maintenance->id;
 
-            //$Category->load('productCategory');
-            $data['page_title'] = " View Fleet Details";
-            $data['page_description'] = "FleetManagement";
-            $data['breadcrumb'] = [
-                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
-            ];
+        $vehiclemaintenance = vehicle_maintenance::where('id', $ID)->get();
+        if (!empty($vehiclemaintenance))
+            $vehiclemaintenance = $vehiclemaintenance->load('images');
+        //return $vehiclemaintenance;
 
-            $data['vehicleTypes'] = $vehicleTypes;
-            $data['vehiclemodeler'] = $vehiclemodeler;
-            $data['vehiclemaker'] = $vehiclemaker;
-            $data['ID'] = $ID;
-            $data['vehicle_image'] = $vehicle_image;
-            $data['vehicle_maintenance'] = $vehicle_maintenance;
-            $data['vehicle'] = $vehicle;
-            $data['Vehicle_types'] = $Vehicle_types;
-            $data['vehiclemodel'] = $vehiclemodel;
-            $data['divisionLevels'] = $divisionLevels;
-            $data['vehicledetail'] = $vehicledetail;
-            $data['vehiclemake'] = $vehiclemake;
-            $data['vehiclemaintenance'] = $vehiclemaintenance;
-            //$data['vehiclemaintenances'] = $vehiclemaintenances;
-            $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Fleet Management';
-            $data['active_rib'] = 'Manage Fleet';
-            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-            //return view('products.products')->with($data);
-            return view('Vehicles.FleetManagement.viewfleetImage')->with($data);
-        } 
+        //$Category->load('productCategory');
+        $data['page_title'] = " View Fleet Details";
+        $data['page_description'] = "FleetManagement";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['vehicleTypes'] = $vehicleTypes;
+        $data['vehiclemodeler'] = $vehiclemodeler;
+        $data['vehiclemaker'] = $vehiclemaker;
+        $data['ID'] = $ID;
+        $data['vehicle_image'] = $vehicle_image;
+        $data['vehicle_maintenance'] = $vehicle_maintenance;
+        $data['vehicle'] = $vehicle;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['vehiclemodel'] = $vehiclemodel;
+        $data['divisionLevels'] = $divisionLevels;
+        $data['vehicledetail'] = $vehicledetail;
+        $data['vehiclemake'] = $vehiclemake;
+        $data['vehiclemaintenance'] = $vehiclemaintenance;
+        //$data['vehiclemaintenances'] = $vehiclemaintenances;
+        $data['maintenance'] = $maintenance;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Manage Fleet';
+        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        //return view('products.products')->with($data);
+        return view('Vehicles.FleetManagement.viewfleetImage')->with($data);
+    }
 
     public function addImages(Request $request)
     {
@@ -474,7 +474,7 @@ class FleetManagementController extends Controller
         $currentDate = time();
 
         $userLogged = Auth::user()->load('person');
-        
+
         $vehicleImages = new images();
 
         //$vehicleImages->vehicle_maintanace = $ID;
@@ -574,49 +574,48 @@ class FleetManagementController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>################# 
 
-        
-            $ID = $maintenance->id;
-            
-            $keytracking = DB::table('keytracking')
-                ->select('keytracking.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'hr_people.manager_id as manager', 'safe.name as safeName')
-                ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
-                ->leftJoin('safe', 'keytracking.safe_name', '=', 'safe.id')
-                ->orderBy('keytracking.id')
-                ->get();
 
-                //return $keytracking;
+        $ID = $maintenance->id;
 
-            $data['page_title'] = " View Fleet Details";
-            $data['page_description'] = "FleetManagement";
-            $data['breadcrumb'] = [
-                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
-            ];
+        $keytracking = DB::table('keytracking')
+            ->select('keytracking.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'hr_people.manager_id as manager', 'safe.name as safeName')
+            ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
+            ->leftJoin('safe', 'keytracking.safe_name', '=', 'safe.id')
+            ->orderBy('keytracking.id')
+            ->where('vehicleID', $ID)
+            ->get();
 
-            $data['name'] = $name;
-            $data['vehicleTypes'] = $vehicleTypes;
-            $data['vehiclemodeler'] = $vehiclemodeler;
-            $data['vehiclemaker'] = $vehiclemaker;
-            $data['IssuedTo'] = $IssuedTo;
-            $data['keyStatus'] = $keyStatus;
-            $data['safe'] = $safe;
-            $data['employees'] = $employees;
-            $data['keytracking'] = $keytracking;
-            $data['vehicle_image'] = $vehicle_image;
-            $data['vehicle_maintenance'] = $vehicle_maintenance;
-            $data['vehicle'] = $vehicle;
-            $data['Vehicle_types'] = $Vehicle_types;
-            $data['vehiclemodel'] = $vehiclemodel;
-            $data['divisionLevels'] = $divisionLevels;
-            $data['vehicledetail'] = $vehicledetail;
-            $data['vehiclemake'] = $vehiclemake;
-            $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Fleet Management';
-            $data['active_rib'] = 'Manage Fleet';
-            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-            //return view('products.products')->with($data);
-            return view('Vehicles.FleetManagement.key_tracking')->with($data);
-        }
+        $data['page_title'] = " View Fleet Details";
+        $data['page_description'] = "FleetManagement";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['name'] = $name;
+        $data['vehicleTypes'] = $vehicleTypes;
+        $data['vehiclemodeler'] = $vehiclemodeler;
+        $data['vehiclemaker'] = $vehiclemaker;
+        $data['IssuedTo'] = $IssuedTo;
+        $data['keyStatus'] = $keyStatus;
+        $data['safe'] = $safe;
+        $data['employees'] = $employees;
+        $data['keytracking'] = $keytracking;
+        $data['vehicle_image'] = $vehicle_image;
+        $data['vehicle_maintenance'] = $vehicle_maintenance;
+        $data['vehicle'] = $vehicle;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['vehiclemodel'] = $vehiclemodel;
+        $data['divisionLevels'] = $divisionLevels;
+        $data['vehicledetail'] = $vehicledetail;
+        $data['vehiclemake'] = $vehiclemake;
+        $data['maintenance'] = $maintenance;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Manage Fleet';
+        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        //return view('products.products')->with($data);
+        return view('Vehicles.FleetManagement.key_tracking')->with($data);
+    }
 
 
     public function vehiclesAct(Request $request, vehicle_maintenance $vehicleDetails)
@@ -659,21 +658,21 @@ class FleetManagementController extends Controller
 
         $keytracking = new keytracking();
         $keytracking->key_number = $SysData['key_number'];
-        $keytracking->key_type = !empty($SysData['key_type']) ? $SysData['key_type'] : 0; 
+        $keytracking->key_type = !empty($SysData['key_type']) ? $SysData['key_type'] : 0;
         $keytracking->key_status = $SysData['key_status'];
         $keytracking->description = $SysData['description'];
         $keytracking->employee = $SysData['key'];
         $keytracking->date_issued = $dates;
-        $keytracking->issued_by = !empty($SysData['issued_by']) ? $SysData['issued_by'] : 0; 
+        $keytracking->issued_by = !empty($SysData['issued_by']) ? $SysData['issued_by'] : 0;
         $keytracking->safe_name = !empty($SysData['safe_name']) ? $SysData['safe_name'] : 0;
-        $keytracking->safe_controller = !empty($SysData['safe_controller']) ? $SysData['safe_controller'] : 0; 
-        $keytracking->issued_to =  !empty($SysData['issued_to']) ? $SysData['issued_to'] : 0; 
+        $keytracking->safe_controller = !empty($SysData['safe_controller']) ? $SysData['safe_controller'] : 0;
+        $keytracking->issued_to = !empty($SysData['issued_to']) ? $SysData['issued_to'] : 0;
         $keytracking->date_lost = $datelost;
         $keytracking->reason_loss = $SysData['reason_loss'];
         $keytracking->vehicle_type = 0;
         $keytracking->vehicle_id = $SysData['valueID'];
         $keytracking->captured_by = $SysData['employee'];
-        $keytracking->safeController = !empty($SysData['safe_controller']) ? $SysData['safe_controller'] :'' ;
+        $keytracking->safeController = !empty($SysData['safe_controller']) ? $SysData['safe_controller'] : '';
         $keytracking->save();
 
         return response()->json();
@@ -735,8 +734,8 @@ class FleetManagementController extends Controller
         $vehicle_image = images::orderBy('id', 'asc')->get();
         $keytracking = keytracking::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
-        $permitlicence = permit_licence::orderBy('id', 'asc')->get();
-
+        $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
+       // return $permitlicence;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
@@ -757,56 +756,56 @@ class FleetManagementController extends Controller
 
         $status = array(1 => 'Active', 2 => 'InActive');
 
-     
-            $ID = $maintenance->id;
-            //return $ID;
 
-            $permits = DB::table('permits_licence')
-                ->select('permits_licence.*', 'contact_companies.name as comp_name', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-                ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
-                ->leftJoin('contact_companies', 'permits_licence.Supplier', '=', 'contact_companies.id')
-                ->orderBy('permits_licence.id')
-                ->get();
+        $ID = $maintenance->id;
+        //return $ID;
 
+        $permits = DB::table('permits_licence')
+            ->select('permits_licence.*', 'contact_companies.name as comp_name', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+            ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
+            ->leftJoin('contact_companies', 'permits_licence.Supplier', '=', 'contact_companies.id')
+            ->orderBy('permits_licence.id' )
+            ->where('vehicleID', $ID)
+            ->get();
 
-            // return $permits;
-
-
-            $data['page_title'] = " View Fleet Details";
-            $data['page_description'] = "FleetManagement";
-            $data['breadcrumb'] = [
-                ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
-            ];
+           // return $permits;
 
 
-            $data['permitlicence'] = $permitlicence;
-            $data['status'] = $status;
-            $data['name'] = $name;
-            $data['vehicleTypes'] = $vehicleTypes;
-            $data['companies'] = $companies;
-            $data['vehiclemodeler'] = $vehiclemodeler;
-            $data['vehiclemaker'] = $vehiclemaker;
-            $data['IssuedTo'] = $IssuedTo;
-            $data['keyStatus'] = $keyStatus;
-            $data['safe'] = $safe;
-            $data['employees'] = $employees;
-            $data['permits'] = $permits;
-            $data['vehicle_image'] = $vehicle_image;
-            $data['vehicle_maintenance'] = $vehicle_maintenance;
-            $data['vehicle'] = $vehicle;
-            $data['Vehicle_types'] = $Vehicle_types;
-            $data['vehiclemodel'] = $vehiclemodel;
-            $data['divisionLevels'] = $divisionLevels;
-            $data['vehicledetail'] = $vehicledetail;
-            $data['vehiclemake'] = $vehiclemake;
-            $data['maintenance'] = $maintenance;
-            $data['active_mod'] = 'Fleet Management';
-            $data['active_rib'] = 'Manage Fleet';
-            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-            //return view('products.products')->with($data);
-            return view('Vehicles.FleetManagement.permits')->with($data);
-        } 
+        $data['page_title'] = " View Fleet Details";
+        $data['page_description'] = "FleetManagement";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+        ];
+
+
+        $data['permitlicence'] = $permitlicence;
+        $data['status'] = $status;
+        $data['name'] = $name;
+        $data['vehicleTypes'] = $vehicleTypes;
+        $data['companies'] = $companies;
+        $data['vehiclemodeler'] = $vehiclemodeler;
+        $data['vehiclemaker'] = $vehiclemaker;
+        $data['IssuedTo'] = $IssuedTo;
+        $data['keyStatus'] = $keyStatus;
+        $data['safe'] = $safe;
+        $data['employees'] = $employees;
+        $data['permits'] = $permits;
+        $data['vehicle_image'] = $vehicle_image;
+        $data['vehicle_maintenance'] = $vehicle_maintenance;
+        $data['vehicle'] = $vehicle;
+        $data['Vehicle_types'] = $Vehicle_types;
+        $data['vehiclemodel'] = $vehiclemodel;
+        $data['divisionLevels'] = $divisionLevels;
+        $data['vehicledetail'] = $vehicledetail;
+        $data['vehiclemake'] = $vehiclemake;
+        $data['maintenance'] = $maintenance;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Manage Fleet';
+        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        //return view('products.products')->with($data);
+        return view('Vehicles.FleetManagement.permits')->with($data);
+    }
 
     public function addPermit(Request $request)
     {
@@ -834,15 +833,15 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
         $permits = new permits_licence();
-
         $permits->permit_licence = $SysData['permit_licence'];
         $permits->Supplier = $SysData['Supplier'];
         $permits->exp_date = $Expdate;
         $permits->date_issued = $dates;
         $permits->status = $SysData['status'];
-        $permits->permits_licence_no =  !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0; 
+        $permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
         $permits->captured_by = $name;
         $permits->date_captured = $currentDate;
+        $permits->vehicleID = $SysData['valueID'];
         $permits->save();
 
         //Upload supporting document
@@ -881,16 +880,18 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
 
-        $permit->permit_licence = $SysData['permit_licence'];
-        $permit->Supplier = 1;
-        $permit->exp_date = $Expdate;
-        $permit->date_issued = $dates;
-        $permit->status = $SysData['status'];
-        $permit->permits_licence_no = '6gljkgk';
-        $permit->captured_by = $name;
+        $permits->permit_licence = $SysData['permit_licence'];
+        $permits->Supplier = $SysData['Supplier'];
+        $permits->exp_date = $Expdate;
+        $permits->date_issued = $dates;
+        $permits->status = $SysData['status'];
+        $permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
+        $permits->captured_by = $name;
+        $permits->date_captured = $currentDate;
+        //$permits->vehicleID = $SysData['valueID'];
         $permit->update();
 
-
+        
         //Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
@@ -929,6 +930,7 @@ class FleetManagementController extends Controller
         $vehicledocumets->date_from = $datefrom;
         $vehicledocumets->exp_date = $Expdate;
         $vehicledocumets->upload_date = $currentDate;
+        $vehicledocumets->vehicleID = $SysData['valueID'];
         $vehicledocumets->save();
 
         //Upload supporting document
@@ -1014,9 +1016,9 @@ class FleetManagementController extends Controller
 
         $notes = new notes();
         $notes->date_captured = $datecaptured;
-        $notes->captured_by =  !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0; 
+        $notes->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
         $notes->notes = $SysData['notes'];
-        $notes->vehicleID = 0;
+        $notes->vehicleID =  $SysData['valueID'];
         $notes->save();
 
         //Upload supporting document
@@ -1054,7 +1056,7 @@ class FleetManagementController extends Controller
 
 
         $note->date_captured = $currentDate;
-        $note->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0; 
+        $note->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
         $note->notes = $SysData['notes'];
         $note->vehicleID = 0;
         $note->update();

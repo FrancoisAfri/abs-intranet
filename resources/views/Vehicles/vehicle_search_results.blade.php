@@ -84,8 +84,8 @@
 
                                             <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
                                             <td>{{ !empty($card->fleet_number) ? $card->fleet_number : ''}}</td>
-                                            <td>{{ !empty($card->vehicle_registration) ? $card->vehicle_registration : ''}}</td>
-                                            <td></td>
+                                            <td>{{ !empty($card->vehicle_registration) ? $card->vehicle_registration : ''}}</td> 
+											<td>{{ !empty($card->chassis_number) ? $card->chassis_number : ''}}</td>         
                                             <td>{{ !empty($card->engine_number) ? $card->engine_number : ''}}</td>
                                             <td>{{ !empty($card->odometer_reading . ' ' . $card->hours_reading ) ? $card->odometer_reading  . ' ' . $card->hours_reading: ''}}</td>
                                             <td>{{ !empty($card->company) ? $card->company : ''}}</td>

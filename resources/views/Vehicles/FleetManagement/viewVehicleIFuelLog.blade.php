@@ -106,13 +106,12 @@
                     </div>
 
                     <div class="box-changedate">
-                        <button type="button" class="btn btn-default pull-left" id="previous_button"><i class="fa fa-caret-square-o-left"></i> Previous Month</button>
-                        <button type="button" class="btn btn-default pull-right" id="next_button"><i class="fa fa-caret-square-o-right"></i> Next Month</button>
+                        <button type="button" class="btn btn-default pull-left" id="previous_button" value="{{$datetaken}}"><i class="fa fa-caret-square-o-left"></i> Previous Month</button>
+                        <button type="button" class="btn btn-default pull-right" id="next_button" value="{{$datetaken}} ><i class="fa fa-caret-square-o-right"></i> Next Month</button>
                     </div>
-                
-                
                     <table class="table table-bordered">
                         <tr>
+
                             <th> Date Taken</th>
                             <th>Transaction Type</th>
                             <th>Filled By</th>
@@ -122,20 +121,15 @@
                             <th>Fuel in Litres</th>
                             <th>Cost per Litres</th>
                             <th>Cost (R)</th>
-                            <th>Hours Reading</th>
-                            <th>Hours Per Litre</th>
+                            <th>Odometer  Reading</th>
+                            <th>Kilometre Per Litre</th>
                             <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($vehiclefuellog) > 0)
                             @foreach ($vehiclefuellog as $details)
                                 <tr id="categories-list">
-                                    {{--  <td nowrap>
-                                        <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-fuelRecords-modal"
-                                                data-id="{{ $details->id }}"><i class="fa fa-pencil-square-o"></i> Edit
-                                        </button>
-                                    </td>  --}}
+
                                     <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
                                     <td>{{ !empty($details->transaction_type) ?  $transType[$details->transaction_type] : ''}}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
@@ -145,17 +139,15 @@
                                     <td>{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
                                      <td>{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td>{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
-                                    <td>{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' hrs' : ''}}</td>
+                                    <td>{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,s' : ''}}</td>
                                     <td></td>
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
-                                    <td style="text-align:center;" colspan="2">
-
-
-
+                                   <!--  <td style="text-align:center;" colspan="2"> -->
+                                    <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                             @endforeach
                                 <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                                <   class="caption"><td colspan="6" style="text-align:right">Total</td><td style="text-align: right">$iTotalLitres</td><td style="text-align: right">&nbsp;</td><td style="text-align: right" nowrap>$sCurrency $iTotalCost</td> <td style="text-align: right"><span style="float:right"></span></br><span style="float:right"></span></td><td style="text-align: right">$iAvgKMperLitre</td><td>&nbsp;</td><td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
+                                <class="caption"><td colspan="6" style="text-align:right">Total</td><td style="text-align: right">{{number_format($iTotalLitres, 2) }}</td><td style="text-align: right">&nbsp;</td><td style="text-align: right" nowrap>{{'R '.number_format($sCurrency, 2)}}</td> <td style="text-align: right"><span style="float:right"></span></br><span style="float:right"></span></td><td style="text-align: right">$iAvgKMperLitre</td><td>&nbsp;</td><td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
 
                         @else
                             <tr id="categories-list">
@@ -229,11 +221,11 @@
                 }
 
                 $('#previous_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/0';
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$datetaken. '_' . 'p'}}';
                 });
 
                 $('#next_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/1';
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$datetaken. '_' . 'n'}}';
                 });
 
 

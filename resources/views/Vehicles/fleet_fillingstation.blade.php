@@ -130,10 +130,10 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'add-filling-station';
                 var redirectUrl = '/vehicle_management/fillingstaion';
-                var successMsgTitle = 'Fleet Type Added!';
-                var successMsg = 'The Fleet Type has been updated successfully.';
+                var successMsgTitle = 'New Fuel Station Added!';
+                var successMsg = 'The Fuel Station has been updated successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });

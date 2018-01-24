@@ -2,6 +2,8 @@
 
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
@@ -58,32 +60,46 @@
                                         </div>
                                     </div>
 
-
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Date From </label>
+                                    <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                                        <label for="days" class="col-sm-2 control-label">Transaction Date</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <input type='text' class="form-control" id='required_from'
-                                                       name="required_from"/>
+                                                <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
+                                                <input type="text" class="form-control daterangepicker" id="action_date"
+                                                       name="action_date" value="" placeholder="Select Action Date...">
+
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Date To </label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type='text' class="form-control" id='required_to'
-                                                       name="required_to"/>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {{--<div class="form-group">--}}
+                                        {{--<label for="path" class="col-sm-2 control-label">Date From </label>--}}
+                                        {{--<div class="col-sm-10">--}}
+                                            {{--<div class="input-group">--}}
+                                                {{--<div class="input-group-addon">--}}
+                                                    {{--<i class="fa fa-calendar"></i>--}}
+                                                {{--</div>--}}
+                                                {{--<input type='text' class="form-control" id='required_from'--}}
+                                                       {{--name="required_from"/>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+
+                                    {{--<div class="form-group">--}}
+                                        {{--<label for="path" class="col-sm-2 control-label">Date To </label>--}}
+                                        {{--<div class="col-sm-10">--}}
+                                            {{--<div class="input-group">--}}
+                                                {{--<div class="input-group-addon">--}}
+                                                    {{--<i class="fa fa-calendar"></i>--}}
+                                                {{--</div>--}}
+                                                {{--<input type='text' class="form-control" id='required_to'--}}
+                                                       {{--name="required_to"/>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
                                     <div class="form-group{{ $errors->has('transaction_type') ? ' has-error' : '' }}">
                                         <label for="transaction_type" class="col-sm-2 control-label"> Transaction Type
@@ -174,7 +190,9 @@
     <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
             type="text/javascript"></script>
     <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-
+    <!-- Date rane picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
@@ -228,6 +246,13 @@
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
             increaseArea: '10%' // optional
+        });
+
+        //Date Range picker
+        $('.daterangepicker').daterangepicker({
+            format: 'DD/MM/YYYY',
+            endDate: '-1d',
+            autoclose: true
         });
 
         //show/hide fields on radio button toggles (depending on registration type)

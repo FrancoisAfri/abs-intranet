@@ -124,7 +124,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-reminder-modal">Upload new Reminder
+                                data-target="#add-reminder-modal">Upload New Reminder
                         </button>
                     </div>
                 </div>
@@ -138,12 +138,7 @@
                 @include('Vehicles.warnings.reminders_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this vehicle model ? This action cannot be undone.'])
             @endif
 
-        </div>
-   <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.upload_newnote_modal')
-        @include('Vehicles.partials.edit_notes_modal')
-          <!-- Include delete warning Modal form-->
-     
+        </div>   
 </div>
 
 

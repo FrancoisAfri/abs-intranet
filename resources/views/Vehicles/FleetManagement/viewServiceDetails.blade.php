@@ -174,7 +174,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-servicedetails-modal">Add new Vehicle Service Log
+                                data-target="#add-servicedetails-modal">Add New Vehicle Service Log
                         </button>
                     </div>
                 </div>

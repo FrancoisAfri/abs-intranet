@@ -263,17 +263,7 @@
 
 
 
-	//Post perk form to server using ajax (add)
-$('#add_notes').on('click', function () {
-	var strUrl = '/vehicle_management/add_new_note';
-	var formName = 'add-note-form';
-	var modalID = 'add-note-modal';
-	var submitBtnID = 'add_notes';
-	var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
-	var successMsgTitle = 'New Note  Added!';
-	var successMsg = 'The Note  has been updated successfully.';
-	modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-});
+
 
 		//Post perk form to server using ajax (add)
 		$('#add_notes').on('click', function () {
