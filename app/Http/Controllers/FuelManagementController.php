@@ -586,8 +586,8 @@ class FuelManagementController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Approvals'] = $Approvals;
-        $data['active_mod'] = 'Vehicle Management';
-        $data['active_rib'] = 'Vehicle Approval';
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Fuel Approvals';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Tank Approvals.search')->with($data);
@@ -751,8 +751,8 @@ class FuelManagementController extends Controller
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
         $data['Approvals'] = $Approvals;
-        $data['active_mod'] = 'Vehicle Management';
-        $data['active_rib'] = 'Vehicle Approval';
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Fuel Approvals';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Tank Approvals.other_approvals')->with($data);

@@ -13,24 +13,20 @@
                 <div class="box-body">
 
 				<table class="table table-bordered">
-					 <tr><th style="width: 10px">#</th>
                      <th>Price</th>
                      <th>Start Date</th>
                      <th>End Date</th>
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($Productprice) > 0)
-						@foreach($Productprice as $jobTitle)
-						 <tr id="jobtitles-list">
-						   <td nowrap>
-                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-new-price-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->name }}" data-description="{{ $jobTitle->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                              
-						  <td>{{ (!empty($jobTitle->price)) ?  $jobTitle->price : ''}} </td>
-                            <td>{{ !empty($jobTitle->start_date) ? date('d M Y - H:m:s', $jobTitle->start_date) : '' }}</td>
-						 <!--  <td>{{ (!empty( $jobTitle->start_date)) ?  $jobTitle->start_date : ''}} </td> -->
-                          <td>{{ (!empty( $jobTitle->end_date)) ?  date('d M Y - H:m:s', $jobTitle->end_date) : ''}} </td>
+						@foreach($Productprice as $product)
+						 <tr id="jobtitles-list"> 
+						  <td>{{ (!empty($product->price)) ?  $product->price : ''}} </td>
+                            <td>{{ !empty($product->start_date) ? date('d M Y - H:m:s', $product->start_date) : '' }}</td>
+						 <!--  <td>{{ (!empty( $product->start_date)) ?  $product->start_date : ''}} </td> -->
+                          <td>{{ (!empty( $product->end_date)) ?  date('d M Y - H:m:s', $product->end_date) : ''}} </td>
 						  <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_job_title" class="btn {{ (!empty($product->status) && $product->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$product->id}}, 'actdeac');"><i class="fa {{ (!empty($product->status) && $product->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($product->status) && $product->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
 						</tr>
 						@endforeach
@@ -69,7 +65,7 @@
 				location.href = "/hr/job_title_active/" + id;
 		}
           $('#back').click(function () {
-                location.href = '/Product/Product/{{ $products->id }}';
+                location.href = '/Product/Product/{{ $products->category_id }}';
             });
         $(function () {
             var jobId;
@@ -114,26 +110,22 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-price_title';
-                var redirectUrl = '/Product/price/add/{{ $products->id }}';
+                var redirectUrl = '/Product/price/{{ $products->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The price has been updated successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-              var Product_ID;
+              var Price_ID;
             $('#edit-product_title-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                Product_ID = btnEdit.data('id');
-                var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
+                Price_ID = btnEdit.data('id');
                 var price = btnEdit.data('price');
                 
                 //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#description').val(description);
                 modal.find('#price').val(price);
 
              });

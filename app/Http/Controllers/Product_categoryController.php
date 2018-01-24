@@ -509,10 +509,13 @@ class Product_categoryController extends Controller
             $query->orderBy('id', 'desc');
             $query->limit(1);
         }]);
-        $previousPrice = $product->productPrices->first();
-        $previousPrice->end_date = $currentDate;
-        $previousPrice->update();
-
+		# check if old price exist
+		$previousPrice = $product->productPrices->first();
+		if (!empty($previousPrice))
+		{
+			$previousPrice->end_date = $currentDate;
+			$previousPrice->update();
+		}
         $product->addNewPrice($price);
 
         AuditReportsController::store('Employee Records', 'Job Title Category Added', "price: $priceData[price]", 0);

@@ -44,7 +44,7 @@
                                         <tr id="categories-list">
                                             <td>
                                                 <a href="{{ '/vehicle_management/viewdetails/' . $card->id }}"
-                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   id="edit_compan"  class="btn btn-default pull-left"
                                                    data-id="{{ $card->id }}">View</a>
 
                                                 <div id="my_div" class="hidden">
