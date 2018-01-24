@@ -58,7 +58,8 @@ class FleetManagementController extends Controller
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
-        //return $vehiclemodel;
+        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
+       // return $DivisionLevelFive;
 
 
         $images = images::orderBy('id', 'asc')->get();
@@ -82,8 +83,9 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
-        //return $vehiclemaintenance;
+
         $data['vehicleConfig'] = $vehicleConfig;
+        $data['DivisionLevelFive'] = $DivisionLevelFive;
         $data['images'] = $images;
         $data['hrDetails'] = $hrDetails;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
@@ -170,8 +172,8 @@ class FleetManagementController extends Controller
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
-        $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
-        $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
+        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
+        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
@@ -247,8 +249,8 @@ class FleetManagementController extends Controller
 
         $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
-        $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
-        $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
+        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
+        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
@@ -351,15 +353,14 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
-        // return  $vehiclemaintenance;
+          // return  $vehiclemaintenance;
 
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
         $vehiclemaintenances = $vehiclemaintenance->first();
 
-        // $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
-        $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("projects/registration_papers/$registrationPapers") : '';
+        $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("Vehicle/registration_papers/$registrationPapers") : '';
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -581,9 +582,8 @@ class FleetManagementController extends Controller
             ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
             ->leftJoin('safe', 'keytracking.safe_name', '=', 'safe.id')
             ->orderBy('keytracking.id')
+            ->where('vehicleID', $ID)
             ->get();
-
-        //return $keytracking;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -734,8 +734,8 @@ class FleetManagementController extends Controller
         $vehicle_image = images::orderBy('id', 'asc')->get();
         $keytracking = keytracking::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
-        $permitlicence = permit_licence::orderBy('id', 'asc')->get();
-
+        $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
+       // return $permitlicence;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
@@ -764,11 +764,11 @@ class FleetManagementController extends Controller
             ->select('permits_licence.*', 'contact_companies.name as comp_name', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
             ->leftJoin('contact_companies', 'permits_licence.Supplier', '=', 'contact_companies.id')
-            ->orderBy('permits_licence.id')
+            ->orderBy('permits_licence.id' )
+            ->where('vehicleID', $ID)
             ->get();
 
-
-        // return $permits;
+           // return $permits;
 
 
         $data['page_title'] = " View Fleet Details";
@@ -833,7 +833,6 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
         $permits = new permits_licence();
-
         $permits->permit_licence = $SysData['permit_licence'];
         $permits->Supplier = $SysData['Supplier'];
         $permits->exp_date = $Expdate;
@@ -842,6 +841,7 @@ class FleetManagementController extends Controller
         $permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
         $permits->captured_by = $name;
         $permits->date_captured = $currentDate;
+        $permits->vehicleID = $SysData['valueID'];
         $permits->save();
 
         //Upload supporting document
@@ -880,16 +880,18 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
 
-        $permit->permit_licence = $SysData['permit_licence'];
-        $permit->Supplier = 1;
-        $permit->exp_date = $Expdate;
-        $permit->date_issued = $dates;
-        $permit->status = $SysData['status'];
-        $permit->permits_licence_no = '6gljkgk';
-        $permit->captured_by = $name;
+        $permits->permit_licence = $SysData['permit_licence'];
+        $permits->Supplier = $SysData['Supplier'];
+        $permits->exp_date = $Expdate;
+        $permits->date_issued = $dates;
+        $permits->status = $SysData['status'];
+        $permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
+        $permits->captured_by = $name;
+        $permits->date_captured = $currentDate;
+        //$permits->vehicleID = $SysData['valueID'];
         $permit->update();
 
-
+        
         //Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
@@ -928,6 +930,7 @@ class FleetManagementController extends Controller
         $vehicledocumets->date_from = $datefrom;
         $vehicledocumets->exp_date = $Expdate;
         $vehicledocumets->upload_date = $currentDate;
+        $vehicledocumets->vehicleID = $SysData['valueID'];
         $vehicledocumets->save();
 
         //Upload supporting document
@@ -1015,7 +1018,7 @@ class FleetManagementController extends Controller
         $notes->date_captured = $datecaptured;
         $notes->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
         $notes->notes = $SysData['notes'];
-        $notes->vehicleID = 0;
+        $notes->vehicleID =  $SysData['valueID'];
         $notes->save();
 
         //Upload supporting document
