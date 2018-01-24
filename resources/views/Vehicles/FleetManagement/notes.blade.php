@@ -131,13 +131,13 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-note-modal">Upload new Notes
+                                data-target="#add-note-modal">Add New Note
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.upload_newnote_modal')
+        @include('Vehicles.partials.add_note_modal')
         @include('Vehicles.partials.edit_notes_modal')
         <!-- Include delete warning Modal form-->
          <!-- Include delete warning Modal form-->

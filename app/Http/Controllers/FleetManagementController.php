@@ -111,14 +111,12 @@ class FleetManagementController extends Controller
 
     public function addvehicle()
     {
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
-
 
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -210,7 +208,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
                 $fileName = $vehicle_maintenance->id . "image." . $fileExt;
-                $request->file('image')->storeAs('image', $fileName);
+                $request->file('image')->storeAs('Vehicle/images', $fileName);
                 //Update file name in the database
                 $vehicle_maintenance->image = $fileName;
                 $vehicle_maintenance->update();
@@ -222,7 +220,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('registration_papers')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('registration_papers')->isValid()) {
                 $fileName = $vehicle_maintenance->id . "_registration_papers." . $fileExt;
-                $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
+                $request->file('registration_papers')->storeAs('Vehicle/registration_papers', $fileName);
                 //Update file name in the table
                 $vehicle_maintenance->registration_papers = $fileName;
                 $vehicle_maintenance->update();
@@ -285,7 +283,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
                 $fileName = $vehicle_maintenance->id . "image." . $fileExt;
-                $request->file('image')->storeAs('image', $fileName);
+                $request->file('image')->storeAs('Vehicle/images', $fileName);
                 //Update file name in the database
                 $vehicle_maintenance->image = $fileName;
                 $vehicle_maintenance->update();
@@ -297,7 +295,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('registration_papers')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('registration_papers')->isValid()) {
                 $fileName = $vehicle_maintenance->id . "_registration_papers." . $fileExt;
-                $request->file('registration_papers')->storeAs('projects/registration_papers', $fileName);
+                $request->file('registration_papers')->storeAs('Vehicle/registration_papers', $fileName);
                 //Update file name in the table
                 $vehicle_maintenance->registration_papers = $fileName;
                 $vehicle_maintenance->update();
@@ -494,7 +492,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
                 $fileName = "image" . time() . '.' . $fileExt;
-                $request->file('image')->storeAs('image', $fileName);
+                $request->file('image')->storeAs('Vehicle/images', $fileName);
                 //Update file name in the database
                 $vehicleImages->image = $fileName;
                 $vehicleImages->update();
@@ -530,7 +528,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
                 $fileName = "image" . time() . '.' . $fileExt;
-                $request->file('image')->storeAs('image', $fileName);
+                $request->file('image')->storeAs('Vehicle/images', $fileName);
                 //Update file name in the database
                 $image->image = $fileName;
                 $image->update();
@@ -852,7 +850,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $permits->id . "_registration_papers." . $fileExt;
-                $request->file('documents')->storeAs('projects/documents', $fileName);
+                $request->file('documents')->storeAs('Vehicle/permits_licence', $fileName);
                 //Update file name in the table
                 $permits->document = $fileName;
                 $permits->update();
@@ -898,7 +896,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $permit->id . "_registration_papers." . $fileExt;
-                $request->file('documents')->storeAs('projects/documents', $fileName);
+                $request->file('documents')->storeAs('Vehicle/permits_licence', $fileName);
                 //Update file name in the table
                 $permit->document = $fileName;
                 $permit->update();
@@ -938,7 +936,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
-                $request->file('documents')->storeAs('documents', $fileName);
+                $request->file('documents')->storeAs('Vehicle/documents', $fileName);
                 //Update file name in the table
                 $vehicledocumets->document = $fileName;
                 $vehicledocumets->update();
@@ -980,7 +978,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
-                $request->file('documents')->storeAs('documents', $fileName);
+                $request->file('documents')->storeAs('Vehicle/documents', $fileName);
                 //Update file name in the table
                 $vehicledocumets->document = $fileName;
                 $vehicledocumets->update();
@@ -1012,12 +1010,9 @@ class FleetManagementController extends Controller
 
         $datecaptured = $SysData['date_captured'] = str_replace('/', '-', $SysData['date_captured']);
         $datecaptured = $SysData['date_captured'] = strtotime($SysData['date_captured']);
-
-
         $currentDate = time();
 
         $notes = new notes();
-        //$notes->captured_by = $datecaptured;
         $notes->date_captured = $datecaptured;
         $notes->captured_by =  !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0; 
         $notes->notes = $SysData['notes'];
@@ -1029,7 +1024,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $notes->id . "_registration_papers." . $fileExt;
-                $request->file('documents')->storeAs('documents', $fileName);
+                $request->file('documents')->storeAs('Vehicle/note_documents', $fileName);
                 //Update file name in the table
                 $notes->documents = $fileName;
                 $notes->update();
@@ -1069,7 +1064,7 @@ class FleetManagementController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $note->id . "_registration_papers." . $fileExt;
-                $request->file('documents')->storeAs('documents', $fileName);
+                $request->file('documents')->storeAs('Vehicle/note_documents', $fileName);
                 //Update file name in the table
                 $note->documents = $fileName;
                 $note->update();

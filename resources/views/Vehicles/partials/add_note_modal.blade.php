@@ -19,7 +19,7 @@
                         <label for="captured_by" class="col-sm-2 control-label">Captured By</label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="captured_by" name="captured_by">
-                                <option value="">*** Select a Role ***</option>
+                                <option value="">*** Select a Capturer ***</option>
                                 @foreach($employees as $employee)
                                     <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
                                 @endforeach
@@ -30,7 +30,7 @@
                         <label for="path" class="col-sm-2 control-label"> Date Captured </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_captured" name="date_captured"
-                                   value="{{ old('date_captured') }}" placeholder="Select  Expiry date ...">
+                                   value="{{ old('date_captured') }}" placeholder="Select  Captured Date ...">
                         </div>
                     </div>
                     

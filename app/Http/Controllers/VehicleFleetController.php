@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Users;
+use App\vehicle;
+use App\vehicle_detail;
 use App\DivisionLevel;
 use App\vehicle_warranties;
 use App\vehiclemodel;
@@ -191,9 +193,7 @@ class VehicleFleetController extends Controller
 
     public function viewnotes(vehicle_maintenance $maintenance)
     {
-
         $ID = $maintenance->id;
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -212,9 +212,9 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         ################## WELL DETAILS ###############
-          $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-          $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
-          $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+		  $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+		  $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+		  $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -230,7 +230,7 @@ class VehicleFleetController extends Controller
 			->leftJoin('hr_people', 'notes.captured_by', '=', 'hr_people.id')
             ->orderBy('notes.id')
 			->get();
-		
+				
             $data['page_title'] = " View Fleet Details";
             $data['page_description'] = "FleetManagement";
             $data['breadcrumb'] = [
