@@ -695,7 +695,9 @@ Route::post('/tasks/add_new_task', 'TaskManagementController@addNewTask');
 Route::post('/task/search_results', 'TaskManagementController@searchResults');
 Route::get('/tasks/task_report', 'TaskManagementController@report');
 Route::post('/task/indtuction_report', 'InductionAdminController@getReport');
+Route::post('/task/normal_report', 'TaskManagementController@getReportNormal');
 Route::post('/task/meeting_report', 'TaskManagementController@getReport');
+Route::post('/task/normal/print', 'TaskManagementController@printNormalReport');
 Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');

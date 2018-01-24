@@ -376,6 +376,7 @@ class InductionAdminController extends Controller
 				$query->where('client_inductions.induction_title', 'ILIKE', "%$inductionTitle%");
 			}
 		})
+		->where('employee_tasks.task_type', '=', 1)
 		->orderBy('employee_tasks.employee_id')
 		->orderBy('employee_tasks.order_no')
 		->get();

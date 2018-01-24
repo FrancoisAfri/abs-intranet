@@ -47,41 +47,39 @@
     </div>
     <!-- /.row -->
     <div class="row">
-	<!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-		<div class="panel box box-primary">
-			<div class="box-body">
-				<table class="table table-striped">
-					<tr>
-						<th>Induction Title</th>
-						<th>Compamy</th>
-						<th>Task Description</th>
-						<th>Person Responsible</th>
-						<th>Status</th>
-						<th>Expected Start Date</th>
-						<th>Actual Start Date</th>
-						<th>Due Date</th>
-						<th>Date Completed</th>
-					</tr>
-					@if(count($employeesTasks) > 0)
-						@foreach($employeesTasks as $employeesTask)
-							<tr>
-								<td>{{ !empty($employeesTask->induction_title) ? $employeesTask->induction_title : '' }}</td>
-								<td>{{ !empty($employeesTask->comp_name) ? $employeesTask->comp_name : '' }}</td>
-								<td style="width:200px;">{{ !empty($employeesTask->description) ? $employeesTask->description : '' }}</td>
-								<td>{{ !empty($employeesTask->firstname) && !empty($employeesTask->surname) ? $employeesTask->firstname.' '.$employeesTask->surname : '' }}</td>
-								<td>{{ (!empty($employeesTask->status)) ?  $taskStatus[$employeesTask->status] : ''}} </td>
-								<td>{{ !empty($employeesTask->start_date) ? date('Y M d', $employeesTask->start_date) : '' }}</td>
-								<td>{{ !empty($employeesTask->date_started) ? date('Y M d', $employeesTask->date_started) : '' }}</td>
-								<td>{{ !empty($employeesTask->due_date) ? date('Y M d', $employeesTask->due_date) : '' }}</td>
-								<td>{{ !empty($employeesTask->date_completed) ? date('Y M d', $employeesTask->date_completed) : '' }}</td>
-								
-							</tr>
-						@endforeach
-					@endif
-				</table>
-			</div>
+		<!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+		<div class="box-body">
+			<table class="table table-striped">
+				<tr>
+					<th>Induction Title</th>
+					<th>Compamy</th>
+					<th>Task Description</th>
+					<th>Person Responsible</th>
+					<th>Status</th>
+					<th>Expected Start Date</th>
+					<th>Actual Start Date</th>
+					<th>Due Date</th>
+					<th>Date Completed</th>
+					<th>Duration</th>
+				</tr>
+				@if(count($employeesTasks) > 0)
+					@foreach($employeesTasks as $employeesTask)
+						<tr>
+							<td>{{ !empty($employeesTask->induction_title) ? $employeesTask->induction_title : '' }}</td>
+							<td>{{ !empty($employeesTask->comp_name) ? $employeesTask->comp_name : '' }}</td>
+							<td style="width:200px;">{{ !empty($employeesTask->description) ? $employeesTask->description : '' }}</td>
+							<td>{{ !empty($employeesTask->firstname) && !empty($employeesTask->surname) ? $employeesTask->firstname.' '.$employeesTask->surname : '' }}</td>
+							<td>{{ (!empty($employeesTask->status)) ?  $taskStatus[$employeesTask->status] : ''}} </td>
+							<td>{{ !empty($employeesTask->start_date) ? date('Y M d', $employeesTask->start_date) : '' }}</td>
+							<td>{{ !empty($employeesTask->date_started) ? date('Y M d', $employeesTask->date_started) : '' }}</td>
+							<td>{{ !empty($employeesTask->due_date) ? date('Y M d', $employeesTask->due_date) : '' }}</td>
+							<td>{{ !empty($employeesTask->date_completed) ? date('Y M d', $employeesTask->date_completed) : '' }}</td>
+							<td>{{ !empty($employeesTask->duration) ? gmdate("H:i:s", $employeesTask->duration) : '' }}</td>
+						</tr>
+					@endforeach
+				@endif
+			</table>
 		</div>
-
     </div>
     <!-- /.row -->
   </section>
