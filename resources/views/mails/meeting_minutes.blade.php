@@ -245,7 +245,7 @@
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    The {{ $company_name }}
+                                                    {{ $company_name }}
                                                 </td>
                                             </tr>
                                         </table>
@@ -255,7 +255,8 @@
                                     <td valign="top" class="footer-cell">
                                         <h4>{{ $company_name }}</h4>
                                         <i></i><br>
-                                        Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>
+                                        Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>.<br>
+										Powered by <a href="http://afrixcel.co.za/" target="_blank">Afrixcel Business Solutions</a>
                                     </td>
                                 </tr>
                             </table>

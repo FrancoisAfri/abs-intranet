@@ -143,14 +143,12 @@
     $(function () {
 		//Initialize Select2 Elements
             $(".select2").select2();
-
-
 		//Date picker
-		$('.job_card_date').datepicker({
-			formminViewMode: 'years',
-            autoclose: true,
-            format: 'yyyy'
-		});
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
 
 		$('#due_time').datetimepicker({
              format: 'HH:mm:ss'

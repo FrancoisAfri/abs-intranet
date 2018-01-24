@@ -18,6 +18,7 @@ use App\keytracking;
 use App\vehicle_fines;
 use App\safe;
 Use App\reminders;
+Use App\tank;
 use App\HRPerson;
 use App\images;
 use App\incident_type;
@@ -121,7 +122,7 @@ class VehicleFleetController extends Controller
 
         $ID = $maintenance->id;
 
-        $vehicle = vehicle::orderBy('id', 'asc')->get();
+        //$vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
@@ -177,7 +178,7 @@ class VehicleFleetController extends Controller
             $data['vehicleDocumets'] = $vehicleDocumets;
             $data['vehicle_image'] = $vehicle_image;
             $data['vehicle_maintenance'] = $vehicle_maintenance;
-            $data['vehicle'] = $vehicle;
+            //$data['vehicle'] = $vehicle;
             $data['Vehicle_types'] = $Vehicle_types;
             $data['vehiclemodel'] = $vehiclemodel;
             $data['divisionLevels'] = $divisionLevels;
