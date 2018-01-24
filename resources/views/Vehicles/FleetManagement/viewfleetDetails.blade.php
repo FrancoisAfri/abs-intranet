@@ -285,6 +285,14 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
 
+                    <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Back</a>
+
+                    <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
+                                class="fa fa-arrow-left"></i> Back
+                    </button>
+
                 </div>
                 @endforeach
             </div>
@@ -324,9 +332,10 @@
 
     <script>
 
-        $('#back_button').click(function () {
-            location.href = '/product/Packages';
+        $('#cancel').click(function () {
+            location.href = '/vehicle_management/manage_fleet';
         });
+//
         $(function () {
             $(".select2").select2();
             $('.hours-field').hide();

@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Action Date</label>
+                            <label for="days" class="col-sm-2 control-label">Transaction Date</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
