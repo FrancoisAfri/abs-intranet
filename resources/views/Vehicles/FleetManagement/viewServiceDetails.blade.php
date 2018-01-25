@@ -126,9 +126,9 @@
                                     <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
                                     <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
                                     <td>{{ !empty($details->invoice_number) ?  $details->invoice_number : '' }}</td>
-                                    <td>R {{ !empty($details->total_cost) ? $details->total_cost : '' }} .00</td>
+                                    <td>{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : '' }}</td>
                                     <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
-                                    <td>R{{ !empty($details->nxt_service_km) ?  $details->nxt_service_km : '' }}.KM</td>
+                                    <td>{{ !empty($details->nxt_service_km) ? 'Km' .number_format($details->total_cost, 2) : '' }}</td>
                                        <td nowrap>
                                         <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>

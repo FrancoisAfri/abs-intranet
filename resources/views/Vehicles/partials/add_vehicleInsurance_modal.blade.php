@@ -16,7 +16,7 @@
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Registration</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="registration" name="registration" value=""
+                            <input type="text" class="form-control" id="registration" name="registration" value="{{!empty($maintenance->vehicle_registration) ? $maintenance->vehicle_registration : ''}}"
                                    placeholder="Enter Contact Person" readonly="">
                         </div>
                     </div>

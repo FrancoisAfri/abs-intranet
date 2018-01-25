@@ -144,7 +144,7 @@
                                         <button type="button" id="cat_module" class="btn btn-primary pull-right"
                                                 data-toggle="modal"
                                                 data-target="#add-vehicledetails-modal"><i
-                                                    class="fa fa-plus-square-o"></i> Add Vehicle
+                                                    class="fa fa-plus-square-o"></i> Add New Vehicle
                                         </button>
                                     </div>
                                 </div>

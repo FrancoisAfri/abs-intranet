@@ -466,9 +466,9 @@ Route::post('vehicle_management/addvehicleincidents', 'VehicleFleetController@ad
 Route::patch('vehicle_management/edit_vehicleincidents/{incident}', 'VehicleFleetController@editvehicleincidents');
 
 Route::get('vehicle_management/insurance/{maintenance}', 'VehicleFleetController@viewInsurance');
-// Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addpolicy');
-// Route::get('vehicle_management/policy_act/{policy}', 'VehicleFleetController@policyAct');
-// Route::patch('vehicle_management/edit_policy/{policy}', 'VehicleFleetController@editpolicy');
+Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addInsurance');
+Route::get('vehicle_management/policy_act/{policy}', 'VehicleFleetController@InsuranceAct');
+Route::patch('vehicle_management/edit_policy/{policy}', 'VehicleFleetController@editInsurance');
 
 //
 Route::get('vehicle_management/warranties/{maintenance}', 'VehicleFleetController@viewWarranties');

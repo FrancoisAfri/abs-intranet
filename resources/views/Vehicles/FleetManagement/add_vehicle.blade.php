@@ -118,7 +118,7 @@
                         </button>
 
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-vehicledetails-modal">Add new Vehicle
+                                data-target="#add-vehicledetails-modal">Add New Vehicle
                         </button>
 
                     </div>

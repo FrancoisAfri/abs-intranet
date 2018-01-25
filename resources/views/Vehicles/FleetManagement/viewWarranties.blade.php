@@ -142,10 +142,8 @@
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
                                     <td>{{ !empty($reminder->exp_date) ? date(' d M Y', $reminder->exp_date) : '' }}</td>
-                                    <td>R{{ !empty($reminder->warranty_amount) ?  $reminder->warranty_amount : '' }}
-                                        .00
-                                    </td>
-                                    <td>{{ !empty($reminder->kilometers) ?  $reminder->kilometers : '' }}</td>
+                                    <td>{{ !empty($reminder->warranty_amount) ?  'R' .number_format($reminder->warranty_amount, 2) : '' }}</td>                                                           
+                                    <td>{{ !empty($reminder->kilometers) ? 'km' .number_format($reminder->kilometers, 2) : '' }}</td>
                                     <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
                                     <td>
                                         <!--   leave here  -->
@@ -178,7 +176,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-warrantie-modal">Add new Warranty
+                                data-target="#add-warrantie-modal">Add New Warranty
                         </button>
                     </div>
                 </div>

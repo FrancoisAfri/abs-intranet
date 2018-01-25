@@ -155,8 +155,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-        //return $ID;
-
 
         $vehicleDocumets = DB::table('vehicle_documets')
             ->select('vehicle_documets.*')
@@ -296,8 +294,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-        //return $ID;
-
 
         $reminders = DB::table('vehicle_reminders')
             ->select('vehicle_reminders.*')
@@ -438,11 +434,8 @@ class VehicleFleetController extends Controller
             ->select('vehicle_generalcosts.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_generalcosts.person_esponsible', '=', 'hr_people.id')
             ->orderBy('vehicle_generalcosts.id')
+            ->where('vehicleID' ,$ID)
             ->get();
-
-
-        //return $vehicleDocumets;
-
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -519,7 +512,6 @@ class VehicleFleetController extends Controller
         $costs->litres = $SysData['litres'];
         $costs->description = $SysData['description'];
         $costs->person_esponsible = $SysData['person_esponsible'];
-        $costs->vehicleID = 0;
         $costs->update();
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
@@ -567,7 +559,9 @@ class VehicleFleetController extends Controller
             ->select('vehicle_warranties.*', 'contact_companies.name as serviceprovider')
             ->leftJoin('contact_companies', 'vehicle_warranties.service_provider', '=', 'contact_companies.id')
             ->orderBy('vehicle_warranties.id')
+            ->where('vehicleID' ,$ID)
             ->get();
+         
 
 
         $data['page_title'] = " View Fleet Details";
@@ -615,6 +609,7 @@ class VehicleFleetController extends Controller
         $Vehiclewarranties->exp_date = $Expdate;
         $Vehiclewarranties->inception_date = $inceptiondate;
         $Vehiclewarranties->status = 1;
+        $Vehiclewarranties->vehicleID = $SysData['valueID'];
         $Vehiclewarranties->save();
 
         //Upload supporting document
@@ -661,10 +656,10 @@ class VehicleFleetController extends Controller
         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
-        $warranties = new vehicle_warranties($SysData);
-        $warranties->exp_date = 0;
-        $warranties->inception_date = 0;
+        $warranties->exp_date = $Expdate;
+        $warranties->inception_date = $inceptiondate;
         $warranties->status = 1;
+        $warranties->vehicleID = $SysData['valueID'];
         $warranties->update();
 
         //Upload supporting document
@@ -716,11 +711,8 @@ class VehicleFleetController extends Controller
             ->select('vehicle_insurance.*', 'contact_companies.name as companyName')
             ->leftJoin('contact_companies', 'vehicle_insurance.service_provider', '=', 'contact_companies.id')
             ->orderBy('vehicle_insurance.id')
+            ->where('vehicleID', $ID)
             ->get();
-
-
-        //return $vehicleinsurance;
-
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -746,7 +738,104 @@ class VehicleFleetController extends Controller
         //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewInsuarance')->with($data);
     }
+    public function addInsurance(Request $request)
+    {
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
 
+        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
+        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+
+
+        $insurance = new vehicle_insurance($SysData);
+        $insurance->inception_date = $inceptiondate;
+        $insurance->vehicleID = $SysData['valueID'];
+        $insurance->status = 1;
+        $insurance->save();
+
+        //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $insurance->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $insurance->document = $fileName;
+                $insurance->update();
+            }
+        }
+
+        //Upload supporting document
+        if ($request->hasFile('documents1')) {
+            $fileExt = $request->file('documents1')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
+                $fileName = $insurance->id . "_documents." . $fileExt;
+                $request->file('documents1')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $insurance->document1 = $fileName;
+                $insurance->update();
+            }
+        }
+
+        return response()->json();
+    }
+
+    
+    public function InsuranceAct(Request $request , vehicle_insurance $policy){
+        if ($policy->status == 1)
+        $stastus = 0;
+    else
+        $stastus = 1;
+
+    $policy->status = $stastus;
+    $policy->update();
+    return back();
+    }
+
+    public function editInsurance(Request $request , vehicle_insurance $policy){
+        $this->validate($request, [
+            // 'issued_to' => 'required_if:key,1',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
+        $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
+
+
+        $insurance = new vehicle_insurance($SysData);
+        $insurance->inception_date = $inceptiondate;
+        $insurance->update();
+
+        //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $insurance->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $insurance->document = $fileName;
+                $insurance->update();
+            }
+        }
+
+        //Upload supporting document
+        if ($request->hasFile('documents1')) {
+            $fileExt = $request->file('documents1')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
+                $fileName = $insurance->id . "_documents." . $fileExt;
+                $request->file('documents1')->storeAs('projects/documents', $fileName);
+                //Update file name in the table
+                $insurance->document1 = $fileName;
+                $insurance->update();
+            }
+        }
+
+        return response()->json();
+    }
 
     public function viewServiceDetails(vehicle_maintenance $maintenance)
     {
@@ -781,10 +870,11 @@ class VehicleFleetController extends Controller
         $vehicleserviceDetails = DB::table('vehicle_serviceDetails')
             ->select('vehicle_serviceDetails.*')
             ->orderBy('vehicle_serviceDetails.id')
+            ->where('vehicleID', $ID)
             ->get();
 
 
-        //return $vehicleinsurance;
+       // return $vehicleserviceDetails;
 
 
         $data['page_title'] = " View Fleet Details";
@@ -830,6 +920,7 @@ class VehicleFleetController extends Controller
         $serviceDetails = new vehicle_serviceDetails($SysData);
         $serviceDetails->date_serviced = $dateserviced;
         $serviceDetails->nxt_service_date = $nxtservicedate;
+        $serviceDetails->vehicleID = $SysData['valueID'];
         $serviceDetails->save();
 
         //Upload supporting document
@@ -879,6 +970,7 @@ class VehicleFleetController extends Controller
         //$details = new vehicle_serviceDetails($SysData);
         $details->date_serviced = $dateserviced;
         $details->nxt_service_date = $nxtservicedate;
+       // $details->vehicleID = $SysData['valueID'];
         $details->update();
 
         //Upload supporting document
@@ -946,6 +1038,7 @@ class VehicleFleetController extends Controller
             ->select('vehicle_fines.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
             ->orderBy('vehicle_fines.id')
+            ->where('vehicleID', $ID)
             ->get();
 
 
@@ -1104,6 +1197,7 @@ class VehicleFleetController extends Controller
         return back();
     }
 
+   
     public function viewIncidents(vehicle_maintenance $maintenance)
     {
         $ID = $maintenance->id;

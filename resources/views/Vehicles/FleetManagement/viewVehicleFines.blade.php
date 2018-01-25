@@ -132,7 +132,7 @@
                                     <td>{{ !empty($details->date_of_fine) ? date(' d M Y', $details->date_of_fine) : '' }}</td>
                                     <td>{{ !empty($details->time_of_fine) ? date(' H:I:S', $details->time_of_fine) : '' }}</td>
                                     <td>{{ (!empty($details->fine_type)) ?  $fineType[$details->fine_type] : ''}}</td>
-                                    <td>R {{ !empty($details->amount) ? $details->amount : '' }} .00</td>
+                                    <td>{{ !empty($details->amount) ? 'R' .number_format($details->amount, 2) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
 
                                        <td nowrap>

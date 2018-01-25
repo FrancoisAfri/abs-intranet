@@ -135,10 +135,10 @@
                                     </td>
                                     <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
-                                    <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : '' }}</td>
+                                    <td>{{ !empty($details->odometer_reading) ? number_format($details->odometer_reading, 2) : '' }}</td>
                                     <td>{{ (!empty($details->incident_type)) ?  $fineType[$details->incident_type] : ''}}</td>
                                     <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
-                                    <td>R {{ !empty($details->Cost) ? $details->Cost : '' }} .00</td>
+                                    <td>{{ !empty($details->Cost) ? 'R' .number_format($details->Cost, 2) : '' }}</td>
                                     <td nowrap>
                                         <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>

@@ -128,8 +128,8 @@
                                     <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
-                                    <td>R{{ !empty($reminder->value_coverd) ?  $reminder->value_coverd : '' }}.00</td>
-                                    <td>{{ !empty($reminder->premium_amount) ?  $reminder->premium_amount : '' }}</td>
+                                    <td>{{ !empty($reminder->value_coverd) ? 'R' .number_format($reminder->value_coverd, 2) : '' }}</td>
+                                    <td>{{ !empty($reminder->premium_amount) ?  'R' .number_format($reminder->premium_amount, 2) : '' }}</td>
                                     <td>
                                         <!--   leave here  -->
                                         <button reminder="button" id="view_ribbons"
@@ -161,7 +161,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-policy-modal">Add new Policy 
+                                data-target="#add-policy-modal">Add New Policy 
                         </button>
                     </div>
                 </div>
