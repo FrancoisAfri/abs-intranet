@@ -34,6 +34,7 @@ use App\ribbons_access;
 use App\service_station;
 use App\Fueltanks;
 use App\vehicle_config;
+use App\ContactPerson;
 use App\vehicle;
 use App\vehicle_detail;
 use Illuminate\Support\Facades\Auth;
@@ -530,6 +531,8 @@ class VehicleFleetController extends Controller
         $ID = $maintenance->id;
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         //return $ContactCompany;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
@@ -567,7 +570,10 @@ class VehicleFleetController extends Controller
             ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-
+         
+        
+        $data['companies'] = $companies;
+        $data['contactPeople'] =$contactPeople;
         $data['ContactCompany'] = $ContactCompany;
         $data['name'] = $name;
         $data['costtype'] = $costtype;
@@ -607,6 +613,8 @@ class VehicleFleetController extends Controller
         $Vehiclewarranties->inception_date = $inceptiondate;
         $Vehiclewarranties->status = 1;
         $Vehiclewarranties->vehicleID = $SysData['valueID'];
+        $Vehiclewarranties->service_provider = $SysData['company_id'];
+        $Vehiclewarranties->contact_person = $SysData['contact_person_id'];
         $Vehiclewarranties->save();
 
         //Upload supporting document
@@ -679,6 +687,8 @@ class VehicleFleetController extends Controller
         $ID = $maintenance->id;
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         //return $ContactCompany;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
@@ -718,6 +728,9 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
+
+        $data['companies'] = $companies;
+        $data['contactPeople'] =$contactPeople;
         $data['ContactCompany'] = $ContactCompany;
         $data['name'] = $name;
         $data['costtype'] = $costtype;
@@ -750,6 +763,8 @@ class VehicleFleetController extends Controller
 
         $insurance = new vehicle_insurance($SysData);
         $insurance->inception_date = $inceptiondate;
+        $insurance->service_provider = $SysData['company_id'];
+        $insurance->contact_person = $SysData['contact_person_id'];
         $insurance->vehicleID = $SysData['valueID'];
         $insurance->status = 1;
         $insurance->save();

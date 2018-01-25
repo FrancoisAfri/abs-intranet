@@ -217,6 +217,10 @@
             <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
             <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+
+              <!-- Ajax dropdown options load -->
+            <script src="/custom_components/js/load_dropdown_options.js"></script>
             <script>
                 function postData(id, data) {
                     if (data == 'actdeac') location.href = "/vehicle_management/warranty_act/" + id;
@@ -237,6 +241,9 @@
                 //Tooltip
 
                 $('[data-toggle="tooltip"]').tooltip();
+
+                //Phone mask
+                $("[data-mask]").inputmask();
 
                 //Vertically center modals on page
                 function reposition() {

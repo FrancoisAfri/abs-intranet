@@ -183,7 +183,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-incidents-modal">Add new Vehicle Incident
+                                data-target="#add-incidents-modal">Add New Vehicle Incident
                         </button>
                     </div>
                 </div>

@@ -20,32 +20,49 @@
                                    placeholder="Enter Contact Person" readonly="">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Service Provider </label>
-                        <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;"
-                                    id="service_provider" name="service_provider">
-                                <option value="0">*** Select Service Provider ***</option>
-                                @foreach($ContactCompany as $company)
-                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                @endforeach
-                            </select>
+
+                    <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'company_id' }}" class="col-sm-2 control-label">Service Provider</label>
+
+                            <div class="col-sm-8">
+                                <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;" onchange="contactCompanyDDOnChange(this)">
+                                    <option value="">*** Please Select a Company ***</option>
+                                    <!-- <option value="0"></option> -->
+                                    @foreach($companies as $company)
+                                        <option value="{{ $company->id }}" {{ ($company->id == old('company_id')) ? 'selected' : '' }}>{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Contact Person</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="contact_person" name="contact_person" value=""
-                                   placeholder="Enter Contact Person" required>
+
+                        <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
+
+                            <div class="col-sm-8">
+                                <select id="contact_person_id" name="contact_person_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">*** Please Select a Company First ***</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                     <div class="form-group">
+                  
+                     <!-- <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Contact Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="contact_number" name="contact_number" value=""
                                    placeholder="Enter Contact Number" required>
                         </div>
                     </div>
+ -->
+                     <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Contact Number</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="contact_number" name="contact_number"
+                                   value="{{ old('contact_number') }}" data-inputmask='"mask": "(999) 999-9999"'
+                                   placeholder="Enter Contact Number" data-mask>
+                        </div>
+
+                    </div>
+
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Contact E-Mail</label>
                         <div class="col-sm-8">
@@ -97,13 +114,13 @@
                             <label for="policy_type" class="col-sm-2 control-label"> Monthly/Annual/Once-off Cost</label>
                              <div class="col-sm-8">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                    id="rdo_package" name="policy_type" value="1"  checked>6 Months  </label>
+                                    id="rdo_package" name="policy_type" value="1"  checked>Monthly   </label>
                                                                                                                                                                                       
                                     <label class="radio-inline"><input type="radio" id="rdo_product"
-                                        name="policy_type" value="2"> 12 Months 
+                                        name="policy_type" value="2"> Annual 
                                             </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_products"
-                                        name="policy_type" value="3"> 24 Months 
+                                        name="policy_type" value="3"> Once-Off 
                                             </label>       
 
                             </div>
