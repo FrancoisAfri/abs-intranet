@@ -124,16 +124,12 @@ class VehicleFleetController extends Controller
     {
 
         $ID = $maintenance->id;
-
-        // $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        // $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
         $vehicle_image = images::orderBy('id', 'asc')->get();
-        $keytracking = keytracking::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
@@ -141,7 +137,6 @@ class VehicleFleetController extends Controller
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -155,7 +150,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-       
 
 
         $vehicleDocumets = DB::table('vehicle_documets')
@@ -181,11 +175,9 @@ class VehicleFleetController extends Controller
         $data['vehicleDocumets'] = $vehicleDocumets;
         $data['vehicle_image'] = $vehicle_image;
         $data['vehicle_maintenance'] = $vehicle_maintenance;
-        // $data['vehicle'] = $vehicle;
         $data['Vehicle_types'] = $Vehicle_types;
         $data['vehiclemodel'] = $vehiclemodel;
         $data['divisionLevels'] = $divisionLevels;
-        // $data['vehicledetail'] = $vehicledetail;
         $data['vehiclemake'] = $vehiclemake;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
@@ -206,8 +198,6 @@ class VehicleFleetController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-        $vehicle_image = images::orderBy('id', 'asc')->get();
-        $keytracking = keytracking::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
@@ -229,7 +219,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-        //return $ID;
         $vehiclenotes = DB::table('notes')
             ->select('notes.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'notes.captured_by', '=', 'hr_people.id')
@@ -253,7 +242,6 @@ class VehicleFleetController extends Controller
         $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['vehiclenotes'] = $vehiclenotes;
-        $data['vehicle_image'] = $vehicle_image;
         $data['vehicle_maintenance'] = $vehicle_maintenance;
         $data['vehicle'] = $vehicle;
         $data['Vehicle_types'] = $Vehicle_types;
@@ -265,21 +253,17 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.notes')->with($data);
     }
 
     public function reminders(vehicle_maintenance $maintenance)
     {
-        $ID = $maintenance->id;
-
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -320,7 +304,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.reminders')->with($data);
     }
 
@@ -331,8 +314,6 @@ class VehicleFleetController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
-        $currentDate = time();
 
         $startdate = $SysData['start_date'] = str_replace('/', '-', $SysData['start_date']);
         $startdate = $SysData['start_date'] = strtotime($SysData['start_date']);
@@ -368,13 +349,13 @@ class VehicleFleetController extends Controller
         $enddate = $SysData['enddate'] = str_replace('/', '-', $SysData['enddate']);
         $enddate = $SysData['enddate'] = strtotime($SysData['enddate']);
 
-        $reminders->name = $SysData['name'];
-        $reminders->description = $SysData['description'];
-        $reminders->start_date = $startdate;
-        $reminders->end_date = $enddate;
-        $reminders->vehicleID = $SysData['valueID'];
-        $reminders->status = 1;
-        $reminders->update();
+        $reminder->name = $SysData['name'];
+        $reminder->description = $SysData['description'];
+        $reminder->start_date = $startdate;
+        $reminder->end_date = $enddate;
+        $reminder->vehicleID = $SysData['valueID'];
+        $reminder->status = 1;
+        $reminder->update();
 
         AuditReportsController::store('Fleet Management', 'Group Admin Page Accessed', "Accessed By User", 0);;
         return response()->json();
@@ -403,15 +384,12 @@ class VehicleFleetController extends Controller
 
     public function viewGeneralCost(vehicle_maintenance $maintenance)
     {
-        $ID = $maintenance->id;
-
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -453,7 +431,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewGeneralcost')->with($data);
     }
 
@@ -464,8 +441,6 @@ class VehicleFleetController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
-        $currentDate = time();
 
         $date = $SysData['date'] = str_replace('/', '-', $SysData['date']);
         $date = $SysData['date'] = strtotime($SysData['date']);
@@ -520,12 +495,11 @@ class VehicleFleetController extends Controller
 
         AuditReportsController::store('Fleet Management', 'document  Deleted', "document has been deleted", 0);
         return back();
-        //return redirect('/vehicle_management/general_cost/$maintenance->id');
+
     }
 
     public function viewWarranties(vehicle_maintenance $maintenance)
     {
-        $ID = $maintenance->id;
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
@@ -552,7 +526,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-
         $vehiclewarranties = DB::table('vehicle_warranties')
             ->select('vehicle_warranties.*', 'contact_companies.name as serviceprovider')
             ->leftJoin('contact_companies', 'vehicle_warranties.service_provider', '=', 'contact_companies.id')
@@ -567,10 +540,10 @@ class VehicleFleetController extends Controller
             ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-         
-        
+
+
         $data['companies'] = $companies;
-        $data['contactPeople'] =$contactPeople;
+        $data['contactPeople'] = $contactPeople;
         $data['ContactCompany'] = $ContactCompany;
         $data['name'] = $name;
         $data['costtype'] = $costtype;
@@ -585,7 +558,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewWarranties')->with($data);
     }
 
@@ -596,8 +568,6 @@ class VehicleFleetController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
-        // $currentDate = time();
 
         $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
         $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
@@ -693,7 +663,6 @@ class VehicleFleetController extends Controller
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -708,8 +677,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-        //return $ID;
-
 
         $vehicleinsurance = DB::table('vehicle_insurance')
             ->select('vehicle_insurance.*', 'contact_companies.name as companyName')
@@ -727,7 +694,7 @@ class VehicleFleetController extends Controller
 
 
         $data['companies'] = $companies;
-        $data['contactPeople'] =$contactPeople;
+        $data['contactPeople'] = $contactPeople;
         $data['ContactCompany'] = $ContactCompany;
         $data['name'] = $name;
         $data['costtype'] = $costtype;
@@ -742,7 +709,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewInsuarance')->with($data);
     }
 
@@ -861,7 +827,6 @@ class VehicleFleetController extends Controller
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -876,9 +841,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-        //return $ID;
-
-
         $vehicleserviceDetails = DB::table('vehicle_serviceDetails')
             ->select('vehicle_serviceDetails.*')
             ->orderBy('vehicle_serviceDetails.id')
@@ -906,7 +868,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewServiceDetails')->with($data);
     }
 
@@ -975,10 +936,8 @@ class VehicleFleetController extends Controller
         $nxtservicedate = $SysData['nxt_service_date'] = str_replace('/', '-', $SysData['nxt_service_date']);
         $nxtservicedate = $SysData['nxt_service_date'] = strtotime($SysData['nxt_service_date']);
 
-        //$details = new vehicle_serviceDetails($SysData);
         $details->date_serviced = $dateserviced;
         $details->nxt_service_date = $nxtservicedate;
-        // $details->vehicleID = $SysData['valueID'];
         $details->update();
 
         //Upload supporting document
@@ -1012,11 +971,8 @@ class VehicleFleetController extends Controller
 
     public function viewFines(vehicle_maintenance $maintenance)
     {
-        $ID = $maintenance->id;
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-        //return $ContactCompany;
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
@@ -1066,7 +1022,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewVehicleFines')->with($data);
     }
 
@@ -1190,8 +1145,6 @@ class VehicleFleetController extends Controller
             }
         }
 
-        return response()->json();
-
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return back();
     }
@@ -1257,7 +1210,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewVehicleIncidents')->with($data);
     }
 
@@ -1371,7 +1323,6 @@ class VehicleFleetController extends Controller
             ->get();
 
 
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1393,8 +1344,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewVehicleIOilLog')->with($data);
     }
 
@@ -1486,7 +1436,7 @@ class VehicleFleetController extends Controller
         $transType = array(1 => 'Full Tank', 2 => 'Top Up');
 
         $vehiclefuel = DB::table('vehicle_fuel_log')->get();
- 
+
         if (!empty($vehicle_fuel_log))
             $vehicle_fuel_log = 0;
         else
@@ -1502,7 +1452,6 @@ class VehicleFleetController extends Controller
         //return   $sCurrency;          
         // ->get();
 
-                
 
 //        $month = date($datetaken ,'%Y');
 //        $month = date($datetaken ,'%Y');
@@ -1562,8 +1511,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
+        AuditReportsController::store('FleetManagement', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
     }
 
@@ -1688,14 +1636,13 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->Hoursreading = $fuelData['hours_reading'];
         $vehiclefuellog->dates = time();
         $vehiclefuellog->save();
+        AuditReportsController::store('Fleet Management', 'add vehiclefuel log', "Accessed by User", 0);
         return response()->json();
 
     }
 
     public function viewBookingLog(vehicle_maintenance $maintenance)
-
     {
-        $ID = $maintenance->id;
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         //return $ContactCompany;
@@ -1745,8 +1692,7 @@ class VehicleFleetController extends Controller
                 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname',
                 'vehicle_collect_documents.document as collectDoc',
-                'vehicle_return_documents.document as returnDoc'
-            )
+                'vehicle_return_documents.document as returnDoc')
             ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
@@ -1754,14 +1700,12 @@ class VehicleFleetController extends Controller
             ->leftJoin('vehicle_collect_documents', 'vehicle_booking.id', '=', 'vehicle_collect_documents.bookingID')
             ->leftJoin('vehicle_return_documents', 'vehicle_booking.id', '=', 'vehicle_return_documents.bookingID')
             ->orderBy('vehicle_booking.id', 'desc')
-            ->where('vehicle_booking.vehicle_id', $ID)
+            ->where('vehicle_booking.vehicle_id', $vehicleID)
             ->get();
 
-        // return $vehiclebookinglog;
 
         $vehiclebooking = $vehiclebookinglog->unique('id');
 
-        //return $vehiclefine
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1790,7 +1734,6 @@ class VehicleFleetController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewBookingLog')->with($data);
     }
 
