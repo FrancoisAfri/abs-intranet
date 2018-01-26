@@ -155,6 +155,8 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
+       
+
 
         $vehicleDocumets = DB::table('vehicle_documets')
             ->select('vehicle_documets.*')
@@ -197,7 +199,6 @@ class VehicleFleetController extends Controller
     {
 
         $ID = $maintenance->id;
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -235,7 +236,6 @@ class VehicleFleetController extends Controller
             ->orderBy('notes.id')
             ->where('vehicleID', $ID)
             ->get();
-
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -426,9 +426,6 @@ class VehicleFleetController extends Controller
 
 
         $ID = $maintenance->id;
-        //return $ID;
-
-
         $generalcost = DB::table('vehicle_generalcosts')
             ->select('vehicle_generalcosts.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_generalcosts.person_esponsible', '=', 'hr_people.id')
@@ -888,10 +885,6 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-
-        // return $vehicleserviceDetails;
-
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1019,6 +1012,7 @@ class VehicleFleetController extends Controller
 
     public function viewFines(vehicle_maintenance $maintenance)
     {
+        $ID = $maintenance->id;
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         //return $ContactCompany;
@@ -1027,6 +1021,7 @@ class VehicleFleetController extends Controller
 
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
+
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -1239,10 +1234,6 @@ class VehicleFleetController extends Controller
             ->orderBy('vehicle_incidents.id')
             ->get();
 
-
-        //return $vehiclefines;
-
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1380,8 +1371,6 @@ class VehicleFleetController extends Controller
             ->get();
 
 
-        //return $vehiclefines;
-
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1497,7 +1486,7 @@ class VehicleFleetController extends Controller
         $transType = array(1 => 'Full Tank', 2 => 'Top Up');
 
         $vehiclefuel = DB::table('vehicle_fuel_log')->get();
-        // return $vehiclefuel;
+ 
         if (!empty($vehicle_fuel_log))
             $vehicle_fuel_log = 0;
         else
@@ -1513,6 +1502,7 @@ class VehicleFleetController extends Controller
         //return   $sCurrency;          
         // ->get();
 
+                
 
 //        $month = date($datetaken ,'%Y');
 //        $month = date($datetaken ,'%Y');

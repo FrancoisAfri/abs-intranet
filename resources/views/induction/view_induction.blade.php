@@ -49,7 +49,7 @@
 						  @if(!empty($task->emp_doc))
 							<td><a class="btn btn-default btn-flat btn-block" href="{{ Storage::disk('local')->url("tasks/$task->emp_doc") }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Click Here</a></td>
                           @else
-                            <td><a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i>N/A</a></td>
+                            <td><a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i>No Document Was Uploaded</a></td>
                           @endif
 						</tr>
 						@endforeach

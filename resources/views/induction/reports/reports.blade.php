@@ -20,7 +20,6 @@
                 <!-- form start -->
                 <form class="form-horizontal" id="report_form" method="POST" action="/induction/reports">
                     {{ csrf_field() }}
-
                     <div class="box-body">
 						<div class="form-group">
                             <label for="company_id" class="col-sm-3 control-label">Client</label>

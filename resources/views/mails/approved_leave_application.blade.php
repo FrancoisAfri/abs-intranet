@@ -221,7 +221,7 @@
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    The {{ $company_name }} online system
+                                                    {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>
@@ -230,7 +230,8 @@
                                 <tr>
                                     <td valign="top" class="footer-cell">
                                         {{ $full_company_name }}.<br>
-                                        Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>
+                                        Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>.<br>
+										Powered by <a href="http://afrixcel.co.za/" target="_blank">Afrixcel Business Solutions</a>
                                     </td>
                                 </tr>
                             </table>
