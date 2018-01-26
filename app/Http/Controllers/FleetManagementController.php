@@ -7,31 +7,21 @@ use App\Http\Requests;
 use App\Users;
 use App\ContactCompany;
 use App\DivisionLevel;
-use App\jobcardMaintance;
 Use App\permits_licence;
-use App\FleetType;
 use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
 use App\vehicle;
-Use App\job_maintanace;
 use App\HRPerson;
 use App\vehicle_detail;
 use App\vehiclemodel;
-use App\modules;
 use App\vehicle_maintenance;
 use App\vehiclemake;
-use App\fleet_documentType;
 use App\keytracking;
 use App\safe;
 use App\vehicle_documets;
 use App\images;
-use App\fleet_fillingstation;
-use App\module_access;
 use App\notes;
 use App\DivisionLevelFive;
-use App\module_ribbons;
-use App\ribbons_access;
-use App\permit_licence;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -47,10 +37,8 @@ class FleetManagementController extends Controller
 
     public function fleetManagent()
     {
-        //$incidentType = incident_type::orderBy('id', 'asc')->get();
 
         $vehicle = vehicle::orderBy('id', 'asc')->get();
-        //return $vehicle;
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
@@ -59,8 +47,6 @@ class FleetManagementController extends Controller
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
-       // return $DivisionLevelFive;
-
 
         $images = images::orderBy('id', 'asc')->get();
 
@@ -880,14 +866,14 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
 
-        $permits->permit_licence = $SysData['permit_licence'];
-        $permits->Supplier = $SysData['Supplier'];
-        $permits->exp_date = $Expdate;
-        $permits->date_issued = $dates;
-        $permits->status = $SysData['status'];
-        $permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
-        $permits->captured_by = $name;
-        $permits->date_captured = $currentDate;
+        $permit->permit_licence = $SysData['permit_licence'];
+        $permit->Supplier = $SysData['Supplier'];
+        $permit->exp_date = $Expdate;
+        $permit->date_issued = $dates;
+        $permit->status = $SysData['status'];
+        $permit->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
+        $permit->captured_by = $name;
+        $permit->date_captured = $currentDate;
         //$permits->vehicleID = $SysData['valueID'];
         $permit->update();
 

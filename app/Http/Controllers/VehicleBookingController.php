@@ -529,7 +529,6 @@ class VehicleBookingController extends Controller
     public function booking_results()
     {
 
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -628,7 +627,7 @@ class VehicleBookingController extends Controller
             ->where('vehicle_booking.status', '!=', 12)// check if the booking is not cancelled
             ->where('vehicle_booking.status', '!=', 14)// check if the booking is not declined
             */
-			->get();
+            ->get();
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -815,7 +814,7 @@ class VehicleBookingController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $collection->id . "_documents." . $fileExt;
-                $request->file('documents')->storeAs('projects/collectiondocuments', $fileName);
+                $request->file('documents')->storeAs('Vehicle/collectiondocuments', $fileName);
                 //Update file name in the table
                 $collection->document = $fileName;
                 $collection->update();
@@ -826,11 +825,11 @@ class VehicleBookingController extends Controller
         return response()->json();
     }
 
-    public function AddcollectionImage( Request $request , vehicle_collect_image $collectionImage)
+    public function AddcollectionImage(Request $request, vehicle_collect_image $collectionImage)
     {
         $this->validate($request, [
-           // 'type' => 'required',
-           'description' => 'required',
+            // 'type' => 'required',
+            'description' => 'required',
             //  'image' => 'required',
         ]);
         $docData = $request->all();
@@ -849,7 +848,7 @@ class VehicleBookingController extends Controller
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
                 $fileName = $collectionImage->id . "image." . $fileExt;
-                $request->file('image')->storeAs('collectionimage', $fileName);
+                $request->file('image')->storeAs('Vehicle/collectionimages', $fileName);
                 //Update file name in the database
                 $collectionImage->image = $fileName;
                 $collectionImage->update();
@@ -895,7 +894,7 @@ class VehicleBookingController extends Controller
         $vehiclecollectimage = vehicle_collect_image::where()->first();
         $vehiclecollectdocuments = vehicle_collect_documents::where()->first();
         #mail to manager
-         Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'],$vehicle_model ));
+        Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'], $vehicle_model));
 
         AuditReportsController::store('Fleet Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
         return redirect()->to('/vehicle_management/collect/' . $ID);
@@ -980,7 +979,7 @@ class VehicleBookingController extends Controller
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
                 $fileName = $returnVehicle->id . "_documents." . $fileExt;
-                $request->file('documents')->storeAs('projects/returndocuments', $fileName);
+                $request->file('documents')->storeAs('Vehicle/returndocuments', $fileName);
                 //Update file name in the table
                 $returnVehicle->document = $fileName;
                 $returnVehicle->update();
@@ -991,7 +990,7 @@ class VehicleBookingController extends Controller
         return response()->json();
     }
 
-    public function AddreturnImage(Request $request , vehicle_return_images  $returnImage )
+    public function AddreturnImage(Request $request, vehicle_return_images $returnImage)
     {
         $this->validate($request, [
 //            'type' => 'required',
@@ -1014,7 +1013,7 @@ class VehicleBookingController extends Controller
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
                 $fileName = $returnImage->id . "image." . $fileExt;
-                $request->file('image')->storeAs('vehiclereturnImage', $fileName);
+                $request->file('image')->storeAs('Vehicle/returnImages', $fileName);
                 //Update file name in the database
                 $returnImage->image = $fileName;
                 $returnImage->update();
@@ -1058,14 +1057,8 @@ class VehicleBookingController extends Controller
     {
 
         $ID = $ispection->id;
-     
-
         $vehicleID = $ispection->vehicle_id;
-
-
-      
-
-        $vehicle = vehicle_maintenance::where('id', $ID )->get()->first();
+        $vehicle = vehicle_maintenance::where('id', $ID)->get()->first();
 
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
@@ -1079,15 +1072,15 @@ class VehicleBookingController extends Controller
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         #vehicle collect documents
-        $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $ID )->get()->first();
-         #vehicle collect images
+        $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID', $ID)->get()->first();
+        #vehicle collect images
         $vehiclecollectimage = vehicle_collect_image::where('vehicleID', $ID)->get();
         //return $vehiclecollectimage;
         #vehicle return documents
         $vehiclereturndocuments = vehicle_return_documents::where('vehicleID', $ID)->get()->first();
         #vehicle return documents
         $vehiclereturnimages = vehicle_return_images::where('vehicleID', $ID)->get();
-       //return  $vehiclereturnimages;
+        //return  $vehiclereturnimages;
 
         $currentDate = time();
         ################## WELL DETAILS ###############
@@ -1107,40 +1100,6 @@ class VehicleBookingController extends Controller
         $transType = array(1 => 'Full Tank', 2 => 'Top Up');
 
 
-        //  $vehicleID = $maintenance->id;
-
-        // $bookingStatus = array(2 => "Pending Capturer Manager Approval",
-        //  1 => "Pending Driver Manager Approval",
-        //  3 => "Pending HOD Approval",
-        //  4 => "Pending Admin Approval",
-        //  10 => "Approved",
-        //  11 => "Collected",
-        //  12 => "Returned",
-        //  13 => "Cancelled",
-        //  14 => "Rejected");
-
-        //  $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
-
-        //   $vehiclebookinglog = DB::table('vehicle_booking')
-        //  ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
-        //      'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
-        //      'hr_people.first_name as firstname', 'hr_people.surname as surname',
-        //      'vehicle_collect_documents.document as collectDoc' ,'vehicle_return_documents.document as returnDoc'
-        //  )
-        //  ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
-        //  ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
-        //  ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
-        //  ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
-        //  ->leftJoin('vehicle_collect_documents' ,'vehicle_booking.id' , '=' , 'vehicle_collect_documents.bookingID' )
-        //  ->leftJoin('vehicle_return_documents' ,'vehicle_booking.id' , '=' , 'vehicle_return_documents.bookingID' )
-        //  ->orderBy('vehicle_booking.id', 'desc')
-        //  ->where('vehicle_booking.vehicle_id', $ID)
-        //  ->get();
-
-        //return $vehiclebookinglog;
-
-
-        //return $vehiclefine
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1167,12 +1126,10 @@ class VehicleBookingController extends Controller
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
-        // $data['vehiclebookinglog'] = $vehiclebookinglog;
         $data['ispection'] = $ispection;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.ViewispectionDocs')->with($data);
 
     }

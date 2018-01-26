@@ -77,7 +77,7 @@
                                             </td>
                                             <td>
                                                 <div class="product-img">
-                                                    <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("image/$card->image") : 'http://placehold.it/60x50' }}"
+                                                    <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("Vehicle/images/$card->image") : 'http://placehold.it/60x50' }}"
                                                          alt="Product Image" width="50" height="50">
                                                 </div>
                                             </td>

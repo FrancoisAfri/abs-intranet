@@ -586,12 +586,6 @@ class VehicleManagemntController extends Controller
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.vehicle_setup')->with($data);
 
-        //}
-
-        //$configuration = DB::table('vehicle_configuration')->where("id", 1)->get()->first();
-        //return $configuration;
-
-
 
     }
 
