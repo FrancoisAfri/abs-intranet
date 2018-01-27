@@ -786,11 +786,6 @@ class VehicleManagemntController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-//            ->where(function ($query) use ($propertyID) {
-//                if (!empty($propertyID)) {
-//                    $query->where('vehicle_details.property_type', $propertyID);
-//                }
-//            })
             ->where(function ($query) use ($vehicleID) {
                 if (!empty($vehicleID)) {
                     $query->where('vehicle_details.vehicle_type', $vehicleID);
@@ -806,7 +801,7 @@ class VehicleManagemntController extends Controller
                     $query->where('vehicle_details.vehicle_registration', $registration_number);
                 }
             })
-            ->orderBy('vehicle_details.id')
+            ->orderBy('vehicle_details.id', 'desc')
             ->get();
 
         //return $vehiclemaintenance;

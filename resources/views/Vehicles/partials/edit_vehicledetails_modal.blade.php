@@ -8,7 +8,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Edit Vehicle Model</h4>
+                        <h4 class="modal-title">Edit Vehicle Details</h4>
                     </div>
                     <div class="modal-body">
                         <div id="invalid-input-alert"></div>
@@ -280,7 +280,7 @@
                                      <i class="fa fa-user-circle-o"></i>
                                  </div>
                                  <select id="vehicle_owner" name="vehicle_owner" class="form-control "  style="width: 100%;">
-                                    <option selected="selected" value=" " >*** Select a Vehicle Type  ***</option>
+                                    <option selected="selected" value=" " >*** Select a Vehicle Owner  ***</option>
                                     @foreach($DivisionLevelFive as $owner)
                                     <option value="{{ $owner->id }}" {{ ($vehiclemaintenance->vehicle_owner == $owner->id) ? ' selected' : '' }} >{{ $owner->name }}</option>
                                     @endforeach

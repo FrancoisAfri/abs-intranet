@@ -298,7 +298,7 @@ class Product_categoryController extends Controller
         $cat->description = $request->input('description');
         $cat->status = 1;
         $cat->save();
-        AuditReportsController::store('List Categories', 'List Categories Added', 'Actioned By User', 0);
+        AuditReportsController::store('Products', 'Category Added', 'Actioned By User', 0);
         return response()->json();
     }
 
@@ -312,7 +312,7 @@ class Product_categoryController extends Controller
         $Category->name = $request->input('name');
         $Category->description = $request->input('description');
         $Category->update();
-        AuditReportsController::store('Employee Records', 'Category Informations Edited', 'Edited by User', 0);
+        AuditReportsController::store('Products', 'Category Informations Edited', 'Edited by User', 0);
         return response()->json(['new_name' => $Category->name, 'new_description' => $Category->description], 200);
     }
 
@@ -326,6 +326,7 @@ class Product_categoryController extends Controller
 
         $Category->status = $stastus;
         $Category->update();
+		AuditReportsController::store('Products', 'Category status changed', 'Edited by User', 0);
         return back();
     }
 
@@ -344,7 +345,6 @@ class Product_categoryController extends Controller
 
         $documentType->status = 1;
         $documentType->category_id = $products->id;
-        // $products->addProducttype($producttype);
 
         $documentType->name = $docData['name'];
         $documentType->description = $docData['description'];
@@ -354,7 +354,7 @@ class Product_categoryController extends Controller
         $newName = $docData['name'];
         $newDescription = $docData['description'];
         $newPrice = $docData['price'];
-        AuditReportsController::store('Document Type', 'Document Type saved ', 'Edited by User', 0);
+        AuditReportsController::store('Products', 'product created', 'Edited by User', 0);
         return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice], 200);
     }
 
@@ -363,27 +363,18 @@ class Product_categoryController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
-            'price' => 'required',
+			'price' => 'required',
         ]);
 
-        $docData = $request->all();
-        unset($docData['_token']);
-
-        $documentType = new product_products($docData);
-
-        $documentType->status = 1;
-        $documentType->category_id = $products->id;
-        // $products->addProducttype($producttype);
-
-        $documentType->name = $docData['name'];
-        $documentType->description = $docData['description'];
-        $documentType->price = $docData['price'];
-        $documentType->update();
-        //
-        $newName = $docData['name'];
-        $newDescription = $docData['description'];
-        $newPrice = $docData['price'];
-        AuditReportsController::store('Document Type', 'Document Type saved ', 'Edited by User', 0);
+		$product->name = $request->input('name');
+        $product->description = $request->input('description');
+        $product->price = $request->input('price');
+        $product->update();
+	
+        $newName = $request->input('name');
+        $newDescription = $request->input('description');
+        $newPrice = $request->input('price');
+        AuditReportsController::store('Products', 'Product Edited', 'Edited by User', 0);
         return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice], 200);
     }
 

@@ -8,7 +8,7 @@
                <div class="modal-header">
                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add New Products Type</h4>
+                    <h4 class="modal-title">Add New Product</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -18,14 +18,14 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Name</label>
                              <div class="col-sm-8">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Product Name Type">
+                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Product Name">
                         </div>
                     </div>
 					
 					<div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Description</label>
                              <div class="col-sm-8">
-                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Product Description Type">
+                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Product Description">
                         </div>
                     </div>
 					<div class="form-group">

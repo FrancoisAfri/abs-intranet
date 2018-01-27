@@ -289,8 +289,9 @@
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_owner"
                                         name="vehicle_owner">
                                     <option value="0">*** Select Vehicle Owner ***</option>
-                                    @foreach($ContactCompany as $owner)
-                                        <option value="{{ $owner->id }}">{{ $owner->name }}</option>
+									@foreach($DivisionLevelFive as $owner)
+                                        <option value="{{ $owner->id }}">
+                                            {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
                                     @endforeach
                                 </select>
                             </div>

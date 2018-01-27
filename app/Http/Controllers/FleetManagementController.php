@@ -37,7 +37,6 @@ class FleetManagementController extends Controller
 
     public function fleetManagent()
     {
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -298,8 +297,6 @@ class FleetManagementController extends Controller
     {
 
         $ID = $maintenance->id;
-
-
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
@@ -327,20 +324,17 @@ class FleetManagementController extends Controller
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehiclemake',
                 'vehicle_model.name as vehiclemodel', 'vehicle_managemnet.name as vehicletype', 'division_level_fives.name as company', 'division_level_fours.name as Department', 'hr_people.first_name as first_name', 'hr_people.surname as surname'
-                , 'contact_companies.name as Vehicle_Owner ')
+                , 'dlf.name as Vehicle_Owner ')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('hr_people', 'vehicle_details.responsible_for_maintenance', '=', 'hr_people.id')
-            ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
+            ->leftJoin('division_level_fives as dlf', 'vehicle_details.vehicle_owner', '=', 'division_level_fives.id')
             ->where('vehicle_details.id', $ID)
             ->orderBy('vehicle_details.id')
             ->get();
-
-          // return  $vehiclemaintenance;
-
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
