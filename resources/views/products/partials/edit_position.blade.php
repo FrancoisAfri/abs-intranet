@@ -26,8 +26,8 @@
                         </div>
                     </div>
 					<div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Product Price</label>
-                             <div class="col-sm-8">
+                        <label for="path" class="col-sm-3 control-label">Product Price</label>
+                             <div class="col-sm-9">
 								<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
                         </div>
                     </div>
