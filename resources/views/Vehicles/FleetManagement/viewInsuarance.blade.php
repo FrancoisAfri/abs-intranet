@@ -79,7 +79,7 @@
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
                          <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines 
+                            <i class="fa fa-list-alt"></i> Fines
                         </a>
                          <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-area-chart"></i> Service Details
@@ -113,36 +113,24 @@
                                     <td nowrap>
                                         <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-policy-modal"
-                                                data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}" 
+                                                data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}"
                                                 data-description="{{ $reminder->description }}"  data-service_provider="{{ $reminder->service_provider }}"
                                                 data-contact_person="{{ $reminder->contact_person }}"  data-contact_number="{{ $reminder->contact_number }}"
                                                 data-contact_email="{{ $reminder->contact_email }}"  data-address="{{ $reminder->address }}"   data-inceptiondate ="{{ date(' d M Y', $reminder->inception_date)}}"
                                                 data-policy_no="{{ $reminder->policy_no }}"  data-premium_amount="{{ $reminder->premium_amount }}"  data-value_coverd="{{ $reminder->value_coverd }}"
-                                                data-type="{{ $reminder->type }}" data-notes="{{ $reminder->notes }}"
+                                                 data-type="{{ $reminder->type }}" data-notes="{{ $reminder->notes }}"
                                                 data-document="{{ $reminder->document }}"
                                                ><i class="fa fa-pencil-square-o"></i> Edit
-                                                   
+
                                         </button>
                                     </td>
-                                    
+
                                     <td>{{ !empty($reminder->companyName) ? $reminder->companyName : '' }}</td>
                                     <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
                                     <td>{{ !empty($reminder->value_coverd) ? 'R' .number_format($reminder->value_coverd, 2) : '' }}</td>
                                     <td>{{ !empty($reminder->premium_amount) ?  'R' .number_format($reminder->premium_amount, 2) : '' }}</td>
-                                    <td nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($reminder->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Vehicle/Insurance/$reminder->document") }}"
-                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
                                     <td>
                                         <!--   leave here  -->
                                         <button reminder="button" id="view_ribbons"
@@ -174,7 +162,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-policy-modal">Add New Policy 
+                                data-target="#add-policy-modal">Add New Policy
                         </button>
                     </div>
                 </div>
@@ -290,7 +278,36 @@
 
                 });
 
-               
+                function clone(id, file_index, child_id) {
+                    var clone = document.getElementById(id).cloneNode(true);
+                    clone.setAttribute("id", file_index);
+                    clone.setAttribute("name", file_index);
+                    clone.style.display = "table-row";
+                    clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+                    clone.querySelector('#' + child_id).disabled = false;
+                    clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+                    return clone;
+                }
+                function addFile() {
+                    var table = document.getElementById("tab_tab");
+                    var file_index = document.getElementById("file_index");
+                    file_index.value = ++file_index.value;
+                    var file_clone = clone("file_row", file_index.value, "loan_file");
+                    var name_clone = clone("name_row", file_index.value, "name");
+                    var final_row = document.getElementById("final_row").cloneNode(false)
+                    console.log(file_clone);
+                    table.appendChild(file_clone);
+                    table.appendChild(name_clone);
+                    table.appendChild(final_row);
+                    var total_files = document.getElementById("total_files");
+                    total_files.value = ++total_files.value;
+                    //change the following using jquery if necessary
+                    var remove = document.getElementsByName("remove");
+                    for (var i = 0; i < remove.length; i++)
+                        remove[i].style.display = "inline";
+                }
+
+
                 //Post perk form to server using ajax (add)
                 $('#add_policy').on('click', function () {
                     var strUrl = '/vehicle_management/addpolicy';
@@ -308,9 +325,9 @@
                 $('#edit-policy-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
                     if (parseInt(btnEdit.data('id')) > 0) {
-                        policyID = btnEdit.data('id');  
+                        policyID = btnEdit.data('id');
                      }
-                     
+
                     var service_provider = btnEdit.data('service_provider');
                     var contact_person = btnEdit.data('contact_person');
                     var contact_number = btnEdit.data('contact_number');
