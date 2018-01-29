@@ -275,7 +275,9 @@ Route::post('help_desk/ticket/add', 'HelpdeskController@addTicket');
 Route::post('help_desk/ticket/client', 'HelpdeskController@clientlTicket');
 
 //   ----------------- Help Desk Settings ------------------   //
+Route::post('help_desk/setup/{setup}', 'HelpdeskController@setup');
 Route::post('help_desk/setup', 'HelpdeskController@setup');
+Route::post('help_desk/notify_managers/{service}', 'HelpdeskController@notify_managers');
 Route::post('help_desk/notify_managers', 'HelpdeskController@notify_managers');
 Route::post('help_desk/auto_escalations', 'HelpdeskController@auto_escalations');
 Route::post('help_desk/unresolved_tickets', 'HelpdeskController@unresolved_tickets');

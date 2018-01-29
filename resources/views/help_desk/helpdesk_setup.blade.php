@@ -15,8 +15,9 @@
                      <h3 class="box-title">Help Desk Set up </h3>
                 </div>
                 <!-- <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data"> -->
-                  <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/setup">
-                    {{ csrf_field() }}
+                  <form class="form-horizontal" id="report_form" method="POST" action="{{ !empty($helpdeskSetup->id) ? '/help_desk/setup/'.$helpdeskSetup->id : '/help_desk/setup'}}">
+                   <input type="hidden" name="helpdesk_id" id="helpdesk_id" value="{{ $serviceID }}"/>
+				   {{ csrf_field() }}
 
                     <div class="box-body">
                         @if (count($errors) > 0)
@@ -85,9 +86,9 @@
                                     </div>
                                     <select name="maximum_priority" class="form-control">
                                         <option value="">*** Select Your Priority ***</option>
-                                        <option value="1" >Low</option>
-                                        <option value="2" >Medium</option>
-                                        <option value="3" >High</option>
+                                        <option value="1"{{ (isset($helpdeskSetup) && $helpdeskSetup->maximum_priority === 1) ? ' selected' : '' }} >Low</option>
+                                        <option value="2" {{ (isset($helpdeskSetup) && $helpdeskSetup->maximum_priority === 2) ? ' selected' : '' }}>Medium</option>
+                                        <option value="3" {{ (isset($helpdeskSetup) && $helpdeskSetup->maximum_priority === 3) ? ' selected' : '' }}>High</option>
                                     </select>
                                 </div>
                             </div>
@@ -112,7 +113,7 @@
                     <i class="fa fa-anchor pull-right"></i>
                   <h3 class="box-title">Notifications Settings</h3>
                 </div>
-                    <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/notify_managers">
+                    <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($helpdeskSetup->id) ? '/help_desk/notify_managers/'.$helpdeskSetup->id : '/help_desk/notify_managers'}}">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -137,7 +138,7 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-clock-o"></i>
                                                 </div>
-                                                <input type="text" class="form-control" id="time_from" name="time_from" value="{{ old('time_from') }}" placeholder="Select Start time...">
+                                                <input type="text" class="form-control" id="time_from" name="time_from" value="{{ !empty($helpdeskSetup->time_from) ? date('H:i:s', $helpdeskSetup->time_from) : old('time_from') }}" placeholder="Select Start time...">
                                             </div>
                                         </div>
                                     </div>
@@ -150,31 +151,22 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-clock-o"></i>
                                                 </div>
-                                                <input type="text" class="form-control" id="time_to" name="time_to" value="{{ old('time_to') }}" placeholder="Select End time...">
+                                                <input type="text" class="form-control" id="time_to" name="time_to" value="{{ !empty($helpdeskSetup->time_to) ? date('H:i:s', $helpdeskSetup->time_to) : old('time_to') }}" placeholder="Select End time...">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                             <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
-                           
-                    
+                             <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">   
                             <table class="table table-bordered">
                              <div class="form-group">
                             <tr>
                                 <td>Notify HR with Application</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                        <!-- <div><input type="checkbox" name="notify_hr_email">Email</div> -->
-                                        <input type="hidden" class="checkbox selectall"  name="notify_hr_email" value="0">
-                                        <div class="sms"><input type="checkbox" name="notify_hr_email" value="1"> Email</div>
-
-                                         <input type="hidden" class="checkbox selectall"  name="notify_hr_sms_sms" value="0">
-                                        <div class="sms"><input type="checkbox" name="notify_hr_sms_sms" value="1"> SMS</div>
-
-                                    
-                                    <!-- <div class="sms"><input type="checkbox" class="checkbox selectall"  name="notify_hr_sms_sms" value="1" >SMS</div> -->
+                                        <!-- <div> <input type="hidden" class="checkbox selectall"  name="notify_hr_sms_sms" value="0"><input type="checkbox" name="notify_hr_email">Email</div><input type="hidden" class="checkbox selectall"  name="notify_hr_email" value="0"> -->
+                                        <div class="sms"><input type="checkbox" name="notify_hr_email" value="1" {{ !empty($helpdeskSetup->notify_hr_email) && $helpdeskSetup->notify_hr_email == 1 ? "checked='checked'" : '' }}> Email</div>
+                                        <div class="sms"><input type="checkbox" name="notify_hr_sms_sms" value="1" {{ !empty($helpdeskSetup->notify_hr_sms_sms) && $helpdeskSetup->notify_hr_sms_sms == 1 ? "checked='checked'" : '' }}> SMS</div>
                                     </td> 
                                 </td>
                               </tr>
@@ -184,13 +176,8 @@
                               <tr>
                                 <td>Notify Managers of New Tickets (After Hours)</td>
                                   <td>
-                                    <input type="hidden" class="checkbox selectall"  name="notify_manager_email" value="0">
-                                        <div class="sms"><input type="checkbox" name="notify_manager_email" value="1"> Email</div>
-
-                                   <!--  <div class="sms"><input type="checkbox" name="notify_manager_sms_sms"> SMS</div> -->
-                                     <input type="hidden" class="checkbox selectall"  name="notify_manager_sms" value="0">
-                                        <div class="sms"><input type="checkbox" name="notify_manager_sms" value="1"> SMS</div>
-
+                                    <div class="sms"><input type="checkbox" name="notify_manager_email" value="1" {{ !empty($helpdeskSetup->notify_manager_email) && $helpdeskSetup->notify_manager_email == 1 ? "checked='checked'" : '' }}> Email</div>
+                                     <div class="sms"><input type="checkbox" name="notify_manager_sms" value="1" {{ !empty($helpdeskSetup->notify_manager_sms) && $helpdeskSetup->notify_manager_sms == 1 ? "checked='checked'" : '' }}> SMS</div>
                                   </td>
                                </tr>
                              </div>
@@ -214,8 +201,9 @@
                     <i class="fa fa-anchor pull-right"></i>
                     <h3 class="box-title">Auto-Escalations Settings</h3>
                 </div>
-                    <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/auto_escalations">
-                    {{ csrf_field() }}
+                    <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($autoEscalationSettings->id) ? '/help_desk/auto_escalations/'.$autoEscalationSettings->id : '/help_desk/auto_escalations'}} ">
+                     <input type="hidden" name="helpdesk_id" id="helpdesk_id" value="{{ $serviceID }}"/>
+					{{ csrf_field() }}
 
                     <div class="box-body">
                         @if (count($errors) > 0)
