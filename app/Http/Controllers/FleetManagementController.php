@@ -339,7 +339,7 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
-          // return  $vehiclemaintenance;
+        // return  $vehiclemaintenance;
 
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
@@ -568,8 +568,10 @@ class FleetManagementController extends Controller
             ->leftJoin('hr_people', 'keytracking.employee', '=', 'hr_people.id')
             ->leftJoin('safe', 'keytracking.safe_name', '=', 'safe.id')
             ->orderBy('keytracking.id')
-            ->where('vehicleID', $ID)
+            ->where('vehicle_id', $ID)
             ->get();
+
+
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -721,7 +723,7 @@ class FleetManagementController extends Controller
         $keytracking = keytracking::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
         $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
-       // return $permitlicence;
+        // return $permitlicence;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
@@ -750,11 +752,11 @@ class FleetManagementController extends Controller
             ->select('permits_licence.*', 'contact_companies.name as comp_name', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
             ->leftJoin('contact_companies', 'permits_licence.Supplier', '=', 'contact_companies.id')
-            ->orderBy('permits_licence.id' )
+            ->orderBy('permits_licence.id')
             ->where('vehicleID', $ID)
             ->get();
 
-           // return $permits;
+        // return $permits;
 
 
         $data['page_title'] = " View Fleet Details";
@@ -877,7 +879,7 @@ class FleetManagementController extends Controller
         //$permits->vehicleID = $SysData['valueID'];
         $permit->update();
 
-        
+
         //Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
@@ -1004,7 +1006,7 @@ class FleetManagementController extends Controller
         $notes->date_captured = $datecaptured;
         $notes->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
         $notes->notes = $SysData['notes'];
-        $notes->vehicleID =  $SysData['valueID'];
+        $notes->vehicleID = $SysData['valueID'];
         $notes->save();
 
         //Upload supporting document

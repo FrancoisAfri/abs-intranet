@@ -62,7 +62,6 @@ class VehicleFleetController extends Controller
         $safe = safe::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
         $currentDate = time();
         ################## WELL DETAILS ###############
@@ -98,7 +97,6 @@ class VehicleFleetController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['vehicleDocumets'] = $vehicleDocumets;
@@ -132,7 +130,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         ################## WELL DETAILS ###############
@@ -165,7 +162,6 @@ class VehicleFleetController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['vehicleDocumets'] = $vehicleDocumets;
@@ -197,8 +193,6 @@ class VehicleFleetController extends Controller
         $safe = safe::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         $currentDate = time();
@@ -234,7 +228,6 @@ class VehicleFleetController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['vehiclenotes'] = $vehiclenotes;
@@ -257,7 +250,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         ################## WELL DETAILS ###############
@@ -290,7 +282,6 @@ class VehicleFleetController extends Controller
 
         $data['name'] = $name;
         $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -383,8 +374,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -416,8 +405,6 @@ class VehicleFleetController extends Controller
 
         $data['name'] = $name;
         $data['costtype'] = $costtype;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -504,8 +491,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         $currentDate = time();
         ################## WELL DETAILS ###############
@@ -543,8 +528,6 @@ class VehicleFleetController extends Controller
         $data['ContactCompany'] = $ContactCompany;
         $data['name'] = $name;
         $data['costtype'] = $costtype;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -656,9 +639,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -692,8 +672,6 @@ class VehicleFleetController extends Controller
         $data['ContactCompany'] = $ContactCompany;
         $data['name'] = $name;
         $data['costtype'] = $costtype;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -820,9 +798,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -853,8 +828,6 @@ class VehicleFleetController extends Controller
         $data['ContactCompany'] = $ContactCompany;
         $data['name'] = $name;
         $data['costtype'] = $costtype;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -971,9 +944,6 @@ class VehicleFleetController extends Controller
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -1007,8 +977,6 @@ class VehicleFleetController extends Controller
         $data['name'] = $name;
         $data['status'] = $status;
         $data['fineType'] = $fineType;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -1158,9 +1126,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -1195,8 +1160,6 @@ class VehicleFleetController extends Controller
         $data['name'] = $name;
         $data['status'] = $status;
         $data['fineType'] = $fineType;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -1289,9 +1252,6 @@ class VehicleFleetController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -1329,8 +1289,6 @@ class VehicleFleetController extends Controller
         $data['name'] = $name;
         $data['status'] = $status;
         $data['fineType'] = $fineType;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -1406,10 +1364,6 @@ class VehicleFleetController extends Controller
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
 
         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
-
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
 
         $currentDate = time();
 
@@ -1496,8 +1450,6 @@ class VehicleFleetController extends Controller
         $data['status'] = $status;
         $data['transType'] = $transType;
         $data['fineType'] = $fineType;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -1646,8 +1598,6 @@ class VehicleFleetController extends Controller
         $servicestation = service_station::orderBy('id', 'desc')->get();
         $fueltank = tank::orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
         $currentDate = time();
         //return $currentDate;
@@ -1718,8 +1668,6 @@ class VehicleFleetController extends Controller
         $data['status'] = $status;
         $data['transType'] = $transType;
         $data['fineType'] = $fineType;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
