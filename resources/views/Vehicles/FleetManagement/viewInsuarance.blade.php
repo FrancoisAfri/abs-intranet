@@ -208,11 +208,10 @@
                     if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
                 }
-
+			$(function () {
                 $('#back_button').click(function () {
                     location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 });
-
 
                 var moduleId;
                 //Initialize Select2 Elements
@@ -277,36 +276,6 @@
 
 
                 });
-
-                function clone(id, file_index, child_id) {
-                    var clone = document.getElementById(id).cloneNode(true);
-                    clone.setAttribute("id", file_index);
-                    clone.setAttribute("name", file_index);
-                    clone.style.display = "table-row";
-                    clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
-                    clone.querySelector('#' + child_id).disabled = false;
-                    clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
-                    return clone;
-                }
-                function addFile() {
-                    var table = document.getElementById("tab_tab");
-                    var file_index = document.getElementById("file_index");
-                    file_index.value = ++file_index.value;
-                    var file_clone = clone("file_row", file_index.value, "loan_file");
-                    var name_clone = clone("name_row", file_index.value, "name");
-                    var final_row = document.getElementById("final_row").cloneNode(false)
-                    console.log(file_clone);
-                    table.appendChild(file_clone);
-                    table.appendChild(name_clone);
-                    table.appendChild(final_row);
-                    var total_files = document.getElementById("total_files");
-                    total_files.value = ++total_files.value;
-                    //change the following using jquery if necessary
-                    var remove = document.getElementsByName("remove");
-                    for (var i = 0; i < remove.length; i++)
-                        remove[i].style.display = "inline";
-                }
-
 
                 //Post perk form to server using ajax (add)
                 $('#add_policy').on('click', function () {
@@ -376,8 +345,7 @@
                     var Method = 'PATCH';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
-
-
-
+			});
+			
             </script>
 @endsection

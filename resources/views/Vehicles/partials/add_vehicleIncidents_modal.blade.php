@@ -2,6 +2,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-incidents-form">
+				<input type="hidden" id="valueID" name="valueID"
+                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+				<input type="hidden" name="file_index" id="file_index" value="1"/>
+				<input type="hidden" name="total_files" id="total_files" value="1"/>
                 {{ csrf_field() }}
 
                 <div class="modal-header">
@@ -120,32 +124,34 @@
                         <label for="path" class="col-sm-2 control-label">Cost</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="Cost" name="Cost" value="0"
-                                   placeholder="Enter Name" required>
+                                   placeholder="Enter Cost" required>
                         </div>
                     </div>
                  
-                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
-                        <label for="documents" class="col-sm-2 control-label">Attachment </label>
-                        <div class="col-sm-8">
-
-                            <input type="file" id="documents" name="documents"
-                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
-                                   data-show-upload="false">
-                        </div>
-
+                    <div id="tab_10">
+						<hr class="hr-text" data-content="DOCUMENTS UPLOAD">
+						<div class="row" id="tab_tab">
+							<div class="col-sm-6" id="file_row" style="margin-bottom: 15px;">
+								<input type="file" id="loan_file" name="loan_file[1]"
+								class="form-control">
+							</div>
+							<div class="col-sm-6" style="display:none;" id="name_row">
+								<input type="text" class="form-control" id="name" name="name"
+									   placeholder="File Name or description" disabled="disabled">
+							</div>
+							<div class="col-sm-6" id="1" name="1" style="margin-bottom: 15px;">
+								<input type="text" class="form-control" id="name[1]" name="name[1]"
+									   placeholder="File Name or description">
+							</div>
+						</div>
+						<div class="row" id="final_row">
+							<div class="col-sm-12">
+								<button type="button" class="btn btn-default btn-block btn-flat add_more" onclick="addFile()">
+									<i class="fa fa-clone"></i> Add More
+								</button>
+							</div>
+						</div>
                     </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Name</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="name" name="name" value=""
-                                   placeholder="Enter Name" required>
-                        </div>
-                    </div>
-
-                    
-                    <input type="hidden" id="valueID" name="valueID"
-                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
-
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
