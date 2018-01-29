@@ -749,11 +749,6 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
 Route::get('quotes/authorisation', 'QuotesController@authorisationIndex');
-Route::get('quote/term-conditions', 'QuotesTermConditionsController@index');
-Route::get('quote/term-actdeact/{term}', 'QuotesTermConditionsController@termAct');
-Route::get('quote/term-edit/{term}', 'QuotesTermConditionsController@editterm');
-Route::post('quote/add-quote-term', 'QuotesTermConditionsController@store');
-Route::patch('quote/term-update/{term}', 'QuotesTermConditionsController@updateTerm');
 Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
 Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');
 Route::get('quote/create', 'QuotesController@createIndex');
@@ -772,6 +767,16 @@ Route::post('quote/search', 'QuotesController@searchResults');
 Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
 Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
 Route::post('newquote/save', 'QuotesController@newQuote');
+// Quote term Categories
+Route::get('quote/categories-terms', 'QuotesTermConditionsController@index');
+Route::get('quote/term-conditions/{cat}', 'QuotesTermConditionsController@viewTerm');
+Route::get('quote/term-actdeact/{term}', 'QuotesTermConditionsController@termAct');
+Route::get('quote/cat_active/{cat}', 'QuotesTermConditionsController@termCatAct');
+Route::get('quote/term-edit/{term}', 'QuotesTermConditionsController@editterm');
+Route::post('quote/category', 'QuotesTermConditionsController@saveCat');
+Route::post('quote/add-quote-term/{cat}', 'QuotesTermConditionsController@store');
+Route::patch('quote/cat_edit/{cat}', 'QuotesTermConditionsController@updateTermCat');
+Route::patch('quote/term-update/{term}', 'QuotesTermConditionsController@updateTerm');
 
 //CRM
 Route::get('crm/account/{account}', 'CRMAccountController@viewAccount');

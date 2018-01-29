@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QuotesTermAndConditions extends Model
+class termsConditionsCategories extends Model
 {
     //Specify the table name
-    public $table = 'quotes_terns_conditions';
+    public $table = 'quote_terms_categories';
 
     // Mass assignable fields
     protected $fillable = [
-        'type_id', 'term_name', 'status', 'category_id', 'vat_number'
+        'name', 'status', 'description'
     ];
 
     /**
@@ -19,8 +19,8 @@ class QuotesTermAndConditions extends Model
      *
      * @return  \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function quotations()
+    public function terms()
     {
-        return $this->belongsToMany('App\Quotation');
+        return $this->hasMany(QuotesTermAndConditions::class, 'category_id');
     }
 }

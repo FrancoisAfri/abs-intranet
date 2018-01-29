@@ -13,33 +13,45 @@
                 <form class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
-                        <h3 class="box-title">Terms and Conditions</h3>
+                        <h3 class="box-title">Terms and Conditions for: {{$category->name}}</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-						<div id="quote-profile-list">
+						<div style="overflow-X:auto;">
 							<table class="table table-bordered table-striped">
 								<tr>
 									<th style="text-align: center; width: 5px;">#</th>
 									<th>Terms</th>
 									<th style="text-align: center;"></th>
 								</tr>
-								@foreach($termConditions as $termCondition)
-									<tr>
-										<td style="text-align: center;">
-											<button type="button" class="btn btn-primary  btn-xs" onclick="postData({{$termCondition->id}}, 'edit');">
-												<i class="fa fa-pencil-square-o"></i> Edit
-											</button>
+								@if (!empty($category->terms))
+									@foreach($category->terms as $termCondition)
+										<tr>
+											<td style="text-align: center;">
+												<button type="button" class="btn btn-primary  btn-xs" onclick="postData({{$termCondition->id}}, 'edit');">
+													<i class="fa fa-pencil-square-o"></i> Edit
+												</button>
+											</td>
+											<td>{!!$termCondition->term_name!!}</td>
+											<td style="text-align: center;"> <button type="button" id="act_deact" onclick="postData({{$termCondition->id}}, 'actdeac');" class="btn {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($termCondition->status) && $termCondition->status == 1) ? "De-Activate" : "Activate"}}</button></td>
+										</tr>
+									@endforeach
+								@else
+									<tr id="kpis-list">
+										<td colspan="5">
+											<div class="alert alert-danger alert-dismissable">
+												<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+												No term & condition to display, please start by adding a new one.
+											</div>
 										</td>
-										<td>{!!$termCondition->term_name!!}</td>
-										<td style="text-align: center;"> <button type="button" id="act_deact" onclick="postData({{$termCondition->id}}, 'actdeac');" class="btn {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"><i class="fa {{ (!empty($termCondition->status) && $termCondition->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($termCondition->status) && $termCondition->status == 1) ? "De-Activate" : "Activate"}}</button></td>
 									</tr>
-								@endforeach
+								@endif
 							</table>
 						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
+						<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="add-new-term-type" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-quotes-terms-modal">Add New Term & Conditions</button>
                     </div>
                     <!-- /.box-footer -->
@@ -85,6 +97,9 @@
 			
 		}
         $(function () {
+						
+			document.getElementById("back_button").onclick = function () {
+			location.href = "/quote/categories-terms";	};
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -112,11 +127,11 @@
             $('#success-action-modal').modal('show');
 			//Post term & conditions form to server using ajax (add)
             $('#save-quote-term').on('click', function() {
-                var strUrl = '/quote/add-quote-term';
+                var strUrl = '/quote/add-quote-term/{{$category->id}}';
                 var formName = 'quotes-term-form';
                 var modalID = 'add-quotes-terms-modal';
                 var submitBtnID = 'save-quote-term';
-                var redirectUrl = '/quote/term-conditions';
+                var redirectUrl = '/quote/term-conditions/{{$category->id}}';
                 var successMsgTitle = 'Quotation term Added!';
                 var successMsg = 'The quotation term has been added successfully!';
                for (instance in CKEDITOR.instances) {
