@@ -37,7 +37,6 @@ class FleetManagementController extends Controller
 
     public function fleetManagent()
     {
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -298,8 +297,6 @@ class FleetManagementController extends Controller
     {
 
         $ID = $maintenance->id;
-
-
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
@@ -337,10 +334,7 @@ class FleetManagementController extends Controller
             ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
             ->where('vehicle_details.id', $ID)
             ->orderBy('vehicle_details.id')
-            ->get();
-
-        // return  $vehiclemaintenance;
-
+            ->get();       
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
@@ -571,8 +565,6 @@ class FleetManagementController extends Controller
             ->where('vehicle_id', $ID)
             ->get();
 
-
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -723,7 +715,7 @@ class FleetManagementController extends Controller
         $keytracking = keytracking::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
         $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
-        // return $permitlicence;
+       // return $permitlicence;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
@@ -756,7 +748,7 @@ class FleetManagementController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-        // return $permits;
+           // return $permits;
 
 
         $data['page_title'] = " View Fleet Details";
@@ -879,7 +871,7 @@ class FleetManagementController extends Controller
         //$permits->vehicleID = $SysData['valueID'];
         $permit->update();
 
-
+        
         //Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();

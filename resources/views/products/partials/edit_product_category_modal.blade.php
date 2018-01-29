@@ -16,13 +16,13 @@
                      <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Name" required>
+                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-3 control-label">Description</label>
                              <div class="col-sm-9">
-                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Description" required>
+                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Description">
                         </div>
                            </div>
                              </div>  
@@ -35,5 +35,3 @@
             </div>
          </div>
             </div>
-        
-           

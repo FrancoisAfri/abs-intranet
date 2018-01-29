@@ -8,7 +8,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edit Products Title</h4>
+                    <h4 class="modal-title">Edit Product</h4>
                 </div>
                 <div class="modal-body">
                     <div id="job_title-invalid-input-alert"></div>
@@ -16,13 +16,19 @@
                     <div class="form-group">
                         <label for="name" class="col-sm-3 control-label">Name</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter job Title Name" required>
+                            <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="description" class="col-sm-3 control-label">Description</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter job Title Description" required>
+                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Description">
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label for="path" class="col-sm-3 control-label">Product Price</label>
+                             <div class="col-sm-9">
+								<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
                         </div>
                     </div>
                 </div>

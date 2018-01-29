@@ -92,9 +92,6 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-    
-            //
-
             //Post module form to server using ajax (ADD)
             $('#save_category').on('click', function() {
                 //console.log('strUrl');
