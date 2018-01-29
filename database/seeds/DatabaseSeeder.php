@@ -360,7 +360,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Term & Conditions';
         $ribbon->description = 'Term & Conditions';
-        $ribbon->ribbon_path = 'quote/term-conditions';
+        $ribbon->ribbon_path = 'quote/categories-terms';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
