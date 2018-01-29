@@ -129,29 +129,31 @@
                                     <td>{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : '' }}</td>
                                     <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
                                     <td>{{ !empty($details->nxt_service_km) ? 'Km' .number_format($details->total_cost, 2) : '' }}</td>
-                                       <td nowrap>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("servicedetails/documents/$details->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+
+
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document1))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document1 }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("servicedetails/documents/$details->document1") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
+                                    </td>
+
                                     </td>
                                 </tr>
                             @endforeach

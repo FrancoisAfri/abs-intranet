@@ -144,7 +144,18 @@
                                     <td>{{ !empty($reminder->exp_date) ? date(' d M Y', $reminder->exp_date) : '' }}</td>
                                     <td>{{ !empty($reminder->warranty_amount) ?  'R' .number_format($reminder->warranty_amount, 2) : '' }}</td>                                                           
                                     <td>{{ !empty($reminder->kilometers) ? 'km' .number_format($reminder->kilometers, 2) : '' }}</td>
-                                    <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($reminder->document))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("Vehicle/warranty/$reminder->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
+                                    </td>
                                     <td>
                                         <!--   leave here  -->
                                         <button reminder="button" id="view_ribbons"

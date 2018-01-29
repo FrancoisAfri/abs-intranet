@@ -104,6 +104,7 @@
                             <th>Inception Date</th>
                             <th> Value Covered(R)</th>
                             <th> Premium Amount(R)</th>
+                            <th> Document(s)</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($vehicleinsurance) > 0)
@@ -117,7 +118,7 @@
                                                 data-contact_person="{{ $reminder->contact_person }}"  data-contact_number="{{ $reminder->contact_number }}"
                                                 data-contact_email="{{ $reminder->contact_email }}"  data-address="{{ $reminder->address }}"   data-inceptiondate ="{{ date(' d M Y', $reminder->inception_date)}}"
                                                 data-policy_no="{{ $reminder->policy_no }}"  data-premium_amount="{{ $reminder->premium_amount }}"  data-value_coverd="{{ $reminder->value_coverd }}"
-                                                 data-type="{{ $reminder->type }}" data-notes="{{ $reminder->notes }}" 
+                                                data-type="{{ $reminder->type }}" data-notes="{{ $reminder->notes }}"
                                                 data-document="{{ $reminder->document }}"
                                                ><i class="fa fa-pencil-square-o"></i> Edit
                                                    
@@ -130,6 +131,18 @@
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
                                     <td>{{ !empty($reminder->value_coverd) ? 'R' .number_format($reminder->value_coverd, 2) : '' }}</td>
                                     <td>{{ !empty($reminder->premium_amount) ?  'R' .number_format($reminder->premium_amount, 2) : '' }}</td>
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($reminder->document))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("Vehicle/Insurance/$reminder->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
+                                    </td>
                                     <td>
                                         <!--   leave here  -->
                                         <button reminder="button" id="view_ribbons"
