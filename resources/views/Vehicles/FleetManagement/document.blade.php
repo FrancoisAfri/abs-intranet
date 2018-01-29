@@ -83,16 +83,16 @@
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
+
                                     <td nowrap>
                                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($document->document))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $document->document }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("Vehicle/documents/$document->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
                                     </td>
@@ -100,8 +100,6 @@
                                     <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
                                     <td>{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
                                     <td>{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : '' }}</td>
-
-
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
                                                 data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>

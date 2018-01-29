@@ -215,6 +215,8 @@ class VehicleFleetController extends Controller
             ->orderBy('notes.id')
             ->where('vehicleID', $ID)
             ->get();
+            
+            //return $vehiclenotes;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -420,7 +422,9 @@ class VehicleFleetController extends Controller
     public function addcosts(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+             'date' => 'required',
+            'document_number' => 'required|unique:general_cost,document_number',
+            'supplier_name' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -432,11 +436,11 @@ class VehicleFleetController extends Controller
         $generalcost->date = $date;
         $generalcost->document_number = $SysData['document_number'];
         $generalcost->supplier_name = $SysData['supplier_name'];
-        $generalcost->cost_type = $SysData['cost_type'];
+        $generalcost->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
         $generalcost->cost = $SysData['cost'];
         $generalcost->litres = $SysData['litres'];
         $generalcost->description = $SysData['description'];
-        $generalcost->person_esponsible = $SysData['person_esponsible'];
+        $generalcost->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $generalcost->vehicleID = $SysData['valueID'];
         $generalcost->save();
 
@@ -449,8 +453,9 @@ class VehicleFleetController extends Controller
     {
 
         $this->validate($request, [
-            // 'date' => 'required',
-            // // 'description' => 'required',
+            'date' => 'required',
+            'document_number' => 'required|unique:general_cost,document_number',
+            'supplier_name' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -461,11 +466,11 @@ class VehicleFleetController extends Controller
         $costs->date = $date;
         $costs->document_number = $SysData['document_number'];
         $costs->supplier_name = $SysData['supplier_name'];
-        $costs->cost_type = $SysData['cost_type'];
+        $costs->cost_type =  !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
         $costs->cost = $SysData['cost'];
         $costs->litres = $SysData['litres'];
         $costs->description = $SysData['description'];
-        $costs->person_esponsible = $SysData['person_esponsible'];
+        $costs->person_esponsible =!empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $costs->update();
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
@@ -514,6 +519,7 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
+          
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -543,7 +549,7 @@ class VehicleFleetController extends Controller
     public function addwarranty(Request $request)
     {
         $this->validate($request, [
-            'issued_to' => 'required_if:key,1',
+            'policy_no' => 'required|unique:vehicle_warranties,policy_no',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -559,8 +565,9 @@ class VehicleFleetController extends Controller
         $Vehiclewarranties->inception_date = $inceptiondate;
         $Vehiclewarranties->status = 1;
         $Vehiclewarranties->vehicleID = $SysData['valueID'];
-        $Vehiclewarranties->service_provider = $SysData['company_id'];
-        $Vehiclewarranties->contact_person = $SysData['contact_person_id'];
+        $Vehiclewarranties->service_provider = !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
+        $Vehiclewarranties->contact_person = !empty($SysData['contact_person_id']) ? $SysData['contact_person_id'] : 0;
+        $Vehiclewarranties->policy_no = $SysData['policy_no'];
         $Vehiclewarranties->save();
 
         //Upload supporting document
@@ -596,7 +603,7 @@ class VehicleFleetController extends Controller
 
         $this->validate($request, [
 
-            // 'description' => 'required',
+            'policy_no' => 'required|unique:vehicle_warranties,policy_no',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -607,10 +614,14 @@ class VehicleFleetController extends Controller
         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
+    
         $warranties->exp_date = $Expdate;
         $warranties->inception_date = $inceptiondate;
         $warranties->status = 1;
         $warranties->vehicleID = $SysData['valueID'];
+        $warranties->service_provider = !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
+        $warranties->contact_person = !empty($SysData['contact_person_id']) ? $SysData['contact_person_id'] : 0;
+        $warranties->policy_no = $SysData['policy_no'];
         $warranties->update();
 
         //Upload supporting document
@@ -688,6 +699,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             // 'issued_to' => 'required_if:key,1',
+            'policy_no' => 'required|unique:vehicle_insurance,policy_no',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -698,9 +710,10 @@ class VehicleFleetController extends Controller
 
         $insurance = new vehicle_insurance($SysData);
         $insurance->inception_date = $inceptiondate;
-        $insurance->service_provider = $SysData['company_id'];
-        $insurance->contact_person = $SysData['contact_person_id'];
+        $insurance->service_provider =  !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
+        $insurance->contact_person = !empty($SysData['contact_person_id']) ? $SysData['contact_person_id'] : 0;
         $insurance->vehicleID = $SysData['valueID'];
+        $insurance->policy_no = $SysData['policy_no'];
         $insurance->status = 1;
         $insurance->save();
 
@@ -737,7 +750,7 @@ class VehicleFleetController extends Controller
     public function editInsurance(Request $request, vehicle_insurance $policy)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            'policy_no' => 'required|unique:vehicle_insurance,policy_no',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -745,9 +758,11 @@ class VehicleFleetController extends Controller
         $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
         $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
 
-
-        $insurance = new vehicle_insurance($SysData);
         $insurance->inception_date = $inceptiondate;
+        $insurance->service_provider =  !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
+        $insurance->contact_person = !empty($SysData['contact_person_id']) ? $SysData['contact_person_id'] : 0;
+        $insurance->vehicleID = $SysData['valueID'];
+        $insurance->policy_no = $SysData['policy_no'];
         $insurance->update();
 
         //Upload supporting document
@@ -818,6 +833,8 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
+           // return  $vehicleserviceDetails;
+
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -844,7 +861,8 @@ class VehicleFleetController extends Controller
     public function addServiceDetails(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            // 'invoice_number' => 'required_if:key,1',
+            'invoice_number' => 'required|unique:vehicle_serviceDetails,invoice_number',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -894,7 +912,7 @@ class VehicleFleetController extends Controller
 
         $this->validate($request, [
             // 'date' => 'required',
-            // 'description' => 'required',
+            'invoice_number' => 'required|unique:vehicle_serviceDetails,invoice_number',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -993,6 +1011,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             // 'issued_to' => 'required_if:key,1',
+            'fine_ref' => 'required|unique:vehicle_fines,fine_ref',
         ]);
         $fineData = $request->all();
         unset($fineData['_token']);
@@ -1020,7 +1039,10 @@ class VehicleFleetController extends Controller
         $vehicle_fines->court_date = $courtDate;
         $vehicle_fines->paid_date = $paidDate;
         $vehicle_fines->vehicleID = $fineData['valueID'];
-
+        $vehicle_fines->fine_ref = $fineData['fine_ref']; 
+        $vehicle_fines->fine_type = !empty($SysData['fine_type']) ? $SysData['fine_type'] : 0;
+        $vehicle_fines->driver = !empty($SysData['driver']) ? $SysData['driver'] : 0;
+        $vehicle_fines->fine_status = !empty($SysData['fine_status']) ? $SysData['fine_status'] : 0;
         $vehicle_fines->save();
 
         //Upload supporting document
@@ -1057,7 +1079,7 @@ class VehicleFleetController extends Controller
 
         $this->validate($request, [
             //'date' => 'required',
-            // 'description' => 'required',
+            'fine_ref' => 'required|unique:vehicle_fines,fine_ref',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1075,25 +1097,28 @@ class VehicleFleetController extends Controller
         $paidDate = $SysData['paid_date'] = str_replace('/', '-', $SysData['paid_date']);
         $paidDate = $SysData['paid_date'] = strtotime($SysData['paid_date']);
 
-        $vehicle_fines = new vehicle_fines($SysData);
-        $vehicle_fines->date_captured = $currentDate;
-        $vehicle_fines->time_of_fine = $timeOfFine;
-        $vehicle_fines->date_of_fine = $dateOfFine;
-        $vehicle_fines->court_date = $courtDate;
-        $vehicle_fines->paid_date = $paidDate;
-        $vehicle_fines->vehicleID = $SysData['valueID'];
-
-        $vehicle_fines->update();
+       
+        $fines->date_captured = $currentDate;
+        $fines->time_of_fine = $timeOfFine;
+        $fines->date_of_fine = $dateOfFine;
+        $fines->court_date = $courtDate;
+        $fines->paid_date = $paidDate;
+        $fines->vehicleID = $SysData['valueID'];
+        $fines->fine_ref = $fineData['fine_ref']; 
+        $fines->fine_type = !empty($SysData['fine_type']) ? $SysData['fine_type'] : 0;
+        $fines->driver = !empty($SysData['driver']) ? $SysData['driver'] : 0;
+        $fines->fine_status = !empty($SysData['fine_status']) ? $SysData['fine_status'] : 0;
+        $fines->update();
 
         //Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $vehicle_fines->id . "_documents." . $fileExt;
+                $fileName = $fines->id . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/vehiclefines', $fileName);
                 //Update file name in the table
-                $vehicle_fines->document = $fileName;
-                $vehicle_fines->update();
+                $fines->document = $fileName;
+                $fines->update();
             }
         }
 
@@ -1101,11 +1126,11 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents1')) {
             $fileExt = $request->file('documents1')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
-                $fileName = $vehicle_fines->id . "_documents." . $fileExt;
+                $fileName = $fines->id . "_documents." . $fileExt;
                 $request->file('documents1')->storeAs('Vehicle/vehiclefines', $fileName);
                 //Update file name in the table
-                $vehicle_fines->document1 = $fileName;
-                $vehicle_fines->update();
+                $fines->document1 = $fileName;
+                $fines->update();
             }
         }
 
@@ -1145,8 +1170,11 @@ class VehicleFleetController extends Controller
         $vehicleincidents = DB::table('vehicle_incidents')
             ->select('vehicle_incidents.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_incidents.reported_by', '=', 'hr_people.id')
+            ->where('vehicleID', $ID)
             ->orderBy('vehicle_incidents.id')
             ->get();
+
+            //return $vehicleincidents;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1176,6 +1204,8 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             // 'issued_to' => 'required_if:key,1',
+            'claim_number' => 'required|unique:vehicle_incidents,claim_number',
+            
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1188,6 +1218,10 @@ class VehicleFleetController extends Controller
         $vehicleincidents = new vehicle_incidents($SysData);
         $vehicleincidents->date_of_incident = $dateofincident;
         $vehicleincidents->vehicleID = $SysData['valueID'];
+        $vehicleincidents->incident_type = !empty($SysData['incident_type']) ? $SysData['incident_type'] : 0;
+        $vehicleincidents->severity = !empty($SysData['severity']) ? $SysData['severity'] : 0;
+        $vehicleincidents->status = !empty($SysData['status']) ? $SysData['status'] : 0;
+        $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->save();
 
         //Upload supporting document
@@ -1211,7 +1245,7 @@ class VehicleFleetController extends Controller
 
         $this->validate($request, [
             //'date' => 'required',
-            // 'description' => 'required',
+            'claim_number' => 'required|unique:vehicle_incidents,claim_number',
         ]);
         $IncuData = $request->all();
         unset($IncuData['_token']);
@@ -1222,6 +1256,10 @@ class VehicleFleetController extends Controller
         $incident = new vehicle_incidents($IncuData);
         $incident->date_of_incident = $dateofincident;;
         $incident->vehicleID = $IncuData['valueID'];
+        $incident->incident_type = !empty($SysData['incident_type']) ? $SysData['incident_type'] : 0;
+        $incident->severity = !empty($SysData['severity']) ? $SysData['severity'] : 0;
+        $incident->status = !empty($SysData['status']) ? $SysData['status'] : 0;
+        $incident->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $incident->Update();
 
 

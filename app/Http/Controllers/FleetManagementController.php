@@ -813,11 +813,11 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
         $permits = new permits_licence();
-        $permits->permit_licence = $SysData['permit_licence'];
-        $permits->Supplier = $SysData['Supplier'];
+        $permits->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
+        $permits->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
         $permits->exp_date = $Expdate;
         $permits->date_issued = $dates;
-        $permits->status = $SysData['status'];
+        $permits->status = !empty($SysData['status']) ? $SysData['status'] : 1;
         $permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
         $permits->captured_by = $name;
         $permits->date_captured = $currentDate;
@@ -860,15 +860,14 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
 
-        $permit->permit_licence = $SysData['permit_licence'];
-        $permit->Supplier = $SysData['Supplier'];
+        $permit->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
+        $permit->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
         $permit->exp_date = $Expdate;
         $permit->date_issued = $dates;
-        $permit->status = $SysData['status'];
+        $permit->status = !empty($SysData['status']) ? $SysData['status'] : 1;
         $permit->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
         $permit->captured_by = $name;
         $permit->date_captured = $currentDate;
-        //$permits->vehicleID = $SysData['valueID'];
         $permit->update();
 
         
@@ -904,9 +903,9 @@ class FleetManagementController extends Controller
         $currentDate = time();
 
         $vehicledocumets = new vehicle_documets();
-        $vehicledocumets->type = $SysData['type'];
+        $vehicledocumets->type = !empty($SysData['type']) ? $SysData['type'] : 0;
         $vehicledocumets->description = $SysData['description'];
-        $vehicledocumets->role = $SysData['role'];
+        $vehicledocumets->role = !empty($SysData['role']) ? $SysData['role'] : 0;
         $vehicledocumets->date_from = $datefrom;
         $vehicledocumets->exp_date = $Expdate;
         $vehicledocumets->upload_date = $currentDate;
@@ -946,10 +945,9 @@ class FleetManagementController extends Controller
 
         $currentDate = time();
 
-        // $vehicledocumets = new vehicle_documets();
-        $vehicledocumets->type = $SysData['type'];
+        $vehicledocumets->type = !empty($SysData['type']) ? $SysData['type'] : 0;
         $vehicledocumets->description = $SysData['description'];
-        $vehicledocumets->role = $SysData['role'];
+        $vehicledocumets->role = !empty($SysData['role']) ? $SysData['role'] : 0;
         $vehicledocumets->date_from = $datefrom;
         $vehicledocumets->exp_date = $Expdate;
         $vehicledocumets->upload_date = $currentDate;
@@ -1027,18 +1025,12 @@ class FleetManagementController extends Controller
         unset($SysData['_token']);
 
         $currentDate = time();
-        // $loggedInEmplID = Auth::user()->person->id;
-        // $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        // $name =  $Employee->first_name . ' ' . $Employee->surname;
-
-        // $datecaptured = $SysData['date_captured'] = str_replace('/', '-', $SysData['date_captured']);
-        //$datecaptured = $SysData['date_captured'] = strtotime($SysData['date_captured']);
-
+    
 
         $note->date_captured = $currentDate;
         $note->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
         $note->notes = $SysData['notes'];
-        $note->vehicleID = 0;
+        $notes->vehicleID = $SysData['valueID'];
         $note->update();
 
         //Upload supporting document

@@ -87,20 +87,20 @@
                                     <td>{{ !empty($document->date_captured) ? date(' d M Y', $document->date_captured) : '' }}</td>
                                     <td>{{ !empty($document->firstname . ' ' . $document->surname ) ?  $document->firstname . ' ' . $document->surname : '' }}</td>
                                     <td>{{ !empty($document->notes) ?  $document->notes : '' }}</td>
-                                    <td nowrap>
-                                        <div class="form-group{{ $errors->has('documents') ? ' has-error' : '' }}">
-                                            <label for="documents" class="control-label"></label>
-                                            @if(!empty($document->documents))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $document->documents }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                <!--  <td>{{ !empty($document->documents) ?  $document->documents : '' }}</td> -->
+
+									<td nowrap>
+										<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+											<label for="document" class="control-label"></label>
+											@if(!empty($document->documents))
+												<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+												   href="{{ Storage::disk('local')->url("Vehicle/note_documents/$document->documents") }}"
+												   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+											@else
+												<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+											@endif
+										</div>
+									</td>
+
 
 
                                     <td>
