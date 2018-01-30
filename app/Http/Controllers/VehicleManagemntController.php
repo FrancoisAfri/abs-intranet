@@ -298,6 +298,7 @@ class VehicleManagemntController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
+
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);

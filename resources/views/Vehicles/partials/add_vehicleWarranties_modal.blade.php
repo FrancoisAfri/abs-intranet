@@ -152,18 +152,9 @@
                                       placeholder="Enter notes..." rows="3">{{ old('notes') }}</textarea>
                         </div>
                     </div>
-                    <!--  <div class="form-group">
-                        <label for="Status" class="col-sm-2 control-label">Status </label>
-                        <div class="col-sm-8">
 
-                            <select id="status" name="status" class="form-control">
-                                <option value="0">*** Select Status ***</option>
-                                <option value="1"> Active</option>
-                                <option value="2"> InActive</option>
-                            </select>
+                    <hr class="hr-text" data-content="DOCUMENTS UPLOAD">
 
-                        </div>
-                    </div> -->
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -175,7 +166,7 @@
 
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Name</label>
+                        <label for="path" class="col-sm-2 control-label">Document Name</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="name" name="name" value=""
                                    placeholder="Enter Name" required>
