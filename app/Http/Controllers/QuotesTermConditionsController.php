@@ -146,7 +146,7 @@ class QuotesTermConditionsController extends Controller
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'Term & Conditions';
         $data['termConditions'] = $termConditions;
-		return redirect('/quote/term-conditions')->with('');
+		return redirect('/quote/term-conditions/'.$term->category_id)->with('');
     }
 	
 	public function updateTermCat(Request $request, termsConditionsCategories $cat)
