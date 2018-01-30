@@ -71,9 +71,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                       {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -131,6 +131,30 @@
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
                                     <td>{{ !empty($reminder->value_coverd) ? 'R' .number_format($reminder->value_coverd, 2) : '' }}</td>
                                     <td>{{ !empty($reminder->premium_amount) ?  'R' .number_format($reminder->premium_amount, 2) : '' }}</td>
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($reminder->document))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("Vehicle/Insurance/$reminder->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
+
+
+                                        {{--<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">--}}
+                                            {{--<label for="document" class="control-label"></label>--}}
+                                            {{--@if(!empty($reminder->document1))--}}
+                                                {{--<a class="btn btn-default btn-flat btn-block pull-right btn-xs"--}}
+                                                   {{--href="{{ Storage::disk('local')->url("Vehicle/Insurance/$reminder->document1") }}"--}}
+                                                   {{--target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>--}}
+                                            {{--@else--}}
+                                                {{--<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>--}}
+                                            {{--@endif--}}
+                                        {{--</div>--}}
+                                    </td>
                                     <td>
                                         <!--   leave here  -->
                                         <button reminder="button" id="view_ribbons"

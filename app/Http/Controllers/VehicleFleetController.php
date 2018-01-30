@@ -37,6 +37,8 @@ use App\vehicle;
 use App\vehicle_detail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
 class VehicleFleetController extends Controller
 {
@@ -215,8 +217,8 @@ class VehicleFleetController extends Controller
             ->orderBy('notes.id')
             ->where('vehicleID', $ID)
             ->get();
-            
-            //return $vehiclenotes;
+
+        //return $vehiclenotes;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -299,7 +301,7 @@ class VehicleFleetController extends Controller
     public function addreminder(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            'name' => 'required|unique:reminders,name',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -422,7 +424,7 @@ class VehicleFleetController extends Controller
     public function addcosts(Request $request)
     {
         $this->validate($request, [
-             'date' => 'required',
+            'date' => 'required',
             'document_number' => 'required|unique:general_cost,document_number',
             'supplier_name' => 'required',
         ]);
@@ -466,11 +468,11 @@ class VehicleFleetController extends Controller
         $costs->date = $date;
         $costs->document_number = $SysData['document_number'];
         $costs->supplier_name = $SysData['supplier_name'];
-        $costs->cost_type =  !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
+        $costs->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
         $costs->cost = $SysData['cost'];
         $costs->litres = $SysData['litres'];
         $costs->description = $SysData['description'];
-        $costs->person_esponsible =!empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
+        $costs->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $costs->update();
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
@@ -519,7 +521,6 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-          
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -550,6 +551,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             'policy_no' => 'required|unique:vehicle_warranties,policy_no',
+            'email' => 'required|email|max:255',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -614,7 +616,7 @@ class VehicleFleetController extends Controller
         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
-    
+
         $warranties->exp_date = $Expdate;
         $warranties->inception_date = $inceptiondate;
         $warranties->status = 1;
@@ -669,6 +671,7 @@ class VehicleFleetController extends Controller
             ->orderBy('vehicle_insurance.id')
             ->where('vehicleID', $ID)
             ->get();
+        //return $vehicleinsurance;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -698,8 +701,10 @@ class VehicleFleetController extends Controller
     public function addInsurance(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            //'email'    => 'required|email|max:255',
             'policy_no' => 'required|unique:vehicle_insurance,policy_no',
+            'address' => 'required',
+            'inception_date' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -710,7 +715,7 @@ class VehicleFleetController extends Controller
 
         $insurance = new vehicle_insurance($SysData);
         $insurance->inception_date = $inceptiondate;
-        $insurance->service_provider =  !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
+        $insurance->service_provider = !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
         $insurance->contact_person = !empty($SysData['contact_person_id']) ? $SysData['contact_person_id'] : 0;
         $insurance->vehicleID = $SysData['valueID'];
         $insurance->policy_no = $SysData['policy_no'];
@@ -745,12 +750,12 @@ class VehicleFleetController extends Controller
     }
 
 
-
-
     public function editInsurance(Request $request, vehicle_insurance $policy)
     {
         $this->validate($request, [
             'policy_no' => 'required|unique:vehicle_insurance,policy_no',
+            'address' => 'required',
+            'inception_date' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -759,7 +764,7 @@ class VehicleFleetController extends Controller
         $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
 
         $insurance->inception_date = $inceptiondate;
-        $insurance->service_provider =  !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
+        $insurance->service_provider = !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
         $insurance->contact_person = !empty($SysData['contact_person_id']) ? $SysData['contact_person_id'] : 0;
         $insurance->vehicleID = $SysData['valueID'];
         $insurance->policy_no = $SysData['policy_no'];
@@ -833,7 +838,7 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-           // return  $vehicleserviceDetails;
+        // return  $vehicleserviceDetails;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1039,7 +1044,7 @@ class VehicleFleetController extends Controller
         $vehicle_fines->court_date = $courtDate;
         $vehicle_fines->paid_date = $paidDate;
         $vehicle_fines->vehicleID = $fineData['valueID'];
-        $vehicle_fines->fine_ref = $fineData['fine_ref']; 
+        $vehicle_fines->fine_ref = $fineData['fine_ref'];
         $vehicle_fines->fine_type = !empty($SysData['fine_type']) ? $SysData['fine_type'] : 0;
         $vehicle_fines->driver = !empty($SysData['driver']) ? $SysData['driver'] : 0;
         $vehicle_fines->fine_status = !empty($SysData['fine_status']) ? $SysData['fine_status'] : 0;
@@ -1097,14 +1102,14 @@ class VehicleFleetController extends Controller
         $paidDate = $SysData['paid_date'] = str_replace('/', '-', $SysData['paid_date']);
         $paidDate = $SysData['paid_date'] = strtotime($SysData['paid_date']);
 
-       
+
         $fines->date_captured = $currentDate;
         $fines->time_of_fine = $timeOfFine;
         $fines->date_of_fine = $dateOfFine;
         $fines->court_date = $courtDate;
         $fines->paid_date = $paidDate;
         $fines->vehicleID = $SysData['valueID'];
-        $fines->fine_ref = $fineData['fine_ref']; 
+        $fines->fine_ref = $fineData['fine_ref'];
         $fines->fine_type = !empty($SysData['fine_type']) ? $SysData['fine_type'] : 0;
         $fines->driver = !empty($SysData['driver']) ? $SysData['driver'] : 0;
         $fines->fine_status = !empty($SysData['fine_status']) ? $SysData['fine_status'] : 0;
@@ -1174,7 +1179,7 @@ class VehicleFleetController extends Controller
             ->orderBy('vehicle_incidents.id')
             ->get();
 
-            //return $vehicleincidents;
+        // return $vehicleincidents;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1205,7 +1210,7 @@ class VehicleFleetController extends Controller
         $this->validate($request, [
             // 'issued_to' => 'required_if:key,1',
             'claim_number' => 'required|unique:vehicle_incidents,claim_number',
-            
+
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1389,10 +1394,11 @@ class VehicleFleetController extends Controller
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
 
-        //return  date('Y', $date);
-
-        $maintenance;
-        //   return date('m', $date);
+        // return  date('Y', $date);
+        //return $date;
+        $startExplode = explode('_', $date);
+        $date = $startExplode[0];
+        $command = (!empty($startExplode[1]) ? $startExplode[1] : 0);
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         //return $ContactCompany;
@@ -1431,22 +1437,32 @@ class VehicleFleetController extends Controller
 
         $datetaken = $vehicle_fuel_log->first()->dates;
 
+        $id = 7; // for example
 
+        if ($command = 'p') {
+            //return $command;
+            $todayDate = Carbon::now();
+            $iLastmonth = $todayDate->subMonth();
+            $MONTH = $iLastmonth->month;
+        } elseif
+        ($command = 'n') {
+            $todayDate = Carbon::now();
+            $inxtmonth = $todayDate->addMonth();
+            $MONTH = $inxtmonth->month;
+        } elseif ($command = 0) {
+            $todayDate = Carbon::now();
+            $MONTH = $todayDate->month;
+        }
         //return $iTotalLitres;
         $ID = $maintenance->id;
         $iTotalLitres = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('litres');
         $sCurrency = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('total_cost');
         //return   $sCurrency;          
         // ->get();
-
-
-//        $month = date($datetaken ,'%Y');
-//        $month = date($datetaken ,'%Y');
-
-
-//        AND FROM_UNIXTIME(date_taken, '%Y')='$iYear'
-//    AND FROM_UNIXTIME(date_taken, '%m')<='$iMonth'
-
+        $todayDates = Carbon::now();
+        $inxtmonth = $todayDates->addMonth();
+        $MONTH = $inxtmonth->month;;
+        //return $todayDates;
 
         $vehiclefuellog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
@@ -1455,6 +1471,9 @@ class VehicleFleetController extends Controller
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->orderBy('vehicle_fuel_log.id')
             ->where('vehicle_fuel_log.vehicleID', $ID)
+            ->whereMonth('published_at', '=', $MONTH)
+//            ->unionAll($prev)
+//            ->unionAll($next)
             // ->where('vehicle_fuel_log.status','!=', 1)
             ->get();
 
@@ -1500,7 +1519,8 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
     }
 
-    public function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
+    public
+    function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
     {
 
         // query the vehicle_configuration  table and bring back the values
@@ -1573,6 +1593,7 @@ class VehicleFleetController extends Controller
         }
     }
 
+
     public function addvehiclefuellog(Request $request)
     {
         $this->validate($request, [
@@ -1619,14 +1640,15 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
         $vehiclefuellog->status = $BookingDetail['status'];
         $vehiclefuellog->Hoursreading = $fuelData['hours_reading'];
-        $vehiclefuellog->dates = time();
+        $vehiclefuellog->published_at = date("Y-m-d H:i:s");
         $vehiclefuellog->save();
         AuditReportsController::store('Fleet Management', 'add vehiclefuel log', "Accessed by User", 0);
         return response()->json();
 
     }
 
-    public function viewBookingLog(vehicle_maintenance $maintenance)
+    public
+    function viewBookingLog(vehicle_maintenance $maintenance)
     {
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
@@ -1718,7 +1740,8 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewBookingLog')->with($data);
     }
 
-    public function deletefuelLog(Request $request, vehicle_fuel_log $fuel)
+    public
+    function deletefuelLog(Request $request, vehicle_fuel_log $fuel)
     {
 
         $fuel->delete();

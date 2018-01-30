@@ -151,14 +151,14 @@
 
                     </div>
 
-                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
-                        <label for="documents" class="col-sm-2 control-label">Attachment </label>
-                        <div class="col-sm-8">
+                     {{--<div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">--}}
+                        {{--<label for="documents" class="col-sm-2 control-label">Attachment </label>--}}
+                        {{--<div class="col-sm-8">--}}
 
-                            <input type="file" id="documents1" name="documents1"
-                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
-                                   data-show-upload="false">
-                        </div>
+                            {{--<input type="file" id="documents1" name="documents1"--}}
+                                   {{--class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'--}}
+                                   {{--data-show-upload="false">--}}
+                        {{--</div>--}}
 
                     </div>
 

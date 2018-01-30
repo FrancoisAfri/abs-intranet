@@ -36,9 +36,9 @@
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                             <a href="{{ '/Product/packages/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product(s)</a>
                                     </td>
-                                    <td>{{ $type->name }}</td>
-                                    <td>{{ $type->description }} </td>
-                                    <td>{{ $type->discount }} %</td>
+                                    <td>{{ !empty($type->name) ? $type->name : ''}} </td>
+                                    <td>{{ !empty($type->description) ? $type->description : ''}} </td>
+                                    <td>{{ !empty($type->discount) ? '%' .number_format($type->discount, 2) : ''}} </td>
                                   <td>
                                     <!--   leave here  -->
                                     <button type="button" id="view_ribbons" class="btn {{ (!empty($type->status) && $type->status == 1) ? " btn-danger " : "btn-success " }}

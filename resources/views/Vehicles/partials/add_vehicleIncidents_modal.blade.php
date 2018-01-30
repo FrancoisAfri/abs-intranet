@@ -132,15 +132,15 @@
 						<hr class="hr-text" data-content="DOCUMENTS UPLOAD">
 						<div class="row" id="tab_tab">
 							<div class="col-sm-6" id="file_row" style="margin-bottom: 15px;">
-								<input type="file" id="loan_file" name="loan_file[1]"
+								<input type="file" id="document" name="document[1]"
 								class="form-control">
 							</div>
 							<div class="col-sm-6" style="display:none;" id="name_row">
-								<input type="text" class="form-control" id="name" name="name"
+								<input type="text" class="form-control" id="Name" name="Name"
 									   placeholder="File Name or description" disabled="disabled">
 							</div>
 							<div class="col-sm-6" id="1" name="1" style="margin-bottom: 15px;">
-								<input type="text" class="form-control" id="name[1]" name="name[1]"
+								<input type="text" class="form-control" id="Name[1]" name="Name[1]"
 									   placeholder="File Name or description">
 							</div>
 						</div>

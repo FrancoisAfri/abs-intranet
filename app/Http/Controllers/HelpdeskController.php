@@ -130,8 +130,9 @@ class HelpdeskController extends Controller {
             $systems = operator::orderBy('id', 'asc')->get();
             $employees = HRPerson::where('status', 1)->get(); 
 			$helpdeskSetup = helpDesk_setup::where('helpdesk_id', $service->id)->first();
-			$autoEscalationSettings = auto_escalation_settings::where('helpdesk_id', $service->id)->first();
-         
+			//$autoEscalationSettings = auto_escalation_settings::where('helpdesk_id', $service->id)->first();
+			$autoEscalationSettings = auto_escalation_settings::orderBy('id', 'asc')->get();
+           // return $autoEscalationSettings;
 		   $counRow = autoRensponder::count();
 
 			if ($counRow ==  0) {

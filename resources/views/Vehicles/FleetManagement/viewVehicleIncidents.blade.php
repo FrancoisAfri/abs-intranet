@@ -79,9 +79,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                        {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -365,8 +365,8 @@
 				var table = document.getElementById("tab_tab");
 				var file_index = document.getElementById("file_index");
 				file_index.value = ++file_index.value;
-				var file_clone = clone("file_row", file_index.value, "loan_file");
-				var name_clone = clone("name_row", file_index.value, "name");
+				var file_clone = clone("file_row", file_index.value, "document");
+				var name_clone = clone("name_row", file_index.value, "Name");
 				var final_row = document.getElementById("final_row").cloneNode(false);
 				table.appendChild(file_clone);
 				table.appendChild(name_clone);

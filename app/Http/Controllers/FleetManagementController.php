@@ -748,7 +748,7 @@ class FleetManagementController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-           // return $permits;
+
 
 
         $data['page_title'] = " View Fleet Details";
@@ -790,7 +790,8 @@ class FleetManagementController extends Controller
     public function addPermit(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            'Supplier' => 'required',
+            'permits_licence_no' => 'required|unique:permits_licence,permits_licence_no',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -843,7 +844,8 @@ class FleetManagementController extends Controller
     public function editPermit(Request $request, permits_licence $permit)
     {
         $this->validate($request, [
-
+            'Supplier' => 'required',
+            'permits_licence_no' => 'required|unique:permits_licence,permits_licence_no',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);

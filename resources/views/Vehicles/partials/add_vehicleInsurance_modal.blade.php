@@ -47,14 +47,6 @@
                             </div>
                         </div>
 
-                     <!-- <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Contact Number</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="contact_number" name="contact_number" value=""
-                                   placeholder="Enter Contact Number" required>
-                        </div>
-                    </div>
- -->
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Contact Number</label>
                         <div class="col-sm-8">
@@ -111,7 +103,7 @@
                         </div>
                     </div>
 
-
+                    <hr class="hr-text" data-content=" ">
                      <div class="form-group{{ $errors->has('policy_type') ? ' has-error' : '' }}">
                             <label for="policy_type" class="col-sm-2 control-label"> Monthly/Annual/Once-off Cost</label>
                              <div class="col-sm-8">
@@ -127,7 +119,7 @@
 
                             </div>
                     </div>
-
+                    <hr class="hr-text" data-content="">
 
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Premium  Amount </label>
@@ -153,7 +145,7 @@
                                       placeholder="Enter notes..." rows="3">{{ old('notes') }}</textarea>
                         </div>
                     </div>
-
+                    <hr class="hr-text" data-content="DOCUMENTS UPLOAD">
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -165,14 +157,14 @@
 
                     </div>
 
-                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
-                        <label for="documents" class="col-sm-2 control-label">Attachment </label>
-                        <div class="col-sm-8">
+                    {{--<div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">--}}
+                        {{--<label for="documents" class="col-sm-2 control-label">Attachment </label>--}}
+                        {{--<div class="col-sm-8">--}}
 
-                            <input type="file" id="documents1" name="documents1"
-                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
-                                   data-show-upload="false">
-                        </div>
+                            {{--<input type="file" id="documents1" name="documents1"--}}
+                                   {{--class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'--}}
+                                   {{--data-show-upload="false">--}}
+                        {{--</div>--}}
 
                     </div>
                 <div class="modal-footer">

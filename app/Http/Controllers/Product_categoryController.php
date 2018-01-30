@@ -42,8 +42,8 @@ class Product_categoryController extends Controller
         $data['page_title'] = 'Product Categories';
         $data['page_description'] = 'Manage Product Categories';
         $data['breadcrumb'] = [
-                ['title' => 'Employee Records', 'path' => '/Product/Categories', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Employee Records', 'path' => '/Product/Categories', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
@@ -63,8 +63,8 @@ class Product_categoryController extends Controller
             $data['page_title'] = 'Manage Products Product';
             $data['page_description'] = 'Products page';
             $data['breadcrumb'] = [
-                    ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                    ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
             ];
             $data['products'] = $Category;
             $data['active_mod'] = 'Products';
@@ -113,8 +113,8 @@ class Product_categoryController extends Controller
         $data['page_title'] = 'Product Packages';
         $data['page_description'] = 'Manage Product Packages';
         $data['breadcrumb'] = [
-                ['title' => 'Employee Records', 'path' => '/Product/Packages', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Product Packages', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Employee Records', 'path' => '/Product/Packages', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Product Packages', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Packages';
@@ -129,20 +129,22 @@ class Product_categoryController extends Controller
     {
         $currentTime = time();
         $productsPromotions = product_promotions::where('status', 1)
-                ->whereRaw("start_date < $currentTime")
-                ->whereRaw("end_date > $currentTime")
-                ->with('product', 'package')
-                ->orderBy('start_date', 'asc')
-                ->get();
+            ->whereRaw("start_date < $currentTime")
+            ->whereRaw("end_date > $currentTime")
+            ->with('product', 'package')
+            ->orderBy('start_date', 'asc')
+            ->get();
+
+
         $products = product_products::whereDoesntHave('promotions', function ($query) use ($currentTime) {
             $query->where('status', 1)
-                            ->whereRaw("start_date < $currentTime")
-                            ->whereRaw("end_date > $currentTime");
+                ->whereRaw("start_date < $currentTime")
+                ->whereRaw("end_date > $currentTime");
         })->get();
         $packages = product_packages::whereDoesntHave('promotions', function ($query) use ($currentTime) {
             $query->where('status', 1)
-                            ->whereRaw("start_date < $currentTime")
-                            ->whereRaw("end_date > $currentTime");
+                ->whereRaw("start_date < $currentTime")
+                ->whereRaw("end_date > $currentTime");
         })->get();
 
         $data['package'] = $packages;
@@ -151,8 +153,8 @@ class Product_categoryController extends Controller
         $data['page_title'] = 'Product Promotions';
         $data['page_description'] = 'Manage Product Promotions';
         $data['breadcrumb'] = [
-                ['title' => 'Employee Records', 'path' => '/Product/Promotions', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Product Promotions', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Employee Records', 'path' => '/Product/Promotions', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Product Promotions', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['active_mod'] = 'Products';
@@ -174,8 +176,8 @@ class Product_categoryController extends Controller
             $data['page_title'] = 'Manage Package_Products Price';
             $data['page_description'] = 'Products page';
             $data['breadcrumb'] = [
-                    ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                    ['title' => 'Manage Product Prices', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Product Prices', 'active' => 1, 'is_module' => 0]
             ];
 
             $data['products'] = $price;
@@ -196,21 +198,21 @@ class Product_categoryController extends Controller
     {
         if ($package->status == 1) {
             $products = DB::table('packages_product_table')
-                    ->select('packages_product_table.*', 'Product_products.name as Prodname', 'Product_products.description as Proddescription', 'Product_products.price as price')
-                    ->leftJoin('Product_products', 'packages_product_table.product_product_id', '=', 'Product_products.id')
-                    ->where('packages_product_table.product_packages_id', $package->id)
-                    ->orderBy('Product_products.name')
-                    ->get();
+                ->select('packages_product_table.*', 'Product_products.name as Prodname', 'Product_products.description as Proddescription', 'Product_products.price as price')
+                ->leftJoin('Product_products', 'packages_product_table.product_product_id', '=', 'Product_products.id')
+                ->where('packages_product_table.product_packages_id', $package->id)
+                ->orderBy('Product_products.name')
+                ->get();
 
             $newProducts = DB::table('Product_products')
-                    ->orderBy('Product_products.name')
-                    ->get();
+                ->orderBy('Product_products.name')
+                ->get();
 
             $data['page_title'] = 'Manage Products packages';
             $data['page_description'] = 'Products page';
             $data['breadcrumb'] = [
-                    ['title' => 'Products package', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                    ['title' => 'Manage Product package', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Products package', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Product package', 'active' => 1, 'is_module' => 0]
             ];
             $data['products'] = $products;
             $data['package'] = $package;
@@ -257,15 +259,15 @@ class Product_categoryController extends Controller
         $category = product_category::where('status', 1)->get();
         $promotions = product_promotions::where('status', 1)->get();
         $productss = DB::table('Product_products')
-                ->select('Product_products.*', 'product_Category.name as catName')
-                ->leftJoin('product_Category', 'Product_products.id', '=', 'product_Category.id')
-                ->get();
+            ->select('Product_products.*', 'product_Category.name as catName')
+            ->leftJoin('product_Category', 'Product_products.id', '=', 'product_Category.id')
+            ->get();
 
         $data['page_title'] = 'Search';
         $data['page_description'] = 'Manage Product(s) Search';
         $data['breadcrumb'] = [
-                ['title' => 'Products search', 'path' => '/Product/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Product Search', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Products search', 'path' => '/Product/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Product Search', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Search';
@@ -326,7 +328,7 @@ class Product_categoryController extends Controller
 
         $Category->status = $stastus;
         $Category->update();
-		AuditReportsController::store('Products', 'Category status changed', 'Edited by User', 0);
+        AuditReportsController::store('Products', 'Category status changed', 'Edited by User', 0);
         return back();
     }
 
@@ -363,14 +365,14 @@ class Product_categoryController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
-			'price' => 'required',
+            'price' => 'required',
         ]);
 
-		$product->name = $request->input('name');
+        $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
         $product->update();
-	
+
         $newName = $request->input('name');
         $newDescription = $request->input('description');
         $newPrice = $request->input('price');
@@ -414,9 +416,9 @@ class Product_categoryController extends Controller
     public function editPackage(Request $request)
     {
         $this->validate($request, [
-                //           'name' => 'required',
-                //          'description' => 'required',
-                // 'discount' => 'required',
+            //           'name' => 'required',
+            //          'description' => 'required',
+            // 'discount' => 'required',
         ]);
 
         $docData = $request->all();
@@ -500,13 +502,12 @@ class Product_categoryController extends Controller
             $query->orderBy('id', 'desc');
             $query->limit(1);
         }]);
-		# check if old price exist
-		$previousPrice = $product->productPrices->first();
-		if (!empty($previousPrice))
-		{
-			$previousPrice->end_date = $currentDate;
-			$previousPrice->update();
-		}
+        # check if old price exist
+        $previousPrice = $product->productPrices->first();
+        if (!empty($previousPrice)) {
+            $previousPrice->end_date = $currentDate;
+            $previousPrice->update();
+        }
         $product->addNewPrice($price);
 
         AuditReportsController::store('Employee Records', 'Job Title Category Added', "price: $priceData[price]", 0);
@@ -516,10 +517,11 @@ class Product_categoryController extends Controller
     public function editPRICE(Request $request, product_packages $products)
     {
         $this->validate($request, [
-                // 'name' => 'required',
-                // 'description' => 'required',
+            // 'name' => 'required',
+            // 'description' => 'required',
         ]);
 
+        $currentDate = time();
         $priceData = $request->all();
         unset($priceData['_token']);
         $price = new product_price($priceData);
@@ -549,36 +551,36 @@ class Product_categoryController extends Controller
         $categoryID = $request->cat_id;
 
         $tickets = DB::table('Product_products')
-                ->select('Product_products.*', 'product_Category.name as catName')
-                ->leftJoin('product_Category', 'Product_products.id', '=', 'Product_products.category_id')
-                ->where(function ($query) use ($productName) {
-                    if (!empty($productName)) {
-                        $query->where('Product_products.id', $productName);
-                    }
-                })
-                ->where(function ($query) use ($productDescription) {
-                    if (!empty($productDescription)) {
-                        $query->where('description', 'ILIKE', "%$productDescription%");
-                    }
-                })
-                ->where(function ($query) use ($productPrice) {
-                    if (!empty($productPrice)) {
-                        $query->where('price', $productPrice);
-                    }
-                })
-                ->where(function ($query) use ($categoryID) {
-                    if (!empty($categoryID)) {
-                        $query->where('product_Category.id', $categoryID);
-                    }
-                })
-                ->orderBy('id')
-                ->get();
+            ->select('Product_products.*', 'product_Category.name as catName')
+            ->leftJoin('product_Category', 'Product_products.id', '=', 'Product_products.category_id')
+            ->where(function ($query) use ($productName) {
+                if (!empty($productName)) {
+                    $query->where('Product_products.id', $productName);
+                }
+            })
+            ->where(function ($query) use ($productDescription) {
+                if (!empty($productDescription)) {
+                    $query->where('description', 'ILIKE', "%$productDescription%");
+                }
+            })
+            ->where(function ($query) use ($productPrice) {
+                if (!empty($productPrice)) {
+                    $query->where('price', $productPrice);
+                }
+            })
+            ->where(function ($query) use ($categoryID) {
+                if (!empty($categoryID)) {
+                    $query->where('product_Category.id', $categoryID);
+                }
+            })
+            ->orderBy('id')
+            ->get();
 
         $data['page_title'] = 'Product Search ';
         $data['page_description'] = 'Product Search Page';
         $data['breadcrumb'] = [
-                ['title' => 'Product Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Product Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Product Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Product Search Page', 'active' => 1, 'is_module' => 0]
         ];
         //
         $data['tickets'] = $tickets;
@@ -598,24 +600,24 @@ class Product_categoryController extends Controller
         $categoryDescription = $request->category_description;
 
         $category = DB::table('product_Category')
-                ->where(function ($query) use ($categoryName) {
-                    if (!empty($categoryName)) {
-                        $query->where('id', $categoryName);
-                    }
-                })
-                ->where(function ($query) use ($categoryDescription) {
-                    if (!empty($categoryDescription)) {
-                        $query->where('description', 'ILIKE', "%$categoryDescription%");
-                    }
-                })
-                ->orderBy('id')
-                ->get();
+            ->where(function ($query) use ($categoryName) {
+                if (!empty($categoryName)) {
+                    $query->where('id', $categoryName);
+                }
+            })
+            ->where(function ($query) use ($categoryDescription) {
+                if (!empty($categoryDescription)) {
+                    $query->where('description', 'ILIKE', "%$categoryDescription%");
+                }
+            })
+            ->orderBy('id')
+            ->get();
 
         $data['page_title'] = 'Category Search';
         $data['page_description'] = 'Category Search Page';
         $data['breadcrumb'] = [
-                ['title' => 'Category Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Category Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Category Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Category Search Page', 'active' => 1, 'is_module' => 0]
         ];
         //
         $data['category'] = $category;
@@ -637,30 +639,30 @@ class Product_categoryController extends Controller
         $package_discount = $request->package_discount;
 
         $packageSearch = DB::table('product_packages')
-                ->select('product_packages.*', 'Product_products.name as product_name')
-                ->leftJoin('Product_products', 'product_packages.products_id', '=', 'Product_products.id')
-                ->where(function ($query) use ($package_name) {
-                    if (!empty($package_name)) {
-                        $query->where('id', $package_name);
-                    }
-                })
-                ->where(function ($query) use ($package_description) {
-                    if (!empty($package_description)) {
-                        $query->where('description', 'ILIKE', "%$package_description%");
-                    }
-                })
-                ->where(function ($query) use ($product_type) {
-                    if (!empty($product_type)) {
-                        $query->where('products_id', $product_type);
-                    }
-                })
-                ->where(function ($query) use ($package_discount) {
-                    if (!empty($package_discount)) {
-                        $query->where('discount', $package_discount);
-                    }
-                })
-                ->orderBy('id')
-                ->get();
+            ->select('product_packages.*', 'Product_products.name as product_name')
+            ->leftJoin('Product_products', 'product_packages.products_id', '=', 'Product_products.id')
+            ->where(function ($query) use ($package_name) {
+                if (!empty($package_name)) {
+                    $query->where('id', $package_name);
+                }
+            })
+            ->where(function ($query) use ($package_description) {
+                if (!empty($package_description)) {
+                    $query->where('description', 'ILIKE', "%$package_description%");
+                }
+            })
+            ->where(function ($query) use ($product_type) {
+                if (!empty($product_type)) {
+                    $query->where('products_id', $product_type);
+                }
+            })
+            ->where(function ($query) use ($package_discount) {
+                if (!empty($package_discount)) {
+                    $query->where('discount', $package_discount);
+                }
+            })
+            ->orderBy('id')
+            ->get();
 
         $Products = product_products::orderBy('id', 'asc')->get();
         if (!empty($Products)) {
@@ -670,8 +672,8 @@ class Product_categoryController extends Controller
         $data['page_title'] = 'Package Search';
         $data['page_description'] = 'Package Search Results Page';
         $data['breadcrumb'] = [
-                ['title' => 'Package Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Package Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Package Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Package Search Page', 'active' => 1, 'is_module' => 0]
         ];
         //
         $data['packageSearch'] = $packageSearch;
@@ -700,31 +702,31 @@ class Product_categoryController extends Controller
         }
 
         $Promotions = DB::table('product_promotions')
-                ->select('product_promotions.*', 'Product_products.name as product_name')
-                ->leftJoin('Product_products', 'product_promotions.product_product_id', '=', 'Product_products.id')
-                ->where(function ($query) use ($actionFrom) {
-                    if (!empty($actionFrom)) {
-                        $query->where('product_promotions.start_date', $actionFrom);
-                    }
-                })
-                ->where(function ($query) use ($actionTo) {
-                    if (!empty($actionTo)) {
-                        $query->where('product_promotions.end_date', $actionTo);
-                    }
-                })
-                ->where(function ($query) use ($promotion_name) {
-                    if (!empty($promotion_name)) {
-                        $query->where('product_promotions.id', $promotion_name);
-                    }
-                })
-                ->orderBy('id')
-                ->get();
+            ->select('product_promotions.*', 'Product_products.name as product_name')
+            ->leftJoin('Product_products', 'product_promotions.product_product_id', '=', 'Product_products.id')
+            ->where(function ($query) use ($actionFrom) {
+                if (!empty($actionFrom)) {
+                    $query->where('product_promotions.start_date', $actionFrom);
+                }
+            })
+            ->where(function ($query) use ($actionTo) {
+                if (!empty($actionTo)) {
+                    $query->where('product_promotions.end_date', $actionTo);
+                }
+            })
+            ->where(function ($query) use ($promotion_name) {
+                if (!empty($promotion_name)) {
+                    $query->where('product_promotions.id', $promotion_name);
+                }
+            })
+            ->orderBy('id')
+            ->get();
 
         $data['page_title'] = 'Promotions Search';
         $data['page_description'] = 'Promotions Search Results Page';
         $data['breadcrumb'] = [
-                ['title' => 'Promotions Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Promotions Search Page', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Promotions Search', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Promotions Search Page', 'active' => 1, 'is_module' => 0]
         ];
         //
         $data['Promotions'] = $Promotions;
