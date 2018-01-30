@@ -24,6 +24,7 @@ use App\vehicle_fuel_log;
 use App\vehicle_incidents;
 use App\ContactCompany;
 use App\general_cost;
+use App\VehicleIncidentsDocuments;
 use App\fleet_fillingstation;
 use App\vehicle_insurance;
 use App\module_ribbons;
@@ -50,33 +51,14 @@ class VehicleFleetController extends Controller
 
     public function document(vehicle_maintenance $maintenance)
     {
-
         $ID = $maintenance->id;
 
-        $vehicle = vehicle::orderBy('id', 'asc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
-        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-        $vehicle_image = images::orderBy('id', 'asc')->get();
-        $safe = safe::orderBy('id', 'asc')->get();
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-        $loggedInEmplID = Auth::user()->person->id;
-        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
-        ###################>>>>>################# 
-
 
         $ID = $maintenance->id;
 
@@ -94,27 +76,15 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['name'] = $name;
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['vehicleDocumets'] = $vehicleDocumets;
-        $data['vehicle_image'] = $vehicle_image;
-        $data['vehicle_maintenance'] = $vehicle_maintenance;
-        $data['vehicle'] = $vehicle;
-        $data['Vehicle_types'] = $Vehicle_types;
-        $data['vehiclemodel'] = $vehiclemodel;
-        $data['divisionLevels'] = $divisionLevels;
-        $data['vehicledetail'] = $vehicledetail;
-        $data['vehiclemake'] = $vehiclemake;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.document')->with($data);
     }
 
@@ -1181,6 +1151,9 @@ class VehicleFleetController extends Controller
 
         // return $vehicleincidents;
 
+//        $name = VehicleIncidentsDocuments::orderBy('id')->get();
+//        return $name;
+
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1226,20 +1199,42 @@ class VehicleFleetController extends Controller
         $vehicleincidents->incident_type = !empty($SysData['incident_type']) ? $SysData['incident_type'] : 0;
         $vehicleincidents->severity = !empty($SysData['severity']) ? $SysData['severity'] : 0;
         $vehicleincidents->status = !empty($SysData['status']) ? $SysData['status'] : 0;
+        $vehicleincidents->document = 'empty';
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->save();
 
-        //Upload supporting document
-        if ($request->hasFile('documents')) {
-            $fileExt = $request->file('documents')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $vehicleincidents->id . "_documents." . $fileExt;
-                $request->file('documents')->storeAs('Vehicle/vehicleIncidents', $fileName);
-                //Update file name in the table
-                $vehicleincidents->document = $fileName;
-                $vehicleincidents->update();
+
+        $document = new VehicleIncidentsDocuments();
+        $numFiles = $index = 0;
+        $totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
+        $Extensions = array('jpg', 'png', 'jpeg', 'bmp', 'doc', 'pdf', 'ods', 'exe', 'csv', 'odt', 'xls', 'xlsx', 'docx', 'txt');
+
+        $Files = isset($_FILES['document']) ? $_FILES['document'] : array();
+        while ($numFiles != $totalFiles) {
+            $index++;
+            $Name = $request->name[$index];
+            if (isset($Files['Name'][$index]) && $Files['Name'][$index] != '') {
+                $fileName = $document->id . '_' . $Files['Name'][$index];
+                $Explode = array();
+                $Explode = explode('.', $fileName);
+                $Ext = end($Explode);
+                $Ext = strtolower($Ext);
+                if (in_array($Ext, $Extensions)) {
+                    if (!is_dir('/storage/app/Vehicle/vehicleIncidents')) mkdir('/storage/app/Vehicle/vehicleIncidents', 0775);
+                    move_uploaded_file($Files['tmp_name'][$index], '/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
+
+
+                    // $document->date_uploaded = !empty($loanData['date_uploaded']) ? strtotime(str_replace('/', '-', $loanData['date_uploaded'])) : time();
+                    $document->incident_id = $SysData['valueID'];
+                    $document->display_name = $Name;
+                    $document->status = 1;
+                    $document->filename = $fileName;
+                    $document->update();
+                }
             }
+            $numFiles++;
         }
+
 
         return response()->json();
 
@@ -1268,17 +1263,17 @@ class VehicleFleetController extends Controller
         $incident->Update();
 
 
-        //Upload supporting document
-        if ($request->hasFile('documents')) {
-            $fileExt = $request->file('documents')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $incident->id . "_documents." . $fileExt;
-                $request->file('documents')->storeAs('Vehicle/vehicleIncidents', $fileName);
-                //Update file name in the table
-                $incident->document = $fileName;
-                $incident->update();
-            }
-        }
+//        //Upload supporting document
+//        if ($request->hasFile('documents')) {
+//            $fileExt = $request->file('documents')->extension();
+//            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+//                $fileName = $incident->id . "_documents." . $fileExt;
+//                $request->file('documents')->storeAs('Vehicle/vehicleIncidents', $fileName);
+//                //Update file name in the table
+//                $incident->document = $fileName;
+//                $incident->update();
+//            }
+//        }
         return response()->json();
 
 

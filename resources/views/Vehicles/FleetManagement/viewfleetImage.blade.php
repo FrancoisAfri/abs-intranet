@@ -100,6 +100,8 @@
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
                                                     data-toggle="modal" data-target="#edit-package-modal"
                                                     data-id="{{ $vehiclemaintenance->id }}"
+                                                    data-name="{{ $vehiclemaintenance->name }}"
+                                                    data-description="{{ $vehiclemaintenance->description }}"
                                                     data-image="{{ $vehiclemaintenance->image }}"><i
                                                         class="fa fa-pencil-square-o"></i> Edit
                                             </button>
@@ -132,56 +134,13 @@
                                         </td>
                                         <td>{{ !empty($vehiclemaintenance->description) ? $vehiclemaintenance->description : ''}}</td>
 
-                                        <td>{{ !empty($vehiclemaintenance->currentDate) ? date(' d M Y', $vehiclemaintenance->currentDate) : '' }}</td>
-                                        <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
-
-                                        <td>{{ !empty($vehiclemaintenance->name) ? $vehiclemaintenance->name : ''}}</td>
-                                    </tr>
-                                @endforeach
-                                 @foreach ($vehiclemaintenance->images as $vehiclemaintenance)
-                                    <tr id="categories-list">
-                                        <td nowrap>
-                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
-                                                    data-toggle="modal" data-target="#edit-package-modal"
-                                                    data-id="{{ $vehiclemaintenance->id }}"
-                                                    data-image="{{ $vehiclemaintenance->image }}"><i
-                                                        class="fa fa-pencil-square-o"></i> Edit
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <div class="product-img">
-                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"
-                                                     alt="Product Image" width="50" height="50">
-                                            </div>
-
-
-                                            <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog"
-                                                 aria-labelledby="enlargeImageModal" aria-hidden="true">
-                                                <!--  <div class="modal-dialog modal" role="document"> -->
-                                                <div class="modal-dialog modal-sm">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close"><span aria-hidden="true">x</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <img src="" class="enlargeImageModalSource"
-                                                                 style="width: 100%;">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>{{ !empty($vehiclemaintenance->description) ? $vehiclemaintenance->description : ''}}</td>
-
                                         <td>{{ !empty($vehiclemaintenance->upload_date) ? date(' d M Y', $vehiclemaintenance->upload_date) : '' }}</td>
-                                        <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+                                        <td>{{ !empty($maintenance->vehicle_registration) ? $maintenance->vehicle_registration : ''}}</td>
 
-                                        <td>{{ !empty($vehiclemaintenance->name) ? $vehiclemaintenance->name : ''}}</td>
+                                        <td>{{ !empty($vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname ) ? $vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname : ''}}</td>
                                     </tr>
                                 @endforeach
+
                             @else
                                 <tr id="categories-list">
                                     <td colspan="9">
