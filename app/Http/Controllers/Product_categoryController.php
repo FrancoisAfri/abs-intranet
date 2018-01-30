@@ -134,6 +134,8 @@ class Product_categoryController extends Controller
                 ->with('product', 'package')
                 ->orderBy('start_date', 'asc')
                 ->get();
+
+
         $products = product_products::whereDoesntHave('promotions', function ($query) use ($currentTime) {
             $query->where('status', 1)
                             ->whereRaw("start_date < $currentTime")

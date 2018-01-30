@@ -24,12 +24,12 @@
 										<th>Product Price</th>
 									</tr>
 									@if(count($tickets) > 0)
-										@foreach($tickets as $helpdsk)
+										@foreach($tickets as $product)
 											<tr>
-											    <td>{{ (!empty($helpdsk->name)) ?  $helpdsk->name : ''}} </td>
-											 	<td>{{ (!empty($helpdsk->catName)) ?  $helpdsk->catName : ''}} </td>
-						                        <td>{{ (!empty($helpdsk->description)) ?  $helpdsk->description : ''}} </td>
-						                        <td>R {{ (!empty($helpdsk->price)) ?  $helpdsk->price : ''}} </td>
+											    <td>{{ (!empty($product->name)) ?  $product->name : ''}} </td>
+											 	<td>{{ (!empty($product->catName)) ?  $product->catName : ''}} </td>
+						                        <td>{{ (!empty($product->description)) ?  $product->description : ''}} </td>
+						                        <td>R {{ (!empty($product->price)) ?  'R' .number_format($product->price, 2) : ''}} </td>
 											</tr>
 										@endforeach
 									<tr>

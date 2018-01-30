@@ -28,7 +28,7 @@
                                <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{$category->description}}"  ><i class="fa fa-money"></i> Prices</a></td>
 						  <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
 						  <td>{{ (!empty( $category->description)) ?  $category->description : ''}} </td>
-                          <td>{{ (!empty( $category->price)) ?  $category->price : ''}} </td>
+                          <td>{{ (!empty( $category->price)) ?  'R' .number_format($category->price, 2) : ''}} </td>
 						   <td>
                             <!--   leave here  -->
                             <button type="button" id="view_ribbons" class="btn {{ (!empty($category->status) && $category->status == 1) ? " btn-danger " : "btn-success " }}

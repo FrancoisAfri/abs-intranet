@@ -32,9 +32,7 @@
 											    <td>{{ (!empty($packages->name)) ?  $packages->name : ''}} </td>
 						                        <td>{{ (!empty($packages->description)) ?  $packages->description : ''}} </td>
 						                        <td>{{ (!empty($packages->product_name)) ?  $packages->product_name : ''}} </td>
-						                        <td><span class="label label-primary ">{{ (!empty($packages->discount)) ?  $packages->discount : ''}} </td>
-						                        <!--  -->
-						                        
+						                        <td>{{ (!empty($packages->discount)) ?  '%' .number_format($packages->discount, 2) : ''}} </td>
 											</tr>
 										@endforeach
 									<tr>
