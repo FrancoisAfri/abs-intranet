@@ -366,7 +366,7 @@
 				var file_index = document.getElementById("file_index");
 				file_index.value = ++file_index.value;
 				var file_clone = clone("file_row", file_index.value, "document");
-				var name_clone = clone("name_row", file_index.value, "Name");
+				var name_clone = clone("name_row", file_index.value, "name");
 				var final_row = document.getElementById("final_row").cloneNode(false);
 				table.appendChild(file_clone);
 				table.appendChild(name_clone);

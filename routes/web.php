@@ -509,6 +509,11 @@ Route::patch('vehicle_management/edit_images/{image}', 'FleetManagementControlle
 
 Route::patch('vehicle_management/edit_key/{keytracking}', 'FleetManagementController@editKeys');
 
+//######## serch Docs ################
+Route::get('vehicle_management/Search', 'VehicleDocSearchController@index');
+Route::post('vehicle_management/doc_search', 'VehicleDocSearchController@doc_search');
+Route::post('vehicle_management/image_search', 'VehicleDocSearchController@image_search');
+
 // Performance Appraisals Module
 
 Route::get('appraisal/setup', 'AppraisalSetupController@index');

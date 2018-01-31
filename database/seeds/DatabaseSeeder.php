@@ -776,14 +776,15 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'Jobcard_management/Job_card';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 3;
-        // $ribbon->ribbon_name = 'Manage Fleet Filling Station';
-        // $ribbon->description = 'Manage Fleet Filling Station damage categories';
-        // $ribbon->ribbon_path = 'vehicle_management/fillingstaion';
-        // $ribbon->access_level = 3;
-        // $module->addRibbon($ribbon);
+
+         $ribbon = new module_ribbons();
+         $ribbon->active = 1;
+         $ribbon->sort_order = 3;
+         $ribbon->ribbon_name = 'Search';
+         $ribbon->description = 'Search';
+         $ribbon->ribbon_path = 'vehicle_management/Search';
+         $ribbon->access_level = 9;
+         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
