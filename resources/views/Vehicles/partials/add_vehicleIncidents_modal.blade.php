@@ -136,11 +136,11 @@
 								class="form-control">
 							</div>
 							<div class="col-sm-6" style="display:none;" id="name_row">
-								<input type="text" class="form-control" id="Name" name="Name"
+								<input type="text" class="form-control" id="name" name="name"
 									   placeholder="File Name or description" disabled="disabled">
 							</div>
 							<div class="col-sm-6" id="1" name="1" style="margin-bottom: 15px;">
-								<input type="text" class="form-control" id="Name[1]" name="Name[1]"
+								<input type="text" class="form-control" id="name[1]" name="name[1]"
 									   placeholder="File Name or description">
 							</div>
 						</div>

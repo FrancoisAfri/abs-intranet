@@ -1199,12 +1199,11 @@ class VehicleFleetController extends Controller
         $vehicleincidents->incident_type = !empty($SysData['incident_type']) ? $SysData['incident_type'] : 0;
         $vehicleincidents->severity = !empty($SysData['severity']) ? $SysData['severity'] : 0;
         $vehicleincidents->status = !empty($SysData['status']) ? $SysData['status'] : 0;
-        $vehicleincidents->document = 'empty';
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->save();
 
 
-        $document = new VehicleIncidentsDocuments();
+
         $numFiles = $index = 0;
         $totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
         $Extensions = array('jpg', 'png', 'jpeg', 'bmp', 'doc', 'pdf', 'ods', 'exe', 'csv', 'odt', 'xls', 'xlsx', 'docx', 'txt');
@@ -1213,18 +1212,21 @@ class VehicleFleetController extends Controller
         while ($numFiles != $totalFiles) {
             $index++;
             $Name = $request->name[$index];
-            if (isset($Files['Name'][$index]) && $Files['Name'][$index] != '') {
-                $fileName = $document->id . '_' . $Files['Name'][$index];
+            if (isset($Files['name'][$index]) && $Files['name'][$index] != '') {
+                $fileName = $vehicleincidents->id . '_' . $Files['name'][$index];
                 $Explode = array();
                 $Explode = explode('.', $fileName);
                 $Ext = end($Explode);
                 $Ext = strtolower($Ext);
                 if (in_array($Ext, $Extensions)) {
-                    if (!is_dir('/storage/app/Vehicle/vehicleIncidents')) mkdir('/storage/app/Vehicle/vehicleIncidents', 0775);
-                    move_uploaded_file($Files['tmp_name'][$index], '/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
+//                    if (!is_dir('/workproject/abs-intaranet/storage/app/Vehicle/vehicleIncidents')) mkdir('Users/Afrixcel2017/workproject/abs-intranet/storage/app/Vehicle/vehicleIncidents', 0775);
+//                    move_uploaded_file($Files['tmp_name'][$index], '/workproject/abs-intaranet/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
+//
 
+//                    $destinationPath  = 'Vehicle/vehicleIncidents';
+//                    $Files['tmp_name'][$index]->storeAs($destinationPath . ' ' . $fileName);
 
-                    // $document->date_uploaded = !empty($loanData['date_uploaded']) ? strtotime(str_replace('/', '-', $loanData['date_uploaded'])) : time();
+                    $document = new VehicleIncidentsDocuments();
                     $document->incident_id = $SysData['valueID'];
                     $document->display_name = $Name;
                     $document->status = 1;
@@ -1234,7 +1236,7 @@ class VehicleFleetController extends Controller
             }
             $numFiles++;
         }
-
+//
 
         return response()->json();
 
@@ -1263,7 +1265,7 @@ class VehicleFleetController extends Controller
         $incident->Update();
 
 
-//        //Upload supporting document
+        //Upload supporting document
 //        if ($request->hasFile('documents')) {
 //            $fileExt = $request->file('documents')->extension();
 //            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
@@ -1642,8 +1644,7 @@ class VehicleFleetController extends Controller
 
     }
 
-    public
-    function viewBookingLog(vehicle_maintenance $maintenance)
+    public function viewBookingLog(vehicle_maintenance $maintenance)
     {
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();

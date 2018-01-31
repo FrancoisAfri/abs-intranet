@@ -525,6 +525,7 @@ class FleetManagementController extends Controller
     {
 
         $ID = $maintenance->id;
+        $ID = $maintenance->id;
 
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
@@ -901,6 +902,10 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
         $currentDate = time();
+
+        $status = 0;
+
+
 
         $vehicledocumets = new vehicle_documets();
         $vehicledocumets->type = !empty($SysData['type']) ? $SysData['type'] : 0;
