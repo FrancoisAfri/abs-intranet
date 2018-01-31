@@ -72,8 +72,8 @@
                                     <select class="form-control select2" style="width: 100%;" id="vehicle_type"
                                             name="vehicle_type">
                                         <option value="">*** Select an Vehicle Type ***</option>
-                                        @foreach($vehicle as $vehicletypes)
-                                            <option value="{{ $vehicletypes->id }}">{{ $vehicletypes->name }}</option>
+                                        @foreach($vehicleTypes as $vehicletypes)
+                                            <option value="{{ $vehicletypes->id }}">{{ $vehicletypes->vehicleMake . ' ' . $vehicletypes->vehicleModel . ' ' . $vehicletypes->year }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -151,10 +151,8 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    
                                     <input type="text" class="form-control" id="expiry_date"
                                            name="expiry_date" value="" placeholder="Select Expiry Date...">
-
                                 </div>
                             </div>
                         </div>
@@ -247,6 +245,17 @@
                 format: 'DD/MM/YYYY',
                 endDate: '-1d',
                 autoclose: true
+            });
+
+            $(document).ready(function () {
+
+                $('input[name="expiry_date"]').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+
             });
             //show/hide fields on radio button toggles (depending on registration type)
 

@@ -68,7 +68,7 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-            return $vehicleDocumets;
+            //return $vehicleDocumets;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";

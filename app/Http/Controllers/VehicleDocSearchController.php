@@ -29,25 +29,19 @@ class VehicleDocSearchController extends Controller
     {
         $vehiclemaker = vehiclemake::orderBy('status', 1)->get();
         $vehiclemodeler = vehiclemodel::orderBy('status', 1)->get();
-        $vehicleTypes = Vehicle_managemnt::orderBy('status', 1)->get();
+        //$vehicleTypes = Vehicle_managemnt::orderBy('status', 1)->get();
         $vehicle = vehicle_maintenance::orderBy('status', 1)->get();
 
-//        $vehiclebookinglog = DB::table('vehicle_details')
-//            ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
-//                'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
-//                'hr_people.first_name as firstname', 'hr_people.surname as surname',
-//                'vehicle_collect_documents.document as collectDoc',
-//                'vehicle_return_documents.document as returnDoc')
-//            ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
-//            ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
-//            ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
-//            ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
-//            ->leftJoin('vehicle_collect_documents', 'vehicle_booking.id', '=', 'vehicle_collect_documents.bookingID')
-//            ->leftJoin('vehicle_return_documents', 'vehicle_booking.id', '=', 'vehicle_return_documents.bookingID')
-//            ->orderBy('vehicle_booking.id', 'desc')
-//            ->where('vehicle_booking.vehicle_id', $vehicleID)
-//            ->get();
+        $vehicleTypes = DB::table('vehicle_details')
+            ->select('vehicle_details.*', 'vehicle_make.name as vehicleMake',
+                'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->orderBy('vehicle_details.id', 'desc')
+            ->get();
 
+        //return $vehicleTypes;
 
 
         $data['page_title'] = "Search";
@@ -71,25 +65,28 @@ class VehicleDocSearchController extends Controller
         ]);
         $request = $request->all();
         unset($request['_token']);
-        return $request;
 
         $actionFrom = $actionTo = 0;
-        $userID = $request['hr_person_id'];
+        // $userID = $request['hr_person_id'];
         $fleetNo = $request['fleet_no'];
         $Description = $request['description'];
         $actionDate = $request['action_date'];
-        $expiryDate = $request['expiry_date'];
+        //$expiryDate = $request['expiry_date'];
         $vehicleType = $request['vehicle_type'];
+
+        $expiryDate = $request['expiry_date'] = str_replace('/', '-', $request['expiry_date']);
+        $expiryDate = $request['expiry_date'] = strtotime($request['expiry_date']);
+
+        // return $expiryDate;
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $historyAudit = DB::table('vehicle_documets')
+
+        $vehicleDocumets = DB::table('vehicle_documets')
             ->select('vehicle_documets.*')
-//            ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
-//            ->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('vehicle_documets.upload_date', [$actionFrom, $actionTo]);
@@ -97,7 +94,12 @@ class VehicleDocSearchController extends Controller
             })
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_documets.type', $vehicleType);
+                    $query->where('vehicle_documets.vehicleID', $vehicleType);
+                }
+            })
+            ->where(function ($query) use ($expiryDate) {
+                if (!empty($expiryDate)) {
+                    $query->where('vehicle_documets.exp_date', $expiryDate);
                 }
             })
             ->where(function ($query) use ($Description) {
@@ -105,13 +107,89 @@ class VehicleDocSearchController extends Controller
                     $query->where('vehicle_documets.description', 'ILIKE', "%$Description%");
                 }
             })
-            ->orderBy('leave_history.id')
+            ->orderBy('vehicle_documets.id')
             ->get();
+
+        $data['page_title'] = "Search";
+        $data['page_description'] = "Document Search";
+        $data['breadcrumb'] = [
+            ['title' => 'Vehicle Search', 'path' => '/vehicle_management/Search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], ['title' => 'Vehicle Search', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['vehicleDocumets'] = $vehicleDocumets;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Search';
+        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        return view('Vehicles.vehicleDoc_search_results')->with($data);
+
 
     }
 
     public function image_search(Request $request)
     {
+        $this->validate($request, [
+        ]);
+        $request = $request->all();
+        unset($request['_token']);
+
+        $actionFrom = $actionTo = 0;
+        // $userID = $request['hr_person_id'];
+        $fleetNo = $request['fleet_no'];
+        $Description = $request['description'];
+        $actionDate = $request['action_date'];
+        //$expiryDate = $request['expiry_date'];
+        $vehicleType = $request['vehicle_type'];
+
+        $expiryDate = $request['expiry_date'] = str_replace('/', '-', $request['expiry_date']);
+        $expiryDate = $request['expiry_date'] = strtotime($request['expiry_date']);
+
+        // return $expiryDate;
+
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+        $vehicleImages = DB::table('vehicle_image')
+            ->select('vehicle_image.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
+            ->leftJoin('hr_people', 'vehicle_image.user_name', '=', 'hr_people.id')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('vehicle_documets.upload_date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->where(function ($query) use ($vehicleType) {
+                if (!empty($vehicleType)) {
+                    $query->where('vehicle_documets.vehicleID', $vehicleType);
+                }
+            })
+            ->where(function ($query) use ($expiryDate) {
+                if (!empty($expiryDate)) {
+                    $query->where('vehicle_documets.exp_date', $expiryDate);
+                }
+            })
+            ->where(function ($query) use ($Description) {
+                if (!empty($Description)) {
+                    $query->where('vehicle_documets.description', 'ILIKE', "%$Description%");
+                }
+            })
+            ->orderBy('vehicle_image.id')
+            ->get();
+
+        //return $vehicleImages;
+
+        $data['page_title'] = "Search";
+        $data['page_description'] = " Image Search";
+        $data['breadcrumb'] = [
+            ['title' => 'Vehicle Search', 'path' => '/vehicle_management/Search', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], ['title' => 'Vehicle Search', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['vehicleImages'] = $vehicleImages;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Search';
+        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        return view('Vehicles.vehicleImage_search_results')->with($data);
 
     }
 }
