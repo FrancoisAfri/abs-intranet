@@ -86,7 +86,8 @@ class VehicleDocSearchController extends Controller
         }
 
         $vehicleDocumets = DB::table('vehicle_documets')
-            ->select('vehicle_documets.*')
+            ->select('vehicle_documets.*','vehicle_details.vehicle_make as make','vehicle_details.fleet_number as fleetNumber')
+            ->leftJoin('vehicle_details', 'vehicle_documets.vehicleID', '=', 'vehicle_details.id')
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('vehicle_documets.upload_date', [$actionFrom, $actionTo]);
@@ -132,6 +133,7 @@ class VehicleDocSearchController extends Controller
         $request = $request->all();
         unset($request['_token']);
 
+
         $actionFrom = $actionTo = 0;
         // $userID = $request['hr_person_id'];
         $fleetNo = $request['fleet_no'];
@@ -139,6 +141,7 @@ class VehicleDocSearchController extends Controller
         $actionDate = $request['action_date'];
         //$expiryDate = $request['expiry_date'];
         $vehicleType = $request['vehicle_type'];
+        $vehicle_make = $request['vehicle_make'];
 
         $expiryDate = $request['expiry_date'] = str_replace('/', '-', $request['expiry_date']);
         $expiryDate = $request['expiry_date'] = strtotime($request['expiry_date']);
@@ -150,6 +153,7 @@ class VehicleDocSearchController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
+
 
         $vehicleImages = DB::table('vehicle_image')
             ->select('vehicle_image.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
@@ -164,6 +168,16 @@ class VehicleDocSearchController extends Controller
                     $query->where('vehicle_image.vehicle_maintanace', $vehicleType);
                 }
             })
+            ->where(function ($query) use ($fleetNo) {
+                if (!empty($fleetNo)) {
+                    $query->where('vehicle_image.fleetNumber', $fleetNo);
+                }
+            })
+            ->where(function ($query) use ($fleetNo) {
+                if (!empty($fleetNo)) {
+                    $query->where('vehicle_image.fleetNumber', $fleetNo);
+                }
+            })
             ->where(function ($query) use ($Description) {
                 if (!empty($Description)) {
                     $query->where('vehicle_image.description', 'ILIKE', "%$Description%");
@@ -172,7 +186,7 @@ class VehicleDocSearchController extends Controller
             ->orderBy('vehicle_image.id')
             ->get();
 
-       // return $vehicleImages;
+      // return $vehicleImages;
 
         $data['page_title'] = "Search";
         $data['page_description'] = " Image Search";

@@ -38,6 +38,7 @@
                                    placeholder="Enter name" required>
                         </div>
                     </div>
+
                     <div class="form-group Single-field">
                         <label for="path" class="col-sm-3 control-label">Image Description</label>
                         <div class="col-sm-8">
@@ -59,9 +60,9 @@
                         <label for="days" class="col-sm-3 control-label">Note</label>
                         <div class="col-sm-8">
 
-                            <textarea class="form-control" id="description" name="description"
+                            <textarea class="form-control" id="note" name="note"
                                       placeholder="Please make sure you zip the files you wish to upload and then upload the zip file. The files in zip file will then be uploaded..."
-                                      rows="3" readonly="">{{ old('description') }}</textarea>
+                                      rows="3" readonly="">{{ old('note') }}</textarea>
 
                         </div>
                     </div>

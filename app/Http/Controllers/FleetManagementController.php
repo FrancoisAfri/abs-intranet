@@ -458,9 +458,9 @@ class FleetManagementController extends Controller
 
         $userLogged = Auth::user()->load('person');
 
-        $vehicleImages = new images();
-        $vehicleImages->name = $SysData['name'];
-        $vehicleImages->description = $SysData['description'];
+        $vehicleImages = new images($SysData);
+        // $vehicleImages->name = $SysData['name'];
+        // $vehicleImages->description = $SysData['description'];
         $vehicleImages->vehicle_maintanace = $SysData['valueID'];
         $vehicleImages->upload_date = $currentDate;
         $vehicleImages->user_name = $userLogged->id;
@@ -902,9 +902,6 @@ class FleetManagementController extends Controller
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
 
         $currentDate = time();
-
-        $status = 0;
-
 
 
         $vehicledocumets = new vehicle_documets();
