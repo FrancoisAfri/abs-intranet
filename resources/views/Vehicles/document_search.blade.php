@@ -14,7 +14,7 @@
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 <!-- Select 2-->
-<link rel="stylesheet" type="text/css" href="css/dropzone.css" />
+<link rel="stylesheet" type="text/css" href="css/dropzone.css"/>
 <!--  -->
 @section('page_dependencies')
 
@@ -72,8 +72,8 @@
                                     <select class="form-control select2" style="width: 100%;" id="vehicle_type"
                                             name="vehicle_type">
                                         <option value="">*** Select an Vehicle Type ***</option>
-                                        @foreach($vehicle as $vehicletypes)
-                                            <option value="{{ $vehicletypes->id }}">{{ $vehicletypes->name }}</option>
+                                        @foreach($vehicleTypes as $vehicletypes)
+                                            <option value="{{ $vehicletypes->id }}">{{ $vehicletypes->vehicleMake . ' ' . $vehicletypes->vehicleModel . ' ' . $vehicletypes->year }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -144,17 +144,15 @@
                             </div>
                         </div>
 
-                        <div class="form-group  {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                        <div class="form-group doc-field  {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Expiry Date</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    
                                     <input type="text" class="form-control" id="expiry_date"
                                            name="expiry_date" value="" placeholder="Select Expiry Date...">
-
                                 </div>
                             </div>
                         </div>
@@ -248,6 +246,17 @@
                 endDate: '-1d',
                 autoclose: true
             });
+
+            $(document).ready(function () {
+
+                $('input[name="expiry_date"]').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+
+            });
             //show/hide fields on radio button toggles (depending on registration type)
 
             $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH, #rdo_cancelled_leaves').on('ifChecked', function () {
@@ -286,19 +295,12 @@
             var allType = $("input[name='application_type']:checked").val();
             if (allType == 1) { //adjsut leave
                 //$('.hours-field').hide();
-                $('.to-field').show();
-                $('.from-field').show();
-                $('.levAction-field').hide();
-                $('.date-field').hide();
+                $('.doc-field').show();
                 $('form[name="leave-application-form"]').attr('action', '/vehicle_management/doc_search');
                 $('#gen-report').val("Submit");
             }
             else if (allType == 2) { //resert leave
-                $('.to-field').hide();
-                $('.from-field').hide();
-                $('.manual-field').hide();
-                $('.levAction-field').hide();
-                $('.date-field').hide();
+                $('.doc-field').hide();
                 $('form[name="leave-application-form"]').attr('action', '/vehicle_management/image_search');
                 $('#gen-report').val("Submit");
             }

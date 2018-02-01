@@ -80,6 +80,26 @@
                                                         <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("Vehicle/images/$card->image") : 'http://placehold.it/60x50' }}"
                                                              alt="Product Image" width="50" height="50">
                                                     </div>
+                                                    <div class="modal fade" id="enlargeImageModal" tabindex="-1"
+                                                         role="dialog"
+                                                         aria-labelledby="enlargeImageModal" aria-hidden="true">
+                                                        <!--  <div class="modal-dialog modal" role="document"> -->
+                                                        <div class="modal-dialog modal-sm">
+                                                            {{--<div class="modal-content">--}}
+                                                                {{--<div class="modal-header">--}}
+                                                                    {{--<button type="button" class="close"--}}
+                                                                            {{--data-dismiss="modal"--}}
+                                                                            {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
+                                                                    {{--</button>--}}
+                                                                {{--</div>--}}
+                                                                <div class="modal-body">
+                                                                    <img src="" class="enlargeImageModalSource"
+                                                                         style="width: 200%;">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
 
                                                 <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
@@ -133,19 +153,23 @@
 
                 @section('page_script')
                     <!-- DataTables -->
+                     <!-- DataTables -->
                         <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                         <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
                         <!-- End Bootstrap File input -->
-
+                        <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+                                type="text/javascript"></script>
+                        <!-- the main fileinput plugin file -->
+                        <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+                        <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+                        <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+                        <script src="/custom_components/js/modal_ajax_submit.js"></script>
                         <script>
-                            function postData(id, data) {
-                                if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
 
-                            }
 
                             //Cancel button click event
                             document.getElementById("cancel").onclick = function () {
-                                location.href = "/vehicle_management/manage_fleet";
+                                location.href = "/vehicle_management/Search";
                             };
                             $(function () {
                                 $('#example2').DataTable({
@@ -158,5 +182,34 @@
                                 });
                             });
 
+                            $('[data-toggle="tooltip"]').tooltip();
+
+                            //Vertically center modals on page
+                            function reposition() {
+                                var modal = $(this),
+                                    dialog = modal.find('.modal-dialog');
+                                modal.css('display', 'block');
+
+                                // Dividing by two centers the modal exactly, but dividing by three
+                                // or four works better for larger screens.
+                                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+                            }
+
+                            // Reposition when a modal is shown
+                            $('.modal').on('show.bs.modal', reposition);
+                            // Reposition when the window is resized
+                            $(window).on('resize', function () {
+                                $('.modal:visible').each(reposition);
+                            });
+
+                            //
+
+
+                            $(function () {
+                                $('img').on('click', function () {
+                                    $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+                                    $('#enlargeImageModal').modal('show');
+                                });
+                            });
                         </script>
 @endsection
