@@ -1203,41 +1203,36 @@ class VehicleFleetController extends Controller
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->save();
 
+		# document
+		$numFiles  = $index = 0;
+		$totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
+		$Extensions = array ('jpg', 'png', 'jpeg', 'bmp', 'doc', 'pdf', 'ods', 'exe', 'csv', 'odt', 'xls', 'xlsx', 'docx', 'txt');
 
-
-        $numFiles = $index = 0;
-        $totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
-        $Extensions = array('jpg', 'png', 'jpeg', 'bmp', 'doc', 'pdf', 'ods', 'exe', 'csv', 'odt', 'xls', 'xlsx', 'docx', 'txt');
-
-        $Files = isset($_FILES['document']) ? $_FILES['document'] : array();
-        while ($numFiles != $totalFiles) {
-            $index++;
-            $Name = $request->name[$index];
-            if (isset($Files['name'][$index]) && $Files['name'][$index] != '') {
-                $fileName = $vehicleincidents->id . '_' . $Files['name'][$index];
-                $Explode = array();
-                $Explode = explode('.', $fileName);
-                $Ext = end($Explode);
-                $Ext = strtolower($Ext);
-                if (in_array($Ext, $Extensions)) {
-//                    if (!is_dir('/workproject/abs-intaranet/storage/app/Vehicle/vehicleIncidents')) mkdir('Users/Afrixcel2017/workproject/abs-intranet/storage/app/Vehicle/vehicleIncidents', 0775);
-//                    move_uploaded_file($Files['tmp_name'][$index], '/workproject/abs-intaranet/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
-//
-
-//                    $destinationPath  = 'Vehicle/vehicleIncidents';
-//                    $Files['tmp_name'][$index]->storeAs($destinationPath . ' ' . $fileName);
-
-                    $document = new VehicleIncidentsDocuments();
-                    $document->incident_id = $SysData['valueID'];
-                    $document->display_name = $Name;
-                    $document->status = 1;
-                    $document->filename = $fileName;
-                    $document->update();
-                }
-            }
-            $numFiles++;
-        }
-//
+		$Files	= isset($_FILES['document'])	?	$_FILES['document'] : array();
+		while ($numFiles != $totalFiles)
+		{
+			$index++;
+			$Name =  $request->name[$index];
+			if(isset($Files['name'][$index]) && $Files['name'][$index] != '')
+			{
+				$fileName = $vehicleincidents->id.'_'.$Files['name'][$index];
+				$Explode = array();
+				$Explode = explode('.', $fileName);
+				$ext = end($Explode);
+				$ext = strtolower($ext);
+				if (in_array($ext, $Extensions))
+				{
+					if (!is_dir('../../../storage/app/Vehicle/vehicleIncidents')) mkdir('../../../storage/app/Vehicle/vehicleIncidents', 0775);
+					move_uploaded_file($Files['tmp_name'][$index], '/home/devloansafrixcel/loansystem/storage/app/loanDocs/'.$fileName ) or  die('Could not move file!');
+					$document = new VehicleIncidentsDocuments($SysData);
+					$document->display_name = $Name;
+					$document->filename = $fileName;
+					$document->status = 1;
+					$vehicleincidents->addIncidentDocs($document);
+				}
+			}
+			$numFiles ++;
+		}
 
         return response()->json();
 
