@@ -120,6 +120,9 @@ class SurveysController extends Controller
 		unset($questions['_token']);
 		$question = new SurveyQuestions($questions);
 		$question->status = 1;
+		$question->division_level_1 = !empty($questions['division_level_1']) ? $questions['division_level_1']: 0;
+		$question->division_level_2 = !empty($questions['division_level_2']) ? $questions['division_level_2']: 0;
+		$question->division_level_3 = !empty($questions['division_level_3']) ? $questions['division_level_3']: 0;
         $question->save();
 		AuditReportsController::store('Survey', 'Question Added', "Question Description: $question->description", 0);
 		return response()->json(['new_meeting_decs' => $question->description], 200);
