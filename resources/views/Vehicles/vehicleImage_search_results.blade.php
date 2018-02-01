@@ -69,7 +69,7 @@
                         <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
                         <!-- End Bootstrap File input -->
                         <script>
-                            
+
 
                             //Cancel button click event
                             document.getElementById("cancel").onclick = function () {

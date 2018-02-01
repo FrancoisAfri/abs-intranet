@@ -1222,10 +1222,6 @@ class VehicleFleetController extends Controller
                 if (in_array($Ext, $Extensions)) {
 //                    if (!is_dir('/workproject/abs-intaranet/storage/app/Vehicle/vehicleIncidents')) mkdir('Users/Afrixcel2017/workproject/abs-intranet/storage/app/Vehicle/vehicleIncidents', 0775);
 //                    move_uploaded_file($Files['tmp_name'][$index], '/workproject/abs-intaranet/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
-//
-
-//                    $destinationPath  = 'Vehicle/vehicleIncidents';
-//                    $Files['tmp_name'][$index]->storeAs($destinationPath . ' ' . $fileName);
 
                     $document = new VehicleIncidentsDocuments();
                     $document->incident_id = $SysData['valueID'];

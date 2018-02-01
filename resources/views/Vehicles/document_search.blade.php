@@ -14,7 +14,7 @@
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 <!-- Select 2-->
-<link rel="stylesheet" type="text/css" href="css/dropzone.css" />
+<link rel="stylesheet" type="text/css" href="css/dropzone.css"/>
 <!--  -->
 @section('page_dependencies')
 
@@ -144,7 +144,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group  {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                        <div class="form-group doc-field  {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Expiry Date</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
@@ -295,19 +295,12 @@
             var allType = $("input[name='application_type']:checked").val();
             if (allType == 1) { //adjsut leave
                 //$('.hours-field').hide();
-                $('.to-field').show();
-                $('.from-field').show();
-                $('.levAction-field').hide();
-                $('.date-field').hide();
+                $('.doc-field').show();
                 $('form[name="leave-application-form"]').attr('action', '/vehicle_management/doc_search');
                 $('#gen-report').val("Submit");
             }
             else if (allType == 2) { //resert leave
-                $('.to-field').hide();
-                $('.from-field').hide();
-                $('.manual-field').hide();
-                $('.levAction-field').hide();
-                $('.date-field').hide();
+                $('.doc-field').hide();
                 $('form[name="leave-application-form"]').attr('action', '/vehicle_management/image_search');
                 $('#gen-report').val("Submit");
             }

@@ -156,28 +156,23 @@ class VehicleDocSearchController extends Controller
             ->leftJoin('hr_people', 'vehicle_image.user_name', '=', 'hr_people.id')
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('vehicle_documets.upload_date', [$actionFrom, $actionTo]);
+                    $query->whereBetween('vehicle_image.upload_date', [$actionFrom, $actionTo]);
                 }
             })
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_documets.vehicleID', $vehicleType);
-                }
-            })
-            ->where(function ($query) use ($expiryDate) {
-                if (!empty($expiryDate)) {
-                    $query->where('vehicle_documets.exp_date', $expiryDate);
+                    $query->where('vehicle_image.vehicle_maintanace', $vehicleType);
                 }
             })
             ->where(function ($query) use ($Description) {
                 if (!empty($Description)) {
-                    $query->where('vehicle_documets.description', 'ILIKE', "%$Description%");
+                    $query->where('vehicle_image.description', 'ILIKE', "%$Description%");
                 }
             })
             ->orderBy('vehicle_image.id')
             ->get();
 
-        //return $vehicleImages;
+       // return $vehicleImages;
 
         $data['page_title'] = "Search";
         $data['page_description'] = " Image Search";
