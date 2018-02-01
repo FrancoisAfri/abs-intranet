@@ -386,17 +386,7 @@ class FleetManagementController extends Controller
         //return $maintenance;
 
         $ID = $maintenance->id;
-
-        $vehicle = vehicle::orderBy('id', 'asc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-
-
-        // return $vehiclemaintenance;
 
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -407,14 +397,12 @@ class FleetManagementController extends Controller
         $ID = $maintenance->id;
 
         $vehiclemaintenance = DB::table('vehicle_image')
-            ->select('vehicle_image.*','hr_people.first_name as first_name', 'hr_people.surname as surname')
+            ->select('vehicle_image.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_image.user_name', '=', 'hr_people.id')
             ->where('vehicle_image.vehicle_maintanace', $ID)
             ->get();
 
-        //return $vehiclemaintenance;
 
-        //$Category->load('productCategory');
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -426,16 +414,8 @@ class FleetManagementController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['ID'] = $ID;
-        //$data['vehicle_image'] = $vehicle_image;
-        $data['vehicle_maintenance'] = $vehicle_maintenance;
-        $data['vehicle'] = $vehicle;
-        $data['Vehicle_types'] = $Vehicle_types;
-        $data['vehiclemodel'] = $vehiclemodel;
-        $data['divisionLevels'] = $divisionLevels;
-        $data['vehicledetail'] = $vehicledetail;
-        $data['vehiclemake'] = $vehiclemake;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
-        //$data['vehiclemaintenances'] = $vehiclemaintenances;
+        $data['vehicle_maintenance'] = $vehicle_maintenance;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
@@ -525,17 +505,7 @@ class FleetManagementController extends Controller
     {
 
         $ID = $maintenance->id;
-        $ID = $maintenance->id;
 
-        $vehicle = vehicle::orderBy('id', 'asc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
-        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-        $vehicle_image = images::orderBy('id', 'asc')->get();
-        $keytracking = keytracking::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
@@ -543,7 +513,6 @@ class FleetManagementController extends Controller
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -582,14 +551,6 @@ class FleetManagementController extends Controller
         $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['keytracking'] = $keytracking;
-        $data['vehicle_image'] = $vehicle_image;
-        $data['vehicle_maintenance'] = $vehicle_maintenance;
-        $data['vehicle'] = $vehicle;
-        $data['Vehicle_types'] = $Vehicle_types;
-        $data['vehiclemodel'] = $vehiclemodel;
-        $data['divisionLevels'] = $divisionLevels;
-        $data['vehicledetail'] = $vehicledetail;
-        $data['vehiclemake'] = $vehiclemake;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
@@ -704,26 +665,11 @@ class FleetManagementController extends Controller
 
         $ID = $maintenance->id;
 
-        $vehicle = vehicle::orderBy('id', 'asc')->get();
         $companies = ContactCompany::orderBy('name', 'asc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
-        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-        $vehicle_image = images::orderBy('id', 'asc')->get();
-        $keytracking = keytracking::orderBy('id', 'asc')->get();
-        $safe = safe::orderBy('id', 'asc')->get();
         $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
-        // return $permitlicence;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -765,19 +711,8 @@ class FleetManagementController extends Controller
         $data['companies'] = $companies;
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['keyStatus'] = $keyStatus;
-        $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['permits'] = $permits;
-        $data['vehicle_image'] = $vehicle_image;
-        $data['vehicle_maintenance'] = $vehicle_maintenance;
-        $data['vehicle'] = $vehicle;
-        $data['Vehicle_types'] = $Vehicle_types;
-        $data['vehiclemodel'] = $vehiclemodel;
-        $data['divisionLevels'] = $divisionLevels;
-        $data['vehicledetail'] = $vehicledetail;
-        $data['vehiclemake'] = $vehiclemake;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
@@ -1032,7 +967,7 @@ class FleetManagementController extends Controller
         $note->date_captured = $currentDate;
         $note->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
         $note->notes = $SysData['notes'];
-        $notes->vehicleID = $SysData['valueID'];
+        $note->vehicleID = $SysData['valueID'];
         $note->update();
 
         //Upload supporting document

@@ -68,7 +68,7 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-            //return $vehicleDocumets;
+        //return $vehicleDocumets;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -92,29 +92,11 @@ class VehicleFleetController extends Controller
     public function contracts(vehicle_maintenance $maintenance)
     {
 
-        $ID = $maintenance->id;
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-        $vehicle_image = images::orderBy('id', 'asc')->get();
-        $safe = safe::orderBy('id', 'asc')->get();
-
-        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-        $loggedInEmplID = Auth::user()->person->id;
-        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
-        ###################>>>>>################# 
 
 
         $ID = $maintenance->id;
@@ -130,56 +112,29 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['name'] = $name;
+
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['safe'] = $safe;
-        $data['employees'] = $employees;
-        $data['vehicleDocumets'] = $vehicleDocumets;
-        $data['vehicle_image'] = $vehicle_image;
-        $data['vehicle_maintenance'] = $vehicle_maintenance;
-        $data['Vehicle_types'] = $Vehicle_types;
-        $data['vehiclemodel'] = $vehiclemodel;
-        $data['divisionLevels'] = $divisionLevels;
-        $data['vehiclemake'] = $vehiclemake;
+
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
+        AuditReportsController::store('Fleet Management', 'Contract Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.contracts')->with($data);
     }
 
     public function viewnotes(vehicle_maintenance $maintenance)
     {
 
-        $ID = $maintenance->id;
-        $vehicle = vehicle::orderBy('id', 'asc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
-        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-        $safe = safe::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-        $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
 
-        $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-        $loggedInEmplID = Auth::user()->person->id;
-        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
-        ###################>>>>>################# 
-
 
         $ID = $maintenance->id;
         $vehiclenotes = DB::table('notes')
@@ -198,25 +153,15 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['name'] = $name;
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
-        $data['IssuedTo'] = $IssuedTo;
-        $data['safe'] = $safe;
         $data['employees'] = $employees;
         $data['vehiclenotes'] = $vehiclenotes;
-        $data['vehicle_maintenance'] = $vehicle_maintenance;
-        $data['vehicle'] = $vehicle;
-        $data['Vehicle_types'] = $Vehicle_types;
-        $data['vehiclemodel'] = $vehiclemodel;
-        $data['divisionLevels'] = $divisionLevels;
-        $data['vehicledetail'] = $vehicledetail;
-        $data['vehiclemake'] = $vehiclemake;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management ', 'Add Notes Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.notes')->with($data);
     }
 
@@ -224,20 +169,12 @@ class VehicleFleetController extends Controller
     {
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-        $loggedInEmplID = Auth::user()->person->id;
-        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
-        ###################>>>>>################# 
-
 
         $ID = $maintenance->id;
 
@@ -247,7 +184,6 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -255,7 +191,6 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['name'] = $name;
         $data['IssuedTo'] = $IssuedTo;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
@@ -265,7 +200,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Add Vehicle Reminders Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.reminders')->with($data);
     }
 
@@ -1202,7 +1137,6 @@ class VehicleFleetController extends Controller
         $vehicleincidents->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->save();
-
 
 
         $numFiles = $index = 0;
