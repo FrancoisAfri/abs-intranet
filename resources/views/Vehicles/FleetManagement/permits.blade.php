@@ -90,7 +90,7 @@
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($permit->document))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("projects/documents/$permit->document") }}"
+                                                   href="{{ Storage::disk('local')->url("Vehicle/permits_licence/$permit->document") }}"
                                                    target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
                                             <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
@@ -119,7 +119,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-permit-modal">Add Permits/Licences
+                                data-target="#add-permit-modal">Add New Permits/Licences
                         </button>
                     </div>
                 </div>

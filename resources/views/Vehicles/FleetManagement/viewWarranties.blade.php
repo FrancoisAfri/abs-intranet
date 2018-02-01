@@ -73,9 +73,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                        {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -142,11 +142,20 @@
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
                                     <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
                                     <td>{{ !empty($reminder->exp_date) ? date(' d M Y', $reminder->exp_date) : '' }}</td>
-                                    <td>R{{ !empty($reminder->warranty_amount) ?  $reminder->warranty_amount : '' }}
-                                        .00
+                                    <td>{{ !empty($reminder->warranty_amount) ?  'R' .number_format($reminder->warranty_amount, 2) : '' }}</td>                                                           
+                                    <td>{{ !empty($reminder->kilometers) ? 'km' .number_format($reminder->kilometers, 2) : '' }}</td>
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($reminder->document))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("Vehicle/warranty/$reminder->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
                                     </td>
-                                    <td>{{ !empty($reminder->kilometers) ?  $reminder->kilometers : '' }}</td>
-                                    <td>{{ !empty($reminder->name) ?  $reminder->name : '' }}</td>
                                     <td>
                                         <!--   leave here  -->
                                         <button reminder="button" id="view_ribbons"
@@ -178,7 +187,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-warrantie-modal">Add new Warranty
+                                data-target="#add-warrantie-modal">Add New Warranty
                         </button>
                     </div>
                 </div>
@@ -219,6 +228,10 @@
             <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
             <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
+
+              <!-- Ajax dropdown options load -->
+            <script src="/custom_components/js/load_dropdown_options.js"></script>
             <script>
                 function postData(id, data) {
                     if (data == 'actdeac') location.href = "/vehicle_management/warranty_act/" + id;
@@ -239,6 +252,9 @@
                 //Tooltip
 
                 $('[data-toggle="tooltip"]').tooltip();
+
+                //Phone mask
+                $("[data-mask]").inputmask();
 
                 //Vertically center modals on page
                 function reposition() {

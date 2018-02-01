@@ -14,20 +14,20 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                    <div class="form-group{{ $errors->has('upload_type') ? ' has-error' : '' }}">
-                        <label for="upload_type" class="col-sm-3 control-label"> Upload Type</label>
+                    {{--<div class="form-group{{ $errors->has('upload_type') ? ' has-error' : '' }}">--}}
+                        {{--<label for="upload_type" class="col-sm-3 control-label"> Upload Type</label>--}}
 
-                        <div class="col-sm-8">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_single"
-                                                                                          name="upload_type" value="1"
-                                                                                          checked>
-                                Bulk </label>
-                            <label class="radio-inline"><input type="radio" id="rdo_bulke" name="upload_type" value="2">
-                                Safe
-                            </label>
-                        </div>
+                        {{--<div class="col-sm-8">--}}
+                            {{--<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_single"--}}
+                                                                                          {{--name="upload_type" value="1"--}}
+                                                                                          {{--checked>--}}
+                                {{--Bulk </label>--}}
+                            {{--<label class="radio-inline"><input type="radio" id="rdo_bulke" name="upload_type" value="2">--}}
+                                {{--Safe--}}
+                            {{--</label>--}}
+                        {{--</div>--}}
 
-                    </div>
+                    {{--</div>--}}
 
                     <div class="form-group">
                         <label for="type" class="col-sm-2 control-label"> Type</label>
@@ -95,17 +95,17 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="role" class="col-sm-2 control-label">Role</label>
-                        <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;" id="role" name="role">
-                                <option value="">*** Select a Role ***</option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    {{--<div class="form-group">--}}
+                        {{--<label for="role" class="col-sm-2 control-label">Role</label>--}}
+                        {{--<div class="col-sm-8">--}}
+                            {{--<select class="form-control select2" style="width: 100%;" id="role" name="role">--}}
+                                {{--<option value="">*** Select a Role ***</option>--}}
+                                {{--@foreach($employees as $employee)--}}
+                                    {{--<option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>--}}
+                                {{--@endforeach--}}
+                            {{--</select>--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
 
 
                 </div>

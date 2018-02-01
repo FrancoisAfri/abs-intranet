@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCancelbookingIDToVehicleBooking extends Migration
+class AddRejectIDToVehicleDetail extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCancelbookingIDToVehicleBooking extends Migration
      */
     public function up()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->integer('cancel_status')->nullable();
+        Schema::table('vehicle_details', function (Blueprint $table) {
+            $table->bigInteger('rejector_id')->unsigned()->nullable();
         });
     }
 
@@ -25,8 +25,9 @@ class AddCancelbookingIDToVehicleBooking extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->integer('cancel_status')->nullable();
+        Schema::table('vehicle_details', function (Blueprint $table) {
+            $table->dropColumn('rejector_id');
         });
     }
 }
+

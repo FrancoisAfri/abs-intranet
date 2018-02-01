@@ -73,7 +73,7 @@
                             </div>
 						</div>
 						<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                            <label for="{{ 'status' }}" class="col-sm-2 control-label">Contact Person</label>
+                            <label for="{{ 'status' }}" class="col-sm-2 control-label">Quote Statuses</label>
                             <div class="col-sm-10">
                                 <select id="status" name="status" class="form-control select2" style="width: 100%;">
                                     <option value="1">*** Select Status ***</option>

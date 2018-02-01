@@ -72,7 +72,7 @@
                                     </td>
                                     <td>
                                         <div class="product-img">
-                                            <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("image/$card->image") : 'http://placehold.it/50x50' }}"
+                                            <img src="{{ (!empty($card->image)) ? Storage::disk('local')->url("Vehicle/image/$card->image") : 'http://placehold.it/50x50' }}"
                                                  alt="Product Image" width="50" height="50">
                                         </div>
                                     </td>
@@ -118,7 +118,7 @@
                         </button>
 
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-vehicledetails-modal">Add new Vehicle
+                                data-target="#add-vehicledetails-modal">Add New Vehicle
                         </button>
 
                     </div>

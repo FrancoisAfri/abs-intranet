@@ -24,11 +24,11 @@
 						@foreach($products->productCategory as $category)
 						 <tr id="categorys-list">
 						   <td nowrap>
-                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{ $category->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-product_title-modal" data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{ $category->description }}" data-price="{{ $category->price }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
                                <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{$category->description}}"  ><i class="fa fa-money"></i> Prices</a></td>
 						  <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
 						  <td>{{ (!empty( $category->description)) ?  $category->description : ''}} </td>
-                          <td>{{ (!empty( $category->price)) ?  $category->price : ''}} </td>
+                          <td>{{ (!empty( $category->price)) ?  'R' .number_format($category->price, 2) : ''}} </td>
 						   <td>
                             <!--   leave here  -->
                             <button type="button" id="view_ribbons" class="btn {{ (!empty($category->status) && $category->status == 1) ? " btn-danger " : "btn-success " }}
@@ -100,9 +100,6 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-
-           
-
               //Post module form to server using ajax (ADD)
             $('#add-product_title').on('click', function() {
                 //console.log('strUrl');
@@ -117,7 +114,7 @@
                 var submitBtnID = 'add-product_title';
                 var redirectUrl = '/Product/Product/{{ $products->id }}';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The group has been updated successfully.';
+                var successMsg = 'The product has been saved successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
@@ -141,7 +138,7 @@
             $('#update-product_title').on('click', function () {
                 var strUrl = '/Product/product_edit/' + Product_ID;
                 // Product/category_edit/{Category}
-                var modalID = 'edit-category-modal';
+                var modalID = 'edit-product_title-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),

@@ -7,6 +7,8 @@ use App\AppraisalKPIResult;
 use App\DivisionLevel;
 use App\HRPerson;
 use App\User;
+use App\ContactCompany;
+use App\ContactPerson;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use App\AppraisalQuery_report;
@@ -31,16 +33,15 @@ class ContactsUploadController extends Controller
     }
     public function index()
     {
-        //phpinfo();
         $data['page_title'] = "Contacts Upload";
         $data['page_description'] = "Upload Contacts From Excel Sheet";
         $data['breadcrumb'] = [
             ['title' => 'Contacts', 'path' => '/import/company', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Import Company', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Import Contacts', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Import Company';
-        AuditReportsController::store('Performance Appraisal', 'Upload page accessed', "Accessed by User", 0);
+        $data['active_rib'] = 'Import Contacts';
+        AuditReportsController::store('Contacts', 'Import Contacts Page Accessed', "Accessed by User", 0);
         return view('contacts.contacts_upload')->with($data);
     }
 
@@ -49,26 +50,13 @@ class ContactsUploadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-	 
-	function randomPass($number = 10)
-	{
-		$passGen = '';
-		$sample = "84h57h67hc767c5765ndkydybg6b7b4b";  
-		$i = 0; 
-		while ($i < $number) {
-			$char = substr($sample, mt_rand(0, strlen($sample)-1), 1);
-			if (!strstr($passGen, $char)) { 
-				$passGen .= $char;
-				$i++;
-			}
-		}
-		return $passGen;
-	}
 	
 	public function store(Request $request)
     {
 		$uploadData = $request->all();
 		$uploadType = $uploadData['upload_type'];
+		$uploadTypes = [1 => "Company", 2 => 'Company Rep'];
+
 		if ($uploadType == 1)
 		{
 			if($request->hasFile('input_file'))
@@ -77,50 +65,32 @@ class ContactsUploadController extends Controller
 				$data = Excel::load($path, function($reader) {})->get();
 				if(!empty($data) && $data->count())
 				{
-					//die('do you come here');
 					foreach ($data->toArray() as $key => $value) 
 					{
-					
 						if(!empty($value))
 						{
-							echo "dkdkdkdnkdn";
-								print_r($value);
-				die;
-							if (!empty($value['email']))
+							if (!empty($value['name']))
 							{
-								$employees = HRPerson::where('employee_number', $value['job_number'])->first();
-								$email = !empty($employees->email) ? $employees->email : '';
+								$company = new ContactCompany();
+								$company->email = !empty($value['email']) ? $value['email'] : '';
+								$company->name = !empty($value['name']) ? $value['name'] : '';
+								$company->registration_number = !empty($value['company_registration_number']) ? $value['company_registration_number'] : '';;
+								$company->vat_number = !empty($value['vat_number']) ? $value['vat_number'] : '';
+								$company->phys_address = !empty($value['physical_address']) ? $value['physical_address'] : '';
+								$company->postal_address = !empty($value['postal_address']) ? $value['postal_address'] : '';
+								$company->cp_home_number = !empty($value['office_number']) ? $value['office_number'] : '';
+								if (!starts_with($company->cp_home_number, '0') && !empty($company->cp_home_number)) $company->cp_home_number = '0'.$company->cp_home_number;
+								$company->fax_number = !empty($value['fax_number']) ? $value['fax_number'] : '';
+								if (!starts_with($company->fax_number, '0') && !empty($company->fax_number)) $company->fax_number = '0'.$company->fax_number;
 								
-								if (empty($employees))
-								{
-									if ($email == $value['email']) continue;
-									$password = EmployeeUploadController::randomPass();
-									$user = new User;
-									$user->email = $value['email'];
-									$user->password = Hash::make($password);
-									$user->type = 1;
-									$user->status = 1;
-									$user->save();
-									//Save record
-									$person = new HRPerson();
-									$person->email = $value['email'];
-									$person->first_name = $value['firstname'];
-									$person->surname = $value['surname'];
-									$person->employee_number = $value['job_number'];
-									$person->status = 1;
-									$user->addPerson($person);
-									//Send email
-									Mail::to("$user->email")->send(new ConfirmRegistration($user, $password));
-									AuditReportsController::store('Security', 'New User Created', "Login Details Sent To User $user->email", 0);
-								}
+								$company->save();
+								
+								AuditReportsController::store('Contacts', 'New Company Created', "Company Name: $company->name", 0);
 							}
 						}
 					}
-					return back()->with('success_add',"Records were successfully inserted.");
 				}
-				else return back()->with('error_add','Please Check your file, Something is wrong there.');
 			}
-			else return back()->with('error_add','Please Upload A File.');
 		}
 		else
 		{
@@ -134,51 +104,40 @@ class ContactsUploadController extends Controller
 					{
 						if(!empty($value))
 						{
-							if (!empty($value['email']))
+							if (!empty($value['firstname']))
 							{
-								$employees = ContactCompany::where('employee_number', $value['job_number'])->first();
+								$companyName = ContactCompany::where('name', $value['company_name'])->first();
+								//return $companyName;
 								$email = !empty($employees->email) ? $employees->email : '';
+								$contact = new ContactPerson();
+								$contact->email = !empty($value['email']) ? $value['email'] : '';
+								$contact->first_name = !empty($value['firstname']) ? $value['firstname'] : '';
+								$contact->surname = !empty($value['surname']) ? $value['surname'] : '';;
+								$contact->cell_number = !empty($value['mobile_number']) ? $value['mobile_number'] : '';
+								$contact->phone_number = !empty($value['office_number']) ? $value['office_number'] : '';
+								$contact->res_address = !empty($value['postal_address']) ? $value['postal_address'] : '';
+								$contact->company_id = !empty($companyName->id) ? $companyName->id : 0;
+								if (!starts_with($contact->cell_number, '0') && !empty($contact->cell_number)) $contact->cell_number = '0'.$contact->cell_number;
+								if (!starts_with($contact->phone_number, '0') && !empty($contact->phone_number)) $contact->phone_number = '0'.$contact->phone_number;
 								
-								if ($email == $value['email']) continue;
-								$password = EmployeeUploadController::randomPass();
-								$user = new User;
-								$user->email = $value['email'];
-								$user->password = Hash::make($password);
-								$user->type = 1;
-								$user->status = 1;
-								$user->save();
-
-								//Save record
-								$person = new HRPerson();
-								$person->email = $value['email'];
-								$person->first_name = $value['firstname'];
-								$person->surname = $value['surname'];
-								$person->employee_number = $value['job_number'];
-								$person->status = 1;
-								$user->addPerson($person);
-
-								//Send email
-								Mail::to("$user->email")->send(new ConfirmRegistration($user, $password));
-								AuditReportsController::store('Security', 'New User Created', "Login Details Sent To User $user->email", 0);
+								$contact->save();
+								
+								AuditReportsController::store('Contacts', 'New Company Rep Created', "Contact Name: $contact->first_name $contact->surname ", 0);
 							}
 						}
 					}
-					return back()->with('success_add',"Records were successfully inserted.");
 				}
-				else return back()->with('error_add','Please Check your file, Something is wrong there.');
 			}
-			else return back()->with('error_add','Please Upload A File.');
-
 		}
-        $data['page_title'] = "Employee Appraisals";
-        $data['page_description'] = "Load Appraisals KPI's";
+        $data['page_title'] = "Contacts Import";
+        $data['page_description'] = "Import Contacts Details";
         $data['breadcrumb'] = [
-            ['title' => 'Performance Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Contacts', 'path' => '/import/company', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Contacts', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Import Contacts';
+		return back();
     }
 	
     public function create()

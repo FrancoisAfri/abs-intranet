@@ -72,7 +72,7 @@
                                     id="tank_name" name="tank_name">
                                 <option value="0">*** Select tank  ***</option>
                                 @foreach($fueltank as $tank)
-                                <option value="{{ $tank->id }}">{{ $tank->name }}</option>
+                                <option value="{{ $tank->id }}">{{ $tank->tank_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -94,7 +94,8 @@
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Litres </label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="litres" name="litres" value="0"
+                            <input type="text" class="form-control" id="litres" name="litres" value=""
+                                       min="0" step="0.001"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
@@ -102,7 +103,7 @@
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Cost per Litre </label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="cost_per_litre" name="cost_per_litre" value="0"
+                            <input type="teXt" class="form-control" id="cost_per_litre" name="cost_per_litre" value=" "  min="0" step="0.01"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
@@ -110,7 +111,7 @@
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Total Cost</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="total_cost" name="total_cost" value="0"
+                            <input type="text" class="form-control" id="total_cost" name="total_cost" value="0"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>

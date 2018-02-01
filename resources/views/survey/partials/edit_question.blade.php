@@ -22,7 +22,7 @@
 									<div class="input-group-addon">
 										<i class="fa fa-black-tie"></i>
 									</div>
-									<select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%;">
+									<select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this, null, 'edit-question-modal')" style="width: 100%;">
 									</select>
 								</div>
 							</div>

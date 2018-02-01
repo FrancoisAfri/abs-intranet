@@ -11,8 +11,10 @@ class Quotation extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id', 'approval_person_id', 'status',
-        'send_date', 'approval_date', 'discount_percent', 'add_vat', 'payment_option', 'payment_term', 'first_payment_date', 'account_id', 'quote_number'
+        'company_id', 'client_id', 'division_id', 'division_level', 'hr_person_id'
+		, 'approval_person_id', 'status','send_date', 'approval_date', 'discount_percent'
+		, 'add_vat', 'payment_option', 'payment_term','first_payment_date', 'account_id'
+		, 'quote_number', 'quote_type', 'quote_title', 'quote_remarks'
     ];
 
     //quotation status
@@ -30,10 +32,16 @@ class Quotation extends Model
         8 => 'Paid'
     ];
 
+    //quotation status
+    protected $quoteTypes = [
+        1 => 'Products/Packages',
+        2 => 'Services'
+    ];
+
     //Payment opyions
     protected $paymentOptions = [
         1 => 'Once-Off',
-        2 => 'Recurring'
+        2 => 'Monthly Term'
     ];
 
     /**
@@ -77,6 +85,16 @@ class Quotation extends Model
     }
 
     /**
+     * Relationship between Quotations and Services
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function services()
+    {
+        return $this->hasMany(ProductService::class, 'quotation_id')->orderBy('id');
+    }
+
+    /**
      * Relationship between Quotations and Terms and Conditions
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -113,15 +131,15 @@ class Quotation extends Model
      */
     public function invoices()
     {
-        return $this->hasMany(CRMInvoice::class, 'quotation_id');
+        return $this->hasMany(CRMInvoice::class, 'quotation_id')->orderBy('id');
     }
-	
-	public function divisionName()
+
+    public function divisionName()
     {
         return $this->belongsTo(DivisionLevelFive::class, 'division_id');
     }
-	
-	public function quoteHistory()
+
+    public function quoteHistory()
     {
         return $this->hasmany(QuoteApprovalHistory::class, 'quotation_id');
     }
@@ -131,7 +149,8 @@ class Quotation extends Model
      *
      * @return String
      */
-	public function getQuoteStatusAttribute() {
+    public function getQuoteStatusAttribute()
+    {
         return (!empty($this->status)) ? $this->quoteStatuses[$this->status] : null;
     }
 
@@ -140,7 +159,8 @@ class Quotation extends Model
      *
      * @return String
      */
-	public function getStrPaymentOptionAttribute() {
+    public function getStrPaymentOptionAttribute()
+    {
         return (!empty($this->payment_option)) ? $this->paymentOptions[$this->payment_option] : null;
     }
 }

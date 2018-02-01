@@ -25,16 +25,12 @@
                     <i class="fa fa-modx"></i>  Vehicle Make
                   </a>
 
-                  <a href="/vehicle_management/vehice_model" class="btn btn-app">
-                    <i class="fa fa-bullseye"></i>  Vehicle Model
-                  </a>
-
 				  <a href="/vehicle_management/fleet_card" class="btn btn-app">
 					<i class="fa fa-car" ></i> Fleet Card Types 
 				  </a>
 
 				  <a href="/vehicle_management/fillingstaion" class="btn btn-app">
-					<i class="fa fa-bitbucket"></i> Fleet Filling Station damage categories 
+					<i class="fa fa-bitbucket"></i> Vehicle Station 
 				  </a>
 
 				  <a href="/vehicle_management/Document_type"  class="btn btn-app">
@@ -54,6 +50,11 @@
                   <a href="/vehicle_management/safe"  class="btn btn-app">
                     <i class="fa fa-ban"></i>  Add Safe  
                   </a>
+
+                  <a href="/vehicle_management/Incidents_type" class="btn btn-app">
+                    <i class="fa fa-bullseye"></i>  Incident Type
+                  </a>
+
 			</div>
           <!-- /.box-body -->
 			</div>

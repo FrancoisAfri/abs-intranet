@@ -159,12 +159,12 @@ class DashboardController extends Controller {
             //return $balances;
             #leave Application
             $application = DB::table('leave_application')
-                    ->select('leave_application.*', 'leave_types.name as leavetype', 'leave_status.name as leaveStatus')
+                    ->select('leave_application.*', 'leave_types.name as leavetype')
                     ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id')
-                    ->leftJoin('leave_status', 'leave_application.hr_id', '=', 'leave_status.id')
                     ->where('leave_application.hr_id', $user->person->id)
-                    ->orderBy('leave_application.id')
+                    ->orderBy('leave_application.id', 'desc')
                     ->get();
+            //return $application;
 
             //Get Employees on leave this month
             $monthStart = new Carbon('first day of this month');
@@ -293,6 +293,7 @@ class DashboardController extends Controller {
             $data['statusLabels'] = $statusLabels;
             $data['balances'] = $balances;
             $data['application'] = $application;
+            $data['leaveStatusNames'] = LeaveApplicationController::status();
             $data['onLeaveThisMonth'] = $onLeaveThisMonth;
             $data['taskStatus'] = $taskStatus;
             $data['user'] = $user;

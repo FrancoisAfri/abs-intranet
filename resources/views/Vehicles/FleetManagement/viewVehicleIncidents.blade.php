@@ -79,9 +79,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                        {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -135,33 +135,34 @@
                                     </td>
                                     <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
-                                    <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : '' }}</td>
+                                    <td>{{ !empty($details->odometer_reading) ? number_format($details->odometer_reading, 2) : '' }}</td>
                                     <td>{{ (!empty($details->incident_type)) ?  $fineType[$details->incident_type] : ''}}</td>
                                     <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
-                                    <td>R {{ !empty($details->Cost) ? $details->Cost : '' }} .00</td>
+                                    <td>{{ !empty($details->Cost) ? 'R' .number_format($details->Cost, 2) : '' }}</td>
                                     <td nowrap>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("Vehicle/vehicleIncidents/$details->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+
+
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document1))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document1 }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("Vehicle/vehicleIncidents/$details->document1") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
+                                    </td>
                                     <td>{{ !empty($details->fine_status) ?  $status[$details->fine_status] : ''}}</td>
                                     </td>
                                 </tr>
@@ -183,7 +184,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-incidents-modal">Add new Vehicle Incident
+                                data-target="#add-incidents-modal">Add New Vehicle Incident
                         </button>
                     </div>
                 </div>
@@ -229,7 +230,7 @@
                     if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
                 }
-
+			$(function () {
                 $('#back_button').click(function () {
                     location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 });
@@ -349,7 +350,33 @@
                     var Method = 'PATCH'
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
-
-
+			});
+			function clone(id, file_index, child_id) {
+				var clone = document.getElementById(id).cloneNode(true);
+				clone.setAttribute("id", file_index);
+				clone.setAttribute("name", file_index);
+				clone.style.display = "table-row";
+				clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+				clone.querySelector('#' + child_id).disabled = false;
+				clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+				return clone;
+			}
+			function addFile() {
+				var table = document.getElementById("tab_tab");
+				var file_index = document.getElementById("file_index");
+				file_index.value = ++file_index.value;
+				var file_clone = clone("file_row", file_index.value, "document");
+				var name_clone = clone("name_row", file_index.value, "name");
+				var final_row = document.getElementById("final_row").cloneNode(false);
+				table.appendChild(file_clone);
+				table.appendChild(name_clone);
+				table.appendChild(final_row);
+				var total_files = document.getElementById("total_files");
+				total_files.value = ++total_files.value;
+				//change the following using jquery if necessary
+				var remove = document.getElementsByName("remove");
+				for (var i = 0; i < remove.length; i++)
+					remove[i].style.display = "inline";
+			}
             </script>
 @endsection

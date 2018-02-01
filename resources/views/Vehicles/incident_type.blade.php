@@ -136,7 +136,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'add-incident-type';
                 var redirectUrl = '/vehicle_management/Incidents_type';
                 var successMsgTitle = ' Incident Type Added!';
                 var successMsg = 'The Incident Type has been updated successfully.';

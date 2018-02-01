@@ -463,7 +463,7 @@ class ContactsController extends Controller
 		})
 		->orderBy('first_name')
 		->orderBy('surname')
-		->limit(100)
+		//->limit(100)
         ->with('company')
 		->get();
 			
@@ -602,8 +602,12 @@ class ContactsController extends Controller
 
     public function sendMessageIndex()
     {
-        $contactPersons = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-        $data['page_title'] = "Client Communication";
+        $contactPersons =DB::table('contacts_contacts')
+							->select('contacts_contacts.*', 'contact_companies.name as comp_name')
+            ->leftJoin('contact_companies', 'contacts_contacts.company_id', '=', 'contact_companies.id')
+			->where('contacts_contacts.status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+
+		$data['page_title'] = "Client Communication";
         $data['page_description'] = "Send a Message To Your Clients";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],

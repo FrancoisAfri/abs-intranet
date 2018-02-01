@@ -35,7 +35,7 @@
 												<td>{{ !empty($Promotion->start_date) ? date('d M Y ', $Promotion->start_date) : '' }}</td>
 												<td>{{ !empty($Promotion->end_date) ? date('d M Y ', $Promotion->end_date) : '' }}</td>
 						                        <td><span class="label label-primary ">{{ (!empty($Promotion->discount)) ?  $Promotion->discount : ''}} </td>
-						                        <td>R {{ (!empty($Promotion->price)) ?  $Promotion->price : ''}} </td>
+						                        <td>R {{ (!empty($Promotion->price)) ?   'R' .number_format($Promotion->price, 2) : ''}} </td>
 											</tr>
 										@endforeach
 									<tr>

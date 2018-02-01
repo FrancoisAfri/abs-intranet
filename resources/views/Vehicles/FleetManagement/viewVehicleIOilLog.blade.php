@@ -81,9 +81,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                       {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -156,7 +156,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-oil-modal">Add Add Oil Record
+                                data-target="#add-oil-modal">Add New Oil Record
                         </button>
                     </div>
                 </div>

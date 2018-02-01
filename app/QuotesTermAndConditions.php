@@ -11,7 +11,7 @@ class QuotesTermAndConditions extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'type_id', 'term_name', 'status', 'vat_number'
+        'type_id', 'term_name', 'status', 'category_id', 'vat_number'
     ];
 
     /**

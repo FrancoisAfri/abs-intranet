@@ -14,6 +14,48 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
+                    @if (isset($vehicleConfig) && $vehicleConfig == 1)
+                    <div class="form-group">
+                    <label for="status" class="col-sm-2 control-label">Status</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            
+                            <select id="status" name="status" class="form-control">
+                                <option value="0">*** Select Status ***</option>
+                                {{--  <option value="1"> Active  </option>  --}}
+                                <option value="2"> Require Approval </option>
+                                {{--  <option value="3"> Rejected</option>
+                                <option value="4"> Inactive </option>  --}}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @else
+                <div class="form-group">
+                    <label for="status" class="col-sm-2 control-label">Status</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            
+                            <select id="status" name="status" class="form-control">
+                                <option value="0">*** Select Status ***</option>
+                                 <option value="1"> Active  </option>
+                                <option value="2"> Require Approval </option>
+                                <option value="3"> Rejected</option>
+                                <option value="4"> Inactive </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                    @endif
+                    
+                     
+
                     @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
@@ -54,42 +96,29 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Vehicle Make</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-modx"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;" id="vehicle_make"
-                                        name="vehicle_make">
-                                    <option value="0">*** Select a Vehicle Make ***</option>
-                                    @foreach($vehiclemake as $make)
-                                        <option value="{{ $make->id }}">{{ $make->name }}</option>
+                    <div class="form-group{{ $errors->has('vehiclemodel_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
+
+                            <div class="col-sm-8">
+                                <select id="vehiclemodel_id" name="vehiclemodel_id" class="form-control select2" style="width: 100%;" onchange="vehiclemakeDDOnChange(this)">
+                                    <option value="">*** Please Select a Vehicle Make ***</option>
+                                    <option value="0"></option>
+                                    @foreach($vehiclemake as $vehiclemodel)
+                                        <option value="{{ $vehiclemodel->id }}" >{{ $vehiclemodel->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="form-group{{ $errors->has('vehiclemake_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'vehiclemake_id' }}" class="col-sm-2 control-label">Vehicle Model</label>
 
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Vehicle Model</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-bullseye"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;" id="vehicle_model"
-                                        name="vehicle_model">
-                                    <option value="0">*** Select a Vehicle Model ***</option>
-                                    @foreach($vehiclemodel as $model)
-                                        <option value="{{ $model->id }}">{{ $model->name }}</option>
-                                    @endforeach
+                            <div class="col-sm-8">
+                                <select id="vehiclemake_id" name="vehiclemake_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">*** Please Select a Vehicle Make First ***</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
 
 
                     <div class="form-group">
@@ -175,6 +204,7 @@
                         </div>
                     </div>
 
+
                     <div class="form-group odometer-field">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
                         <div class="col-sm-8">
@@ -259,8 +289,9 @@
                                 <select class="form-control select2" style="width: 100%;" id="vehicle_owner"
                                         name="vehicle_owner">
                                     <option value="0">*** Select Vehicle Owner ***</option>
-                                    @foreach($ContactCompany as $owner)
-                                        <option value="{{ $owner->id }}">{{ $owner->name }}</option>
+									@foreach($DivisionLevelFive as $owner)
+                                        <option value="{{ $owner->id }}">
+                                            {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -288,8 +319,9 @@
                                 <select class="form-control select2" style="width: 100%;" id="financial_institution"
                                         name="financial_institution">
                                     <option value="0">*** Select Financial Institution ***</option>
-                                    @foreach($vehicle as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ (!empty( $vehice->name)) ?  $vehice->name : ''}}</option>
+                                    @foreach($ContactCompany as $owner)
+                                        <option value="{{ $owner->id }}">
+                                            {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -305,7 +337,7 @@
                                 </div>
                                 <select class="form-control select2" style="width: 100%;" id="company" name="company">
                                     <option value="0">*** Select Company ***</option>
-                                    @foreach($ContactCompany as $owner)
+                                    @foreach($DivisionLevelFive as $owner)
                                         <option value="{{ $owner->id }}">
                                             {{ (!empty( $owner->name)) ?  $owner->name : ''}}</option>
                                     @endforeach

@@ -60,6 +60,7 @@
 						<th>Actual Start Date</th>
 						<th>Due Date</th>
 						<th>Date Completed</th>
+						<th>Duration</th>
 					</tr>
 					@if(count($employeesTasks) > 0)
 						@foreach($employeesTasks as $employeesTask)
@@ -72,7 +73,7 @@
 								<td>{{ !empty($employeesTask->date_started) ? date('Y M d', $employeesTask->date_started) : '' }}</td>
 								<td>{{ !empty($employeesTask->due_date) ? date('Y M d', $employeesTask->due_date) : '' }}</td>
 								<td>{{ !empty($employeesTask->date_completed) ? date('Y M d', $employeesTask->date_completed) : '' }}</td>
-								
+								<td>{{ !empty($employeesTask->duration) ? gmdate("H:i:s", $employeesTask->duration) : '' }}</td>
 							</tr>
 						@endforeach
 					@endif

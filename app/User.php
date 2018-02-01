@@ -32,14 +32,13 @@ class User extends Authenticatable
      *
      * @return array HRPerson|ContactPerson hasOne
      */
-    public function person() {
+    public function person()
+    {
         if ($this->type === 1 || $this->type === 3) { //dev and hr person
             return $this->hasOne(HRPerson::class, 'user_id');
-        }
-        elseif ($this->type === 2) { //contact person
+        } elseif ($this->type === 2) { //contact person
             return $this->hasOne(ContactPerson::class, 'user_id');
-        }
-        elseif ($this->type === 4) { //educator
+        } elseif ($this->type === 4) { //educator
             return $this->hasOne(educator::class, 'user_id');
         }
     }
@@ -50,7 +49,8 @@ class User extends Authenticatable
      * @param HRPerson|ContactPerson $person
      * @return HRPerson|ContactPerson saved person
      */
-    public function addPerson($person) {
-            return $this->person()->save($person);
+    public function addPerson($person)
+    {
+        return $this->person()->save($person);
     }
 }

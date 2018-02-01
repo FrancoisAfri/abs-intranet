@@ -44,27 +44,28 @@
                                 </ul>
                             </div>
                         @endif
-                          <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
 
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Leave Taken </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Leave Balance</label>
-                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Leave Paid Out</label>
-                                      <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Leave Allowance</label>
-                                      <label class="radio-inline"><input type="radio" id="rdo_levH" name="application_type" value="5">  Leave History</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Leave Paid Out</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Leave Allowance</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_levH" name="application_type" value="5">  Leave History</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_cancelled_leaves" name="application_type" value="6"> Cancelled Leaves</label>
 
                                 </div>
                             </div>
 
                           <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                            <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
+                            <label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id" data-placeholder="**Select employee **">
+                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -102,17 +103,17 @@
                         </div>
                        
                         <div class="form-group lev-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                            <label for="leave_types_id" class="col-sm-2 control-label">Leave Type(s)</label>
+                            <label for="leave_types_id" class="col-sm-2 control-label">Leave Type</label>
 
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <select id="leave_types_id" name="leave_types_id" class="form-control select2"  data-placeholder="**Select Leave type**" >
-                                    <option value="">*** Select a leaveType ***</option>
+                                    <select id="leave_types_id" name="leave_types_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">*** Select a Leave Type ***</option>
                                         @foreach($leaveTypes as $leaveType)
-                                                    <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
+                                            <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -163,11 +164,7 @@
                                 </div>
                             </div>
 
-                    <!-- /.box-body -->
-                    <!-- <div class="box-footer">
-                        <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Cancel</button>
-                        <button type="submit" id="gen_report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
-                    </div> -->
+                  
                      <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
                        <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
@@ -280,7 +277,7 @@
         });
             //show/hide fields on radio button toggles (depending on registration type)
 
-            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH').on('ifChecked', function(){      
+            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH, #rdo_cancelled_leaves').on('ifChecked', function(){
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Leave Taken');
                 else if (allType == 2) $('#box-subtitle').html('Leave Balance');
@@ -288,11 +285,21 @@
                  else if (allType == 4) $('#box-subtitle').html('Leave Allowance');
                   else if (allType == 5) $('#box-subtitle').html('Leave History');
             });
-         
+
+            //Vertically center modals on page
+            function reposition() {
+                var modal = $(this),
+                    dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
-            $(window).on('resize', function() {
+            $(window).on('resize', function () {
                 $('.modal:visible').each(reposition);
             });
 
@@ -313,7 +320,7 @@
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
-                 $('.to-field').show();
+                 $('.to-field').hide();
                  $('.from-field').hide();
                  $('.manual-field').hide();
                 $('.levAction-field').hide();
@@ -348,6 +355,15 @@
                  $('.date-field').show();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/history/');    
                  $('#gen-report').val("Submit"); 
+            } else if (allType == 6) {
+                $('.to-field').show();
+                $('.from-field').show();
+                $('.lev-field-field').hide();
+                $('.manual-field').hide();
+                $('.levAction-field').hide();
+                $('.date-field').hide();
+                $('form[name="leave-application-form"]').attr('action', '/leave/reports/cancelled-leaves');
+                $('#gen-report').val("Submit");
             }
             return allType;      
             }

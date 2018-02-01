@@ -27,7 +27,7 @@
                                     </div>
                                     <select name="clients[]" id="clients" class="form-control select2" multiple data-placeholder="*** Select a Client ***">
                                         @foreach($contactPersons as $contactPerson)
-                                            <option value="{{ $contactPerson->id}}">{{ $contactPerson->full_name }}</option>
+                                            <option value="{{ $contactPerson->id}}">{{$contactPerson->comp_name."|**|". $contactPerson->first_name."".$contactPerson->surname }}</option>
                                         @endforeach
                                     </select>
                                 </div>

@@ -382,22 +382,29 @@
 
                                 <thead>
                                 <tr>
-                                    <th><i class="material-icons">shop_two</i>Leave Type</th>
-                                    <th><i class="fa fa-calendar-o"></i>Date From</th>
-                                    <th><i class="fa fa-calendar-o"></i>Date To</th>
+                                    <th><i class="material-icons">shop_two</i> Leave Type</th>
+                                    <th><i class="fa fa-calendar-o"></i> Date From</th>
+                                    <th><i class="fa fa-calendar-o"></i> Date To</th>
                                     <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @if (!empty($application))
                                     @foreach($application as $checkTask)
                                         <tr>
-                                            <td>{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
-                                            <td>{{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}</td>
-                                            <td>{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
-                                            <td style="text-align: right;">{{ (!empty($checkTask->leaveStatus)) ?  $checkTask->leaveStatus : ''}}</td>
-                                            <td>
-
+                                            <td style="vertical-align: middle;">{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
+                                            <td style="vertical-align: middle;">
+                                                {{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}
+                                            </td>
+                                            <td style="vertical-align: middle;">{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
+                                            <td style="text-align: right; vertical-align: middle;">
+                                                {{ (!empty($checkTask->status) && $checkTask->status > 0) ? $leaveStatusNames[$checkTask->status] : ''}}
+                                            </td>
+                                            <td class="text-right" style="vertical-align: middle;">
+                                                @if(in_array($checkTask->status, [2, 3, 4, 5]))
+                                                    <button class="btn btn-xs btn-warning" title="Cancel Leave Application" data-toggle="modal" data-target="#cancel-leave-application-modal" data-leave_application_id="{{ $checkTask->id }}"><i class="fa fa-times"></i></button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -406,6 +413,8 @@
                             </table>
                         </div>
                     </div>
+                    <!-- Include cancellation reason modal -->
+                    @include('dashboard.partials.cancel_leave_application_modal')
                 </div>
             </div>
 
@@ -685,6 +694,29 @@
                 //leave status (widget)
                 var LeaveStatus = $('#leave-status-list');
                 //loadLeaveStatus();
+
+                //leave cancellation reason form on show
+                var cancelApplicationModal = $('#cancel-leave-application-modal');
+                var leaveApplicationID;
+                cancelApplicationModal.on('show.bs.modal', function (e) {
+                    //console.log('gets here');
+                    var btnCancel = $(e.relatedTarget);
+                    leaveApplicationID = btnCancel.data('leave_application_id');
+                    //var modal = $(this);
+                    //modal.find('#task_id').val(taskID);
+                });
+
+                //perform leave application cancellation
+                cancelApplicationModal.find('#cancel-leave-application').on('click', function() {
+                    var strUrl = '/leave/application/' + leaveApplicationID + '/cancel';
+                    var formName = 'cancel-leave-application-form';
+                    var modalID = 'cancel-leave-application-modal';
+                    var submitBtnID = 'cancel-leave-application';
+                    var redirectUrl = '/';
+                    var successMsgTitle = 'Leave Application Cancelled!';
+                    var successMsg = 'Your leave application has been cancelled!';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
             @endif
 
             @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())

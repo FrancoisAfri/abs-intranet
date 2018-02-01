@@ -125,23 +125,21 @@ class HelpdeskController extends Controller {
         if ($service->status == 1) 
         {
             $serviceID = $service->id;
-            //return $serviceID ;
             $serviceName = $service->name;
-            //return $serviceName;
             $description = $service->description;
             $systems = operator::orderBy('id', 'asc')->get();
-            
-            $employees = HRPerson::where('status', 1)->get();
-             
-     //$Rensponder = DB::table('auto_rensponder')->select('helpdesk_id', $serviceID)->get()->first();
-         // return $Rensponder; 
-            $counRow = autoRensponder::count();
-          // return $counRow;
+            $employees = HRPerson::where('status', 1)->get(); 
+			$helpdeskSetup = helpDesk_setup::where('helpdesk_id', $service->id)->first();
+			//$autoEscalationSettings = auto_escalation_settings::where('helpdesk_id', $service->id)->first();
+			$autoEscalationSettings = auto_escalation_settings::orderBy('id', 'asc')->get();
+           // return $autoEscalationSettings;
+		   $counRow = autoRensponder::count();
 
-           if ($counRow ==  0) {
+			if ($counRow ==  0) {
             $autRensponder = new autoRensponder();
             $autRensponder->save();
-            }else{
+            }
+			else{
                 $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();  
             }
 
@@ -165,6 +163,8 @@ class HelpdeskController extends Controller {
 
 
             
+             $data['helpdeskSetup'] = $helpdeskSetup;          
+             $data['autoEscalationSettings'] = $autoEscalationSettings;          
              $data['autoRensponder'] = $autoRensponder;          
              $data['products'] = $service;
              $data['settings'] = $settings;
@@ -176,7 +176,7 @@ class HelpdeskController extends Controller {
              $data['service'] = $service;
              $data['description'] = $description;
              $data['operators'] = $operators;
-             $data['$description'] = 'description';
+            // $data['$description'] = 'description';
              $data['page_title'] = "View Help Desk  ($serviceName) " ;
              $data['page_description'] = "Help Desk Settings page";
              $data['breadcrumb'] = [
@@ -320,9 +320,9 @@ class HelpdeskController extends Controller {
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        //return $SysData;
         $setup->description = $request->input('description');
         $setup->maximum_priority = $request->input('maximum_priority');
+		$setup->helpdesk_id = $request->input('helpdesk_id');
         $setup->save();
         return back();
     }
@@ -343,10 +343,6 @@ class HelpdeskController extends Controller {
         //convert time to unix timestamp
         $start_time = strtotime($time_from);
         $end_time = strtotime($time_to);
-
-        // $counRow = helpDesk_setup::count();
-        // if ($counRow ==  0) {
-
         $service->time_from = $start_time;
         $service->time_to = $end_time;
         $service->notify_hr_email = $request->input('notify_hr_email');
@@ -355,20 +351,6 @@ class HelpdeskController extends Controller {
         $service->notify_manager_sms = $request->input('notify_manager_sms');
         $service->helpdesk_id = $request->input('helpdesk_id');
         $service->save();
-        // }else{
-        //     //$autoRensponder = autoRensponder::where('helpdesk_id', $serviceID)->get()->first();
-        //      DB::table('helpDeskSetup')
-        //        ->where('helpdesk_id', $HelpdeskID)
-        //        ->update(['time_from' => $start_time] ,
-        //                 ['time_to' => $end_time],
-        //                 ['notify_hr_email' =>$request->input('notify_hr_email')],
-        //                 ['notify_hr_sms_sms' =>$request->input('notify_hr_sms_sms')],
-        //                 ['notify_manager_email' =>$request->input('notify_manager_email')],
-        //                 ['notify_manager_sms' =>$request->input('notify_manager_sms')]);
-        // }
-
-
-
         return back();
     }
 
@@ -410,7 +392,9 @@ class HelpdeskController extends Controller {
         $settings->office_hrs_critical_sms = $request->input('office_hrs_critical_sms');
         $settings->aftoffice_hrs_critical_email = $request->input('aftoffice_hrs_critical_email');
         $settings->aftoffice_hrs_critical_sms = $request->input('aftoffice_hrs_critical_sms');
-        $settings->save();
+        $settings->helpdesk_id = $request->input('helpdesk_id');
+		
+        $settings->update();
         return back();
     }
 
@@ -498,13 +482,9 @@ class HelpdeskController extends Controller {
                 ['title' => 'Help Desk Page', 'active' => 1, 'is_module' => 0]
         ];
 
-        //    //$user->load('person');
-        //    //$avatar = $user->person->profile_pic;
-
         $systems = HelpDesk::orderBy('name', 'asc')->get();
 
         //return $systems;
-
 
         $data['systems'] = $systems;
         $data['active_mod'] = 'Help Desk';
@@ -524,7 +504,7 @@ class HelpdeskController extends Controller {
                 ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-ticket', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Help Search Page', 'active' => 1, 'is_module' => 0]
         ];
-        //
+
         $data['helpdesk'] = $helpdesk;
         $data['active_mod'] = 'Help Desk';
         $data['active_rib'] = 'Search';

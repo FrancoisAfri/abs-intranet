@@ -87,20 +87,20 @@
                                     <td>{{ !empty($document->date_captured) ? date(' d M Y', $document->date_captured) : '' }}</td>
                                     <td>{{ !empty($document->firstname . ' ' . $document->surname ) ?  $document->firstname . ' ' . $document->surname : '' }}</td>
                                     <td>{{ !empty($document->notes) ?  $document->notes : '' }}</td>
-                                    <td nowrap>
-                                        <div class="form-group{{ $errors->has('documents') ? ' has-error' : '' }}">
-                                            <label for="documents" class="control-label"></label>
-                                            @if(!empty($document->documents))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $document->documents }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                <!--  <td>{{ !empty($document->documents) ?  $document->documents : '' }}</td> -->
+
+									<td nowrap>
+										<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+											<label for="document" class="control-label"></label>
+											@if(!empty($document->documents))
+												<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+												   href="{{ Storage::disk('local')->url("Vehicle/note_documents/$document->documents") }}"
+												   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+											@else
+												<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+											@endif
+										</div>
+									</td>
+
 
 
                                     <td>
@@ -131,13 +131,13 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-note-modal">Upload new Notes
+                                data-target="#add-note-modal">Add New Note
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.upload_newnote_modal')
+        @include('Vehicles.partials.add_note_modal')
         @include('Vehicles.partials.edit_notes_modal')
         <!-- Include delete warning Modal form-->
          <!-- Include delete warning Modal form-->
@@ -263,17 +263,7 @@
 
 
 
-	//Post perk form to server using ajax (add)
-$('#add_notes').on('click', function () {
-	var strUrl = '/vehicle_management/add_new_note';
-	var formName = 'add-note-form';
-	var modalID = 'add-note-modal';
-	var submitBtnID = 'add_notes';
-	var redirectUrl = '/vehicle_management/notes/{{ $maintenance->id }}';
-	var successMsgTitle = 'New Note  Added!';
-	var successMsg = 'The Note  has been updated successfully.';
-	modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-});
+
 
 		//Post perk form to server using ajax (add)
 		$('#add_notes').on('click', function () {

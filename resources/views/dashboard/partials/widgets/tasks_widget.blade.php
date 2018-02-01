@@ -64,23 +64,6 @@
                                     @endif
                                 </div>
                             </td>
-                            <!--
-                            <td>
-                            <!-- @if($isSuperuser)
-                                {{ $topGroupLvl->plural_name }}
-                            @elseif($isDivHead)
-                                {{ $managedDivsLevel->plural_name }}
-                            @endif --
-                                @if(!empty($task->status) && ($task->status == 1 || $task->status == 3))
-                                    <button type="button" id="startPause" class="btn btn-sm btn-default btn-flat pull-right" onclick="startPause({{$task->task_id}},);">Start</button>
-                                @elseif(!empty($task->status) && $task->status == 2)
-                                    <button type="button" id="end-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
-                                            data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}"
-                                            data-upload_required="{{ $task->upload_required }}" >End</button>
-                                    <button type="button" id="pause-task" class="btn btn-sm btn-default btn-flat pull-right" onclick="postData({{$task->task_id}}, 'pause');">Pause</button>
-                                @endif
-                            </td>
-                            -->
                         </tr>
                     @endforeach
                 @endif

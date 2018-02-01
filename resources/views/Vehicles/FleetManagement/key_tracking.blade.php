@@ -83,9 +83,10 @@
                                                 data-key_type="{{$key->key_type}}"
                                                 data-key_status="{ {$key->key_status}}"
                                                 data-description="{{$key->description}}"
-                                                data-date_issued="{{$key->date_issued}}"
+                                                data-date_issued="{{date(' d M Y', $key->date_issued)}}"
                                                 data-issued_by="{{ $key->issued_by}}"
-                                                data-reason_loss="{{ $key->reason_loss}}" data-date_lost="{{ $key->date_lost }}"
+                                                data-reason_loss="{{ $key->reason_loss}}"
+                                                data-date_lost="{{ date(' d M Y', $key->date_lost) }}"
 
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -108,7 +109,7 @@
                             @endforeach
                         @else
                             <tr id="categories-list">
-                                <td colspan="10">
+                                <td colspan="14">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
@@ -125,7 +126,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-key-modal">Add Key Details
+                                data-target="#add-key-modal">Add New Key Details
                         </button>
                     </div>
                 </div>
@@ -218,6 +219,14 @@
                         autoclose: true,
                         todayHighlight: true
                     });
+                     $(document).ready(function () {
+                        $('input[name="date_issued"]').datepicker({
+                                format: 'dd/mm/yyyy',
+                                autoclose: true,
+                                todayHighlight: true
+                            });	
+		                });
+
 
                     $(function () {
                         $('img').on('click', function () {

@@ -32,6 +32,31 @@
                             </div>
                         @endif
 
+                        <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                            <label for="Leave_type" class="col-sm-2 control-label"> Quote Type</label>
+
+                            <div class="col-sm-9">
+                                <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Products/Packages</label>
+                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2">  Services</label>
+                            </div>
+                        </div>
+						<div class="form-group">
+                        <label for="quote_title" class="col-sm-2 control-label">Quote Title</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<input type="text" class="form-control" id="quote_title" name="quote_title" value="" placeholder="Enter Quote Title" required>
+								</div>
+							</div>
+						</div>
+						<div class="form-group existing_one">
+							<label for="name" class="col-sm-2 control-label">Remark</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<textarea class="form-control" rows="3" cols="70" id="quote_remarks" name="quote_remarks"
+											  placeholder="Enter Quote Remark"></textarea>
+								</div>
+							</div>
+						</div>
                         <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
                             <label for="{{ 'division_id' }}" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
 
@@ -73,9 +98,9 @@
                             </div>
                         </div>
 
-                        <hr class="hr-text" data-content="SELECT PRODUCTS">
+                        <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
 
-                        <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                        <div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>
 
                             <div class="col-sm-10">
@@ -88,9 +113,9 @@
                             </div>
                         </div>
 
-                        <hr class="hr-text" data-content="OR SELECT PACKAGES">
+                        <hr class="hr-text packages-field" data-content="OR SELECT PACKAGES">
 
-                        <div class="form-group{{ $errors->has('package_id') ? ' has-error' : '' }}">
+                        <div class="form-group packages-field{{ $errors->has('package_id') ? ' has-error' : '' }}">
                             <label for="package_id" class="col-sm-2 control-label">Package</label>
 
                             <div class="col-sm-10">
@@ -135,7 +160,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right">Create Quote</button>
+                        <button type="submit" class="btn btn-primary pull-right">Next <i class="fa fa-arrow-right"></i></button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -203,10 +228,33 @@
                 $('.modal:visible').each(reposition);
             });
 
+            //show / hide fields
+            hideFields();
+
+            $('#rdo_products, #rdo_services').on('ifChecked', function(){
+                var allType = hideFields();
+            });
+
             //Show success action modal
             @if(Session('changes_saved'))
                 $('#success-action-modal').modal('show');
             @endif
         });
+
+        //function to hide/show fields depending on the quote  type
+        function hideFields() {
+            var quoteType = $("input[name='quote_type']:checked").val();
+            if (quoteType == 1) { //products and packages
+                $('.products-field').show();
+                $('.packages-field').show();
+                $('.services-field').hide();
+            }
+            else if (quoteType == 2) { //services
+                $('.products-field').hide();
+                $('.packages-field').hide();
+                $('.services-field').show();
+            }
+            return quoteType;
+        }
     </script>
 @endsection

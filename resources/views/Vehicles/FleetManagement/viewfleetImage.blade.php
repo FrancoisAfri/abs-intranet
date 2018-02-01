@@ -1,21 +1,10 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-    <!-- Include Date Range Picker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
-    <!--Time Charger-->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- year picker -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
-          rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script> </head>
+
 @endsection
 @section('content')
 
@@ -100,88 +89,48 @@
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
                                                     data-toggle="modal" data-target="#edit-package-modal"
                                                     data-id="{{ $vehiclemaintenance->id }}"
+                                                    data-name="{{ $vehiclemaintenance->name }}"
+                                                    data-description="{{ $vehiclemaintenance->description }}"
                                                     data-image="{{ $vehiclemaintenance->image }}"><i
                                                         class="fa fa-pencil-square-o"></i> Edit
                                             </button>
                                         </td>
                                         <td>
                                             <div class="product-img">
-                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"
+                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("Vehicle/images/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"
                                                      alt="Product Image" width="50" height="50">
                                             </div>
 
 
-                                            <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog"
-                                                 aria-labelledby="enlargeImageModal" aria-hidden="true">
-                                                <!--  <div class="modal-dialog modal" role="document"> -->
-                                                <div class="modal-dialog modal-sm">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close"><span aria-hidden="true">x</span>
-                                                            </button>
+                                            <div class="modal fade" id="enlargeImageModal" tabindex="-1"
+                                                         role="dialog" align="center"
+                                                         aria-labelledby="enlargeImageModal" aria-hidden="true">
+                                                        <!--  <div class="modal-dialog modal" role="document"> -->
+                                                        <div class="modal-dialog modal-sm" >
+                                                            {{--<div class="modal-content">--}}
+                                                                {{--<div class="modal-header">--}}
+                                                                    {{--<button type="button" class="close"--}}
+                                                                            {{--data-dismiss="modal"--}}
+                                                                            {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
+                                                                    {{--</button>--}}
+                                                                {{--</div>--}}
+                                                                <div class="modal-body" align="center">
+                                                                    <img src="" class="enlargeImageModalSource"
+                                                                         style="width: 200%;">
+
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="modal-body">
-                                                            <img src="" class="enlargeImageModalSource"
-                                                                 style="width: 100%;">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>{{ !empty($vehiclemaintenance->description) ? $vehiclemaintenance->description : ''}}</td>
-
-                                        <td>{{ !empty($vehiclemaintenance->currentDate) ? date(' d M Y', $vehiclemaintenance->currentDate) : '' }}</td>
-                                        <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
-
-                                        <td>{{ !empty($vehiclemaintenance->name) ? $vehiclemaintenance->name : ''}}</td>
-                                    </tr>
-                                @endforeach
-                                 @foreach ($vehiclemaintenance->images as $vehiclemaintenance)
-                                    <tr id="categories-list">
-                                        <td nowrap>
-                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
-                                                    data-toggle="modal" data-target="#edit-package-modal"
-                                                    data-id="{{ $vehiclemaintenance->id }}"
-                                                    data-image="{{ $vehiclemaintenance->image }}"><i
-                                                        class="fa fa-pencil-square-o"></i> Edit
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <div class="product-img">
-                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("image/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"
-                                                     alt="Product Image" width="50" height="50">
-                                            </div>
-
-
-                                            <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog"
-                                                 aria-labelledby="enlargeImageModal" aria-hidden="true">
-                                                <!--  <div class="modal-dialog modal" role="document"> -->
-                                                <div class="modal-dialog modal-sm">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close"><span aria-hidden="true">x</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <img src="" class="enlargeImageModalSource"
-                                                                 style="width: 100%;">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </td>
                                         <td>{{ !empty($vehiclemaintenance->description) ? $vehiclemaintenance->description : ''}}</td>
 
                                         <td>{{ !empty($vehiclemaintenance->upload_date) ? date(' d M Y', $vehiclemaintenance->upload_date) : '' }}</td>
-                                        <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+                                        <td>{{ !empty($maintenance->vehicle_registration) ? $maintenance->vehicle_registration : ''}}</td>
 
-                                        <td>{{ !empty($vehiclemaintenance->name) ? $vehiclemaintenance->name : ''}}</td>
+                                        <td>{{ !empty($vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname ) ? $vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname : ''}}</td>
                                     </tr>
                                 @endforeach
+
                             @else
                                 <tr id="categories-list">
                                     <td colspan="9">
@@ -198,7 +147,7 @@
                         <div class="box-footer">
                             <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                             <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                    data-target="#upload-image-modal">Upload new Image
+                                    data-target="#upload-image-modal">Upload New Image
                             </button>
                         </div>
                         @include('Vehicles.partials.edit_image_modal')
@@ -209,42 +158,25 @@
             </div>
             @endsection
             @section('page_script')
-                <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-                <!-- iCheck -->
-                <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+
+
                 <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                        type="text/javascript"></script>
-                <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-                <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
                         type="text/javascript"></script>
                 <!-- the main fileinput plugin file -->
                 <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
                 <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
                 <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-                <!-- InputMask -->
-                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
 
                 <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
-
-
                 <script>
 
                     $('#back_button').click(function () {
                         location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                     });
                     $(function () {
-                        $(".select2").select2();
-                        $('.zip-field').hide();
 
                         var moduleId;
                         //Tooltip
@@ -269,11 +201,7 @@
                         });
 
                         //
-                        $('.datepicker').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
+
 
                         $(function () {
                             $('img').on('click', function () {
@@ -283,21 +211,16 @@
                         });
 
                         //Initialize iCheck/iRadio Elements
-                        $('input').iCheck({
-                            checkboxClass: 'icheckbox_square-blue',
-                            radioClass: 'iradio_square-blue',
-                            increaseArea: '10%' // optional
-                        });
 
-                        $(document).ready(function () {
-
-                            $('#year').datepicker({
-                                minViewMode: 'years',
-                                autoclose: true,
-                                format: 'yyyy'
-                            });
-
-                        });
+//                        $(document).ready(function () {
+//
+//                            $('#year').datepicker({
+//                                minViewMode: 'years',
+//                                autoclose: true,
+//                                format: 'yyyy'
+//                            });
+//
+//                        });
 
                         $('#rdo_single, #rdo_zip').on('ifChecked', function () {
                             var allType = hideFields();

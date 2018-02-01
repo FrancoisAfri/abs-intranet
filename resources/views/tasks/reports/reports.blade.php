@@ -20,24 +20,24 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form class="form-horizontal"  id="report_form" method="POST">
+                <form class="form-horizontal"  id="report_form" method="POST" action="/task/normal_report">
                     {{ csrf_field() }}
-
                     <div class="box-body">
 						<div class="form-group{{ $errors->has('meeting_type') ? ' has-error' : '' }}">
 							<label for="meeting_type" class="col-sm-3 control-label">Report Type</label>
 							<div class="col-sm-9">
 								<div class="input-group">
-									<select class="form-control" name="report_type" id="report_type" placeholder="Select Report Type"  onchange="changetype(this.value)">
-										<option value="1" selected>Induction Tasks</option>
+									<select class="form-control" name="report_type" id="report_type" placeholder="Select Report Type"  onchange="changetype(this.value)" required>
+										<option value="" selected>*** Select a Report Type ***</option>
+										<option value="1">Induction Tasks</option>
 										<option value="2">Meeting Tasks</option>
 										<option value="3">Normal Tasks</option>
-										<option value="4">Helpdesk Tasks</option>
+										<!--<option value="4">Helpdesk Tasks</option>-->
 									</select>
 								</div>
 							</div>
                         </div>
-						<div class="form-group inductionTasks">
+						<div class="form-group inductionTasks" id="clientdiv">
                             <label for="company_id" class="col-sm-3 control-label">Client</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
@@ -75,7 +75,6 @@
                                 </div>
                             </div>
                         </div>
-						
 						<div class="form-group inductionTasks">
                             <label for="induction_title" class="col-sm-3 control-label">Induction Title</label>
                             <div class="col-sm-9">
@@ -131,7 +130,7 @@
                                 </div>
                             </div>
                         </div>
-                     </div>   
+                    </div>   
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Generate</button>
@@ -219,14 +218,14 @@
 				$('.meetingTasks').show();
 				$('#report_form').attr('action', '/task/meeting_report');
 			}
-			/*else if (type == 3)
+			else if (type == 3)
 			{
-				$('.programmes').hide();
-				$('.projects').hide();
-				$('.activities').show();
+				$('.inductionTasks').hide();
+				$('.meetingTasks').hide();
+				$('#clientdiv').show();
 				$('#report_form').attr('action', '/task/normal_report');
 			}
-			else if (type == 4)
+			/*else if (type == 4)
 			{
 				$('.programmes').hide();
 				$('.projects').hide();

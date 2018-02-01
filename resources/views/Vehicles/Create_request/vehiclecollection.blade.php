@@ -23,7 +23,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form name="leave-application-form" class="form-horizontal" method="POST" action="/vehicle_management/confirmbooking/{{ $collect->id }}"
+                <form name="leave-application-form" class="form-horizontal" method="POST" action="/vehicle_management/{{ $collect->id }}/confirmbooking"
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
@@ -186,8 +186,8 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-spinner"></i>
                                         </div>
-                                        <input type="text" id="driver_id" class="form-control pull-left"
-                                               name="driver_id" value=" enter actual Odometer Reading">
+                                        <input type="text" id="start_mileage_id" class="form-control pull-left"
+                                               name="start_mileage_id" value="0">
                                     </div>
                                 </div>
                             </div>
@@ -377,7 +377,7 @@
 
         //Post perk form to server using ajax (add)
         $('#add-collection_image').on('click', function () {
-            var strUrl = '/vehicle_management/add_collectionImage';
+            var strUrl = '/vehicle_management/addcollectionImage';
             var formName = 'add-new-collectImage-form';
             var modalID = 'add-image-modal';
             var submitBtnID = 'add-collection_image';

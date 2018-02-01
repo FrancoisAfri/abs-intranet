@@ -16,17 +16,17 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                    <div class="form-group{{ $errors->has('image_type') ? ' has-error' : '' }}">
-                        <label for="Leave_type" class="col-sm-3 control-label"> Upload Type</label>
+                    {{--<div class="form-group{{ $errors->has('image_type') ? ' has-error' : '' }}">--}}
+                    {{--<label for="Leave_type" class="col-sm-3 control-label"> Upload Type</label>--}}
 
-                        <div class="col-sm-8">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_single"
-                                                                                          name="image_type" value="1"
-                                                                                          checked> Single </label>
-                            <label class="radio-inline"><input type="radio" id="rdo_zip" name="image_type" value="2">
-                                Bulk </label>
-                        </div>
-                    </div>
+                    {{--<div class="col-sm-8">--}}
+                    {{--<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_single"--}}
+                    {{--name="image_type" value="1"--}}
+                    {{--checked> Single </label>--}}
+                    {{--<label class="radio-inline"><input type="radio" id="rdo_zip" name="image_type" value="2">--}}
+                    {{--Bulk </label>--}}
+                    {{--</div>--}}
+                    {{--</div>--}}
 
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
@@ -38,6 +38,7 @@
                                    placeholder="Enter name" required>
                         </div>
                     </div>
+
                     <div class="form-group Single-field">
                         <label for="path" class="col-sm-3 control-label">Image Description</label>
                         <div class="col-sm-8">
@@ -45,7 +46,6 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-
 
                     <div class="form-group">
                         <label for="image" class="col-sm-3 control-label">Upload</label>
@@ -60,9 +60,9 @@
                         <label for="days" class="col-sm-3 control-label">Note</label>
                         <div class="col-sm-8">
 
-                            <textarea class="form-control" id="description" name="description"
+                            <textarea class="form-control" id="note" name="note"
                                       placeholder="Please make sure you zip the files you wish to upload and then upload the zip file. The files in zip file will then be uploaded..."
-                                      rows="3" readonly="">{{ old('description') }}</textarea>
+                                      rows="3" readonly="">{{ old('note') }}</textarea>
 
                         </div>
                     </div>

@@ -164,6 +164,9 @@
                                         </div>
                                     </div>
 
+
+                       
+
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-left"><i
                                                     class="fa fa-search"></i> Search
@@ -317,7 +320,6 @@
             return allType;
         }
 
-        //Post perk form to server using ajax (add)
         $('#add_vehicledetails').on('click', function () {
             var strUrl = '/vehicle_management/add_vehicleDetails';
             var formName = 'add-new-vehicledetails-form';

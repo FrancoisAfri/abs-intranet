@@ -79,9 +79,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                       {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -130,34 +130,36 @@
                                     </td>
                                     <td>{{ !empty($details->fine_ref) ? $details->fine_ref : '' }}</td>
                                     <td>{{ !empty($details->date_of_fine) ? date(' d M Y', $details->date_of_fine) : '' }}</td>
-                                    <td>{{ !empty($details->time_of_fine) ? date(' H:I:S', $details->time_of_fine) : '' }}</td>
+                                    <td>{{ !empty($details->time_of_fine) ? date(' h:m:z', $details->time_of_fine) : '' }}</td>
                                     <td>{{ (!empty($details->fine_type)) ?  $fineType[$details->fine_type] : ''}}</td>
-                                    <td>R {{ !empty($details->amount) ? $details->amount : '' }} .00</td>
+                                    <td>{{ !empty($details->amount) ? 'R' .number_format($details->amount, 2) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
 
-                                       <td nowrap>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("Vehicle/vehiclefines/$details->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+
+
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document1))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document1 }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("Vehicle/vehiclefines/$details->document1") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
+                                    </td>
+
                                          <td>{{ !empty($details->fine_status) ?  $status[$details->fine_status] : ''}}</td>
                                     </td>
                                 </tr>
@@ -179,7 +181,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-fines-modal">Add new Vehicle Fines
+                                data-target="#add-fines-modal">Add New Vehicle Fines
                         </button>
                     </div>
                 </div>

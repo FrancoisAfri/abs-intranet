@@ -125,6 +125,9 @@
             <!-- /.box -->
         </div>
         <!-- End new Form-->
+	@if(Session('success_add'))
+            @include('contacts.partials.success_action', ['modal_title' => "New Task Added!", 'modal_content' => session('success_add')])
+    @endif
 </div>
 @endsection
 <!-- Ajax form submit -->
@@ -143,7 +146,6 @@
     $(function () {
 		//Initialize Select2 Elements
             $(".select2").select2();
-
 		//Date picker
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
@@ -157,7 +159,26 @@
         $('#time_to').datetimepicker({
              format: 'HH:mm:ss'
         });
+		
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+					dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function() {
+			$('.modal:visible').each(reposition);
+		});
+
+		//Show success action modal
+		$('#success-action-modal').modal('show');
     });
 </script>
  @endsection

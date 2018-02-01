@@ -71,9 +71,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                       <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                       {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -126,32 +126,34 @@
                                     <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
                                     <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
                                     <td>{{ !empty($details->invoice_number) ?  $details->invoice_number : '' }}</td>
-                                    <td>R {{ !empty($details->total_cost) ? $details->total_cost : '' }} .00</td>
+                                    <td>{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : '' }}</td>
                                     <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
-                                    <td>R{{ !empty($details->nxt_service_km) ?  $details->nxt_service_km : '' }}.KM</td>
-                                       <td nowrap>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+                                    <td>{{ !empty($details->nxt_service_km) ? 'Km' .number_format($details->total_cost, 2) : '' }}</td>
+                                    <td nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("servicedetails/documents/$details->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
-                                        <div class="form-group{{ $errors->has('details') ? ' has-error' : '' }}">
+
+
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
                                             @if(!empty($details->document1))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ $details->document1 }}" target="_blank"><i
-                                                            class="fa fa-file-pdf-o"></i> View Document</a>
+                                                   href="{{ Storage::disk('local')->url("servicedetails/documents/$details->document1") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
+                                    </td>
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -174,7 +176,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-servicedetails-modal">Add new Vehicle Service Log
+                                data-target="#add-servicedetails-modal">Add New Vehicle Service Log
                         </button>
                     </div>
                 </div>

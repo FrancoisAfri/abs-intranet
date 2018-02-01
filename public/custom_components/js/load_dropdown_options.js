@@ -367,3 +367,55 @@ function loadContactPeopleOptions(ddID, selectedOption, companyID, incInactive, 
             }
         });
 }
+
+//   
+// 
+// // **********************************************
+
+/* function to load contact people drop down options */
+function vehiclemakeDDOnChange(dropDownObj, vehiclemomdeDDID, selectedOption) {
+    console.log('gets here');
+    vehiclemomdeDDID = vehiclemomdeDDID || 'vehiclemake_id';
+    selectedOption = selectedOption || '';
+
+    var postTo = '';
+    //var ddID = dropDownObj.id;
+    var makeID = dropDownObj.value;
+    var incInactive = -1;
+    var loadAll = -1;
+    loadVehicleModelOptions(vehiclemomdeDDID, selectedOption, makeID);
+}
+
+/* function to load Contact People drop down options */
+function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, loadAll, postTo) {
+    loadAll = loadAll || -1;
+    incInactive = incInactive || -1;
+    postTo = postTo || '/api/vehiclemodeldropdown';
+
+    //var parentDDVal = $('#'+parentDDID).val();
+    //var ddLabel = 'a Company';
+    //var divLvl = parseInt(parentDDID.substr(parentDDID.lastIndexOf("_") + 1));
+    $.post(postTo, { vehiclemake_id: makeID, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
+        function(data) {
+            var dropdown = $('#'+ddID);
+            var firstDDOption = "*** Select a Vehicle Model ***";
+            if (makeID == '') firstDDOption = "*** Select a make First ***";
+            dropdown.empty();
+            dropdown
+                .append($("<option></option>")
+                    .attr("value",'')
+                    .text(firstDDOption));
+            if (makeID != '') {
+                $.each(data, function(key, value) {
+                    var ddOption = $("<option></option>")
+                        .attr("value",value)
+                        .text(key);
+                    if (selectedOption == value) ddOption.attr("selected", "selected");
+                    dropdown
+                        .append(ddOption);
+                });
+            }
+        });
+}
+
+//   

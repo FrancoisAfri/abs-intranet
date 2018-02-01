@@ -85,7 +85,7 @@
                             <select class="form-control select2" style="width: 100%;"
                                     id="service_station" name="service_station">
                                 <option value="0">*** Select tank  ***</option>
-                                @foreach($servicestation as $station)
+                                @foreach($fueltank as $station)
                                     <option value="{{ $station->id }}">{{ $station->name }}</option>
                                 @endforeach
                             </select>
@@ -136,8 +136,8 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Captured By</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="captured_by" name="captured_by" value="{{ $name }}"
-                                   placeholder="{{ $name }}" required readonly="">
+                            <input type="text" class="form-control" id="captured_by" name="captured_by" value=" "
+                                   placeholder=" " required readonly="">
                         </div>
                     </div>
 

@@ -13,30 +13,36 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Service Provider </label>
-                        <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;"
-                                    id="service_provider" name="service_provider">
-                                <option value="0">*** Select Service Provider ***</option>
-                                @foreach($ContactCompany as $company)
-                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                @endforeach
-                            </select>
+                   <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'company_id' }}" class="col-sm-2 control-label">Service Provider</label>
+
+                            <div class="col-sm-8">
+                                <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;" onchange="contactCompanyDDOnChange(this)">
+                                    <option value="">*** Please Select a Company ***</option>
+                                    <!-- <option value="0"></option> -->
+                                    @foreach($companies as $company)
+                                        <option value="{{ $company->id }}" {{ ($company->id == old('company_id')) ? 'selected' : '' }}>{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Contact Person</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="contact_person" name="contact_person" value=""
-                                   placeholder="Enter Contact Person" required>
+
+                        <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
+
+                            <div class="col-sm-8">
+                                <select id="contact_person_id" name="contact_person_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">*** Please Select a Company First ***</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                   
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Contact Number</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="contact_number" name="contact_number" value=""
-                                   placeholder="Enter Contact Number" required>
+                            <input type="text" class="form-control" id="contact_number" name="contact_number"
+                                   value="{{ old('contact_number') }}" data-inputmask='"mask": "(999) 999-9999"'
+                                   placeholder="Enter Contact Number" data-mask>
                         </div>
                     </div>
                     <div class="form-group">
@@ -124,7 +130,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Warranty Amount </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="warranty_amount" name="warranty_amount" value=""
+                            <input type="number" class="form-control" id="warranty_amount" name="warranty_amount" value=""
                                    placeholder="Enter Warranty Amount" required>
 
                         </div>
@@ -146,18 +152,9 @@
                                       placeholder="Enter notes..." rows="3">{{ old('notes') }}</textarea>
                         </div>
                     </div>
-                    <!--  <div class="form-group">
-                        <label for="Status" class="col-sm-2 control-label">Status </label>
-                        <div class="col-sm-8">
 
-                            <select id="status" name="status" class="form-control">
-                                <option value="0">*** Select Status ***</option>
-                                <option value="1"> Active</option>
-                                <option value="2"> InActive</option>
-                            </select>
+                    <hr class="hr-text" data-content="DOCUMENTS UPLOAD">
 
-                        </div>
-                    </div> -->
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -169,7 +166,7 @@
 
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Name</label>
+                        <label for="path" class="col-sm-2 control-label">Document Name</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="name" name="name" value=""
                                    placeholder="Enter Name" required>

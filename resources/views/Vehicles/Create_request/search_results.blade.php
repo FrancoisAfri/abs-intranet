@@ -1,8 +1,6 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-
 @endsection
 @section('content')
     <div class="row">
@@ -20,7 +18,6 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
-
                                     <th style="width: 5px; text-align: center;"></th>
                                     <th>Vehicle</th>
                                     <th>Type</th>
@@ -82,11 +79,9 @@
                     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
                     <!-- End Bootstrap File input -->
-
                     <script>
                         function postData(id, data) {
                             if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
-
                         }
 
                         //Cancel button click event

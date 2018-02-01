@@ -215,14 +215,14 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $manager->first_name }},<br><br>
-                                                    We would like to inform you that a new quotation has been loaded and requires your approval. To view approve the quotation please <a target="_blank" href="{{ $quote_url }}">click here.</a>
+                                                    We would like to inform you that a new quotation has been loaded and requires your approval. To view  and approve the quotation please <a target="_blank" href="{{ $quote_url }}">click here.</a>
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    The {{ $company_name }} online system
+                                                    {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>
@@ -231,7 +231,8 @@
                                 <tr>
                                     <td valign="top" class="footer-cell">
                                         {{ $full_company_name }}.<br>
-                                        Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>
+                                        Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>.<br>
+										Powered by <a href="http://afrixcel.co.za/" target="_blank">Afrixcel Business Solutions</a>
                                     </td>
                                 </tr>
                             </table>

@@ -74,9 +74,9 @@
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
 
-                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-file-o"></i> Oil Log
-                        </a>
+                        {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
+                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
@@ -132,8 +132,8 @@
                                     <td>{{ !empty($reminder->document_number) ?  $reminder->document_number : '' }}</td>
                                     <td>{{ !empty($reminder->supplier_name) ?  $reminder->supplier_name : '' }}</td>
                                     <td>{{ (!empty($reminder->cost_type)) ?  $costtype[$reminder->cost_type] : ''}}</td>
-                                    <td>R{{ !empty($reminder->cost) ?  $reminder->cost : '' }}.00</td>
-                                    <td>{{ !empty($reminder->litres) ?  $reminder->litres : '' }}</td>
+                                    <td>{{ !empty($reminder->cost) ?  'R' .number_format($reminder->cost, 2): '' }}</td>
+                                    <td>{{ !empty($reminder->litres) ?  number_format($reminder->litres, 2) : '' }}</td>
                                     <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
                                     <td>{{ !empty($reminder->first_name . ' ' . $reminder->surname) ? $reminder->first_name . ' ' . $reminder->surname : ''}}</td>
                                     <td>
@@ -164,7 +164,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-costs-modal">Add new Costs
+                                data-target="#add-costs-modal">Add New Costs
                         </button>
                     </div>
                 </div>
