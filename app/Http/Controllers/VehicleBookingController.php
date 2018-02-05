@@ -756,9 +756,11 @@ class VehicleBookingController extends Controller
         //  if ($collect->status == 10) {
         $bookingID = $collect->id;
         //return $ID;
-        $doc =  vehicle_collect_documents::all();
-        $image = collectionImage::all();
+        $doc =  vehicle_collect_documents::count();
 
+        $image = vehicle_collect_image::count();
+
+        //return $doc;
 
         $vehiclebookings = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_details.*', 'vehicle_details.name as vehicle_make',
@@ -869,6 +871,8 @@ class VehicleBookingController extends Controller
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
+
+
         $confirm->collector_id = $loggedInEmplID = Auth::user()->person->id;
         $confirm->status = 11;
         $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
@@ -923,6 +927,8 @@ class VehicleBookingController extends Controller
         //  if ($collect->status == 10) {
         $bookingID = $returnVeh->id;
         //return $ID;
+        $doc =  vehicle_return_documents::count();
+        $image = vehicle_return_images::count();
 
         $vehiclebookings = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_details.*', 'vehicle_details.name as vehicle_make',
@@ -942,6 +948,8 @@ class VehicleBookingController extends Controller
         ];
 
 
+        $data['image'] = $image;
+        $data['doc'] = $doc;
         $data['servicestation'] = $servicestation;
         $data['fueltank'] = $fueltank;
         $data['returnVeh'] = $returnVeh;

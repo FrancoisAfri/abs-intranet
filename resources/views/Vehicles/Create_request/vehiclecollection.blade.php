@@ -243,12 +243,10 @@
                                 </button>
 
 
-                                @if (isset($doc) && (!empty($doc)))
-                                    <td>
+
+                                    @if (isset($doc) && $doc > 0 && (isset($image) && $image>0))
                                         <input type="submit" id="load-allocation" name="load-allocation"
                                                class="btn btn-primary pull-right" value="Submit">
-                                    </td> @else
-                                    <td></td>
                                 @endif
                             </div>
                             <!-- /.box-footer -->
