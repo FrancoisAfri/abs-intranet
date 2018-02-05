@@ -1,42 +1,45 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
 
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-<!-- bootstrap datepicker -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-<!--  -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-rel="stylesheet">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+    <!--  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 
 @endsection
 @section('content')
-<div class="row">
-    <div class="col-md-12 col-md-offset-0">
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <i class="fa fa-truck pull-right"></i>
-                <h3 class="box-title"> Vehicle Booking Log </h3>
-            </div>
-            <div class="box-body">
+    <div class="row">
+        <div class="col-md-12 col-md-offset-0">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-truck pull-right"></i>
+                    <h3 class="box-title"> Vehicle Booking Log </h3>
+                </div>
+                <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong>
+                                    <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -92,9 +95,9 @@ rel="stylesheet">
                         </a>
                         <!--  -->
                     </div>
-                <div style="overflow-X:auto;">
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
+                    <div style="overflow-X:auto;">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Vehicle</th>
@@ -109,60 +112,61 @@ rel="stylesheet">
                                 <th style="width: 10px; text-align: center;">Action</th>
                                 <th style="width: 10px; text-align: center;">Inspection</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @if (count($vehiclebooking) > 0)
-                            <ul class="products-list product-list-in-box">
-                                @foreach ($vehiclebooking as $booking)
-                                <tr>
-                                   <td nowrap>
-                                        <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#add-booking-modal"
-                                                data-id="{{ $booking->id }}"><i class="fa fa-eye"></i> view
-                                        </button>
-                                    </td> 
-                                <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
-                               <td>{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}</td>
-                                <td>{{ !empty($booking->return_datetime ) ?  date("F j, Y, g:i a", $booking->return_datetime)  : ''}}</td>
-                                <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>  
-                                <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td> 
-                                 <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
-                                 <td>{{ !empty($booking->start_mileage_id) ? $booking->start_mileage_id : ''}}</td>
-                                 <td>{{ !empty($booking->end_mileage_id) ? $booking->end_mileage_id : ''}}</td>
-                                 <td>{{ !empty($booking->start_mileage_id - $booking->end_mileage_id ) ? $booking->start_mileage_id - $booking->end_mileage_id  : ''}}</td>
-                                
+                                <ul class="products-list product-list-in-box">
+                                    @foreach ($vehiclebooking as $booking)
+                                        <tr>
+                                            <td nowrap>
+                                                <button details="button" id="edit_compan"
+                                                        class="btn btn-warning  btn-xs"
+                                                        data-toggle="modal" data-target="#add-booking-modal"
+                                                        data-id="{{ $booking->id }}"><i class="fa fa-eye"></i> view
+                                                </button>
+                                            </td>
+                                            <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
+                                            <td>{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}</td>
+                                            <td>{{ !empty($booking->return_datetime ) ?  date("F j, Y, g:i a", $booking->return_datetime)  : ''}}</td>
+                                            <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
+                                            <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
+                                            <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
+                                            <td>{{ !empty($booking->start_mileage_id) ? $booking->start_mileage_id : ''}}</td>
+                                            <td>{{ !empty($booking->end_mileage_id) ? $booking->end_mileage_id : ''}}</td>
+                                            <td>{{ !empty($booking->start_mileage_id - $booking->end_mileage_id ) ? $booking->start_mileage_id - $booking->end_mileage_id  : ''}}</td>
 
-                            @if (isset($booking) && $booking->status === 10)
-                            <td>
-                                <a href="{{ '/vehicle_management/collect/' . $booking->id }}"
-                                 id="collect"
-                                 class="btn btn-success  btn-xs" data-id="{{ $booking->id }}"><i
-                                 class="fa fa-handshake-o"></i> collect</a>
-                             </td>@elseif (isset($booking) && $booking->status == 11)
-                             <td>
-                                <a href="{{ '/vehicle_management/return_vehicle/' . $booking->id }}"
-                                 id="return"
-                                 class="btn btn-info  btn-xs" data-id="{{ $booking->id }}"><i
-                                 class="fa fa-reply-all"></i> return Vehicle </a>
-                             </td>
-                             @else
-                             <td></td>
-                             @endif
-                                        @if (isset($booking) && $booking->status === 12)
-                             <td>
-                                <a href="{{ '/vehicle_management/vehicle_ispection/' . $booking->id }}"
-                                 id="collect"
-                                 class="btn btn-primary  btn-xs" data-id="{{ $booking->id }}"><i
-                                 class="fa fa-hand-lizard-o"></i> Inspection</a>  
-                             </td>
-                         </tr>
+
+                                            @if (isset($booking) && $booking->status === 10)
+                                                <td>
+                                                    <a href="{{ '/vehicle_management/collect/' . $booking->id }}"
+                                                       id="collect"
+                                                       class="btn btn-success  btn-xs" data-id="{{ $booking->id }}"><i
+                                                                class="fa fa-handshake-o"></i> collect</a>
+                                                </td>@elseif (isset($booking) && $booking->status == 11)
+                                                <td>
+                                                    <a href="{{ '/vehicle_management/return_vehicle/' . $booking->id }}"
+                                                       id="return"
+                                                       class="btn btn-info  btn-xs" data-id="{{ $booking->id }}"><i
+                                                                class="fa fa-reply-all"></i> return Vehicle </a>
+                                                </td>
+                                            @else
+                                                <td></td>
+                                            @endif
+                                            @if (isset($booking) && $booking->status === 12)
+                                                <td>
+                                                    <a href="{{ '/vehicle_management/vehicle_ispection/' . $booking->id }}"
+                                                       id="collect"
+                                                       class="btn btn-primary  btn-xs" data-id="{{ $booking->id }}"><i
+                                                                class="fa fa-hand-lizard-o"></i> Inspection</a>
+                                                </td>
+                                        </tr>
                             @endif
-                         @endforeach
-						  @endif
-                     </tbody>
-                     <tfoot>
-                        <tr>
-                            <th style="width: 10px; text-align: center;"></th>
+                            @endforeach
+                            @endif
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th style="width: 10px; text-align: center;"></th>
                                 <th>Vehicle</th>
                                 <th>Requested From</th>
                                 <th>Return By</th>
@@ -174,34 +178,36 @@ rel="stylesheet">
                                 <th>Total km Travelled</th>
                                 <th style="width: 10px; text-align: center;">Action</th>
                                 <th style="width: 10px; text-align: center;">Inspection</th>
-                        </tr>
-                    </tfoot>
-                </table>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                     @include('Vehicles.partials.viewbookinglog_modal')
+                            </tr>
+                            </tfoot>
+                        </table>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
+                                        class="fa fa-arrow-left"></i> Back
+                            </button>
+                            @include('Vehicles.partials.viewbookinglog_modal')
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </div>
-       
-    </div>
-    @endsection
+        @endsection
 
-    @section('page_script')
-    <!-- DataTables -->
-    <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-    <script src="/custom_components/js/modal_ajax_submit.js"></script>
-    <!-- time picker -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-    <!-- Select2 -->
-    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    <!-- End Bootstrap File input -->
-
-    <script>
+        @section('page_script')
+            <!-- DataTables -->
+                <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+                <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+                <script src="/custom_components/js/modal_ajax_submit.js"></script>
+                <!-- time picker -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+                <!-- Select2 -->
+                <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+                <!-- End Bootstrap File input -->
+                <script>
                     //Cancel button click event
                     document.getElementById("cancel").onclick = function () {
-                        location.href = "/vehicle_management/vehicle_request";
+                        location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                     };
                     $(function () {
                         $('#example2').DataTable({
@@ -236,7 +242,7 @@ rel="stylesheet">
                         //Vertically center modals on page
                         function reposition() {
                             var modal = $(this),
-                            dialog = modal.find('.modal-dialog');
+                                dialog = modal.find('.modal-dialog');
                             modal.css('display', 'block');
 
                             // Dividing by two centers the modal exactly, but dividing by three
@@ -253,7 +259,7 @@ rel="stylesheet">
 
                         //Show success action modal
                         $('#success-action-modal').modal('show');
-                        
+
                         $(".js-example-basic-multiple").select2();
 
                         //Cancell booking
@@ -307,4 +313,4 @@ rel="stylesheet">
                     });
                 </script>
 
-                @endsection
+@endsection

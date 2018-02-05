@@ -621,12 +621,6 @@ class VehicleBookingController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
             ->orderBy('vehicle_booking.id', 'desc')
             ->whereNotIn('vehicle_booking.status', [10, 11, 12, 13, 14])//check if the booking is not approved
-            /*->where('vehicle_booking.status', '!=', 10)//check if the booking is not approved
-            ->where('vehicle_booking.status', '!=', 11)//check if the vehicle is not collected
-            ->where('vehicle_booking.status', '!=', 13)// check if the booking is not cancelled
-            ->where('vehicle_booking.status', '!=', 12)// check if the booking is not cancelled
-            ->where('vehicle_booking.status', '!=', 14)// check if the booking is not declined
-            */
             ->get();
 
         $data['page_title'] = " View Fleet Details";
@@ -762,6 +756,9 @@ class VehicleBookingController extends Controller
         //  if ($collect->status == 10) {
         $bookingID = $collect->id;
         //return $ID;
+        $doc =  vehicle_collect_documents::all();
+        $image = collectionImage::all();
+
 
         $vehiclebookings = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_details.*', 'vehicle_details.name as vehicle_make',
@@ -780,6 +777,9 @@ class VehicleBookingController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
+
+        $data['doc'] = $doc;
+        $data['image'] = $image;
         $data['collect'] = $collect;
         $data['name'] = $name;
         $data['vehicleTypes'] = $vehicleTypes;

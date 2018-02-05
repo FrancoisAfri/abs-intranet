@@ -1137,36 +1137,33 @@ class VehicleFleetController extends Controller
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->save();
 
-		# document
-		$numFiles  = $index = 0;
-		$totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
-		$Extensions = array ('jpg', 'png', 'jpeg', 'bmp', 'doc', 'pdf', 'ods', 'exe', 'csv', 'odt', 'xls', 'xlsx', 'docx', 'txt');
+        # document
+        $numFiles = $index = 0;
+        $totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
+        $Extensions = array('jpg', 'png', 'jpeg', 'bmp', 'doc', 'pdf', 'ods', 'exe', 'csv', 'odt', 'xls', 'xlsx', 'docx', 'txt');
 
-		$Files	= isset($_FILES['document'])	?	$_FILES['document'] : array();
-		while ($numFiles != $totalFiles)
-		{
-			$index++;
-			$Name =  $request->name[$index];
-			if(isset($Files['name'][$index]) && $Files['name'][$index] != '')
-			{
-				$fileName = $vehicleincidents->id.'_'.$Files['name'][$index];
-				$Explode = array();
-				$Explode = explode('.', $fileName);
-				$ext = end($Explode);
-				$ext = strtolower($ext);
-				if (in_array($ext, $Extensions))
-				{
-					if (!is_dir('../../../storage/app/Vehicle/vehicleIncidents')) mkdir('../../../storage/app/Vehicle/vehicleIncidents', 0775);
-					move_uploaded_file($Files['tmp_name'][$index], '/home/devloansafrixcel/loansystem/storage/app/loanDocs/'.$fileName ) or  die('Could not move file!');
-					$document = new VehicleIncidentsDocuments($SysData);
-					$document->display_name = $Name;
-					$document->filename = $fileName;
-					$document->status = 1;
-					$vehicleincidents->addIncidentDocs($document);
-				}
-			}
-			$numFiles ++;
-		}
+        $Files = isset($_FILES['document']) ? $_FILES['document'] : array();
+        while ($numFiles != $totalFiles) {
+            $index++;
+            $Name = $request->name[$index];
+            if (isset($Files['name'][$index]) && $Files['name'][$index] != '') {
+                $fileName = $vehicleincidents->id . '_' . $Files['name'][$index];
+                $Explode = array();
+                $Explode = explode('.', $fileName);
+                $ext = end($Explode);
+                $ext = strtolower($ext);
+                if (in_array($ext, $Extensions)) {
+                    if (!is_dir('../../../storage/app/Vehicle/vehicleIncidents')) mkdir('../../../storage/app/Vehicle/vehicleIncidents', 0775);
+                    move_uploaded_file($Files['tmp_name'][$index], '/home/devloansafrixcel/loansystem/storage/app/loanDocs/' . $fileName) or die('Could not move file!');
+                    $document = new VehicleIncidentsDocuments($SysData);
+                    $document->display_name = $Name;
+                    $document->filename = $fileName;
+                    $document->status = 1;
+                    $vehicleincidents->addIncidentDocs($document);
+                }
+            }
+            $numFiles++;
+        }
 
         return response()->json();
 
@@ -1327,6 +1324,7 @@ class VehicleFleetController extends Controller
         $date = $startExplode[0];
         $command = (!empty($startExplode[1]) ? $startExplode[1] : 0);
 
+
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         //return $ContactCompany;
 
@@ -1335,9 +1333,38 @@ class VehicleFleetController extends Controller
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
 
         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
+        $commands = $command;
+//        return $thisMonth;
 
-        $currentDate = time();
 
+        $counter = 0;
+        while ($counter < 12) {
+            if ($commands === 0) {
+                $currentMonth = TIME();
+                $thisMonth = date('m', $currentMonth);
+                $imonth = $thisMonth = date('m');
+
+            } elseif ($commands === 'p') {
+                $currentMonth = TIME();
+                $previous = strtotime('-1 months', $currentMonth);
+                $imonth = $prev = date('m', $previous);
+            } elseif ($commands === 'n') {
+                $currentMonth = TIME();
+                $next = strtotime('+1 months', $currentMonth);
+                $imonth = $nex = date('m', $next);
+            } else {
+                $currentMonth = TIME();
+                $thisMonth = date('m', $currentMonth);
+                $imonth = $thisMonth = date('m');
+            }
+            $counter++;
+        }
+
+
+        return $counter;
+
+
+        // return $imonth;
         /// return $currentDate;
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -1364,32 +1391,12 @@ class VehicleFleetController extends Controller
 
         $datetaken = $vehicle_fuel_log->first()->dates;
 
-        $id = 7; // for example
 
-        if ($command = 'p') {
-            //return $command;
-            $todayDate = Carbon::now();
-            $iLastmonth = $todayDate->subMonth();
-            $MONTH = $iLastmonth->month;
-        } elseif
-        ($command = 'n') {
-            $todayDate = Carbon::now();
-            $inxtmonth = $todayDate->addMonth();
-            $MONTH = $inxtmonth->month;
-        } elseif ($command = 0) {
-            $todayDate = Carbon::now();
-            $MONTH = $todayDate->month;
-        }
         //return $iTotalLitres;
         $ID = $maintenance->id;
         $iTotalLitres = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('litres');
         $sCurrency = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('total_cost');
-        //return   $sCurrency;          
-        // ->get();
-        $todayDates = Carbon::now();
-        $inxtmonth = $todayDates->addMonth();
-        $MONTH = $inxtmonth->month;;
-        //return $todayDates;
+
 
         $vehiclefuellog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
@@ -1398,7 +1405,7 @@ class VehicleFleetController extends Controller
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->orderBy('vehicle_fuel_log.id')
             ->where('vehicle_fuel_log.vehicleID', $ID)
-            ->whereMonth('published_at', '=', $MONTH)
+            ->whereMonth('vehicle_fuel_log.created_at', '=', $imonth)// show record for this month
 //            ->unionAll($prev)
 //            ->unionAll($next)
             // ->where('vehicle_fuel_log.status','!=', 1)
@@ -1419,7 +1426,6 @@ class VehicleFleetController extends Controller
             1 => "Approved",
             14 => "Rejected");
 
-        //return $iTotalLitres;
 
         $data['sCurrency'] = $sCurrency;
         $data['iTotalLitres'] = $iTotalLitres;
@@ -1446,8 +1452,7 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
     }
 
-    public
-    function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
+    public function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
     {
 
         // query the vehicle_configuration  table and bring back the values
