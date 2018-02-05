@@ -40,6 +40,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
+use Illuminate\Support\Facades\Storage;
 
 class VehicleFleetController extends Controller
 {
@@ -1153,9 +1154,10 @@ class VehicleFleetController extends Controller
                 $ext = end($Explode);
                 $ext = strtolower($ext);
                 if (in_array($ext, $Extensions)) {
-                    if (!is_dir('../../../storage/app/Vehicle/vehicleIncidents')) mkdir('../../../storage/app/Vehicle/vehicleIncidents', 0775);
-                    move_uploaded_file($Files['tmp_name'][$index], '/home/devloansafrixcel/loansystem/storage/app/loanDocs/' . $fileName) or die('Could not move file!');
-                    $document = new VehicleIncidentsDocuments($SysData);
+                    if (!is_dir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents')) mkdir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents', 0775);
+					move_uploaded_file($Files['tmp_name'][$index], '/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents/'.$fileName ) or  die('Could not move file!');
+
+					$document = new VehicleIncidentsDocuments($SysData);
                     $document->display_name = $Name;
                     $document->filename = $fileName;
                     $document->status = 1;
@@ -1164,9 +1166,7 @@ class VehicleFleetController extends Controller
             }
             $numFiles++;
         }
-
         return response()->json();
-
     }
 
     public function editvehicleincidents(Request $request, vehicle_incidents $incident)
@@ -1671,8 +1671,7 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewBookingLog')->with($data);
     }
 
-    public
-    function deletefuelLog(Request $request, vehicle_fuel_log $fuel)
+    public function deletefuelLog(Request $request, vehicle_fuel_log $fuel)
     {
 
         $fuel->delete();
