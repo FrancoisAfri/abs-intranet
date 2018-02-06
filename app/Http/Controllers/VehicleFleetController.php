@@ -1155,9 +1155,9 @@ class VehicleFleetController extends Controller
                 $ext = strtolower($ext);
                 if (in_array($ext, $Extensions)) {
                     if (!is_dir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents')) mkdir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents', 0775);
-					move_uploaded_file($Files['tmp_name'][$index], '/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents/'.$fileName ) or  die('Could not move file!');
+                    move_uploaded_file($Files['tmp_name'][$index], '/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
 
-					$document = new VehicleIncidentsDocuments($SysData);
+                    $document = new VehicleIncidentsDocuments($SysData);
                     $document->display_name = $Name;
                     $document->filename = $fileName;
                     $document->status = 1;
@@ -1280,8 +1280,7 @@ class VehicleFleetController extends Controller
         // return  date('Y', $date);
         //return $date;
 
-        $imonth = date('n');
-        $iYear = date('y');
+        $now = Carbon::now();
 
         $startExplode = explode('_', $date);
         $imonth = $startExplode[0];
@@ -1300,8 +1299,8 @@ class VehicleFleetController extends Controller
         $commands = $command;
 
         if ($commands === 0) {
-            $imonth = date('n');
-            $iYear = date('y');
+            $imonth = $now->month;
+           $iYear =  $now->year;
         } elseif ($commands === 'p') {
             if ($imonth == 1) {
                 $iYear = $iYear - 1;
@@ -1316,8 +1315,7 @@ class VehicleFleetController extends Controller
             } else $imonth = $imonth + 1;
         }
 
-        $iYear = 20. . $iYear;;
-        ################## WELL DETAILS ###############
+//                ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
@@ -1343,7 +1341,7 @@ class VehicleFleetController extends Controller
         $datetaken = date('n');
         //return $datetaken;
         if ($imonth < 10) {
-            $imonth = 0. . $imonth;
+            $imonth = 0..$imonth;
         } else $imonth = $imonth;
 
         $ID = $maintenance->id;
@@ -1359,7 +1357,7 @@ class VehicleFleetController extends Controller
             ->orderBy('vehicle_fuel_log.id')
             ->where('vehicle_fuel_log.vehicleID', $ID)
             ->whereMonth('vehicle_fuel_log.created_at', '=', $imonth)// show record for this month
-            ->whereYear('vehicle_fuel_log.created_at', '=', $iYear)// show record for this month
+            ->whereYear('vehicle_fuel_log.created_at', '=', $iYear)// show record for this year
             // ->where('vehicle_fuel_log.status','!=', 1)
             ->get();
 

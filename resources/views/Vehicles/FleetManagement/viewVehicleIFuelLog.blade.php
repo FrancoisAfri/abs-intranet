@@ -115,11 +115,11 @@
                         <input type="hidden" name="calendar_month" id="calendar_month" value="{{$imonth}}">
                         <input type="hidden" name="calendar_year" id="calendar_year" value="{{$iYear}}}">
 
-                        @if (isset($icurrentmonth) && $icurrentmonth === $imonth )
+                        {{--@if (isset($imonth) && $imonth === $icurrentmonth )--}}
                             <button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
                                         class="fa fa-caret-square-o-right"></i> Next Month
                             </button>
-                        @endif
+                        {{--@endif--}}
 
                     </div>
                     <table class="table table-bordered">
