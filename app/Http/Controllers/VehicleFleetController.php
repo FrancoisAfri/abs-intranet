@@ -1155,9 +1155,9 @@ class VehicleFleetController extends Controller
                 $ext = strtolower($ext);
                 if (in_array($ext, $Extensions)) {
                     if (!is_dir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents')) mkdir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents', 0775);
-					move_uploaded_file($Files['tmp_name'][$index], '/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents/'.$fileName ) or  die('Could not move file!');
+                    move_uploaded_file($Files['tmp_name'][$index], '/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
 
-					$document = new VehicleIncidentsDocuments($SysData);
+                    $document = new VehicleIncidentsDocuments($SysData);
                     $document->display_name = $Name;
                     $document->filename = $fileName;
                     $document->status = 1;
@@ -1268,47 +1268,6 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewVehicleIOilLog')->with($data);
     }
 
-// 
-
-//    public function getLastMonthReadings($iMonth, $iYear)
-//    {
-//        global $sSelectColumn, $iVehicleID, $aFuelinLitre, $aFTReadings, $nLMTopupLitres;
-//
-//        $sSQL = "SELECT date_taken, $sSelectColumn AS previous_reading FROM vehicle_fuel
-//			WHERE vehicle_id=$iVehicleID
-//			AND FROM_UNIXTIME(date_taken, '%Y')='$iYear'
-//			AND FROM_UNIXTIME(date_taken, '%m')<='$iMonth'
-//			ORDER BY date_taken DESC LIMIT 1";
-//        $aLastMonthReading = database::query($sSQL)->fetchrow();
-//        $iLastMonthReading = isset($aLastMonthReading['previous_reading']) ? $aLastMonthReading['previous_reading'] : 0;
-//        $iLastMonthReadingDT = isset($aLastMonthReading['date_taken']) ? $aLastMonthReading['date_taken'] : 0;
-//
-//        //Get previous Full tank reading
-//        $sSQL = "SELECT date_taken, $sSelectColumn AS previous_reading FROM vehicle_fuel
-//			WHERE vehicle_id=$iVehicleID
-//			AND (transaction_type = 1 OR transaction_type IS NULL)
-//			AND FROM_UNIXTIME(date_taken, '%Y')='$iYear'
-//			AND FROM_UNIXTIME(date_taken, '%m')<='$iMonth'
-//			ORDER BY date_taken DESC LIMIT 1";
-//        $aLastMonthFTReading = database::query($sSQL)->fetchrow();
-//        $iLastMonthFTReading = isset($aLastMonthFTReading['previous_reading']) ? $aLastMonthFTReading['previous_reading'] : 0;
-//        $iLastMonthFTReadingDT = isset($aLastMonthFTReading['date_taken']) ? $aLastMonthFTReading['date_taken'] : 0;
-//        //get total top up fuel liters from last month
-//        //print('iLastMonthReadingDT: ' . date('Y-m-d', $iLastMonthReadingDT) . ' - iLastMonthFTReadingDT: ' . date('Y-m-d', $iLastMonthFTReadingDT) . '<br>');
-//        if ($iLastMonthReadingDT > $iLastMonthFTReadingDT) {
-//            $sSQL = "SELECT SUM(litres) AS total_litres FROM vehicle_fuel
-//				WHERE vehicle_id = $iVehicleID
-//				AND date_taken > $iLastMonthFTReadingDT
-//				AND date_taken <= $iLastMonthReadingDT
-//				AND transaction_type = 2";
-//            //print $sSQL . '<br>';
-//            $aLMTopupLitres = database::query($sSQL)->fetchrow();
-//            $nLMTopupLitres = isset($aLMTopupLitres['total_litres']) ? $aLMTopupLitres['total_litres'] : 0;
-//        }
-//
-//        array_push($aFuelinLitre, $iLastMonthReading);
-//        array_push($aFTReadings, $iLastMonthFTReading);
-//    }
 
     public function viewFuelLog(Request $request, vehicle_maintenance $maintenance, $date = 0)
     {
@@ -1320,9 +1279,13 @@ class VehicleFleetController extends Controller
 
         // return  date('Y', $date);
         //return $date;
+
+        $now = Carbon::now();
+
         $startExplode = explode('_', $date);
-        $date = $startExplode[0];
+        $imonth = $startExplode[0];
         $command = (!empty($startExplode[1]) ? $startExplode[1] : 0);
+        $iYear = (!empty($startExplode[2]) ? $startExplode[2] : 0);
 
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
@@ -1334,39 +1297,25 @@ class VehicleFleetController extends Controller
 
         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
         $commands = $command;
-//        return $thisMonth;
+
+        if ($commands === 0) {
+            $imonth = $now->month;
+           $iYear =  $now->year;
+        } elseif ($commands === 'p') {
+            if ($imonth == 1) {
+                $iYear = $iYear - 1;
+                $imonth = 12;
+            } else $imonth = $imonth - 1;
 
 
-        $counter = 0;
-        while ($counter < 12) {
-            if ($commands === 0) {
-                $currentMonth = TIME();
-                $thisMonth = date('m', $currentMonth);
-                $imonth = $thisMonth = date('m');
-
-            } elseif ($commands === 'p') {
-                $currentMonth = TIME();
-                $previous = strtotime('-1 months', $currentMonth);
-                $imonth = $prev = date('m', $previous);
-            } elseif ($commands === 'n') {
-                $currentMonth = TIME();
-                $next = strtotime('+1 months', $currentMonth);
-                $imonth = $nex = date('m', $next);
-            } else {
-                $currentMonth = TIME();
-                $thisMonth = date('m', $currentMonth);
-                $imonth = $thisMonth = date('m');
-            }
-            $counter++;
+        } elseif ($commands === 'n') {
+            if ($imonth == 12) {
+                $iYear = $iYear + 1;
+                $imonth = 1;
+            } else $imonth = $imonth + 1;
         }
 
-
-        return $counter;
-
-
-        // return $imonth;
-        /// return $currentDate;
-        ################## WELL DETAILS ###############
+//                ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
@@ -1389,10 +1338,12 @@ class VehicleFleetController extends Controller
         else
             $vehicle_fuel_log = vehicle_fuel_log::latest()->first();
 
-        $datetaken = $vehicle_fuel_log->first()->dates;
+        $datetaken = date('n');
+        //return $datetaken;
+        if ($imonth < 10) {
+            $imonth = 0..$imonth;
+        } else $imonth = $imonth;
 
-
-        //return $iTotalLitres;
         $ID = $maintenance->id;
         $iTotalLitres = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('litres');
         $sCurrency = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('total_cost');
@@ -1406,12 +1357,9 @@ class VehicleFleetController extends Controller
             ->orderBy('vehicle_fuel_log.id')
             ->where('vehicle_fuel_log.vehicleID', $ID)
             ->whereMonth('vehicle_fuel_log.created_at', '=', $imonth)// show record for this month
-//            ->unionAll($prev)
-//            ->unionAll($next)
+            ->whereYear('vehicle_fuel_log.created_at', '=', $iYear)// show record for this year
             // ->where('vehicle_fuel_log.status','!=', 1)
             ->get();
-
-        //return $vehiclefuellog;
 
 
         $data['page_title'] = " View Fleet Details";
@@ -1427,6 +1375,15 @@ class VehicleFleetController extends Controller
             14 => "Rejected");
 
 
+        $icurrentmonth = date('n');
+        if ($icurrentmonth < 10) {
+            $icurrentmonth = 0. . $icurrentmonth;
+        } else $icurrentmonth = $icurrentmonth;
+
+
+        $data['icurrentmonth'] = $icurrentmonth;
+        $data['imonth'] = $imonth;
+        $data['iYear'] = $iYear;
         $data['sCurrency'] = $sCurrency;
         $data['iTotalLitres'] = $iTotalLitres;
         $data['datetaken'] = $datetaken;

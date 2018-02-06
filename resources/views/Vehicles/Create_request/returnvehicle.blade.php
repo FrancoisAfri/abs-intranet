@@ -277,8 +277,12 @@
                                 <button type="button" id="cancel" class="btn btn-primary"><i
                                             class="fa fa-arrow-left"></i> Cancel
                                 </button>
-                                <input type="submit" id="load-allocation" name="load-allocation"
-                                       class="btn btn-primary pull-right" value="Submit">
+
+                                @if (isset($doc) && $doc > 0 && (isset($image) && $image>0))
+                                    <input type="submit" id="load-allocation" name="load-allocation"
+                                           class="btn btn-primary pull-right" value="Submit">
+                                @endif
+
                             </div>
                             <!-- /.box-footer -->
                         </div>
