@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
 
-class Accept_application extends Mailable
+class LeaveRejection extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -47,7 +47,8 @@ class Accept_application extends Mailable
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['profile_url'] = url('/users/profile');
-
+		$data['dashboard_url'] = url('/');
+		
         return $this->view('mails.rejected_leave_application')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)

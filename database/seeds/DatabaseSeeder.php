@@ -598,8 +598,8 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Allocate Leave Types';
-        $ribbon->description = 'Allocate Leave Types';
+        $ribbon->ribbon_name = 'Manage Leave';
+        $ribbon->description = 'Manage Leave';
         $ribbon->ribbon_path = 'leave/Allocate_leave_types';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);

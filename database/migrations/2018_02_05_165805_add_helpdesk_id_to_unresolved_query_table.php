@@ -25,8 +25,6 @@ class AddHelpdeskIdToUnresolvedQueryTable extends Migration
      */
     public function down()
     {
-        Schema::table('unresolved_tickets_settings', function (Blueprint $table) {
-            $table->timestamp('helpdesk_id')->nullable();;
-        });
+         
     }
 }

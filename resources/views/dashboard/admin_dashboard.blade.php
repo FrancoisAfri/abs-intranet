@@ -385,24 +385,28 @@
                                     <th><i class="fa fa-calendar-o"></i> Date From</th>
                                     <th><i class="fa fa-calendar-o"></i> Date To</th>
                                     <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
+                                    <th style="text-align: right;"><i class="fa fa-info-circle"></i> Rejection Reason</th>
                                     <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @if (!empty($application))
-                                    @foreach($application as $checkTask)
+                                    @foreach($application as $app)
                                         <tr>
-                                            <td style="vertical-align: middle;">{{ (!empty($checkTask->leavetype)) ?  $checkTask->leavetype : ''}}</td>
+                                            <td style="vertical-align: middle;">{{ (!empty($app->leavetype)) ?  $app->leavetype : ''}}</td>
                                             <td style="vertical-align: middle;">
-                                                {{ !empty($checkTask->start_date) ? date('d M Y ', $checkTask->start_date) : '' }}
+                                                {{ !empty($app->start_date) ? date('d M Y ', $app->start_date) : '' }}
                                             </td>
-                                            <td style="vertical-align: middle;">{{ !empty($checkTask->end_date) ? date('d M Y ', $checkTask->end_date) : '' }}</td>
+                                            <td style="vertical-align: middle;">{{ !empty($app->end_date) ? date('d M Y ', $app->end_date) : '' }}</td>
                                             <td style="text-align: right; vertical-align: middle;">
-                                                {{ (!empty($checkTask->status) && $checkTask->status > 0) ? $leaveStatusNames[$checkTask->status] : ''}}
+                                                {{ (!empty($app->status) && $app->status > 0) ? $leaveStatusNames[$app->status]." ".$app->reject_reason  : ''}}
+                                            </td>
+											<td style="text-align: right; vertical-align: middle;">
+                                                {{ !empty($app->reject_reason) ? $app->reject_reason  : 'N/A'}}
                                             </td>
                                             <td class="text-right" style="vertical-align: middle;">
-                                                @if(in_array($checkTask->status, [2, 3, 4, 5]))
-                                                    <button class="btn btn-xs btn-warning" title="Cancel Leave Application" data-toggle="modal" data-target="#cancel-leave-application-modal" data-leave_application_id="{{ $checkTask->id }}"><i class="fa fa-times"></i></button>
+                                                @if(in_array($app->status, [2, 3, 4, 5]))
+                                                    <button class="btn btn-xs btn-warning" title="Cancel Leave Application" data-toggle="modal" data-target="#cancel-leave-application-modal" data-leave_application_id="{{ $app->id }}"><i class="fa fa-times"></i></button>
                                                 @endif
                                             </td>
                                         </tr>

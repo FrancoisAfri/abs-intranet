@@ -94,7 +94,7 @@
                           </div>
                       </div> -->
                     <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                        <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
+                        <label for="days" class="col-sm-2 control-label">Available:</label>
                         <div class="col-sm-10">
                             <div class="input-group">
                                 <div class="input-group-addon">
@@ -115,7 +115,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" id ="negsick" class="form-control pull-left" name="val" value=" {{$negannualDays}}" disabled="true">
+                                        <input type="text" id="negannual" class="form-control pull-left" name="val" value=" {{$negannualDays}}" disabled="true">
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" id ="negannual" class="form-control pull-left" name="val" value=" {{$negsickDays}}" disabled="true">
+                                        <input type="text" id="negsick" class="form-control pull-left" name="val" value=" {{$negsickDays}}" disabled="true">
                                     </div>
                                 </div>
                             </div>
@@ -194,23 +194,6 @@
                             </div>
                         </div>
                     </div>
-                    <!--  -->
-
-
-                    <!--     <div class="form-group hours-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                        <label for="days" class="col-sm-2 control-label">Hours</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-
-                                <input type="text" class="form-control pull-left" name="datetime" value=" " />
-
-                            </div>
-                        </div>
-                    </div> -->
-
                     <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Notes</label>
                         <div class="col-sm-10">

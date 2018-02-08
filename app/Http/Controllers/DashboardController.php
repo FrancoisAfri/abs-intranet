@@ -160,7 +160,7 @@ class DashboardController extends Controller {
             #leave Application
             $application = DB::table('leave_application')
                     ->select('leave_application.*', 'leave_types.name as leavetype')
-                    ->leftJoin('leave_types', 'leave_application.hr_id', '=', 'leave_types.id')
+                    ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
                     ->where('leave_application.hr_id', $user->person->id)
                     ->orderBy('leave_application.id', 'desc')
                     ->get();

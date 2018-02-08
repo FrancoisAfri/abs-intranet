@@ -65,7 +65,7 @@ class LeaveSetupController extends Controller {
         $data['employees'] = $employees;
         $data['leave_customs'] = $leave_customs;
 
-        AuditReportsController::store('Leave', 'Leave Type Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Leave Management', 'Leave Type Page Accessed', "Accessed By User", 0);
 
         return view('leave.leave_types')->with($data);
     }
@@ -73,7 +73,7 @@ class LeaveSetupController extends Controller {
     //#leave allocation
     public function show() {
 
-        $data['page_title'] = "Allocate Leave Types";
+        $data['page_title'] = "Manage Leave";
         $data['page_description'] = "Allocate leave types ";
         $data['breadcrumb'] = [
                 ['title' => 'Leave Management', 'path' => '/leave/Allocate_leave_types', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Allocate leave ', 'active' => 1, 'is_module' => 0]
@@ -95,13 +95,13 @@ class LeaveSetupController extends Controller {
 
 
         $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Allocate Leave Types';
+        $data['active_rib'] = 'Manage Leave';
         $data['leaveTypes'] = $leaveTypes;
         $data['division_levels'] = $divisionLevels;
         $data['employees'] = $employees;
         $data['leave_credit'] = $leave_credit;
         $data['leave_profile'] = $leave_profile;
-        AuditReportsController::store('Leave', 'Leave Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Leave Management', 'Leave Management Page Accessed', "Accessed By User", 0);
         return view('leave.leave_allocation')->with($data);
     }
 
@@ -128,7 +128,7 @@ class LeaveSetupController extends Controller {
         if (isset($person['leave_profile'])) {
             $person['leave_profile'] = (int) $person['leave_profile'];
         }
-        AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        AuditReportsController::store('Leave Management', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('leave.setup')->with($data);
     }
 
@@ -169,13 +169,13 @@ class LeaveSetupController extends Controller {
             $leave_configuration = new leave_configuration($lateData);
             $leave_configuration->save();
         }
-        AuditReportsController::store('Leave custom', 'leave custom Added', "Actioned Performed By User", 0);
+        AuditReportsController::store('Leave Management', 'leave custom Added', "Actioned Performed By User", 0);
         return response()->json();
     }
 
     public function Adjust(Request $request, HRPerson $person, LeaveType $lev) {
         $this->validate($request, [
-                // 'leave_type' => 'bail|required',
+                 'hr_person_id' => 'required',
                 // 'Division' => 'bail|required',
                 // 'Department' => 'bail|required',
                 // 'Employee name' => 'bail|required',
@@ -206,7 +206,7 @@ class LeaveSetupController extends Controller {
                 $emp->leave_types()->detach($leveTyp);
                 $emp->leave_types()->attach($leveTyp, ['leave_balance' => $currentBalance]);
 
-                AuditReportsController::store('Leave', 'leave days adjusted ', "Edited by User: $lev->name", 0);
+                AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User: $lev->name", 0);
                 LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', $val ,($days * 8),$currentBalance,$leveTyp, $empID);
             }
         }
@@ -232,7 +232,7 @@ class LeaveSetupController extends Controller {
                 $emp->leave_types()->attach($typID, ['leave_balance' => $resert_days]);
                 //$emp->leave_types()->where('leave_type_id',$typID)->sync([$empID => ['leave_balance' => $resert_days]]);
 
-                AuditReportsController::store('Leave', 'leave days reset Edited', "Edited by User: $lev->name", 0);
+                AuditReportsController::store('Leave Management', 'leave days reset Edited', "Edited by User: $lev->name", 0);
 				LeaveHistoryAuditController::store('leave days reseted','leave days reseted', 0 ,$resert_days,$resert_days,$typID, $empID);
             }
         }
@@ -288,7 +288,7 @@ class LeaveSetupController extends Controller {
                         ->first();
 				$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
 				$currentBalance =  $previousBalance + $min;
-				AuditReportsController::store('Leave', 'leave days allocation Edited', "Edited by User: $lev->name", 0);
+				AuditReportsController::store('Leave Management', 'leave days allocation Edited', "Edited by User: $lev->name", 0);
                 LeaveHistoryAuditController::store('leave days allocation','leave days allocation', $previousBalance ,$min,$currentBalance,$LevID,$empID);
             }
         }
@@ -321,7 +321,7 @@ class LeaveSetupController extends Controller {
         ]);
 //
         //return $lev;
-        AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
+        AuditReportsController::store('Leave Management', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json();
     }
 
