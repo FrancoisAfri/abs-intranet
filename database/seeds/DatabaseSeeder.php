@@ -247,6 +247,32 @@ class DatabaseSeeder extends Seeder
         $groupLevel->active = 1;
         $groupLevel->save();
 
+        $module = new modules(); //Contacts
+        $module->active = 1;
+        $module->name = 'Policy';
+        $module->code_name = 'Policy Enforcement System';
+        $module->path = 'Policy';
+        $module->font_awesome = 'fa-accusoft';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = ' Policy';
+        $ribbon->description = ' Policy';
+        $ribbon->ribbon_path = 'System/policy/create';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'view Policies';
+        $ribbon->description = 'view Policies';
+        $ribbon->ribbon_path = 'System/policy/view_policies';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
         //Insert navigation menus (Modules)
         $module = new modules(); //Contacts
         $module->active = 1;

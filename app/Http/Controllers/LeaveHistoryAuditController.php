@@ -27,35 +27,38 @@ use Illuminate\Support\Facades\Storage;
 
 #
 
-class LeaveHistoryAuditController extends Controller {
+class LeaveHistoryAuditController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
-    public function show() {
+    public function show()
+    {
         $data['page_title'] = "Leave Audit Report";
         $data['page_description'] = "Leave History Audit";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'leave';
         $data['active_rib'] = 'Leave History Audit';
 
         $users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
-        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
-                $query->orderBy('name', 'asc');
-            }]);
+        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function ($query) {
+            $query->orderBy('name', 'asc');
+        }]);
 
-        $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function($query) {
-                $query->orderBy('name', 'asc');
-            }]);
+        $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function ($query) {
+            $query->orderBy('name', 'asc');
+        }]);
 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
@@ -64,19 +67,20 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.leave_search')->with($data);
     }
 
-    public function reports() {
+    public function reports()
+    {
         $data['page_title'] = "Report";
         $data['page_description'] = "Leave Reports";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], ['title' => 'Leave Reports', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], ['title' => 'Leave Reports', 'active' => 1, 'is_module' => 0]
         ];
-        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
-                $query->orderBy('name', 'asc');
-            }]);
+        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function ($query) {
+            $query->orderBy('name', 'asc');
+        }]);
 
-        $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function($query) {
-                $query->orderBy('name', 'asc');
-            }]);
+        $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function ($query) {
+            $query->orderBy('name', 'asc');
+        }]);
 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
@@ -85,13 +89,13 @@ class LeaveHistoryAuditController extends Controller {
         if (!empty($leave_customs))
             $leave_customs = $leave_customs->load('userCustom');
 
-        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function($query) {
-                $query->orderBy('name', 'asc');
-            }]);
+        $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function ($query) {
+            $query->orderBy('name', 'asc');
+        }]);
 
-        $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function($query) {
-                $query->orderBy('name', 'asc');
-            }]);
+        $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function ($query) {
+            $query->orderBy('name', 'asc');
+        }]);
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
         $data['active_mod'] = 'Leave Management';
@@ -105,13 +109,14 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.reports.leave_report_index')->with($data);
     }
 
-    public static function store($action = '', $descriptionAction = '', $previousBalance = 0, $transcation = 0, $current_balance = 0, $leave_type = 0, $hrID = 0) {
+    public static function store($action = '', $descriptionAction = '', $previousBalance = 0, $transcation = 0, $current_balance = 0, $leave_type = 0, $hrID = 0)
+    {
         $user = Auth::user()->load('person');
         $leave_history = new leave_history();
         //$leave_history
         $leave_history->hr_id = $hrID;
         $leave_history->added_by = $user->person->id;
-        $leave_history->added_by_name = $user->person->first_name." ".$user->person->surname;
+        $leave_history->added_by_name = $user->person->first_name . " " . $user->person->surname;
         //$leave_history->action = $action;
         $leave_history->description_action = $descriptionAction;
         $leave_history->previous_balance = $previousBalance;
@@ -127,7 +132,8 @@ class LeaveHistoryAuditController extends Controller {
     #
     #draw history report according to search critea
 
-    public function getlevhistoryReport(Request $request) {
+    public function getlevhistoryReport(Request $request)
+    {
         $this->validate($request, [
         ]);
         $request = $request->all();
@@ -143,28 +149,28 @@ class LeaveHistoryAuditController extends Controller {
             $actionTo = strtotime($startExplode[1]);
         }
         $historyAudit = DB::table('leave_history')
-                ->select('leave_history.*', 'hr_people.employee_number as employee_number '
-				, 'hr_people.first_name as firstname'
-				, 'hr_people.surname as surname', 'leave_types.name as leave_type')
-                ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
-                ->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
-                ->where(function ($query) use ($actionFrom, $actionTo) {
-                    if ($actionFrom > 0 && $actionTo > 0) {
-                        $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
-                    }
-                })
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('leave_history.hr_id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($action) {
-                    if (!empty($action)) {
-                        $query->where('leave_history.action', 'ILIKE', "%$action%");
-                    }
-                })
-                ->orderBy('leave_history.id')
-                ->get();
+            ->select('leave_history.*', 'hr_people.employee_number as employee_number '
+                , 'hr_people.first_name as firstname'
+                , 'hr_people.surname as surname', 'leave_types.name as leave_type')
+            ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
+            ->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('leave_history.hr_id', $userID);
+                }
+            })
+            ->where(function ($query) use ($action) {
+                if (!empty($action)) {
+                    $query->where('leave_history.action', 'ILIKE', "%$action%");
+                }
+            })
+            ->orderBy('leave_history.id')
+            ->get();
 
         $data['actionFrom'] = $actionFrom;
         $data['userID'] = $userID;
@@ -174,7 +180,7 @@ class LeaveHistoryAuditController extends Controller {
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -183,7 +189,8 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.leave_history report')->with($data);
     }
 
-    public function cancelledLeaves(Request $request) {
+    public function cancelledLeaves(Request $request)
+    {
         $this->validate($request, [
             'date_from' => 'date_format:"F Y"',
             'date_to' => 'date_format:"F Y"',
@@ -194,7 +201,8 @@ class LeaveHistoryAuditController extends Controller {
         //return $reportData;
     }
 
-    public function cancelledLeavesPrint(Request $request) {
+    public function cancelledLeavesPrint(Request $request)
+    {
         $this->validate($request, [
             'date_from' => 'date_format:"F Y"',
             'date_to' => 'date_format:"F Y"',
@@ -204,14 +212,15 @@ class LeaveHistoryAuditController extends Controller {
         return $this->getCancelledLeavesReport($reportData['hr_person_id'], $reportData['leave_types_id'], $reportData['date_from'], $reportData['date_to'], true);
     }
 
-    private function getCancelledLeavesReport($employeeID, $leaveTypeID, $dateFrom, $dateTo, $print = false) {
+    private function getCancelledLeavesReport($employeeID, $leaveTypeID, $dateFrom, $dateTo, $print = false)
+    {
         $data['employeeID'] = $employeeID;
         $data['leaveTypeID'] = $leaveTypeID;
         $data['dateFrom'] = $dateFrom;
         $data['dateTo'] = $dateTo;
 
-        $employeeID = !empty($employeeID) ? (int) $employeeID : 0;
-        $leaveTypeID = !empty($leaveTypeID) ? (int) $leaveTypeID : 0;
+        $employeeID = !empty($employeeID) ? (int)$employeeID : 0;
+        $leaveTypeID = !empty($leaveTypeID) ? (int)$leaveTypeID : 0;
         $dateFrom = trim($dateFrom);
         if (!empty($dateFrom)) {
             $dateFrom = new Carbon('first day of ' . $dateFrom);
@@ -224,22 +233,22 @@ class LeaveHistoryAuditController extends Controller {
         }
 
         $leaveApplications = leave_application::where('status', 10)
-            ->where(function ($query) use($employeeID) {
+            ->where(function ($query) use ($employeeID) {
                 if ($employeeID > 0) {
                     $query->where('hr_id', $employeeID);
                 }
             })
-            ->where(function ($query) use($leaveTypeID) {
+            ->where(function ($query) use ($leaveTypeID) {
                 if ($leaveTypeID > 0) {
                     $query->where('leave_type_id', $leaveTypeID);
                 }
             })
-            ->where(function ($query) use($dateFrom) {
+            ->where(function ($query) use ($dateFrom) {
                 if (!empty($dateFrom)) {
                     $query->whereRaw('start_date >= ' . $dateFrom->timestamp);
                 }
             })
-            ->where(function ($query) use($dateTo) {
+            ->where(function ($query) use ($dateTo) {
                 if (!empty($dateTo)) {
                     $query->whereRaw('start_date <= ' . $dateTo->timestamp);
                 }
@@ -268,15 +277,15 @@ class LeaveHistoryAuditController extends Controller {
             $data['date'] = date("d-m-Y");
             //return 'gets here';
             return view('leave.reports.concelled_leaves_report_print')->with($data);
-        }
-        else {
+        } else {
             AuditReportsController::store('Audit', 'Generate Cancelled Leaves Report', "Generated by user", 0);
             return view('leave.reports.cancelled_leaves_report')->with($data);
         }
     }
 
     #
-    public function printlevhistoReport(Request $request) {
+    public function printlevhistoReport(Request $request)
+    {
 
         $actionFrom = $actionTo = 0;
         $userID = $request['userID'];
@@ -288,30 +297,29 @@ class LeaveHistoryAuditController extends Controller {
             $actionTo = strtotime($startExplode[1]);
         }
         $historyAudit = DB::table('leave_history')
-                ->select('leave_history.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname','leave_types.name as leave_type')
-                ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
-				->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
-                ->where(function ($query) use ($actionFrom, $actionTo) {
-                    if ($actionFrom > 0 && $actionTo > 0) {
-                        $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
-                    }
-                })
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('leave_history.hr_id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($action) {
-                    if (!empty($action)) {
-                        $query->where('leave_history.action', 'ILIKE', "%$action%");
-                    }
-                })
-                ->orderBy('leave_history.id')
-                ->get();
+            ->select('leave_history.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'leave_types.name as leave_type')
+            ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
+            ->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('leave_history.hr_id', $userID);
+                }
+            })
+            ->where(function ($query) use ($action) {
+                if (!empty($action)) {
+                    $query->where('leave_history.action', 'ILIKE', "%$action%");
+                }
+            })
+            ->orderBy('leave_history.id')
+            ->get();
 
         $name = $historyAudit->first()->firstname;
-        $surname = $historyAudit->first()->firstname;
-        ;
+        $surname = $historyAudit->first()->firstname;;
 
         $data['name'] = $name;
         $data['surname'] = $surname;
@@ -322,7 +330,7 @@ class LeaveHistoryAuditController extends Controller {
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -336,9 +344,10 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.reports.leave_history_print')->with($data);
     }
 
-    public function leavebalance(Request $request) {
+    public function leavebalance(Request $request)
+    {
         $this->validate($request, [
-                #code here ....
+            #code here ....
         ]);
         $request = $request->all();
         unset($request['_token']);
@@ -348,29 +357,29 @@ class LeaveHistoryAuditController extends Controller {
         $dateTo = trim($request['date_to']);
         #Query the leave credit
         $credit = DB::table('hr_people')
-                ->select('hr_people.*', 'leave_credit.hr_id as userID', 'leave_credit.leave_balance as Balance', 'leave_credit.leave_type_id as LeaveID', 'leave_types.name as leaveType')
-                ->leftJoin('leave_credit', 'leave_credit.hr_id', '=', 'hr_people.id')
-                ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_credit.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('leave_credit.hr_id')
-                ->get();
+            ->select('hr_people.*', 'leave_credit.hr_id as userID', 'leave_credit.leave_balance as Balance', 'leave_credit.leave_type_id as LeaveID', 'leave_types.name as leaveType')
+            ->leftJoin('leave_credit', 'leave_credit.hr_id', '=', 'hr_people.id')
+            ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+            ->where('hr_people.status', 1)
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('hr_people.id', $userID);
+                }
+            })
+            ->where(function ($query) use ($LevTypID) {
+                if (!empty($LevTypID)) {
+                    $query->where('leave_credit.leave_type_id', $LevTypID);
+                }
+            })
+            ->orderBy('leave_credit.hr_id')
+            ->get();
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
         $data['credit'] = $credit;
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave Balance Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -380,28 +389,29 @@ class LeaveHistoryAuditController extends Controller {
     }
 
     //
-    public function printlevbalReport(Request $request) {
+    public function printlevbalReport(Request $request)
+    {
 
         $userID = $request['userID'];
         $LevTypID = $request['LevTypID'];
 
         $credit = DB::table('hr_people')
-                ->select('hr_people.*', 'leave_credit.hr_id as userID', 'leave_credit.leave_balance as Balance', 'leave_credit.leave_type_id as LeaveID', 'leave_types.name as leaveType')
-                ->leftJoin('leave_credit', 'leave_credit.hr_id', '=', 'hr_people.id')
-                ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_credit.leave_types_id', $LevTypID);
-                    }
-                })
-                ->orderBy('leave_credit.hr_id')
-                ->get();
+            ->select('hr_people.*', 'leave_credit.hr_id as userID', 'leave_credit.leave_balance as Balance', 'leave_credit.leave_type_id as LeaveID', 'leave_types.name as leaveType')
+            ->leftJoin('leave_credit', 'leave_credit.hr_id', '=', 'hr_people.id')
+            ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+            ->where('hr_people.status', 1)
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('hr_people.id', $userID);
+                }
+            })
+            ->where(function ($query) use ($LevTypID) {
+                if (!empty($LevTypID)) {
+                    $query->where('leave_credit.leave_types_id', $LevTypID);
+                }
+            })
+            ->orderBy('leave_credit.hr_id')
+            ->get();
 
         $name = $credit->first()->first_name;
         $surname = $credit->first()->surname;
@@ -414,7 +424,7 @@ class LeaveHistoryAuditController extends Controller {
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -428,9 +438,10 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.leave_balance_print')->with($data);
     }
 
-    public function leaveAllowance(Request $request) {
+    public function leaveAllowance(Request $request)
+    {
         $this->validate($request, [
-                #validation code here ....
+            #validation code here ....
         ]);
         $request = $request->all();
         unset($request['_token']);
@@ -439,24 +450,24 @@ class LeaveHistoryAuditController extends Controller {
         $LevTypID = $request['leave_types_id'];
 
         $custom = DB::table('hr_people')
-                ->select('hr_people.*', 'type_profile.max as max', 'type_profile.leave_type_id as levID', 'type_profile.leave_profile_id as ProfID', 'leave_customs.hr_id as empID', 'leave_customs.number_of_days as Days', 'leave_types.name as leaveType')
-                ->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
-                ->leftJoin('leave_customs', 'hr_people.id', '=', 'leave_customs.hr_id')
-                ->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
-                ->where('leave_customs.status', 1)
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('type_profile.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('type_profile.leave_type_id')
-                ->get();
+            ->select('hr_people.*', 'type_profile.max as max', 'type_profile.leave_type_id as levID', 'type_profile.leave_profile_id as ProfID', 'leave_customs.hr_id as empID', 'leave_customs.number_of_days as Days', 'leave_types.name as leaveType')
+            ->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
+            ->leftJoin('leave_customs', 'hr_people.id', '=', 'leave_customs.hr_id')
+            ->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
+            ->where('leave_customs.status', 1)
+            ->where('hr_people.status', 1)
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('hr_people.id', $userID);
+                }
+            })
+            ->where(function ($query) use ($LevTypID) {
+                if (!empty($LevTypID)) {
+                    $query->where('type_profile.leave_type_id', $LevTypID);
+                }
+            })
+            ->orderBy('type_profile.leave_type_id')
+            ->get();
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -464,8 +475,8 @@ class LeaveHistoryAuditController extends Controller {
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Leave Taken Audit', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Leave Taken Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Reports';
@@ -473,9 +484,10 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.leave_allowance report')->with($data);
     }
 
-    public function taken(Request $request) {
+    public function taken(Request $request)
+    {
         $this->validate($request, [
-                #validation code here ....
+            #validation code here ....
         ]);
         $request = $request->all();
         unset($request['_token']);
@@ -484,22 +496,22 @@ class LeaveHistoryAuditController extends Controller {
         $userID = $request['hr_person_id'];
         $LevTypID = $request['leave_types_id'];
         $custom = DB::table('hr_people')
-                ->select('hr_people.*', 'leave_application.hr_id as userID', 'leave_application.leave_type_id as leaveType', 'leave_types.name as leaveTypename')
-                ->leftJoin('leave_application', 'hr_people.id', '=', 'leave_application.hr_id')
-                ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_application.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('leave_application.leave_type_id')
-                ->get();
+            ->select('hr_people.*', 'leave_application.hr_id as userID', 'leave_application.leave_type_id as leaveType', 'leave_types.name as leaveTypename')
+            ->leftJoin('leave_application', 'hr_people.id', '=', 'leave_application.hr_id')
+            ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
+            ->where('hr_people.status', 1)
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('hr_people.id', $userID);
+                }
+            })
+            ->where(function ($query) use ($LevTypID) {
+                if (!empty($LevTypID)) {
+                    $query->where('leave_application.leave_type_id', $LevTypID);
+                }
+            })
+            ->orderBy('leave_application.leave_type_id')
+            ->get();
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -507,7 +519,7 @@ class LeaveHistoryAuditController extends Controller {
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -517,9 +529,10 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.leave_taken report')->with($data);
     }
 
-    public function leavepaidOut(Request $request) {
+    public function leavepaidOut(Request $request)
+    {
         $this->validate($request, [
-                #code here ....
+            #code here ....
         ]);
         $request = $request->all();
         unset($request['_token']);
@@ -528,24 +541,24 @@ class LeaveHistoryAuditController extends Controller {
         $LevTypID = $request['leave_types_id'];
 
         $custom = DB::table('hr_people')
-                ->select('hr_people.*', 'type_profile.max as max', 'type_profile.leave_type_id as levID', 'type_profile.leave_profile_id as ProfID', 'leave_customs.hr_id as empID', 'leave_customs.number_of_days as Days', 'leave_types.name as leaveType')
-                ->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
-                ->leftJoin('leave_customs', 'hr_people.id', '=', 'leave_customs.hr_id')
-                ->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
-                ->where('leave_customs.status', 1)
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('type_profile.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('type_profile.leave_type_id')
-                ->get();
+            ->select('hr_people.*', 'type_profile.max as max', 'type_profile.leave_type_id as levID', 'type_profile.leave_profile_id as ProfID', 'leave_customs.hr_id as empID', 'leave_customs.number_of_days as Days', 'leave_types.name as leaveType')
+            ->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
+            ->leftJoin('leave_customs', 'hr_people.id', '=', 'leave_customs.hr_id')
+            ->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
+            ->where('leave_customs.status', 1)
+            ->where('hr_people.status', 1)
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('hr_people.id', $userID);
+                }
+            })
+            ->where(function ($query) use ($LevTypID) {
+                if (!empty($LevTypID)) {
+                    $query->where('type_profile.leave_type_id', $LevTypID);
+                }
+            })
+            ->orderBy('type_profile.leave_type_id')
+            ->get();
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -553,7 +566,7 @@ class LeaveHistoryAuditController extends Controller {
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave Taken Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';

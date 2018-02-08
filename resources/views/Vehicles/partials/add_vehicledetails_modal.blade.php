@@ -56,7 +56,7 @@
                     
                      
 
-                    @foreach($division_levels as $division_level)
+                   <!--  @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
                                    class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @endforeach -->
 
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
