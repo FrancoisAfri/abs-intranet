@@ -96,10 +96,15 @@ Route::get('System/policy/create', 'PolicyEnforcementController@create');
 Route::get('System/policy/view_policies', 'PolicyEnforcementController@viewPolicies');
 Route::post('System/policy/add_policy', 'PolicyEnforcementController@createpolicy');
 Route::get('System/policy_act/{pol}', 'PolicyEnforcementController@policyAct');
-Route::get('System/add_user_act/{users}', 'PolicyEnforcementController@policyUserAct');
+Route::get('System/add_user_act/{policyUser}', 'PolicyEnforcementController@policyUserAct');
 Route::get('system/policy/viewUsers/{users}', 'PolicyEnforcementController@viewUsers');
 Route::post('System/policy/add_policyUsers', 'PolicyEnforcementController@addpolicyUsers');
 Route::post('System/policy/update_status', 'PolicyEnforcementController@updatestatus');
+Route::get('System/policy/search_policies', 'PolicyEnforcementController@policySearchindex');
+Route::post('System/policy/docsearch', 'PolicyEnforcementController@docsearch');
+Route::get('System/policy/reports', 'PolicyEnforcementController@reports');
+Route::post('System/policy/reportsearch', 'PolicyEnforcementController@reportsearch');
+
 
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');

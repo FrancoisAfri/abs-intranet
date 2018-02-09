@@ -7,7 +7,7 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
     <!-- iCheck -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/yellow.css">
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@
                 {{ csrf_field() }}
                 {{--<input type="hidden" name="module_id" value="{{ $moduleID }}">--}}
                 <div class="box-header with-border">
-                    <h3 class="box-title">Users Access </h3>
+                    <h3 class="box-title">Users Access for policy - {{ $policyname }}</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -52,41 +52,41 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($policyUsers as $policy)
+                        @foreach($policyUsers as $policyUser)
                             <tr>
 
                                 <td style="vertical-align: middle;"
-                                    nowrap>{{ (!empty( $policy->firstname)) ?  $policy->firstname : ''}}</td>
+                                    nowrap>{{ (!empty( $policyUser->firstname)) ?  $policyUser->firstname : ''}}</td>
                                 <td style="vertical-align: middle;"
-                                    nowrap>{{ (!empty( $policy->surname)) ?  $policy->surname : ''}}</td>
+                                    nowrap>{{ (!empty( $policyUser->surname)) ?  $policyUser->surname : ''}}</td>
                                 <td style="vertical-align: middle;"
-                                    nowrap>{{ (!empty( $policy->Expiry)) ?  date(' d M Y', $policy->Expiry) : ''}}</td>
+                                    nowrap>{{ (!empty( $policyUser->Expiry)) ?  date(' d M Y', $policyUser->Expiry) : ''}}</td>
 
                                 <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                  id="{{ $policy->id . '_rdo_none' }}"
+                                                                                                  id="{{ $policyUser->id . '_rdo_none' }}"
                                                                                                   name=""
-                                                                                                  value="0" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
+                                                                                                  value="0" {{ $policyUser->read_understood == 1 ? ' checked' : '' }} disabled='disabled' ></label>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                  id="{{ $policy->id . '_rdo_read' }}"
+                                                                                                  id="{{ $policyUser->id . '_rdo_read' }}"
                                                                                                   name=""
-                                                                                                  value="1" {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>
+                                                                                                  value="1" {{ $policyUser->read_not_understood == 1 ? ' checked' : '' }} disabled='disabled' ></label>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                  id="{{ $policy->id . '_rdo_write' }}"
+                                                                                                  id="{{ $policyUser->id . '_rdo_write' }}"
                                                                                                   name=""
-                                                                                                  value="2" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>
+                                                                                                  value="2" {{ $policyUser->read_not_sure == 1 ? ' checked' : '' }} disabled='disabled' ></label>
                                 </td>
                                 <td>
                                     <!--   leave here  -->
                                     <button vehice="button" id="view_ribbons"
-                                            class="btn {{ (!empty($policy->status) && $policy->status == 1) ? " btn-danger " : "btn-success " }}
-                                                    btn-xs" onclick="postData({{$policy->id}}, 'actdeac');"><i
-                                                class="fa {{ (!empty($policy->status) && $policy->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($policy->status) && $policy->status == 1) ? "De-Activate" : "Activate"}}
+                                            class="btn {{ (!empty($policyUser->status) && $policyUser->status == 1) ? " btn-danger " : "btn-success " }}
+                                                    btn-xs" onclick="postData({{$policyUser->id}}, 'actdeac');"><i
+                                                class="fa {{ (!empty($policyUser->status) && $policyUser->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($policyUser->status) && $policyUser->status == 1) ? "De-Activate" : "Activate"}}
                                     </button>
                                 </td>
                                 @endforeach
@@ -217,7 +217,7 @@
 
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
+                checkboxClass: 'icheckbox_square-yellow',
                 radioClass: 'iradio_square-blue',
                 increaseArea: '10%' // optional
             });

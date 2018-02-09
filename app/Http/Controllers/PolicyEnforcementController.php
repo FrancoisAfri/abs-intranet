@@ -179,6 +179,8 @@ class PolicyEnforcementController extends Controller
             ->orderBy('policy_users.id')
             ->get();
 
+            return $policyUsers;
+
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $employees = HRPerson::where('status', 1)->get();
 
@@ -190,6 +192,8 @@ class PolicyEnforcementController extends Controller
         ];
 
         $policyID = $users->id;
+        $policyname = $users->name;
+        $data['policyname'] = $policyname;
         $data['policyID'] = $policyID;
         $data['employees'] = $employees;
         $data['division_levels'] = $divisionLevels;
@@ -202,16 +206,14 @@ class PolicyEnforcementController extends Controller
 
     }
 
-    public function policyUserAct(Request $request, $users)
-    {
-        $policy = Policy_users::where('id', $users)->first();
-        if ($policy->status == 1)
+    public function policyUserAct(Request $request, Policy_users $policyUser){
+        if ($policyUser->status == 1)
             $stastus = 0;
         else
             $stastus = 1;
 
-        $policy->status = $stastus;
-        $policy->update();
+        $policyUser->status = $stastus;
+        $policyUser->update();
         return back();
     }
 
@@ -254,7 +256,7 @@ class PolicyEnforcementController extends Controller
             # create record in policy users
             $policyUsers = new Policy_users();
             //use updateOrCreate to avoid duplicates
-            $policyUsers->updateOrCreate(['policy_id' => $policyData['policyID']] ,['user_id' => $hrID->id]);
+            $policyUsers->updateOrCreate(['policy_id' => $policyData['policyID']], ['user_id' => $hrID->id]);
             // get user details
             $firstname = $hrID->first_name;
             $surname = $hrID->surname;
@@ -276,18 +278,18 @@ class PolicyEnforcementController extends Controller
         $today = time();
 
         $policyUsers = DB::table('policy_users')
-            ->select('policy_users.*', 'policy.date as Expiry','policy.name as policyName',
+            ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
                 'policy.description as policyDescription', 'policy.document as policyDoc',
                 'hr_people.first_name as firstname',
                 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
             ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
-           ->where('policy.date','>', $today)
-           ->where('policy_users.user_id', $users)
+            ->where('policy.date', '>', $today)
+            ->where('policy_users.user_id', $users)
             ->orderBy('policy_users.id')
             ->get();
 
-    
+
 
         $modules = modules::where('active', 1)->orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -311,11 +313,174 @@ class PolicyEnforcementController extends Controller
 
     }
 
-    public function updatestatus(Request $request){
+    public function updatestatus(Request $request)
+    {
 
         $policyData = $request->all();
         unset($policyData['_token']);
+        unset($policyData['emp-list-table_length']);
 
-        return $policyData;
+        $status = $policyData['docread'];
+
+        if (count($status) > 0) {
+            foreach ($status as $policyID => $accessLevel) {
+
+                return $accessLevel;
+
+                $policyUsers = Policy_users::where('policy_id', $policyID)->where('user_id',$user->person_id)->first();
+                $policyUsers->read_understood =  ($accessLevel == 'read_understood') ? 1 : 0;
+                $policyUsers->read_not_understood =  ($accessLevel == 'read_not_understood') ? 1 : 0;
+                $policyUsers->read_not_sure =  ($accessLevel == 'read_not_sure') ? 1 : 0;
+                $policyUsers->date_read = time();
+//                $userRights->user_id = $userID;
+//                $userRights->module_id = $moduleID;
+//                $userRights->access_level = $accessLevel;
+//                $userRights->save();
+                //module_access::where('module_id', $moduleID)->where('user_id', $userID)->update(['access_level' => $accessLevel]);
+            }
+        }
+
+
+    }
+
+    public function policySearchindex()
+    {
+
+
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Policy';
+        $data['active_rib'] = 'Search Policies';
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
+        return view('policy.policy_search')->with($data);
+    }
+
+    public function docsearch(Request $request)
+    {
+        $policyData = $request->all();
+        unset($policyData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $name = $policyData['policy_name'];
+        $actionDate = $request['action_date'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+        $policyUsers = DB::table('policy')
+            ->select('policy.*')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('policy.date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->where(function ($query) use ($name) {
+                if (!empty($name)) {
+                    $query->where('policy.name', 'ILIKE', "%$name%");
+                }
+            })
+            ->orderBy('policy.id')
+            ->get();
+
+        //return $policyUsers;
+
+        $data['policyUsers'] = $policyUsers;
+
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Policy';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Leave Management', 'Viewed Leave History report Results', "view Audit Results", 0);
+        return view('policy.policyDoc_results')->with($data);
+    }
+
+
+    public function reports()
+    {
+
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $policy = Policy::where('status', 1)->get();
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['division_levels'] = $divisionLevels;
+        $data['policy'] = $policy;
+        $data['active_mod'] = 'Policy';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
+        return view('policy.reports_search')->with($data);
+    }
+
+    public function reportsearch(Request $request)
+    {
+        $policyData = $request->all();
+        unset($policyData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        //$DivFive = $DivFour = $DivThree = $DivTwo = $DivOne;
+        $DivFive = !empty($policyData['division_level_5']) ? $policyData['division_level_5'] : 0;
+        $DivFour = !empty($policyData['division_level_4']) ? $policyData['division_level_4'] : 0;
+        $DivThree = !empty($policyData['division_level_3']) ? $policyData['division_level_3'] : 0;
+        $DivTwo = !empty($policyData['division_level_2']) ? $policyData['division_level_2'] : 0;
+        $DivOne = !empty($policyData['division_level_1']) ? $policyData['division_level_1'] : 0;
+
+
+        $name = $policyData['policy_name'];
+        $actionDate = $request['action_date'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+        $policyUsers = DB::table('policy')
+            ->select('policy.*')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('policy.date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->where(function ($query) use ($name) {
+                if (!empty($name)) {
+                    $query->where('policy.name', 'ILIKE', "%$name%");
+                }
+            })
+            ->orderBy('policy.id')
+            ->get();
+
+        //return $policyUsers;
+
+        $data['policyUsers'] = $policyUsers;
+
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Policy';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Leave Management', 'Viewed Leave History report Results', "view Audit Results", 0);
+        return view('policy.policyDoc_results')->with($data);
     }
 }
