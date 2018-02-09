@@ -273,6 +273,24 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search Policies';
+        $ribbon->description = 'Search Policies';
+        $ribbon->ribbon_path = 'System/policy/search_policies';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Policies Reports';
+        $ribbon->ribbon_path = 'System/policy/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
         //Insert navigation menus (Modules)
         $module = new modules(); //Contacts
         $module->active = 1;
