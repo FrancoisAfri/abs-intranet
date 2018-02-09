@@ -70,13 +70,13 @@
                                 <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->Expiry)) ?  date(' d M Y', $policy->Expiry) : ''}}</td>
 
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->id . "]" }}" value={{"read_understood_$policy->user_id"}}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->id . "]" }}" value="{{ "read_understood-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->id . "]" }}" value={{"read_not_understood_$policy->user_id"}}" {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->id . "]" }}" value="{{ "read_not_understood-$policy->user_id" }}"  {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->id . "]" }}" value={{"read_not_sure_$policy->user_id"}}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->id . "]" }}" value="{{ "read_not_sure-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>
                                 </td>
                                 @endforeach
                             </tr>
