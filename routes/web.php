@@ -91,6 +91,16 @@ Route::post('hr/print_card', 'BusinessCardsController@busibess_card');
 Route::post('/hr/card_active', 'BusinessCardsController@activeCard');
 Route::post('hr/emial', 'LeaveController@getEmail');
 
+#policy enforcement system
+Route::get('System/policy/create', 'PolicyEnforcementController@create');
+Route::get('System/policy/view_policies', 'PolicyEnforcementController@viewPolicies');
+Route::post('System/policy/add_policy', 'PolicyEnforcementController@createpolicy');
+Route::get('System/policy_act/{pol}', 'PolicyEnforcementController@policyAct');
+Route::get('System/add_user_act/{users}', 'PolicyEnforcementController@policyUserAct');
+Route::get('system/policy/viewUsers/{users}', 'PolicyEnforcementController@viewUsers');
+Route::post('System/policy/add_policyUsers', 'PolicyEnforcementController@addpolicyUsers');
+Route::post('System/policy/update_status', 'PolicyEnforcementController@updatestatus');
+
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
@@ -299,8 +309,10 @@ Route::get('/vehicle_management/fueltank_act/{fuel}', 'FuelManagementController@
 //tanktop up
 Route::patch('vehicle_management/edit_fueltank/{Fueltanks}' ,'FuelManagementController@editfueltank');
 Route::get('/vehicle_management/vehice_tank/{fuel}', 'FuelManagementController@ViewTank');
-Route::post('vehicle_management/tanksearch/{tank}', 'FuelManagementController@tanksearch');
-Route::post('vehicle_management/tank_topup', 'FuelManagementController@TanktopUp');    
+Route::post('vehicle_management/incoming/{tank}', 'FuelManagementController@incoming');
+Route::post('vehicle_management/outgoing/{tank}', 'FuelManagementController@outgoing');
+Route::post('vehicle_management/both/{tank}', 'FuelManagementController@both');
+Route::post('vehicle_management/tank_topup', 'FuelManagementController@TanktopUp');
 //tank private
 Route::post('vehicle_management/tank_privateuse', 'FuelManagementController@TankprivateUse'); 
 

@@ -8,7 +8,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Top Up {{$tank}}</h4>
+                    <h4 class="modal-title">Top Up {{!empty($tank) ? $tank : '' }}</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -60,7 +60,7 @@
                                 filling</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control" id="reading_before_filling"
-                                       name="reading_before_filling" value="{{$current }}"
+                                       name="reading_before_filling" value="{{ (!empty($booking->available_litres ))  ?  $booking->reading_before_filling + $booking->litres  : 0 }}"
                                        placeholder="Enter reading before filling" readonly="">
                             </div>
                         </div>

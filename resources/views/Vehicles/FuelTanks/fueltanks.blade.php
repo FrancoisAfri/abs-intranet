@@ -62,7 +62,7 @@
                                                 data-tank_location="{{ $tanks->tank_location }}"
                                                 data-tank_description="{{ $tanks->tank_description }}"
                                                 data-tank_capacity="{{number_format($tanks->tank_capacity, 2) }}"
-                                                data-current_fuel_litres="{{ number_format($tanks->current_fuel_litres, 2)}}"
+                                                
                                                 data-tank_manager="{{$tanks->tank_manager}}"
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
