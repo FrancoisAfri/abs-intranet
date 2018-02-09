@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
-            <form class="form-horizontal" method="POST" action="/users/update-users-access">
+            <form class="form-horizontal" method="POST" action="/System/policy/update_status">
                 {{ csrf_field() }}
                 {{--<input type="hidden" name="module_id" value="{{ $moduleID }}">--}}
                 <div class="box-header with-border">
@@ -46,19 +46,18 @@
                             <th style="vertical-align: middle; text-align: center;">Read and understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not sure</th>
-                            <th style="vertical-align: middle; text-align: center;"></th>
 
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($policy as $policy)
+                        @foreach($policyUsers as $policy)
                             <tr>
                                 <td style="vertical-align: middle;" nowrap>
                                     <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                         <label for="document" class="control-label"></label>
-                                        @if(!empty($policy->document))
+                                        @if(!empty($policy->policyDoc))
                                             <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                               href="{{ Storage::disk('local')->url("Policies/policy/$policy->document") }}"
+                                               href="{{ Storage::disk('local')->url("Policies/policy/$policy->policyDoc") }}"
                                                target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                         @else
                                             <a class="btn btn-default pull-centre btn-xs"><i
@@ -66,21 +65,20 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
-                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->description)) ?  $policy->description : ''}}</td>
-                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->date)) ?  date(' d M Y', $policy->date) : ''}}</td>
+                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->policyName)) ?  $policy->policyName : ''}}</td>
+                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->policyDescription)) ?  $policy->policyDescription : ''}}</td>
+                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->Expiry)) ?  date(' d M Y', $policy->Expiry) : ''}}</td>
+
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{$policy->id. '_docread'}}" value="1" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{$policy->id. '_docread'}}" value="1" {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{$policy->id. '_docread'}}" value="1" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>
+
                                 @endforeach
-
-                                <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_rdo_none' }}" name="{{ "access_level[" . $policy->uid . "]" }}" value="0" {{ $policy->access_level == 0 ? ' checked' : '' }}></label>
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_rdo_read' }}" name="{{ "access_level[" . $policy->uid . "]" }}" value="1" {{ $policy->access_level == 1 ? ' checked' : '' }}></label>
-                                </td>
-                                <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_rdo_write' }}" name="{{ "access_level[" . $policy->uid . "]" }}" value="2" {{ $policy->access_level == 2 ? ' checked' : '' }}></label>
-                                </td>
-
                             </tr>
 
                         </tbody>
@@ -93,7 +91,6 @@
                             <th style="vertical-align: middle; text-align: center;">Read and understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not sure</th>
-                            <th style="vertical-align: middle; text-align: center;"></th>
                         </tr>
                         </tfoot>
                     </table>

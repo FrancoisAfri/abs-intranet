@@ -40,8 +40,8 @@
                                 @if(!empty($person->email))
                                     <i class="fa fa-envelope-o"></i> {{ $person->email }}
                                 @endif
-                                @if(!empty($person->position) && count($positions) > 0)
-                                    &nbsp; {{ ' | ' }} &nbsp; <i class="fa fa-user-circle"></i> {{ $positions[$person->position] }}
+                                @if(!empty($person->position))
+                                    &nbsp; {{ ' | ' }} &nbsp; <i class="fa fa-user-circle"></i> {{ $person->position_title }}
                                 @endif
                             </span>
                                 </div>

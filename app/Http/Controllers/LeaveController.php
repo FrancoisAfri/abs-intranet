@@ -58,7 +58,7 @@ class LeaveController extends Controller
             4 => ['min' => $shiftmin, 'max' => $shiftmax]
         ]);
 
-        AuditReportsController::store('Leave', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
+        AuditReportsController::store('Leave Management', 'leave days Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json();
     }
 
@@ -72,7 +72,7 @@ class LeaveController extends Controller
         $lev->name = $request->input('name');
         $lev->description = $request->input('description');
         $lev->update();
-        AuditReportsController::store('Leave', 'leavetype Informations Edited', "Edited by User: $lev->name", 0);
+        AuditReportsController::store('Leave Management', 'leave type Informations Edited', "Edited by User: $lev->name", 0);
         return response()->json(['new_name' => $lev->name, 'description' => $lev->description], 200);
     }
 
@@ -87,18 +87,24 @@ class LeaveController extends Controller
         $leave = new LeaveType($leaveData);
         $leave->status = 1;
         $leave->save();
-        AuditReportsController::store('leave', 'leavetype Added', "leave type Name: $leave->name", 0);
+        AuditReportsController::store('Leave Management', 'leave type Added', "leave type Name: $leave->name", 0);
     }
 
     public function leaveAct(LeaveType $lev)
     {
         if ($lev->status == 1)
+		{
             $stastus = 0;
+			$statusDisplay = "De-activated";
+		}
         else
+		{
             $stastus = 1;
-
+			$statusDisplay = "Activated";
+		}
         $lev->status = $stastus;
         $lev->update();
+		AuditReportsController::store('Leave Management', "leave type status changed: $statusDisplay", "leave type Name: $lev->name", 0);
         return back();
     }
 
@@ -114,7 +120,7 @@ class LeaveController extends Controller
         unset($leaveData['_token']);
         $leave_customs = new leave_custom();
         $leave_customs->updateOrCreate(['hr_id' => $leaveData['hr_id']], ['number_of_days' => $leaveData['number_of_days'], 'status' => 1]);
-        AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
+        AuditReportsController::store('Leave Management', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
         return response()->json();
     }
 
@@ -126,7 +132,7 @@ class LeaveController extends Controller
         ]);
         $lev->number_of_days = $request->input('number_of_days');
         $lev->update();
-        AuditReportsController::store('Leave custom', 'leave custom  Informations Edited', "Edited by User", 0);
+        AuditReportsController::store('Leave Management', 'leave custom  Informations Edited', "Edited by User", 0);
         return response()->json();
     }
 
@@ -134,12 +140,19 @@ class LeaveController extends Controller
     public function customleaveAct(leave_custom $lev)
     {
         if ($lev->status == 1)
+        {
             $stastus = 0;
+			$statusDisplay = "De-activated";
+		}
         else
+		{
             $stastus = 1;
+			$statusDisplay = "Activated";
+		}
 
         $lev->status = $stastus;
         $lev->update();
+		AuditReportsController::store('Leave Management', "leave custom status changed: $statusDisplay", "leave custom: $lev->number_of_days", 0);
         return back();
     }
 

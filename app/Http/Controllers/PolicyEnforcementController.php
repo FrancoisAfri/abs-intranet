@@ -253,14 +253,12 @@ class PolicyEnforcementController extends Controller
         foreach ($users as $hrID) {
             # create record in policy users
             $policyUsers = new Policy_users();
-            $policyUsers->user_id = $hrID->id;
-            $policyUsers->policy_id = $policyData['policyID'];
-            $policyUsers->save();
+            //use updateOrCreate to avoid duplicates
+            $policyUsers->updateOrCreate(['policy_id' => $policyData['policyID']] ,['user_id' => $hrID->id]);
             // get user details
             $firstname = $hrID->first_name;
             $surname = $hrID->surname;
             $email = $hrID->email;
-
             #mail to user
             Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
         }
@@ -274,14 +272,22 @@ class PolicyEnforcementController extends Controller
         $policies = Policy::where('status', 1)->orderBy('name', 'asc')->get();
         $policy = $policies->load('policyUsers');
 
-//        $policyreport = DB::table('policy')
-//            ->select('policy.*' , 'policy_users.*')
-//            ->leftJoin('policy_users', 'policy.id', '=', 'policy_users.policy_id')
-////            ->leftJoin('vehicle_image', 'vehicle_details.id', '=', 'vehicle_image.vehicle_maintanace')
-//            ->orderBy('policy.id')
-//
-//            ->get();
+        $users = Auth::user()->person->id;
+        $today = time();
 
+        $policyUsers = DB::table('policy_users')
+            ->select('policy_users.*', 'policy.date as Expiry','policy.name as policyName',
+                'policy.description as policyDescription', 'policy.document as policyDoc',
+                'hr_people.first_name as firstname',
+                'hr_people.surname as surname')
+            ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
+            ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
+           ->where('policy.date','>', $today)
+           ->where('policy_users.user_id', $users)
+            ->orderBy('policy_users.id')
+            ->get();
+
+    
 
         $modules = modules::where('active', 1)->orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -292,6 +298,8 @@ class PolicyEnforcementController extends Controller
             ['title' => 'Fleet Management', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
         ];
+
+        $data['policyUsers'] = $policyUsers;
         $data['policies'] = $policies;
         $data['policy'] = $policy;
         $data['active_mod'] = 'Policy';
@@ -301,5 +309,13 @@ class PolicyEnforcementController extends Controller
         AuditReportsController::store('Security', 'Users Access Page Accessed', "Accessed By User", 0);
         return view('policy.policy_list_access')->with($data);
 
+    }
+
+    public function updatestatus(Request $request){
+
+        $policyData = $request->all();
+        unset($policyData['_token']);
+
+        return $policyData;
     }
 }

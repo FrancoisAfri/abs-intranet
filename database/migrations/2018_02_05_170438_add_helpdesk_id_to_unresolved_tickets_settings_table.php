@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BookingidToVehicleCollectImage extends Migration
+class AddHelpdeskIdToUnresolvedTicketsSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class BookingidToVehicleCollectImage extends Migration
      */
     public function up()
     {
-        Schema::table('vehicle_collect_image', function (Blueprint $table) {
-            $table->timestamp('bookingID')->nullable();;
+        Schema::table('unresolved_tickets_settings', function (Blueprint $table) {
+            $table->integer('helpdesk_id')->nullable();;
         });
     }
 
@@ -25,8 +25,8 @@ class BookingidToVehicleCollectImage extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_collect_image', function (Blueprint $table) {
-            $table->timestamp('bookingID')->nullable();;
+        Schema::table('unresolved_tickets_settings', function (Blueprint $table) {
+            $table->dropColumn('helpdesk_id');
         });
     }
 }

@@ -99,6 +99,7 @@ Route::get('System/policy_act/{pol}', 'PolicyEnforcementController@policyAct');
 Route::get('System/add_user_act/{users}', 'PolicyEnforcementController@policyUserAct');
 Route::get('system/policy/viewUsers/{users}', 'PolicyEnforcementController@viewUsers');
 Route::post('System/policy/add_policyUsers', 'PolicyEnforcementController@addpolicyUsers');
+Route::post('System/policy/update_status', 'PolicyEnforcementController@updatestatus');
 
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -288,7 +289,9 @@ Route::post('help_desk/setup/{setup}', 'HelpdeskController@setup');
 Route::post('help_desk/setup', 'HelpdeskController@setup');
 Route::post('help_desk/notify_managers/{service}', 'HelpdeskController@notify_managers');
 Route::post('help_desk/notify_managers', 'HelpdeskController@notify_managers');
+Route::post('help_desk/auto_escalations/{settings}', 'HelpdeskController@auto_escalations');
 Route::post('help_desk/auto_escalations', 'HelpdeskController@auto_escalations');
+Route::post('help_desk/unresolved_tickets/{service}', 'HelpdeskController@unresolved_tickets');
 Route::post('help_desk/unresolved_tickets', 'HelpdeskController@unresolved_tickets');
 Route::post('help_desk/auto_responder_messages', 'HelpdeskController@auto_responder_messages');
 Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');

@@ -9,7 +9,7 @@ function avilabledays(hr_id, levID, availdaystxt) {
 }
 
 /* function to get negative leave days */
-function avilabledays(hr_id, levID, negDAYS) {
+function negativedays(hr_id, levID, negDAYS) {
      postTo = '/api/leave/negativeDays/'+ hr_id + '/' + levID;
     $.get(postTo, { hr_id: hr_id, levID: levID },
         function(data) {

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DropimageToVehicleCollectImage extends Migration
+class AddHelpdeskIdToUnresolvedQueryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class DropimageToVehicleCollectImage extends Migration
      */
     public function up()
     {
-        Schema::table('vehicle_collect_image', function($table) {
-            $table->dropColumn(['vehicleID', 'bookingID']);
+        Schema::table('unresolved_tickets_settings', function (Blueprint $table) {
+            $table->timestamp('helpdesk_id')->nullable();;
         });
     }
 
@@ -25,6 +25,6 @@ class DropimageToVehicleCollectImage extends Migration
      */
     public function down()
     {
-        //
+         
     }
 }

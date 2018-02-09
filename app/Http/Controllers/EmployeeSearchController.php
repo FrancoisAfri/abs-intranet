@@ -36,6 +36,7 @@ class EmployeeSearchController extends Controller
     }
 
      public function getSearch(Request $request) {
+		 
      	//ivisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         //ivision=DivisionLevelTwo::where('active', 1)->get();
         $personName = trim($request->person_name);
@@ -55,7 +56,7 @@ class EmployeeSearchController extends Controller
             })
 
             ->orderBy('first_name')
-            ->limit(100)
+            //->limit(100)
             ->get();
         $data['page_title'] = "Employee Search";
         $data['page_description'] = "List of users found";

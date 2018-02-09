@@ -109,7 +109,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i>
-                        Cancel
+                        Back
                     </button>
                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal"
                             data-target="#add-user-modal">Add Users
@@ -161,8 +161,8 @@
 
         }
 
-        $('#back_button').click(function () {
-            location.href = '/vehicle_management/setup';
+        $('#cancel').click(function () {
+            location.href = '/System/policy/create';
         });
 
         $(function () {
@@ -228,12 +228,12 @@
                 var formName = 'add-user-form';
                 var modalID = 'add-user-modal';
                 var submitBtnID = 'add-user';
-                var redirectUrl = '/System/policy/viewUsers';
+                var redirectUrl = '/system/policy/viewUsers/{{ $policyID }}';
                 var successMsgTitle = 'New Users  Added!';
                 var successMsg = 'The policy Users has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-            
+
             //Load divisions drop down
             var parentDDID = '';
             var loadAllDivs = 1;

@@ -61,7 +61,7 @@
 						<th>Previous Balance</th>
 						<th>Transaction</th>
 						<th>Current Balance</th>
-						<th>Added By</th>
+						<th>performed By</th>
 					</tr>
 					@if(count($historyAudit) > 0)
 						@foreach($historyAudit as $audit)
