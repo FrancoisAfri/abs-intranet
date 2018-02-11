@@ -10,8 +10,7 @@ class Policy_users extends Model
 
     // Mass assignable fields
     protected $fillable = ['policy_id', 'user_id', 'read_understood',
-        'read_not_understood','read_not_sure', 'status', 'date_read' ,
-      
+        'read_not_understood','read_not_sure', 'status', 'date_read'
     ];
 
      public function policy()

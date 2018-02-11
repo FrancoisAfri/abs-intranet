@@ -207,7 +207,8 @@ class PolicyEnforcementController extends Controller
 
     }
 
-    public function policyUserAct(Request $request, Policy_users $policyUser){
+    public function policyUserAct(Request $request, Policy_users $policyUser)
+    {
         if ($policyUser->status == 1)
             $stastus = 0;
         else
@@ -291,6 +292,7 @@ class PolicyEnforcementController extends Controller
             ->orderBy('policy_users.id')
             ->get();
 
+        //  return $policyUsers;
 
 
         $modules = modules::where('active', 1)->orderBy('name', 'asc')->get();
@@ -318,7 +320,9 @@ class PolicyEnforcementController extends Controller
 
     public function updatestatus(Request $request)
     {
-
+        $this->validate($request, [
+            'docread' => 'required',
+        ]);
         $policyData = $request->all();
         unset($policyData['_token']);
         unset($policyData['emp-list-table_length']);
@@ -334,12 +338,10 @@ class PolicyEnforcementController extends Controller
                 $accessLevel = $Acess[0];
                 $user = $Acess[1];
 
-                return $accessLevel == 'read_understood';
-
                 $policyUsers = Policy_users::where('policy_id', $policyID)->where('user_id', $user)->first();
-                $policyUsers->read_understood = ($accessLevel == 'read_understood') ? 1 : 0;
-                $policyUsers->read_not_understood = ($accessLevel == 'read_not_understood') ? 1 : 0;
-                $policyUsers->read_not_sure = ($accessLevel == 'read_not_sure') ? 1 : 0;
+                $policyUsers->read_understood = ($accessLevel == 1) ? 1 : 0;
+                $policyUsers->read_not_understood = ($accessLevel == 2) ? 1 : 0;
+                $policyUsers->read_not_sure = ($accessLevel == 3) ? 1 : 0;
                 $policyUsers->date_read = time();
                 $policyUsers->update();
 
@@ -443,7 +445,7 @@ class PolicyEnforcementController extends Controller
         unset($policyData['_token']);
 
         $actionFrom = $actionTo = 0;
-        //$DivFive = $DivFour = $DivThree = $DivTwo = $DivOne;
+
         $DivFive = !empty($policyData['division_level_5']) ? $policyData['division_level_5'] : 0;
         $DivFour = !empty($policyData['division_level_4']) ? $policyData['division_level_4'] : 0;
         $DivThree = !empty($policyData['division_level_3']) ? $policyData['division_level_3'] : 0;
