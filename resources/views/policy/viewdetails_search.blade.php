@@ -44,11 +44,12 @@
                             <thead>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th> Name</th>
-                                <th>Assigned Users</th>
-                                <th>Understood</th>
-                                <th>Not Understood</th>
-                                <th>Read but not sure</th>
+                                <th> Employee Name</th>
+                                <th>Company</th>
+                                <th>Department</th>
+                                <th> Date Added</th>
+                                <th> Date Read</th>
+                                <th>Read Statuse</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -61,18 +62,23 @@
                                         ><i class="	fa fa-files-o"></i>
                                             View Details</a></td>
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
-                                    <td><span class="label label-primary ">{{ $policy->policyUsers->count() }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="label label-primary ">{{ $policy->policyUsers->where('read_understood', 1)->count() }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="label label-primary ">{{ $policy->policyUsers->where('read_not_understood', 1)->count() }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="label label-primary ">{{ $policy->policyUsers->where('read_not_sure', 1)->count() }}</span>
-                                    </td>
+                                        nowrap>{{ (!empty( $policy->firstname . ' ' . $policy->firstname)) ? $policy->firstname . ' ' . $policy->firstname : ''}}</td>
+
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->company )) ? $policy->company : ''}}</td>
+
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->Department )) ? $policy->Department : ''}}</td>
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->created_at )) ? $policy->created_at  : ''}}</td>
+
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->date_read )) ? $policy->date_read : '' }}</td>
+
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->date_read )) ? $policy->date_read : '' }}</td>
+
+
                                     @endforeach
                                 </tr>
 
@@ -80,11 +86,12 @@
                             <tfoot>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th> Name</th>
-                                <th>Assigned Users</th>
-                                <th>Understood</th>
-                                <th>Not Understood</th>
-                                <th>Read but not sure</th>
+                                <th> Employee Name</th>
+                                <th>Company</th>
+                                <th>Department</th>
+                                <th> Date Added</th>
+                                <th> Date Read</th>
+                                <th>Read Statuse</th>
                             </tr>
                             </tfoot>
                         </table>

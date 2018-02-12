@@ -104,6 +104,7 @@ Route::get('System/policy/search_policies', 'PolicyEnforcementController@policyS
 Route::post('System/policy/docsearch', 'PolicyEnforcementController@docsearch');
 Route::get('System/policy/reports', 'PolicyEnforcementController@reports');
 Route::post('System/policy/reportsearch', 'PolicyEnforcementController@reportsearch');
+Route::get('System/policy/viewdetails/{policydetails}', 'PolicyEnforcementController@viewdetails');
 
 
 //#Leave Management

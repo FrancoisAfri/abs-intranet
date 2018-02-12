@@ -356,8 +356,6 @@ class PolicyEnforcementController extends Controller
 
     public function policySearchindex()
     {
-
-
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
         $data['breadcrumb'] = [
@@ -504,5 +502,37 @@ class PolicyEnforcementController extends Controller
 
         AuditReportsController::store('Policy', 'Policy Reports Page Accessed', "Accessed By User", 0);
         return view('policy.reportsResults_search')->with($data);
+    }
+
+    public function viewdetails(Policy $policydetails)
+    {
+
+        $Policies = DB::table('policy_users')
+            ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
+                'policy.description as policyDescription', 'policy.document as policyDoc',
+                'hr_people.first_name as firstname', 'hr_people.surname as surname',
+                'hr_people.division_level_5 as company', 'hr_people.division_level_4 as Department')
+            ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
+            ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
+            ->leftJoin('division_level_fives', 'hr_people.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'hr_people.division_level_4', '=', 'division_level_fours.id')
+            ->where('policy_users.policy_id', $policydetails->id)
+            ->orderBy('policy_users.id')
+            ->limit(100)
+            ->get();
+
+
+        $data['Policies'] = $Policies;
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
+
+        $data['active_mod'] = 'Policy';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Policy', 'Policy View Details Page Accessed', "Accessed By User", 0);
+        return view('policy.viewdetails_search')->with($data);
+
     }
 }
