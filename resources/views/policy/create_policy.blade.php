@@ -40,7 +40,7 @@
                                 <tr id="categories-list">
                                     <td nowrap>
                                         <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-package-modal"
+                                                data-toggle="modal" data-target="#edit-policy-modal"
                                                 data-id="{{ $policy->id }}" data-name="{{ $policy->name }}"
                                                 data-description="{{$policy->description}}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
@@ -103,7 +103,8 @@
             </div>
             <!-- Include add new prime rate modal -->
         @include('policy.partials.add_policy_modal')
-        @include('Vehicles.partials.edit_fleetcard_modal')
+        @include('policy.partials.edit_policy_modal')
+        {{--@include('Vehicles.partials.edit_fleetcard_modal')--}}
         <!-- Include delete warning Modal form-->
             {{--@if (count($policyType) > 0)--}}
             {{--@include('Vehicles.warnings.fleetcard_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])--}}

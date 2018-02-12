@@ -285,6 +285,8 @@ class HelpdeskController extends Controller {
         if (!empty($helpdeskTickets))
             $helpdeskTickets->load('ticket');
 
+        helpdeskTickets
+
         $systems = HelpDesk::orderBy('name', 'asc')->get();
 
         $CompletedTickets = DB::table('ticket')->pluck('status');

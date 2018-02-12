@@ -306,6 +306,7 @@ class LeaveHistoryAuditController extends Controller {
                         $query->where('leave_history.action', 'ILIKE', "%$action%");
                     }
                 })
+                ->limit(100)
                 ->orderBy('leave_history.id')
                 ->get();
 

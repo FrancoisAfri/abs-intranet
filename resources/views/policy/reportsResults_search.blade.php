@@ -44,43 +44,32 @@
                             <thead>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th style="vertical-align: middle; text-align: center;"></th>
                                 <th> Name</th>
-                                <th>Company</th>
-                                <th>Department</th>
-                                <th>Expiry Date</th>
+                                <th>Assigned Users</th>
+                                <th>Understood</th>
+                                <th>Not Understood </th>
+                                <th>Read but not sure </th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($policyUsers as $policy)
+                            @foreach($Policies as $policy)
                                 <tr>
                                     <td nowrap>
                                         <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-package-modal"
                                                 data-id="{{ $policy->id }}" data-name="{{ $policy->name }}"
-                                                data-description="{{$policy->description}}"><i
-                                                    class="fa fa-pencil-square-o"></i> Edit
+                                                data-description="{{$policy->description}}"> View Details
                                         </button>
-                                    </td>
-                                    <td style="vertical-align: middle;" nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($policy->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Policies/policy/$policy->document") }}"
-                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
                                     </td>
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->date)) ?  date(' d M Y', $policy->date) : ''}}</td>
+                                    <td ><span class="label label-primary ">{{ $policy->policyUsers->count() }}</span></td>
+                                    <td ><span class="label label-primary ">{{ $policy->policyUsers->where('read_understood', 1)->count() }}</span></td>
+                                    <td ><span class="label label-primary ">{{ $policy->policyUsers->where('read_not_understood', 1)->count() }}</span></td>
+                                    <td ><span class="label label-primary ">{{ $policy->policyUsers->where('read_not_sure', 1)->count() }}</span></td>
+
+                                    {{--<td ><span class="label label-primary ">{{ $policy->read_understood->count() }}</span></td>--}}
+                                    {{--<td ><span class="label label-primary ">{{ $policy->read_not_understood->count() }}</span></td>--}}
                                     @endforeach
                                 </tr>
 
@@ -88,11 +77,11 @@
                             <tfoot>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th style="vertical-align: middle; text-align: center;"></th>
                                 <th> Name</th>
-                                <th>Company</th>
-                                <th>Department</th>
-                                <th>Expiry Date</th>
+                                <th>Assigned Users</th>
+                                <th>Understood</th>
+                                <th>Not Understood </th>
+                                <th>Read but not sure </th>
                             </tr>
                             </tfoot>
                         </table>
