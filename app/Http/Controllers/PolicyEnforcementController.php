@@ -513,7 +513,9 @@ class PolicyEnforcementController extends Controller
             ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
                 'policy.description as policyDescription', 'policy.document as policyDoc',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname',
-                'hr_people.division_level_5 as company', 'hr_people.division_level_4 as Department')
+                'hr_people.division_level_5 as company', 'hr_people.division_level_4 as Department',
+                'division_level_fives.name as company', 'division_level_fours.name as Department'
+                )
             ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
             ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
             ->leftJoin('division_level_fives', 'hr_people.division_level_5', '=', 'division_level_fives.id')
@@ -523,7 +525,7 @@ class PolicyEnforcementController extends Controller
             ->limit(100)
             ->get();
 
-        //return $Policies;
+       // return $Policies;
 
         $data['Policies'] = $Policies;
         $data['page_title'] = "Policy Enforcement System";
