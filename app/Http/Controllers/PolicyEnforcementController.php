@@ -141,9 +141,10 @@ class PolicyEnforcementController extends Controller
             $policyUsers = new Policy_users();
             $policyUsers->user_id = $hrID->id;
             $policyUsers->policy_id = $policyID;
-            $policyUsers->read_not_understood = 0;
-            $policyUsers->read_understood = 0;
-            $policyUsers->read_not_sure = 0;
+            $policyUsers->date_added = time();
+//            $policyUsers->read_not_understood = ;
+//            $policyUsers->read_understood = 0;
+//            $policyUsers->read_not_sure = 0;
             $policyUsers->status = 1;
             $policyUsers->save();
 
@@ -262,11 +263,12 @@ class PolicyEnforcementController extends Controller
             # create record in policy users
             $policyUsers = new Policy_users();
             //use updateOrCreate to avoid duplicates
-            $policyUsers->updateOrCreate(['policy_id' => $policyData['policyID']], ['user_id' => $hrID->id]);
+            $policyUsers->updateOrCreate(['policy_id' => $policyData['policyID']], ['user_id' => $hrID->id], ['date_added' => time()]);
             // get user details
             $firstname = $hrID->first_name;
             $surname = $hrID->surname;
             $email = $hrID->email;
+
             #mail to user
             Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
         }
@@ -521,6 +523,7 @@ class PolicyEnforcementController extends Controller
             ->limit(100)
             ->get();
 
+        //return $Policies;
 
         $data['Policies'] = $Policies;
         $data['page_title'] = "Policy Enforcement System";
@@ -534,5 +537,35 @@ class PolicyEnforcementController extends Controller
         AuditReportsController::store('Policy', 'Policy View Details Page Accessed', "Accessed By User", 0);
         return view('policy.viewdetails_search')->with($data);
 
+    }
+
+    public function viewpolicyUsers(Request $request)
+    {
+        $results = $request->all();
+        unset($results['_token']);
+        unset($results['emp-list-table_length']);
+
+        foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
+        foreach ($results as $key => $sValue) {
+            if (strlen(strstr($key, 'userID'))) {
+                $aValue = explode("_", $key);
+                $name = $aValue[0];
+                $userID = $aValue[1];
+
+                $users = HRPerson::where('user_id', $userID)->orderBy('id', 'desc')->first();
+                $firstname = $users->first_name;
+                $surname = $users->surname;
+                $email = $users->email;
+                #mail to user
+                Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
+
+            }
+        }
+        AuditReportsController::store('Policy Enforcement', 'Policy Enforcement Page Accessed', "Accessed By User", 0);
+        return back();
     }
 }

@@ -26,7 +26,7 @@ class AddVehicleIDToVehicleinsuarance extends Migration
     public function down()
     {
         Schema::table('vehicle_insurance', function (Blueprint $table) {
-            $table->integer('vehicleID')->index()->unsigned()->nullable();
+            $table->dropColumn('vehicleID');
         });
     }
 }

@@ -6,15 +6,14 @@
           type="text/css"/>
     <!-- DataTables -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/System/policy/update_status">
+                <form class="form-horizontal" method="POST" action="/System/policy/viewUsers">
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
@@ -43,7 +42,9 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th style="vertical-align: middle; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;">Accept <input type="checkbox" id="checkallaccept"
+                                                                                          onclick="checkAllboxAccept()"/>
+                                </th>
                                 <th> Employee Name</th>
                                 <th>Company</th>
                                 <th>Department</th>
@@ -55,12 +56,15 @@
                             <tbody>
                             @foreach($Policies as $policy)
                                 <tr>
-                                    <td style="vertical-align: middle;"
-                                        nowrap>
-                                        <a href="{{ '/System/policy/viewdetails/' . $policy->id }}" id="edit_compan"
-                                           class="btn btn-primary  btn-xs" data-id="{{ $policy->id }}"
-                                        ><i class="	fa fa-files-o"></i>
-                                            View Details</a></td>
+                                    <td style='text-align:center'>
+                                        <input type="hidden" class="checkbox selectall"
+                                               id="userID_{{ $policy->user_id }}"
+                                               name="userID_{{ $policy->user_id }}" value="0">
+                                        <input type="checkbox" class="checkbox selectall"
+                                               id="userID_{{ $policy->user_id }}"
+                                               name="userID_{{ $policy->user_id }}"
+                                               value="1" {{$policy->read_understood === 1 ? 'checked ="checked"' : 0 }}>
+                                    </td>
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->firstname . ' ' . $policy->firstname)) ? $policy->firstname . ' ' . $policy->firstname : ''}}</td>
 
@@ -70,13 +74,13 @@
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->Department )) ? $policy->Department : ''}}</td>
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->created_at )) ? $policy->created_at  : ''}}</td>
+                                        nowrap>{{ (!empty( $policy->date_added )) ? $policy->date_added  : ''}}</td>
 
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->date_read )) ? $policy->date_read : '' }}</td>
+                                        nowrap>{{ (!empty( $policy->date_read )) ? date(' d M Y', $policy->date_read) : '' }}</td>
 
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->date_read )) ? $policy->date_read : '' }}</td>
+                                        nowrap>{{ (!empty( $policy->read_understood )) ? $policy->read_understood : ''}}</td>
 
 
                                     @endforeach
@@ -97,6 +101,10 @@
                         </table>
                     </div>
                     <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary pull-right"><i
+                                    class="fa fa-envelope-square"></i> Send Email</button>
+                    </div>
 
                 </form>
             </div>
@@ -125,8 +133,7 @@
 
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    <!-- iCheck -->
-    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+    
     <!-- DataTables -->
     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -134,16 +141,36 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
+
+        function toggle(source) {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] != source)
+                    checkboxes[i].checked = source.checked;
+            }
+        }
+
+        //
+        function checkAllboxAccept() {
+            if ($('#checkallaccept:checked').val() == 'on') {
+                $('.selectall').prop('checked', true);
+            }
+            else {
+                $('.selectall').prop('checked', false);
+            }
+        }
+
+        function checkAllboxreject() {
+            if ($('#checkallreject:checked').val() == 'on') {
+                $('.reject').prop('checked', true);
+            }
+            else {
+                $('.reject').prop('checked', false);
+            }
+        }
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
-
-            //Initialize iCheck/iRadio Elements
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
 
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
@@ -187,4 +214,4 @@
             @endif
         });
     </script>
-@endsection
+@endsection                                                                                                  

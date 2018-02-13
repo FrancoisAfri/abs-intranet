@@ -29,6 +29,7 @@ class AddTankAndOtherToFuellogtable extends Migration
         Schema::table('vehicle_fuel_log', function (Blueprint $table) {
             $table->dropColumn('tank_and_other');
             $table->dropColumn('transaction_type');
+            
         });
     }
 }

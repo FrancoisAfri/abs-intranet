@@ -28,9 +28,9 @@ class AddRejectReasonToFuellogtable extends Migration
      public function down()
      {
           Schema::table('vehicle_fuel_log', function (Blueprint $table) {
-              //$table->string('reject_reason')->nullable();
-              $table->bigInteger('reject_timestamp')->nullable();
-              $table->integer('rejector_id')->nullable();
+            $table->dropColumn('reject_timestamp');
+            $table->dropColumn('rejector_id');
+            
          });
      }
  }

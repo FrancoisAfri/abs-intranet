@@ -26,7 +26,7 @@ class AddContactpersonToVehicleInsuaranceTable extends Migration
     public function down()
     {
         Schema::table('vehicle_insurance', function (Blueprint $table) {
-            $table->integer('contact_person')->index()->unsigned()->nullable();
+            $table->dropColumn('contact_person');
         });
     }
 }

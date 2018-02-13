@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddDivionsToPolicyUserTable extends Migration
+class AddDateAddedPolicyUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddDivionsToPolicyUserTable extends Migration
     public function up()
     {
         Schema::table('policy_users', function (Blueprint $table) {
-
+            $table->bigInteger('date_added')->index()->unsigned()->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddDivionsToPolicyUserTable extends Migration
     public function down()
     {
         Schema::table('policy_users', function (Blueprint $table) {
-
+            $table->dropColumn('date_added');
         });
     }
 }

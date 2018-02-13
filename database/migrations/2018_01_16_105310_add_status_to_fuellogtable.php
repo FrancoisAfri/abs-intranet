@@ -27,7 +27,7 @@ class AddStatusToFuellogtable extends Migration
      public function down()
      {
           Schema::table('vehicle_fuel_log', function (Blueprint $table) {
-            $table->smallInteger('status');
+            $table->dropColumn('status');
          });
      }
  }
