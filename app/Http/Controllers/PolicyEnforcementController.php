@@ -413,7 +413,7 @@ class PolicyEnforcementController extends Controller
         ];
 
         $data['active_mod'] = 'Policy';
-        $data['active_rib'] = 'Reports';
+        $data['active_rib'] = 'Search Policies';
 
         AuditReportsController::store('Policy', 'Policy Document Search Page Accessed', "Accessed By User", 0);
         return view('policy.policyDoc_results')->with($data);
@@ -525,9 +525,11 @@ class PolicyEnforcementController extends Controller
             ->limit(100)
             ->get();
 
-       // return $Policies;
+        $PolicyID = $Policies->first()->policy_id;
+        $Policy = Policy::where('id',$PolicyID)->first();
 
         $data['Policies'] = $Policies;
+        $data['Policy'] = $Policy;
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
         $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
