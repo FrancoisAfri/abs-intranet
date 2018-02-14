@@ -216,11 +216,11 @@
             $(".js-example-basic-multiple").select2();
 
             //Initialize iCheck/iRadio Elements
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-yellow',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '10%' // optional
-            });
+//            $('input').iCheck({
+//                checkboxClass: 'icheckbox_square-yellow',
+//                radioClass: 'iradio_square-blue',
+//                increaseArea: '10%' // optional
+//            });
 
 
             $('#add-user').on('click', function () {

@@ -50,7 +50,7 @@
                                 <th>Department</th>
                                 <th> Date Added</th>
                                 <th> Date Read</th>
-                                <th>Read Statuse</th>
+                                {{--<th>Read Statuse</th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -79,8 +79,10 @@
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->date_read )) ? date(' d M Y', $policy->date_read) : '' }}</td>
 
-                                    <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->read_understood )) ? $policy->read_understood : ''}}</td>
+                                    {{--<td style="vertical-align: middle;"--}}
+                                        {{--nowrap>{{ (!empty( $policy->read_understood )) ? $policy->read_understood : ''}}--}}
+                                        {{--{{ (!empty( $policy->read_understood )) ? $policy->read_not_understood : ''}}--}}
+                                        {{--{{ (!empty( $policy->read_understood )) ? $policy->read_not_sure : ''}}</td>--}}
 
 
                                     @endforeach
@@ -95,7 +97,7 @@
                                 <th>Department</th>
                                 <th> Date Added</th>
                                 <th> Date Read</th>
-                                <th>Read Statuse</th>
+                                {{--<th>Read Statuse</th>--}}
                             </tr>
                             </tfoot>
                         </table>
