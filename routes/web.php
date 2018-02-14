@@ -106,6 +106,8 @@ Route::get('System/policy/reports', 'PolicyEnforcementController@reports');
 Route::post('System/policy/reportsearch', 'PolicyEnforcementController@reportsearch');
 Route::get('System/policy/viewdetails/{policydetails}', 'PolicyEnforcementController@viewdetails');
 Route::post('System/policy/viewUsers', 'PolicyEnforcementController@viewpolicyUsers');
+Route::patch('System/policy/edit_policy/{policy}', 'PolicyEnforcementController@editPolicy');
+
 
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -533,6 +535,11 @@ Route::patch('vehicle_management/edit_key/{keytracking}', 'FleetManagementContro
 Route::get('vehicle_management/Search', 'VehicleDocSearchController@index');
 Route::post('vehicle_management/doc_search', 'VehicleDocSearchController@doc_search');
 Route::post('vehicle_management/image_search', 'VehicleDocSearchController@image_search');
+
+//######## Vehicle Reports ################
+Route::get('vehicle_management/vehicle_reports', 'VehicleReportsController@index');
+Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
+Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
 
 // Performance Appraisals Module
 

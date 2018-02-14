@@ -207,8 +207,44 @@ class PolicyEnforcementController extends Controller
         $data['active_rib'] = 'View Policies';
         AuditReportsController::store('Policy Enforcement', 'View Policy Page Accessed', "Accessed By User", 0);
         return view('policy.users_list_access')->with($data);
+    }
+
+    public function editPolicy(Request $request, Policy $policy)
+    {
+        $this->validate($request, [
+//            'division_level_5' => 'required',
+//            'name' => 'required',
+//            'description' => 'required',
+//            'date' => 'required',
+//            'hr_person_id' => 'required',
+        ]);
+        $policyData = $request->all();
+        unset($policyData['_token']);
 
 
+        if (isset($policyData['date'])) {
+            $dates = $policyData['date'] = str_replace('/', '-', $policyData['date']);
+            $dates = $policyData['date'] = strtotime($policyData['date']);
+        }
+
+        $policy->name = $policyData['name'];
+        $policy->description = $policyData['description'];
+        $policy->date = $dates;
+        $policy->update();
+
+        //Upload policy document
+        if ($request->hasFile('document')) {
+            $fileExt = $request->file('document')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('document')->isValid()) {
+                $fileName = $policy->id . "_policy_documet." . $fileExt;
+                $request->file('document')->storeAs('Policies/policy', $fileName);
+                $policy->document = $fileName;
+                $policy->update();
+            }
+        }
+
+        AuditReportsController::store('Policy', 'Edit policy Page Accessed', "Accessed By User", 0);
+        return response()->json();
     }
 
     public function policyUserAct(Request $request, Policy_users $policyUser)
@@ -275,6 +311,7 @@ class PolicyEnforcementController extends Controller
         AuditReportsController::store('Policy', 'Policy Management Page Accessed', "Accessed By User", 0);
         return response()->json();
     }
+
 
     public function viewPolicies()
     {
@@ -515,7 +552,7 @@ class PolicyEnforcementController extends Controller
                 'hr_people.first_name as firstname', 'hr_people.surname as surname',
                 'hr_people.division_level_5 as company', 'hr_people.division_level_4 as Department',
                 'division_level_fives.name as company', 'division_level_fours.name as Department'
-                )
+            )
             ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
             ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
             ->leftJoin('division_level_fives', 'hr_people.division_level_5', '=', 'division_level_fives.id')
@@ -526,7 +563,7 @@ class PolicyEnforcementController extends Controller
             ->get();
 
         $PolicyID = $Policies->first()->policy_id;
-        $Policy = Policy::where('id',$PolicyID)->first();
+        $Policy = Policy::where('id', $PolicyID)->first();
 
         $data['Policies'] = $Policies;
         $data['Policy'] = $Policy;

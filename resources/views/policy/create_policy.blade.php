@@ -23,7 +23,7 @@
                         </button>
                     </div>
                 </div>
-                {{ csrf_field() }}
+               
                 <div class="box-body">
                     <table class="table table-bordered">
                         <tr>
@@ -42,7 +42,9 @@
                                         <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-policy-modal"
                                                 data-id="{{ $policy->id }}" data-name="{{ $policy->name }}"
-                                                data-description="{{$policy->description}}"><i
+                                                data-description="{{$policy->description}}"
+                                                data-date="{{ date(' d M Y', $policy->date)}}"
+                                        ><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
@@ -73,7 +75,9 @@
                                     </td>
 
                                     <td nowrap>
-                                        <a href="{{ '/system/policy/viewUsers/' . $policy->id }}" id="edit_compan" class="btn btn-primary  btn-xs"><i class="fa fa-user"> </i> View Users</a></td>
+                                        <a href="{{ '/system/policy/viewUsers/' . $policy->id }}" id="edit_compan"
+                                           class="btn btn-primary  btn-xs"><i class="fa fa-user"> </i> View Users</a>
+                                    </td>
                                     </td>
 
                                 </tr>
@@ -194,11 +198,13 @@
 
                     $(document).ready(function () {
 
-                        $('#date').datepicker({
+                        $('input[name="date"]').datepicker({
                             format: 'dd/mm/yyyy',
                             autoclose: true,
                             todayHighlight: true
                         });
+
+
                     });
 
                     //save Fleet
@@ -214,50 +220,36 @@
                         modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                     });
 
-                    //Post module form to server using ajax (ADD)
-//                    $('#add-fleet-card').on('click', function () {
-//                        //console.log('strUrl');
-//                        var strUrl = '/vehice/add_fleetcard';
-//                        var modalID = 'add-fleet-modal';
-//                        var objData = {
-//                            name: $('#' + modalID).find('#name').val(),
-//                            description: $('#' + modalID).find('#description').val(),
-//                            _token: $('#' + modalID).find('input[name=_token]').val()
-//                        };
-//                        var submitBtnID = 'add-fleet-card';
-//                        var redirectUrl = '/vehicle_management/fleet_card';
-//                        var successMsgTitle = 'Fleet Type Added!';
-//                        var successMsg = 'The Fleet Type has been updated successfully.';
-//                        //var formMethod = 'PATCH';
-//                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-//                    });
 
-                    var fleetID;
-                    $('#edit-package-modal').on('show.bs.modal', function (e) {
-                        //console.log('kjhsjs');
+                    var policyID;
+                    $('#edit-policy-modal').on('show.bs.modal', function (e) {
                         var btnEdit = $(e.relatedTarget);
-                        fleetID = btnEdit.data('id');
+                        if (parseInt(btnEdit.data('id')) > 0) {
+                            policyID = btnEdit.data('id');
+                        }
                         var name = btnEdit.data('name');
                         var description = btnEdit.data('description');
+                        var document = btnEdit.data('document');
+                        var date = btnEdit.data('date');
                         var modal = $(this);
                         modal.find('#name').val(name);
                         modal.find('#description').val(description);
+                        modal.find('#document').val(document);
+                        modal.find('#date').val(date);
                     });
-                    $('#edit_fleetcard').on('click', function () {
-                        var strUrl = '/vehice/edit_fleetcard/' + fleetID;
-                        var modalID = 'edit-package-modal';
-                        var objData = {
-                            name: $('#' + modalID).find('#name').val(),
-                            description: $('#' + modalID).find('#description').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'edit_fleetcard';
-                        var redirectUrl = '/vehicle_management/Manage_fleet_types';
+
+                    //Post perk form to server using ajax (edit)
+                    $('#edit_policy').on('click', function () {
+                        var strUrl = '/System/policy/edit_policy/' + policyID;
+                        var formName = 'edit-policy-form';
+                        var modalID = 'edit-policy-modal';
+                        var submitBtnID = 'edit_policy';
+                        var redirectUrl = '/System/policy/create';
                         var successMsgTitle = 'Changes Saved!';
-                        var successMsg = 'The Fleet Type has been updated successfully.';
-                        var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                        var successMsg = 'The  policy details been updated successfully!';
+                        modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                     });
+
 
                     //Load divisions drop down
                     var parentDDID = '';

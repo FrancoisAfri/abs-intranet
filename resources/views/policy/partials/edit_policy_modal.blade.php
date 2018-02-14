@@ -1,7 +1,7 @@
 <div id="edit-policy-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+            <form class="form-horizontal" method="POST" name="edit-policy-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -15,24 +15,42 @@
                     <div id="success-alert"></div>
 
                     <div class="form-group">
-                        <label for="name" class="col-sm-3 control-label">Name</label>
-                        <div class="col-sm-9">
+                        <label for="path" class="col-sm-2 control-label">Name</label>
+                        <div class="col-sm-8">
                             <input type="text" class="form-control" id="name" name="name" value=""
-                                   placeholder="Enter Name" required>
+                                   placeholder="Enter name" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-3 control-label">Description</label>
-                        <div class="col-sm-9">
+                        <label for="path" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-8">
                             <input type="text" class="form-control" id="description" name="description" value=""
                                    placeholder="Enter Description" required>
+                        </div>
+                    </div>
+
+                    <hr class="hr-text" data-content="DOCUMENTS UPLOAD">
+
+                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
+                        <label for="documents" class="col-sm-2 control-label">Attachment </label>
+                        <div class="col-sm-8">
+                            <input type="file" id="document" name="document"
+                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc","txt"]'
+                                   data-show-upload="false">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="date" class="col-sm-2 control-label">Completion date</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="date" name="date"
+                                   value="{{ old('date') }}" placeholder="Select  Inception date  ...">
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_fleetcard" class="btn btn-primary"><i class="fa fa-floppy-o"></i>
+                    <button type="button" id="edit_policy" class="btn btn-primary"><i class="fa fa-floppy-o"></i>
                         Save
                     </button>
                 </div>
