@@ -73,6 +73,7 @@ class PolicyEnforcementController extends Controller
 
 
         AuditReportsController::store('Policy Enforcement', 'Policy Enforcement Page Accessed', "Accessed By User", 0);
+
         return view('policy.create_policy')->with($data);
     }
 

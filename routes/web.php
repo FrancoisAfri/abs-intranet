@@ -540,6 +540,8 @@ Route::post('vehicle_management/image_search', 'VehicleDocSearchController@image
 Route::get('vehicle_management/vehicle_reports', 'VehicleReportsController@index');
 Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
+  // ***************
+Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 
 // Performance Appraisals Module
 

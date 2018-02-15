@@ -252,7 +252,7 @@ class DatabaseSeeder extends Seeder
         $module->name = 'Policy Enforcement';
         $module->code_name = 'Policy Enforcement';
         $module->path = 'System/policy/create';
-        $module->font_awesome = 'fa-accusoft';
+        $module->font_awesome = 'fa fa-leanpub322';
         $module->save();
 
         $ribbon = new module_ribbons();
