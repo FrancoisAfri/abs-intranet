@@ -42,7 +42,8 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th style="width: 5px; text-align: center;">Accept <input type="checkbox" id="checkallaccept"
+                                <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
+                                                                                          id="checkallaccept"
                                                                                           onclick="checkAllboxAccept()"/>
                                 </th>
                                 <th> Employee Name</th>
@@ -50,7 +51,7 @@
                                 <th>Department</th>
                                 <th> Date Added</th>
                                 <th> Date Read</th>
-                                {{--<th>Read Statuse</th>--}}
+                                <th>Read Statuse</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -79,12 +80,14 @@
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->date_read )) ? date(' d M Y', $policy->date_read) : '' }}</td>
 
-                                    {{--<td style="vertical-align: middle;"--}}
-                                        {{--nowrap>{{ (!empty( $policy->read_understood )) ? $policy->read_understood : ''}}--}}
-                                        {{--{{ (!empty( $policy->read_understood )) ? $policy->read_not_understood : ''}}--}}
-                                        {{--{{ (!empty( $policy->read_understood )) ? $policy->read_not_sure : ''}}</td>--}}
-
-
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->read_understood )) ? $readunderstood[$policy->read_understood] : ''}}
+                                    </td>
+                                    <td style="vertical-align: middle;" nowrap>
+                                        {{ (!empty( $policy->read_not_understood )) ? $readntstood[$policy->read_not_understood] : ''}}
+                                    </td>
+                                    <td style="vertical-align: middle;" nowrap>
+                                        {{ (!empty( $policy->read_not_sure )) ? $readntsure[$policy->read_not_sure] : ''}}</td>
                                     @endforeach
                                 </tr>
 
@@ -97,15 +100,17 @@
                                 <th>Department</th>
                                 <th> Date Added</th>
                                 <th> Date Read</th>
-                                {{--<th>Read Statuse</th>--}}
+                                <th>Read Statuse</th>
                             </tr>
                             </tfoot>
                         </table>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
+                        <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="submit" class="btn btn-primary pull-right"><i
-                                    class="fa fa-envelope-square"></i> Send Email</button>
+                                    class="fa fa-envelope-square"></i> Send Email
+                        </button>
                     </div>
 
                 </form>
@@ -135,7 +140,7 @@
 
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    
+
     <!-- DataTables -->
     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -143,6 +148,11 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
+        $('#back_button').click(function () {
+            location.href = '/System/policy/reports';
+        });
+
+        http://localhost:8000/System/policy/reportsearch/
 
         function toggle(source) {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -170,6 +180,7 @@
                 $('.reject').prop('checked', false);
             }
         }
+
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();

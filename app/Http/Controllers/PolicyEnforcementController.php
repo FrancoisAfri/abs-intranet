@@ -530,6 +530,8 @@ class PolicyEnforcementController extends Controller
         }
 
 
+       
+      
         $data['Policies'] = $Policies;
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -564,6 +566,15 @@ class PolicyEnforcementController extends Controller
 
         $PolicyID = $Policies->first()->policy_id;
         $Policy = Policy::where('id', $PolicyID)->first();
+
+         $readunderstood = array(0 => '', 1 => 'Read and Understood');
+        $readntstood = array(0 => '', 1 => 'Read and not Understood');
+        $readntsure = array(0 => '', 1 => 'Read but not Sure');
+        
+
+        $data['readunderstood'] = $readunderstood;
+        $data['readntstood'] = $readntstood;
+        $data['readntsure'] = $readntsure;
 
         $data['Policies'] = $Policies;
         $data['Policy'] = $Policy;

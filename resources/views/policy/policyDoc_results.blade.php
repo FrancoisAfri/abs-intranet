@@ -100,7 +100,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                    class="fa fa-arrow-left"></i> Cancel
+                                    class="fa fa-arrow-left"></i> Back
                         </button>
                         <button type="submit" id="add-new-module" class="btn btn-primary pull-right"><i
                                     class="fa fa-floppy-o"></i> Save Changes
