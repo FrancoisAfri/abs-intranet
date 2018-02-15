@@ -41,7 +41,6 @@ class PolicyEnforcementController extends Controller
 
     public function create()
     {
-
         $Policy = Policy::all();
         $employees = HRPerson::where('status', 1)->get();
 
@@ -54,7 +53,6 @@ class PolicyEnforcementController extends Controller
         $users = HRPerson::where('division_level_5', 1)->orderBy('id', 'desc')->get();
         // $DivFive = DivisionLevel::where('level', 5)->orderBy('id', 'desc')->get();
         // return $users;
-
 
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -81,10 +79,10 @@ class PolicyEnforcementController extends Controller
     {
         $this->validate($request, [
             'division_level_5' => 'required',
-            'name' => 'required',
+            '' => 'required',
+			'name' => 'required|unique:policy,name',
             'description' => 'required',
             'date' => 'required',
-            'hr_person_id' => 'required',
         ]);
         $policyData = $request->all();
         unset($policyData['_token']);
@@ -124,7 +122,6 @@ class PolicyEnforcementController extends Controller
         $users = 0;
         if (!empty($policyData['hr_person_id'])) {
             $users = HRPerson::wherein('id', $policyData['hr_person_id'])->orderBy('id', 'desc')->get();
-
         } elseif ($DivOne->active == 1 && (!empty($policyData['division_level_1']) && $policyData['division_level_1'] > 0)) {
             $users = HRPerson::where('division_level_1', ($policyData['division_level_1']))->orderBy('id', 'desc')->get();
         } elseif ($DivTwo->active == 1 && (!empty($policyData['division_level_2']) && $policyData['division_level_2'] > 0)) {

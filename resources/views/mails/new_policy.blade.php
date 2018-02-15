@@ -220,7 +220,7 @@
                                                     We would like to inform you that a new Policy has been loaded and
                                                     requires your Attention.
                                                     To view the Policy please <a target="_blank"
-                                                                                                href="{{ mypolicies_url }}">click
+                                                                                                href="{{ $mypolicies_url }}">click
                                                         here.</a>
                                                 </td>
                                             </tr>

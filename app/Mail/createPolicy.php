@@ -49,7 +49,7 @@ class createPolicy extends Mailable
         $data['mypolicies_url'] = url("/System/policy/view_policies");
         $data['dashboard_url'] = url('/');
 
-        return $this->view('policy.mails.new_policy')
+        return $this->view('mails.new_policy')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);
