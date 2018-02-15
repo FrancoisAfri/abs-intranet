@@ -79,7 +79,6 @@ class PolicyEnforcementController extends Controller
     {
         $this->validate($request, [
             'division_level_5' => 'required',
-            '' => 'required',
 			'name' => 'required|unique:policy,name',
             'description' => 'required',
             'date' => 'required',
