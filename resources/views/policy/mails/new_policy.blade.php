@@ -215,11 +215,13 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $first_name . ' ' . $surname}},<br><br>
-                                                    We would like to inform you that a new Policy needs your Urgent
-                                                    attention !
-                                                    For more details See below .
 
+                                                    Hi {{ $first_name . ' ' . $surname}},<br><br>
+                                                    We would like to inform you that a new Policy has been loaded and
+                                                    requires your Attention.
+                                                    To view the Policy please <a target="_blank"
+                                                                                                href="{{ mypolicies_url }}">click
+                                                        here.</a>
                                                 </td>
                                             </tr>
                                             <tr>

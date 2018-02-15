@@ -46,6 +46,7 @@ class createPolicy extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['mypolicies_url'] = url("/System/policy/view_policies");
         $data['dashboard_url'] = url('/');
 
         return $this->view('policy.mails.new_policy')
