@@ -247,7 +247,7 @@ class DatabaseSeeder extends Seeder
         $groupLevel->active = 1;
         $groupLevel->save();
 
-        $module = new modules(); //Contacts
+        $module = new modules(); //polivy
         $module->active = 1;
         $module->name = 'Policy Enforcement';
         $module->code_name = 'Policy Enforcement';
