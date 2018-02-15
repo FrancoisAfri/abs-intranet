@@ -247,12 +247,12 @@ class DatabaseSeeder extends Seeder
         $groupLevel->active = 1;
         $groupLevel->save();
 
-        $module = new modules(); //Contacts
+        $module = new modules(); //polivy
         $module->active = 1;
         $module->name = 'Policy Enforcement';
         $module->code_name = 'Policy Enforcement';
         $module->path = 'System/policy/create';
-        $module->font_awesome = 'fa fa-leanpub322';
+        $module->font_awesome = 'fa fa-leanpub';
         $module->save();
 
         $ribbon = new module_ribbons();
