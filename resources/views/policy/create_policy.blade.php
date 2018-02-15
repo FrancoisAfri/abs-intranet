@@ -89,7 +89,7 @@
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
                                         </button>
-                                        No Policies to display, please start by adding a new Policies ...
+                                        No Policies to display, please start by adding a new policy ...
                                     </div>
                                 </td>
                             </tr>
