@@ -978,7 +978,6 @@ class ContactCompaniesController extends Controller
     public function addCompanyDoc(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
             'name' => 'required|unique:contactsCompanydocs,name',
             'exp_date' => 'required',
             'supporting_docs' => 'required',
@@ -1040,8 +1039,45 @@ class ContactCompaniesController extends Controller
         return back();
     }
 
-    public function editCompanydoc()
+    public function editCompanydoc(Request $request , contactsCompanydocs $company)
     {
+        $this->validate($request, [
+//            'name' => 'required',
+//            'name' => 'required|unique:contactsCompanydocs,name',
+//            'exp_date' => 'required',
+//            'supporting_docs' => 'required',
+        ]);
+
+        $contactsCompanydocs = $request->all();
+        unset($contactsCompanydocs['_token']);
+
+
+        $Datefrom = $contactsCompanydocs['date_from'] = str_replace('/', '-', $contactsCompanydocs['date_from']);
+        $Datefrom = $contactsCompanydocs['date_from'] = strtotime($contactsCompanydocs['date_from']);
+
+        $Expirydate = $contactsCompanydocs['expirydate'] = str_replace('/', '-', $contactsCompanydocs['expirydate']);
+        $Expirydate = $contactsCompanydocs['expirydate'] = strtotime($contactsCompanydocs['expirydate']);
+
+        $company->name = $contactsCompanydocs['name'];
+        $company->description = $contactsCompanydocs['description'];
+        $company->date_from = $Datefrom;
+        $company->expirydate = $Expirydate;
+        $company->company_id = $contactsCompanydocs['companyID'];
+        $company->update();
+
+        //Upload supporting document
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $company->id . "_client_documents." . $fileExt;
+                $request->file('supporting_docs')->storeAs('ContactCompany/company_documents', $fileName);
+                //Update file name in the table
+                $company->supporting_docs = $fileName;
+                $company->update();
+            }
+        }
+        AuditReportsController::store('Contacts', ' Company Document Updated', "Company Document Updated", 0);
+        return response()->json();
 
     }
 

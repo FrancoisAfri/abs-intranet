@@ -78,6 +78,8 @@ Route::get('contacts/{person}/viewdocuments', 'ContactsController@viewdocuments'
 Route::post('contacts/add_document', 'ContactsController@addDocumets');
 Route::get('contacts/clientdoc_act/{document}', 'ContactsController@clientdocAct');
 Route::get('contacts/clientdoc/{document}/delete', 'ContactsController@deleteClientDoc');
+Route::patch('contacts/editClientdoc/{document}', 'ContactsController@editClientdoc');
+
 
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');
@@ -206,7 +208,7 @@ Route::get('contacts/{company}/viewcompanydocuments', 'ContactCompaniesControlle
 Route::post('contacts/add_companydocument', 'ContactCompaniesController@addCompanyDoc');
 Route::get('contacts/companydoc/{document}/delete', 'ContactCompaniesController@deleteCompanyDoc');
 Route::get('contacts/companydoc_act/{document}', 'ContactCompaniesController@companydocAct');
-Route::patch('contacts/editCompanydoc/{company}', 'ContactCompaniesController@editCompanydoc');
+Route::patch('contacts/edit_companydoc/{company}', 'ContactCompaniesController@editCompanydoc');
 
 //#reports
 Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');

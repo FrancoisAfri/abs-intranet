@@ -820,6 +820,48 @@ class ContactsController extends Controller
         return response()->json();
     }
 
+    public function editClientdoc(Request $request, contactsClientdocuments $document)
+    {
+        $this->validate($request, [
+//            'name' => 'required|unique:contactsClientdocuments,name',
+//            'date_from' => 'required',
+//            'exp_date' => 'required',
+//            'supporting_docs' => 'required',
+        ]);
+        $clientdocData = $request->all();
+        unset($clientdocData['_token']);
+
+        $Datefrom = $clientdocData['date_from'] = str_replace('/', '-', $clientdocData['date_from']);
+        $Datefrom = $clientdocData['date_from'] = strtotime($clientdocData['date_from']);
+
+        $Expirydate = $clientdocData['expirydate'] = str_replace('/', '-', $clientdocData['expirydate']);
+        $Expirydate = $clientdocData['expirydate'] = strtotime($clientdocData['expirydate']);
+
+        $document->document_name = $clientdocData['document_name'];
+        $document->description = $clientdocData['description'];
+        $document->date_from = $Datefrom;
+        $document->expirydate = $Expirydate;
+        $document->client_id = $clientdocData['clientID'];
+        $document->status = 1;
+        $document->save();
+
+        //Upload supporting document
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $document->id . "_client_documents." . $fileExt;
+                $request->file('supporting_docs')->storeAs('ContactClient/client_documents', $fileName);
+                //Update file name in the table
+                $document->supporting_docs = $fileName;
+                $document->update();
+            }
+        }
+
+
+        AuditReportsController::store('Contacts', ' Client Document Updated ', "Client Document Updated", 0);
+        return response()->json();
+    }
+
     public function clientdocAct(Request $request, contactsClientdocuments $document)
     {
         if ($document->status == 1)

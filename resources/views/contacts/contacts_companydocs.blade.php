@@ -266,11 +266,11 @@
                 });
 
                 $('#edit_doc').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_vehicledoc/' + docID;
+                    var strUrl = '/contacts/edit_companydoc/' + docID;
                     var formName = 'edit-newdoc-form';
                     var modalID = 'edit-newdoc-modal';
                     var submitBtnID = 'edit_doc';
-                    var redirectUrl = '/vehicle_management/document';
+                    var redirectUrl = '/contacts/{{ $company->id }}/viewcompanydocuments';
                     var successMsgTitle = 'New Documents Details have been updated!';
                     var successMsg = 'The Documents Details has been updated successfully.';
                     var Method = 'PATCH';

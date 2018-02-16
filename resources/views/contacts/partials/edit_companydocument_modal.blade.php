@@ -53,8 +53,8 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control datepicker" id="exp_date" name="exp_date"
-                                       value="{{ old('exp_date') }}" placeholder="Click to Select a Date...">
+                                <input type="text" class="form-control datepicker" id="expirydate" name="expirydate"
+                                       value="{{ old('expirydate') }}" placeholder="Click to Select a Date...">
                             </div>
                         </div>
                     </div>
