@@ -348,7 +348,8 @@
                             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete Client</button>
                         @endif
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Update</button>
-					</div>
+                        <a href="/contacts/{{ $contactPerson->id }}/viewdocuments" class="btn btn-primary " ><i class="fa fa-clipboard"> </i> Client Document(s)</a>
+                    </div>
                     <!-- 
 					
 						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$contactPerson->user_id}}, 'access');">Modules Access</button>/.box-footer -->
