@@ -28,19 +28,16 @@
                             <label for="leave_types_id" class="col-sm-2 control-label">Policy Name </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="policy_name" name="policy_name"
-                                       placeholder="Enter an policy name...">
+                                       placeholder="Enter Policy Name...">
                             </div>
                         </div>
 
                         <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Action Date</label>
+                            <label for="days" class="col-sm-2 control-label">Policy Date</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
                                     <input type="text" class="form-control daterangepicker" id="action_date"
-                                           name="action_date" value="" placeholder="Select Action Date...">
+                                           name="action_date" value="" placeholder="Select Policy Date...">
 
                                 </div>
                             </div>

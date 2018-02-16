@@ -44,6 +44,7 @@
                                                 data-id="{{ $policy->id }}" data-name="{{ $policy->name }}"
                                                 data-description="{{$policy->description}}"
                                                 data-date="{{ date(' d M Y', $policy->date)}}"
+                                                data-doc_link="{{ Storage::disk('local')->url("Policies/policy/$policy->document") }}}}"
                                         ><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -75,7 +76,7 @@
                                     </td>
 
                                     <td nowrap>
-                                        <a href="{{ '/system/policy/viewUsers/' . $policy->id }}" id="edit_compan"
+                                        <a href="{{ '/system/policy/viewUsers/' . $policy->id }}" id="policy_users"
                                            class="btn btn-primary  btn-xs"><i class="fa fa-user"> </i> View Users</a>
                                     </td>
                                     </td>
@@ -229,12 +230,12 @@
                         }
                         var name = btnEdit.data('name');
                         var description = btnEdit.data('description');
-                        var document = btnEdit.data('document');
+                        var doc_link = btnEdit.data('doc_link');
                         var date = btnEdit.data('date');
                         var modal = $(this);
                         modal.find('#name').val(name);
                         modal.find('#description').val(description);
-                        modal.find('#document').val(document);
+                        modal.find('#doc_link').val(doc_link);
                         modal.find('#date').val(date);
                     });
 

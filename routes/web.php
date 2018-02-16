@@ -629,7 +629,7 @@ Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
 
 // #Document setup module
-// Route::get('/hr/document', 'DocumentTypeController@viewDoc');
+ //Route::get('/hr/document', 'DocumentTypeController@viewDoc');
 // Route::post('/hr/document/add/doc_type', 'DocumentTypeController@addList');
 // Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
 // Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');

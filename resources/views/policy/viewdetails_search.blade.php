@@ -49,9 +49,11 @@
                                 <th> Employee Name</th>
                                 <th>Company</th>
                                 <th>Department</th>
-                                <th> Date Added</th>
-                                <th> Date Read</th>
-                                <th>Read Statuse</th>
+                                <th>Date Added</th>
+                                <th>Date Read</th>
+                                <th>Understood</th>
+                                <th>Not Understood</th>
+                                <th>Read but not sure</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -81,13 +83,13 @@
                                         nowrap>{{ (!empty( $policy->date_read )) ? date(' d M Y', $policy->date_read) : '' }}</td>
 
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->read_understood )) ? $readunderstood[$policy->read_understood] : ''}}
+                                        nowrap>{{ (!empty( $policy->read_understood )) ? 'Yes' : 'N/A'}}
                                     </td>
                                     <td style="vertical-align: middle;" nowrap>
-                                        {{ (!empty( $policy->read_not_understood )) ? $readntstood[$policy->read_not_understood] : ''}}
+                                        {{ (!empty( $policy->read_not_understood )) ? 'Yes' : 'N/A'}}
                                     </td>
                                     <td style="vertical-align: middle;" nowrap>
-                                        {{ (!empty( $policy->read_not_sure )) ? $readntsure[$policy->read_not_sure] : ''}}</td>
+                                        {{ (!empty( $policy->read_not_sure )) ? 'Yes' : 'N/A'}}</td>
                                     @endforeach
                                 </tr>
 
