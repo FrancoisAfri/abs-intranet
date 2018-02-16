@@ -44,24 +44,13 @@
                             <thead>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th style="vertical-align: middle; text-align: center;"></th>
                                 <th> Name</th>
-                                <th>Company</th>
-                                <th>Department</th>
                                 <th>Expiry Date</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($policyUsers as $policy)
                                 <tr>
-                                    <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-package-modal"
-                                                data-id="{{ $policy->id }}" data-name="{{ $policy->name }}"
-                                                data-description="{{$policy->description}}"><i
-                                                    class="fa fa-pencil-square-o"></i> Edit
-                                        </button>
-                                    </td>
                                     <td style="vertical-align: middle;" nowrap>
                                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
@@ -77,8 +66,6 @@
                                     </td>
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
-                                    <td></td>
-                                    <td></td>
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->date)) ?  date(' d M Y', $policy->date) : ''}}</td>
                                     @endforeach
@@ -88,10 +75,7 @@
                             <tfoot>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th style="vertical-align: middle; text-align: center;"></th>
                                 <th> Name</th>
-                                <th>Company</th>
-                                <th>Department</th>
                                 <th>Expiry Date</th>
                             </tr>
                             </tfoot>

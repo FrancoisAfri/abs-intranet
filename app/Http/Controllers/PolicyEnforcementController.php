@@ -61,8 +61,8 @@ class PolicyEnforcementController extends Controller
             ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Policy';
-        $data['active_rib'] = 'Policies';
+        $data['active_mod'] = 'Policy Enforcement';
+        $data['active_rib'] = 'Add Policy';
         $data['employees'] = $employees;
         $data['Policy'] = $Policy;
         $data['division_levels'] = $divisionLevels;
@@ -140,9 +140,6 @@ class PolicyEnforcementController extends Controller
             $policyUsers->user_id = $hrID->id;
             $policyUsers->policy_id = $policyID;
             $policyUsers->date_added = time();
-//            $policyUsers->read_not_understood = ;
-//            $policyUsers->read_understood = 0;
-//            $policyUsers->read_not_sure = 0;
             $policyUsers->status = 1;
             $policyUsers->save();
 
@@ -202,7 +199,7 @@ class PolicyEnforcementController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['policyUsers'] = $policyUsers;
         $data['active_mod'] = 'Policy Enforcement';
-        $data['active_rib'] = 'View Policies';
+        $data['active_rib'] = 'Add Policy';
         AuditReportsController::store('Policy Enforcement', 'View Policy Page Accessed', "Accessed By User", 0);
         return view('policy.users_list_access')->with($data);
     }
@@ -349,8 +346,8 @@ class PolicyEnforcementController extends Controller
         $data['policyUsers'] = $policyUsers;
         $data['policies'] = $policies;
         $data['policy'] = $policy;
-        $data['active_mod'] = 'Policy';
-        $data['active_rib'] = 'View Policies';
+        $data['active_mod'] = 'Policy Enforcement';
+        $data['active_rib'] = 'My Policies';
         $data['modules'] = $modules;
         $data['division_levels'] = $divisionLevels;
 
@@ -400,7 +397,7 @@ class PolicyEnforcementController extends Controller
             ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Policy';
+        $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Search Policies';
 
         AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
@@ -447,7 +444,7 @@ class PolicyEnforcementController extends Controller
             ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Policy';
+        $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Search Policies';
 
         AuditReportsController::store('Policy', 'Policy Document Search Page Accessed', "Accessed By User", 0);
@@ -469,7 +466,7 @@ class PolicyEnforcementController extends Controller
 
         $data['division_levels'] = $divisionLevels;
         $data['policy'] = $policy;
-        $data['active_mod'] = 'Policy';
+        $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Reports';
 
         AuditReportsController::store('Policy', 'Policy Reports Page Accessed', "Accessed By User", 0);
@@ -526,10 +523,7 @@ class PolicyEnforcementController extends Controller
             if (!empty($Policies))
                 $Policies = $Policies->load('policyUsers');
         }
-
-
-       
-      
+		
         $data['Policies'] = $Policies;
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -581,7 +575,7 @@ class PolicyEnforcementController extends Controller
         $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
 
-        $data['active_mod'] = 'Policy';
+        $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Reports';
 
         AuditReportsController::store('Policy', 'Policy View Details Page Accessed', "Accessed By User", 0);

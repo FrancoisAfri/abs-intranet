@@ -12,7 +12,7 @@
             <div class="box box-warning">
                 <div class="box-header with-border">
                     <i class="fa fa-leanpub pull-right"></i>
-                    <h3 class="box-title">View report for</h3>
+                    <h3 class="box-title">Report Search Criteria</h3>
                 </div>
                 <form class="form-horizontal" id="report_form" method="POST" action="/System/policy/reportsearch/">
                     {{ csrf_field() }}
@@ -33,32 +33,11 @@
                         <div class="col-md-8 col-md-offset-2">
                             <div>
                                 <div class="box-header with-border" align="center">
-                                    <h3 class="box-title">Search for a Vehicle</h3>
+                                    <h3 class="box-title">Search Criteria</h3>
                                 </div>
                                 <div class="box-body" id="vehicle_details">
-
-                                    @foreach($division_levels as $division_level)
-                                        <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                                            <label for="{{ 'division_level_' . $division_level->level }}"
-                                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
-                                            <div class="col-sm-10">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon">
-                                                        <i class="fa fa-black-tie"></i>
-                                                    </div>
-                                                    <select id="{{ 'division_level_' . $division_level->level }}"
-                                                            name="{{ 'division_level_' . $division_level->level }}"
-                                                            class="form-control"
-                                                            onchange="divDDOnChange(this, null, 'vehicle_details')">
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-
-                                    <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                                        <label for="hr_person_id" class="col-sm-2 control-label">Policy Name</label>
+                                    <div class="form-group {{ $errors->has('policy_name') ? ' has-error' : '' }}">
+                                        <label for="policy_name" class="col-sm-2 control-label">Policy Name</label>
                                         <div class="col-sm-10">
                                             <select class="form-control select2" style="width: 100%;" id="policy_name"
                                                     name="policy_name">
@@ -71,14 +50,11 @@
                                     </div>
 
                                     <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                                        <label for="days" class="col-sm-2 control-label">Action Date</label>
+                                        <label for="days" class="col-sm-2 control-label">Policy Date</label>
                                         <div class="col-sm-10">
                                             <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
                                                 <input type="text" class="form-control daterangepicker" id="action_date"
-                                                       name="action_date" value="" placeholder="Select Action Date...">
+                                                       name="action_date" value="" placeholder="Select Policy Date...">
 
                                             </div>
                                         </div>
