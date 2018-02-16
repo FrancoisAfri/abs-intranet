@@ -780,7 +780,7 @@ class ContactsController extends Controller
     public function addDocumets(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:contactsClientdocuments,name',
             'date_from' => 'required',
             'exp_date' => 'required',
             'supporting_docs' => 'required',

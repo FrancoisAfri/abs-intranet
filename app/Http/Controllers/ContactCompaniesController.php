@@ -979,7 +979,7 @@ class ContactCompaniesController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'date_from' => 'required',
+            'name' => 'required|unique:contactsCompanydocs,name',
             'exp_date' => 'required',
             'supporting_docs' => 'required',
         ]);
