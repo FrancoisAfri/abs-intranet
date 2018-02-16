@@ -82,6 +82,7 @@ class PolicyEnforcementController extends Controller
 			'name' => 'required|unique:policy,name',
             'description' => 'required',
             'date' => 'required',
+            'document' => 'required',
         ]);
         $policyData = $request->all();
         unset($policyData['_token']);
