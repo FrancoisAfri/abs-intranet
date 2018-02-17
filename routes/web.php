@@ -116,6 +116,9 @@ Route::get('System/policy/viewdetails/{policydetails}', 'PolicyEnforcementContro
 Route::post('System/policy/viewUsers', 'PolicyEnforcementController@viewpolicyUsers');
 Route::patch('System/policy/edit_policy/{policy}', 'PolicyEnforcementController@editPolicy');
 
+Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementController@viewuserdetails');
+Route::post('System/policy/print/{policydetails}', 'PolicyEnforcementController@viewuserprint');
+
 
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
