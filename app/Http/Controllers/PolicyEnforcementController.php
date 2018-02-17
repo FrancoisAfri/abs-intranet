@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Users;
 use App\Policy_users;
 use App\Policy;
+use App\CompanyIdentity;
 use App\DivisionLevelFive;
 use App\DivisionLevelFour;
 use App\DivisionLevelThree;
@@ -610,7 +611,8 @@ class PolicyEnforcementController extends Controller
 
     }
 
-    public function viewuserprint(Policy $policydetails){
+    public function viewuserprint(Policy $policydetails)
+    {
 
         $Policies = DB::table('policy_users')
             ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
@@ -634,6 +636,9 @@ class PolicyEnforcementController extends Controller
         $data['Policies'] = $Policies;
         $data['Policy'] = $Policy;
 
+//
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
 
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
@@ -644,9 +649,10 @@ class PolicyEnforcementController extends Controller
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Reports';
         $user = Auth::user()->load('person');
-        $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'Afrixcel Business Solution';
-        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['date'] = date("d-m-Y");
         AuditReportsController::store('Leave Management', 'Printed Leave Balance Report Results', "view Audit Results", 0);
         return view('policy.users_print')->with($data);

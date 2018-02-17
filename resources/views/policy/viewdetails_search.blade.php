@@ -159,7 +159,7 @@
         });
 
         $('#print').click(function () {
-            location.href = '/System/policy/viewuserdetails/{{ $Policy->id }}';
+            location.href = '/System/policy/print/{{ $Policy->id }}';
         });
 
 
