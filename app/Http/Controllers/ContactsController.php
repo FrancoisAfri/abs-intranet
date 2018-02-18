@@ -795,7 +795,7 @@ class ContactsController extends Controller
         $Expirydate = $clientdocData['exp_date'] = strtotime($clientdocData['exp_date']);
 
         $clientDoc = new contactsClientdocuments();
-        $clientDoc->document_name = $clientdocData['document_name'];
+        $clientDoc->document_name = $clientdocData['name'];
         $clientDoc->description = $clientdocData['description'];
         $clientDoc->date_from = $Datefrom;
         $clientDoc->expirydate = $Expirydate;
