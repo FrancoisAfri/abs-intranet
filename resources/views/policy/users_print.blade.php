@@ -68,10 +68,10 @@
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->Department )) ? $policy->Department : ''}}</td>
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->date_added )) ? $policy->date_added  : ''}}</td>
+                                        nowrap>{{ (!empty( $policy->date_added )) ? date('d M Y', $policy->date_added) : ''}}</td>
 
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->date_read )) ? date(' d M Y', $policy->date_read) : '' }}</td>
+                                        nowrap>{{ (!empty( $policy->date_read )) ? date('d M Y', $policy->date_read) : '' }}</td>
 
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->read_understood )) ? 'Yes' : 'N/A'}}
