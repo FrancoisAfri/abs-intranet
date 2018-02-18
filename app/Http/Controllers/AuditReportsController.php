@@ -41,9 +41,11 @@ class AuditReportsController extends Controller
         $data['active_mod'] = 'Audit';
         $data['active_rib'] = 'Audit Report';
 		
+		$modules = DB::table('security_modules')->where('active', 1)->orderBy('name', 'asc')->get();
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 		
 		$data['users'] = $users;
+		$data['modules'] = $modules;
 		AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
         return view('audit.audit_search')->with($data);
     }
