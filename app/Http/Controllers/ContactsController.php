@@ -766,6 +766,7 @@ class ContactsController extends Controller
         ];
 
         $documents = contactsClientdocuments::orderby('id', 'asc')->where('client_id', $personID)->get();
+        //return $documents;
 
         $data['person'] = $person;
         $data['documents'] = $documents;
@@ -780,7 +781,7 @@ class ContactsController extends Controller
     public function addDocumets(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:contactsClientdocuments,name',
+            //'name' => 'required|unique:contactsClientdocuments,name',
             'date_from' => 'required',
             'exp_date' => 'required',
             'supporting_docs' => 'required',
