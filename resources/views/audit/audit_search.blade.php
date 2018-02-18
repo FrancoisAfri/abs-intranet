@@ -31,12 +31,9 @@
 									</div>
 									<select class="form-control select2" style="width: 100%;" id="module_name" name="module_name">
                                         <option selected="selected" value="">*** Select a Module ***</option>
-                                            <option value="Audit">Audit</option>
-                                            <option value="Contacts">Contacts</option>
-                                            <option value="Employee Records">Employee Records</option>
-                                            <option value="Leave Management">Leave Management</option>
-                                            <option value="Performance Appraisal">Performance Appraisal</option>
-                                            <option value="Security">Security</option>
+                                            @foreach($modules as $module)
+                                                <option value="{{ $module->name }}">{{ $module->name }}</option>
+                                            @endforeach
                                     </select>
 								</div>
                             </div>
