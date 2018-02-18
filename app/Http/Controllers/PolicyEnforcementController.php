@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Users;
 use App\Policy_users;
 use App\Policy;
+use App\CompanyIdentity;
 use App\DivisionLevelFive;
 use App\DivisionLevelFour;
 use App\DivisionLevelThree;
@@ -79,7 +80,7 @@ class PolicyEnforcementController extends Controller
     {
         $this->validate($request, [
             'division_level_5' => 'required',
-			'name' => 'required|unique:policy,name',
+            'name' => 'required|unique:policy,name',
             'description' => 'required',
             'date' => 'required',
             'document' => 'required',
@@ -523,7 +524,7 @@ class PolicyEnforcementController extends Controller
             if (!empty($Policies))
                 $Policies = $Policies->load('policyUsers');
         }
-		
+
         $data['Policies'] = $Policies;
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -559,15 +560,6 @@ class PolicyEnforcementController extends Controller
         $PolicyID = $Policies->first()->policy_id;
         $Policy = Policy::where('id', $PolicyID)->first();
 
-         $readunderstood = array(0 => '', 1 => 'Read and Understood');
-        $readntstood = array(0 => '', 1 => 'Read and not Understood');
-        $readntsure = array(0 => '', 1 => 'Read but not Sure');
-        
-
-        $data['readunderstood'] = $readunderstood;
-        $data['readntstood'] = $readntstood;
-        $data['readntsure'] = $readntsure;
-
         $data['Policies'] = $Policies;
         $data['Policy'] = $Policy;
         $data['page_title'] = "Policy Enforcement System";
@@ -581,6 +573,89 @@ class PolicyEnforcementController extends Controller
         AuditReportsController::store('Policy', 'Policy View Details Page Accessed', "Accessed By User", 0);
         return view('policy.viewdetails_search')->with($data);
 
+    }
+
+    public function viewuserdetails(Policy $policydetails)
+    {
+        $Policies = DB::table('policy_users')
+            ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
+                'policy.description as policyDescription', 'policy.document as policyDoc',
+                'hr_people.first_name as firstname', 'hr_people.surname as surname',
+                'hr_people.division_level_5 as company', 'hr_people.division_level_4 as Department',
+                'division_level_fives.name as company', 'division_level_fours.name as Department'
+            )
+            ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
+            ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
+            ->leftJoin('division_level_fives', 'hr_people.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'hr_people.division_level_4', '=', 'division_level_fours.id')
+            ->where('policy_users.policy_id', $policydetails->id)
+            ->orderBy('policy_users.id')
+            ->limit(100)
+            ->get();
+
+        $PolicyID = $Policies->first()->policy_id;
+        $Policy = Policy::where('id', $PolicyID)->first();
+
+        $data['Policies'] = $Policies;
+        $data['Policy'] = $Policy;
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
+
+        $data['active_mod'] = 'Policy Enforcement';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Policy', 'Policy View Details Page Accessed', "Accessed By User", 0);
+        return view('policy.viewuserdetails')->with($data);
+
+    }
+
+    public function viewuserprint(Policy $policydetails)
+    {
+
+        $Policies = DB::table('policy_users')
+            ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
+                'policy.description as policyDescription', 'policy.document as policyDoc',
+                'hr_people.first_name as firstname', 'hr_people.surname as surname',
+                'hr_people.division_level_5 as company', 'hr_people.division_level_4 as Department',
+                'division_level_fives.name as company', 'division_level_fours.name as Department'
+            )
+            ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
+            ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
+            ->leftJoin('division_level_fives', 'hr_people.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'hr_people.division_level_4', '=', 'division_level_fours.id')
+            ->where('policy_users.policy_id', $policydetails->id)
+            ->orderBy('policy_users.id')
+            ->limit(100)
+            ->get();
+
+        $PolicyID = $Policies->first()->policy_id;
+        $Policy = Policy::where('id', $PolicyID)->first();
+
+        $data['Policies'] = $Policies;
+        $data['Policy'] = $Policy;
+
+//
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        $user = Auth::user()->load('person');
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        AuditReportsController::store('Leave Management', 'Printed Leave Balance Report Results', "view Audit Results", 0);
+        return view('policy.users_print')->with($data);
     }
 
     public function viewpolicyUsers(Request $request)

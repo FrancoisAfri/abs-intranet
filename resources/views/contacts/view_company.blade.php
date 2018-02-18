@@ -271,7 +271,8 @@
                             <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
                             <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Deactivate" : "Activate"}}</a>
                             <a href="{{ '/contacts/add-to-company/' . $company->id }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add Contact Person</a>
-                            <a href="/contacts/company/{{ $company->id }}/notes" class="btn btn-info "><i class="fa fa-phone-square"></i> Notes </a>  
+                            <a href="/contacts/company/{{ $company->id }}/notes" class="btn btn-info "><i class="fa fa-phone-square"></i> Notes </a>
+                            <a href="/contacts/{{ $company->id }}/viewcompanydocuments" class="btn btn-primary " ><i class="fa fa-clipboard"> </i> Company Document(s)</a>
                         @endif
                     </div>
                     <!-- /.box-footer -->

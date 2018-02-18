@@ -73,6 +73,14 @@ Route::post('contacts/search', 'ContactsController@getSearch');
 Route::post('contacts/search/print', 'ContactsController@printSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
 //Route::post('contacts/{user}/reset-random-pw', 'ContactsController@resetRandomPassword');
+//contacts Documents
+Route::get('contacts/{person}/viewdocuments', 'ContactsController@viewdocuments');
+Route::post('contacts/add_document', 'ContactsController@addDocumets');
+Route::get('contacts/clientdoc_act/{document}', 'ContactsController@clientdocAct');
+Route::get('contacts/clientdoc/{document}/delete', 'ContactsController@deleteClientDoc');
+Route::patch('contacts/editClientdoc/{document}', 'ContactsController@editClientdoc');
+
+
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');
 Route::post('contacts/send-message', 'ContactsController@sendMessage');
@@ -107,6 +115,9 @@ Route::post('System/policy/reportsearch', 'PolicyEnforcementController@reportsea
 Route::get('System/policy/viewdetails/{policydetails}', 'PolicyEnforcementController@viewdetails');
 Route::post('System/policy/viewUsers', 'PolicyEnforcementController@viewpolicyUsers');
 Route::patch('System/policy/edit_policy/{policy}', 'PolicyEnforcementController@editPolicy');
+
+Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementController@viewuserdetails');
+Route::get('System/policy/print/{policydetails}', 'PolicyEnforcementController@viewuserprint');
 
 
 //#Leave Management
@@ -192,6 +203,16 @@ Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@ac
 Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
 Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
 Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
+//#CompanyNotes
+Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
+
+//#CompanyDocuments
+Route::get('contacts/{company}/viewcompanydocuments', 'ContactCompaniesController@viewdocumets');
+Route::post('contacts/add_companydocument', 'ContactCompaniesController@addCompanyDoc');
+Route::get('contacts/companydoc/{document}/delete', 'ContactCompaniesController@deleteCompanyDoc');
+Route::get('contacts/companydoc_act/{document}', 'ContactCompaniesController@companydocAct');
+Route::patch('contacts/edit_companydoc/{company}', 'ContactCompaniesController@editCompanydoc');
+
 //#reports
 Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
 Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
@@ -541,6 +562,7 @@ Route::get('vehicle_management/vehicle_reports', 'VehicleReportsController@index
 Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
   // ***************
+Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 
 // Performance Appraisals Module

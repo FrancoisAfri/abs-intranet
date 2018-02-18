@@ -8,6 +8,7 @@ use App\ContactPerson;
 use App\ContactsCommunication;
 use App\Country;
 use App\public_reg;
+use App\contactsClientdocuments;
 use App\Mail\ConfirmRegistration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,11 +30,13 @@ use Illuminate\Support\Facades\Hash;
 
 class ContactsController extends Controller
 {
-	public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
-	}
-    public function index() {
+    }
+
+    public function index()
+    {
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
 
@@ -47,18 +50,18 @@ class ContactsController extends Controller
         $data['active_rib'] = 'search clients';
         $data['companies'] = $companies;
         $data['provinces'] = $provinces;
-		AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
+        AuditReportsController::store('Clients', 'Clients Search Page Accessed', "Actioned By User", 0);
         return view('contacts.search_contact')->with($data);
     }
 
-    public function reports(){
+    public function reports()
+    {
 
         //$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->get();
-       // return $employees;
+        // return $employees;
 
-          $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
-       
+        $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
 
 
         $data['page_title'] = "Induction";
@@ -72,7 +75,7 @@ class ContactsController extends Controller
         $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'report';
         $data['companies'] = $companies;
-        
+
         $data['employees'] = $employees;
         AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
         return view('contacts.contacts_report_index')->with($data);
@@ -80,17 +83,18 @@ class ContactsController extends Controller
     }
 
 
-    public function create($companyID = null) {
+    public function create($companyID = null)
+    {
 
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
         $orgTypes = [1 => 'Private Company', 2 => 'Parastatal', 3 => 'School', 4 => 'Government', 5 => 'Other'];
         $companies = ContactCompany::where('status', 1)
-            ->where(function ($query) use($companyID) {
+            ->where(function ($query) use ($companyID) {
                 if ($companyID) $query->where('id', $companyID);
             })
             ->orderBy('name')->get();
         $data['companies'] = $companies;
-		$data['page_title'] = "Contacts";
+        $data['page_title'] = "Contacts";
         $data['page_description'] = "Add a New Contact";
         $data['breadcrumb'] = [
             ['title' => 'Contacts', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
@@ -101,11 +105,13 @@ class ContactsController extends Controller
         $data['companyID'] = $companyID;
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Add Client';
-		//die('what');
-		AuditReportsController::store('Contacts', 'Contacts Contact Page Accessed', "Actioned By User", 0);
+        //die('what');
+        AuditReportsController::store('Contacts', 'Contacts Contact Page Accessed', "Actioned By User", 0);
         return view('contacts.add_contact')->with($data);
     }
-	public function addContact() {
+
+    public function addContact()
+    {
 
         $data['page_title'] = "Contact";
         $data['page_description'] = "Add a New Contact";
@@ -115,12 +121,13 @@ class ContactsController extends Controller
         ];
         $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'Contact';
-		$data['contact_type'] = 1; //Contacts
-		AuditReportsController::store('Contacts', 'Contacts Contact Page Accessed', "Actioned By User", 0);
+        $data['contact_type'] = 1; //Contacts
+        AuditReportsController::store('Contacts', 'Contacts Contact Page Accessed', "Actioned By User", 0);
         return view('contacts.general_meeting')->with($data);
     }
-	
-	public function educatorRegistration() {
+
+    public function educatorRegistration()
+    {
         $data['page_title'] = "Educator Registration";
         $data['page_description'] = "Add a New Educator Registration";
         $data['breadcrumb'] = [
@@ -128,13 +135,15 @@ class ContactsController extends Controller
             ['title' => 'Educator Registration', 'active' => 1, 'is_module' => 0]
         ];
 
-		$ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
-		$data['ethnicities'] = $ethnicities;
+        $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
+        $data['ethnicities'] = $ethnicities;
         $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'Educator Registration';
         return view('contacts.educator_registration')->with($data);
     }
-	public function learnerRegistration() {
+
+    public function learnerRegistration()
+    {
         $data['page_title'] = "Learner registration";
         $data['page_description'] = "Add a New Learner registration";
         $data['breadcrumb'] = [
@@ -142,13 +151,15 @@ class ContactsController extends Controller
             ['title' => 'Learner registration', 'active' => 1, 'is_module' => 0]
         ];
 
-		$ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
-		$data['ethnicities'] = $ethnicities;
+        $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
+        $data['ethnicities'] = $ethnicities;
         $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'Learner registration';
         return view('contacts.learner_registration')->with($data);
     }
-    public function store(Request $request) {
+
+    public function store(Request $request)
+    {
         $this->validate($request, [
             'first_name' => 'required',
             'surname' => 'required',
@@ -171,7 +182,7 @@ class ContactsController extends Controller
         $person->status = 1;
         if (!empty($request->company_id)) $person->company_id = $request->company_id;
 
-        $createLogin = (int) $request->input('create_login');
+        $createLogin = (int)$request->input('create_login');
         if ($createLogin === 1) {
             //save user details
             $user = new User;
@@ -190,19 +201,19 @@ class ContactsController extends Controller
         } else $person->save(); //save ContactPerson without login details
 
         //Notify admin about the new applicant
-       /* $administrators = HRPerson::where('position', 2)->get();
-        foreach ($administrators as $admin) {
-            Mail::to("$admin->email")->send(new NewClientAdminNotification($admin, $user->id));
-        }
-*/
+        /* $administrators = HRPerson::where('position', 2)->get();
+         foreach ($administrators as $admin) {
+             Mail::to("$admin->email")->send(new NewClientAdminNotification($admin, $user->id));
+         }
+ */
         //Redirect to all usr view
-		AuditReportsController::store('Contacts', 'New Contact Added', "Contact Successfully added", 0);
+        AuditReportsController::store('Contacts', 'New Contact Added', "Contact Successfully added", 0);
         return redirect("/contacts/$person->id/edit")->with('success_add', "The contact has been added successfully.");
     }
     /*public function addToCompany(Request $request, $companyID) {
         return $this->store($request, $companyID);
     }*/
-	
+
     /*public function edit(ContactPerson $contact) {
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
         $orgTypes = [1 => 'Private Company', 2 => 'Parastatal', 3 => 'School', 4 => 'Government', 5 => 'Other'];
@@ -221,8 +232,9 @@ class ContactsController extends Controller
 		AuditReportsController::store('Contacts', 'Contact Edited', "Contact On Edit Mode", 0);
         return view('contacts.view_contact')->with($data);
     }*/
-	public function edit(ContactPerson $person) {
-	    $loggedInUser = Auth::user();
+    public function edit(ContactPerson $person)
+    {
+        $loggedInUser = Auth::user();
         $person->load('user', 'company');
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
@@ -235,7 +247,7 @@ class ContactsController extends Controller
         $data['page_description'] = "View/Update client details";
         $data['back'] = "/contacts";
         $data['view_by_admin'] = 1;
-		
+
         $data['division_levels'] = $divisionLevels;
         $data['contactPerson'] = $person;
         $data['avatar'] = $person->profile_pic_url;
@@ -246,20 +258,22 @@ class ContactsController extends Controller
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Client details', 'active' => 1, 'is_module' => 0]
         ];
-		$data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'search clients';
         $data['companies'] = $companies;
         $data['canDeleteAndActivate'] = $canDeleteAndActivate;
         $data['view_by_admin'] = 1;
-		AuditReportsController::store('Contacts', 'Contact Edited', "Contact On Edit Mode", 0);
+        AuditReportsController::store('Contacts', 'Contact Edited', "Contact On Edit Mode", 0);
         return view('contacts.view_contact')->with($data);
     }
-    
-    public function profile() {
+
+    public function profile()
+    {
         $user = Auth::user()->load('person');
         $person = $user->person;
         return $this->edit($person);
     }
+
     /*
     public function profile() {
         $user = Auth::user()->load('person');
@@ -284,22 +298,23 @@ class ContactsController extends Controller
         return view('contacts.view_contact')->with($data);
     }
     */
-	public function emailAdmin(Request $request) {
-		$emails = $request->all();
-		$message  = $emails['message'];
+    public function emailAdmin(Request $request)
+    {
+        $emails = $request->all();
+        $message = $emails['message'];
         $user = Auth::user()->load('person');
-		//return $user;
-		$senderName = $user->person->first_name." ".$user->person->surname;
-		$senderEmail = $user->person->email;
-		$adminUser = DB::table('hr_people')->where('position', 2)->orderBy('id', 'asc')->get();
-		foreach($adminUser as $admin)
-		{
-			Mail::to($admin->email)->send(new AdminEmail($admin->first_name, $senderName, $message, $senderEmail));
-		}
-		AuditReportsController::store('Contacts', 'New Email Sent', "Email Sent To Admin", 0);
+        //return $user;
+        $senderName = $user->person->first_name . " " . $user->person->surname;
+        $senderEmail = $user->person->email;
+        $adminUser = DB::table('hr_people')->where('position', 2)->orderBy('id', 'asc')->get();
+        foreach ($adminUser as $admin) {
+            Mail::to($admin->email)->send(new AdminEmail($admin->first_name, $senderName, $message, $senderEmail));
+        }
+        AuditReportsController::store('Contacts', 'New Email Sent', "Email Sent To Admin", 0);
         //return view('contacts.view_contact')->with($data);
-		return redirect('/');
+        return redirect('/');
     }
+
     /*public function update(Request $request, ContactPerson $contact) {
         $this->validate($request, [
             'first_name' => 'required',
@@ -345,8 +360,9 @@ class ContactsController extends Controller
         //Redirect to all usr view
         return redirect("/contacts/$contact->id/edit")->with('success_edit', "The contact details have been updated successfully.");
     }*/
-	
-	public function update(Request $request, ContactPerson $contactPerson) {
+
+    public function update(Request $request, ContactPerson $contactPerson)
+    {
         //exclude token, method and command fields from query.
         $person = $request->all();
         unset($person['_token'], $person['_method'], $person['command']);
@@ -367,37 +383,37 @@ class ContactsController extends Controller
 
         //convert numeric values to numbers
         if (isset($person['res_postal_code'])) {
-            $person['res_postal_code'] = (int) $person['res_postal_code'];
+            $person['res_postal_code'] = (int)$person['res_postal_code'];
         }
         if (isset($person['res_province_id'])) {
-            $person['res_province_id'] = (int) $person['res_province_id'];
+            $person['res_province_id'] = (int)$person['res_province_id'];
         }
         if (isset($person['gender'])) {
-            $person['gender'] = (int) $person['gender'];
+            $person['gender'] = (int)$person['gender'];
         }
         if (isset($person['id_number'])) {
-            $person['id_number'] = (int) $person['id_number'];
+            $person['id_number'] = (int)$person['id_number'];
         }
         if (isset($person['marital_status'])) {
-            $person['marital_status'] = (int) $person['marital_status'];
+            $person['marital_status'] = (int)$person['marital_status'];
         }
         if (isset($person['ethnicity'])) {
-            $person['ethnicity'] = (int) $person['ethnicity'];
+            $person['ethnicity'] = (int)$person['ethnicity'];
         }
-         if (isset($person['division_level_5'])) {
-            $person['division_level_5'] = (int) $person['division_level_5'];
+        if (isset($person['division_level_5'])) {
+            $person['division_level_5'] = (int)$person['division_level_5'];
         }
         if (isset($person['division_level_4'])) {
-            $person['division_level_4'] = (int) $person['division_level_4'];
+            $person['division_level_4'] = (int)$person['division_level_4'];
         }
         if (isset($person['division_level_3'])) {
-            $person['division_level_3'] = (int) $person['division_level_3'];
+            $person['division_level_3'] = (int)$person['division_level_3'];
         }
         if (isset($person['division_level_2'])) {
-            $person['division_level_2'] = (int) $person['division_level_2'];
+            $person['division_level_2'] = (int)$person['division_level_2'];
         }
         if (isset($person['division_level_1'])) {
-            $person['division_level_1'] = (int) $person['division_level_1'];
+            $person['division_level_1'] = (int)$person['division_level_1'];
         }
 
         //convert date of birth to unix time stamp
@@ -421,11 +437,13 @@ class ContactsController extends Controller
                 $contactPerson->update(['profile_pic' => $fileName]);
             }
         }
-		AuditReportsController::store('Contacts', 'Record Updated', "Updated By User", 0);
+        AuditReportsController::store('Contacts', 'Record Updated', "Updated By User", 0);
         //return to the edit page
         return back();
     }
-    public function getSearch(Request $request, $print = false) {
+
+    public function getSearch(Request $request, $print = false)
+    {
         $personName = trim($request->person_name);
         $personIDNum = trim($request->id_number);
         $personPassportNum = trim($request->passport_number);
@@ -434,39 +452,39 @@ class ContactsController extends Controller
         $provinceID = $request->res_province_id;
         $provinceName = $request->res_province_name;
 
-		$persons = ContactPerson::
-		where(function ($query) use ($personName) {
-			if (!empty($personName)) {
-				$query->where('first_name', 'ILIKE', "%$personName%");
-				$query->orWhere('surname', 'ILIKE', "%$personName%");
-			}
-		})
-		->where(function ($query) use ($personIDNum) {
-			if (!empty($personIDNum)) {
-				$query->where('id_number', 'ILIKE', "%$personIDNum%");
-			}
-		})
-		->where(function ($query) use ($personPassportNum) {
-			if (!empty($personPassportNum)) {
-				$query->where('passport_number', 'ILIKE', "%$personPassportNum%");
-			}
-		})
-		->where(function ($query) use ($provinceID) {
-			if (!empty($provinceID)) {
-				$query->where('res_province_id', $provinceID);
-			}
-		})
-		->where(function ($query) use ($personCompanyID) {
-			if (!empty($personCompanyID)) {
-				$query->where('company_id', $personCompanyID);
-			}
-		})
-		->orderBy('first_name')
-		->orderBy('surname')
-		//->limit(100)
-        ->with('company')
-		->get();
-			
+        $persons = ContactPerson::
+        where(function ($query) use ($personName) {
+            if (!empty($personName)) {
+                $query->where('first_name', 'ILIKE', "%$personName%");
+                $query->orWhere('surname', 'ILIKE', "%$personName%");
+            }
+        })
+            ->where(function ($query) use ($personIDNum) {
+                if (!empty($personIDNum)) {
+                    $query->where('id_number', 'ILIKE', "%$personIDNum%");
+                }
+            })
+            ->where(function ($query) use ($personPassportNum) {
+                if (!empty($personPassportNum)) {
+                    $query->where('passport_number', 'ILIKE', "%$personPassportNum%");
+                }
+            })
+            ->where(function ($query) use ($provinceID) {
+                if (!empty($provinceID)) {
+                    $query->where('res_province_id', $provinceID);
+                }
+            })
+            ->where(function ($query) use ($personCompanyID) {
+                if (!empty($personCompanyID)) {
+                    $query->where('company_id', $personCompanyID);
+                }
+            })
+            ->orderBy('first_name')
+            ->orderBy('surname')
+            //->limit(100)
+            ->with('company')
+            ->get();
+
         $data['page_title'] = "Clients";
         $data['page_description'] = "List of clients found";
         $data['personName'] = $personName;
@@ -484,33 +502,34 @@ class ContactsController extends Controller
         ];
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Search Clients';
-		AuditReportsController::store('Contacts', 'Contact Search Results Accessed', "Search Results Accessed", 0);
+        AuditReportsController::store('Contacts', 'Contact Search Results Accessed', "Search Results Accessed", 0);
 
-		if ($print) {
+        if ($print) {
             $data['report_name'] = 'Contacts Search Result';
             $data['user'] = Auth::user()->load('person');
             $data['company_logo'] = CompanyIdentity::systemSettings()['company_logo_url'];
             $data['date'] = Carbon::now()->format('d/m/Y');
 
-		    return view('contacts.print_contacts')->with($data);
-		}
-        else return view('contacts.contacts')->with($data);
+            return view('contacts.print_contacts')->with($data);
+        } else return view('contacts.contacts')->with($data);
     }
+
     public function printSearch(Request $request)
     {
         return $this->getSearch($request, true);
     }
 
-    public function updatePassword(Request $request, User $user) {
+    public function updatePassword(Request $request, User $user)
+    {
         //return response()->json(['message' => $request['current_password']]);
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'current_password' => 'required',
             'new_password' => 'bail|required|min:6',
             'confirm_password' => 'bail|required|same:new_password'
         ]);
 
-        $validator->after(function($validator) use ($request, $user){
+        $validator->after(function ($validator) use ($request, $user) {
             $userPW = $user->password;
 
             if (!(Hash::check($request['current_password'], $userPW))) {
@@ -524,7 +543,7 @@ class ContactsController extends Controller
         $newPassword = $request['new_password'];
         $user->password = Hash::make($newPassword);
         $user->update();
-		AuditReportsController::store('Contacts', 'Contact Password Updated', "Password Updated", 0);
+        AuditReportsController::store('Contacts', 'Contact Password Updated', "Password Updated", 0);
         return response()->json(['success' => 'Password updated successfully.'], 200);
     }
 
@@ -565,7 +584,8 @@ class ContactsController extends Controller
         }
     }
 
-    public function createLoginDetails(ContactPerson $person) {
+    public function createLoginDetails(ContactPerson $person)
+    {
         //save user details
         $user = new User;
         $user->email = $person->email;
@@ -602,12 +622,12 @@ class ContactsController extends Controller
 
     public function sendMessageIndex()
     {
-        $contactPersons =DB::table('contacts_contacts')
-							->select('contacts_contacts.*', 'contact_companies.name as comp_name')
+        $contactPersons = DB::table('contacts_contacts')
+            ->select('contacts_contacts.*', 'contact_companies.name as comp_name')
             ->leftJoin('contact_companies', 'contacts_contacts.company_id', '=', 'contact_companies.id')
-			->where('contacts_contacts.status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+            ->where('contacts_contacts.status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
 
-		$data['page_title'] = "Client Communication";
+        $data['page_title'] = "Client Communication";
         $data['page_description'] = "Send a Message To Your Clients";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
@@ -625,109 +645,241 @@ class ContactsController extends Controller
     {
         $this->validate($request, [
             'clients.*' => 'required',
-			'message_type' => 'required',  
-			'email_content' => 'bail|required_if:message_type,1',
+            'message_type' => 'required',
+            'email_content' => 'bail|required_if:message_type,1',
             'sms_content' => 'bail|required_if:message_type,2|max:180',
         ]);
-		
-		$CommunicationData = $request->all();
-        unset($CommunicationData['_token']);
-		//return $CommunicationData;
-		# Save email
-		$user = Auth::user();
-		
-		foreach ($CommunicationData['clients'] as $clientID) {
-			$ContactsCommunication = new ContactsCommunication;
-			$ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
-			$ContactsCommunication->communication_type = $CommunicationData['message_type'];
-			$ContactsCommunication->contact_id = $clientID;
-			$ContactsCommunication->status = 1;
-			$ContactsCommunication->sent_by = $user->id;
-			$ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
-			$ContactsCommunication->save();
-			$client = ContactPerson::where('id', $clientID)->first();
-			if ($CommunicationData['message_type'] == 1 && !empty($client->email))
-				# Send Email to Client
-				Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication));
-		}
-		if ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
-		{
-			foreach ($CommunicationData['clients'] as $clientID) {
-				$mobileArray[] = $this->formatCellNo($client->cell_number);;
-			}
-			#format cell numbers
-			# send out the message
-			$CommunicationData['sms_content'] = str_replace("<br>","",$CommunicationData['sms_content']);
-			$CommunicationData['sms_content'] = str_replace(">","-",$CommunicationData['sms_content']);
-			$CommunicationData['sms_content'] = str_replace("<","-",$CommunicationData['sms_content']);
-			BulkSMSController::send($mobileArray, $CommunicationData['sms_content']);
-		}
-		AuditReportsController::store('Contacts', 'Client Communication Set', "Message: $ContactsCommunication->message", 0);
-		return redirect("/contacts/send-message")->with('success_sent', "Communication Successfully Sent to Client");
-	}
 
-    public function setup() {
-		$data['page_title'] = "Contacts Setup";
+        $CommunicationData = $request->all();
+        unset($CommunicationData['_token']);
+        //return $CommunicationData;
+        # Save email
+        $user = Auth::user();
+
+        foreach ($CommunicationData['clients'] as $clientID) {
+            $ContactsCommunication = new ContactsCommunication;
+            $ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
+            $ContactsCommunication->communication_type = $CommunicationData['message_type'];
+            $ContactsCommunication->contact_id = $clientID;
+            $ContactsCommunication->status = 1;
+            $ContactsCommunication->sent_by = $user->id;
+            $ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
+            $ContactsCommunication->save();
+            $client = ContactPerson::where('id', $clientID)->first();
+            if ($CommunicationData['message_type'] == 1 && !empty($client->email))
+                # Send Email to Client
+                Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication));
+        }
+        if ($CommunicationData['message_type'] == 2 && !empty($client->cell_number)) {
+            foreach ($CommunicationData['clients'] as $clientID) {
+                $mobileArray[] = $this->formatCellNo($client->cell_number);;
+            }
+            #format cell numbers
+            # send out the message
+            $CommunicationData['sms_content'] = str_replace("<br>", "", $CommunicationData['sms_content']);
+            $CommunicationData['sms_content'] = str_replace(">", "-", $CommunicationData['sms_content']);
+            $CommunicationData['sms_content'] = str_replace("<", "-", $CommunicationData['sms_content']);
+            BulkSMSController::send($mobileArray, $CommunicationData['sms_content']);
+        }
+        AuditReportsController::store('Contacts', 'Client Communication Set', "Message: $ContactsCommunication->message", 0);
+        return redirect("/contacts/send-message")->with('success_sent', "Communication Successfully Sent to Client");
+    }
+
+    public function setup()
+    {
+        $data['page_title'] = "Contacts Setup";
         $data['page_description'] = "Contacts set up ";
         $data['breadcrumb'] = [
-            ['title' => 'Contacts', 'path' => '/contacts/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Contacts', 'path' => '/contacts/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
-		$SmSConfiguration = SmS_Configuration::first();
-		$data['active_mod'] = 'contacts';
+        $SmSConfiguration = SmS_Configuration::first();
+        $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'setup';
         $data['SmSConfiguration'] = $SmSConfiguration;
-		//return $SmSConfiguration;
+        //return $SmSConfiguration;
         AuditReportsController::store('Contacts', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('contacts.setup')->with($data);
-	}
-	
-	public function saveSetup(Request $request)
+    }
+
+    public function saveSetup(Request $request)
     {
         $this->validate($request, [
             'sms_provider' => 'required',
             'sms_username' => 'required',
             'sms_password' => 'required',
         ]);
-		
-		$smsData = $request->all();
+
+        $smsData = $request->all();
         unset($smsData['_token']);
 
-		$SmSConfiguration = new SmS_Configuration;
+        $SmSConfiguration = new SmS_Configuration;
         $SmSConfiguration->sms_provider = $smsData['sms_provider'];
-		$SmSConfiguration->sms_username = $smsData['sms_username'];
+        $SmSConfiguration->sms_username = $smsData['sms_username'];
         $SmSConfiguration->sms_password = $smsData['sms_password'];
         $SmSConfiguration->save();
-		AuditReportsController::store('Contacts', 'SMS Setup Saved', "Actioned By User", 0);
+        AuditReportsController::store('Contacts', 'SMS Setup Saved', "Actioned By User", 0);
         return redirect('/contacts/setup');
     }
-	public function updateSMS(Request $request, SmS_Configuration $smsConfiguration)
+
+    public function updateSMS(Request $request, SmS_Configuration $smsConfiguration)
     {
         $this->validate($request, [
             'sms_provider' => 'required',
             'sms_username' => 'required',
             'sms_password' => 'required',
         ]);
-		$smsData = $request->all();
+        $smsData = $request->all();
         unset($smsData['_token']);
 
         $smsConfiguration->sms_provider = $smsData['sms_provider'];
-		$smsConfiguration->sms_username = $smsData['sms_username'];
+        $smsConfiguration->sms_username = $smsData['sms_username'];
         $smsConfiguration->sms_password = $smsData['sms_password'];
         $smsConfiguration->update();
-		AuditReportsController::store('Contacts', 'SMS Setup Updated', "Actioned By User", 0);
+        AuditReportsController::store('Contacts', 'SMS Setup Updated', "Actioned By User", 0);
         return redirect('/contacts/setup');
     }
-	function formatCellNo($sCellNo)
-	{
-		# Remove the following characters from the phone number
-		$cleanup_chr = array ("+", " ", "(", ")", "\r", "\n", "\r\n");
 
-		# clean phone number
-		$sCellNo = str_replace($cleanup_chr, '', $sCellNo);
+    function formatCellNo($sCellNo)
+    {
+        # Remove the following characters from the phone number
+        $cleanup_chr = array("+", " ", "(", ")", "\r", "\n", "\r\n");
 
-		#Internationalise  the number
-		if($sCellNo{0} == "0" ) $sCellNo = "27" . substr($sCellNo, 1);
+        # clean phone number
+        $sCellNo = str_replace($cleanup_chr, '', $sCellNo);
 
-		return $sCellNo;
-	}
+        #Internationalise  the number
+        if ($sCellNo{0} == "0") $sCellNo = "27" . substr($sCellNo, 1);
+
+        return $sCellNo;
+    }
+
+    public function viewdocuments(ContactPerson $person)
+    {
+
+        //return $person;
+        $personID = $person->id;
+
+        $data['page_title'] = "Contacts Setup";
+        $data['page_description'] = "Contacts set up ";
+        $data['breadcrumb'] = [
+            ['title' => 'Contacts', 'path' => '/contacts/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $documents = contactsClientdocuments::orderby('id', 'asc')->where('client_id', $personID)->get();
+
+        $data['person'] = $person;
+        $data['documents'] = $documents;
+        $data['personID'] = $personID;
+        $data['active_mod'] = 'contacts';
+        $data['active_rib'] = 'setup';
+        //return $SmSConfiguration;
+        AuditReportsController::store('Contacts', 'Setup Search Page Accessed', "Actioned By User", 0);
+        return view('contacts.mydocuments')->with($data);
+    }
+
+    public function addDocumets(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|unique:contactsClientdocuments,name',
+            'date_from' => 'required',
+            'exp_date' => 'required',
+            'supporting_docs' => 'required',
+        ]);
+        $clientdocData = $request->all();
+        unset($clientdocData['_token']);
+
+        $Datefrom = $clientdocData['date_from'] = str_replace('/', '-', $clientdocData['date_from']);
+        $Datefrom = $clientdocData['date_from'] = strtotime($clientdocData['date_from']);
+
+        $Expirydate = $clientdocData['exp_date'] = str_replace('/', '-', $clientdocData['exp_date']);
+        $Expirydate = $clientdocData['exp_date'] = strtotime($clientdocData['exp_date']);
+
+        $clientDoc = new contactsClientdocuments();
+        $clientDoc->document_name = $clientdocData['name'];
+        $clientDoc->description = $clientdocData['description'];
+        $clientDoc->date_from = $Datefrom;
+        $clientDoc->expirydate = $Expirydate;
+        $clientDoc->client_id = $clientdocData['clientID'];
+        $clientDoc->status = 1;
+        $clientDoc->save();
+
+        //Upload supporting document
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $clientDoc->id . "_client_documents." . $fileExt;
+                $request->file('supporting_docs')->storeAs('ContactClient/client_documents', $fileName);
+                //Update file name in the table
+                $clientDoc->supporting_docs = $fileName;
+                $clientDoc->update();
+            }
+        }
+
+
+        AuditReportsController::store('Contacts', 'Create Client Document ', "Client Document Created", 0);
+        return response()->json();
+    }
+
+    public function editClientdoc(Request $request, contactsClientdocuments $document)
+    {
+        $this->validate($request, [
+//            'name' => 'required|unique:contactsClientdocuments,name',
+//            'date_from' => 'required',
+//            'exp_date' => 'required',
+//            'supporting_docs' => 'required',
+        ]);
+        $clientdocData = $request->all();
+        unset($clientdocData['_token']);
+
+        $Datefrom = $clientdocData['date_from'] = str_replace('/', '-', $clientdocData['date_from']);
+        $Datefrom = $clientdocData['date_from'] = strtotime($clientdocData['date_from']);
+
+        $Expirydate = $clientdocData['expirydate'] = str_replace('/', '-', $clientdocData['expirydate']);
+        $Expirydate = $clientdocData['expirydate'] = strtotime($clientdocData['expirydate']);
+
+        $document->document_name = $clientdocData['document_name'];
+        $document->description = $clientdocData['description'];
+        $document->date_from = $Datefrom;
+        $document->expirydate = $Expirydate;
+        $document->client_id = $clientdocData['clientID'];
+        $document->status = 1;
+        $document->save();
+
+        //Upload supporting document
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = $document->id . "_client_documents." . $fileExt;
+                $request->file('supporting_docs')->storeAs('ContactClient/client_documents', $fileName);
+                //Update file name in the table
+                $document->supporting_docs = $fileName;
+                $document->update();
+            }
+        }
+
+
+        AuditReportsController::store('Contacts', ' Client Document Updated ', "Client Document Updated", 0);
+        return response()->json();
+    }
+
+    public function clientdocAct(Request $request, contactsClientdocuments $document)
+    {
+        if ($document->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $document->status = $stastus;
+        $document->update();
+        return back();
+    }
+
+    public function deleteClientDoc(contactsClientdocuments $document)
+    {
+        $document->delete();
+
+        AuditReportsController::store('Contacts', 'Client Document  Deleted', "Client Document Deleted", 0);
+        return back();
+    }
+
 }

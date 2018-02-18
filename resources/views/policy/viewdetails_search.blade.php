@@ -18,12 +18,13 @@
 
                     <div class="box-header with-border">
                         <h3 class="box-title">Policy Users For - {{$Policy->name}} </h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                        class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
-                                        class="fa fa-remove"></i></button>
-                        </div>
+                        {{--<button type="button" class="btn btn-default pull-right" id="access_button"--}}
+                                {{--onclick="postData({{$Policy->id}}, 'access');"><i class="fa fa-print"></i> Print--}}
+                        {{--</button>--}}
+
+                        <button type="button" class="btn btn-default pull-right" id="print"><i class="fa fa-print"></i> Print</button>
+
+
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -102,7 +103,9 @@
                                 <th>Department</th>
                                 <th> Date Added</th>
                                 <th> Date Read</th>
-                                <th>Read Statuse</th>
+                                <th>Understood</th>
+                                <th>Not Understood</th>
+                                <th>Read but not sure</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -113,6 +116,7 @@
                         <button type="submit" class="btn btn-primary pull-right"><i
                                     class="fa fa-envelope-square"></i> Send Email
                         </button>
+
                     </div>
 
                 </form>
@@ -154,15 +158,18 @@
             location.href = '/System/policy/reports';
         });
 
-        http://localhost:8000/System/policy/reportsearch/
+        $('#print').click(function () {
+            location.href = '/System/policy/print/{{ $Policy->id }}';
+        });
 
-        function toggle(source) {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            for (var i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i] != source)
-                    checkboxes[i].checked = source.checked;
+
+            function toggle(source) {
+                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i] != source)
+                        checkboxes[i].checked = source.checked;
+                }
             }
-        }
 
         //
         function checkAllboxAccept() {
@@ -223,10 +230,13 @@
                 $('.modal:visible').each(reposition);
             });
 
+            function postData(id, data) {
+                if (data == 'access_button') location.href = "/leave/approval/" + id;
+            }
             //Show success action modal
             @if(Session('changes_saved'))
             $('#success-action-modal').modal('show');
             @endif
         });
     </script>
-@endsection                                                                                                  
+@endsection
