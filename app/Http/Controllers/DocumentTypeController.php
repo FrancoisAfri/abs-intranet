@@ -17,7 +17,8 @@ class DocumentTypeController extends Controller {
     }
 
     public function viewDoc() {
-        $doc_type = DB::table('doc_type')->orderBy('name', 'description')->get();
+		die;
+        $doc_types = DB::table('doc_type')->orderBy('name', 'description')->get();
         //$docs = doc_type::where('status', 1)->get();
         $doc_type_category = DB::table('doc_type_category')->orderBy('name', 'description')->get();
         $data['page_title'] = "List Categories";
@@ -26,7 +27,7 @@ class DocumentTypeController extends Controller {
                 ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
-
+		return $doc_types;
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'document type';
         $data['doc_type'] = $doc_type;
@@ -76,6 +77,7 @@ class DocumentTypeController extends Controller {
     }
 
     public function viewCategory() {
+		
         $doc_type = DB::table('doc_type')->orderBy('name', 'description')->get();
         $doc_type_category = DB::table('doc_type_category')->orderBy('name', 'description')->get();
         $data['page_title'] = "List Documents";

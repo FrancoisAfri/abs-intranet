@@ -81,7 +81,7 @@ class HrController extends Controller {
     }
 
     public function viewDoc() {
-        $doc_type = DB::table('doc_type')->orderBy('name', 'description')->get();
+        $doc_types = DB::table('doc_type')->orderBy('name', 'description')->get();
         //$docs = doc_type::where('status', 1)->get();
         $doc_type_category = DB::table('doc_type_category')->orderBy('name', 'description')->get();
         $data['page_title'] = "List Categories";

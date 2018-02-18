@@ -73,6 +73,14 @@ Route::post('contacts/search', 'ContactsController@getSearch');
 Route::post('contacts/search/print', 'ContactsController@printSearch');
 Route::post('contacts/{user}/pw', 'ContactsController@updatePassword');
 //Route::post('contacts/{user}/reset-random-pw', 'ContactsController@resetRandomPassword');
+//contacts Documents
+Route::get('contacts/{person}/viewdocuments', 'ContactsController@viewdocuments');
+Route::post('contacts/add_document', 'ContactsController@addDocumets');
+Route::get('contacts/clientdoc_act/{document}', 'ContactsController@clientdocAct');
+Route::get('contacts/clientdoc/{document}/delete', 'ContactsController@deleteClientDoc');
+Route::patch('contacts/editClientdoc/{document}', 'ContactsController@editClientdoc');
+
+
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');
 Route::post('contacts/send-message', 'ContactsController@sendMessage');
@@ -90,6 +98,27 @@ Route::post('hr/search', 'BusinessCardsController@getSearch');
 Route::post('hr/print_card', 'BusinessCardsController@busibess_card');
 Route::post('/hr/card_active', 'BusinessCardsController@activeCard');
 Route::post('hr/emial', 'LeaveController@getEmail');
+
+#policy enforcement system
+Route::get('System/policy/create', 'PolicyEnforcementController@create');
+Route::get('System/policy/view_policies', 'PolicyEnforcementController@viewPolicies');
+Route::post('System/policy/add_policy', 'PolicyEnforcementController@createpolicy');
+Route::get('System/policy_act/{pol}', 'PolicyEnforcementController@policyAct');
+Route::get('System/add_user_act/{policyUser}', 'PolicyEnforcementController@policyUserAct');
+Route::get('system/policy/viewUsers/{users}', 'PolicyEnforcementController@viewUsers');
+Route::post('System/policy/add_policyUsers', 'PolicyEnforcementController@addpolicyUsers');
+Route::post('System/policy/update_status', 'PolicyEnforcementController@updatestatus');
+Route::get('System/policy/search_policies', 'PolicyEnforcementController@policySearchindex');
+Route::post('System/policy/docsearch', 'PolicyEnforcementController@docsearch');
+Route::get('System/policy/reports', 'PolicyEnforcementController@reports');
+Route::post('System/policy/reportsearch', 'PolicyEnforcementController@reportsearch');
+Route::get('System/policy/viewdetails/{policydetails}', 'PolicyEnforcementController@viewdetails');
+Route::post('System/policy/viewUsers', 'PolicyEnforcementController@viewpolicyUsers');
+Route::patch('System/policy/edit_policy/{policy}', 'PolicyEnforcementController@editPolicy');
+
+Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementController@viewuserdetails');
+Route::get('System/policy/print/{policydetails}', 'PolicyEnforcementController@viewuserprint');
+
 
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
@@ -174,6 +203,16 @@ Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@ac
 Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
 Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
 Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
+//#CompanyNotes
+Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
+
+//#CompanyDocuments
+Route::get('contacts/{company}/viewcompanydocuments', 'ContactCompaniesController@viewdocumets');
+Route::post('contacts/add_companydocument', 'ContactCompaniesController@addCompanyDoc');
+Route::get('contacts/companydoc/{document}/delete', 'ContactCompaniesController@deleteCompanyDoc');
+Route::get('contacts/companydoc_act/{document}', 'ContactCompaniesController@companydocAct');
+Route::patch('contacts/edit_companydoc/{company}', 'ContactCompaniesController@editCompanydoc');
+
 //#reports
 Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
 Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
@@ -279,7 +318,9 @@ Route::post('help_desk/setup/{setup}', 'HelpdeskController@setup');
 Route::post('help_desk/setup', 'HelpdeskController@setup');
 Route::post('help_desk/notify_managers/{service}', 'HelpdeskController@notify_managers');
 Route::post('help_desk/notify_managers', 'HelpdeskController@notify_managers');
+Route::post('help_desk/auto_escalations/{settings}', 'HelpdeskController@auto_escalations');
 Route::post('help_desk/auto_escalations', 'HelpdeskController@auto_escalations');
+Route::post('help_desk/unresolved_tickets/{service}', 'HelpdeskController@unresolved_tickets');
 Route::post('help_desk/unresolved_tickets', 'HelpdeskController@unresolved_tickets');
 Route::post('help_desk/auto_responder_messages', 'HelpdeskController@auto_responder_messages');
 Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
@@ -297,8 +338,10 @@ Route::get('/vehicle_management/fueltank_act/{fuel}', 'FuelManagementController@
 //tanktop up
 Route::patch('vehicle_management/edit_fueltank/{Fueltanks}' ,'FuelManagementController@editfueltank');
 Route::get('/vehicle_management/vehice_tank/{fuel}', 'FuelManagementController@ViewTank');
-Route::post('vehicle_management/tanksearch/{tank}', 'FuelManagementController@tanksearch');
-Route::post('vehicle_management/tank_topup', 'FuelManagementController@TanktopUp');    
+Route::post('vehicle_management/incoming/{tank}', 'FuelManagementController@incoming');
+Route::post('vehicle_management/outgoing/{tank}', 'FuelManagementController@outgoing');
+Route::post('vehicle_management/both/{tank}', 'FuelManagementController@both');
+Route::post('vehicle_management/tank_topup', 'FuelManagementController@TanktopUp');
 //tank private
 Route::post('vehicle_management/tank_privateuse', 'FuelManagementController@TankprivateUse'); 
 
@@ -514,6 +557,14 @@ Route::get('vehicle_management/Search', 'VehicleDocSearchController@index');
 Route::post('vehicle_management/doc_search', 'VehicleDocSearchController@doc_search');
 Route::post('vehicle_management/image_search', 'VehicleDocSearchController@image_search');
 
+//######## Vehicle Reports ################
+Route::get('vehicle_management/vehicle_reports', 'VehicleReportsController@index');
+Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
+Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
+  // ***************
+Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
+Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
+
 // Performance Appraisals Module
 
 Route::get('appraisal/setup', 'AppraisalSetupController@index');
@@ -600,7 +651,7 @@ Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
 
 // #Document setup module
-// Route::get('/hr/document', 'DocumentTypeController@viewDoc');
+ //Route::get('/hr/document', 'DocumentTypeController@viewDoc');
 // Route::post('/hr/document/add/doc_type', 'DocumentTypeController@addList');
 // Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
 // Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');

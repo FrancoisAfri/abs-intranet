@@ -215,7 +215,8 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-													We would like to inform you that your leave application with {{ $company_name }} has been declined.<br>
+													We regret to inform you that your leave request has been declined.<br>
+													Please Log in to the System for more information.<a href="{{ $dashboard_url }}">Click Here</a>.
                                                 </td>
                                             </tr>
 

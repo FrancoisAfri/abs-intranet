@@ -58,9 +58,9 @@
         $(function () {
             var jobId;
 			
-			// document.getElementById("back_button").onclick = function () {
-			// location.href = "/hr/job_title";	
-   //      }
+			document.getElementById("back_button").onclick = function () {
+			 location.href = "/hr/job_title";	
+         }
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 

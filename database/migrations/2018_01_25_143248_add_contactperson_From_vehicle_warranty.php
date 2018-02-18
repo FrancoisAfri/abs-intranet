@@ -26,7 +26,7 @@ class AddContactpersonFromVehicleWarranty extends Migration
     public function down()
     {
         Schema::table('vehicle_warranties', function (Blueprint $table) {
-            $table->integer('contact_person')->index()->unsigned()->nullable();
+             $table->dropColumn('contact_person');
         });
     }
 }

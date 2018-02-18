@@ -247,6 +247,50 @@ class DatabaseSeeder extends Seeder
         $groupLevel->active = 1;
         $groupLevel->save();
 
+        $module = new modules(); //polivy
+        $module->active = 1;
+        $module->name = 'Policy Enforcement';
+        $module->code_name = 'Policy Enforcement';
+        $module->path = 'System/policy/create';
+        $module->font_awesome = 'fa fa-leanpub';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Add Policy';
+        $ribbon->description = 'Add Policy';
+        $ribbon->ribbon_path = 'System/policy/create';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'View Policies';
+        $ribbon->description = 'View Policies';
+        $ribbon->ribbon_path = 'System/policy/view_policies';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search Policies';
+        $ribbon->description = 'Search Policies';
+        $ribbon->ribbon_path = 'System/policy/search_policies';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Policies Reports';
+        $ribbon->ribbon_path = 'System/policy/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
         //Insert navigation menus (Modules)
         $module = new modules(); //Contacts
         $module->active = 1;
@@ -598,8 +642,8 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Allocate Leave Types';
-        $ribbon->description = 'Allocate Leave Types';
+        $ribbon->ribbon_name = 'Manage Leave';
+        $ribbon->description = 'Manage Leave';
         $ribbon->ribbon_path = 'leave/Allocate_leave_types';
         $ribbon->access_level = 5;
         $module->addRibbon($ribbon);
@@ -829,11 +873,20 @@ class DatabaseSeeder extends Seeder
         $ribbon->description = 'Tank Approvals';
         $ribbon->ribbon_path = 'vehicle_management/tank_approval';
         $ribbon->access_level = 3;
+        $module->addRibbon($ribbon); 
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 8;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Vehicle Reports';
+        $ribbon->ribbon_path = 'vehicle_management/vehicle_reports';
+        $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order = 9;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'vehicle_management/setup';

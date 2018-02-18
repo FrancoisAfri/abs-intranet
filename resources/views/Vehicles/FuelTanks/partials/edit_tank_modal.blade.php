@@ -66,14 +66,14 @@
                                    placeholder="Enter the tank capacity...">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="current_fuel_litres" class="col-sm-2 control-label">Add Litres</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="current_fuel_litres"
                                    name="current_fuel_litres" value="" onchange="convert(this.value, 2);"
                                    placeholder="Enter Fuel Litres" required>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group safe-field">
                         <label for="tank_manager" class="col-sm-2 control-label">Employee </label>
                         <div class="col-sm-8">

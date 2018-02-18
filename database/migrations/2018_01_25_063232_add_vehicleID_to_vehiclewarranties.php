@@ -26,7 +26,7 @@ class AddVehicleIDToVehiclewarranties extends Migration
     public function down()
     {
         Schema::table('vehicle_warranties', function (Blueprint $table) {
-            $table->integer('vehicleID')->index()->unsigned()->nullable();
+            $table->dropColumn('vehicleID');
         });
     }
 }

@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that your leave application with {{ $company_name }} has been successful! For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
+                                                    We would like to inform you that there is a new leave application  that requires your attention. Please Log on to the system and attend to it.<a href="{{ $dashboard_url }}">Click Here</a>.
                                                 </td>
                                             </tr>
                                             <tr>

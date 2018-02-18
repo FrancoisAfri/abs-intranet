@@ -26,7 +26,7 @@ class AddHoursReadingToFuellogtable extends Migration
      public function down()
      {
           Schema::table('vehicle_fuel_log', function (Blueprint $table) {
-            $table->string('Hoursreading')->nullable();
+               $table->dropColumn('Hoursreading');
          });
      }
  }

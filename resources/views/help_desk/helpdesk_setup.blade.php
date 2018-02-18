@@ -201,7 +201,7 @@
                     <i class="fa fa-anchor pull-right"></i>
                     <h3 class="box-title">Auto-Escalations Settings</h3>
                 </div>
-                    <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($autoEscalationSettings->id) ? '/help_desk/auto_escalations/'.$autoEscalationSettings->id : '/help_desk/auto_escalations'}} ">
+                    <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($autoEscalationSettings->id) ? '/help_desk/auto_escalations/'.$autoEscalationSettings->id : '/help_desk/auto_escalations'}}">
                      <input type="hidden" name="helpdesk_id" id="helpdesk_id" value="{{ $serviceID }}"/>
 					{{ csrf_field() }}
 
@@ -226,136 +226,97 @@
                          <th>Office Hours</th>
                            <th>After Hours </th>
                         <th style="width: 40px"></th>
-                    </tr> 
-                   
+                    </tr>
                     <tr id="modules-list">
-                      
                         <td>Low </td>
-                        <td><input type="text" size="2" name="auto_low" value=""></td>
+                        <td><input type="text" size="2" name="auto_low" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
                         <!--  -->
                          <!-- <td style="text-align:center;"><input type="checkbox" name="office_hrs_low"></td> -->
-                        <input type="hidden" class="checkbox selectall"  name="office_hrs_low" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_low" value="1"></div></td>
+                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_low" value="1" {{ !empty($autoEscalationSettings->office_hrs_low) && $autoEscalationSettings->office_hrs_low == 1 ? "checked='checked'" : '' }}></div></td>
                          <!--  -->
-                        <td style="text-align:center;"><select name="notify_level_low"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
-                                 <td>
-                                 <!--  -->
-                                 <input type="hidden" class="checkbox selectall"  name="office_hrs_low_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="office_hrs_low_email" value="1"> Email</div>
-
-                                 <input type="hidden" class="checkbox selectall"  name="office_hrs_low_sms" value="0">
-                                 <div class="sms"><input type="checkbox" name="office_hrs_low_sms" value="1"> SMS</div>
-                                 <!--  -->
-                                    <!-- <div ><input type="checkbox" name="office_hrs_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_low_sms"> SMS</div> -->
-                                  </td>
-                                  <td>
-                                  <!--  -->
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_email" value="1"> Email</div>
-
-                                 <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_sms" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms" value="1"> SMS</div>
-                                  <!--  -->
-                                   <!--  <div ><input type="checkbox" name="aftoffice_hrs_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms"> SMS</div> -->
-                                  </td>
+                        <td style="text-align:center;">
+							<select name="notify_level_low">
+								<option value="1" {{ !empty($autoEscalationSettings->notify_level_low) && $autoEscalationSettings->notify_level_low === 1 ? ' selected' : '' }} >low</option>
+								<option value="2" {{ !empty($autoEscalationSettings->notify_level_low) && $autoEscalationSettings->notify_level_low === 2 ? ' selected' : '' }} >medium</option>
+								<option value="3" {{ !empty($autoEscalationSettings->notify_level_low) && $autoEscalationSettings->notify_level_low === 3 ? ' selected' : '' }} >high</option>
+							</select>
+						</td>
+						<td>
+						 <!--  -->
+							<input type="checkbox" name="office_hrs_low_email" value="1" {{ !empty($autoEscalationSettings->office_hrs_low_email) && $autoEscalationSettings->office_hrs_low_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="office_hrs_low_sms" value="1" {{ !empty($autoEscalationSettings->office_hrs_low_sms) && $autoEscalationSettings->office_hrs_low_sms == 1 ? "checked='checked'" : '' }}> SMS
+						</td>
+						<td>
+						  <!--  -->
+							<input type="checkbox" name="aftoffice_hrs_low_email" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_low_email) && $autoEscalationSettings->aftoffice_hrs_low_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="aftoffice_hrs_low_sms" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_low_sms) && $autoEscalationSettings->aftoffice_hrs_low_sms == 1 ? "checked='checked'" : '' }}> SMS
+						</td>
                       
-                        </tr>
+                    </tr>
                     <tr id="modules-list">
-                      
                         <td>Normal </td>
-                        <td><input type="text" size="2" name="auto_mormal" value=""></td>
+                        <td><input type="text" size="2" name="auto_mormal" value="{{!empty($autoEscalationSettings->auto_mormal) ? $autoEscalationSettings->auto_mormal : '' }}"></td>
                         <!--  -->
-                         <input type="hidden" class="checkbox selectall"  name="office_hrs_normal" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_normal" value="1"></div></td>
-                        <td style="text-align:center;"><select name="notify_level_normal"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
-                         <td>
-                                <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="office_hrs_normal_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_sms" value="0">
-                                 <div class="sms"><input type="checkbox" name="office_hrs_normal_sms" value="1"> SMS</div>
-<!-- 
-                                    <div ><input type="checkbox" name="office_hrs_normal_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_normal_sms"> SMS</div> -->
-                                  </td>
-                                  <td>
-
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_normal_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_normal_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_normal_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_normal_sms" value="1"> SMS</div>
-<!-- 
-
-                                    <div ><input type="checkbox" name="aftoffice_hrs_normal_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_normal_sms"> SMS</div> -->
-                                  </td>
+                        <td style="text-align:center;"><input type="checkbox" name="office_hrs_normal" value="1" {{ !empty($autoEscalationSettings->office_hrs_normal) && $autoEscalationSettings->office_hrs_normal == 1 ? "checked='checked'" : '' }}></td>
+                        <td style="text-align:center;">
+							<select name="notify_level_normal">
+								<option value="1" {{ !empty($autoEscalationSettings->notify_level_normal) && $autoEscalationSettings->notify_level_normal === 1 ? ' selected' : '' }} >low</option>
+								<option value="2" {{ !empty($autoEscalationSettings->notify_level_normal) && $autoEscalationSettings->notify_level_normal === 2 ? ' selected' : '' }} >medium</option>
+								<option value="3" {{ !empty($autoEscalationSettings->notify_level_normal) && $autoEscalationSettings->notify_level_normal === 3 ? ' selected' : '' }} >high</option>
+							</select>
+						</td>
+                        <td>
+                            <input type="checkbox" name="office_hrs_normal_email" value="1" {{ !empty($autoEscalationSettings->office_hrs_normal_email) && $autoEscalationSettings->office_hrs_normal_email == 1 ? "checked='checked'" : '' }}> Email
+                            <input type="checkbox" name="office_hrs_normal_sms" value="1" {{ !empty($autoEscalationSettings->office_hrs_normal_sms) && $autoEscalationSettings->office_hrs_normal_sms == 1 ? "checked='checked'" : '' }}> SMS
+						</td>
+						<td>
+							<input type="checkbox" name="aftoffice_hrs_normal_email" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_normal_email) && $autoEscalationSettings->aftoffice_hrs_normal_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="aftoffice_hrs_normal_sms" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_normal_sms) && $autoEscalationSettings->aftoffice_hrs_normal_sms == 1 ? "checked='checked'" : '' }}> SMS
+						</td>
                     </tr>
-
-                     <tr id="modules-list">
-                      
+                    <tr id="modules-list">
                         <td>High </td>
-                        <td><input type="text" size="2" name="auto_high" value=""></td>
-                         <!-- <td style="text-align:center;"><input type="checkbox" name="office_hrs_hihg"></td> -->
-                         <!--  -->
-                         <input type="hidden" class="checkbox selectall"  name="office_hrs_hihg" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_hihg" value="1"></div></td>  
-                        <td style="text-align:center;"><select name="notify_level_high"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
-                          <td>
-                                <input type="hidden" class="checkbox selectall"  name="office_hrs_high_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="office_hrs_high_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_high_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="office_hrs_high_sms" value="1"> SMS</div>
-
-                                 <!--    <div ><input type="checkbox" name="office_hrs_high_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_high_sms"> SMS</div> -->
-                                  </td>
-                                  <td>
-                                    <!-- <div ><input type="checkbox" name="aftoffice_hrs_high_sms">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms"> SMS</div> -->
-                                    <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms" value="1"> SMS</div>
-                                  </td>
+                        <td><input type="text" size="2" name="auto_high" value="{{!empty($autoEscalationSettings->auto_high) ? $autoEscalationSettings->auto_high : '' }}"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="office_hrs_hihg" value="1" {{ !empty($autoEscalationSettings->office_hrs_hihg) && $autoEscalationSettings->office_hrs_hihg == 1 ? "checked='checked'" : '' }}></td>  
+                        <td style="text-align:center;">
+							<select name="notify_level_high">
+								<option value="1" {{ !empty($autoEscalationSettings->notify_level_high) && $autoEscalationSettings->notify_level_high === 1 ? ' selected' : '' }} >low</option>
+								<option value="2" {{ !empty($autoEscalationSettings->notify_level_high) && $autoEscalationSettings->notify_level_high === 2 ? ' selected' : '' }} >medium</option>
+								<option value="3" {{ !empty($autoEscalationSettings->notify_level_high) && $autoEscalationSettings->notify_level_high === 3 ? ' selected' : '' }} >high</option>
+							</select>
+						</td>
+                        <td>
+                            <input type="checkbox" name="office_hrs_high_email" value="1" {{ !empty($autoEscalationSettings->office_hrs_high_email) && $autoEscalationSettings->office_hrs_high_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="office_hrs_high_sms" value="1" {{ !empty($autoEscalationSettings->office_hrs_high_sms) && $autoEscalationSettings->office_hrs_high_sms == 1 ? "checked='checked'" : '' }}> SMS
+						</td>
+                        <td>
+                            <input type="checkbox" name="aftoffice_hrs_high_email" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_high_email) && $autoEscalationSettings->aftoffice_hrs_high_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="aftoffice_hrs_high_sms" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_high_sms) && $autoEscalationSettings->aftoffice_hrs_high_sms == 1 ? "checked='checked'" : '' }}> SMS
+                        </td>
                     </tr>
-
-                     <tr id="modules-list">
-                      
+                    <tr id="modules-list">
                         <td>Critical </td>
-                        <td><input type="text" size="2" name="auto_critical" value=""></td>
-                        <!--  <td style="text-align:center;"><input type="checkbox" name="office_hrs_critical"></td> -->
-                         <input type="hidden" class="checkbox selectall"  name="office_hrs_critical" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="office_hrs_critical" value="1"></div></td> 
-                        <td style="text-align:center;"><select name="notify_level_critical"><option selected="selected" value="1">low</option><option value="2">medium</option><option value="3">high</option></select></td>
-                         <td>   
-                                    <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="office_hrs_critical_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="office_hrs_critical_sms" value="1"> SMS</div>
-
-                                   <!--  <div ><input type="checkbox" name="office_hrs_critical_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="office_hrs_critical_sms"> SMS</div> -->
-                                  </td>
-                                  <td>
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_sms" value="1"> SMS</div>
-
-                                  <!--   <div ><input type="checkbox" name="aftoffice_hrs_critical_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_sms"> SMS</div> -->
-                                  </td>
+                        <td><input type="text" size="2" name="auto_critical" value="{{!empty($autoEscalationSettings->auto_critical) ? $autoEscalationSettings->auto_critical : '' }}"></td>
+                        <td style="text-align:center;">
+							<input type="checkbox" name="office_hrs_critical" value="1" {{ !empty($autoEscalationSettings->office_hrs_critical) && $autoEscalationSettings->office_hrs_critical == 1 ? "checked='checked'" : '' }}>
+						</td> 
+                        <td style="text-align:center;">
+							<select name="notify_level_critical">
+								<option value="1" {{ !empty($autoEscalationSettings->notify_level_critical) && $autoEscalationSettings->notify_level_critical === 1 ? ' selected' : '' }}>low</option>
+								<option value="2" {{ !empty($autoEscalationSettings->notify_level_critical) && $autoEscalationSettings->notify_level_critical === 2 ? ' selected' : '' }}>medium</option>
+								<option value="3" {{ !empty($autoEscalationSettings->notify_level_critical) && $autoEscalationSettings->notify_level_critical === 3 ? ' selected' : '' }}>high</option>
+							</select>
+						</td>
+                        <td>   
+                            <input type="checkbox" name="office_hrs_critical_email" value="1" {{ !empty($autoEscalationSettings->office_hrs_critical_email) && $autoEscalationSettings->office_hrs_critical_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="office_hrs_critical_sms" value="1" {{ !empty($autoEscalationSettings->office_hrs_critical_sms) && $autoEscalationSettings->office_hrs_critical_sms == 1 ? "checked='checked'" : '' }}> SMS
+						</td>
+                        <td>
+						  <input type="checkbox" name="aftoffice_hrs_critical_email" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_critical_email) && $autoEscalationSettings->aftoffice_hrs_critical_email == 1 ? "checked='checked'" : '' }}> Email
+						  <input type="checkbox" name="aftoffice_hrs_critical_sms" value="1" {{ !empty($autoEscalationSettings->aftoffice_hrs_critical_sms) && $autoEscalationSettings->aftoffice_hrs_critical_sms == 1 ? "checked='checked'" : '' }}> SMS
+                        </td>
                     </tr>
-                    
-            </table>
-   
+					</table>
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
@@ -373,131 +334,80 @@
                     <i class="fa fa-anchor pull-right"></i>
                        <h3 class="box-title">Notify Managers on unresolved tickets</h3>
                 </div>
-                    <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/unresolved_tickets">
-                    {{ csrf_field() }}
+                <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($unresolvedTicketsSettings->id) ? '/help_desk/unresolved_tickets/'.$unresolvedTicketsSettings->id : '/help_desk/unresolved_tickets'}}">
+						<input type="hidden" name="helpdesk_id" id="helpdesk_id" value="{{ $serviceID }}"/>                   
+						{{ csrf_field() }}
 
                     <div class="box-body">
-                      <!--   @if (count($errors) > 0)
-                            <div class="alert alert-danger alert-dismissible fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif -->
-                        <table class="table table-bordered">
-                    <tr>
-                        <th style="width: 10px"></th>
-                        <th>Hours</th>
-                        <th>Office Hours Only</th>
-                         <th>Office Hours</th>
-                           <th>After Hours </th>
-                        <th style="width: 40px"></th>
-                    </tr> 
-                   
-                    <tr id="modules-list">
-                      
-                        <td>Low </td>
-                        <td><input type="text" size="2" name="tickets_low" value=""></td>
-                        <!--  <td style="text-align:center;"><input type="checkbox" name="low_ah"></td> -->
+						<table class="table table-bordered">
+							<tr>
+								<th style="width: 10px"></th>
+								<th>Hours</th>
+								<th>Office Hours Only</th>
+								 <th>Office Hours</th>
+								   <th>After Hours </th>
+								<th style="width: 40px"></th>
+							</tr>
+							<tr id="modules-list">
+								<td>Low </td>
+								<td><input type="text" size="2" name="tickets_low" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
+								<td style="text-align:center;"><input type="checkbox" name="low_ah" value="1"></td>
+								<td>
+									<input type="checkbox" name="esc_low_email" value="1"> Email
+									<input type="checkbox" name="esc_low_sms" value="1"> SMS
+								</td>
+								<td>
+									<input type="checkbox" name="aftoffice_hrs_low_email" value="1"> Email
+									<input type="checkbox" name="aftoffice_hrs_low_sms" value="1"> SMS
+								</td>
+							  
+							</tr>
+							<tr id="modules-list">
+								<td>Normal </td>
+								<td><input type="text" size="2" name="tickets_normal" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
+								<td style="text-align:center;"><input type="checkbox" name="normal_oficehrs" value="1"></td>
+								<td>       
+									<input type="checkbox" name="office_hrs_normal_email" value="1"> Email
+									<input type="checkbox" name="office_hrs_normal_sms" value="1"> SMS
+								</td>
+								<td>
+									<input type="checkbox" name="aftoffice_hrs_nomal_email" value="1"> Email
+									<input type="checkbox" name="aftoffice_hrs_nomal_sms" value="1"> SMS
+								</td>
+							</tr>
 
-                         <input type="hidden" class="checkbox selectall"  name="low_ah" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="low_ah" value="1"></div></td>
-                    
-                                 <td>
-                                  <input type="hidden" class="checkbox selectall"  name="esc_low_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="esc_low_email" value="1"> Email</div>
+							<tr id="modules-list">
+								<td>High </td>
+								<td><input type="text" size="2" name="tickets_high" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
+								 <input type="hidden" class="checkbox selectall"  name="high_oficehrs" value="0">
+								<td style="text-align:center;"><div class="sms"><input type="checkbox" name="high_oficehrs" value="1"></div></td>
+								  <td>
+										   <!--  <div ><input type="checkbox" name="esc_high_email">Email </div> 
+											<div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
+											<!--  -->
+											 <input type="hidden" class="checkbox selectall"  name="office_hrs_high_email" value="0">
+											 <div class="sms"><input type="checkbox" name="office_hrs_high_email" value="1"> Email</div>
 
-                                  <input type="hidden" class="checkbox selectall"  name="esc_low_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="esc_low_sms" value="1"> SMS</div>
-                                    <!--  -->
-                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_low_sms"> SMS</div> -->
-                                  </td>
-                                  <td>
-                                 <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_email" value="1"> Email</div>
+										  <input type="hidden" class="checkbox selectall"  name="office_hrs_high_sms" value="0">
+										  <div class="sms"><input type="checkbox" name="office_hrs_high_sms" value="1"> SMS</div>
 
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_low_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms" value="1"> SMS</div>
-                                 <!--  -->
-                                    <!-- <div ><input type="checkbox" name="aftoffice_hrs_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="aftoffice_hrs_low_sms"> SMS</div> -->
-                                  </td>
-                      
-                        </tr>
-                    <tr id="modules-list">
-                      
-                        <td>Normal </td>
-                        <td><input type="text" size="2" name="tickets_normal" value=""></td>
-                         <!-- <td style="text-align:center;"><input type="checkbox" name="normal_oficehrs"></td> -->
+										  </td>
+										  <td>
+										  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_email" value="0">
+										 <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_email" value="1"> Email</div>
 
-                          <input type="hidden" class="checkbox selectall"  name="normal_oficehrs" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="normal_oficehrs" value="1"></div></td>
-                       
-                         <td>       
-                                 <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="office_hrs_normal_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_normal_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="office_hrs_normal_sms" value="1"> SMS</div>
-
-                                    <!--  -->
-                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_normal_email"> SMS</div> -->
-                                  </td>
-                                  <td>
-                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_normal_email"> SMS</div> -->
-                                    <!--  -->
-                                 <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_nomal_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_nomal_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_nomal_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_nomal_sms" value="1"> SMS</div>
-                                  </td>
-                    </tr>
-
-                     <tr id="modules-list">
-                      
-                        <td>High </td>
-                        <td><input type="text" size="2" name="tickets_high" value=""></td>
-                        <!--  -->
-                         <input type="hidden" class="checkbox selectall"  name="high_oficehrs" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="high_oficehrs" value="1"></div></td>
-
-                         <!-- <td style="text-align:center;"><input type="checkbox" name="low_ah"></td> -->
-                      
-                          <td>
-                                   <!--  <div ><input type="checkbox" name="esc_high_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
-                                    <!--  -->
-                                     <input type="hidden" class="checkbox selectall"  name="office_hrs_high_email" value="0">
-                                     <div class="sms"><input type="checkbox" name="office_hrs_high_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="office_hrs_high_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="office_hrs_high_sms" value="1"> SMS</div>
-
-                                  </td>
-                                  <td>
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms" value="1"> SMS</div>
-                                    <!--  -->
-                                   <!--  <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
-                                  </td>
-                    </tr>
+										  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_sms" value="0">
+										  <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms" value="1"> SMS</div>
+											<!--  -->
+										   <!--  <div ><input type="checkbox" name="esc_low_email">Email </div> 
+											<div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
+										  </td>
+							</tr>
 
                      <tr id="modules-list">
                       
                         <td>Critical </td>
-                        <td><input type="text" size="2" name="tickets_critical" value=""></td>
+                        <td><input type="text" size="2" name="tickets_critical" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
                         <!--  <input type="hidden" class="checkbox selectall"  name="critical_oficehrs" value="0"> -->
 
                           <input type="hidden" class="checkbox selectall"  name="critical_oficehrs" value="0">

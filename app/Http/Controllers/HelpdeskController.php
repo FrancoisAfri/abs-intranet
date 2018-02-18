@@ -130,9 +130,8 @@ class HelpdeskController extends Controller {
             $systems = operator::orderBy('id', 'asc')->get();
             $employees = HRPerson::where('status', 1)->get(); 
 			$helpdeskSetup = helpDesk_setup::where('helpdesk_id', $service->id)->first();
-			//$autoEscalationSettings = auto_escalation_settings::where('helpdesk_id', $service->id)->first();
-			$autoEscalationSettings = auto_escalation_settings::orderBy('id', 'asc')->get();
-           // return $autoEscalationSettings;
+			$autoEscalationSettings = auto_escalation_settings::where('helpdesk_id', $service->id)->first();
+			$unresolvedTicketsSettings = unresolved_tickets_settings::where('helpdesk_id', $service->id)->first();
 		   $counRow = autoRensponder::count();
 
 			if ($counRow ==  0) {
@@ -165,6 +164,7 @@ class HelpdeskController extends Controller {
             
              $data['helpdeskSetup'] = $helpdeskSetup;          
              $data['autoEscalationSettings'] = $autoEscalationSettings;          
+             $data['unresolvedTicketsSettings'] = $unresolvedTicketsSettings;          
              $data['autoRensponder'] = $autoRensponder;          
              $data['products'] = $service;
              $data['settings'] = $settings;
@@ -285,13 +285,7 @@ class HelpdeskController extends Controller {
         if (!empty($helpdeskTickets))
             $helpdeskTickets->load('ticket');
 
-        //return $helpdeskTickets;
-        // $id = DB::table('ticket')
-        // 		  ->select('id')
-        // 	      ->where('id', (SELECT MAX(id))
-        // 	      ->get();
-        // 	      return $id;
-
+        helpdeskTickets
 
         $systems = HelpDesk::orderBy('name', 'asc')->get();
 
@@ -394,7 +388,7 @@ class HelpdeskController extends Controller {
         $settings->aftoffice_hrs_critical_sms = $request->input('aftoffice_hrs_critical_sms');
         $settings->helpdesk_id = $request->input('helpdesk_id');
 		
-        $settings->update();
+        $settings->save();
         return back();
     }
 
@@ -432,9 +426,8 @@ class HelpdeskController extends Controller {
         $service->office_hrs_critical_sms = $request->input('office_hrs_critical_sms');
         $service->aftoffice_hrs_critical_email = $request->input('aftoffice_hrs_critical_email');
         $service->aftoffice_hrs_critical_sms = $request->input('aftoffice_hrs_critical_sms');
+		$service->helpdesk_id = $request->input('helpdesk_id');
         $service->save();
-
-
         return back();
     }
 

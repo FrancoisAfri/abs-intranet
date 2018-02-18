@@ -14,19 +14,19 @@ class AddCurrentDateToFuellog extends Migration
     public function up()
     {
         Schema::table('vehicle_fuel_log', function (Blueprint $table) {
-            $table->timestamp('published_at')->nullable();;
-        });
-    }
+    $table->timestamp('published_at')->nullable();;
+});
+}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('vehicle_fuel_log', function (Blueprint $table) {
-            $table->timestamp('published_at')->nullable();;
-        });
-    }
+/**
+ * Reverse the migrations.
+ *
+ * @return void
+ */
+public function down()
+{
+    Schema::table('vehicle_fuel_log', function (Blueprint $table) {
+         $table->dropColumn('published_at');
+    });
+}
 }

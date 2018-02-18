@@ -82,10 +82,9 @@
                                             </td>
                                             <td>
                                                 <button type="button" id="reject-reason" class="btn btn-danger btn-xs"
-                                                        data-toggle="modal" data-target="#reject-leave-modal"
-                                                        data-id="{{ $approval->id }}"
-                                                        onclick="reject({{$approval->id}}, 'reject_id' data - description ="{{ $approval->reject_reason }}
-                                                " > </i> Decline</button></td>
+													data-toggle="modal" data-target="#reject-leave-modal"
+													data-id="{{ $approval->id }}"
+													onclick="reject({{$approval->id}}, 'reject_id' data - description ="{{$approval->reject_reason }}")">Decline</button></td>
 
                                 @endforeach
                                 </tbody>

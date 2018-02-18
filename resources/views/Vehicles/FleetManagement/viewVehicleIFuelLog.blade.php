@@ -31,8 +31,8 @@
                         </button>
                     </div>
                 </div>
-        
-            <!-- /.box-header -->
+
+                <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -40,15 +40,18 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong>
+                                    <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -81,7 +84,7 @@
                         </a>
 
                         {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
-                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
+                        {{--<i class="fa fa-file-o"></i> Oil Log--}}
                         {{--</a>--}}
 
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
@@ -106,8 +109,18 @@
                     </div>
 
                     <div class="box-changedate">
-                        <button type="button" class="btn btn-default pull-left" id="previous_button" value="{{$datetaken}}"><i class="fa fa-caret-square-o-left"></i> Previous Month</button>
-                        <button type="button" class="btn btn-default pull-right" id="next_button" value="{{$datetaken}} ><i class="fa fa-caret-square-o-right"></i> Next Month</button>
+                        <button type="button" class="btn btn-default pull-left" id="previous_button" value=""><i
+                                    class="fa fa-caret-square-o-left"></i> Previous Month
+                        </button>
+                        <input type="hidden" name="calendar_month" id="calendar_month" value="{{$imonth}}">
+                        <input type="hidden" name="calendar_year" id="calendar_year" value="{{$iYear}}}">
+
+                        {{--@if (isset($imonth) && $imonth === $icurrentmonth )--}}
+                            <button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
+                                        class="fa fa-caret-square-o-right"></i> Next Month
+                            </button>
+                        {{--@endif--}}
+
                     </div>
                     <table class="table table-bordered">
                         <tr>
@@ -121,7 +134,7 @@
                             <th>Fuel in Litres</th>
                             <th>Cost per Litres</th>
                             <th>Cost (R)</th>
-                            <th>Odometer  Reading</th>
+                            <th>Odometer Reading</th>
                             <th>Kilometre Per Litre</th>
                             <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
@@ -137,17 +150,31 @@
                                     <td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
                                     <td>{{ !empty($details->Staion) ?  $details->Staion : ''}}</td>
                                     <td>{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
-                                     <td>{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
+                                    <td>{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td>{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
                                     <td>{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,s' : ''}}</td>
                                     <td></td>
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
-                                   <!--  <td style="text-align:center;" colspan="2"> -->
-                                    <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                    <!--  <td style="text-align:center;" colspan="2"> -->
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+                                                data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i>
+                                            Delete
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
-                                <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                                <class="caption"><td colspan="6" style="text-align:right">Total</td><td style="text-align: right">{{number_format($iTotalLitres, 2) }}</td><td style="text-align: right">&nbsp;</td><td style="text-align: right" nowrap>{{'R '.number_format($sCurrency, 2)}}</td> <td style="text-align: right"><span style="float:right"></span></br><span style="float:right"></span></td><td style="text-align: right">$iAvgKMperLitre</td><td>&nbsp;</td><td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
+                            <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
+                            <class="caption">
+                            <td colspan="6" style="text-align:right">Total</td>
+                            <td style="text-align: right">{{number_format($iTotalLitres, 2) }}</td>
+                            <td style="text-align: right">&nbsp;</td>
+                            <td style="text-align: right" nowrap>{{'R '.number_format($sCurrency, 2)}}</td>
+                            <td style="text-align: right"><span style="float:right"></span></br><span
+                                        style="float:right"></span></td>
+                            <td style="text-align: right">$iAvgKMperLitre</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
 
                         @else
                             <tr id="categories-list">
@@ -172,15 +199,15 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-          
-            @include('Vehicles.partials.add_fuelrecord_modal')
-           <!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
-           <!--  @include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal') -->
+
+        @include('Vehicles.partials.add_fuelrecord_modal')
+        <!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
+        <!--  @include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal') -->
 
             @if (count($vehiclefuellog) > 0)
-              @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Vehicle Fuel Log? This action cannot be undone.'])
+                @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Vehicle Fuel Log? This action cannot be undone.'])
             @endif
-            
+
 
         </div>
 
@@ -221,13 +248,12 @@
                 }
 
                 $('#previous_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$datetaken. '_' . 'p'}}';
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$imonth. '_' . 'p' . '_' . $iYear }}';
                 });
 
                 $('#next_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$datetaken. '_' . 'n'}}';
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$imonth. '_' . 'n' . '_' . $iYear }}';
                 });
-
 
 
                 var moduleId;
@@ -273,51 +299,51 @@
                     increaseArea: '10%' // optional
                 });
 
-                 $(document).ready(function () {
-                                $('#litres').change(function () {
-                                    var litres = $('#litres').val();
-                                    var total_cost = $('#total_cost').val();
-                                    var litre_cost = $('#cost_per_litre').val();
+                $(document).ready(function () {
+                    $('#litres').change(function () {
+                        var litres = $('#litres').val();
+                        var total_cost = $('#total_cost').val();
+                        var litre_cost = $('#cost_per_litre').val();
 
-                                    if (litre_cost > 0 && litres > 0) {
-                                        var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                        document.getElementById('total_cost').value = total_cost;
-                                    }
-                                    else if (litres > 0 && total_cost > 0) {
-                                        var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                        document.getElementById('cost_per_litre').value = litre_cost;
-                                    }
-                                });
+                        if (litre_cost > 0 && litres > 0) {
+                            var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('total_cost').value = total_cost;
+                        }
+                        else if (litres > 0 && total_cost > 0) {
+                            var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('cost_per_litre').value = litre_cost;
+                        }
+                    });
 
-                                $('#cost_per_litre').change(function () {
-                                    var litres = $('#litres').val();
-                                    var total_cost = $('#total_cost').val();
-                                    var litre_cost = $('#cost_per_litre').val();
-                                    if (litre_cost > 0 && litres > 0) {
-                                        var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                        document.getElementById('total_cost').value = total_cost;
-                                    }
-                                    else if (litre_cost > 0 && total_cost > 0) {
-                                        var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                        document.getElementById('litres').value = litres;
-                                    }
-                                });
+                    $('#cost_per_litre').change(function () {
+                        var litres = $('#litres').val();
+                        var total_cost = $('#total_cost').val();
+                        var litre_cost = $('#cost_per_litre').val();
+                        if (litre_cost > 0 && litres > 0) {
+                            var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('total_cost').value = total_cost;
+                        }
+                        else if (litre_cost > 0 && total_cost > 0) {
+                            var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('litres').value = litres;
+                        }
+                    });
 
-                                $('#total_cost').change(function () {
-                                    var litres = $('#litres').val();
-                                    var total_cost = $('#total_cost').val();
-                                    var litre_cost = $('#cost_per_litre').val();
-                                    if (litre_cost > 0 && total_cost) {
-                                        var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                        document.getElementById('litres').value = litres;
-                                    }
-                                    else if (litres > 0 && total_cost) {
-                                        var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                                        document.getElementById('cost_per_litre').value = litre_cost;
-                                    }
-                                });
+                    $('#total_cost').change(function () {
+                        var litres = $('#litres').val();
+                        var total_cost = $('#total_cost').val();
+                        var litre_cost = $('#cost_per_litre').val();
+                        if (litre_cost > 0 && total_cost) {
+                            var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('litres').value = litres;
+                        }
+                        else if (litres > 0 && total_cost) {
+                            var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('cost_per_litre').value = litre_cost;
+                        }
+                    });
 
-                            });
+                });
 
 
                 $(document).ready(function () {
@@ -337,13 +363,12 @@
 
                 });
 
-               
-                // 
-                  $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
-                    var allType = hideFields();
-                    
-                });
 
+                // 
+                $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
+                    var allType = hideFields();
+
+                });
 
 
                 function hideFields() {
@@ -358,11 +383,12 @@
                     }
                     return allType;
                 }
-                // 
+
+                //
                 // 
                 //   $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
                 //     var allType = hideFields();
-                    
+
                 // });
 
                 // function hideFields() {
