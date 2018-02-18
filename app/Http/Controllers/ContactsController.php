@@ -780,7 +780,7 @@ class ContactsController extends Controller
     public function addDocumets(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:client_documents,name',
+            'name' => 'required|unique:client_documents,document_name',
             'date_from' => 'required',
             'exp_date' => 'required',
             'supporting_docs' => 'required',
@@ -795,7 +795,7 @@ class ContactsController extends Controller
         $Expirydate = $clientdocData['exp_date'] = strtotime($clientdocData['exp_date']);
 
         $clientDoc = new contactsClientdocuments();
-        $clientDoc->document_name = $clientdocData['name'];
+        $clientDoc->document_name = $clientdocData['document_name'];
         $clientDoc->description = $clientdocData['description'];
         $clientDoc->date_from = $Datefrom;
         $clientDoc->expirydate = $Expirydate;
