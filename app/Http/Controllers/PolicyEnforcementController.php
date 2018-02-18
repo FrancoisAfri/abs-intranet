@@ -171,7 +171,6 @@ class PolicyEnforcementController extends Controller
 
     public function viewUsers(Policy $users)
     {
-
         $policyUsers = DB::table('policy_users')
             ->select('policy_users.*', 'policy.date as Expiry', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
@@ -290,19 +289,27 @@ class PolicyEnforcementController extends Controller
         } elseif ($DivFive->active == 1 && (!empty($policyData['division_level_5']) && $policyData['division_level_5'] > 0)) {
             $users = HRPerson::where('division_level_5', ($policyData['division_level_5']))->orderBy('id', 'desc')->get();
         }
-//
-        foreach ($users as $hrID) {
-            # create record in policy users
-            $policyUsers = new Policy_users();
-            //use updateOrCreate to avoid duplicates
-            $policyUsers->updateOrCreate(['policy_id' => $policyData['policyID']], ['user_id' => $hrID->id], ['date_added' => time()]);
-            // get user details
-            $firstname = $hrID->first_name;
-            $surname = $hrID->surname;
-            $email = $hrID->email;
 
-            #mail to user
-            Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
+		foreach ($users as $hrID) {
+			$OldUser = Policy_users::where('user_id', $hrID->id)->where('policy_id', $policyData['policyID'])->first();
+            # create record in policy users
+            if (empty($OldUser->id))
+			{
+				$policyUsers = new Policy_users();
+				$policyUsers->user_id = $hrID->id;
+				$policyUsers->policy_id = $policyData['policyID'];
+				$policyUsers->date_added = time();
+				$policyUsers->status = 1;
+				$policyUsers->save();
+
+				// get user details
+				$firstname = $hrID->first_name;
+				$surname = $hrID->surname;
+				$email = $hrID->email;
+
+				#mail to user
+				Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
+			}
         }
         AuditReportsController::store('Policy', 'Policy Management Page Accessed', "Accessed By User", 0);
         return response()->json();

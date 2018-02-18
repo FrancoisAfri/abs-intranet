@@ -98,7 +98,6 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
                     <button type="submit" id="add-new-module" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
                 </div>
             </form>
@@ -162,11 +161,6 @@
             "ordering": true,
             "info": false,
             "autoWidth": true
-        });
-
-        //Cancel button
-        $('#cancel').click(function () {
-            location.href = '/users/users-access';
         });
 
         //Vertically center modals on page
