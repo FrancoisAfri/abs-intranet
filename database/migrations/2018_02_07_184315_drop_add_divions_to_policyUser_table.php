@@ -14,9 +14,9 @@ class DropAddDivionsToPolicyUserTable extends Migration
     public function up()
     {
         Schema::table('policy_users', function ($table) {
-            $table->dropColumn(['division_level_5', 'division_level_4', 'division_level_3',
+            /*$table->dropColumn(['division_level_5', 'division_level_4', 'division_level_3',
                 'division_level_2', 'division_level_1'
-            ]);
+            ]);*/
         });
     }
 
