@@ -978,7 +978,7 @@ class ContactCompaniesController extends Controller
     public function addCompanyDoc(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:contactsCompanydocs,name',
+            //'name' => 'required|unique:contactsCompanydocs,name',
             'exp_date' => 'required',
             'supporting_docs' => 'required',
         ]);
@@ -1039,7 +1039,7 @@ class ContactCompaniesController extends Controller
         return back();
     }
 
-    public function editCompanydoc(Request $request , contactsCompanydocs $company)
+    public function editCompanydoc(Request $request, contactsCompanydocs $company)
     {
         $this->validate($request, [
 //            'name' => 'required',
@@ -1050,7 +1050,6 @@ class ContactCompaniesController extends Controller
 
         $contactsCompanydocs = $request->all();
         unset($contactsCompanydocs['_token']);
-
 
         $Datefrom = $contactsCompanydocs['date_from'] = str_replace('/', '-', $contactsCompanydocs['date_from']);
         $Datefrom = $contactsCompanydocs['date_from'] = strtotime($contactsCompanydocs['date_from']);
@@ -1076,6 +1075,9 @@ class ContactCompaniesController extends Controller
                 $company->update();
             }
         }
+
+        // request fields
+
         AuditReportsController::store('Contacts', ' Company Document Updated', "Company Document Updated", 0);
         return response()->json();
 
