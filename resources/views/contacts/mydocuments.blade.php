@@ -30,6 +30,7 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
+                            <th style="width: 20px; text-align: center;"></th>
                             <th>name</th>
                             <th>Description</th>
                             <th>Date From</th>
@@ -88,10 +89,7 @@
                                 <td colspan="7">
                                     <div class="callout callout-danger">
                                         <h4><i class="fa fa-database"></i> No Records found</h4>
-
-                                        <p>No Records matching your search criteria in the database. Please refine your
-                                            search
-                                            parameters.</p>
+                                        <p>No Document found. Please start by adding a document.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -151,12 +149,12 @@
                 }
 
                 $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails';
+                    location.href = "/contacts/{{$person->id}}/edit";
                 });
 
                 $(function () {
                     $('#back_button').click(function () {
-                        location.href = '/vehicle_management/viewdetails';
+                        location.href = "/contacts/{{$person->id}}/edit";
                     });
                     var moduleId;
                     //Initialize Select2 Elements

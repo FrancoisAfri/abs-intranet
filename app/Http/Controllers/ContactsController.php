@@ -766,7 +766,6 @@ class ContactsController extends Controller
         ];
 
         $documents = contactsClientdocuments::orderby('id', 'asc')->where('client_id', $personID)->get();
-        //return $documents;
 
         $data['person'] = $person;
         $data['documents'] = $documents;
