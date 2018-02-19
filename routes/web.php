@@ -117,30 +117,6 @@ Route::post('System/policy/viewUsers', 'PolicyEnforcementController@viewpolicyUs
 Route::patch('System/policy/edit_policy/{policy}', 'PolicyEnforcementController@editPolicy');
 
 Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementController@viewuserdetails');
-Route::get('System/policy/print/{policydetails}', 'PolicyEnforcementController@viewuserprint');
-
-
-//#Leave Management
-Route::post('leave/type/add_leave', 'LeaveController@addleave');
-Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
-Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
-
-//# leavesetup Controller
-Route::get('leave/types', 'LeaveSetupController@setuptypes');
-Route::get('/leave/setup', 'LeaveSetupController@showSetup');
-Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
-Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
-Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
-Route::patch('/leave/setup/{id}', 'LeaveSetupController@addAnnual');
-Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
-
-//leave Allocation
-Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
-Route::post('leave/Allocate_leave', 'LeaveSetupController@Adjust');
-Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resert');
-Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
-
-//leave Application
 Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
@@ -847,6 +823,12 @@ Route::get('crm/invoice/mail/{quotation}', 'CRMInvoiceController@emailInvoice');
 Route::get('crm/invoice/mail/{quotation}/{invoice}', 'CRMInvoiceController@emailMonthlyInvoice');
 Route::post('crm/capture-payment/{quotation}/{invoice}', 'CRMAccountController@capturePayment');
 Route::post('crm/accounts/search', 'CRMSetupController@searchResults');
+
+// CMS
+Route::get('cms/viewnews', 'CmsController@addnews');
+Route::post('cms/crm_news', 'CmsController@addcmsnews');
+Route::get('cms/viewnews/{news}', 'CmsController@viewnews');
+Route::post('cms/updatenews', 'CmsController@updatenews');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

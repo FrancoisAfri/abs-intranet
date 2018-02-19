@@ -1013,7 +1013,9 @@ class ContactCompaniesController extends Controller
                 $contactsCompany->update();
             }
         }
-        AuditReportsController::store('Contacts', 'Create Company Document ', "Company Document Created", 0);
+
+        AuditReportsController::store('Contacts', 'Create Company Document', "Company Document Created , Document Name: $contactsCompanydocs[name], 
+       Document description: $contactsCompanydocs[description], Document expiry date: $Expirydate ,  Company ID : $contactsCompanydocs[companyID] ", 0);
         return response()->json();
 
     }
@@ -1027,6 +1029,8 @@ class ContactCompaniesController extends Controller
 
         $document->status = $stastus;
         $document->update();
+
+        AuditReportsController::store('Contacts', 'Company Document Status Changed  ', "Company Document Status Changed", 0);
         return back();
     }
 
@@ -1078,7 +1082,8 @@ class ContactCompaniesController extends Controller
 
         // request fields
 
-        AuditReportsController::store('Contacts', ' Company Document Updated', "Company Document Updated", 0);
+        AuditReportsController::store('Contacts', 'Create Company Document', "Company Document Created , Document Name: $contactsCompanydocs[name], 
+       Document description: $contactsCompanydocs[description], Document expiry date: $Expirydate ,  Company ID : $contactsCompanydocs[companyID] ", 0);
         return response()->json();
 
     }
