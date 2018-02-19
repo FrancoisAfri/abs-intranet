@@ -113,7 +113,7 @@ class QuotesTermConditionsController extends Controller
         return response()->json(['term_id' => $catTerm->id], 200);
     }
 	public function editterm(QuotesTermAndConditions $term)
-	{	   
+	{ 
 	   $data['page_title'] = "Quotes";
         $data['page_description'] = "Term & Condition Edit";
         $data['breadcrumb'] = [

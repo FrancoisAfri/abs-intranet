@@ -972,6 +972,7 @@ class ContactCompaniesController extends Controller
         $data['active_rib'] = 'Search Company';
         $data['company'] = $company;
         $data['document'] = $document;
+		AuditReportsController::store('Contacts',"Accessed Documents For Company: $company->name", "Accessed By User", 0);
         return view('contacts.contacts_companydocs')->with($data);
     }
 
@@ -985,7 +986,6 @@ class ContactCompaniesController extends Controller
 
         $contactsCompanydocs = $request->all();
         unset($contactsCompanydocs['_token']);
-
 
         $Datefrom = $contactsCompanydocs['date_from'] = str_replace('/', '-', $contactsCompanydocs['date_from']);
         $Datefrom = $contactsCompanydocs['date_from'] = strtotime($contactsCompanydocs['date_from']);
@@ -1001,7 +1001,7 @@ class ContactCompaniesController extends Controller
         $contactsCompany->company_id = $contactsCompanydocs['companyID'];
         $contactsCompany->status = 1;
         $contactsCompany->save();
-
+		$company = ContactCompany::where('id', $contactsCompanydocs['companyID'])->first(); 
         //Upload supporting document
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
@@ -1014,32 +1014,36 @@ class ContactCompaniesController extends Controller
             }
         }
 
-        AuditReportsController::store('Contacts', 'Create Company Document', "Company Document Created , Document Name: $contactsCompanydocs[name], 
-       Document description: $contactsCompanydocs[description], Document expiry date: $Expirydate ,  Company ID : $contactsCompanydocs[companyID] ", 0);
-        return response()->json();
-
+        AuditReportsController::store('Contacts', 'Company Document Added', "Company Document added , Document Name: $contactsCompanydocs[name], 
+		Document description: $contactsCompanydocs[description], Document expiry date: $Expirydate ,  Company Name : $company->name", 0);
+		return response()->json();
     }
 
     public function companydocAct(Request $request, contactsCompanydocs $document)
     {
+        $companyDetails = ContactCompany::where('id', $document->company_id)->first();
         if ($document->status == 1)
+		{
             $stastus = 0;
+			$label = "De-Activated";
+		}
         else
+		{
             $stastus = 1;
-
+			$label = "Activated";
+		}
         $document->status = $stastus;
         $document->update();
-
-        AuditReportsController::store('Contacts', 'Company Document Status Changed  ', "Company Document Status Changed", 0);
+        AuditReportsController::store('Contacts', "Company Document Status Changed: $label, Document: $document->name, Company $companyDetails->name", "Changed By User", 0);
         return back();
     }
 
     public function deleteCompanyDoc(contactsCompanydocs $document)
     {
-
+		$companyDetails = ContactCompany::where('id', $document->company_id)->first();
         $document->delete();
 
-        AuditReportsController::store('Contacts', 'Company Document  Deleted', "Company Document Deleted", 0);
+        AuditReportsController::store('Contacts', "Company Document Deleted: $document->name For: $companyDetails->name", "Deleted By User", 0);
         return back();
     }
 
@@ -1058,6 +1062,7 @@ class ContactCompaniesController extends Controller
         $Datefrom = $contactsCompanydocs['date_from'] = str_replace('/', '-', $contactsCompanydocs['date_from']);
         $Datefrom = $contactsCompanydocs['date_from'] = strtotime($contactsCompanydocs['date_from']);
 
+        $Expirydatet = $contactsCompanydocs['expirydate'] = str_replace('/', '-', $contactsCompanydocs['expirydate']);
         $Expirydate = $contactsCompanydocs['expirydate'] = str_replace('/', '-', $contactsCompanydocs['expirydate']);
         $Expirydate = $contactsCompanydocs['expirydate'] = strtotime($contactsCompanydocs['expirydate']);
 
@@ -1079,13 +1084,12 @@ class ContactCompaniesController extends Controller
                 $company->update();
             }
         }
-
+		$companyDetails = ContactCompany::where('id', $company->company_id)->first();
         // request fields
 
-        AuditReportsController::store('Contacts', 'Create Company Document', "Company Document Created , Document Name: $contactsCompanydocs[name], 
-       Document description: $contactsCompanydocs[description], Document expiry date: $Expirydate ,  Company ID : $contactsCompanydocs[companyID] ", 0);
+        AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated, Document Name: $contactsCompanydocs[name], 
+       Document description: $contactsCompanydocs[description], Document expiry date: $Expirydatet, Company Name : $companyDetails->name ", 0);
         return response()->json();
-
     }
 
 }

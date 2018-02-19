@@ -112,7 +112,6 @@ class ContactsController extends Controller
 
     public function addContact()
     {
-
         $data['page_title'] = "Contact";
         $data['page_description'] = "Add a New Contact";
         $data['breadcrumb'] = [
@@ -755,10 +754,8 @@ class ContactsController extends Controller
 
     public function viewdocuments(ContactPerson $person)
     {
-
         //return $person;
         $personID = $person->id;
-
         $data['page_title'] = "Contacts Setup";
         $data['page_description'] = "Contacts set up ";
         $data['breadcrumb'] = [
@@ -772,8 +769,7 @@ class ContactsController extends Controller
         $data['personID'] = $personID;
         $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'setup';
-        //return $SmSConfiguration;
-        AuditReportsController::store('Contacts', 'Setup Search Page Accessed', "Actioned By User", 0);
+        AuditReportsController::store('Contacts',"Accessed Documents For Client: $person->first_name $person->surname", "Accessed By User", 0);
         return view('contacts.mydocuments')->with($data);
     }
 
@@ -793,7 +789,7 @@ class ContactsController extends Controller
 
         $Expirydate = $clientdocData['exp_date'] = str_replace('/', '-', $clientdocData['exp_date']);
         $Expirydate = $clientdocData['exp_date'] = strtotime($clientdocData['exp_date']);
-
+		$clientDetails = ContactPerson::where('id', $clientdocData['clientID'])->first();
         $clientDoc = new contactsClientdocuments();
         $clientDoc->document_name = $clientdocData['name'];
         $clientDoc->description = $clientdocData['description'];
@@ -814,9 +810,7 @@ class ContactsController extends Controller
                 $clientDoc->update();
             }
         }
-
-
-        AuditReportsController::store('Contacts', 'Create Client Document ', "Client Document Created", 0);
+        AuditReportsController::store('Contacts', "New Document Added For Client: $clientDetails->first_name $clientDetails->surname, Document Name:$clientDoc->document_name", "Added by User", 0);
         return response()->json();
     }
 
@@ -844,7 +838,7 @@ class ContactsController extends Controller
         $document->client_id = $clientdocData['clientID'];
         $document->status = 1;
         $document->save();
-
+		$clientDetails = ContactPerson::where('id', $clientdocData['clientID'])->first();
         //Upload supporting document
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
@@ -856,29 +850,36 @@ class ContactsController extends Controller
                 $document->update();
             }
         }
-
-
-        AuditReportsController::store('Contacts', ' Client Document Updated ', "Client Document Updated", 0);
+        AuditReportsController::store('Contacts', "Client Document Updated For client: $clientDetails->first_name $clientDetails->surname, Document Name: $document->document_name", "Updated By User", 0);
         return response()->json();
     }
 
     public function clientdocAct(Request $request, contactsClientdocuments $document)
     {
+		$clientDetails = ContactPerson::where('id', $document->client_id)->first();
         if ($document->status == 1)
+		{
             $stastus = 0;
+			$label = "De-Activated";
+		}
         else
+		{
             $stastus = 1;
-
+			$label = "Activated";
+		}
+		
         $document->status = $stastus;
         $document->update();
+		die;
+		AuditReportsController::store('Contacts', "Client Document Status Updated For Client: $clientDetails->first_name $clientDetails->surname To $label, Document Name: $document->document_name", "Updated By User", 0);
         return back();
     }
 
     public function deleteClientDoc(contactsClientdocuments $document)
     {
+		$clientDetails = ContactPerson::where('id', $document->client_id)->first();
         $document->delete();
-
-        AuditReportsController::store('Contacts', 'Client Document  Deleted', "Client Document Deleted", 0);
+        AuditReportsController::store('Contacts', "Client Document Deleted, Document Name:$document->name, Client:$clientDetails->first_name $clientDetails->surname, Document Name: $document->document_name", "Deleted By User", 0);
         return back();
     }
 
