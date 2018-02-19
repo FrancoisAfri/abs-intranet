@@ -1171,6 +1171,15 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Add Company News';
+        $ribbon->description = 'Add Company News';
+        $ribbon->ribbon_path = 'cms/viewnews';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
         $ribbon->ribbon_name = 'Add Task';
         $ribbon->description = 'Add Task';
         $ribbon->ribbon_path = 'tasks/add_task';

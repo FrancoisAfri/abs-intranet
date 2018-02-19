@@ -18,9 +18,17 @@
 
                     <div class="box-header with-border">
                         <h3 class="box-title">Policy Users For - {{$Policy->name}} </h3>
-                        {{--<button type="button" class="btn btn-default pull-right" id="access_button"--}}
-                                {{--onclick="postData({{$Policy->id}}, 'access');"><i class="fa fa-print"></i> Print--}}
-                        {{--</button>--}}
+						</br>
+                         <h3 class="box-title">
+							@if(!empty($Policy->document))
+								<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+								   href="{{ Storage::disk('local')->url("Policies/policy/$Policy->document") }}"
+								   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+							@else
+								<a class="btn btn-default pull-centre btn-xs"><i
+											class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+							@endif							
+						</h3>
 
                         <button type="button" class="btn btn-default pull-right" id="print"><i class="fa fa-print"></i> Print</button>
 
@@ -60,7 +68,7 @@
                             <tbody>
                             @foreach($Policies as $policy)
                                 <tr>
-                                    <td style='text-align:center'>
+                                    <td style="width: 5px; text-align: center;">
                                         <input type="hidden" class="checkbox selectall"
                                                id="userID_{{ $policy->user_id }}"
                                                name="userID_{{ $policy->user_id }}" value="0">
@@ -78,7 +86,7 @@
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->Department )) ? $policy->Department : ''}}</td>
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->date_added )) ? $policy->date_added  : ''}}</td>
+                                        nowrap>{{ (!empty( $policy->date_added )) ? date(' d M Y', $policy->date_added)  : ''}}</td>
 
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->date_read )) ? date(' d M Y', $policy->date_read) : '' }}</td>
