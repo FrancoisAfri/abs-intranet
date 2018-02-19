@@ -1,5 +1,5 @@
 <div id="add-news-modal" class="modal modal-default fade">
-       <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-news-form">
                 {{ csrf_field() }}
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                     </div>
-  @foreach($division_levels as $division_level)
+                    @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
                                    class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -63,14 +63,14 @@
                         </div>
                     @endforeach
 
-
-                    <div class="box-body">
-                        <textarea id="summary" name="summary" rows="10" cols="80"></textarea>
-                        <input type="hidden" name="summary" value="summary">
-                        <br>
-                        <p style="margin-bottom: 0;"><b>Placeholders:</b> [client name]</p>
+                    <div class="form-group">
+                        <label for="term_name" class="col-sm-2 control-label">Summary</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <textarea class="form-control" rows="3" cols="70" id="term_name" name="term_name"></textarea>
+                            </div>
+                        </div>
                     </div>
-
 
                 </div>
                 <div class="modal-footer">

@@ -829,6 +829,8 @@ Route::get('cms/viewnews', 'CmsController@addnews');
 Route::post('cms/crm_news', 'CmsController@addcmsnews');
 Route::get('cms/viewnews/{news}', 'CmsController@viewnews');
 Route::post('cms/updatenews', 'CmsController@updatenews');
+Route::get('cms/cmsnews_act/{news}', 'CmsController@newsAct');
+Route::get('/cms/news/{news}/delete', 'CmsController@deleteNews');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

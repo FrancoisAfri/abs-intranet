@@ -178,14 +178,14 @@
 
 
 
-                $(document).ready(function () {
-
-                    $('#exp_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-                });
+//                $(document).ready(function () {
+//
+//                    $('#exp_date').datepicker({
+//                        format: 'dd/mm/yyyy',
+//                        autoclose: true,
+//                        todayHighlight: true
+//                    });
+//                });
 
                 //Show success action modal
                 @if(Session('changes_saved'))

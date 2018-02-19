@@ -51,6 +51,7 @@ class CmsController extends Controller
         $this->validate($request, [
 //            'name' => 'required',
 //            'description' => 'required',
+
         ]);
         $NewsData = $request->all();
         unset($NewsData['_token']);
@@ -61,7 +62,7 @@ class CmsController extends Controller
         $crmNews = new Cmsnews();
         $crmNews->name = $NewsData['name'];
         $crmNews->description = $NewsData['description'];
-        $crmNews->summary = $NewsData['summary'];
+        $crmNews->summary = html_entity_decode($NewsData['term_name']);
         $crmNews->division_level_1 = !empty($NewsData['division_level_1']) ? $NewsData['division_level_1'] : 0;
         $crmNews->division_level_2 = !empty($NewsData['division_level_2']) ? $NewsData['division_level_2'] : 0;
         $crmNews->division_level_3 = !empty($NewsData['division_level_3']) ? $NewsData['division_level_3'] : 0;
@@ -100,6 +101,27 @@ class CmsController extends Controller
 
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return view('cms.add_crm_news')->with($data);
+    }
+
+    public function newsAct(Cmsnews $news ){
+        if ($news->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $news->status = $stastus;
+        $news->update();
+
+        AuditReportsController::store('Content Management', 'Company News Status Changed', "Company News Status  Changed", 0);
+        return back();
+    }
+
+    public function deleteNews(Cmsnews $news){
+
+        $news->delete();
+
+        AuditReportsController::store('Contacts', 'Company Document  Deleted', "Company Document Deleted", 0);
+        return back();
     }
 
     public function updatenews(Request $request)
