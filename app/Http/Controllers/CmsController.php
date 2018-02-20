@@ -100,10 +100,11 @@ class CmsController extends Controller
 
 
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
-        return view('cms.add_crm_news')->with($data);
+        return view('cms.edit_crm_news')->with($data);
     }
 
-    public function newsAct(Cmsnews $news ){
+    public function newsAct(Cmsnews $news)
+    {
         if ($news->status == 1)
             $stastus = 0;
         else
@@ -116,15 +117,16 @@ class CmsController extends Controller
         return back();
     }
 
-    public function deleteNews(Cmsnews $news){
+    public function deleteNews(Cmsnews $news)
+    {
 
         $news->delete();
 
-        AuditReportsController::store('Contacts', 'Company Document  Deleted', "Company Document Deleted", 0);
+        AuditReportsController::store('Content Management', 'Content News  Deleted', "Content News Deleted", 0);
         return back();
     }
 
-    public function updatenews(Request $request)
+    public function updatContent(Request $request, Cmsnews $news)
     {
 
         $this->validate($request, [
@@ -133,9 +135,24 @@ class CmsController extends Controller
         $NewsData = $request->all();
         unset($NewsData['_token']);
 
-        $summary = $NewsData['summary'];
 
-        return $summary;
+        $Expdate = $NewsData['exp_date'] = str_replace('/', '-', $NewsData['exp_date']);
+        $Expdate = $NewsData['exp_date'] = strtotime($NewsData['exp_date']);
+
+        $news->name = $NewsData['name'];
+        $news->description = $NewsData['description'];
+        $news->summary = html_entity_decode($NewsData['summary']);
+        $news->division_level_1 = !empty($NewsData['division_level_1']) ? $NewsData['division_level_1'] : 0;
+        $news->division_level_2 = !empty($NewsData['division_level_2']) ? $NewsData['division_level_2'] : 0;
+        $news->division_level_3 = !empty($NewsData['division_level_3']) ? $NewsData['division_level_3'] : 0;
+        $news->division_level_4 = !empty($NewsData['division_level_4']) ? $NewsData['division_level_4'] : 0;
+        $news->division_level_5 = !empty($NewsData['division_level_5']) ? $NewsData['division_level_5'] : 0;
+        $news->expirydate = $Expdate;
+        $news->update();
+
+        AuditReportsController::store('Contacts', 'Company News Content  Updated', "Company News Content  Updated", 0);
+        return back()->with('success_application', "Content Update successfully.");
+
     }
 
 }

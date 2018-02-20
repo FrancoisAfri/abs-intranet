@@ -40,22 +40,19 @@
                         @if (count($Cmsnews) > 0)
                             @foreach ($Cmsnews as $news)
                                 <tr id="categories-list">
-                                    <td nowrap>
-                                        <button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-newdoc-modal"
-                                                data-id="{{ $news->id }}"
-                                                data-document_name="{{ $news->document_name }}"
-                                                data-description="{{ $news->description }}"
-                                                data-role="{{ $news->role }}"
-                                                data-date_from="{{  date(' d M Y', $news->date_from) }}"
-                                                data-expirydate="{{ date(' d M Y', $news->expirydate) }}"
-                                        ><i class="fa fa-pencil-square-o"></i> Edit
-                                        </button>
-                                    </td>
                                     <td>
                                         <a href="{{ '/cms/viewnews/' . $news->id }}" id="edit_compan"
                                            class="btn btn-primary  btn-xs" data-id="{{ $news->id }}"><i
-                                                    class="fa fa-file-audio-o"></i> View News</a>
+                                                    class="fa fa-pencil-square-o"></i> Edit</a>
+                                    </td>
+                                    <td nowrap>
+                                        <button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
+                                                data-toggle="modal" data-target="#view-news-modal"
+                                                data-id="{{ $news->id }}"
+                                                data-document_name="{{ $news->document_name }}"
+                                                data-description="{{ $news->description }}"
+                                        ><i class="fa fa-file-audio-o"></i> View News
+                                        </button>
                                     </td>
                                     <td>{{ !empty($news->expirydate) ? date(' d M Y', $news->expirydate) : '' }}</td>
                                     <td>{{ !empty($news->name) ? $news->name : ''}}</td>
@@ -100,7 +97,7 @@
             </div>
             <!-- Include add new prime rate modal -->
         @include('cms.partials.add_news_modal')
-        @include('contacts.partials.edit_clientdocument_modal')
+        @include('cms.partials.view_news_modal')
         <!-- Include delete warning Modal form-->
             @if (count($Cmsnews) > 0)
                 @include('cms.partials.news_warning_action', ['modal_title' => 'Delete Record', 'modal_content' => 'Are you sure you want to delete this Record? This action cannot be undone.'])
@@ -110,6 +107,8 @@
     @endsection
 
     @section('page_script')
+            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+            <!-- iCheck -->
         <!-- Start Bootstrap File input -->
             <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
             <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js"
@@ -150,6 +149,7 @@
                     //alwaysVisible: true
                 });
 
+
                 // Replace the <textarea id="send_quote_message"> with a CKEditor
                 // instance, using default configuration.
                 CKEDITOR.replace('term_name');
@@ -176,16 +176,13 @@
                 $('#success-action-modal').modal('show');
 
 
-
-
-                $(document).ready(function () {
-
-                    $('#exp_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+                $('.datepicker').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
                 });
+
+
 
                 //Show success action modal
                 @if(Session('changes_saved'))
