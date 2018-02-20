@@ -18,8 +18,7 @@
 
                     <div class="box-header with-border">
                         <h3 class="box-title">Policy Users For - {{$Policy->name}} </h3>
-
-                    </div>
+					</div>
                     <!-- /.box-header -->
                     <div class="box-body">
                         @if (count($errors) > 0)
