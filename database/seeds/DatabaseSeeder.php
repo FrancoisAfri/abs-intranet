@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
         $province = new Province();
         $province->name = 'North West';
         $country->addProvince($province);
-
+//
         $province = new Province();
         $province->name = 'Northern Cape';
         $country->addProvince($province);
