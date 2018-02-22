@@ -14,7 +14,7 @@ class DropRegistrationFromVehicleinsuarance extends Migration
     public function up()
     {
         Schema::table('vehicle_insurance', function($table) {
-            $table->dropColumn(['registration', 'vehicle_reg_no']);
+            $table->dropColumn(['registration']);
          });
     }
 

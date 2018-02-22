@@ -14,7 +14,7 @@ class DropcurrentlitrsOnVehicleFueltank extends Migration
     public function up()
     {
         Schema::table('fuel_tanks', function($table) {
-            $table->dropColumn('current_fuel_litres');
+            //$table->dropColumn('current_fuel_litres');
         });
     }
     /**

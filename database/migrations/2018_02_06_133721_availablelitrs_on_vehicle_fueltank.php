@@ -26,7 +26,7 @@ class AvailablelitrsOnVehicleFueltank extends Migration
     public function down()
     {
         Schema::table('fuel_tanks', function (Blueprint $table) {
-            $table->double('available_litres')->nullable();;
+               $table->dropColumn('available_litres');
         });
     }
 }

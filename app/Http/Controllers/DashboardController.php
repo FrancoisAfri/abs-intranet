@@ -33,6 +33,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -270,8 +271,18 @@ class DashboardController extends Controller
 
 
             #cms
-            $news = Cmsnews::orderBy('id', 'asc')->where('status',1)->get();
-            //return $news;
+            #cms
+            $news = Cmsnews::orderBy('id', 'asc')
+                ->where('status', 1)
+//                ->where('expirydate', '>', $today)
+                ->get();
+
+            $Cmsnews = Cmsnews::orderBy('id', 'asc')->first();
+
+            $avatar = $Cmsnews->image;
+
+
+            $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("CMS/images/$avatar") : '';
             #induction
 
             $ClientInduction = ClientInduction::

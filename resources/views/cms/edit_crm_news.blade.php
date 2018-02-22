@@ -89,9 +89,22 @@
                             </div>
                         @endforeach
 
+                        <div class="form-group">
+                            <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
+
+                            <div class="col-sm-8">
+                                <div style="margin-bottom: 10px;">
+                                    <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="320" height="150">
+                                </div>
+                                <input type="file" id="image" name="image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            </div>
+                        </div>
+
+
+
                         <div class="box-body">
                             <textarea id="send_invoice_message" name="summary" rows="10"
-                                      cols="80">{{$Cmsnews->summary}}</textarea>
+                                      cols="60">{{$Cmsnews->summary}}</textarea>
                             <input type="hidden" name="template_key" value="send_invoice">
                             <br>
                             {{--<p style="margin-bottom: 0;"><b>Placeholders:</b> [client name]</p>--}}
@@ -103,6 +116,7 @@
                     @endif
                     <!-- /.box-body -->
                         <div class="box-footer">
+                            <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save
                             </button>
                         </div>
@@ -141,6 +155,11 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
     <script>
+
+        $('#back_button').click(function () {
+            location.href = '/cms/viewnews';
+        });
+
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();

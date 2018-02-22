@@ -9,8 +9,50 @@
 @endsection
 @section('content')
     {{----}}
+    {{----}}
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="box box-muted same-height-widget">
+                <div class="box-header with-border">
+                    <i class="fa fa-comments-o"></i>
+                    <h3 class="box-title"> News</h3>
+
+                    <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
+                        <div class="btn-group" data-toggle="btn-toggle">
+                            <button type="button" class="btn btn-default btn-sm active"><i
+                                        class="fa fa-square text-green"></i>
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                
+
+                <div id="myCarousel" class="carousel slide"> <!-- slider -->
+                    <div class="carousel-inner">
+                        <div class="active item"> <!-- item 1 -->
+                            <img src="{{ $avatar }}" class="img-responsive img-thumbnail"  width="520" height="300">
+                        </div> <!-- end item -->
+                        <div class="item"> <!-- item 2 -->
+                            <img src="{{ $avatar }}" class="img-responsive img-thumbnail"  width="520" height="300">
+                        </div> <!-- end item -->
+                        <div class="item"> <!-- item 3 -->
+                            <img src="{{ $avatar }}" class="img-responsive img-thumbnail"  width="520" height="300">
+                        </div> <!-- end item -->
+                    </div> <!-- end carousel inner -->
+                    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                </div> <!-- end slider -->
+
+
+
+            </div>
+        </div>
+
+
+        <div class="col-md-6">
             <div class="box box-muted same-height-widget">
                 <div class="box-header with-border">
                     <i class="fa fa-comments-o"></i>
@@ -59,6 +101,8 @@
             </div>
         </div>
     </div>
+    {{----}}
+
     {{----}}
 
     @if($activeModules->where('code_name', 'appraisal')->first())

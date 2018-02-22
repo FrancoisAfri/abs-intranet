@@ -72,6 +72,18 @@ class CmsController extends Controller
         $crmNews->status = 1;
         $crmNews->save();
 
+        //Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = $crmNews->id . "image." . $fileExt;
+                $request->file('image')->storeAs('CMS/images', $fileName);
+                //Update file name in the database
+                $crmNews->image = $fileName;
+                $crmNews->update();
+            }
+        }
+
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return response()->json();
     }
@@ -91,6 +103,8 @@ class CmsController extends Controller
             ['title' => 'CMS', 'path' => '/News', 'icon' => 'fa fa-handshake-o', 'active' => 0, 'is_module' => 1],
             ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
         ];
+        $avatar = $Cmsnews->image;
+        $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("CMS/images/$avatar") : '';
         $data['active_mod'] = 'Content Management';
         $data['active_rib'] = 'Add Company News';
         $data['Cmsnews'] = $Cmsnews;
@@ -149,6 +163,17 @@ class CmsController extends Controller
         $news->division_level_5 = !empty($NewsData['division_level_5']) ? $NewsData['division_level_5'] : 0;
         $news->expirydate = $Expdate;
         $news->update();
+
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = $news->id . "image." . $fileExt;
+                $request->file('image')->storeAs('CMS/images', $fileName);
+                //Update file name in the database
+                $news->image = $fileName;
+                $news->update();
+            }
+        }
 
         AuditReportsController::store('Contacts', 'Company News Content  Updated', "Company News Content  Updated", 0);
         return back()->with('success_application', "Content Update successfully.");

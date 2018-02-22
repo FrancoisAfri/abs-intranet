@@ -96,8 +96,8 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('cms.partials.add_news_modal')
-        @include('cms.partials.view_news_modal')
+      @include('cms.partials.add_news_modal')
+        {{--  @include('cms.partials.view_news_modal')   --}}
         <!-- Include delete warning Modal form-->
             @if (count($Cmsnews) > 0)
                 @include('cms.partials.news_warning_action', ['modal_title' => 'Delete Record', 'modal_content' => 'Are you sure you want to delete this Record? This action cannot be undone.'])

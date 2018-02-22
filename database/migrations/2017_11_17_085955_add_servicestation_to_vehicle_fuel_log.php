@@ -15,7 +15,7 @@ class AddServicestationToVehicleFuelLog extends Migration
     {
          Schema::table('vehicle_fuel_log', function ($table) {
              $table->integer('service_station')->nullable()->unsigned()->index();
-             $table->integer('transaction_type')->nullable();
+             //$table->integer('transaction_type')->nullable();
              $table->double('cost_per_litre')->nullable();
              $table->double('total_cost')->nullable();
         });
@@ -30,7 +30,7 @@ class AddServicestationToVehicleFuelLog extends Migration
     {
       Schema::table('vehicle_fuel_log', function ($table) {
             $table->dropColumn('service_station');
-            $table->dropColumn('transaction_type');
+            //$table->dropColumn('transaction_type');
             $table->dropColumn('cost_per_litre');
             $table->dropColumn('total_cost');
         });
