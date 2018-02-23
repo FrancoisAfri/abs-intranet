@@ -273,14 +273,19 @@ class DashboardController extends Controller
 
             #cms
             #cms
+
+            $today = time();
             $news = Cmsnews::orderBy('id', 'asc')
                 ->where('status', 1)
                 ->where('expirydate', '>', $today)
                 ->get();
 
+               // return $news;
+
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
             $ceonews = ceo_news::latest()->first();
+          // return $ceonews;
 
             $ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')

@@ -5,6 +5,7 @@
           type="text/css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+
 @endsection
 @section('content')
     {{----}}
@@ -30,8 +31,8 @@
                         @foreach($news as $key => $Cmsnews)
 
                             <div class="item{{ $key == 0 ? ' active' : '' }}"> <!-- item 1 -->
-                        
-                                <button type="button" id="edit_compan" class="btn success btn-xs"  data-toggle="modal"
+
+                                <button type="button" id="edit_compan" class="btn success btn-xs" data-toggle="modal"
                                         data-target="#View-news-modal" data-id="{{ $Cmsnews->id }}"
                                         data-name="{{ $Cmsnews->name }}"
                                         data-description="{{$Cmsnews->description}}"
@@ -63,7 +64,51 @@
                     <i class="fa fa-comments-o"></i>
                     <h3 class="box-title"> Campony Ceo News</h3>
                 </div>
-                
+
+                <div class="container">
+                   <!--  <div class="page-header">
+                        <h1 id="timeline">Timeline</h1>
+                    </div> -->
+                    <ul class="timeline">
+
+                        <li>
+                            <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title"><N>{{$ceonews->name}}</N></h4>
+                                    <p>
+                                        <small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{date(' d M Y', $ceonews->date) }}
+                                        </small>
+                                    </p>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>{!!$ceonews->summary!!}.</p>
+                                    <div>
+                                        <div class="pull-right">
+                                            <span class="label label-default">alice</span>
+                                            <span class="label label-primary">story</span>
+                                            <span class="label label-success">blog</span>
+                                            <span class="label label-info">personal</span>
+                                            <span class="label label-warning">Warning</span>
+                                            <span class="label label-danger">Danger</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="timeline-footer">
+                                    <div>
+                                        <!--  -->
+                                        
+                                        <!--  -->
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    
+                    </ul>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -589,7 +634,7 @@
     <script src="/custom_components/js/tasktimer.js"></script>
     <!-- CK Editor -->
     <script src="https://cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
-
+    {{--<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>--}}
     <script>
         function postData(id, data) {
             if (data == 'start')
