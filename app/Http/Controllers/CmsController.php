@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cmsnews;
-use App\contacts_company;
+use App\ceo_news;
 use App\HRPerson;
 use App\User;
 use App\ContactPerson;
@@ -174,6 +174,112 @@ class CmsController extends Controller
                 $news->update();
             }
         }
+
+        AuditReportsController::store('Content Management', 'Company News Updated', "Company News Content Management Accessed", 0);
+        return back()->with('success_application', "Content Update successfully.");
+
+    }
+
+    public function addCeonews()
+    {
+
+        $Ceo_news = ceo_news::all();
+
+        $data['page_title'] = "CRM ";
+        $data['page_description'] = "Ceo News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Ceo News', 'path' => '/News', 'icon' => 'fa fa-handshake-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'CEO News';
+        $data['Ceo_news'] = $Ceo_news;
+
+        AuditReportsController::store('Content Management', 'Company Ceo News Accessed', "Company News Content Management Accessed", 0);
+        return view('cms.viewceonews')->with($data);
+    }
+
+    public function addcmsceonews(Request $request)
+    {
+        $this->validate($request, [
+//            'name' => 'required',
+//            'description' => 'required',
+
+        ]);
+        $NewsData = $request->all();
+        unset($NewsData['_token']);
+
+
+        $crmNews = new ceo_news();
+        $crmNews->name = $NewsData['name'];
+        $crmNews->description = $NewsData['description'];
+        $crmNews->summary = html_entity_decode($NewsData['term_name']);
+        $crmNews->date = time();
+        $crmNews->status = 1;
+        $crmNews->save();
+
+
+        AuditReportsController::store('Content Management', 'Company Ceo News Added', "Company News Content Management Accessed", 0);
+        return response()->json();
+    }
+
+    public function ceonewsAct(ceo_news $news)
+    {
+        if ($news->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $news->status = $stastus;
+        $news->update();
+
+        AuditReportsController::store('Content Management', 'Company Ceo News Status Changed', "Company Ceo News Status  Changed", 0);
+        return back();
+    }
+
+    public function deleteCeoNews(ceo_news $news)
+    {
+
+        $news->delete();
+
+        AuditReportsController::store('Content Management', 'Content Ceo News  Deleted', "Content Ceo News Deleted", 0);
+        return back();
+    }
+
+    public function editCeoNews(ceo_news $news)
+    {
+
+        // return $news;
+        $Cmsnews = ceo_news::where('id', $news->id)->first();
+
+        $data['page_title'] = "CRM ";
+        $data['page_description'] = "Ceo News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Ceo News', 'path' => '/News', 'icon' => 'fa fa-handshake-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'CEO News';
+        $data['Cmsnews'] = $Cmsnews;
+
+        AuditReportsController::store('Content Management', 'Company Ceo News Accessed', "Company Ceo News Content  Accessed", 0);
+        return view('cms.edit_ceo_news')->with($data);
+    }
+
+    public function updatCeonewsContent(Request $request, ceo_news $news)
+    {
+
+        $this->validate($request, [
+
+        ]);
+        $NewsData = $request->all();
+        unset($NewsData['_token']);
+
+        $news->name = $NewsData['name'];
+        $news->description = $NewsData['description'];
+        $news->summary = html_entity_decode($NewsData['summary']);
+        $news->date = time();
+        $news->update();
 
         AuditReportsController::store('Contacts', 'Company News Content  Updated', "Company News Content  Updated", 0);
         return back()->with('success_application', "Content Update successfully.");

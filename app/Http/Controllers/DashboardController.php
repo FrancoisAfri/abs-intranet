@@ -26,6 +26,7 @@ use App\modules;
 use App\programme;
 use App\ContactPerson;
 use App\CRMAccount;
+use App\ceo_news;
 use App\Quotation;
 use App\Cmsnews;
 use Carbon\Carbon;
@@ -274,16 +275,12 @@ class DashboardController extends Controller
             #cms
             $news = Cmsnews::orderBy('id', 'asc')
                 ->where('status', 1)
-//                ->where('expirydate', '>', $today)
+                ->where('expirydate', '>', $today)
                 ->get();
 
-            $Cmsnews = Cmsnews::orderBy('id', 'asc')->first();
+            $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
-            $avatar = $Cmsnews->image;
-
-
-            $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("CMS/images/$avatar") : '';
-            #induction
+            $ceonews = ceo_news::latest()->first();
 
             $ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
@@ -294,6 +291,7 @@ class DashboardController extends Controller
             $ClientTask = $ClientInduction->load('TasksList');
 
 
+            $data['ceonews'] = $ceonews;
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
             $data['news'] = $news;

@@ -1177,14 +1177,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 1;
-        // $ribbon->ribbon_name = 'Add Task';
-        // $ribbon->description = 'Add Task';
-        // $ribbon->ribbon_path = 'tasks/add_task';
-        // $ribbon->access_level = 2;
-        // $module->addRibbon($ribbon);
+         $ribbon = new module_ribbons();
+         $ribbon->active = 1;
+         $ribbon->sort_order = 1;
+         $ribbon->ribbon_name = 'CEO News';
+         $ribbon->description = 'Add Ceo News';
+         $ribbon->ribbon_path = 'cms/ceo/add_news';
+         $ribbon->access_level = 2;
+         $module->addRibbon($ribbon);
 
         // $ribbon = new module_ribbons();
         // $ribbon->active = 1;

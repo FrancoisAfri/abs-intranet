@@ -1,5 +1,5 @@
 /* Font awesome icon on the top-right corner of forms */
-div.box-header>i.pull-right {
+div.box-header > i.pull-right {
     font-size: 40px;
     color: #ddd;
 }
@@ -15,96 +15,103 @@ hr.hr-text {
     height: 1.5em;
     opacity: .5;
 }
-hr.hr-text::before {
-     content: '';
-     /* use the linear-gradient for the fading effect
-     // use a solid background color for a solid bar */
-     background: linear-gradient(to right, transparent, #818078, transparent);
-     position: absolute;
-     left: 0;
-     top: 50%;
-     width: 100%;
-     height: 1px;
- }
-hr.hr-text::after {
-     content: attr(data-content);
-     position: relative;
-     display: inline-block;
-     color: black;
 
-     padding: 0 .5em;
-     line-height: 1.5em;
-     /* this is really the only tricky part, you need to specify the background color of the container element...*/
-     color: #818078;
-     background-color: #fcfcfa;
- }
- h2.headertekst {
-  text-align: center;
+hr.hr-text::before {
+    content: '';
+    /* use the linear-gradient for the fading effect
+    // use a solid background color for a solid bar */
+    background: linear-gradient(to right, transparent, #818078, transparent);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
 }
+
+hr.hr-text::after {
+    content: attr(data-content);
+    position: relative;
+    display: inline-block;
+    color: black;
+
+    padding: 0 .5em;
+    line-height: 1.5em;
+    /* this is really the only tricky part, you need to specify the background color of the container element...*/
+    color: #818078;
+    background-color: #fcfcfa;
+}
+
+h2.headertekst {
+    text-align: center;
+}
+
 #nav {
-width:750px;
-margin:0 auto;
-list-style:none;
+    width: 750px;
+    margin: 0 auto;
+    list-style: none;
 }
+
 #nav li {
-float:left;
+    float: left;
 }
+
 #nav a {
-display:block;
-text-align:center;
-width:150px; /* fixed width */
-text-decoration:none; 
+    display: block;
+    text-align: center;
+    width: 150px; /* fixed width */
+    text-decoration: none;
 }
+
 /*
 */
 /*
-Align the 
+Align the
 */
 #content {
-    border: 2px ;
+    border: 2px;
     width: 100%;
     height: 80%;
-   /* position: relative;*/
+    /* position: relative;*/
     top: -15px;
     left: -15px;
     padding: 10px;
-  }
+}
 
-  #content .A {
-    border: 3px ;
-    width:50%;
+#content .A {
+    border: 3px;
+    width: 50%;
     height: 50%;
     float: left;
-   /* background: purple;*/
-  }
+    /* background: purple;*/
+}
 
-  #content .B {
-  /*  border: 2px ;*/
-    width:50%;
-    height: 50%;
-    float: left;
-    /*background: purple;*/
-  }
-
-  #content .C {
-    border: 2px ;
-    width:50%;
+#content .B {
+    /*  border: 2px ;*/
+    width: 50%;
     height: 50%;
     float: left;
     /*background: purple;*/
-  }
+}
 
-  #content .D {
-    border: 2px ;
-    width:50%;
+#content .C {
+    border: 2px;
+    width: 50%;
     height: 50%;
     float: left;
     /*background: purple;*/
-  }
+}
+
+#content .D {
+    border: 2px;
+    width: 50%;
+    height: 50%;
+    float: left;
+    /*background: purple;*/
+}
 
 #content, #content > div {
-      -webkit-box-sixing: border-box;
-    -moz-box-sizing: border-box; 
+    -webkit-box-sixing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
@@ -112,130 +119,188 @@ Align the
 *,
 *:before,
 *:after {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  /* outline: 1px dotted salmon; */
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    /* outline: 1px dotted salmon; */
 }
 
 html,
 body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  
-  /* font-size: 14px; */
-  /* Helvetica/Arial-based sans serif stack */
-  font: 125%/1.5 Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    /* font-size: 14px; */
+    /* Helvetica/Arial-based sans serif stack */
+    font: 125%/1.5 Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .flexbox-parent {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* align items in Main Axis */
-  align-items: stretch;
-  /* align items in Cross Axis */
-  align-content: stretch;
-  /* Extra space in Cross Axis */
-  background: rgba(255, 255, 255, .1);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* align items in Main Axis */
+    align-items: stretch;
+    /* align items in Cross Axis */
+    align-content: stretch;
+    /* Extra space in Cross Axis */
+    background: rgba(255, 255, 255, .1);
 }
 
 .flexbox-item {
-  padding: 5px;
+    padding: 5px;
 }
 
 .flexbox-item-grow {
-  flex: 1;
-  /* same as flex: 1 1 auto; */
+    flex: 1;
+    /* same as flex: 1 1 auto; */
 }
 
 .fill-area {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  /* align items in Main Axis */
-  align-items: stretch;
-  /* align items in Cross Axis */
-  align-content: stretch;
-  /* Extra space in Cross Axis */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    /* align items in Main Axis */
+    align-items: stretch;
+    /* align items in Cross Axis */
+    align-content: stretch;
+    /* Extra space in Cross Axis */
 }
 
 .fill-area-content {
-  background: rgba(55, 155, 225, .1);
-  padding: 7px;
-  /* Needed for when the area gets squished too far and there is content that can't be displayed */
-  overflow: hidden;
+    background: rgba(55, 155, 225, .1);
+    padding: 7px;
+    /* Needed for when the area gets squished too far and there is content that can't be displayed */
+    overflow: hidden;
 }
+
 .panel-body {
-  /* height: 480px; */
-  height: calc(100vh - 200px);
-  overflow-y: auto; 
+    /* height: 480px; */
+    height: calc(100vh - 200px);
+    overflow-y: auto;
 }
+
 .header-page,
 .footer-page {
-  background-color: rgba(0,0,0,.75);
-  color: #fff;
-  text-align: center;
-  font-weight: 300;
-  height: 40px;
+    background-color: rgba(0, 0, 0, .75);
+    color: #fff;
+    text-align: center;
+    font-weight: 300;
+    height: 40px;
 }
+
 .header-page h1 {
-  font-size: 2em;
-  line-height: 1.5;
-  margin: 0;
+    font-size: 2em;
+    line-height: 1.5;
+    margin: 0;
 }
+
 .footer-page small {
-  display: inline-block;
-  font-size: 1.25em;
-  margin: .25em auto;
-} 
+    display: inline-block;
+    font-size: 1.25em;
+    margin: .25em auto;
+}
 
 /**/
-button.accordion {
-    background-color: #eee;
-    color: #444;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
+body {width:auto; background: #fff;}
+
+#myCarousel {margin-left: 30px; margin-right: 30px;}
+
+.carousel-control {
+    top: 50%;
+}
+.carousel-inner {
+    width: auto;
+    height: 300px;
+}
+.carousel-control.left, .carousel-control.right {
+    background: none;
+    color: red;
     border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: 0.4s;
 }
-
-button.accordion.active, button.accordion:hover {
-    background-color: #ddd; 
-}
-
-div.panel {
-    padding: 0 18px;
-    display: none;
-    background-color: white;
-}
+.carousel-control.left {margin-left: -45px; color: brown;}
+.carousel-control.right {margin-right: -45px; color: black;}
 
 /**/
-#upleft { 
-   width:100px; 
-   height: 300px; 
-   background:red; float:left; 
+
+
+/*#####################
+Additional Styles (required)
+######################*/
+.btn_outline {
+    border: 2px solid black;
+    background-color: white;
+    color: black;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
-#upright { 
-   width:300px; 
-   height:200px; 
-   background:blue; 
-   float:left
+/* Green */
+.success {
+    border-color: #4CAF50;
+    color: green;
 }
-#below { 
-   height:300px; 
-   width:400px; 
-   background:green 
+
+.success:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Blue */
+.info {
+    border-color: #2196F3;
+    color: dodgerblue
+}
+
+.info:hover {
+    background: #2196F3;
+    color: white;
+}
+
+/* Orange */
+.warning {
+    border-color: #ff9800;
+    color: orange;
+}
+
+.warning:hover {
+    background: #ff9800;
+    color: white;
+}
+
+/* Red */
+.danger {
+    border-color: #f44336;
+    color: red
+}
+
+.danger:hover {
+    background: #f44336;
+    color: white;
+}
+
+/* Gray */
+.default {
+    border-color: #e7e7e7;
+    color: black;
+}
+
+.default:hover {
+    background: #e7e7e7;
+}
+.btn_outline {
+    border-radius: 5px;
+}
+.btn_outline_sx
+{
+    width: 10px;
+    height: 20px;
 }

@@ -3,9 +3,8 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 @endsection
 @section('content')
     {{----}}
@@ -15,94 +14,59 @@
             <div class="box box-muted same-height-widget">
                 <div class="box-header with-border">
                     <i class="fa fa-comments-o"></i>
-                    <h3 class="box-title"> News</h3>
+                    <h3 class="box-title"> Campony News</h3>
 
-                    <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
-                        <div class="btn-group" data-toggle="btn-toggle">
-                            <button type="button" class="btn btn-default btn-sm active"><i
-                                        class="fa fa-square text-green"></i>
-                            </button>
-                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i>
-                            </button>
-                        </div>
-                    </div>
                 </div>
-                <!-- /.box-header -->
-                
-
-                <div id="myCarousel" class="carousel slide"> <!-- slider -->
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+                        <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
+                    </ol>
                     <div class="carousel-inner">
-                        <div class="active item"> <!-- item 1 -->
-                            <img src="{{ $avatar }}" class="img-responsive img-thumbnail"  width="520" height="300">
-                        </div> <!-- end item -->
-                        <div class="item"> <!-- item 2 -->
-                            <img src="{{ $avatar }}" class="img-responsive img-thumbnail"  width="520" height="300">
-                        </div> <!-- end item -->
-                        <div class="item"> <!-- item 3 -->
-                            <img src="{{ $avatar }}" class="img-responsive img-thumbnail"  width="520" height="300">
-                        </div> <!-- end item -->
-                    </div> <!-- end carousel inner -->
-                    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-                    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-                </div> <!-- end slider -->
+                        @foreach($news as $key => $Cmsnews)
 
-
-
+                            <div class="item{{ $key == 0 ? ' active' : '' }}"> <!-- item 1 -->
+                        
+                                <button type="button" id="edit_compan" class="btn success btn-xs"  data-toggle="modal"
+                                        data-target="#View-news-modal" data-id="{{ $Cmsnews->id }}"
+                                        data-name="{{ $Cmsnews->name }}"
+                                        data-description="{{$Cmsnews->description}}"
+                                        data-summary="{{$Cmsnews->summary}}">Learn more
+                                </button>
+                                <img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}">
+                                <div class="carousel-caption">
+                                    <p>{{$Cmsnews->name}}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
             </div>
+            @include('dashboard.partials.view_news_modal')
         </div>
-
 
         <div class="col-md-6">
             <div class="box box-muted same-height-widget">
                 <div class="box-header with-border">
                     <i class="fa fa-comments-o"></i>
-                    <h3 class="box-title">Campony News</h3>
-
-                    <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
-                        <div class="btn-group" data-toggle="btn-toggle">
-                            <button type="button" class="btn btn-default btn-sm active"><i
-                                        class="fa fa-square text-green"></i>
-                            </button>
-                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <h3 class="box-title"> Campony Ceo News</h3>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body" style="height: 274px; overflow-y: scroll;">
-                    <table class="table table-striped table-hover">
-
-
-                        @if (!empty($news))
-                            @foreach($news as $Cmsnews)
-                                <tr>
-                                    <div id="categories-list">
-                                        <p class="filename">
-                                            <td>
-                                                <div class="slimScrollDiv"
-                                                     style="position: relative; width: auto; height: 150px;">
-                                                    <div class="box-body chat" id="chat-box"
-                                                         style="overflow: hidden; width: auto; height:auto; ">
-                                                        <h4>{{ $Cmsnews->name }}:</h4>
-                                                        <small class="text-muted pull-right"><i
-                                                                    class="fa fa-clock-o"></i> {{ $Cmsnews->created_at }}
-                                                        </small>
-                                        <td>{!!$Cmsnews->summary!!}</td>
-                                    </div>
-                                    </p>
-                                </tr>
-                            @endforeach
-                        @endif
-                    </table>
-                </div>
-                <!-- </div> -->
-                <div class="box-footer">
-                </div>
+                
             </div>
         </div>
     </div>
-    {{----}}
-
     {{----}}
 
     @if($activeModules->where('code_name', 'appraisal')->first())
@@ -623,7 +587,8 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Task timer -->
     <script src="/custom_components/js/tasktimer.js"></script>
-
+    <!-- CK Editor -->
+    <script src="https://cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
 
     <script>
         function postData(id, data) {
@@ -671,6 +636,13 @@
                 $('.modal:visible').each(reposition);
             });
 
+            $(function () {
+                $('img').on('click', function () {
+                    $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+                    $('#enlargeImageModal').modal('show');
+                });
+            });
+//            CKEDITOR.replace('summary');
             //widgets permissions
             var isSuperuser = parseInt({{ (int) $isSuperuser }}),
                 isDivHead = parseInt({{ (int) $isDivHead }}),
@@ -821,6 +793,19 @@
                 });
             }
 
+            var newsID;
+            $('#View-news-modal').on('show.bs.modal', function (e) {
+                //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                newsID = btnEdit.data('id');
+                var name = btnEdit.data('name');
+                var description = btnEdit.data('description');
+                var summary = btnEdit.data('summary');
+                var modal = $(this);
+                modal.find('#name').val(name);
+                modal.find('#description').val(description);
+                modal.find('#summary').val(summary);
+            });
             //Show available perks on the perks widget
             var perksWidgetList = $('#perks-widget-list');
             loadAvailablePerks(perksWidgetList);
@@ -920,6 +905,12 @@
 
             //Show success action modal
             //$('#success-action-modal').modal('show');
+
+            $(window).load(function () {
+                $('#myCarousel').carousel({
+                    interval: 5000
+                })
+            });
         });
     </script>
 @endsection

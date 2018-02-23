@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Company News </h3>
+                    <h3 class="box-title"> Company Ceo News </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -31,17 +31,16 @@
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
                             <th style="width: 20px; text-align: center;"></th>
-                            <th>Date</th>
                             <th>name</th>
                             <th>Description</th>
                             <th style="width: 5px; text-align: center;"></th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
-                        @if (count($Cmsnews) > 0)
-                            @foreach ($Cmsnews as $news)
+                        @if (count($Ceo_news) > 0)
+                            @foreach ($Ceo_news as $news)
                                 <tr id="categories-list">
                                     <td>
-                                        <a href="{{ '/cms/viewnews/' . $news->id }}" id="edit_compan"
+                                        <a href="{{ '/cms/editCeonews/' . $news->id }}" id="edit_compan"
                                            class="btn btn-primary  btn-xs" data-id="{{ $news->id }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit</a>
                                     </td>
@@ -95,11 +94,11 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-    
-          @include('cms.partials.add_news_modal')
+      @include('cms.partials.add_ceo_news_modal')
+
         <!-- Include delete warning Modal form-->
-            @if (count($Cmsnews) > 0)
-                @include('cms.partials.news_warning_action', ['modal_title' => 'Delete Record', 'modal_content' => 'Are you sure you want to delete this Record? This action cannot be undone.'])
+            @if (count($Ceo_news) > 0)
+                @include('cms.partials.ceo_news_warning_action', ['modal_title' => 'Delete Record', 'modal_content' => 'Are you sure you want to delete this Record? This action cannot be undone.'])
             @endif
 
         </div>
@@ -135,7 +134,7 @@
             <script src="/custom_components/js/modal_ajax_submit.js"></script>
             <script>
                 function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/cms/cmsnews_act/" + id;
+                    if (data == 'actdeac') location.href = "/cms/ceo_cmsnews_act/" + id;
 
                 }
 
@@ -194,11 +193,11 @@
 
                 //Post perk form to server using ajax (add)
                 $('#add_news').on('click', function () {
-                    var strUrl = '/cms/crm_news';
+                    var strUrl = '/cms/add_ceo_news';
                     var formName = 'add-news-form';
                     var modalID = 'add-news-modal';
                     var submitBtnID = 'add_news';
-                    var redirectUrl = '/cms/viewnews';
+                    var redirectUrl = '/cms/ceo/add_news';
                     var successMsgTitle = 'New Record Details Added!';
                     var successMsg = 'New Crm News has been Added successfully.';
                     for (instance in CKEDITOR.instances) {
@@ -207,22 +206,6 @@
                     $("#term_name").serialize()
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
-
-                //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                @foreach($division_levels as $division_level)
-                //Populate drop down on page load
-                var ddID = '{{ 'division_level_' . $division_level->level }}';
-                var postTo = '{!! route('divisionsdropdown') !!}';
-                var selectedOption = '';
-                var divLevel = parseInt('{{ $division_level->level }}');
-                var incInactive = -1;
-                var loadAll = loadAllDivs;
-                loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-                parentDDID = ddID;
-                loadAllDivs = -1;
-                @endforeach
                 //
             </script>
 @endsection

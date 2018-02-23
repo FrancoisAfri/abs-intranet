@@ -832,6 +832,15 @@ Route::post('cms/updatenews', 'CmsController@updatenews');
 Route::get('cms/cmsnews_act/{news}', 'CmsController@newsAct');
 Route::get('/cms/news/{news}/delete', 'CmsController@deleteNews');
 Route::patch('cms/{news}/update', 'CmsController@updatContent');
+
+// cms ceo news
+Route::get('cms/ceo/add_news', 'CmsController@addCeonews');
+Route::post('cms/add_ceo_news', 'CmsController@addcmsceonews');
+Route::get('cms/ceo_cmsnews_act/{news}', 'CmsController@ceonewsAct');
+Route::get('/cms/ceo_news/{news}/delete', 'CmsController@deleteCeoNews');
+Route::get('cms/editCeonews/{news}', 'CmsController@editCeoNews');
+Route::patch('cms/ceonews/{news}/update', 'CmsController@updatCeonewsContent');
+
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
