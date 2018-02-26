@@ -31,12 +31,8 @@
 
                     <hr class="hr-text" data-content="">
                     <div class="form-group{{ $errors->has('summary') ? ' has-error' : '' }}">
-                        <label for="{{ 'summary' }}" class="col-sm-2 control-label">News Content</label>
-
-                        <div class="col-sm-8">
                             <textarea class="form-control" id="summary" name="summary" placeholder="summary" rows="10"
                             >{{ old('summary') }}</textarea>
-                        </div>
                     </div>
 
 
