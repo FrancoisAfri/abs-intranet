@@ -1186,14 +1186,14 @@ class DatabaseSeeder extends Seeder
          $ribbon->access_level = 2;
          $module->addRibbon($ribbon);
 
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 2;
-        // $ribbon->ribbon_name = 'Search Task';
-        // $ribbon->description = 'Search Task';
-        // $ribbon->ribbon_path = 'tasks/search_task';
-        // $ribbon->access_level = 3;
-        // $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search ';
+        $ribbon->description = 'Search ';
+        $ribbon->ribbon_path = 'cms/search';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
 
         // $ribbon = new module_ribbons();
         // $ribbon->active = 1;

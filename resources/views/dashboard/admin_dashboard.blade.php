@@ -31,13 +31,6 @@
                         @foreach($news as $key => $Cmsnews)
 
                             <div class="item{{ $key == 0 ? ' active' : '' }}"> <!-- item 1 -->
-
-                                {{--<button type="button" id="edit_compan" class="btn success btn-xs" data-toggle="modal"--}}
-                                        {{--data-target="#View-news-modal" data-id="{{ $Cmsnews->id }}"--}}
-                                        {{--data-name="{{ $Cmsnews->name }}"--}}
-                                        {{--data-description="{{$Cmsnews->description}}"--}}
-                                        {{--data-summary="{{$Cmsnews->summary}}">Read more--}}
-                                {{--</button>--}}
                                 <a href="{{ '/view/' . $Cmsnews->id }}" id="edit_compan" class="btn btn-default  btn-xs" target="_blank" ><i class=""></i> Read more  </a>
                                 <img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}">
                               
