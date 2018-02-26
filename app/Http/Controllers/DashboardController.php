@@ -26,7 +26,7 @@ use App\modules;
 use App\programme;
 use App\ContactPerson;
 use App\CRMAccount;
-use App\ceo_news;
+use App\ceoNews;
 use App\Quotation;
 use App\Cmsnews;
 use Carbon\Carbon;
@@ -290,13 +290,13 @@ class DashboardController extends Controller
           // return $ceonews;
 
             $ClientInduction = ClientInduction::
-            select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
-                ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
-                ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
-                ->get();
+                               select('client_inductions.*','hr_people.first_name as firstname', 'hr_people.surname as surname','contact_companies.name as company_name')
+                               ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
+                               ->leftJoin('contact_companies', 'client_inductions.company_id', '=' ,'contact_companies.id' )
+                               //->where('client_inductions.id', 13)
+							   ->get();
 
             $ClientTask = $ClientInduction->load('TasksList');
-
 
             $data['ceonews'] = $ceonews;
             $data['ClientInduction'] = $ClientInduction;
