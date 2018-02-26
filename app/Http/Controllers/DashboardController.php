@@ -277,17 +277,17 @@ class DashboardController extends Controller
             #cms
 
             // return $clientID;
-
+            $employee = Auth::user()->load('person');
             $Divisions = HRPerson::where('id', $clientID)
                 ->select('division_level_5', 'division_level_4', 'division_level_3', 'division_level_2', 'division_level_1')
                 ->get()
                 ->first();
 
 
-            $Div4 = Cmsnews::pluck('division_level_4')->first();
-            $Div3 = Cmsnews::pluck('division_level_3')->first();
-            $Div2 = Cmsnews::pluck('division_level_2')->first();
-            $Div1 = Cmsnews::pluck('division_level_1')->first();
+            $Div4 = $employee->division_level_4;
+            $Div3 = $employee->division_level_3;
+            $Div2 = $employee->division_level_2;
+            $Div1 = $employee->division_level_1;
 
 
             $today = time();
@@ -295,10 +295,31 @@ class DashboardController extends Controller
             $news = Cmsnews::orderBy('id', 'asc')
                 ->where('status', 1)
                 ->where('expirydate', '>', $today)
-                ->where($Div4 )
+                ->where(function ($query) use ($Div4) {
+                    if (!empty($Div4)) {
+                        $query->where('division_level_4', '=', $Div4);
+                        $query->orWhere('division_level_3', '=', 0);
+                    }
+                })
+                ->where(function ($query) use ($Div3) {
+                    if (!empty($Div3)) {
+                        $query->where('division_level_3', '=', $Div3);
+                        $query->orWhere('division_level_2', '=', 0);
+                    }
+                })
+                ->where(function ($query) use ($Div2) {
+                    if (!empty($Div2)) {
+                        $query->where('division_level_2', '=', $Div2);
+                        $query->orWhere('division_level_1', '=', 0);
+                    }
+                })
+                ->where(function ($query) use ($Div1) {
+                    if (!empty($Div1)) {
+                        $query->where('division_level_1', '=', $Div1);
+                    }
+                })
                 ->get();
-
-            return $news;
+            
 
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
