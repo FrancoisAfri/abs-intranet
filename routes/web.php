@@ -844,6 +844,12 @@ Route::get('/cms/ceo_news/{news}/delete', 'CmsController@deleteCeoNews');
 Route::get('cms/editCeonews/{news}', 'CmsController@editCeoNews');
 Route::patch('cms/ceonews/{news}/update', 'CmsController@updatCeonewsContent');
 
+// cms search
+Route::get('cms/search', 'CmsController@search');
+Route::post('cms/search/CeoNews', 'CmsController@cmsceonews');
+Route::post('cms/search/CamponyNews', 'CmsController@CamponyNews');
+
+
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
