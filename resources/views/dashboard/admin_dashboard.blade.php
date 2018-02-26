@@ -27,6 +27,7 @@
                         <li data-target="#carouselExampleIndicators" data-slide-to="5"></li>
                     </ol>
                     <div class="carousel-inner">
+					@if (!empty($news))
                         @foreach($news as $key => $Cmsnews)
 
                             <div class="item{{ $key == 0 ? ' active' : '' }}"> <!-- item 1 -->
@@ -42,6 +43,7 @@
                               
                             </div>
                         @endforeach
+					@endif
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -60,48 +62,47 @@
             <div class="box box-muted same-height-widget">
                 <div class="box-header with-border">
                     <i class="fa fa-comments-o"></i>
-                    <h3 class="box-title"> Campony Ceo Message</h3>
+                    <h3 class="box-title"> Campony CEO Message</h3>
                 </div>
 
                 <div class="container">
                     <!--  <div class="page-header">
                          <h1 id="timeline">Timeline</h1>
                      </div> -->
-                    <ul class="timeline">
-
-                        <li>
-                            <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
-                            <div class="timeline-panel" style="max-height: 300px; overflow-y: scroll;">
-                                {{--<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">--}}
-                                <div class="timeline-heading">
-                                    <h4 class="timeline-title">
-                                        <N>{{$ceonews->name}}</N>
-                                    </h4>
-                                    <p>
-                                        <small class="text-muted"><i
-                                                    class="glyphicon glyphicon-time"></i> {{date(' d M Y', $ceonews->date) }}
-                                        </small>
-                                    </p>
-                                </div>
-                                <div class="timeline-body">
-                                    <p>{!!$ceonews->summary!!}.</p>
-                                    <div>
-                                        <div class="pull-right">
-                                            <span class="label label-info">{{$surname . ' ' . $names}}</span>
-                                            <span class="label label-primary">story</span>
-                                            {{--<span class="label label-success">blog</span>--}}
-                                            {{--<span class="label label-info">personal</span>--}}
-                                            {{--<span class="label label-warning">Warning</span>--}}
-                                            {{--<span class="label label-danger">Danger</span>--}}
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-
-                            </div>
-                        </li>
-
-                    </ul>
+					@if (!empty($ceonews))
+					<ul class="timeline">
+						<li>
+							<div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
+							<div class="timeline-panel" style="max-height: 300px; overflow-y: scroll;">
+								{{--<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">--}}
+								<div class="timeline-heading">
+									<h4 class="timeline-title">
+										<N>{{!empty($ceonews->name) ? $ceonews->name : ''}}</N>
+									</h4>
+									<p>
+										<small class="text-muted"><i
+													class="glyphicon glyphicon-time"></i> {{!empty($ceonews->date) ? date(' d M Y', $ceonews->date) : ''}}
+										</small>
+									</p>
+								</div>
+								<div class="timeline-body">
+										<p>{!!$ceonews->summary!!}.</p>
+									<div>
+										<div class="pull-right">
+											<span class="label label-info">{{$surname . ' ' . $names}}</span>
+											<span class="label label-primary">story</span>
+											{{--<span class="label label-success">blog</span>--}}
+											{{--<span class="label label-info">personal</span>--}}
+											{{--<span class="label label-warning">Warning</span>--}}
+											{{--<span class="label label-danger">Danger</span>--}}
+										</div>
+									</div>
+								</div>
+								<hr>
+							</div>
+						</li>
+					</ul>
+					@endif
                 </div>
             </div>
         </div>
