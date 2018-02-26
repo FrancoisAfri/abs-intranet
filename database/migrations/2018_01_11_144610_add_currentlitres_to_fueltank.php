@@ -14,7 +14,7 @@ class AddCurrentlitresToFueltank extends Migration
     public function up()
     {
     Schema::table('fuel_tanks', function (Blueprint $table) {
-            $table->integer('current_fuel_litres')->nullable();
+           // $table->integer('current_fuel_litres')->nullable();
             });
     }
 
@@ -26,7 +26,7 @@ class AddCurrentlitresToFueltank extends Migration
     public function down()
     {
          Schema::table('fuel_tanks', function (Blueprint $table) {
-            $table->dropColumn('current_fuel_litres');
+          //  $table->dropColumn('current_fuel_litres');
         });
     }
 }

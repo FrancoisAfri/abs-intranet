@@ -63,6 +63,16 @@
                         </div>
                     @endforeach
 
+                    <div class="form-group zip-field">
+                        <label for="image" class="col-sm-2 control-label">Upload Zip File</label>
+
+                        <div class="col-sm-8">
+
+                            <input type="file" id="image" name="image" class="file file-loading"
+                                   data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="term_name" class="col-sm-2 control-label">Summary</label>
                         <div class="col-sm-9">

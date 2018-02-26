@@ -28,6 +28,9 @@ Route::get('/home', function () {
 
 Auth::routes();
 
+Route::get('view/{id}', 'CmsController@view');
+Route::get('viewceo/{viewceo}', 'CmsController@viewceo');
+
 //Users related requests
 Route::get('users', 'UsersController@index');
 //Route::get('users/modules', 'UsersController@viewModules');
@@ -735,7 +738,8 @@ Route::post('/task/normal/print', 'TaskManagementController@printNormalReport');
 Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
-Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
+//Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
+Route::post('users/recoverpw', 'UsersController@recoverPassword');
 
 //Survey (Guest)
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
@@ -831,6 +835,15 @@ Route::get('cms/viewnews/{news}', 'CmsController@viewnews');
 Route::post('cms/updatenews', 'CmsController@updatenews');
 Route::get('cms/cmsnews_act/{news}', 'CmsController@newsAct');
 Route::get('/cms/news/{news}/delete', 'CmsController@deleteNews');
+Route::patch('cms/{news}/update', 'CmsController@updatContent');
+
+// cms ceo news
+Route::get('cms/ceo/add_news', 'CmsController@addCeonews');
+Route::post('cms/add_ceo_news', 'CmsController@addcmsceonews');
+Route::get('cms/ceo_cmsnews_act/{news}', 'CmsController@ceonewsAct');
+Route::get('/cms/ceo_news/{news}/delete', 'CmsController@deleteCeoNews');
+Route::get('cms/editCeonews/{news}', 'CmsController@editCeoNews');
+Route::patch('cms/ceonews/{news}/update', 'CmsController@updatCeonewsContent');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

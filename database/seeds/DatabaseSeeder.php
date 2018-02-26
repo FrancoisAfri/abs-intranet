@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
         $province = new Province();
         $province->name = 'North West';
         $country->addProvince($province);
-
+//
         $province = new Province();
         $province->name = 'Northern Cape';
         $country->addProvince($province);
@@ -1177,32 +1177,32 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'Add Task';
-        $ribbon->description = 'Add Task';
-        $ribbon->ribbon_path = 'tasks/add_task';
-        $ribbon->access_level = 2;
-        $module->addRibbon($ribbon);
+         $ribbon = new module_ribbons();
+         $ribbon->active = 1;
+         $ribbon->sort_order = 1;
+         $ribbon->ribbon_name = 'CEO News';
+         $ribbon->description = 'Add Ceo News';
+         $ribbon->ribbon_path = 'cms/ceo/add_news';
+         $ribbon->access_level = 2;
+         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Search Task';
-        $ribbon->description = 'Search Task';
-        $ribbon->ribbon_path = 'tasks/search_task';
+        $ribbon->ribbon_name = 'Search ';
+        $ribbon->description = 'Search ';
+        $ribbon->ribbon_path = 'cms/search';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Report';
-        $ribbon->description = 'Report';
-        $ribbon->ribbon_path = 'tasks/task_report';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
+        // $ribbon = new module_ribbons();
+        // $ribbon->active = 1;
+        // $ribbon->sort_order = 2;
+        // $ribbon->ribbon_name = 'Report';
+        // $ribbon->description = 'Report';
+        // $ribbon->ribbon_path = 'tasks/task_report';
+        // $ribbon->access_level = 4;
+        // $module->addRibbon($ribbon);
 
         $leave_config = new leave_configuration();
         $leave_config->save();

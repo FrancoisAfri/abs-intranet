@@ -26,25 +26,31 @@ use App\modules;
 use App\programme;
 use App\ContactPerson;
 use App\CRMAccount;
+use App\ceo_news;
 use App\Quotation;
+use App\Cmsnews;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
-class DashboardController extends Controller {
+class DashboardController extends Controller
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
-    public function index() {
+    public function index()
+    {
 
         $loggedInEmplID = Auth::user()->person->id;
 
         $data['breadcrumb'] = [
-                ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
+            ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
         ];
         $data['active_mod'] = 'dashboard';
         $user = Auth::user()->load('person');
@@ -65,7 +71,7 @@ class DashboardController extends Controller {
         //check if Ribbon is active
         //$Ribbon_module = modules::where('active', 1)->get();
         $activeModules = modules::where('active', 1)->get();
-       // return $activeModules;
+        // return $activeModules;
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -108,7 +114,7 @@ class DashboardController extends Controller {
                 $managedDivsLevel = DivisionLevel::where('level', 1)->orderBy('level', 'desc')->limit(1)->first();
             } else {
                 $isDivHead = false;
-                $managedDivsLevel = (object) [];
+                $managedDivsLevel = (object)[];
                 $managedDivsLevel->level = 0;
             }
 
@@ -124,10 +130,10 @@ class DashboardController extends Controller {
                 $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get(); //->load('divisionLevelGroup');
             elseif ($isDivHead) {
                 $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')
-                        ->where('level', $managedDivsLevel->level)
-                        ->get();
+                    ->where('level', $managedDivsLevel->level)
+                    ->get();
             } else
-                $divisionLevels = (object) [];
+                $divisionLevels = (object)[];
 
             $statusLabels = [10 => "label-danger", 50 => "label-warning", 80 => 'label-success', 100 => 'label-info'];
 
@@ -135,35 +141,35 @@ class DashboardController extends Controller {
             $today = strtotime(date('Y-m-d'));
             $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
             $tasks = EmployeeTasks::
-                    select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
-                            , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
-                            , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
-                            , 'employee_tasks.id as task_id', 'contact_companies.name as client_name', 'employee_tasks.duration', 'employee_tasks.date_paused', 'employee_tasks.date_started')
-                    ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
-                    ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
-                    ->where('employee_tasks.employee_id', $user->person->id)
-                    ->where('employee_tasks.start_date', '<=', $today)
-                    ->where('employee_tasks.status', '<', 4)
-                    ->orderBy('client_name')
-                    ->orderBy('employee_tasks.order_no')
-                    ->get();
+            select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
+                , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
+                , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
+                , 'employee_tasks.id as task_id', 'contact_companies.name as client_name', 'employee_tasks.duration', 'employee_tasks.date_paused', 'employee_tasks.date_started')
+                ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
+                ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
+                ->where('employee_tasks.employee_id', $user->person->id)
+                ->where('employee_tasks.start_date', '<=', $today)
+                ->where('employee_tasks.status', '<', 4)
+                ->orderBy('client_name')
+                ->orderBy('employee_tasks.order_no')
+                ->get();
 
 
             #leave Balance
             $balances = DB::table('leave_credit')
-                    ->select('leave_credit.*', 'leave_types.name as leavetype')
-                    ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-                    ->where('leave_credit.hr_id', $user->person->id)
-                    ->orderBy('leave_credit.id')
-                    ->get();
+                ->select('leave_credit.*', 'leave_types.name as leavetype')
+                ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+                ->where('leave_credit.hr_id', $user->person->id)
+                ->orderBy('leave_credit.id')
+                ->get();
             //return $balances;
             #leave Application
             $application = DB::table('leave_application')
-                    ->select('leave_application.*', 'leave_types.name as leavetype')
-                    ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-                    ->where('leave_application.hr_id', $user->person->id)
-                    ->orderBy('leave_application.id', 'desc')
-                    ->get();
+                ->select('leave_application.*', 'leave_types.name as leavetype')
+                ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
+                ->where('leave_application.hr_id', $user->person->id)
+                ->orderBy('leave_application.id', 'desc')
+                ->get();
             //return $application;
 
             //Get Employees on leave this month
@@ -177,14 +183,14 @@ class DashboardController extends Controller {
             $todayStart = $today->copy()->startOfDay()->timestamp;
             $todayEnd = $today->copy()->endOfDay()->timestamp;
             $onLeaveThisMonth = HRPerson::select('hr_people.id', 'hr_people.first_name', 'hr_people.surname', 'hr_people.profile_pic',
-                    'leave_application.start_date', 'leave_application.start_time', 'leave_application.end_date', 'leave_application.end_time')
+                'leave_application.start_date', 'leave_application.start_time', 'leave_application.end_date', 'leave_application.end_time')
                 ->join('leave_application', 'hr_people.id', '=', 'leave_application.hr_id')
                 ->where('leave_application.status', 1)
-                ->where(function ($query) use($todayStart) {
+                ->where(function ($query) use ($todayStart) {
                     $query->whereRaw('leave_application.start_date >= ' . $todayStart);
                     $query->orWhereRaw('leave_application.end_date >= ' . $todayStart);
                 })
-                ->where(function ($query) use($monthEnd) {
+                ->where(function ($query) use ($monthEnd) {
                     $query->whereRaw('leave_application.start_date <= ' . $monthEnd);
                     $query->orWhereRaw('leave_application.end_date <= ' . $monthEnd);
                 })
@@ -200,24 +206,24 @@ class DashboardController extends Controller {
 
             // check task
             $checkTasks = DB::table('employee_tasks')
-                    ->select('employee_tasks.description', 'employee_tasks.employee_id'
-                            , 'employee_tasks.status', 'employee_tasks.id as task_id'
-                            , 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-                    ->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
-                    ->where('employee_tasks.check_by_id', $user->person->id)
-                    ->where('employee_tasks.status', '=', 4)
-                    ->whereNull('checked')
-                    ->orderBy('employee_tasks.employee_id')
-                    ->get();
+                ->select('employee_tasks.description', 'employee_tasks.employee_id'
+                    , 'employee_tasks.status', 'employee_tasks.id as task_id'
+                    , 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+                ->where('employee_tasks.check_by_id', $user->person->id)
+                ->where('employee_tasks.status', '=', 4)
+                ->whereNull('checked')
+                ->orderBy('employee_tasks.employee_id')
+                ->get();
 
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
 
             $ticketLabels = [1 => "label-danger", 2 => "label-warning", 3 => 'label-success', 4 => 'label-info'];
 
             $tickets = DB::table('ticket')
-                    ->where('user_id', $loggedInEmplID)
-                    ->orderBy('id', 'asc')
-                    ->get();
+                ->where('user_id', $loggedInEmplID)
+                ->orderBy('id', 'asc')
+                ->get();
 
             $email = $user->email;
 
@@ -228,11 +234,13 @@ class DashboardController extends Controller {
                 $helpdeskTickets->load('ticket');
 
             $name = HRPerson::where('id', $loggedInEmplID)
-                    ->select('first_name', 'surname')
-                    ->get()
-                    ->first();
+                ->select('first_name', 'surname')
+                ->get()
+                ->first();
             $names = $name->first_name;
             $surname = $name->surname;
+
+            //return $surname;
             #Product_Category-------->
 
 
@@ -264,7 +272,22 @@ class DashboardController extends Controller {
                 $package = $packages->first()->id;
             }
 
-            #induction
+
+            #cms
+            #cms
+
+            $today = time();
+            $news = Cmsnews::orderBy('id', 'asc')
+                ->where('status', 1)
+                ->where('expirydate', '>', $today)
+                ->get();
+
+               // return $news;
+
+            $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
+
+            $ceonews = ceo_news::latest()->first();
+          // return $ceonews;
 
             $ClientInduction = ClientInduction::
                                select('client_inductions.*','hr_people.first_name as firstname', 'hr_people.surname as surname','contact_companies.name as company_name')
@@ -274,9 +297,11 @@ class DashboardController extends Controller {
 							   ->get();
 
             $ClientTask = $ClientInduction->load('TasksList');
- 			
+
+            $data['ceonews'] = $ceonews;
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
+            $data['news'] = $news;
             $data['account'] = $account;
             //$data['Ribbon_module'] = $Ribbon_module;
             $data['activeModules'] = $activeModules;
@@ -316,20 +341,19 @@ class DashboardController extends Controller {
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
         } else {
             $name = HRPerson::where('id', $clientID)
-                    ->select('first_name', 'surname')
-                    ->get()
-                    ->first();
+                ->select('first_name', 'surname')
+                ->get()
+                ->first();
             $tickets = DB::table('ticket')
-                    ->where('client_id', $clientID)
-                    ->orderBy('id', 'asc')
-                    ->get();
+                ->where('client_id', $clientID)
+                ->orderBy('id', 'asc')
+                ->get();
             $user = Auth::user()->load('person');
             $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
             //
             $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
             $ticketcount = ticket::where('client_id', $clientID)->count();
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
-
 
 
             //return $account;
@@ -382,7 +406,6 @@ class DashboardController extends Controller {
             //return $currentPrice;
 
 
-
             $data['products'] = $products;
             $data['packages'] = $packages;
             $data['helpdeskTickets'] = $helpdeskTickets;
@@ -404,5 +427,6 @@ class DashboardController extends Controller {
         }
     }
 
-    
+
+
 }
