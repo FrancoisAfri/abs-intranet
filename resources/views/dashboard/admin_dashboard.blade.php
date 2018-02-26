@@ -63,7 +63,7 @@
             <div class="box box-muted same-height-widget">
                 <div class="box-header with-border">
                     <i class="fa fa-comments-o"></i>
-                    <h3 class="box-title"> Campony CEO Message</h3>
+                    <h3 class="box-title"> Company CEO Message</h3>
                 </div>
 
                 <div class="container">

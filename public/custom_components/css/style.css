@@ -558,4 +558,6 @@ Additional Styles (required)
     background-color: #555;
 }
 
-
+imgs {
+    float: left;
+}
