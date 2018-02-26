@@ -28,7 +28,8 @@ Route::get('/home', function () {
 
 Auth::routes();
 
-Route::get('view/{id}', 'DashboardController@view');
+Route::get('view/{id}', 'CmsController@view');
+Route::get('viewceo/{viewceo}', 'CmsController@viewceo');
 
 //Users related requests
 Route::get('users', 'UsersController@index');

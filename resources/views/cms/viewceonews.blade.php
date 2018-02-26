@@ -45,13 +45,9 @@
                                                     class="fa fa-pencil-square-o"></i> Edit</a>
                                     </td>
                                     <td nowrap>
-                                        <button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#view-news-modal"
-                                                data-id="{{ $news->id }}"
-                                                data-document_name="{{ $news->document_name }}"
-                                                data-description="{{ $news->description }}"
-                                        ><i class="fa fa-file-audio-o"></i> View News
-                                        </button>
+                                        <a href="{{ '/viewceo/' . $news->id }}" id="edit_compan"
+                                           class="btn btn-warning  btn-xs" target="_blank"><i class=""></i> View News
+                                        </a>
                                     </td>
                                     <td>{{ !empty($news->name) ? $news->name : ''}}</td>
                                     <td>{{ !empty($news->description) ? $news->description : ''}}</td>
@@ -94,7 +90,7 @@
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-      @include('cms.partials.add_ceo_news_modal')
+        @include('cms.partials.add_ceo_news_modal')
 
         <!-- Include delete warning Modal form-->
             @if (count($Ceo_news) > 0)
@@ -102,12 +98,12 @@
             @endif
 
         </div>
-    @endsection
+        @endsection
 
-    @section('page_script')
+        @section('page_script')
             <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
             <!-- iCheck -->
-        <!-- Start Bootstrap File input -->
+            <!-- Start Bootstrap File input -->
             <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
             <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js"
                     type="text/javascript"></script>
@@ -179,7 +175,6 @@
                     autoclose: true,
                     todayHighlight: true
                 });
-
 
 
                 //Show success action modal
