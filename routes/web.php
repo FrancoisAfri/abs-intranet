@@ -737,7 +737,8 @@ Route::post('/task/normal/print', 'TaskManagementController@printNormalReport');
 Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
-Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
+//Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
+Route::post('users/recoverpw', 'UsersController@recoverPassword');
 
 //Survey (Guest)
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');

@@ -6,7 +6,7 @@ use App\CompanyIdentity;
 use App\DivisionLevel;
 use App\Mail\ConfirmRegistration;
 use Illuminate\Http\Request;
-
+use App\Mail\ResetPassword;
 use App\Http\Requests;
 use App\HRPerson;
 use App\User;
@@ -530,6 +530,29 @@ class UsersController extends Controller
         }
 
         return redirect('/users')->with('changes_saved', "Your changes have been saved successfully.");
+    }
+	// Reset Password
+	public function recoverPassword(Request $request) {
+        //return response()->json(['message' => $request['current_password']]);
+
+        $validator = Validator::make($request->all(),[
+            'reset_email' => 'bail|required|exists:users,email',
+        ]);
+
+        $validator->validate();
+
+        //find the user
+        $user = User::where('email', $request['reset_email'])->first();
+
+        //Update user password
+        $randomPass = str_random(10);
+        $user->password = Hash::make($randomPass);
+        $user->update();
+
+        //email new password to user
+        Mail::to("$user->email")->send(new ResetPassword($user, $randomPass));
+		AuditReportsController::store('Security', 'User Password Recoverd', "User Password Recoverd", 0);
+        return response()->json(['success' => 'Password successfully reset.'], 200);
     }
 
 }

@@ -16,7 +16,6 @@
                 <div class="box-header with-border">
                     <i class="fa fa-comments-o"></i>
                     <h3 class="box-title"> Company News</h3>
-
                 </div>
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
