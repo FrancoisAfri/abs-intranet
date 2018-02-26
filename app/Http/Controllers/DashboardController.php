@@ -276,25 +276,41 @@ class DashboardController extends Controller
             #cms
             #cms
 
+            // return $clientID;
+
+            $Divisions = HRPerson::where('id', $clientID)
+                ->select('division_level_5', 'division_level_4', 'division_level_3', 'division_level_2', 'division_level_1')
+                ->get()
+                ->first();
+
+
+            $Div4 = Cmsnews::pluck('division_level_4')->first();
+            $Div3 = Cmsnews::pluck('division_level_3')->first();
+            $Div2 = Cmsnews::pluck('division_level_2')->first();
+            $Div1 = Cmsnews::pluck('division_level_1')->first();
+
+
             $today = time();
+
             $news = Cmsnews::orderBy('id', 'asc')
                 ->where('status', 1)
                 ->where('expirydate', '>', $today)
+                ->where($Div4 )
                 ->get();
 
-               // return $news;
+            return $news;
 
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
             $ceonews = ceoNews::latest()->first();
-          // return $ceonews;
+            // return $ceonews;
 
             $ClientInduction = ClientInduction::
-                               select('client_inductions.*','hr_people.first_name as firstname', 'hr_people.surname as surname','contact_companies.name as company_name')
-                               ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
-                               ->leftJoin('contact_companies', 'client_inductions.company_id', '=' ,'contact_companies.id' )
-                               //->where('client_inductions.id', 13)
-							   ->get();
+            select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
+                ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
+                ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
+                //->where('client_inductions.id', 13)
+                ->get();
 
             $ClientTask = $ClientInduction->load('TasksList');
 
@@ -426,7 +442,6 @@ class DashboardController extends Controller
             return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }
-
 
 
 }
