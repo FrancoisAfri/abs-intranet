@@ -9,6 +9,7 @@
 @section('content')
     {{----}}
     {{----}}
+	@if($activeModules->where('code_name', 'cms')->first())
     <div class="row">
         <div class="col-md-6">
             <div class="box box-muted same-height-widget">
@@ -107,6 +108,7 @@
             </div>
         </div>
     </div>
+	@endif
     {{----}}
 
     @if($activeModules->where('code_name', 'appraisal')->first())
