@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cmsnews;
-use App\ceo_news;
+use App\ceoNews;
 use App\HRPerson;
 use App\User;
 use App\ContactPerson;

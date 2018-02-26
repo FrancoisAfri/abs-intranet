@@ -26,7 +26,7 @@ use App\modules;
 use App\programme;
 use App\ContactPerson;
 use App\CRMAccount;
-use App\ceo_news;
+use App\ceoNews;
 use App\Quotation;
 use App\Cmsnews;
 use Carbon\Carbon;
