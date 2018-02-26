@@ -286,7 +286,7 @@ class DashboardController extends Controller
 
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
-            $ceonews = ceo_news::latest()->first();
+            $ceonews = ceoNews::latest()->first();
           // return $ceonews;
 
             $ClientInduction = ClientInduction::

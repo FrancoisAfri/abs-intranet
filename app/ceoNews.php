@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ceo_news extends Model
+class ceoNews extends Model
 {
   public $table = 'ceo_news';
 
