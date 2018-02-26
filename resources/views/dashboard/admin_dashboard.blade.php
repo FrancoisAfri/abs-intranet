@@ -37,7 +37,7 @@
                                         {{--data-description="{{$Cmsnews->description}}"--}}
                                         {{--data-summary="{{$Cmsnews->summary}}">Read more--}}
                                 {{--</button>--}}
-                                <a href="{{ '/Product/Product/' . $Cmsnews->id }}" id="edit_compan" class="btn btn-success  btn-xs"  ><i class="fa fa-money"></i> Products  </a>
+                                <a href="{{ '/view/' . $Cmsnews->id }}" id="edit_compan" class="btn btn-default  btn-xs"  ><i class=""></i> Read more  </a>
                                 <img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}">
                               
                             </div>
