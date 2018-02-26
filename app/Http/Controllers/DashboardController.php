@@ -427,5 +427,22 @@ class DashboardController extends Controller
         }
     }
 
+    public function view(Cmsnews $id){
+        $newsID = $id->id;
+        $Cmsnews = Cmsnews::where('id',$newsID )->first();
 
+
+        $data['page_title'] = "CRM ";
+        $data['page_description'] = "Ceo News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Ceo News', 'path' => '/News', 'icon' => 'fa fa-handshake-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'CEO News';
+        $data['Cmsnews'] = $Cmsnews;
+
+        AuditReportsController::store('Content Management', 'Company Ceo News Accessed', "Company Ceo News Content  Accessed", 0);
+        return view('dashboard.view_news_dashboard')->with($data);
+    }
 }
