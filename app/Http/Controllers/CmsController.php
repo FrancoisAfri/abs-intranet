@@ -328,4 +328,114 @@ class CmsController extends Controller
         return view('cms.view_ceonews_dashboard')->with($data);
     }
 
+    public function search()
+    {
+        $data['page_title'] = "CMS ";
+        $data['page_description'] = "Search News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Search News', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Search';
+
+
+        AuditReportsController::store('Content Management', 'Company Search Accessed', "Company Search Accessed", 0);
+
+        return view('cms.search_news')->with($data);
+
+    }
+
+    public function cmsceonews(Request $request)
+    {
+
+        $policyData = $request->all();
+        unset($policyData['_token']);
+
+
+        $actionFrom = $actionTo = 0;
+        $name = $policyData['name'];
+        $actionDate = $policyData['day'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+        $ceo_news = ceo_news::where(function ($query) use ($actionFrom, $actionTo) {
+            if ($actionFrom > 0 && $actionTo > 0) {
+                $query->whereBetween('ceo_news.date', [$actionFrom, $actionTo]);
+            }
+        })
+            ->where(function ($query) use ($name) {
+                if (!empty($name)) {
+                    $query->where('ceo_news.name', 'ILIKE', "%$name%");
+                }
+            })
+            ->orderBy('ceo_news.name')
+            ->get();
+
+        //  return $ceo_news;
+
+        $data['ceo_news'] = $ceo_news;
+
+        $data['page_title'] = "CMS ";
+        $data['page_description'] = "CEO Message ";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Search News', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Search';
+
+        AuditReportsController::store('Content Management', 'Company Ceo Messages Accessed', "Company Accessed", 0);
+        return view('cms.ceonews_results')->with($data);
+
+
+    }
+
+    public function CamponyNews(Request $request)
+    {
+        $policyData = $request->all();
+        unset($policyData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $name = $policyData['name'];
+        $actionDate = $policyData['day'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+        $Cmsnews = DB::table('cms_news')
+            ->select('cms_news.*')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('cms_news.expirydate', [$actionFrom, $actionTo]);
+                }
+            })
+            ->where(function ($query) use ($name) {
+                if (!empty($name)) {
+                    $query->where('cms_news.name', 'ILIKE', "%$name%");
+                }
+            })
+            ->limit(100)
+            ->orderBy('cms_news.id')
+            ->get();
+
+        $data['Cmsnews'] = $Cmsnews;
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Search News', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Search';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.camponynews_results')->with($data);
+
+
+    }
 }

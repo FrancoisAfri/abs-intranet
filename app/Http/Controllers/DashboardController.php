@@ -276,25 +276,62 @@ class DashboardController extends Controller
             #cms
             #cms
 
+            // return $clientID;
+            $employee = Auth::user()->load('person');
+            $Divisions = HRPerson::where('id', $clientID)
+                ->select('division_level_5', 'division_level_4', 'division_level_3', 'division_level_2', 'division_level_1')
+                ->get()
+                ->first();
+
+
+            $Div4 = $employee->division_level_4;
+            $Div3 = $employee->division_level_3;
+            $Div2 = $employee->division_level_2;
+            $Div1 = $employee->division_level_1;
+
+
             $today = time();
+
             $news = Cmsnews::orderBy('id', 'asc')
                 ->where('status', 1)
                 ->where('expirydate', '>', $today)
+                ->where(function ($query) use ($Div4) {
+                    if (!empty($Div4)) {
+                        $query->where('division_level_4', '=', $Div4);
+                        $query->orWhere('division_level_3', '=', 0);
+                    }
+                })
+                ->where(function ($query) use ($Div3) {
+                    if (!empty($Div3)) {
+                        $query->where('division_level_3', '=', $Div3);
+                        $query->orWhere('division_level_2', '=', 0);
+                    }
+                })
+                ->where(function ($query) use ($Div2) {
+                    if (!empty($Div2)) {
+                        $query->where('division_level_2', '=', $Div2);
+                        $query->orWhere('division_level_1', '=', 0);
+                    }
+                })
+                ->where(function ($query) use ($Div1) {
+                    if (!empty($Div1)) {
+                        $query->where('division_level_1', '=', $Div1);
+                    }
+                })
                 ->get();
-
-               // return $news;
+            
 
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
             $ceonews = ceoNews::latest()->first();
-          // return $ceonews;
+            // return $ceonews;
 
             $ClientInduction = ClientInduction::
-                               select('client_inductions.*','hr_people.first_name as firstname', 'hr_people.surname as surname','contact_companies.name as company_name')
-                               ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
-                               ->leftJoin('contact_companies', 'client_inductions.company_id', '=' ,'contact_companies.id' )
-                               //->where('client_inductions.id', 13)
-							   ->get();
+            select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
+                ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
+                ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
+                //->where('client_inductions.id', 13)
+                ->get();
 
             $ClientTask = $ClientInduction->load('TasksList');
 
@@ -426,7 +463,6 @@ class DashboardController extends Controller
             return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }
-
 
 
 }
