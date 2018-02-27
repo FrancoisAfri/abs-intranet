@@ -183,7 +183,7 @@ class CmsController extends Controller
     public function addCeonews()
     {
 
-        $Ceo_news = ceo_news::all();
+        $Ceo_news = ceoNews::all();
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Ceo News";
@@ -210,7 +210,7 @@ class CmsController extends Controller
         unset($NewsData['_token']);
 
 
-        $crmNews = new ceo_news();
+        $crmNews = new ceoNews();
         $crmNews->name = $NewsData['name'];
         $crmNews->description = $NewsData['description'];
         $crmNews->summary = html_entity_decode($NewsData['term_name']);
@@ -223,7 +223,7 @@ class CmsController extends Controller
         return response()->json();
     }
 
-    public function ceonewsAct(ceo_news $news)
+    public function ceonewsAct(ceoNews $news)
     {
         if ($news->status == 1)
             $stastus = 0;
@@ -237,7 +237,7 @@ class CmsController extends Controller
         return back();
     }
 
-    public function deleteCeoNews(ceo_news $news)
+    public function deleteCeoNews(ceoNews $news)
     {
 
         $news->delete();
@@ -246,11 +246,11 @@ class CmsController extends Controller
         return back();
     }
 
-    public function editCeoNews(ceo_news $news)
+    public function editCeoNews(ceoNews $news)
     {
 
         // return $news;
-        $Cmsnews = ceo_news::where('id', $news->id)->first();
+        $Cmsnews = ceoNews::where('id', $news->id)->first();
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Ceo News";
@@ -266,7 +266,7 @@ class CmsController extends Controller
         return view('cms.edit_ceo_news')->with($data);
     }
 
-    public function updatCeonewsContent(Request $request, ceo_news $news)
+    public function updatCeonewsContent(Request $request, ceoNews $news)
     {
 
         $this->validate($request, [
@@ -290,8 +290,6 @@ class CmsController extends Controller
     {
         $newsID = $id->id;
         $Cmsnews = Cmsnews::where('id', $newsID)->first();
-//        return $Cmsnews;
-
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
@@ -307,12 +305,10 @@ class CmsController extends Controller
         return view('dashboard.view_news_dashboard')->with($data);
     }
 
-    public function viewceo(ceo_news $viewceo)
+    public function viewceo(ceoNews $viewceo)
     {
         $newsID = $viewceo->id;
-        $Cmsnews = ceo_news::where('id', $newsID)->first();
-//        return $Cmsnews;
-
+        $Cmsnews = ceoNews::where('id', $newsID)->first();
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
@@ -328,4 +324,114 @@ class CmsController extends Controller
         return view('cms.view_ceonews_dashboard')->with($data);
     }
 
+    public function search()
+    {
+        $data['page_title'] = "CMS ";
+        $data['page_description'] = "Search News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Search News', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Search';
+
+
+        AuditReportsController::store('Content Management', 'Company Search Accessed', "Company Search Accessed", 0);
+
+        return view('cms.search_news')->with($data);
+
+    }
+
+    public function cmsceonews(Request $request)
+    {
+
+        $policyData = $request->all();
+        unset($policyData['_token']);
+
+
+        $actionFrom = $actionTo = 0;
+        $name = $policyData['name'];
+        $actionDate = $policyData['day'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+        $ceo_news = ceoNews::where(function ($query) use ($actionFrom, $actionTo) {
+            if ($actionFrom > 0 && $actionTo > 0) {
+                $query->whereBetween('ceo_news.date', [$actionFrom, $actionTo]);
+            }
+        })
+            ->where(function ($query) use ($name) {
+                if (!empty($name)) {
+                    $query->where('ceo_news.name', 'ILIKE', "%$name%");
+                }
+            })
+            ->orderBy('ceo_news.name')
+            ->get();
+
+        //  return $ceo_news;
+
+        $data['ceo_news'] = $ceo_news;
+
+        $data['page_title'] = "CMS ";
+        $data['page_description'] = "CEO Message ";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Search News', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Search';
+
+        AuditReportsController::store('Content Management', 'Company Ceo Messages Accessed', "Company Accessed", 0);
+        return view('cms.ceonews_results')->with($data);
+
+
+    }
+
+    public function CamponyNews(Request $request)
+    {
+        $policyData = $request->all();
+        unset($policyData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $name = $policyData['name'];
+        $actionDate = $policyData['day'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+        $Cmsnews = DB::table('cms_news')
+            ->select('cms_news.*')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('cms_news.expirydate', [$actionFrom, $actionTo]);
+                }
+            })
+            ->where(function ($query) use ($name) {
+                if (!empty($name)) {
+                    $query->where('cms_news.name', 'ILIKE', "%$name%");
+                }
+            })
+            ->limit(100)
+            ->orderBy('cms_news.id')
+            ->get();
+
+        $data['Cmsnews'] = $Cmsnews;
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Search News', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Search';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.camponynews_results')->with($data);
+
+
+    }
 }

@@ -50,6 +50,10 @@ Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
 Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
 
+// Reset password
+Route::get('password/expired', 'Auth\ResetPasswordController@expired')
+        ->name('password.expired');
+
 Route::patch('/ribbon/{ribbon}', 'UsersController@editRibbon');
 Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
@@ -844,6 +848,12 @@ Route::get('cms/ceo_cmsnews_act/{news}', 'CmsController@ceonewsAct');
 Route::get('/cms/ceo_news/{news}/delete', 'CmsController@deleteCeoNews');
 Route::get('cms/editCeonews/{news}', 'CmsController@editCeoNews');
 Route::patch('cms/ceonews/{news}/update', 'CmsController@updatCeonewsContent');
+
+// cms search
+Route::get('cms/search', 'CmsController@search');
+Route::post('cms/search/CeoNews', 'CmsController@cmsceonews');
+Route::post('cms/search/CamponyNews', 'CmsController@CamponyNews');
+
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

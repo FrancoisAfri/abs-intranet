@@ -32,13 +32,13 @@
                             <li><span><i class="glyphicon glyphicon-calendar"></i>  {{$Cmsnews->created_at}} </span></li>
                             <li>|</li>
                             {{--<span><i class="glyphicon glyphicon-comment"></i> 2 comments</span>--}}
-                            {{--<li>|</li>--}}
+                            <li>| <b>Please Rate  This Article</b></li>
                             <li>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star-empty"></span>
+							<a href="{{ '/rate/1/' . $Cmsnews->id }}" id="rate_cms" class="btn btn-default  btn-xs"><i class=""></i><span class="glyphicon glyphicon-star-empty"></span> </a>
+							<a href="{{ '/rate/2/' . $Cmsnews->id }}" id="rate_cms" class="btn btn-default  btn-xs"><i class=""></i><span class="glyphicon glyphicon-star-empty"></span> </a>
+							<a href="{{ '/rate/3/' . $Cmsnews->id }}" id="rate_cms" class="btn btn-default  btn-xs"><i class=""></i><span class="glyphicon glyphicon-star-empty"></span> </a>
+							<a href="{{ '/rate/4/' . $Cmsnews->id }}" id="rate_cms" class="btn btn-default  btn-xs"><i class=""></i><span class="glyphicon glyphicon-star-empty"></span> </a>
+							<a href="{{ '/rate/5/' . $Cmsnews->id }}" id="rate_cms" class="btn btn-default  btn-xs"><i class=""></i><span class="glyphicon glyphicon-star-empty"></span> </a>
                             </li>
                             <li>|</li>
                             {{--<li>--}}
