@@ -53,7 +53,7 @@
                                     News
                                 </label>
                                 <label class="radio-inline"><input type="radio" id="rdo_hours" name="application_type"
-                                                                   value="2"> Campony News</label>
+                                                                   value="2"> Company News</label>
 
                             </div>
                         </div>
