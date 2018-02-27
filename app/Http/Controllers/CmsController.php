@@ -6,8 +6,9 @@ use App\Cmsnews;
 use App\ceoNews;
 use App\HRPerson;
 use App\User;
-use App\ContactPerson;
+use App\cms_rating;
 use App\DivisionLevel;
+use function GuzzleHttp\Promise\is_fulfilled;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -83,6 +84,16 @@ class CmsController extends Controller
                 $crmNews->update();
             }
         }
+
+        $rating = new cms_rating();
+        $rating->user_id = $crmNews->id;
+        $rating->rating_1 = 0;
+        $rating->rating_2 = 0;
+        $rating->rating_3 = 0;
+        $rating->rating_4 = 0;
+        $rating->rating_5 = 0;
+        $rating->save();
+
 
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return response()->json();
@@ -239,7 +250,6 @@ class CmsController extends Controller
 
     public function deleteCeoNews(ceoNews $news)
     {
-
         $news->delete();
 
         AuditReportsController::store('Content Management', 'Content Ceo News  Deleted', "Content Ceo News Deleted", 0);
@@ -290,6 +300,8 @@ class CmsController extends Controller
     {
         $newsID = $id->id;
         $Cmsnews = Cmsnews::where('id', $newsID)->first();
+        $val = 0;
+        #
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
@@ -432,6 +444,49 @@ class CmsController extends Controller
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
         return view('cms.camponynews_results')->with($data);
 
+    }
+
+    public function cmsratings(Request $request, $id, $cmsID)
+    {
+        $cms_news_rating = cms_rating::where('user_id', $cmsID)->first();
+
+        if ($id == 1) {
+            $cms_news_rating->rating_1 = ($id == 1) ? 1 : 0;
+            $cms_news_rating->rating_2 = ($id == 2) ? 1 : 0;
+            $cms_news_rating->rating_3 = ($id == 3) ? 1 : 0;
+            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
+            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+        } elseif ($id == 2) {
+            $cms_news_rating->rating_1 = ($id == 2) ? 1 : 0;
+            $cms_news_rating->rating_2 = ($id == 2) ? 1 : 0;
+            $cms_news_rating->rating_3 = ($id == 3) ? 1 : 0;
+            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
+            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+        } elseif ($id == 3) {
+            $cms_news_rating->rating_1 = ($id == 3) ? 1 : 0;
+            $cms_news_rating->rating_2 = ($id == 3) ? 1 : 0;
+            $cms_news_rating->rating_3 = ($id == 3) ? 1 : 0;
+            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
+            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+        } elseif ($id == 4) {
+            $cms_news_rating->rating_1 = ($id == 4) ? 1 : 0;
+            $cms_news_rating->rating_2 = ($id == 4) ? 1 : 0;
+            $cms_news_rating->rating_3 = ($id == 4) ? 1 : 0;
+            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
+            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+        } elseif ($id == 5) {
+            $cms_news_rating->rating_1 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_2 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_3 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_4 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+
+        }
+
+        $cms_news_rating->update();
+
+        AuditReportsController::store('Content Management', 'Company News Ratings', "Company News Ratings", 0);
+        return back();
 
     }
 }

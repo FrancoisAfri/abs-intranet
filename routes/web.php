@@ -31,6 +31,9 @@ Auth::routes();
 Route::get('view/{id}', 'CmsController@view');
 Route::get('viewceo/{viewceo}', 'CmsController@viewceo');
 
+#cms ratings
+Route::get('rate/{id}/{cmsID}', 'CmsController@cmsratings');
+
 //Users related requests
 Route::get('users', 'UsersController@index');
 //Route::get('users/modules', 'UsersController@viewModules');

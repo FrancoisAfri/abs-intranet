@@ -13,7 +13,7 @@ class CmsRating extends Migration
      */
     public function up()
     {
-        //
+
     }
 
     /**
@@ -23,6 +23,7 @@ class CmsRating extends Migration
      */
     public function down()
     {
-        //
+
     }
 }
+

@@ -34,6 +34,6 @@ class CreateCeoNewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cms_news');
+        Schema::dropIfExists('ceo_news');
     }
 }
