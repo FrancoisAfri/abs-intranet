@@ -29,4 +29,9 @@ class ResetPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+	
+	public function expired()
+    {
+        return view('auth.passwords.expired');
+    }
 }
