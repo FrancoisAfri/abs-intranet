@@ -39,9 +39,6 @@ class CmsController extends Controller
         $data['active_rib'] = 'Add Company News';
         $data['Cmsnews'] = $Cmsnews;
         $data['division_levels'] = $divisionLevels;
-        AuditReportsController::store('CRM', 'CRM Setup Page Accessed', "Accessed By User", 0);
-
-
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return view('cms.viewcrmnews')->with($data);
     }
@@ -110,9 +107,6 @@ class CmsController extends Controller
         $data['Cmsnews'] = $Cmsnews;
         $data['division_levels'] = $divisionLevels;
         $data['hrDetails'] = $hrDetails;
-        AuditReportsController::store('CRM', 'CRM Setup Page Accessed', "Accessed By User", 0);
-
-
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return view('cms.edit_crm_news')->with($data);
     }
@@ -281,7 +275,7 @@ class CmsController extends Controller
         $news->date = time();
         $news->update();
 
-        AuditReportsController::store('Contacts', 'Company News Content  Updated', "Company News Content  Updated", 0);
+        AuditReportsController::store('Content Management', 'Company News Content  Updated', "Company News Content  Updated", 0);
         return back()->with('success_application', "Content Update successfully.");
 
     }
@@ -348,7 +342,6 @@ class CmsController extends Controller
 
     public function cmsceonews(Request $request)
     {
-
         $policyData = $request->all();
         unset($policyData['_token']);
 
@@ -435,7 +428,5 @@ class CmsController extends Controller
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
         return view('cms.camponynews_results')->with($data);
-
-
     }
 }
