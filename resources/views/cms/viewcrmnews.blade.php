@@ -50,6 +50,7 @@
                                            class="btn btn-warning  btn-xs" target="_blank"><i class=""></i> View News
                                         </a>
                                     </td>
+                                    <td>{{!empty($news->expirydate) ? date(' d M Y', $news->expirydate) : ''}}</td>
                                     <td>{{ !empty($news->name) ? $news->name : ''}}</td>
                                     <td>{{ !empty($news->description) ? $news->description : ''}}</td>
                                     <td>
@@ -97,7 +98,6 @@
             @if (count($Cmsnews) > 0)
                 @include('cms.partials.news_warning_action', ['modal_title' => 'Delete Record', 'modal_content' => 'Are you sure you want to delete this Record? This action cannot be undone.'])
             @endif
-
         </div>
         @endsection
 
@@ -143,8 +143,6 @@
                     railVisible: true
                     //alwaysVisible: true
                 });
-
-
                 // Replace the <textarea id="send_quote_message"> with a CKEditor
                 // instance, using default configuration.
                 CKEDITOR.replace('term_name');
@@ -177,15 +175,12 @@
                     todayHighlight: true
                 });
 
-
                 //Show success action modal
                 @if(Session('changes_saved'))
                 $('#success-action-modal').modal('show');
                 @endif
 
-
                 $(".js-example-basic-multiple").select2();
-
 
                 //Post perk form to server using ajax (add)
                 $('#add_news').on('click', function () {

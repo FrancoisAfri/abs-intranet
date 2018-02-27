@@ -8,7 +8,6 @@ use App\HRPerson;
 use App\User;
 use App\cms_rating;
 use App\DivisionLevel;
-use function GuzzleHttp\Promise\is_fulfilled;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -84,16 +83,6 @@ class CmsController extends Controller
                 $crmNews->update();
             }
         }
-
-        $rating = new cms_rating();
-        $rating->user_id = $crmNews->id;
-        $rating->rating_1 = 0;
-        $rating->rating_2 = 0;
-        $rating->rating_3 = 0;
-        $rating->rating_4 = 0;
-        $rating->rating_5 = 0;
-        $rating->save();
-
 
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return response()->json();
@@ -250,6 +239,7 @@ class CmsController extends Controller
 
     public function deleteCeoNews(ceoNews $news)
     {
+
         $news->delete();
 
         AuditReportsController::store('Content Management', 'Content Ceo News  Deleted', "Content Ceo News Deleted", 0);
@@ -291,7 +281,7 @@ class CmsController extends Controller
         $news->date = time();
         $news->update();
 
-        AuditReportsController::store('Contacts', 'Company News Content  Updated', "Company News Content  Updated", 0);
+        AuditReportsController::store('Content Management', 'Company News Content  Updated', "Company News Content  Updated", 0);
         return back()->with('success_application', "Content Update successfully.");
 
     }
@@ -300,8 +290,6 @@ class CmsController extends Controller
     {
         $newsID = $id->id;
         $Cmsnews = Cmsnews::where('id', $newsID)->first();
-        $val = 0;
-        #
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
