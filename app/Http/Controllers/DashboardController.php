@@ -315,10 +315,11 @@ class DashboardController extends Controller
                 ->get();
 
 
+            
+
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
             $ceonews = ceoNews::latest()->first();
-            // return $ceonews;
 
             $ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
