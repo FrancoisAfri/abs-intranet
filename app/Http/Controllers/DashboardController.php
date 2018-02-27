@@ -278,10 +278,6 @@ class DashboardController extends Controller
 
             // return $clientID;
             $employee = Auth::user()->load('person');
-            $Divisions = HRPerson::where('id', $clientID)
-                ->select('division_level_5', 'division_level_4', 'division_level_3', 'division_level_2', 'division_level_1')
-                ->get()
-                ->first();
 
             $Div4 = $employee->division_level_4;
             $Div3 = $employee->division_level_3;
@@ -318,12 +314,13 @@ class DashboardController extends Controller
                     }
                 })
                 ->get();
+
+
             
 
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
             $ceonews = ceoNews::latest()->first();
-            // return $ceonews;
 
             $ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')

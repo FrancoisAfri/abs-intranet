@@ -177,7 +177,7 @@ class CmsController extends Controller
     public function addCeonews()
     {
 
-        $Ceo_news = ceo_news::all();
+        $Ceo_news = ceoNews::all();
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Ceo News";
@@ -204,7 +204,7 @@ class CmsController extends Controller
         unset($NewsData['_token']);
 
 
-        $crmNews = new ceo_news();
+        $crmNews = new ceoNews();
         $crmNews->name = $NewsData['name'];
         $crmNews->description = $NewsData['description'];
         $crmNews->summary = html_entity_decode($NewsData['term_name']);
@@ -217,7 +217,7 @@ class CmsController extends Controller
         return response()->json();
     }
 
-    public function ceonewsAct(ceo_news $news)
+    public function ceonewsAct(ceoNews $news)
     {
         if ($news->status == 1)
             $stastus = 0;
@@ -231,7 +231,7 @@ class CmsController extends Controller
         return back();
     }
 
-    public function deleteCeoNews(ceo_news $news)
+    public function deleteCeoNews(ceoNews $news)
     {
 
         $news->delete();
@@ -240,11 +240,11 @@ class CmsController extends Controller
         return back();
     }
 
-    public function editCeoNews(ceo_news $news)
+    public function editCeoNews(ceoNews $news)
     {
 
         // return $news;
-        $Cmsnews = ceo_news::where('id', $news->id)->first();
+        $Cmsnews = ceoNews::where('id', $news->id)->first();
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Ceo News";
@@ -260,7 +260,7 @@ class CmsController extends Controller
         return view('cms.edit_ceo_news')->with($data);
     }
 
-    public function updatCeonewsContent(Request $request, ceo_news $news)
+    public function updatCeonewsContent(Request $request, ceoNews $news)
     {
 
         $this->validate($request, [
@@ -284,8 +284,6 @@ class CmsController extends Controller
     {
         $newsID = $id->id;
         $Cmsnews = Cmsnews::where('id', $newsID)->first();
-//        return $Cmsnews;
-
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
@@ -301,12 +299,10 @@ class CmsController extends Controller
         return view('dashboard.view_news_dashboard')->with($data);
     }
 
-    public function viewceo(ceo_news $viewceo)
+    public function viewceo(ceoNews $viewceo)
     {
         $newsID = $viewceo->id;
-        $Cmsnews = ceo_news::where('id', $newsID)->first();
-//        return $Cmsnews;
-
+        $Cmsnews = ceoNews::where('id', $newsID)->first();
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
@@ -354,7 +350,7 @@ class CmsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $ceo_news = ceo_news::where(function ($query) use ($actionFrom, $actionTo) {
+        $ceo_news = ceoNews::where(function ($query) use ($actionFrom, $actionTo) {
             if ($actionFrom > 0 && $actionTo > 0) {
                 $query->whereBetween('ceo_news.date', [$actionFrom, $actionTo]);
             }
