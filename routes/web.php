@@ -50,6 +50,10 @@ Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
 Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
 
+// Reset password
+Route::get('password/expired', 'Auth\ResetPasswordController@expired')
+        ->name('password.expired');
+
 Route::patch('/ribbon/{ribbon}', 'UsersController@editRibbon');
 Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
