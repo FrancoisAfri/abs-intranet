@@ -436,44 +436,59 @@ class CmsController extends Controller
 
     public function cmsratings($id, $cmsID)
     {
+		
         $cms_news_rating = cms_rating::where('user_id', $cmsID)->first();
 
+		if (empty($cms_news_rating))
+		{
+			$cms_news_rating = new cms_rating();
+			$cms_news_rating->rating_1 = 0;
+			$cms_news_rating->rating_2 = 0;
+			$cms_news_rating->rating_3 = 0;
+			$cms_news_rating->rating_4 = 0;
+			$cms_news_rating->rating_5 = 0;
+			$cms_news_rating->save();
+		}
+		
         if ($id == 1) {
-            $cms_news_rating->rating_1 = ($id == 1) ? 1 : 0;
-            $cms_news_rating->rating_2 = ($id == 2) ? 1 : 0;
-            $cms_news_rating->rating_3 = ($id == 3) ? 1 : 0;
-            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
-            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 0;
+            $cms_news_rating->rating_3 = 0;
+            $cms_news_rating->rating_4 = 0;
+            $cms_news_rating->rating_5 = 0;
         } elseif ($id == 2) {
-            $cms_news_rating->rating_1 = ($id == 2) ? 1 : 0;
-            $cms_news_rating->rating_2 = ($id == 2) ? 1 : 0;
-            $cms_news_rating->rating_3 = ($id == 3) ? 1 : 0;
-            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
-            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 0;
+            $cms_news_rating->rating_4 = 0;
+            $cms_news_rating->rating_5 = 0;
         } elseif ($id == 3) {
-            $cms_news_rating->rating_1 = ($id == 3) ? 1 : 0;
-            $cms_news_rating->rating_2 = ($id == 3) ? 1 : 0;
-            $cms_news_rating->rating_3 = ($id == 3) ? 1 : 0;
-            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
-            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 1;
+            $cms_news_rating->rating_4 = 0;
+            $cms_news_rating->rating_5 = 0;
         } elseif ($id == 4) {
-            $cms_news_rating->rating_1 = ($id == 4) ? 1 : 0;
-            $cms_news_rating->rating_2 = ($id == 4) ? 1 : 0;
-            $cms_news_rating->rating_3 = ($id == 4) ? 1 : 0;
-            $cms_news_rating->rating_4 = ($id == 4) ? 1 : 0;
-            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+			echo $cms_news_rating->rating_1 ;
+			die;
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 1;
+            $cms_news_rating->rating_4 = 1;
+            $cms_news_rating->rating_5 = 0;
         } elseif ($id == 5) {
-            $cms_news_rating->rating_1 = ($id == 5) ? 1 : 0;
-            $cms_news_rating->rating_2 = ($id == 5) ? 1 : 0;
-            $cms_news_rating->rating_3 = ($id == 5) ? 1 : 0;
-            $cms_news_rating->rating_4 = ($id == 5) ? 1 : 0;
-            $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 1;
+            $cms_news_rating->rating_4 = 1;
+            $cms_news_rating->rating_5 = 1;
         }
-
+		
         $cms_news_rating->update();
 
         AuditReportsController::store('Content Management', 'Company News Ratings', "Company News Ratings", 0);
-        return back();
+       
+		return back();
 
     }
 }
