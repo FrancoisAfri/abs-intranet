@@ -434,7 +434,7 @@ class CmsController extends Controller
 
     }
 
-    public function cmsratings(Request $request, $id, $cmsID)
+    public function cmsratings($id, $cmsID)
     {
         $cms_news_rating = cms_rating::where('user_id', $cmsID)->first();
 
@@ -468,7 +468,6 @@ class CmsController extends Controller
             $cms_news_rating->rating_3 = ($id == 5) ? 1 : 0;
             $cms_news_rating->rating_4 = ($id == 5) ? 1 : 0;
             $cms_news_rating->rating_5 = ($id == 5) ? 1 : 0;
-
         }
 
         $cms_news_rating->update();

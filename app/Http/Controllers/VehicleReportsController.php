@@ -105,42 +105,50 @@ class VehicleReportsController extends Controller
         $vehicleID = $reportData['vehicle_id'];
         $driverID = $reportData['driver_id'];
 
-        $actionDate = $request['action_date'];
-        if (!empty($actionDate)) {
-            $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
-        }
+        //return $reportID;
 
-        $Policies = DB::table('policy')
-            ->select('policy.*')
-            ->where(function ($query) use ($actionFrom, $actionTo) {
-                if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('policy.date', [$actionFrom, $actionTo]);
-                }
-            })
+        if($reportID  == 1){
+            $actionDate = $request['action_date'];
+            if (!empty($actionDate)) {
+                $startExplode = explode('-', $actionDate);
+                $actionFrom = strtotime($startExplode[0]);
+                $actionTo = strtotime($startExplode[1]);
+            }
+
+            $Policies = DB::table('policy')
+                ->select('policy.*')
+                ->where(function ($query) use ($actionFrom, $actionTo) {
+                    if ($actionFrom > 0 && $actionTo > 0) {
+                        $query->whereBetween('policy.date', [$actionFrom, $actionTo]);
+                    }
+                })
 //            ->where(function ($query) use ($name) {
 //                if (!empty($name)) {
 //                    $query->where('policy.name', 'ILIKE', "%$name%");
 //                }
 //            })
-            ->limit(100)
-            ->orderBy('policy.id')
-            ->get();
+                ->limit(100)
+                ->orderBy('policy.id')
+                ->get();
 
-        $data['Policies']= $Policies;
-        $data['page_title'] = " Fleet Management ";
-        $data['page_description'] = "Fleet Cards Report ";
-        $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
-        ];
+            $data['Policies']= $Policies;
+            $data['page_title'] = " Fleet Management ";
+            $data['page_description'] = "Fleet Cards Report ";
+            $data['breadcrumb'] = [
+                ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+            ];
 
-        $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Reports';
+            $data['active_mod'] = 'Fleet Management';
+            $data['active_rib'] = 'Reports';
 
-        AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
-        return view('Vehicles.Reports.bookinglog_results')->with($data);
+            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            return view('Vehicles.Reports.bookinglog_results')->with($data);
+        }elseif ($reportID == 2){
+
+        }
+
+
 
     }
 

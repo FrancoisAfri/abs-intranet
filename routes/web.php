@@ -549,7 +549,7 @@ Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsControl
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
   // ***************
 Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
-Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
+//Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 
 // Performance Appraisals Module
 
