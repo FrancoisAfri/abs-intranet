@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\Return_;
 
 class CmsController extends Controller
 {
@@ -474,6 +475,58 @@ class CmsController extends Controller
 
         AuditReportsController::store('Content Management', 'Company News Ratings', "Company News Ratings", 0);
         return back();
+    }
 
+    public function cms_report()
+    {
+
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Cms Reports';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.Reports.index')->with($data);
+    }
+
+    public function cms_rankings()
+    {
+
+        $Cmsnews = Cmsnews::all();
+       // return $Cmsnews;
+
+        $data['Cmsnews'] = $Cmsnews;
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Cms Reports';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.Reports.Search_results')->with($data);
+    }
+
+    public function cms_Star_rankings(Request $request , Cmsnews $news){
+      //  return $news;
+
+        $data['Cmsnews'] = $news;
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'CMS Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Cms Reports';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.partials.new_ratings')->with($data);
     }
 }

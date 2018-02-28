@@ -857,6 +857,10 @@ Route::get('cms/search', 'CmsController@search');
 Route::post('cms/search/CeoNews', 'CmsController@cmsceonews');
 Route::post('cms/search/CamponyNews', 'CmsController@CamponyNews');
 
+// cms Reports
+Route::get('cms/cms_report', 'CmsController@cms_report');
+Route::post('cms/cms_news_ranking', 'CmsController@cms_rankings');
+Route::get('cms/cms_newsrankings/{news}', 'CmsController@cms_Star_rankings');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
