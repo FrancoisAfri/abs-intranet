@@ -516,7 +516,7 @@ class CmsController extends Controller
     public function cms_Star_rankings(Request $request , Cmsnews $news){
       //  return $news;
 
-        $data['Cmsnews'] = $news;
+        $data['news'] = $news;
         $data['page_title'] = "CMS";
         $data['page_description'] = "Campony News";
         $data['breadcrumb'] = [

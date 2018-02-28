@@ -14,7 +14,7 @@
 
 <!--  -->
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8 col-md-offset-2">
         <div>
             <div class="box box-warning same-height-widget">
                 <div class="box-header with-border">
@@ -23,30 +23,49 @@
                 <div class="box-body" style="max-height: auto; overflow-y: scroll;">
 
                     <div class="media-body">
-                        <h4 class="media-heading">{{$Cmsnews->name }}</h4>
+                        <h4 class="media-heading">{{$news->name }}</h4>
                         <p class="text-right"></p>
                         <p>
-                            {!!$Cmsnews->summary!!}.</p>
-                        <ul class="list-inline list-unstyled">
-                            <li><span><i class="glyphicon glyphicon-calendar"></i>  {{$Cmsnews->created_at}} </span></li>
-                            <li>|</li>
-                            {{--<span><i class="glyphicon glyphicon-comment"></i> 2 comments</span>--}}
-                            {{--<li>|</li>--}}
-                           <!--  <li>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star-empty"></span>
-                            </li> -->
-                            <li>|</li>
-                            {{--<li>--}}
-                                {{--<!-- Use Font Awesome http://fortawesome.github.io/Font-Awesome/ -->--}}
-                                {{--<span><i class="fa fa-facebook-square"></i></span>--}}
-                                {{--<span><i class="fa fa-twitter-square"></i></span>--}}
-                                {{--<span><i class="fa fa-google-plus-square"></i></span>--}}
-                            {{--</li>--}}
-                        </ul>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </p><p>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </p>
+                        <p>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </p>
+
+
                     </div>
                 </div>
                 <div class="box-footer clearfix">
