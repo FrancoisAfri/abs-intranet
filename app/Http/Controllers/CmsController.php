@@ -511,7 +511,7 @@ class CmsController extends Controller
         $data['active_rib'] = 'Reports';
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
-        return view('cms.Reports.Search_results')->with($data);
+        return view('cms.reports.search_results')->with($data);
     }
 
     public function cms_rankings()
@@ -531,7 +531,7 @@ class CmsController extends Controller
         $data['active_rib'] = 'Reports';
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
-        return view('cms.Reports.Search_results')->with($data);
+        return view('cms.reports.search_results')->with($data);
     }
 
     public function cms_Star_rankings(Request $request, Cmsnews $news)
