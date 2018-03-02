@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CmsRating extends Migration
+class AddNewsIDToCmsNewstable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,9 @@ class CmsRating extends Migration
      */
     public function up()
     {
-
+        Schema::table('cms_news_ratings', function (Blueprint $table) {
+            $table->Integer('cmsnewsID')->nullable();
+        });
     }
 
     /**
@@ -23,7 +25,8 @@ class CmsRating extends Migration
      */
     public function down()
     {
-
+        Schema::table('cms_news_ratings', function (Blueprint $table) {
+            $table->dropColumn('cmsnewsID');
+        });
     }
 }
-

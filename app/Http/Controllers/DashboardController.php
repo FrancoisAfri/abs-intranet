@@ -12,6 +12,7 @@ use App\EmployeeTasks;
 use App\HRPerson;
 use App\HelpDesk;
 use App\ticket;
+use App\cms_rating;
 use App\leave_application;
 use App\leave_credit;
 use App\module_access;
@@ -316,7 +317,8 @@ class DashboardController extends Controller
                 ->get();
 
 
-            
+          $cms_rating =   cms_rating::all();
+          //return $cms_rating;
 
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 

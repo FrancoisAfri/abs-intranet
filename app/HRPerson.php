@@ -50,6 +50,11 @@ class HRPerson extends Model
 //        return $this->hasMany(leave_credit::class, 'hr_id');
 //    }
 
+    public function rateUsers()
+    {
+        return $this->hasMany(cms_rating::class, 'user_id');
+    }
+
     
     //Relationship hr_person (manager) and Division level group
     public function divisionLevelGroup() {
@@ -114,4 +119,6 @@ class HRPerson extends Model
             ->pluck('id', 'full_name');
         return $hrPeople;
     }
+
+
 }

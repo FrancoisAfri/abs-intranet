@@ -31,6 +31,9 @@ Auth::routes();
 Route::get('view/{id}', 'CmsController@view');
 Route::get('viewceo/{viewceo}', 'CmsController@viewceo');
 
+#cms ratings
+Route::get('rate/{id}/{cmsID}', 'CmsController@cmsratings');
+
 //Users related requests
 Route::get('users', 'UsersController@index');
 //Route::get('users/modules', 'UsersController@viewModules');
@@ -546,7 +549,7 @@ Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsControl
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
   // ***************
 Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
-Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
+//Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 
 // Performance Appraisals Module
 
@@ -854,6 +857,10 @@ Route::get('cms/search', 'CmsController@search');
 Route::post('cms/search/CeoNews', 'CmsController@cmsceonews');
 Route::post('cms/search/CamponyNews', 'CmsController@CamponyNews');
 
+// cms Reports
+Route::get('cms/cms_report', 'CmsController@cms_report');
+Route::post('cms/cms_news_ranking', 'CmsController@cms_rankings');
+Route::get('cms/cms_newsrankings/{news}', 'CmsController@cms_Star_rankings');
 
 //Email Template
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');

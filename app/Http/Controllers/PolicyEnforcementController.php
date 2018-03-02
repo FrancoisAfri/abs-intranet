@@ -44,6 +44,7 @@ class PolicyEnforcementController extends Controller
     {
         $Policy = Policy::all();
         $employees = HRPerson::where('status', 1)->get();
+       // return $employees;
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
@@ -51,9 +52,9 @@ class PolicyEnforcementController extends Controller
 
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
 
-        $users = HRPerson::where('division_level_5', 1)->orderBy('id', 'desc')->get();
+        $users =  HRPerson::where('status', 1)->get();
         // $DivFive = DivisionLevel::where('level', 5)->orderBy('id', 'desc')->get();
-        // return $users;
+         //return $users;
 
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -553,6 +554,8 @@ class PolicyEnforcementController extends Controller
             ->where('policy_users.policy_id', $policydetails->id)
             ->orderBy('policy_users.id')
             ->get();
+
+          //  return $Policies;
 
         $PolicyID = $Policies->first()->policy_id;
         $Policy = Policy::where('id', $PolicyID)->first();

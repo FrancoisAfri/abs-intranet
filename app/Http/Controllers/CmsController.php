@@ -6,7 +6,7 @@ use App\Cmsnews;
 use App\ceoNews;
 use App\HRPerson;
 use App\User;
-use App\ContactPerson;
+use App\cms_rating;
 use App\DivisionLevel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Node\Stmt\Return_;
 
 class CmsController extends Controller
 {
@@ -39,6 +40,9 @@ class CmsController extends Controller
         $data['active_rib'] = 'Add Company News';
         $data['Cmsnews'] = $Cmsnews;
         $data['division_levels'] = $divisionLevels;
+        AuditReportsController::store('CRM', 'CRM Setup Page Accessed', "Accessed By User", 0);
+
+
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return view('cms.viewcrmnews')->with($data);
     }
@@ -107,6 +111,9 @@ class CmsController extends Controller
         $data['Cmsnews'] = $Cmsnews;
         $data['division_levels'] = $divisionLevels;
         $data['hrDetails'] = $hrDetails;
+        AuditReportsController::store('CRM', 'CRM Setup Page Accessed', "Accessed By User", 0);
+
+
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return view('cms.edit_crm_news')->with($data);
     }
@@ -284,6 +291,7 @@ class CmsController extends Controller
     {
         $newsID = $id->id;
         $Cmsnews = Cmsnews::where('id', $newsID)->first();
+       // return $Cmsnews->cmsRankings;
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
@@ -338,6 +346,7 @@ class CmsController extends Controller
 
     public function cmsceonews(Request $request)
     {
+
         $policyData = $request->all();
         unset($policyData['_token']);
 
@@ -424,5 +433,129 @@ class CmsController extends Controller
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
         return view('cms.camponynews_results')->with($data);
+
+    }
+
+    public function cmsratings($id, $cmsID)
+    {
+
+        $cms_news_rating = cms_rating::where('cmsnewsID', $cmsID)->first();
+        // return  $loggedInEmplID = Auth::user()->person->id;
+
+        if (empty($cms_news_rating)) {
+            $cms_news_rating = new cms_rating();
+            $cms_news_rating->rating_1 = 0;
+            $cms_news_rating->rating_2 = 0;
+            $cms_news_rating->rating_3 = 0;
+            $cms_news_rating->rating_4 = 0;
+            $cms_news_rating->rating_5 = 0;
+            $cms_news_rating->cmsnewsID = $cmsID;
+            $cms_news_rating->user_id = $loggedInEmplID = Auth::user()->person->id;
+            $cms_news_rating->save();
+        }
+
+        if ($id == 1) {
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 0;
+            $cms_news_rating->rating_3 = 0;
+            $cms_news_rating->rating_4 = 0;
+            $cms_news_rating->rating_5 = 0;
+        } elseif ($id == 2) {
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 0;
+            $cms_news_rating->rating_4 = 0;
+            $cms_news_rating->rating_5 = 0;
+        } elseif ($id == 3) {
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 1;
+            $cms_news_rating->rating_4 = 0;
+            $cms_news_rating->rating_5 = 0;
+        } elseif ($id == 4) {
+            echo $cms_news_rating->rating_1;
+            // die;
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 1;
+            $cms_news_rating->rating_4 = 1;
+            $cms_news_rating->rating_5 = 0;
+        } elseif ($id == 5) {
+            $cms_news_rating->rating_1 = 1;
+            $cms_news_rating->rating_2 = 1;
+            $cms_news_rating->rating_3 = 1;
+            $cms_news_rating->rating_4 = 1;
+            $cms_news_rating->rating_5 = 1;
+        }
+
+        $cms_news_rating->update();
+
+        AuditReportsController::store('Content Management', 'Company News Ratings', "Company News Ratings", 0);
+
+        return back();
+    }
+
+    public function cms_report()
+    {
+        $Cmsnews = Cmsnews::all();
+        // return $Cmsnews;
+
+        $data['Cmsnews'] = $Cmsnews;
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.Reports.Search_results')->with($data);
+    }
+
+    public function cms_rankings()
+    {
+
+        $Cmsnews = Cmsnews::all();
+        // return $Cmsnews;
+
+        $data['Cmsnews'] = $Cmsnews;
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.Reports.Search_results')->with($data);
+    }
+
+    public function cms_Star_rankings(Request $request, Cmsnews $news)
+    {
+        $ID = $news->id;
+
+        $ratings = cms_rating::select('cms_news_ratings.*', 'hr_people.id', 'hr_people.first_name', 'hr_people.surname')
+            ->join('hr_people', 'cms_news_ratings.user_id', '=', 'hr_people.id')
+            ->where('cmsnewsID', $ID)
+            ->get();
+        // return $ratings;
+
+        $data['news'] = $news;
+        $data['ratings'] = $ratings;
+        $data['page_title'] = "CMS";
+        $data['page_description'] = "Campony News";
+        $data['breadcrumb'] = [
+            ['title' => 'Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Content Management';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
+        return view('cms.partials.new_ratings')->with($data);
     }
 }
