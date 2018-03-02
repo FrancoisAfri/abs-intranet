@@ -608,7 +608,6 @@
             </div>
         </div>
     @endif
-<<<<<<< HEAD
          @if($activeModules->where('code_name', 'induction')->first())
            <div class="row">
              <div class="col-md-12">
@@ -658,7 +657,6 @@
            </div>
        </div>
     @endif 
-=======
     @if($activeModules->where('code_name', 'induction')->first())
         <div class="row">
             <div class="col-md-12">
@@ -715,7 +713,6 @@
             </div>
         </div>
     @endif
->>>>>>> 2be2274109e6bed219d4b8daf1afdfbcaa04f66c
     <!--  -->
     @if($activeModules->where('code_name', 'leave')->first())
         <div class="row">
