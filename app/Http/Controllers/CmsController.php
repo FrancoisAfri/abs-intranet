@@ -291,6 +291,7 @@ class CmsController extends Controller
     {
         $newsID = $id->id;
         $Cmsnews = Cmsnews::where('id', $newsID)->first();
+       // return $Cmsnews->cmsRankings;
 
         $data['page_title'] = "CMS ";
         $data['page_description'] = "Company News";
