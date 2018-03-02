@@ -504,11 +504,11 @@ class CmsController extends Controller
         $data['page_title'] = "CMS";
         $data['page_description'] = "Campony News";
         $data['breadcrumb'] = [
-            ['title' => 'CMS Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
             ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Content Management';
-        $data['active_rib'] = 'Cms Reports';
+        $data['active_rib'] = 'Reports';
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
         return view('cms.Reports.Search_results')->with($data);
@@ -524,11 +524,11 @@ class CmsController extends Controller
         $data['page_title'] = "CMS";
         $data['page_description'] = "Campony News";
         $data['breadcrumb'] = [
-            ['title' => 'CMS Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
             ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Content Management';
-        $data['active_rib'] = 'Cms Reports';
+        $data['active_rib'] = 'Reports';
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
         return view('cms.Reports.Search_results')->with($data);
@@ -549,11 +549,11 @@ class CmsController extends Controller
         $data['page_title'] = "CMS";
         $data['page_description'] = "Campony News";
         $data['breadcrumb'] = [
-            ['title' => 'CMS Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Reports', 'path' => '/News', 'icon' => 'fa fa-spinner', 'active' => 0, 'is_module' => 1],
             ['title' => 'Content Management', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Content Management';
-        $data['active_rib'] = 'Cms Reports';
+        $data['active_rib'] = 'Reports';
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
         return view('cms.partials.new_ratings')->with($data);
