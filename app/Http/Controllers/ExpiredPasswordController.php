@@ -16,8 +16,7 @@ class ExpiredPasswordController extends Controller
 	
 	public function __construct()
     {
-        $this->middleware('auth');
-		$this->middleware('password_expired');
+        //$this->middleware('auth');
     }
 	// Call Password change form
 	

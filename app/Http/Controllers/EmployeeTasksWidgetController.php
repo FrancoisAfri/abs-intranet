@@ -23,7 +23,6 @@ class EmployeeTasksWidgetController extends Controller
 	public function __construct()
     {
         $this->middleware('auth');
-		$this->middleware('password_expired');
     }
 	
     //returns a group's avg performance from jan to last month or a list of emp from that group and their avg performances

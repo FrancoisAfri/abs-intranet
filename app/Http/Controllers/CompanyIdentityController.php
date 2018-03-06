@@ -13,7 +13,6 @@ class CompanyIdentityController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-		$this->middleware('password_expired');
     }
     /**
      * Save or update company identity data.

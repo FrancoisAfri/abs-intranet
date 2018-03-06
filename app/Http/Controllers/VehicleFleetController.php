@@ -48,7 +48,6 @@ class VehicleFleetController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-		$this->middleware('password_expired');
     }
 
     public function document(vehicle_maintenance $maintenance)

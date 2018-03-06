@@ -23,7 +23,6 @@ class AppraisalKpiTypeController extends Controller
 	public function __construct()
     {
         $this->middleware('auth');
-		$this->middleware('password_expired');
     }
 	// Range View
     public function kpiRange(appraisalsKpis $kpi)
