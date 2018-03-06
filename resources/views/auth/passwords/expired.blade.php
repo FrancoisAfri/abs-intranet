@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Change Password</title>
+    <title>{{ \App\CompanyIdentity::systemSettings('company_name') . 'online system'  }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -25,6 +25,9 @@
     <![endif]-->
 </head>
 <div class="col-md-8 col-md-offset-2">
+<div class="login-logo">
+        <img src="{{ \App\CompanyIdentity::systemSettings('company_logo_url') }}" width="100%" class="img-responsive" alt="Company Logo">
+    </div>
 <div class="panel panel-default">
 	<div class="panel-heading">Reset Password</div>
 
