@@ -29,6 +29,7 @@ class Assign_ticketController extends Controller
    public function __construct()
 	    {
 	        $this->middleware('auth');
+			$this->middleware('password_expired');
 	    }
 
      public function assign_tickets(ticket $ticket) {

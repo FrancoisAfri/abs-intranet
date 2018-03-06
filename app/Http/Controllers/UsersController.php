@@ -31,6 +31,7 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+		$this->middleware('password_expired');
     }
     public function index() {
         $data['page_title'] = "Users";
@@ -251,11 +252,15 @@ class UsersController extends Controller
 	}
     public function store(Request $request ) {
         //Save usr
+		$compDetails = CompanyIdentity::first();
+		$iduration = !empty($compDetails->password_expiring_month) ? $compDetails->password_expiring_month : 0;
+		$expiredDate = !empty($iduration) ? mktime(0,0,0,date('m')+ $iduration,date('d'),date('Y')) : 0;
         $user = new User;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->type = 1;
         $user->status = 1;
+		$user->password_changed_at = $expiredDate;
         $user->save();
 
         //exclude empty fields from query

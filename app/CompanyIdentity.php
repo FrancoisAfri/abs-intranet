@@ -13,8 +13,10 @@ class CompanyIdentity extends Model
 
     //Mass assignable fields
     protected $fillable = [
-        'company_name', 'full_company_name', 'header_name_bold', 'header_name_regular', 'header_acronym_bold',
-        'header_acronym_regular', 'company_logo', 'sys_theme_color', 'mailing_name', 'mailing_address', 'support_email','company_website'
+        'company_name', 'full_company_name', 'header_name_bold', 'header_name_regular'
+		, 'header_acronym_bold','header_acronym_regular', 'company_logo'
+		, 'sys_theme_color', 'mailing_name', 'mailing_address', 'support_email'
+		,'company_website','password_expiring_month'
     ];
 
     /**

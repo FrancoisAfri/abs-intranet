@@ -21,6 +21,7 @@ class DropDownAPIController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+		$this->middleware('password_expired');
     }
 
     //load division level 5, 4, 3, 2, or 1

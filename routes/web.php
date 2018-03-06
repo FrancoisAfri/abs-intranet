@@ -55,6 +55,7 @@ Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
 
 // Reset password
 Route::get('password/expired', 'ExpiredPasswordController@expired');
+Route::post('password/post_expired/{user}', 'ExpiredPasswordController@postExpired');
 
 Route::patch('/ribbon/{ribbon}', 'UsersController@editRibbon');
 Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');

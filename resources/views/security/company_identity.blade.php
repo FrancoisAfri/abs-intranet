@@ -191,18 +191,29 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="form-group{{ $errors->has('company_website') ? ' has-error' : '' }}">
-                            <label for="company_website" class="col-sm-2 control-label">Compony Website</label>
+						<div class="form-group{{ $errors->has('company_website') ? ' has-error' : '' }}">
+							<label for="company_website" class="col-sm-2 control-label">Compony Website</label>
 
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-internet-explorer"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="company_website" name="company_website" value="{{ ($companyDetails) ? $companyDetails->company_website : '' }}" placeholder="Company Website ">
-                                </div>
-                            </div>
-                        </div>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-internet-explorer"></i>
+									</div>
+									<input type="text" class="form-control" id="company_website" name="company_website" value="{{ ($companyDetails) ? $companyDetails->company_website : '' }}" placeholder="Company Website ">
+								</div>
+							</div>
+						</div><div class="form-group{{ $errors->has('password_expiring_month') ? ' has-error' : '' }}">
+							<label for="company_website" class="col-sm-2 control-label">Password Duration (Months)</label>
+
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-building-o"></i>
+									</div>
+									<input type="text" class="form-control" id="password_expiring_month" name="password_expiring_month" value="{{ ($companyDetails) ? $companyDetails->password_expiring_month : '' }}" placeholder="Password Duration (Months)... ">
+								</div>
+							</div>
+						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

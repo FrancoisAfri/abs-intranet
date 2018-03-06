@@ -41,6 +41,7 @@ class QuotesController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+		$this->middleware('password_expired');
     }
 
     public $quoteStatuses = [1 => 'Awaiting Manager Approval', 2 => 'Awaiting Client Approval',

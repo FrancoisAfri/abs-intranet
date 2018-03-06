@@ -38,6 +38,7 @@ class BulkSMSController extends Controller
 	public function __construct()
     {
         $this->middleware('auth');
+		$this->middleware('password_expired');
 	}
 
     public static function send($mobileArray, $message)

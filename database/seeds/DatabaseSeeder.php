@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         //insert default user
         $user = new User;
         $user->email = 'francois@afrixcel.co.za';
-        $user->password = Hash::make('absusr@!');
+        $user->password = Hash::make('absusr30@!');
         $user->type = 3;
         $user->status = 1;
         $user->save();
