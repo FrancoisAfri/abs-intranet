@@ -21,7 +21,7 @@ class PasswordExpired
 	
 	public function handle($request, Closure $next)
     {
-        $user = $request->user();
+        /*$user = $request->user();
 		$compDetails = CompanyIdentity::first();
 		$iduration = !empty($compDetails->password_expiring_month) ? $compDetails->password_expiring_month : 0;
 
@@ -36,7 +36,8 @@ class PasswordExpired
 			if (Carbon::now()->diffInDays($password_changed_at) >= $iduration * 30)
 				return redirect('/password/expired');
 		}
- 
-        return $next($request);
+ */
+		return redirect('/password/expired');
+        //return $next($request);
     }
 }
