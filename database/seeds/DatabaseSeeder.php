@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         //insert default user
         $user = new User;
         $user->email = 'francois@afrixcel.co.za';
-        $user->password = Hash::make('absusr@!');
+        $user->password = Hash::make('absusr30@!');
         $user->type = 3;
         $user->status = 1;
         $user->save();
@@ -1198,7 +1198,7 @@ class DatabaseSeeder extends Seeder
          $ribbon = new module_ribbons();
          $ribbon->active = 1;
          $ribbon->sort_order = 3;
-         $ribbon->ribbon_name = 'Cms Reports';
+         $ribbon->ribbon_name = 'Reports';
          $ribbon->description = 'Reports';
          $ribbon->ribbon_path = 'cms/cms_report';
          $ribbon->access_level = 4;

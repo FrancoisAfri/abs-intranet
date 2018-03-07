@@ -62,7 +62,7 @@ class AppraisalGraphsController extends Controller
                 $empYearResult[] = AppraisalKPIResult::getEmpMonthAppraisal($employee->id, $appraisalMonth->format('M Y'));
                 $appraisalMonth->addMonth();
             }
-            $empAvg = array_sum($empYearResult) / count($empYearResult);
+            $empAvg = !empty(array_sum($empYearResult)) && !empty(count($empYearResult)) ? array_sum($empYearResult) / count($empYearResult) : 0;
             if ($returnEmpList) {
                 $objEmp = (object) [];
                 $objEmp->emp_id = $employee->id;

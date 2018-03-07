@@ -19,6 +19,12 @@ use App\ProductServiceSettings;
 
 class Product_categoryController extends Controller
 {
+	
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
+	
     public function index()
     {
         $jobCategories = JobCategory::orderBy('name', 'asc')->get();

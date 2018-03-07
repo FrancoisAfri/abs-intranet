@@ -37,8 +37,7 @@
                                 {{--<span><i class="glyphicon glyphicon-comment"></i> 2 comments</span>--}}
                                 <li>| <b>Please Rate This Article</b></li>
                                 <li>
-                                    {{$Cmsnews->cmsRankings}}
-                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_1) && $Cmsnews->cmsRankings->first()->rating_1 !== 0 )
+                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_1) && $Cmsnews->cmsRankings->first()->rating_1 == 1)
                                         <a href="{{ '/rate/1/' . $Cmsnews->id }}" id="rate_cms"
                                            class="btn btn-default  btn-xs"><i class=""></i><span
                                                     class="glyphicon glyphicon-star"></span> </a>
@@ -47,44 +46,44 @@
                                            class="btn btn-default  btn-xs"><i class=""></i><span
                                                     class="glyphicon glyphicon-star-empty"></span> </a>
                                     @endif
-                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_2) && $Cmsnews->cmsRankings->first()->rating_2 == 0 )
-                                        <a href="{{ '/rate/2/' . $Cmsnews->id }}" id="rate_cms"
-                                           class="btn btn-default  btn-xs"><i class=""></i><span
-                                                    class="glyphicon glyphicon-star-empty"></span> </a>
-                                    @else
+                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_2) && $Cmsnews->cmsRankings->first()->rating_2 == 1)
                                         <a href="{{ '/rate/2/' . $Cmsnews->id }}" id="rate_cms"
                                            class="btn btn-default  btn-xs"><i class=""></i><span
                                                     class="glyphicon glyphicon-star"></span> </a>
+                                    @else
+                                        <a href="{{ '/rate/2/' . $Cmsnews->id }}" id="rate_cms"
+                                           class="btn btn-default  btn-xs"><i class=""></i><span
+                                                    class="glyphicon glyphicon-star-empty"></span> </a>
                                     @endif
 
-                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_3) && $Cmsnews->cmsRankings->first()->rating_3 == 0 )
+                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_3) && $Cmsnews->cmsRankings->first()->rating_3 == 1)
+                                        <a href="{{ '/rate/3/' . $Cmsnews->id }}" id="rate_cms"
+                                           class="btn btn-default  btn-xs"><i class=""></i><span
+                                                    class="glyphicon glyphicon-star"></span> </a>
+                                    @else
                                         <a href="{{ '/rate/3/' . $Cmsnews->id }}" id="rate_cms"
                                            class="btn btn-default  btn-xs"><i class=""></i><span
                                                     class="glyphicon glyphicon-star-empty"></span> </a>
-                                    @else
-                                        <a href="{{ '/rate/3/' . $Cmsnews->id }}" id="rate_cms"
-                                           class="btn btn-default  btn-xs"><i class=""></i><span
-                                                    class="glyphicon glyphicon-star"></span> </a>
                                     @endif
 
-                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_4) && $Cmsnews->cmsRankings->first()->rating_4 == 0 )
-                                        <a href="{{ '/rate/4/' . $Cmsnews->id }}" id="rate_cms"
-                                           class="btn btn-default  btn-xs"><i class=""></i><span
-                                                    class="glyphicon glyphicon-star-empty"></span> </a>
-                                    @else
+                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_4) && $Cmsnews->cmsRankings->first()->rating_4 == 1)
                                         <a href="{{ '/rate/4/' . $Cmsnews->id }}" id="rate_cms"
                                            class="btn btn-default  btn-xs"><i class=""></i><span
                                                     class="glyphicon glyphicon-star"></span> </a>
-                                    @endif
-
-                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_5) && $Cmsnews->cmsRankings->first()->rating_5 == 0 )
-                                        <a href="{{ '/rate/5/' . $Cmsnews->id }}" id="rate_cms"
+                                    @else
+                                        <a href="{{ '/rate/4/' . $Cmsnews->id }}" id="rate_cms"
                                            class="btn btn-default  btn-xs"><i class=""></i><span
                                                     class="glyphicon glyphicon-star-empty"></span> </a>
-                                    @else
+                                    @endif
+
+                                    @if (!empty($Cmsnews->cmsRankings->first()->rating_5) && $Cmsnews->cmsRankings->first()->rating_5 == 1)
                                         <a href="{{ '/rate/5/' . $Cmsnews->id }}" id="rate_cms"
                                            class="btn btn-default  btn-xs"><i class=""></i><span
                                                     class="glyphicon glyphicon-star"></span> </a>
+                                    @else
+                                        <a href="{{ '/rate/5/' . $Cmsnews->id }}" id="rate_cms"
+                                           class="btn btn-default  btn-xs"><i class=""></i><span
+                                                    class="glyphicon glyphicon-star-empty"></span> </a>
                                     @endif
 
                                 </li>
