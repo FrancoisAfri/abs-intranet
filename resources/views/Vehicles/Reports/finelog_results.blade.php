@@ -18,7 +18,8 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Booking Deatails Report - for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
+                        <h3 class="box-title">Vehicle Fines Report -
+                            for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -43,47 +44,55 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th> Date Collected</th>
-                                <th>Date Returned</th>
-                                <th>Approved By</th>
+                                <th> Date</th>
+                                <th>Time</th>
+                                <th>Reference</th>
+                                <th>Location</th>
+                                <th>Type</th>
                                 <th>Driver</th>
-                                <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Starting Km</th>
-                                <th>Ending Km Km</th>
-                                <th>Total Km Travelled</th>
+                                <th>Amount</th>
+                                <th>Amount Paid</th>
+                                <th>Status</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehicle_booking as $policy)
+                            @foreach($vehiclefines as $fine)
                                 <tr>
-                                    <td>{{ !empty($policy->require_datetime) ? date(' d M Y', $policy->require_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->return_datetime) ? date(' d M Y', $policy->return_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
-                                    <td>{{ !empty($policy->purpose) ? $policy->purpose : ''}}</td>
-                                    <td>{{ !empty($policy->destination) ? $policy->destination : ''}}</td>
-                                    <td>{{ !empty($policy->start_mileage_id) ? $policy->start_mileage_id : ''}}</td>
-                                    <td>{{ !empty($policy->end_mileage_id) ? $policy->end_mileage_id : ''}}</td>
-                                    <td>{{ !empty($policy->end_mileage_id - $policy->start_mileage_id) ? $policy->end_mileage_id - $policy->start_mileage_id  : ''}}</td>
+
+                                    <td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
+                                    <td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
+                                    <td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
+                                    <td>{{ !empty($fine->location) ?  $fine->location : '' }}</td>
+                                    <td>{{ !empty($fine->fine_type) ?  $fineType[$fine->fine_type] : '' }}</td>
+                                    <td>{{ !empty($fine->firstname . ' ' . $fine->surname ) ?  $fine->firstname . ' ' . $fine->surname : '' }}</td>
+                                    <td>{{ !empty($fine->amount  ) ?  'R '.number_format($fine->amount, 2) :'' }}</td>
+                                    <td>{{ !empty($fine->amount_paid  ) ?  'R '.number_format($fine->amount_paid, 2) :'' }}</td>
+                                    <td>{{ !empty($fine->fine_status  ) ?  $status[$fine->fine_status] :'' }}</td>
                                     @endforeach
+
                                 </tr>
 
                             </tbody>
                             <tfoot>
                             <tr>
-                                
-                                <th> Date Collected</th>
-                                <th>Date Returned</th>
-                                <th>Approved By</th>
+                                <th> Date</th>
+                                <th>Time</th>
+                                <th>Reference</th>
+                                <th>Location</th>
+                                <th>Type</th>
                                 <th>Driver</th>
-                                <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Starting Km</th>
-                                <th>Ending Km Km</th>
-                                <th>Total Km Travelled</th>
+                                <th>Amount</th>
+                                <th>Amount Paid</th>
+                                <th>Status</th>
                             </tr>
                             </tfoot>
+                            <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
+                            <class
+                            ="caption">
+                            <td colspan="6" style="text-align:right">Total</td>
+                            <td style="text-align: right">{{number_format($total, 2) }}</td>
+                            <td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>
+                            <td style="text-align: right" nowrap></td>
                         </table>
                     </div>
                     <!-- /.box-body -->
