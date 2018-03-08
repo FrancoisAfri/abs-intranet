@@ -18,7 +18,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Booking Deatails Report - for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
+                        <h3 class="box-title">Vehicle Fuel Report for -{{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -43,7 +43,8 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th> Date Collected</th>
+                                <th style="vertical-align: middle; text-align: center;"></th>
+                                <th> Date Collected	</th>
                                 <th>Date Returned</th>
                                 <th>Approved By</th>
                                 <th>Driver</th>
@@ -55,25 +56,25 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehicle_booking as $policy)
+                            @foreach($vehiclefuellog as $policy)
                                 <tr>
-                                    <td>{{ !empty($policy->require_datetime) ? date(' d M Y', $policy->require_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->return_datetime) ? date(' d M Y', $policy->return_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
-                                    <td>{{ !empty($policy->purpose) ? $policy->purpose : ''}}</td>
-                                    <td>{{ !empty($policy->destination) ? $policy->destination : ''}}</td>
-                                    <td>{{ !empty($policy->start_mileage_id) ? $policy->start_mileage_id : ''}}</td>
-                                    <td>{{ !empty($policy->end_mileage_id) ? $policy->end_mileage_id : ''}}</td>
-                                    <td>{{ !empty($policy->end_mileage_id - $policy->start_mileage_id) ? $policy->end_mileage_id - $policy->start_mileage_id  : ''}}</td>
+                                    <td style="vertical-align: middle;"
+                                        nowrap>
+                                        <a href="{{ '/System/policy/viewdetails/' . $policy->id }}" id="edit_compan"
+                                           class="btn btn-primary  btn-xs" data-id="{{ $policy->id }}"
+                                        ><i class="	fa fa-files-o"></i>
+                                            View Details</a></td>
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
+
                                     @endforeach
                                 </tr>
 
                             </tbody>
                             <tfoot>
                             <tr>
-                                
-                                <th> Date Collected</th>
+                                <th style="vertical-align: middle; text-align: center;"></th>
+                                <th> Date Collected	</th>
                                 <th>Date Returned</th>
                                 <th>Approved By</th>
                                 <th>Driver</th>

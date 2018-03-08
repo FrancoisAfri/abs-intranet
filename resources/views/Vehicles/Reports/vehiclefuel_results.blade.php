@@ -14,11 +14,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/System/policy/update_status">
+                <form class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Booking Deatails Report - for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
+                        <h3 class="box-title">Vehicle Type </h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -43,45 +43,51 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th> Date Collected</th>
-                                <th>Date Returned</th>
-                                <th>Approved By</th>
-                                <th>Driver</th>
-                                <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Starting Km</th>
-                                <th>Ending Km Km</th>
-                                <th>Total Km Travelled</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;">Image</th>
+                                <th>Vehicle Model/Year</th>
+                                <th>Fleet Number</th>
+                                <th>Vehicle Registration</th>
+                                <th>VIN Numberr</th>
+                                <th>Engine Number</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehicle_booking as $policy)
+                            @foreach($vehicledetail as $fine)
                                 <tr>
-                                    <td>{{ !empty($policy->require_datetime) ? date(' d M Y', $policy->require_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->return_datetime) ? date(' d M Y', $policy->return_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
-                                    <td>{{ !empty($policy->purpose) ? $policy->purpose : ''}}</td>
-                                    <td>{{ !empty($policy->destination) ? $policy->destination : ''}}</td>
-                                    <td>{{ !empty($policy->start_mileage_id) ? $policy->start_mileage_id : ''}}</td>
-                                    <td>{{ !empty($policy->end_mileage_id) ? $policy->end_mileage_id : ''}}</td>
-                                    <td>{{ !empty($policy->end_mileage_id - $policy->start_mileage_id) ? $policy->end_mileage_id - $policy->start_mileage_id  : ''}}</td>
+                                    <td style="vertical-align: middle;"
+                                        nowrap>
+                                        <a href="{{ '/vehicle_management/vehicle_reports/viewfueldetails/' . $fine->id }}" id="edit_compan"
+                                           class="btn btn-primary  btn-xs" data-id="{{ $fine->id }}"
+                                        ><i class="	fa fa-files-o"></i>
+                                            View Details</a></td>
+                                    <td>
+                                        <div class="product-img">
+                                            <img src="{{ (!empty($fine->image)) ? Storage::disk('local')->url("Vehicle/images/$fine->image") : 'http://placehold.it/60x50' }}"
+                                                 alt="Product Image" width="50" height="50">
+                                        </div>
+
+                                    </td>
+
+                                    <td>{{ !empty($fine->vehicle_model . ' ' . $fine->year ) ? $fine->vehicle_model  . ' ' . $fine->year: ''}}</td>
+                                    <td>{{ !empty($fine->fleet_number) ? $fine->fleet_number : ''}}</td>
+                                    <td>{{ !empty($fine->vehicle_registration) ? $fine->vehicle_registration : ''}}</td>
+                                    <td>{{ !empty($fine->chassis_number) ? $fine->chassis_number : ''}}</td>
+                                    <td>{{ !empty($fine->engine_number) ? $fine->engine_number : ''}}</td>
+
                                     @endforeach
                                 </tr>
 
                             </tbody>
                             <tfoot>
                             <tr>
-                                
-                                <th> Date Collected</th>
-                                <th>Date Returned</th>
-                                <th>Approved By</th>
-                                <th>Driver</th>
-                                <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Starting Km</th>
-                                <th>Ending Km Km</th>
-                                <th>Total Km Travelled</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;">Image</th>
+                                <th>Vehicle Model/Year</th>
+                                <th>Fleet Number</th>
+                                <th>Vehicle Registration</th>
+                                <th>VIN Numberr</th>
+                                <th>Engine Number</th>
                             </tr>
                             </tfoot>
                         </table>

@@ -23,6 +23,7 @@ use App\service_station;
 use App\module_ribbons;
 use App\ribbons_access;
 use App\ContactCompany;
+use App\vehicle_config;
 use App\vehicle_return_images;
 use App\vehicle_return_documents;
 use Illuminate\Http\Request;
@@ -315,11 +316,26 @@ class VehicleBookingController extends Controller
         // query the vehicle_configuration  table and bring back the values
         $approvals = DB::table('vehicle_configuration')->select('approval_manager_capturer', 'approval_manager_driver', 'approval_hod', 'approval_admin')->first();
 
+
+        if (empty($approvals)) {
+            $vehicleconfig = new vehicle_config();
+            $vehicleconfig->approval_manager_capturer = 0;
+            $vehicleconfig->approval_manager_driver = 0;
+            $vehicleconfig->approval_hod = 0;
+            $vehicleconfig->approval_admin = 0;
+            $vehicleconfig->save();
+        }
+
+
+
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
         $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
 
-        $managerID = HRPerson::where('id', $hrID)->where('status', 1)->first();
-        $driverHead = $managerID->manager_id;
+        $managerID = HRPerson::where('id', $driverDetails->manager_id)->where('status', 1)->first();
+        $driverHead = !empty($managerID->manager_id) ? $managerID->manager_id : 0;
+         if (!empty($driverHead)) {
+            $driverHead = HRPerson::where('id', $driverHead)->where('status', 1)->first();
+        }
 
         if ($approvals->approval_manager_capturer == 1) {
             # code...

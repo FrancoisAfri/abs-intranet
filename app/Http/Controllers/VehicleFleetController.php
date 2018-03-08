@@ -951,9 +951,9 @@ class VehicleFleetController extends Controller
         $vehicle_fines->paid_date = $paidDate;
         $vehicle_fines->vehicleID = $fineData['valueID'];
         $vehicle_fines->fine_ref = $fineData['fine_ref'];
-        $vehicle_fines->fine_type = !empty($SysData['fine_type']) ? $SysData['fine_type'] : 0;
-        $vehicle_fines->driver = !empty($SysData['driver']) ? $SysData['driver'] : 0;
-        $vehicle_fines->fine_status = !empty($SysData['fine_status']) ? $SysData['fine_status'] : 0;
+        $vehicle_fines->fine_type = !empty($fineData['fine_type']) ? $fineData['fine_type'] : 0;
+        $vehicle_fines->driver = !empty($fineData['driver']) ? $fineData['driver'] : 0;
+        $vehicle_fines->fine_status = !empty($fineData['fine_status']) ? $fineData['fine_status'] : 0;
         $vehicle_fines->save();
 
         //Upload supporting document
@@ -1583,15 +1583,14 @@ class VehicleFleetController extends Controller
         $vehiclebookinglog = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
                 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
-                'hr_people.first_name as firstname', 'hr_people.surname as surname',
-                'vehicle_collect_documents.document as collectDoc',
-                'vehicle_return_documents.document as returnDoc')
+                'hr_people.first_name as firstname', 'hr_people.surname as surname'
+                )
             ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('vehicle_collect_documents', 'vehicle_booking.id', '=', 'vehicle_collect_documents.bookingID')
-            ->leftJoin('vehicle_return_documents', 'vehicle_booking.id', '=', 'vehicle_return_documents.bookingID')
+//            ->leftJoin('vehicle_collect_documents', 'vehicle_booking.id', '=', 'vehicle_collect_documents.bookingID')
+//            ->leftJoin('vehicle_return_documents', 'vehicle_booking.id', '=', 'vehicle_return_documents.bookingID')
             ->orderBy('vehicle_booking.id', 'desc')
             ->where('vehicle_booking.vehicle_id', $vehicleID)
             ->get();
