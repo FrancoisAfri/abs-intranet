@@ -23,7 +23,7 @@ class CreateFuelTanks extends Migration
             $table->string('tank_name')->nullable();
             $table->string('tank_location')->nullable();
             $table->string('tank_description')->nullable();
-            $table->integer('tank_capacity')->unsigned()->index()->nullable();
+            //$table->integer('tank_capacity')->unsigned()->index()->nullable();
             $table->integer('tank_manager')->index()->unsigned()->nullable();
             $table->smallInteger('status')->nullable(); 
             $table->timestamps();

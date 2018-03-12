@@ -15,7 +15,7 @@ class AddNewsIDToCmsNewsTAABLE extends Migration
     {
 
         Schema::table('users', function (Blueprint $table) {
-            $table->Integer('cmsnewsID')->nullable();;
+           // $table->Integer('cmsnewsID')->nullable();;
         });
     }
 
@@ -27,7 +27,7 @@ class AddNewsIDToCmsNewsTAABLE extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('cmsnewsID');
+            //$table->dropColumn('cmsnewsID');
         });
     }
 }
