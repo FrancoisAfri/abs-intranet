@@ -155,7 +155,6 @@ class DashboardController extends Controller
                 ->orderBy('employee_tasks.order_no')
                 ->get();
 
-
             #leave Balance
             $balances = DB::table('leave_credit')
                 ->select('leave_credit.*', 'leave_types.name as leavetype')
