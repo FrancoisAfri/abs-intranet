@@ -21,13 +21,15 @@ class CompanyIdentityController extends Controller
      * @return  \Illuminate\Http\Response
      */
     public function saveOrUpdate(Request $request)
+	
     {
         $this->validate($request, [
             'mailing_address' => 'email',
             'support_email' => 'email',
         ]);
-
+			
         $compDetails = CompanyIdentity::first();
+		
         //$compDetails = (Schema::hasTable('company_identities')) ? CompanyIdentity::first() : null;
         if ($compDetails) { //update
             $compDetails->update($request->all());

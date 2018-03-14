@@ -18,7 +18,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Fines Report -
+                        <h3 class="box-title">Vehicle Services Details Report -
                             for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
@@ -45,29 +45,26 @@
                             <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Time</th>
-                                <th>Reference</th>
-                                <th>Location</th>
-                                <th>Type</th>
-                                <th>Driver</th>
-                                <th>Amount</th>
-                                <th>Amount Paid</th>
-                                <th>Status</th>
+                                <th>Garage</th>
+                                <th>Next Service Date</th>
+                                <th>Next Service Km</th>
+                                <th>Licence Renewal Date</th>
+                                <th>Invoice Number</th>
+                                <th style="width: 5px; text-align: center;">Total Cost</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehiclefines as $fine)
+                            @foreach($serviceDetails as $details)
                                 <tr>
 
-                                    <td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
-                                    <td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
-                                    <td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
-                                    <td>{{ !empty($fine->location) ?  $fine->location : '' }}</td>
-                                    <td>{{ !empty($fine->fine_type) ?  $fineType[$fine->fine_type] : '' }}</td>
-                                    <td>{{ !empty($fine->firstname . ' ' . $fine->surname ) ?  $fine->firstname . ' ' . $fine->surname : '' }}</td>
-                                    <td>{{ !empty($fine->amount  ) ?  'R '.number_format($fine->amount, 2) :'' }}</td>
-                                    <td>{{ !empty($fine->amount_paid  ) ?  'R '.number_format($fine->amount_paid, 2) :'' }}</td>
-                                    <td>{{ !empty($fine->fine_status  ) ?  $status[$fine->fine_status] :'' }}</td>
+                                    <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
+                                    <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
+                                    <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
+                                    <td>{{ !empty($details->nxt_service_km) ? date(' d M Y', $details->nxt_service_km) : '' }}</td>
+                                    <td></td>
+                                    <td>{{ !empty($details->invoice_number) ?  $details->invoice_number : '' }}</td>
+                                    <td>{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : '' }}</td>
+                                    
                                     @endforeach
 
                                 </tr>
@@ -75,24 +72,20 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th> Date</th>
-                                <th>Time</th>
-                                <th>Reference</th>
-                                <th>Location</th>
-                                <th>Type</th>
-                                <th>Driver</th>
-                                <th>Amount</th>
-                                <th>Amount Paid</th>
-                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Garage</th>
+                                <th>Next Service Date</th>
+                                <th>Next Service Km</th>
+                                <th>Licence Renewal Date</th>
+                                <th>Invoice Number</th>
+                                <th style="width: 5px; text-align: center;">Total Cost</th>
                             </tr>
                             </tfoot>
                             <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
                             <class
                             ="caption">
                             <td colspan="6" style="text-align:right">Total</td>
-                            <td style="text-align: right">{{number_format($total, 2) }}</td>
-                            <td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>
-                            <td style="text-align: right" nowrap></td>
+                            <td style="text-align: right" nowrap>{{ !empty($totalamount_paid) ? 'R' .number_format($totalamount_paid, 2) : '' }}</td>
                         </table>
                     </div>
                     <!-- /.box-body -->

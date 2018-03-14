@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToVehicleDetails extends Migration
+class ChangeColumnSizeToBookings extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddColumnToVehicleDetails extends Migration
      */
     public function up()
     {
-//        Schema::table('vehicle_details', function (Blueprint $table) {
-//            $table->Integer('booking_status')->nullable();
-//        });
+        Schema::table('vehicle_booking', function (Blueprint $table) {
+            $table->string('purpose', 5000)->change();
+        }); 
     }
 
     /**
@@ -25,8 +25,6 @@ class AddColumnToVehicleDetails extends Migration
      */
     public function down()
     {
-//        Schema::table('cms_news_ratings', function (Blueprint $table) {
-//            $table->dropColumn('booking_status');
-//        });
+        //
     }
 }

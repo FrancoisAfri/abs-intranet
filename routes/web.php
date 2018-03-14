@@ -548,11 +548,12 @@ Route::get('vehicle_management/vehicle_reports', 'VehicleReportsController@index
 Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
   // ***************
-Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails'); 
+Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 Route::get('vehicle_management/vehicle_reports/viewfinedetails/{vehicleID}', 'VehicleReportsController@vehicleFineDetails');
 Route::get('vehicle_management/vehicle_reports/viewbookingdetails/{vehicleID}', 'VehicleReportsController@vehicleBookingDetails');
 Route::get('vehicle_management/vehicle_reports/viewfueldetails/{vehicleID}', 'VehicleReportsController@vehicleFuelDetails');
-
+Route::get('vehicle_management/vehicle_reports/viewservicedetails/{vehicleID}', 'VehicleReportsController@vehicleServiceDetails');
+Route::get('vehicle_management/vehicle_reports/Incidents_details/{vehicleID}', 'VehicleReportsController@vehicleIncidentsDetails');
 // Performance Appraisals Module
 
 Route::get('appraisal/setup', 'AppraisalSetupController@index');

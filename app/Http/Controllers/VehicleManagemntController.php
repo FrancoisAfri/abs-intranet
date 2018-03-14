@@ -777,6 +777,8 @@ class VehicleManagemntController extends Controller
         // return $vehiclemodel;
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+		
+	
 
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',

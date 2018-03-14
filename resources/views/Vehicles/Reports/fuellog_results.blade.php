@@ -43,27 +43,21 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th style="vertical-align: middle; text-align: center;"></th>
-                                <th> Date Collected	</th>
-                                <th>Date Returned</th>
-                                <th>Approved By</th>
-                                <th>Driver</th>
-                                <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Starting Km</th>
-                                <th>Ending Km Km</th>
-                                <th>Total Km Travelled</th>
+
+                                <th></th>
+                                <th> </th>
+                                <th></th>
+                                <th></th>
+                                <th> Station</th>
+                                <th> Reading</th>
+                                <th></th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($vehiclefuellog as $policy)
                                 <tr>
-                                    <td style="vertical-align: middle;"
-                                        nowrap>
-                                        <a href="{{ '/System/policy/viewdetails/' . $policy->id }}" id="edit_compan"
-                                           class="btn btn-primary  btn-xs" data-id="{{ $policy->id }}"
-                                        ><i class="	fa fa-files-o"></i>
-                                            View Details</a></td>
+
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
 
@@ -73,16 +67,14 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th style="vertical-align: middle; text-align: center;"></th>
-                                <th> Date Collected	</th>
-                                <th>Date Returned</th>
-                                <th>Approved By</th>
+                             <th>Date </th>
                                 <th>Driver</th>
                                 <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Starting Km</th>
-                                <th>Ending Km Km</th>
-                                <th>Total Km Travelled</th>
+                                <th>Service Station</th>
+                                <th>Odometer Reading</th>
+                                <th>Litres</th>
+                                <th>Cost</th>
+                                <th>Cost Rate Per Litre</th>
                             </tr>
                             </tfoot>
                         </table>

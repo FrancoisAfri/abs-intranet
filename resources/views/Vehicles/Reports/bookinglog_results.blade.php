@@ -57,10 +57,11 @@
                             <tbody>
                             @foreach($vehicle_booking as $policy)
                                 <tr>
-                                    <td>{{ !empty($policy->require_datetime) ? date(' d M Y', $policy->require_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->return_datetime) ? date(' d M Y', $policy->return_datetime) : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
-                                    <td>{{ !empty($policy->engine_number) ? $policy->engine_number : ''}}</td>
+                                    <td>{{ !empty($policy->collect_timestamp) ? date(' d M Y', $policy->collect_timestamp) : ''}}</td>
+                                    <td>{{ !empty($policy->return_timestamp) ? date(' d M Y', $policy->return_timestamp) : ''}}</td>
+                                    <td></td>purpose
+
+                                    <td>{{ !empty($policy->firstname . ' ' . $policy->surname ) ? $policy->firstname . ' ' . $policy->surname : ''}}</td>
                                     <td>{{ !empty($policy->purpose) ? $policy->purpose : ''}}</td>
                                     <td>{{ !empty($policy->destination) ? $policy->destination : ''}}</td>
                                     <td>{{ !empty($policy->start_mileage_id) ? $policy->start_mileage_id : ''}}</td>
@@ -68,7 +69,6 @@
                                     <td>{{ !empty($policy->end_mileage_id - $policy->start_mileage_id) ? $policy->end_mileage_id - $policy->start_mileage_id  : ''}}</td>
                                     @endforeach
                                 </tr>
-
                             </tbody>
                             <tfoot>
                             <tr>
@@ -84,6 +84,13 @@
                                 <th>Total Km Travelled</th>
                             </tr>
                             </tfoot>
+							<input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
+                            <class
+                            ="caption">
+							 <td style="text-align: right"></td>
+							  <td style="text-align: right"></td>
+                            <td colspan="6" style="text-align:right">Total</td>
+                            <td style="text-align: right" nowrap></td>
                         </table>
                     </div>
                     <!-- /.box-body -->

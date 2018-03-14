@@ -18,7 +18,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Type </h3>
+                        <h3 class="box-title">Vehicle Booking Details </h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -68,8 +68,7 @@
                                         </div>
 
                                     </td>
-
-                                    <td>{{ !empty($fine->vehicle_model . ' ' . $fine->year ) ? $fine->vehicle_model  . ' ' . $fine->year: ''}}</td>
+                                    <td>{{ !empty($fine->vehicle_make . ' ' .  $fine->vehicle_model  . ' ' . $fine->vehicle_type . ' ' . $fine->year  ) ? $fine->vehicle_make . ' ' .  $fine->vehicle_model  . ' ' . $fine->vehicle_type . ' ' . $fine->year : ''}}</td>
                                     <td>{{ !empty($fine->fleet_number) ? $fine->fleet_number : ''}}</td>
                                     <td>{{ !empty($fine->vehicle_registration) ? $fine->vehicle_registration : ''}}</td>
                                     <td>{{ !empty($fine->chassis_number) ? $fine->chassis_number : ''}}</td>

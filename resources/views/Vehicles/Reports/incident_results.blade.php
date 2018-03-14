@@ -18,8 +18,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Fines Report -
-                            for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
+                        <h3 class="box-title">Vehicle Incidents Details</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -44,55 +43,53 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Reference</th>
-                                <th>Location</th>
-                                <th>Type</th>
-                                <th>Driver</th>
-                                <th>Amount</th>
-                                <th>Amount Paid</th>
-                                <th>Status</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;">Image</th>
+                                <th>Vehicle Model/Year</th>
+                                <th>Fleet Number</th>
+                                <th>Vehicle Registration</th>
+                                <th>VIN Numberr</th>
+                                <th>Engine Number</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehiclefines as $fine)
+                            @foreach($vehicledetail as $service)
                                 <tr>
+                                    <td style="vertical-align: middle;"
+                                        nowrap>
+                                        <a href="{{ '/vehicle_management/vehicle_reports/Incidents_details/' . $service->id }}" id="edit_compan"
+                                           class="btn btn-primary  btn-xs" data-id="{{ $service->id }}"
+                                        ><i class="	fa fa-files-o"></i>
+                                            View Details</a></td>
+                                    <td>
+                                        <div class="product-img">
+                                            <img src="{{ (!empty($service->image)) ? Storage::disk('local')->url("Vehicle/images/$service->image") : 'http://placehold.it/60x50' }}"
+                                                 alt="Product Image" width="50" height="50">
+                                        </div>
 
-                                    <td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
-                                    <td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
-                                    <td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
-                                    <td>{{ !empty($fine->location) ?  $fine->location : '' }}</td>
-                                    <td>{{ !empty($fine->fine_type) ?  $fineType[$fine->fine_type] : '' }}</td>
-                                    <td>{{ !empty($fine->firstname . ' ' . $fine->surname ) ?  $fine->firstname . ' ' . $fine->surname : '' }}</td>
-                                    <td>{{ !empty($fine->amount  ) ?  'R '.number_format($fine->amount, 2) :'' }}</td>
-                                    <td>{{ !empty($fine->amount_paid  ) ?  'R '.number_format($fine->amount_paid, 2) :'' }}</td>
-                                    <td>{{ !empty($fine->fine_status  ) ?  $status[$fine->fine_status] :'' }}</td>
+                                    </td>
+
+                                    <td>{{ !empty($service->vehicle_model . ' ' . $service->year ) ? $service->vehicle_model  . ' ' . $service->year: ''}}</td>
+                                    <td>{{ !empty($service->fleet_number) ? $service->fleet_number : ''}}</td>
+                                    <td>{{ !empty($service->vehicle_registration) ? $service->vehicle_registration : ''}}</td>
+                                    <td>{{ !empty($service->chassis_number) ? $service->chassis_number : ''}}</td>
+                                    <td>{{ !empty($service->engine_number) ? $service->engine_number : ''}}</td>
+
                                     @endforeach
-
                                 </tr>
 
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th> Date</th>
-                                <th>Time</th>
-                                <th>Reference</th>
-                                <th>Location</th>
-                                <th>Type</th>
-                                <th>Driver</th>
-                                <th>Amount</th>
-                                <th>Amount Paid</th>
-                                <th>Status</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;">Image</th>
+                                <th>Vehicle Model/Year</th>
+                                <th>Fleet Number</th>
+                                <th>Vehicle Registration</th>
+                                <th>VIN Numberr</th>
+                                <th>Engine Number</th>
                             </tr>
                             </tfoot>
-                            <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                            <class
-                            ="caption">
-                            <td colspan="6" style="text-align:right">Total</td>
-                            <td style="text-align: right">{{number_format($total, 2) }}</td>
-                            <td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>
-                            <td style="text-align: right" nowrap></td>
                         </table>
                     </div>
                     <!-- /.box-body -->

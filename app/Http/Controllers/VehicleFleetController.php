@@ -744,7 +744,7 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-        // return  $vehicleserviceDetails;
+       //  return  $vehicleserviceDetails;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1015,7 +1015,7 @@ class VehicleFleetController extends Controller
         $fines->court_date = $courtDate;
         $fines->paid_date = $paidDate;
         $fines->vehicleID = $SysData['valueID'];
-        $fines->fine_ref = $fineData['fine_ref'];
+        $fines->fine_ref = $SysData['fine_ref'];
         $fines->fine_type = !empty($SysData['fine_type']) ? $SysData['fine_type'] : 0;
         $fines->driver = !empty($SysData['driver']) ? $SysData['driver'] : 0;
         $fines->fine_status = !empty($SysData['fine_status']) ? $SysData['fine_status'] : 0;

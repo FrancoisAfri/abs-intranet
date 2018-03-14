@@ -95,6 +95,8 @@ class VehicleBookingController extends Controller
             // ->where('vehicle_booking.status', '!=', 12)
             ->get();
 
+           
+
         //return $vehiclebookings;
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -165,6 +167,8 @@ class VehicleBookingController extends Controller
         $requiredTo = $vehicleData['required_to'];
         $startDate = strtotime($requiredFrom);
         $EndDate = strtotime($requiredTo);
+
+       
 
         $vehiclebookings = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ',
@@ -251,6 +255,7 @@ class VehicleBookingController extends Controller
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
         $vehicle_image = images::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
+       
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
@@ -397,6 +402,7 @@ class VehicleBookingController extends Controller
         } else {
 
             $details = array('status' => 10, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
+
             return $details;
         }
     }
@@ -437,7 +443,9 @@ class VehicleBookingController extends Controller
         $name = $users->first_name . ' ' . $users->surname;
         $vehicleID = $vehicleData['vehicle_id'];
         $Employee = vehicle_maintenance::where('id', $vehicleID)->orderBy('id', 'desc')->get()->first();
-        //return $Employee;
+
+        $OdometerReading = DB::table('vehicle_details')->where('id' , $vehicleID)->first();
+        $CurrentOdometerReading =  $OdometerReading->odometer_reading;
 
         $Vehiclebookings = new vehicle_booking();
         $Vehiclebookings->vehicle_type = $Employee->vehicle_type;
@@ -455,8 +463,13 @@ class VehicleBookingController extends Controller
         $Vehiclebookings->vehicle_id = $request['vehicle_id'];
         $Vehiclebookings->capturer_id = $name;
         $Vehiclebookings->UserID = $loggedInEmplID;
+        if($BookingDetail['status'] == 10){
+             $Vehiclebookings->status = $BookingDetail['status'];
+             $Vehiclebookings->approver3_id = $loggedInEmplID = Auth::user()->person->id;
+        }else
         $Vehiclebookings->status = $BookingDetail['status'];
         $Vehiclebookings->cancel_status = 0;  // 0 is the for vehicle not booked
+        $Vehiclebookings->start_mileage_id = $CurrentOdometerReading;
         $Vehiclebookings->save();
 
         DB::table('vehicle_details')->where('id', $request['vehicle_id'])->update(['booking_status' => 1]);
@@ -886,8 +899,6 @@ class VehicleBookingController extends Controller
         ]);
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
-
-
 
         $confirm->collector_id = $loggedInEmplID = Auth::user()->person->id;
         $confirm->status = 11;

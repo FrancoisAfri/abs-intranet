@@ -18,8 +18,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Fines Report -
-                            for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
+                        <h3 class="box-title">Vehicle Fuel Report for -{{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -44,55 +43,40 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Reference</th>
-                                <th>Location</th>
-                                <th>Type</th>
+
+                                <th>Date </th>
                                 <th>Driver</th>
-                                <th>Amount</th>
-                                <th>Amount Paid</th>
-                                <th>Status</th>
+                                <th>Purpose</th>
+                                <th>Service Station</th>
+                                <th>Odometer Reading</th>
+                                <th>Litres</th>
+                                <th>Cost</th>
+                                <th>Cost Rate Per Litre</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehiclefines as $fine)
+                            @foreach($vehiclefuellog as $policy)
                                 <tr>
 
-                                    <td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
-                                    <td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
-                                    <td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
-                                    <td>{{ !empty($fine->location) ?  $fine->location : '' }}</td>
-                                    <td>{{ !empty($fine->fine_type) ?  $fineType[$fine->fine_type] : '' }}</td>
-                                    <td>{{ !empty($fine->firstname . ' ' . $fine->surname ) ?  $fine->firstname . ' ' . $fine->surname : '' }}</td>
-                                    <td>{{ !empty($fine->amount  ) ?  'R '.number_format($fine->amount, 2) :'' }}</td>
-                                    <td>{{ !empty($fine->amount_paid  ) ?  'R '.number_format($fine->amount_paid, 2) :'' }}</td>
-                                    <td>{{ !empty($fine->fine_status  ) ?  $status[$fine->fine_status] :'' }}</td>
-                                    @endforeach
+                                    <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
 
+                                    @endforeach
                                 </tr>
 
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th> Date</th>
-                                <th>Time</th>
-                                <th>Reference</th>
-                                <th>Location</th>
-                                <th>Type</th>
+                             <th>Date </th>
                                 <th>Driver</th>
-                                <th>Amount</th>
-                                <th>Amount Paid</th>
-                                <th>Status</th>
+                                <th>Purpose</th>
+                                <th>Service Station</th>
+                                <th>Odometer Reading</th>
+                                <th>Litres</th>
+                                <th>Cost</th>
+                                <th>Cost Rate Per Litre</th>
                             </tr>
                             </tfoot>
-                            <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                            <class
-                            ="caption">
-                            <td colspan="6" style="text-align:right">Total</td>
-                            <td style="text-align: right">{{number_format($total, 2) }}</td>
-                            <td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>
-                            <td style="text-align: right" nowrap></td>
                         </table>
                     </div>
                     <!-- /.box-body -->

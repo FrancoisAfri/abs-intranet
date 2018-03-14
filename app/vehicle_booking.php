@@ -15,4 +15,7 @@ class vehicle_booking extends Model
         return $this->belongsTo(vehicle_booking::class, 'vehicle_id');
     }
 
+	public function hr_people(){
+        return $this->belongsTo(vehicle_booking::class, 'vehicle_id');
+    }
 }
