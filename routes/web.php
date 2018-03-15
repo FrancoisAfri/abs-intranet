@@ -131,6 +131,25 @@ Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
 Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
+//# leavesetup Controller
+Route::get('leave/types', 'LeaveSetupController@setuptypes');
+Route::get('/leave/setup', 'LeaveSetupController@showSetup');
+Route::post('/leave/setup/{levg}', 'LeaveSetupController@store');
+Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetupType');
+Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
+Route::patch('/leave/setup/{id}', 'LeaveSetupController@addAnnual');
+Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
+
+//#Leave Management
+Route::post('leave/type/add_leave', 'LeaveController@addleave');
+Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
+Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
+
+//leave Allocation
+Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
+Route::post('leave/Allocate_leave', 'LeaveSetupController@Adjust');
+Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resert');
+Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
 //leave Approval
 Route::get('leave/approval', 'LeaveApplicationController@show');
