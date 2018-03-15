@@ -43,21 +43,23 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-
-                                <th></th>
-                                <th> </th>
-                                <th></th>
-                                <th></th>
-                                <th> Station</th>
-                                <th> Reading</th>
-                                <th></th>
-                                <th></th>
+                                <th>Date</th>
+                                <th>Driver</th>
+                                <th>Purpose</th>
+                                <th>Destination</th>
+                                <th>Service Station</th>
+                                <th>Odometer Reading</th>
+                                <th>litres</th>
+                                <th>Cost</th>
+                                <th>Rate per Litre</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehiclefuellog as $policy)
+                            @foreach($vehiclefuellog as $details)
                                 <tr>
 
+                                    <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+                                    <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
 
@@ -67,14 +69,15 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                             <th>Date </th>
+                              <th>Date</th>
                                 <th>Driver</th>
                                 <th>Purpose</th>
+                                <th>Destination</th>
                                 <th>Service Station</th>
                                 <th>Odometer Reading</th>
-                                <th>Litres</th>
+                                <th>litres</th>
                                 <th>Cost</th>
-                                <th>Cost Rate Per Litre</th>
+                                <th>Rate per Litre</th>
                             </tr>
                             </tfoot>
                         </table>
