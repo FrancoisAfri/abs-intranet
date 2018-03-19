@@ -744,7 +744,7 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-       //  return  $vehicleserviceDetails;
+        //  return  $vehicleserviceDetails;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1289,7 +1289,9 @@ class VehicleFleetController extends Controller
 
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-        //return $ContactCompany;
+
+        $Details = vehicle_detail::where('id', $maintenance->id)->first();
+        $MetreType = $Details->metre_reading_type;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $servicestation = fleet_fillingstation::orderBy('id', 'desc')->get();
@@ -1300,7 +1302,7 @@ class VehicleFleetController extends Controller
 
         if ($commands === 0) {
             $imonth = $now->month;
-           $iYear =  $now->year;
+            $iYear = $now->year;
         } elseif ($commands === 'p') {
             if ($imonth == 1) {
                 $iYear = $iYear - 1;
@@ -1341,7 +1343,7 @@ class VehicleFleetController extends Controller
         $datetaken = date('n');
         //return $datetaken;
         if ($imonth < 10) {
-            $imonth = 0..$imonth;
+            $imonth = 0. . $imonth;
         } else $imonth = $imonth;
 
         $ID = $maintenance->id;
@@ -1360,6 +1362,8 @@ class VehicleFleetController extends Controller
             ->whereYear('vehicle_fuel_log.created_at', '=', $iYear)// show record for this year
             // ->where('vehicle_fuel_log.status','!=', 1)
             ->get();
+
+        //return $vehiclefuellog;
 
 
         $data['page_title'] = " View Fleet Details";
@@ -1381,6 +1385,7 @@ class VehicleFleetController extends Controller
         } else $icurrentmonth = $icurrentmonth;
 
 
+        $data['MetreType'] = $MetreType;
         $data['icurrentmonth'] = $icurrentmonth;
         $data['imonth'] = $imonth;
         $data['iYear'] = $iYear;
@@ -1527,10 +1532,12 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->total_cost = !empty ($totalcost) ? $totalcost : 0;
         $vehiclefuellog->tank_and_other = !empty($fuelData['transaction']) ? $fuelData['transaction'] : 0;
         $vehiclefuellog->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
+        $vehiclefuellog->Odometer_reading = !empty($fuelData['Odometer_reading']) ? $fuelData['Odometer_reading'] : 0;
         $vehiclefuellog->status = $BookingDetail['status'];
-        $vehiclefuellog->Hoursreading = $fuelData['hours_reading'];
+        $vehiclefuellog->Hoursreading = !empty($fuelData['hours_reading']) ? $fuelData['hours_reading'] : '';
         $vehiclefuellog->published_at = date("Y-m-d H:i:s");
         $vehiclefuellog->save();
+
         AuditReportsController::store('Fleet Management', 'add vehiclefuel log', "Accessed by User", 0);
         return response()->json();
 
@@ -1584,7 +1591,7 @@ class VehicleFleetController extends Controller
             ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
                 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname'
-                )
+            )
             ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')

@@ -921,6 +921,18 @@ class VehicleBookingController extends Controller
 
         $vehicle_model = $vehiclemaker->name . ' ' . $vehicle_model1->name . ' ' . $vehicleTypes->name . ' ' . $year;
 
+        $Vehiclemilege =  vehicle_milege::where('vehicle_id
+        ',$confirm->id)->first();
+
+        $Vehiclemilege = new vehicle_milege();
+        $Vehiclemilege->date_created = time();
+//        $Vehiclemilege->vehicle_id = $;
+//        $Vehiclemilege->odometer_reading = $vehicleData['odometer_reading'];
+//        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
+        $Vehiclemilege->type = 0;
+        $Vehiclemilege->booking_id = 0;
+        $Vehiclemilege->save();
+
         #check if the images have beeen uploaded
         $vehiclecollectimage = vehicle_collect_image::where()->first();
         $vehiclecollectdocuments = vehicle_collect_documents::where()->first();
