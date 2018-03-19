@@ -60,8 +60,13 @@
 
                                     <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
-                                    <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{ !empty($details->service_station) ?  $details->service_station: 'Nill' }}</td>
+                                    <td>{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }}</td>
+                                    <td>{{ !empty($details->litres) ?  $details->litres: '' }}</td>
+                                    <td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
+                                    <td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
 
                                     @endforeach
                                 </tr>

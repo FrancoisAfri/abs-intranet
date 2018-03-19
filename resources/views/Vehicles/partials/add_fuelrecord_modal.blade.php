@@ -115,14 +115,23 @@
                         </div>
                     </div>
 
+                    @if (isset($MetreType) && $MetreType === 1)
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="Odometer_reading" name="Odometer_reading" value=""
+                                   placeholder="Enter Odometer reading Reading" required>
+                        </div>
+                    </div>
+                        @else
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Hours Reading</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
                                    placeholder="Enter Hours Reading" required>
                         </div>
                     </div>
-
+                    @endif
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">

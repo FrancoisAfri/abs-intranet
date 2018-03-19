@@ -433,7 +433,7 @@ class VehicleReportsController extends Controller
             ->where('vehicle_fuel_log.vehicleID', $vehicleID->id)
             ->get();
 
-        //return  $vehiclefuellog;
+      //  return  $vehiclefuellog;
 
 
         $vehicledetail = DB::table('vehicle_details')

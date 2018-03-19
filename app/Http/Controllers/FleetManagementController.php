@@ -18,6 +18,7 @@ use App\vehicle_maintenance;
 use App\vehiclemake;
 use App\keytracking;
 use App\safe;
+use App\vehicle_milege;
 use App\vehicle_documets;
 use App\images;
 use App\notes;
@@ -68,6 +69,9 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
+
+       // $veggvg =  vehicle_milege::all();
+      //  return $veggvg;
 
         $data['vehicleConfig'] = $vehicleConfig;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
@@ -213,6 +217,18 @@ class FleetManagementController extends Controller
                 $vehicle_maintenance->update();
             }
         }
+
+        // add Details into vehicle Milege table
+
+        $Vehiclemilege = new vehicle_milege();
+        $Vehiclemilege->date_created = time();
+        $Vehiclemilege->vehicle_id = $vehicle_maintenance->id;
+        $Vehiclemilege->odometer_reading = $SysData['odometer_reading'];
+        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
+        $Vehiclemilege->type = 0;
+        $Vehiclemilege->booking_id = 0;
+        $Vehiclemilege->save();
+
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
