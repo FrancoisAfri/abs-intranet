@@ -174,7 +174,7 @@
                                         </div>
                                         <input type="text" id="driver_id" class="form-control pull-left"
                                                name="driver_id"
-                                               value="{{  $vehiclebookings->odometer_reading }}" readonly>
+                                               value="{{  $OdometerReading->odometer_reading }}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -262,7 +262,7 @@
     {{--@include('Vehicles.partials.edit_document_modal')--}}
 
     @if(Session('success_application'))
-    @include('Vehicles.sucess.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
+    @include('Vehicles.sucess.success_action', ['modal_title' => "Vehicle Collection successful!", 'modal_content' => session('success_application')])
     @endif
 
     </div>

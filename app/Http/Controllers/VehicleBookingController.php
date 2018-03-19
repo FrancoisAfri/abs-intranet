@@ -22,6 +22,7 @@ use App\vehicle_fuel_log;
 use App\service_station;
 use App\module_ribbons;
 use App\ribbons_access;
+Use App\vehicle_milege;
 use App\ContactCompany;
 use App\vehicle_config;
 use App\vehicle_return_images;
@@ -95,7 +96,6 @@ class VehicleBookingController extends Controller
             // ->where('vehicle_booking.status', '!=', 12)
             ->get();
 
-           
 
         //return $vehiclebookings;
         $data['page_title'] = " View Fleet Details";
@@ -168,7 +168,6 @@ class VehicleBookingController extends Controller
         $startDate = strtotime($requiredFrom);
         $EndDate = strtotime($requiredTo);
 
-       
 
         $vehiclebookings = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ',
@@ -255,7 +254,7 @@ class VehicleBookingController extends Controller
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
         $vehicle_image = images::orderBy('id', 'asc')->get();
         $safe = safe::orderBy('id', 'asc')->get();
-       
+
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $keyStatus = array(1 => 'In Use', 2 => 'Reallocated', 3 => 'Lost', 4 => 'In Safe',);
@@ -332,13 +331,12 @@ class VehicleBookingController extends Controller
         }
 
 
-
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
         $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
 
         $managerID = HRPerson::where('id', $driverDetails->manager_id)->where('status', 1)->first();
         $driverHead = !empty($managerID->manager_id) ? $managerID->manager_id : 0;
-         if (!empty($driverHead)) {
+        if (!empty($driverHead)) {
             $driverHead = HRPerson::where('id', $driverHead)->where('status', 1)->first();
         }
 
@@ -444,8 +442,8 @@ class VehicleBookingController extends Controller
         $vehicleID = $vehicleData['vehicle_id'];
         $Employee = vehicle_maintenance::where('id', $vehicleID)->orderBy('id', 'desc')->get()->first();
 
-        $OdometerReading = DB::table('vehicle_details')->where('id' , $vehicleID)->first();
-        $CurrentOdometerReading =  $OdometerReading->odometer_reading;
+        $OdometerReading = DB::table('vehicle_details')->where('id', $vehicleID)->first();
+        $CurrentOdometerReading = $OdometerReading->odometer_reading;
 
         $Vehiclebookings = new vehicle_booking();
         $Vehiclebookings->vehicle_type = $Employee->vehicle_type;
@@ -463,11 +461,11 @@ class VehicleBookingController extends Controller
         $Vehiclebookings->vehicle_id = $request['vehicle_id'];
         $Vehiclebookings->capturer_id = $name;
         $Vehiclebookings->UserID = $loggedInEmplID;
-        if($BookingDetail['status'] == 10){
-             $Vehiclebookings->status = $BookingDetail['status'];
-             $Vehiclebookings->approver3_id = $loggedInEmplID = Auth::user()->person->id;
-        }else
-        $Vehiclebookings->status = $BookingDetail['status'];
+        if ($BookingDetail['status'] == 10) {
+            $Vehiclebookings->status = $BookingDetail['status'];
+            $Vehiclebookings->approver3_id = $loggedInEmplID = Auth::user()->person->id;
+        } else
+            $Vehiclebookings->status = $BookingDetail['status'];
         $Vehiclebookings->cancel_status = 0;  // 0 is the for vehicle not booked
         $Vehiclebookings->start_mileage_id = $CurrentOdometerReading;
         $Vehiclebookings->save();
@@ -770,7 +768,6 @@ class VehicleBookingController extends Controller
     public function collect_vehicle(vehicle_booking $collect)
     {
 
-        //return $collect->id;
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $collect->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $collect->vehicle_model)->get()->first();
@@ -785,7 +782,7 @@ class VehicleBookingController extends Controller
         //  if ($collect->status == 10) {
         $bookingID = $collect->id;
         //return $ID;
-        $doc =  vehicle_collect_documents::count();
+        $doc = vehicle_collect_documents::count();
 
         $image = vehicle_collect_image::count();
 
@@ -800,6 +797,8 @@ class VehicleBookingController extends Controller
             ->orderBy('vehicle_booking.id')
             ->first();
 
+        $OdometerReading = vehicle_milege::where('booking_id' ,$bookingID )->latest()->first();
+
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -808,7 +807,7 @@ class VehicleBookingController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-
+        $data['OdometerReading'] = $OdometerReading;
         $data['doc'] = $doc;
         $data['image'] = $image;
         $data['collect'] = $collect;
@@ -900,6 +899,8 @@ class VehicleBookingController extends Controller
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
+        //return $vehicleData;
+
         $confirm->collector_id = $loggedInEmplID = Auth::user()->person->id;
         $confirm->status = 11;
         $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
@@ -920,27 +921,34 @@ class VehicleBookingController extends Controller
         $vehicleTypes = Vehicle_managemnt::where('id', $vehicleypes)->get()->first();
 
         $vehicle_model = $vehiclemaker->name . ' ' . $vehicle_model1->name . ' ' . $vehicleTypes->name . ' ' . $year;
+        //return $vehicle_model;
 
-        $Vehiclemilege =  vehicle_milege::where('vehicle_id
-        ',$confirm->id)->first();
+        //types
+        //0 =  vehicle creation
+        // 1 =  vehicle collected
+        //2 = vehicle returned
+
 
         $Vehiclemilege = new vehicle_milege();
         $Vehiclemilege->date_created = time();
-//        $Vehiclemilege->vehicle_id = $;
-//        $Vehiclemilege->odometer_reading = $vehicleData['odometer_reading'];
-//        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
-        $Vehiclemilege->type = 0;
-        $Vehiclemilege->booking_id = 0;
+        $Vehiclemilege->date_taken = time();
+        $Vehiclemilege->vehicle_id = $confirm->vehicle_id;
+        $Vehiclemilege->odometer_reading = $vehicleData['start_mileage_id'];
+        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
+        $Vehiclemilege->type = 1;
+        $Vehiclemilege->booking_id = $confirm->id;
         $Vehiclemilege->save();
 
         #check if the images have beeen uploaded
-        $vehiclecollectimage = vehicle_collect_image::where()->first();
-        $vehiclecollectdocuments = vehicle_collect_documents::where()->first();
+        $vehiclecollectimage = vehicle_collect_image::where('vehicleID',$confirm->vehicle_id )->first();
+        $vehiclecollectdocuments = vehicle_collect_documents::where('vehicleID',$confirm->vehicle_id )->first();
+       // return $vehiclecollectdocuments;
+
         #mail to manager
-        Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'], $vehicle_model));
+       // Mail::to($BookingDetail['email'])->send(new vehicle_confirm_collection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'], $vehicle_model));
 
         AuditReportsController::store('Fleet Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
-        return redirect()->to('/vehicle_management/collect/' . $ID);
+        return redirect()->to('/vehicle_management/create_request')->with('success_application', "Vehicle Collection  was successful.");
 
     }
 
@@ -966,7 +974,7 @@ class VehicleBookingController extends Controller
         //  if ($collect->status == 10) {
         $bookingID = $returnVeh->id;
         //return $ID;
-        $doc =  vehicle_return_documents::count();
+        $doc = vehicle_return_documents::count();
         $image = vehicle_return_images::count();
 
         $vehiclebookings = DB::table('vehicle_booking')
@@ -978,6 +986,8 @@ class VehicleBookingController extends Controller
             ->orderBy('vehicle_booking.id')
             ->first();
 
+        $OdometerReading = vehicle_milege::where('booking_id' ,$bookingID )->latest()->first();
+        //return $OdometerReading;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -987,6 +997,7 @@ class VehicleBookingController extends Controller
         ];
 
 
+        $data['OdometerReading'] = $OdometerReading;
         $data['image'] = $image;
         $data['doc'] = $doc;
         $data['servicestation'] = $servicestation;
@@ -1082,6 +1093,8 @@ class VehicleBookingController extends Controller
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
+        //return $vehicleData;
+
         $confirm->collector_id = $loggedInEmplID = Auth::user()->person->id;
         $confirm->status = 12;
         $confirm->end_mileage_id = $vehicleData['end_mileage_id'];
@@ -1095,8 +1108,23 @@ class VehicleBookingController extends Controller
             ->where('id', $ID)
             ->update(['booking_status' => 0]);
 
+        //types
+        //0 =  vehicle creation
+        // 1 =  vehicle collected
+        //2 = vehicle returned
+
+
+        $Vehiclemilege = new vehicle_milege();
+        $Vehiclemilege->date_created = time();
+        $Vehiclemilege->vehicle_id = $confirm->vehicle_id;
+        $Vehiclemilege->odometer_reading = $vehicleData['end_mileage_id'];
+        //$Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
+        $Vehiclemilege->type = 2;
+        $Vehiclemilege->booking_id = $confirm->id;
+        $Vehiclemilege->save();
+
         AuditReportsController::store('Fleet Management', 'Vehicle Has Been Collected  ', "Booking has been Collected", 0);
-        return redirect()->to('/vehicle_management/return_vehicle/' . $ID);
+        return redirect()->to('/vehicle_management/create_request')->with('success_application', "Vehicle Collection  was successful.");;
 
     }
 

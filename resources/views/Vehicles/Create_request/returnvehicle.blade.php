@@ -213,7 +213,7 @@
                                         </div>
                                         <input type="text" id="start_mileage_id" class="form-control pull-left"
                                                name="start_mileage_id"
-                                               value="{{  $vehiclebookings->start_mileage_id }}" readonly>
+                                               value="{{  $OdometerReading->odometer_reading }}" readonly>
                                     </div>
                                 </div>
                             </div>

@@ -220,6 +220,11 @@ class FleetManagementController extends Controller
 
         // add Details into vehicle Milege table
 
+        //types
+        //0 =  vehicle creation
+       // 1 =  vehicle collected
+        //2 = vehicle returned
+
         $Vehiclemilege = new vehicle_milege();
         $Vehiclemilege->date_created = time();
         $Vehiclemilege->vehicle_id = $vehicle_maintenance->id;
