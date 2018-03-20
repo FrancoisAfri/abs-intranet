@@ -174,7 +174,8 @@
                                         </div>
                                         <input type="text" id="driver_id" class="form-control pull-left"
                                                name="driver_id"
-                                               value="{{  $OdometerReading->odometer_reading }}" readonly>
+                                               value="{{ (!empty( $OdometerReading->odometer_reading)) ?  $OdometerReading->odometer_reading : ''}}"
+											   readonly>
                                     </div>
                                 </div>
                             </div>
@@ -187,7 +188,8 @@
                                             <i class="fa fa-spinner"></i>
                                         </div>
                                         <input type="text" id="start_mileage_id" class="form-control pull-left"
-                                               name="start_mileage_id" value="0">
+                                               name="{{(!empty( $start_mileage_id)) ?  $start_mileage_id: ''}}"
+											   value="0">
                                     </div>
                                 </div>
                             </div>
