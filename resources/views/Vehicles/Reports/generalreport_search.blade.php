@@ -16,12 +16,11 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
-                    <h3 class="box-title">Vehicle Reports</h3>
+                    <h3 class="box-title">Fleet Management Reports</h3>
                 </div>
                 <!-- /.box-header -->
-                <!-- form start -->
-                <form class="form-horizontal" id="report_form" method="POST"
-                      action="/vehicle_management/vehicle_reports/details">
+                <!-- form startaction="/vehicle_management/vehicle_reports/details" -->
+                <form class="form-horizontal" id="report_form" method="POST">
                     <!-- audits -->
                     {{ csrf_field() }}
 
@@ -49,9 +48,9 @@
                             <label for="gender" class="col-sm-2 control-label">Report Type</label>
 
                             <div class="col-sm-8">
-                                <select name="report_id" id="report_id" class="form-control">
+                                <select name="report_id" id="report_id" class="form-control" onchange="changetype(this.value)"  required>
                                     <option value="">*** Select Report Type ***</option>
-                                    <option value="1">Booking Log</option>
+                                    <option value="1" selected>Booking Log</option>
                                     <option value="2">Fuel Log</option>
                                     <option value="3">Fines</option>
                                     <option value="4">Service</option>
@@ -103,7 +102,7 @@
                                         name="vehicle_id[]">
                                     <option value="">*** Select an Vehicle ***</option>
                                     @foreach($vehicledetail as $vehicle)
-                                        <option value="{{ $vehicle->id }}">{{ $vehicle->vehicle_make . ' ' . $vehicle->vehicle_model}}</option>
+                                        <option value="{{ $vehicle->id }}">{{ $vehicle->vehicle_registration.' '.$vehicle->vehicle_make.' '.$vehicle->vehicle_model}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -208,9 +207,25 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-
+			
+			$('#report_form').attr('action', '/vehicle_management/booking_report');
         });
         //Phone mask
         $("[data-mask]").inputmask();
+		function changetype(type)
+		{
+			if (type == 1)	$('#report_form').attr('action', '/vehicle_management/booking_report');
+			else if (type == 2) $('#report_form').attr('action', '/project/search');
+			else if (type == 3) $('#report_form').attr('action', '/activity/search');
+			else if (type == 4) $('#report_form').attr('action', '/activity/search');
+			else if (type == 5) $('#report_form').attr('action', '/activity/search');
+			else if (type == 6) $('#report_form').attr('action', '/activity/search');
+			else if (type == 7) $('#report_form').attr('action', '/activity/search');
+			else if (type == 8) $('#report_form').attr('action', '/activity/search');
+			else if (type == 9) $('#report_form').attr('action', '/activity/search');
+			else if (type == 10) $('#report_form').attr('action', '/activity/search');
+			else if (type == 11) $('#report_form').attr('action', '/activity/search');
+				
+		}
     </script>
 @endsection

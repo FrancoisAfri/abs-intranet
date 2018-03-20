@@ -22,6 +22,4 @@ class vehicle_detail extends Model
         return $this->hasMany(vehicle_fines::class, 'vehicleID');
     }
 
-
-
 }
