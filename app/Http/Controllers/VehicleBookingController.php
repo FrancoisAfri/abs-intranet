@@ -16,6 +16,7 @@ use App\vehicle_maintenance;
 use App\vehicle_collect_documents;
 use App\vehiclemake;
 use App\safe;
+use App\tank;
 use App\vehicle_collect_image;
 use App\images;
 use App\vehicle_fuel_log;
@@ -209,6 +210,8 @@ class VehicleBookingController extends Controller
             // ->where('vehicle_booking.status' , '=', 12 )
             ->orderBy('vehicle_details.id')
             ->get();
+			
+			//return  $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 
@@ -796,8 +799,12 @@ class VehicleBookingController extends Controller
             ->where('vehicle_booking.id', $bookingID)
             ->orderBy('vehicle_booking.id')
             ->first();
+			
+			//return $bookingID;
 
         $OdometerReading = vehicle_milege::where('booking_id' ,$bookingID )->latest()->first();
+		
+		//return $OdometerReading;
 
 
         $data['page_title'] = " View Fleet Details";
@@ -894,7 +901,7 @@ class VehicleBookingController extends Controller
     {
 
         $this->validate($request, [
-            'start_mileage_id' => 'required',
+            //'start_mileage_id' => 'required',
         ]);
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
@@ -968,7 +975,9 @@ class VehicleBookingController extends Controller
         ###################>>>>>#################
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-        $fueltank = vehicle_fuel_log::orderBy('id', 'desc')->get();
+        $vehicle_fuel_log = vehicle_fuel_log::orderBy('id', 'desc')->get();
+        $fueltank = tank::orderBy('id', 'desc')->get();
+		//return $fueltank;
         $servicestation = service_station::orderBy('id', 'desc')->get();
 
         //  if ($collect->status == 10) {

@@ -200,8 +200,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Include add new prime rate modal -->
-
+            
         @include('Vehicles.partials.add_fuelrecord_modal')
         <!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
         <!--  @include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal') -->

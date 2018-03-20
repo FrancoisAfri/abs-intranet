@@ -213,7 +213,7 @@
                                         </div>
                                         <input type="text" id="start_mileage_id" class="form-control pull-left"
                                                name="start_mileage_id"
-                                               value="{{  $OdometerReading->odometer_reading }}" readonly>
+                                               value="{{ !empty($OdometerReading->odometer_reading) ? $OdometerReading->odometer_reading : ''}}" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -276,6 +276,7 @@
                             <div class="box-footer">
                                 <button type="button" id="cancel" class="btn btn-primary"><i
                                             class="fa fa-arrow-left"></i> Cancel
+											
                                 </button>
 
                                 @if (isset($doc) && $doc > 0 && (isset($image) && $image>0))
@@ -464,6 +465,21 @@
             var successMsg = 'The Image  has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
+
+        //fuel log
+		   //Post perk form to server using ajax (add)
+                $('#add_vehiclefuellog').on('click', function () {
+                    var strUrl = '/vehicle_management/addvehiclefuellog';
+                    var formName = 'add-fuel-form';
+                    var modalID = 'add-fuel-modal';
+                    var submitBtnID = 'add_vehiclefuellog';
+                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id}}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
+
+                // fine
 
 
     </script>

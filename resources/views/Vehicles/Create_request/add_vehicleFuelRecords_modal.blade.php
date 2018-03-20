@@ -13,7 +13,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Driver </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
@@ -26,7 +26,7 @@
                         </div>
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Document Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="document_number" name="document_number" value=" "
@@ -44,24 +44,23 @@
 
                     <div class="form-group{{ $errors->has('transaction') ? ' has-error' : '' }}">
                         <label for="transaction" class="col-sm-2 control-label"> Tanks and Other </label>
-                            <div class="col-sm-8">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_transaction"
-                                        name="transaction" value="1" checked>Tank
-                             </label>
-                                 <label class="radio-inline"><input type="radio" id="rdo_Other" name="transaction" value="2">
-                                        Other
-                                </label>
-                            </div>
+                        <div class="col-sm-8">
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_transaction"
+                                                                                          name="transaction" value="1" checked>Tank
+                            </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_Other" name="transaction" value="2">
+                                Other
+                            </label>
+                        </div>
                     </div>
                     <div class="form-group transaction-field{{ $errors->has('transaction_type') ? ' has-error' : '' }}">
                         <label for="transaction_type" class="col-sm-2 control-label"> Transaction Type </label>
                         <div class="col-sm-8">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fulltank"
-                                                                                          name="transaction_type" value="1" checked>Full Tank
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="empty"
+                                                                                          name="transaction_type" value="0" checked disabled>
                             </label>
-                            <label class="radio-inline"><input type="radio" id="rdo_topup" name="transaction_type" value="2">
-                                Top Up
-                            </label>
+                            <label class="radio-inline" ><input type="radio" id="rdo_fulltank"  name="transaction_type" value="1">Full Tank </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_topup" name="transaction_type" value="2"> Top Up </label>
                         </div>
                     </div>
 
@@ -72,7 +71,7 @@
                                     id="tank_name" name="tank_name">
                                 <option value="0">*** Select tank  ***</option>
                                 @foreach($fueltank as $tank)
-                                <option value="{{ $tank->id }}">{{ $tank->name }}</option>
+                                    <option value="{{ $tank->id }}">{{ $tank->tank_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -91,10 +90,11 @@
                         </div>
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Litres </label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="litres" name="litres" value="0"
+                            <input type="text" class="form-control" id="litres" name="litres" value=""
+                                   min="0" step="0.001"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Cost per Litre </label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="cost_per_litre" name="cost_per_litre" value="0"
+                            <input type="teXt" class="form-control" id="cost_per_litre" name="cost_per_litre" value=""  min="0" step="0.01"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
@@ -110,19 +110,28 @@
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Total Cost</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="total_cost" name="total_cost" value="0"
+                            <input type="text" class="form-control" id="total_cost" name="total_cost" value="0"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
 
-                      <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Hours Reading </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
-                                   placeholder="Enter Hours Reading" required>
+                    @if (isset($MetreType) && $MetreType === 1)
+                        <div class="form-group">
+                            <label for="path" class="col-sm-2 control-label">Odometer Reading </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="Odometer_reading" name="Odometer_reading" value=""
+                                       placeholder="Enter Odometer reading Reading" required>
+                            </div>
                         </div>
-                    </div>
-
+                    @else
+                        <div class="form-group">
+                            <label for="path" class="col-sm-2 control-label">Hours Reading</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
+                                       placeholder="Enter Hours Reading" required>
+                            </div>
+                        </div>
+                    @endif
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">
@@ -140,7 +149,7 @@
                         </div>
                     </div>
 
-                   <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
@@ -158,8 +167,8 @@
 
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="button" id="add_vehiclefuellog" class="btn btn-warning"><i class="fa fa-cloud-upload"></i>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" id="add_vehiclefuellog" class="btn btn-warning"><i class="fa fa-cloud-upload"></i>
                         Save
                     </button>
                 </div>

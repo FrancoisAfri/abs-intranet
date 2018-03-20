@@ -62,8 +62,7 @@
                                 <tr>
                                     <td>{{ !empty($policy->collect_timestamp) ? date(' d M Y', $policy->collect_timestamp) : ''}}</td>
                                     <td>{{ !empty($policy->return_timestamp) ? date(' d M Y', $policy->return_timestamp) : ''}}</td>
-                                    <td></td>purpose
-
+                                    <td></td>
                                     <td>{{ !empty($policy->firstname . ' ' . $policy->surname ) ? $policy->firstname . ' ' . $policy->surname : ''}}</td>
                                     <td>{{ !empty($policy->purpose) ? $policy->purpose : ''}}</td>
                                     <td>{{ !empty($policy->destination) ? $policy->destination : ''}}</td>

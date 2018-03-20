@@ -13,18 +13,18 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                     <div class="form-group">
+                     <!-- <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Capture Date</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_captured" name="date_captured" value=""
                                    placeholder="Enter Capture Date" required readonly="">
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Registration</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="contact_number" name="contact_number" value=""
+                            <input type="text" class="form-control" id="registrion" name="registrion" value="{{!empty($maintenance->vehicle_registration) ? $maintenance->vehicle_registration : ''}}"
                                    placeholder="Enter Registration " required readonly="">
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Reduced</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="reduced" name="reduced" value=""
+                            <input type="number" class="form-control" id="reduced" name="reduced" value=""
                                    placeholder="Enter reduced" required>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Additional Fee </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="additional_fee" name="additional_fee" value="" placeholder="Enter additional Fee " required>
+                            <input type="number" class="form-control" id="additional_fee" name="additional_fee" value="" placeholder="Enter additional Fee " required>
                                   
                         </div>
                     </div>
@@ -101,14 +101,14 @@
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Speed </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="speed" name="speed" value="" placeholder="Enter speed " required>
+                            <input type="number" class="form-control" id="speed" name="speed" value="" placeholder="Enter speed " required>
                                   
                         </div>
                     </div>
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Zone Speed </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="zone_speed" name="zone_speed" value="" placeholder="Enter zone speed " required>
+                            <input type="number" class="form-control" id="zone_speed" name="zone_speed" value="" placeholder="Enter zone speed " required>
                                   
                         </div>
                     </div>
@@ -154,7 +154,7 @@
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Amount Paid </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="amount_paid" name="amount_paid" value="" placeholder="Enter amount paid  " required>
+                            <input type="number" class="form-control" id="amount_paid" name="amount_paid" value="" placeholder="Enter amount paid  " required>
                                   
                         </div>
                     </div>

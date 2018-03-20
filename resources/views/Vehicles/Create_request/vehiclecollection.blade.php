@@ -187,7 +187,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-spinner"></i>
                                         </div>
-                                        <input type="text" id="start_mileage_id" class="form-control pull-left"
+                                        <input type="text" id="start_mileage_id" name="start_mileage_id" class="form-control pull-left"
                                                name="{{(!empty( $start_mileage_id)) ?  $start_mileage_id: ''}}"
 											   value="0">
                                     </div>
