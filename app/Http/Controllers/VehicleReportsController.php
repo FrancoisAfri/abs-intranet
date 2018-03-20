@@ -646,8 +646,6 @@ class VehicleReportsController extends Controller
             AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         }
-
-
     }
 
     public function jobcard()
@@ -684,25 +682,23 @@ class VehicleReportsController extends Controller
             ->get();*/
 
 
-            $vehicle_booking = DB::table('vehicle_booking')
-            ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
-                'vehicle_model.name as vehicleModel'
-            ->leftJoin('vehicle_details', 'vehicle_booking.vehecile_id', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.make_id', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.model_id', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->orderBy('vehicle_booking.id', 'desc')
-            ->where('vehicle_booking.vehicle_id', $vehicleID->id)
-            ->get();
+         //   $vehicle_booking = DB::table('vehicle_booking')
+          //  ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
+            //    'vehicle_model.name as vehicleModel'
+           // ->leftJoin('vehicle_details', 'vehicle_booking.vehecile_id', '=', 'vehicle_details.id')
+            //->leftJoin('vehicle_make', 'vehicle_details.make_id', '=', 'vehicle_make.id')
+            //->leftJoin('vehicle_model', 'vehicle_details.model_id', '=', 'vehicle_model.id')
+           // ->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
+           // ->orderBy('vehicle_booking.id', 'desc')
+           // ->where('vehicle_booking.vehicle_id', $vehicleID->id)
+            //->get();
 			
-			$vehicle = vehicle_booking::where('id', $vehicleID->id)->get()->load(['milege' => function($query) {
-                $query->orderBy('id', 'asc');
-            }]);
+			//$vehicle = vehicle_booking::where('id', $vehicleID->id)->get()->load(['milege' => function($query) {
+            //    $query->orderBy('id', 'asc');
+            //}]);
 			
 			
-			return $vehicle;
-
-           // return $vehicle_booking;
+			//return $vehicle;
 
 
 
