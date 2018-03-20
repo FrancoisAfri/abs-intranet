@@ -881,7 +881,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Vehicle Reports';
         $ribbon->ribbon_path = 'vehicle_management/vehicle_reports';
-        $ribbon->access_level = 3;
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();

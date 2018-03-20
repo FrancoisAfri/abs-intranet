@@ -20,8 +20,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form name="reports-form" class="form-horizontal" method="POST" action=" "
-                      enctype="multipart/form-data">
+                <form name="reports-form" class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
 
                     <hr class="hr-text" data-content="Report Generator">

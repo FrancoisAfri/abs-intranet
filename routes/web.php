@@ -563,8 +563,9 @@ Route::post('vehicle_management/doc_search', 'VehicleDocSearchController@doc_sea
 Route::post('vehicle_management/image_search', 'VehicleDocSearchController@image_search');
 
 //######## Vehicle Reports ################
-Route::get('vehicle_management/vehicle_reports', 'VehicleReportsController@index');
-Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
+Route::get('vehicle_management/vehicle_reports', 'VehicleReportsController@general');
+Route::post('vehicle_management/booking_report', 'VehicleReportsController@bookingReports');
+//Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
   // ***************
 Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
