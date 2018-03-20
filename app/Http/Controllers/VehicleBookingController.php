@@ -924,9 +924,9 @@ class VehicleBookingController extends Controller
         //return $vehicle_model;
 
         //types
-        //0 =  vehicle creation
-        // 1 =  vehicle collected
-        //2 = vehicle returned
+        //1 =  vehicle creation
+        // 2 =  vehicle collected
+        //3= vehicle returned
 
 
         $Vehiclemilege = new vehicle_milege();
@@ -935,7 +935,7 @@ class VehicleBookingController extends Controller
         $Vehiclemilege->vehicle_id = $confirm->vehicle_id;
         $Vehiclemilege->odometer_reading = $vehicleData['start_mileage_id'];
         $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
-        $Vehiclemilege->type = 1;
+        $Vehiclemilege->type = 2;
         $Vehiclemilege->booking_id = $confirm->id;
         $Vehiclemilege->save();
 
@@ -1109,9 +1109,9 @@ class VehicleBookingController extends Controller
             ->update(['booking_status' => 0]);
 
         //types
-        //0 =  vehicle creation
-        // 1 =  vehicle collected
-        //2 = vehicle returned
+        //1 =  vehicle creation
+        // 2 =  vehicle collected
+        //3 = vehicle returned
 
 
         $Vehiclemilege = new vehicle_milege();
@@ -1119,7 +1119,7 @@ class VehicleBookingController extends Controller
         $Vehiclemilege->vehicle_id = $confirm->vehicle_id;
         $Vehiclemilege->odometer_reading = $vehicleData['end_mileage_id'];
         //$Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
-        $Vehiclemilege->type = 2;
+        $Vehiclemilege->type = 3;
         $Vehiclemilege->booking_id = $confirm->id;
         $Vehiclemilege->save();
 

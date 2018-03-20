@@ -18,4 +18,12 @@ class vehicle_booking extends Model
 	public function hr_people(){
         return $this->belongsTo(vehicle_booking::class, 'vehicle_id');
     }
+
+    public function milege(){
+        return $this->hasMany(vehicle_milege::class, 'vehicle_id');
+    }
+
+    public function make(){
+        return $this->hasMany(vehiclemake::class, 'vehicle_id');
+    }
 }

@@ -33,7 +33,7 @@
                                 <label class="radio-inline"><input type="radio" id="rdo_resert" name="allocation_type"
                                                                    value="1" checked> General Report</label>
                                 <label class="radio-inline"><input type="radio" id="rdo_allocate" name="allocation_type"
-                                                                   value="2"> Job Card Report</label>
+                                                                   value="2" disabled> Job Card Report</label>
                             </div>
                         </div>
                     </div>

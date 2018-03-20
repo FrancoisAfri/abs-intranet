@@ -43,15 +43,18 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
-                                <th> Date Collected</th>
+                                <th>Date Collected</th>
                                 <th>Date Returned</th>
                                 <th>Approved By</th>
                                 <th>Driver</th>
                                 <th>Purpose</th>
                                 <th>Destination</th>
                                 <th>Starting Km</th>
-                                <th>Ending Km Km</th>
+                                <th>Ending Km</th>
+                                <th>Type</th>
                                 <th>Total Km Travelled</th>
+
+
                             </tr>
                             </thead>
                             <tbody>
@@ -64,8 +67,8 @@
                                     <td>{{ !empty($policy->firstname . ' ' . $policy->surname ) ? $policy->firstname . ' ' . $policy->surname : ''}}</td>
                                     <td>{{ !empty($policy->purpose) ? $policy->purpose : ''}}</td>
                                     <td>{{ !empty($policy->destination) ? $policy->destination : ''}}</td>
-                                    <td>{{ !empty($policy->start_mileage_id) ? $policy->start_mileage_id : ''}}</td>
-                                    <td>{{ !empty($policy->end_mileage_id) ? $policy->end_mileage_id : ''}}</td>
+                                    <td>{{ !empty($policy->odometer_reading) ? $policy->odometer_reading : ''}}</td>
+                                    <td>{{ !empty($policy->odometer_reading) ? $policy->odometer_reading : ''}}</td>
                                     <td>{{ !empty($policy->end_mileage_id - $policy->start_mileage_id) ? $policy->end_mileage_id - $policy->start_mileage_id  : ''}}</td>
                                     @endforeach
                                 </tr>
