@@ -87,7 +87,7 @@
                                             <i class="fa fa-bullseye"></i>
                                         </div>
                                         <input type="text" id="vehiclemodel" class="form-control pull-left"
-                                               name="vehiclemodel" value="{{ $vehiclemodeler->name }} "
+                                               name="vehiclemodel" value="{{  (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : '' }}"
                                                readonly>
                                     </div>
                                 </div>
@@ -165,31 +165,15 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label"> Default Odometer
+                                <label for="path" class="col-sm-2 control-label">Odometer
                                     Reading </label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-spinner"></i>
                                         </div>
-                                        <input type="text" id="driver_id" class="form-control pull-left"
-                                               name="driver_id"
-                                               value="{{ (!empty( $OdometerReading->odometer_reading)) ?  $OdometerReading->odometer_reading : ''}}"
-											   readonly>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label"> Actual Odometer
-                                    Reading </label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-spinner"></i>
-                                        </div>
-                                        <input type="text" id="start_mileage_id" name="start_mileage_id" class="form-control pull-left"
-                                               name="{{(!empty( $start_mileage_id)) ?  $start_mileage_id: ''}}"
-											   value="0">
+										{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}
+										<input type="hidden" id="start_mileage_id" name="start_mileage_id" value="{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}">
                                     </div>
                                 </div>
                             </div>
@@ -317,7 +301,7 @@
             $('.zip-field').hide();
             //Cancel button click event
             $('#cancel').click(function () {
-                location.href = '/leave/application';
+                location.href = '/vehicle_management/create_request';
             });
 
             //Phone mask

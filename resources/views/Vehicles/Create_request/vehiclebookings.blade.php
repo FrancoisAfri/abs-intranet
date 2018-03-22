@@ -24,7 +24,7 @@
                         </button>
                     </div>
                 </div>
-                <form class="form-horizontal" method="POST" action="/vehicle_management/vehiclebooking">
+                <form class="form-horizontal" method="POST" action="/vehicle_management/vehiclebooking/{{$vehicle->id}}">
                     {{ csrf_field() }}
                     <div class="box-body">
 
@@ -45,17 +45,17 @@
                                         -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
                                         &nbsp;
                                     @endif
-                                    @if(!empty($maintenance->vehicle_registration))
+                                    @if(!empty($vehicle->vehicle_registration))
                                         -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
-                                        <em>{{ $maintenance->vehicle_registration }}</em> &nbsp; &nbsp;
+                                        <em>{{ $vehicle->vehicle_registration }}</em> &nbsp; &nbsp;
                                     @endif
-                                    @if(!empty($maintenance->year))
-                                        -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $maintenance->year }}</em> &nbsp;
+                                    @if(!empty($vehicle->year))
+                                        -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $vehicle->year }}</em> &nbsp;
                                         &nbsp;
                                     @endif
-                                    @if(!empty($maintenance->vehicle_color))
+                                    @if(!empty($vehicle->vehicle_color))
                                         -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
-                                        <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                        <em>{{ $vehicle->vehicle_color }}</em> &nbsp; &nbsp; -|
                                     @endif
 
                                 </p>
@@ -91,7 +91,7 @@
                                                         <i class="fa fa-truck"></i>
                                                     </div>
 
-                                                    <input type="text" id ="vehicletype" class="form-control form-control-sm pull-left" name="vehicletype" value="{{ $vehicleTypes->name }} " readonly>
+                                                    <input type="text" id ="vehicletype" class="form-control form-control-sm pull-left" name="vehicletype" value="{{ (!empty($vehicleTypes->name)) ?  $vehicleTypes->name : ''}}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -102,7 +102,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-bullseye"></i>
                                                     </div>
-                                                    <input type="text" id ="vehiclemodel" class="form-control pull-left" name="vehiclemodel" value="{{ $vehiclemodeler->name }} " readonly>
+                                                    <input type="text" id ="vehiclemodel" class="form-control pull-left" name="vehiclemodel" value="{{ (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : ''}}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -113,7 +113,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-id-card-o"></i>
                                                     </div>
-                                                    <input type="text" id ="vehicle_reg" class="form-control pull-left" name="vehicle_reg" value="{{  $maintenance->vehicle_registration }} " readonly>
+                                                    <input type="text" id ="vehicle_reg" class="form-control pull-left" name="vehicle_reg" value="{{ (!empty($vehicle->vehicle_registration)) ?  $vehicle->vehicle_registration : ''}}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -203,9 +203,21 @@
                                                 </div>
                                             </div>
                                         </div>
-
+										<div class="form-group">
+											<label for="path" class="col-sm-2 control-label">Odometer
+												Reading </label>
+											<div class="col-sm-8">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-spinner"></i>
+													</div>
+													{{ (!empty( $vehicle->odometer_reading)) ?  $vehicle->odometer_reading : ''}}
+													<input type="hidden" name="odometer_reading" value="{{ (!empty( $vehicle->odometer_reading)) ?  $vehicle->odometer_reading : ''}}">
+												</div>
+											</div>
+										</div>
                                         <input type="hidden" id="vehicle_id" name="vehicle_id"
-                                               value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+                                               value="{{ !empty($vehicle->id) ? $vehicle->id : ''}}">
 
                                         <!-- /.box-body -->
                                         <div class="box-footer">
@@ -266,7 +278,9 @@
                                         $(".select2").select2();
                                         //Phone mask
                                         $("[data-mask]").inputmask();
-
+										$('#back_button').click(function () {
+														location.href = '/vehicle_management/vehicle_request';
+													});
                                         //Vertically center modals on page
                                         function reposition() {
                                             var modal = $(this),

@@ -44,7 +44,7 @@
                                             <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
                                             <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
                                             <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
-                                            //<td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
                                             <td></td>
                                         </tr>
                                     @endforeach
