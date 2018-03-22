@@ -867,7 +867,6 @@ class VehicleBookingController extends Controller
 
     public function returnVehicle(vehicle_booking $returnVeh)
     {
-
         //return $ $returnVeh->id;
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $returnVeh->vehicle_make)->get()->first();
@@ -1021,7 +1020,7 @@ class VehicleBookingController extends Controller
         $ID = $confirm->vehicle_id;
         DB::table('vehicle_details')
             ->where('id', $ID)
-            ->update(['booking_status' => 0]);
+            ->update(['booking_status' => 0, 'odometer_reading' => $vehicleData['end_mileage_id']]);
 
         //types
         //1 =  vehicle creation

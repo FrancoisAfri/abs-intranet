@@ -697,7 +697,7 @@ class VehicleReportsController extends Controller
             $vehiclebookings = $vehiclebookings->load('driverBooking', 'bookingMake', 'bookingModel'
 		, 'bookingType', 'bookingVehicle', 'approverBooking');
 
-        return $vehiclebookings;
+        //return $vehiclebookings;
 
         $data['vehiclebookings'] = $vehiclebookings;
        // $data['vehicledetail'] = $vehicledetail;
