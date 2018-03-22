@@ -15,7 +15,7 @@ class vehicle_booking extends Model
 	, 'booking_type', 'approver4_id', 'collector_id', 'returner_id', 'canceller_id', 'canceller_timestamp'
 	, 'approver4_timestamp', 'required_time', 'return_time', 'usage_type','vehicle_type','vehicle_make'
 	, 'vehicle_model', 'vehicle_reg','usage_type','UserID','registration_no','year','fleet_number'
-	,'cancel_status','collect_timestamp','return_timestamp' ];
+	,'cancel_status','collect_timestamp','return_timestamp', 'booking_date' ];
 
 	public function driverBooking(){
         return $this->belongsTo(HRPerson::class, 'driver_id');

@@ -448,6 +448,11 @@ class VehicleBookingController extends Controller
         $OdometerReading = DB::table('vehicle_details')->where('id', $vehicleID)->first();
         $CurrentOdometerReading = $OdometerReading->odometer_reading;
 
+
+        $Startingkm = vehicle_milege::where('vehicle_id' ,$vehicleID )->latest()->first();
+        return $Startingkm;
+
+
         $Vehiclebookings = new vehicle_booking();
         $Vehiclebookings->vehicle_type = $Employee->vehicle_type;
         $Vehiclebookings->vehicle_model = $Employee->vehicle_model;
@@ -471,6 +476,7 @@ class VehicleBookingController extends Controller
             $Vehiclebookings->status = $BookingDetail['status'];
         $Vehiclebookings->cancel_status = 0;  // 0 is the for vehicle not booked
         $Vehiclebookings->start_mileage_id = $CurrentOdometerReading;
+        $Vehiclebookings->booking_date = time();
         $Vehiclebookings->save();
 
         DB::table('vehicle_details')->where('id', $request['vehicle_id'])->update(['booking_status' => 1]);
