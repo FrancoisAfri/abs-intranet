@@ -375,9 +375,9 @@ Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_a
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
 Route::get('vehicle_management/vehicle_request', 'VehicleBookingController@vehiclerequest');
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
-Route::get('vehicle_management/bookingdetails/{bookings}/{required}', 'VehicleBookingController@viewBooking');
+Route::get('vehicle_management/bookingdetails/{vehicle}/{required}', 'VehicleBookingController@viewBooking');
 
-Route::post('vehicle_management/vehiclebooking', 'VehicleBookingController@vehiclebooking');
+Route::post('vehicle_management/vehiclebooking/{vehicle}', 'VehicleBookingController@vehiclebooking');
 Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
 //cancel booking
  Route::get('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');

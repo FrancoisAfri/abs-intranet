@@ -694,8 +694,8 @@ class VehicleReportsController extends Controller
             ->get();
 
         if (!empty($vehiclebookings))
-            $vehiclebookings = $vehiclebookings->load('driverBooking'
-                , 'bookingMilege', 'bookingMake', 'bookingModel', 'bookingType', 'bookingVehicle', 'approverBooking');
+            $vehiclebookings = $vehiclebookings->load('driverBooking', 'bookingMake', 'bookingModel'
+		, 'bookingType', 'bookingVehicle', 'approverBooking');
 
         //return $vehiclebookings;
 

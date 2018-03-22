@@ -96,7 +96,7 @@
                                             <i class="fa fa-bullseye"></i>
                                         </div>
                                         <input type="text" id="vehiclemodel" class="form-control pull-left"
-                                               name="vehiclemodel" value="{{ $vehiclemodeler->name }} "
+                                               name="vehiclemodel" value="{{ (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : ''}}"
                                                readonly>
                                     </div>
                                 </div>
