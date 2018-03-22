@@ -105,7 +105,7 @@
                                                     <input type="text" id ="vehiclemodel" class="form-control pull-left" name="vehiclemodel" value="{{ (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : ''}}" readonly>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>   
                                         <div class="form-group">
                                             <label for="path" class="col-sm-2 control-label">Vehicle Reg. No</label>
                                             <div class="col-sm-10">
