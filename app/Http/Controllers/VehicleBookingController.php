@@ -450,7 +450,7 @@ class VehicleBookingController extends Controller
 
 
         $Startingkm = vehicle_milege::where('vehicle_id' ,$vehicleID )->latest()->first();
-        return $Startingkm;
+       // return $Startingkm;
 
 
         $Vehiclebookings = new vehicle_booking();
