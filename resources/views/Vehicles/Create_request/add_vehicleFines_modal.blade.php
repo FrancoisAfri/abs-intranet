@@ -24,7 +24,7 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Registration</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="registrion" name="registrion" value="{{!empty($maintenance->vehicle_registration) ? $maintenance->vehicle_registration : ''}}"
+                            <input type="text" class="form-control" id="registrion" name="registrion" value="{{!empty($vehiclebookings->vehicle_registration) ? $vehiclebookings->vehicle_registration : ''}}"
                                    placeholder="Enter Registration " required readonly="">
                         </div>
                     </div>

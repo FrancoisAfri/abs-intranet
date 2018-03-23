@@ -14,6 +14,7 @@ use App\vehiclemodel;
 use App\vehicle_detail;
 use App\vehicle_collect_documents;
 use App\vehiclemake;
+use App\incident_type;
 use App\safe;
 use App\tank;
 use App\vehicle_collect_image;
@@ -929,6 +930,8 @@ class VehicleBookingController extends Controller
         //return $ID;
         $doc = vehicle_return_documents::count();
         $image = vehicle_return_images::count();
+		
+		$incidentType = incident_type::orderBy('id', 'asc')->get();
 
         $InforceVehiclerules = DB::table('vehicle_configuration')->select('inforce_vehicle_image', 'inforce_vehicle_documents', 'include_inspection_document')->first();
 
@@ -948,6 +951,7 @@ class VehicleBookingController extends Controller
             ->where('vehicle_booking.id', $bookingID)
             ->orderBy('vehicle_booking.id')
             ->first();
+			
 
         $OdometerReading = vehicle_milege::where('booking_id', $bookingID)->latest()->first();
         //return $OdometerReading;
@@ -960,6 +964,7 @@ class VehicleBookingController extends Controller
         ];
 
 
+        $data['incidentType'] = $incidentType;
         $data['OdometerReading'] = $OdometerReading;
         $data['InforceVehiclerules'] = $InforceVehiclerules;
         $data['image'] = $image;
