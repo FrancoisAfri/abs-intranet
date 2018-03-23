@@ -253,36 +253,32 @@
                                     </button>
                                 </div>
                             </div>
+                      
+							 <div class="box-footer">
 
 
-                            <div class="row">
-                                <div class="col-xs-8 text-left">
-                                    <button type="button" id="cat_module"
-                                            class="btn btn-muted btn-xs pull-left" data-toggle="modal"
-                                            data-target="#add-returndocument-modal">Inspection Documents
-                                    </button>
-
-                                </div>
-
-                                <div class="col-xs-4 text-right">
-                                    <button type="button" id="cat_module"
-                                            class="btn btn-info btn-xs pull-right" data-toggle="modal"
-                                            data-target="#add-returnimage-modal">Inspection Images
-                                    </button>
-                                </div>
                             </div>
+                            <!-- /.box-footer -->
 
-                            <!-- /.box-body -->
-                            <div class="box-footer">
-                                <button type="button" id="cancel" class="btn btn-primary"><i
-                                            class="fa fa-arrow-left"></i> Cancel
-											
+                            <div class="box-footer" style="text-align: center;">
+                                <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
+                                <button type="submit" name="command" id="update" class="btn btn-primary pull-right">
+                                    Update
                                 </button>
 
-                                @if (isset($doc) && $doc > 0 && (isset($image) && $image>0))
-                                    <input type="submit" id="load-allocation" name="load-allocation"
-                                           class="btn btn-primary pull-right" value="Submit">
+                                @if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_image === 1)
+                                     <button type="button" id="cat_module"
+                                            class="btn btn-info btn-xs" data-toggle="modal"
+                                            data-target="#add-returnimage-modal">Inspection Images
+                                    </button>
                                 @endif
+								
+								@if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_documents === 1)
+                                    <button type="button" id="cat_module"
+                                            class="btn btn-muted btn-xs" data-toggle="modal"
+                                            data-target="#add-returndocument-modal">Inspection Documents
+                                    </button>
+								@endif
 
                             </div>
                             <!-- /.box-footer -->

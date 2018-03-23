@@ -19,7 +19,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-anchor pull-right"></i>
-                    <h3 class="box-title">Confirm Booking</h3>
+                    <h3 class="box-title">Confirm Booking collection</h3>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -205,45 +205,38 @@
                                     </div>
                                 </div>
                             </div>
-                               
 
-                                
 
-                        <!-- /.box-body -->
+                            <!-- /.box-body -->
                             <div class="box-footer">
-                               
-                                
+
+
                             </div>
                             <!-- /.box-footer -->
-							
-							   <div class="box-footer" style="text-align: center;">
-                        <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
-                        <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
-						
-						@if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_image === 1)
-                                    
-                                        <button type="button" id="cat_module"
-                                                class="btn btn-info btn-xs" data-toggle="modal"
-                                                data-target="#add-image-modal">Inspection Images
-                                        </button>
 
-                        @endif
-						
-						 @if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_documents === 1)
-                            
+                            <div class="box-footer" style="text-align: center;">
+                                <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
+                                <button type="submit" name="command" id="update" class="btn btn-primary pull-right">
+                                    Update
+                                </button>
+
+                                @if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_image === 1)
+
+                                    <button type="button" id="cat_module"
+                                            class="btn btn-info btn-xs" data-toggle="modal"
+                                            data-target="#add-image-modal">Inspection Images
+                                    </button>
+
+                                @endif
+								
+								@if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_documents === 1)
                                     <button type="button" id="cat_module"
                                             class="btn btn-muted btn-xs " data-toggle="modal"
                                             data-target="#add-document-modal">Inspection Documents
                                     </button>
-                               
-             
-                                @endif
-						
-                          
-						
-						
-						
-                    </div> 
+								@endif
+
+                            </div>
                         </div>
                 </form>
             </div>
@@ -255,7 +248,7 @@
     @include('Vehicles.Create_request.inspection_image_modal')
     {{--@include('Vehicles.partials.edit_document_modal')--}}
     @if(Session('success_application'))
-    @include('Vehicles.sucess.success_action', ['modal_title' => "Vehicle Collection successful!", 'modal_content' => session('success_application')])
+        @include('Vehicles.sucess.success_action', ['modal_title' => "Vehicle Collection successful!", 'modal_content' => session('success_application')])
     @endif
 @endsection
 
