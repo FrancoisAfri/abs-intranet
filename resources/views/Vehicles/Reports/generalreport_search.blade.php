@@ -48,7 +48,7 @@
                             <label for="gender" class="col-sm-2 control-label">Report Type</label>
 
                             <div class="col-sm-8">
-                                <select name="report_id" id="report_id" class="form-control" onchange="changetype(this.value)"  required>
+                                <select name="report_id" id="report_id" class="form-control"  onchange="changetype(this.value);" required>
                                     <option value="">*** Select Report Type ***</option>
                                     <option value="1" selected>Booking Log</option>
                                     <option value="2">Fuel Log</option>
@@ -79,7 +79,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group {{ $errors->has('licence_type') ? ' has-error' : '' }}">
+						
+                        <div class="form-group licence-field {{ $errors->has('licence_type') ? ' has-error' : '' }}">
                             <label for="licence_type" class="col-sm-2 control-label">Licence Type</label>
                             <div class="col-sm-8">
 
@@ -107,6 +108,23 @@
                                 </select>
                             </div>
                         </div>
+						<div class="form-group dest-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label"> Destination</label>
+                            <div class="col-sm-8">
+                                                            
+                                    <input type="text" class="form-control" id="destination"
+                                           name="destination" value="" placeholder="Enter destination...">
+                            </div>
+                        </div>
+						<div class="form-group dest-field {{ $errors->has('purpose') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label"> Purpose</label>
+                            <div class="col-sm-8">
+                                                            
+                                    <input type="text" class="form-control" id="purpose"
+                                           name="purpose" value="" placeholder="Enter Purpose...">
+                            </div>
+                        </div>
+						
                         <div class="form-group {{ $errors->has('driver_id') ? ' has-error' : '' }}">
                             <label for="driver_id" class="col-sm-2 control-label">Driver</label>
                             <div class="col-sm-8">
@@ -191,6 +209,9 @@
         /*document.getElementById("cancel").onclick = function () {
             location.href = "/contacts";
         };*/
+		
+		$('.licence-field').hide(); 
+		
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
@@ -215,7 +236,7 @@
 		function changetype(type)
 		{
 			if (type == 1)	$('#report_form').attr('action', '/vehicle_management/booking_report');
-			else if (type == 2) $('#report_form').attr('action', '/project/search');
+			else if (type == 2) $('#report_form').attr('action', '/vehicle_management/fuel_report');
 			else if (type == 3) $('#report_form').attr('action', '/activity/search');
 			else if (type == 4) $('#report_form').attr('action', '/activity/search');
 			else if (type == 5) $('#report_form').attr('action', '/activity/search');
@@ -226,6 +247,20 @@
 			else if (type == 10) $('#report_form').attr('action', '/activity/search');
 			else if (type == 11) $('#report_form').attr('action', '/activity/search');
 				
+				//changetype
+				
+		var levID = document.getElementById("report_id").value;
+		 
+		if (levID == 1) {
+			$('.licence-field').hide();
+			$('.Sick-field').show();
+		} else if (levID == 2) {
+			$('.dest-field').hide();
+			//$('.neg-field').hide();
+		} else if (levID == 5) {
+			$('.Sick-field').hide();
+			$('.neg-field').show();
+		}
 		}
     </script>
 @endsection
