@@ -19,6 +19,7 @@
                                     <thead>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
+                                        <th>Driver</th>
                                         <th>Date Collected</th>
                                         <th>Date Returned</th>
                                         <th>Approved By	</th>
@@ -51,6 +52,7 @@
                                     <tfoot>
                                     <tr>
                                         <th style="width: 5px; text-align: center;"></th>
+                                        <th>Driver</th>
                                         <th>Date Collected</th>
                                         <th>Date Returned</th>
                                         <th>Approved By	Driver</th>

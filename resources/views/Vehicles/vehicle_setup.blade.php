@@ -46,13 +46,28 @@
                                     <td colspan="3"><input type="checkbox" name="use_fleet_number"
                                                            value="1" {{ $configuration->use_fleet_number === 1 ? 'checked ="checked"' : 0 }} >
                                     </td>
-
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Include Inspection Documents</td>
                                     <input type="hidden" name="include_inspection_document" value="0">
                                     <td colspan="3"><input type="checkbox" name="include_inspection_document"
                                                            value="1" {{ $configuration->include_inspection_document === 1 ? 'checked ="checked"' : 0 }} >
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="caption" colspan="2">Inforce Vehicle Documents</td>
+                                    <input type="hidden" name="include_inspection_document" value="0">
+                                    <td colspan="3"><input type="checkbox" name="include_inspection_document"
+                                                           value="1" {{ $configuration->inforce_vehicle_documents === 1 ? 'checked ="checked"' : 0 }} >
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="caption" colspan="2">Inforce Vehicle Images</td>
+                                    <input type="hidden" name="include_inspection_document" value="0">
+                                    <td colspan="3"><input type="checkbox" name="include_inspection_document"
+                                                           value="1" {{ $configuration->inforce_vehicle_image === 1 ? 'checked ="checked"' : 0 }} >
                                     </td>
 
                                 </tr>
@@ -76,7 +91,7 @@
                                     <td colspan="3"><input type="checkbox" name="fuel_auto_approval" value="1"
                                                            onclick="$('.tr_hide').toggle();" {{ $configuration->fuel_auto_approval === 1 ? 'checked ="checked"' : 0 }} >
                                     </td>
-                                    ></td>
+                                    </td>
                                 </tr>
                                 <tr class="tr_hide">
                                     <td class="caption" colspan="2">Fuel Require Tank Manager Approval</td>

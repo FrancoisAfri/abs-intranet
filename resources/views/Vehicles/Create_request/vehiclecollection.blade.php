@@ -23,7 +23,8 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form name="leave-application-form" class="form-horizontal" method="POST" action="/vehicle_management/{{ $collect->id }}/confirmbooking"
+                <form name="leave-application-form" class="form-horizontal" method="POST"
+                      action="/vehicle_management/{{ $collect->id }}/confirmbooking"
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
@@ -36,30 +37,28 @@
 
                                     @if(!empty($vehiclemaker))
                                         | &nbsp; &nbsp; <strong>Vehicle Make:</strong><em>{{ $vehiclemaker->name }}</em>
-                                        &nbsp;
-                                        &nbsp;
+                                        &nbsp;&nbsp;
                                     @endif
                                     @if(!empty($vehiclemodeler))
                                         -| &nbsp; &nbsp; <strong>Vehicle Model:</strong>
-                                        <em>{{ $vehiclemodeler->name }}</em>
-                                        &nbsp; &nbsp;
+                                        <em>{{ $vehiclemodeler->name }}</em>&nbsp; &nbsp;
                                     @endif
                                     @if(!empty($vehicleTypes))
                                         -| &nbsp; &nbsp; <strong>Vehicle Type:</strong>
-                                        <em>{{ $vehicleTypes->name }}</em> &nbsp;
-                                        &nbsp;
+                                        <em>{{ $vehicleTypes->name }}</em> &nbsp;&nbsp;
                                     @endif
                                     @if(!empty($maintenance->vehicle_registration))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
-                                    <em>{{ $vehiclebookings->vehicle_reg }}</em> &nbsp; &nbsp;
+                                        -| &nbsp; &nbsp; <strong>Vehicle Registration:</strong>
+                                        <em>{{ $vehiclebookings->vehicle_reg }}</em> &nbsp; &nbsp;
                                     @endif
                                     @if(!empty($maintenance->year))
-                                    -| &nbsp; &nbsp; <strong>Year:</strong> <em>{{ $vehiclebookings->vehicle_reg->year }}</em> &nbsp;
-                                    &nbsp;
+                                        -| &nbsp; &nbsp; <strong>Year:</strong>
+                                        <em>{{ $vehiclebookings->vehicle_reg->year }}</em> &nbsp;
+                                        &nbsp;
                                     @endif
                                     @if(!empty($maintenance->vehicle_color))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
-                                    <em>{{ $vehiclebookings->vehicle_reg->vehicle_color }}</em> &nbsp; &nbsp; -|
+                                        -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
+                                        <em>{{ $vehiclebookings->vehicle_reg->vehicle_color }}</em> &nbsp; &nbsp; -|
                                     @endif
 
                                 </p>
@@ -87,7 +86,8 @@
                                             <i class="fa fa-bullseye"></i>
                                         </div>
                                         <input type="text" id="vehiclemodel" class="form-control pull-left"
-                                               name="vehiclemodel" value="{{  (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : '' }}"
+                                               name="vehiclemodel"
+                                               value="{{  (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : '' }}"
                                                readonly>
                                     </div>
                                 </div>
@@ -172,8 +172,9 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-spinner"></i>
                                         </div>
-										{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}
-										<input type="hidden" id="start_mileage_id" name="start_mileage_id" value="{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}">
+                                        {{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}
+                                        <input type="hidden" id="start_mileage_id" name="start_mileage_id"
+                                               value="{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}">
                                     </div>
                                 </div>
                             </div>
@@ -204,38 +205,45 @@
                                     </div>
                                 </div>
                             </div>
+                               
 
-                            <div class="row">
-                                <div class="col-xs-8 text-left">
-                                    <button type="button" id="cat_module"
-                                            class="btn btn-muted btn-xs pull-left" data-toggle="modal"
-                                            data-target="#add-document-modal">Inspection Documents
-                                    </button>
+                                
 
-                                </div>
-
-                                <div class="col-xs-4 text-right">
-                                    <button type="button" id="cat_module"
-                                            class="btn btn-info btn-xs pull-right" data-toggle="modal"
-                                            data-target="#add-image-modal">Inspection Images
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- /.box-body -->
+                        <!-- /.box-body -->
                             <div class="box-footer">
-                                <button type="button" id="cancel" class="btn btn-primary"><i
-                                            class="fa fa-arrow-left"></i> Cancel
-                                </button>
-
-
-
-                                    @if (isset($doc) && $doc > 0 && (isset($image) && $image>0))
-                                        <input type="submit" id="load-allocation" name="load-allocation"
-                                               class="btn btn-primary pull-right" value="Submit">
-                                @endif
+                               
+                                
                             </div>
                             <!-- /.box-footer -->
+							
+							   <div class="box-footer" style="text-align: center;">
+                        <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
+                        <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
+						
+						@if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_image === 1)
+                                    
+                                        <button type="button" id="cat_module"
+                                                class="btn btn-info btn-xs" data-toggle="modal"
+                                                data-target="#add-image-modal">Inspection Images
+                                        </button>
+
+                        @endif
+						
+						 @if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_documents === 1)
+                            
+                                    <button type="button" id="cat_module"
+                                            class="btn btn-muted btn-xs " data-toggle="modal"
+                                            data-target="#add-document-modal">Inspection Documents
+                                    </button>
+                               
+             
+                                @endif
+						
+                          
+						
+						
+						
+                    </div> 
                         </div>
                 </form>
             </div>
@@ -246,12 +254,9 @@
     @include('Vehicles.Create_request.inspection_document_modal')
     @include('Vehicles.Create_request.inspection_image_modal')
     {{--@include('Vehicles.partials.edit_document_modal')--}}
-
     @if(Session('success_application'))
     @include('Vehicles.sucess.success_action', ['modal_title' => "Vehicle Collection successful!", 'modal_content' => session('success_application')])
     @endif
-
-    </div>
 @endsection
 
 @section('page_script')
@@ -377,8 +382,6 @@
             var successMsg = 'The Image  has been updated successfully.';
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
-
-
 
 
     </script>

@@ -726,6 +726,18 @@ class VehicleBookingController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>#################
 
+
+        $InforceVehiclerules = DB::table('vehicle_configuration')->select('inforce_vehicle_image','inforce_vehicle_documents','include_inspection_document')->first();
+
+        if (empty($InforceVehiclerules)) {
+            $vehicleconfig = new vehicle_config();
+            $vehicleconfig->inforce_vehicle_image = 0;
+            $vehicleconfig->inforce_vehicle_documents = 0;
+            $vehicleconfig->include_inspection_document = 0;
+            $vehicleconfig->save();
+        }
+
+       // return $InforceVehiclerules;
         //  if ($collect->status == 10) {
         $bookingID = $collect->id;
         //return $ID;
@@ -756,6 +768,7 @@ class VehicleBookingController extends Controller
 
         //$data['OdometerReading'] = $OdometerReading;
         $data['doc'] = $doc;
+        $data['InforceVehiclerules'] = $InforceVehiclerules;
         $data['image'] = $image;
         $data['collect'] = $collect;
         $data['name'] = $name;

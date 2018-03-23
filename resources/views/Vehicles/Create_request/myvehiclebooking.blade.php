@@ -76,16 +76,16 @@ rel="stylesheet">
                                 <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
                                 <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
                                 <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
-                                @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14  && $booking->status !== 11 && $booking->status !== 12)
-                                <td nowrap>
-                                    <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                    data-target="#delete-contact-warning-modal"><i
-                                    class="fa fa-trash"></i> Cancel Booking
-                                </button>
-                            </td>
-                            @else
-                            <td></td>
-                            @endif
+                                    @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14  && $booking->status !== 11 && $booking->status !== 12)
+                                        <td nowrap>
+                                            <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+                                                    data-target="#delete-contact-warning-modal"><i
+                                                        class="fa fa-trash"></i> Cancel Booking
+                                            </button>
+                                        </td>
+                                    @else
+                                        <td></td>
+                                    @endif
 
                             @if (isset($booking) && $booking->status === 10)
                             <td>

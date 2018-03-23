@@ -86,130 +86,134 @@
                                                         <!--  <div class="modal-dialog modal" role="document"> -->
                                                         <div class="modal-dialog modal-sm">
                                                             {{--<div class="modal-content">--}}
-                                                                {{--<div class="modal-header">--}}
-                                                                    {{--<button type="button" class="close"--}}
-                                                                            {{--data-dismiss="modal"--}}
-                                                                            {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
-                                                                    {{--</button>--}}
-                                                                {{--</div>--}}
-                                                                <div class="modal-body">
-                                                                    <img src="" class="enlargeImageModalSource"
-                                                                         style="width: 200%;">
+                                                            {{--<div class="modal-header">--}}
+                                                            {{--<button type="button" class="close"--}}
+                                                            {{--data-dismiss="modal"--}}
+                                                            {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
+                                                            {{--</button>--}}
+                                                            {{--</div>--}}
+                                                            <div class="modal-body">
+                                                                <img src="" class="enlargeImageModalSource"
+                                                                     style="width: 200%;">
 
-                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </td>
+                            </div>
+                            </td>
 
-                                                <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
-                                                <td>{{ !empty($card->fleet_number) ? $card->fleet_number : ''}}</td>
-                                                <td>{{ !empty($card->vehicle_registration) ? $card->vehicle_registration : ''}}</td>
-                                                <td>{{ !empty($card->chassis_number) ? $card->chassis_number : ''}}</td>
-                                                <td>{{ !empty($card->engine_number) ? $card->engine_number : ''}}</td>
-                                                <td>{{ !empty($card->odometer_reading . ' ' . $card->hours_reading ) ? $card->odometer_reading  . ' ' . $card->hours_reading: ''}}</td>
-                                                <td>{{ !empty($card->company) ? $card->company : ''}}</td>
-                                                <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
-                                            <!--  <td>
+                            <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
+                            <td>{{ !empty($card->fleet_number) ? $card->fleet_number : ''}}</td>
+                            <td>{{ !empty($card->vehicle_registration) ? $card->vehicle_registration : ''}}</td>
+                            <td>{{ !empty($card->chassis_number) ? $card->chassis_number : ''}}</td>
+                            <td>{{ !empty($card->engine_number) ? $card->engine_number : ''}}</td>
+                            @if (isset($card) && $card->hours_reading === 0)
+                                <td>{{ !empty($card->hours_reading) ? $card->hours_reading : ''}}</td>
+                            @else
+                                <td>{{ !empty($card->odometer_reading) ? $card->odometer_reading : ''}}</td>
+                            @endif
+                            <td>{{ !empty($card->company) ? $card->company : ''}}</td>
+                            <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
+                        <!--  <td>
                                             
                                         <button card="button" id="view_ribbons" class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}
-                                                    btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i class="fa {{ (!empty($card->status) && $card->status == 1) ?
+                                btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i class="fa {{ (!empty($card->status) && $card->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}</button>
                                                 
                                             </td> -->
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <th style="width: 5px; text-align: center;">Image</th>
-                                        <th>Vehicle Model/Year</th>
-                                        <th>Fleet Number</th>
-                                        <th>Vehicle Registration</th>
-                                        <th>VIN Numberr</th>
-                                        <th>Engine Number</th>
-                                        <th>Odometer/Hours</th>
-                                        <th>Company</th>
-                                        <th>Department</th>
+                            </tr>
+                            @endforeach
+                            @endif
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td></td>
+                                <th style="width: 5px; text-align: center;">Image</th>
+                                <th>Vehicle Model/Year</th>
+                                <th>Fleet Number</th>
+                                <th>Vehicle Registration</th>
+                                <th>VIN Numberr</th>
+                                <th>Engine Number</th>
+                                <th>Odometer/Hours</th>
+                                <th>Company</th>
+                                <th>Department</th>
 
-                                    </tr>
-                                    </tfoot>
-                                </table>
+                            </tr>
+                            </tfoot>
+                            </table>
 
-                                <!-- /.box-body -->
-                                <div class="box-footer">
-                                    <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                                class="fa fa-arrow-left"></i> Back
-                                    </button>
-                                </div>
-                                @include('Vehicles.partials.upload_newImage_modal')
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                            class="fa fa-arrow-left"></i> Back
+                                </button>
                             </div>
+                            @include('Vehicles.partials.upload_newImage_modal')
                         </div>
-                        <!-- End new User Form-->
                     </div>
-                @endsection
+                    <!-- End new User Form-->
+                </div>
+            @endsection
 
-                @section('page_script')
+            @section('page_script')
+                <!-- DataTables -->
                     <!-- DataTables -->
-                     <!-- DataTables -->
-                        <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-                        <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-                        <!-- End Bootstrap File input -->
-                        <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                                type="text/javascript"></script>
-                        <!-- the main fileinput plugin file -->
-                        <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-                        <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-                        <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-                        <script src="/custom_components/js/modal_ajax_submit.js"></script>
-                        <script>
+                    <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+                    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+                    <!-- End Bootstrap File input -->
+                    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+                            type="text/javascript"></script>
+                    <!-- the main fileinput plugin file -->
+                    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+                    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+                    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+                    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+                    <script>
 
 
-                            //Cancel button click event
-                            document.getElementById("cancel").onclick = function () {
-                                location.href = "/vehicle_management/Search";
-                            };
-                            $(function () {
-                                $('#example2').DataTable({
-                                    "paging": true,
-                                    "lengthChange": true,
-                                    "searching": true,
-                                    "ordering": true,
-                                    "info": true,
-                                    "autoWidth": true
-                                });
+                        //Cancel button click event
+                        document.getElementById("cancel").onclick = function () {
+                            location.href = "/vehicle_management/Search";
+                        };
+                        $(function () {
+                            $('#example2').DataTable({
+                                "paging": true,
+                                "lengthChange": true,
+                                "searching": true,
+                                "ordering": true,
+                                "info": true,
+                                "autoWidth": true
                             });
+                        });
 
-                            $('[data-toggle="tooltip"]').tooltip();
+                        $('[data-toggle="tooltip"]').tooltip();
 
-                            //Vertically center modals on page
-                            function reposition() {
-                                var modal = $(this),
-                                    dialog = modal.find('.modal-dialog');
-                                modal.css('display', 'block');
+                        //Vertically center modals on page
+                        function reposition() {
+                            var modal = $(this),
+                                dialog = modal.find('.modal-dialog');
+                            modal.css('display', 'block');
 
-                                // Dividing by two centers the modal exactly, but dividing by three
-                                // or four works better for larger screens.
-                                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                            }
+                            // Dividing by two centers the modal exactly, but dividing by three
+                            // or four works better for larger screens.
+                            dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+                        }
 
-                            // Reposition when a modal is shown
-                            $('.modal').on('show.bs.modal', reposition);
-                            // Reposition when the window is resized
-                            $(window).on('resize', function () {
-                                $('.modal:visible').each(reposition);
+                        // Reposition when a modal is shown
+                        $('.modal').on('show.bs.modal', reposition);
+                        // Reposition when the window is resized
+                        $(window).on('resize', function () {
+                            $('.modal:visible').each(reposition);
+                        });
+
+                        //
+
+
+                        $(function () {
+                            $('img').on('click', function () {
+                                $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+                                $('#enlargeImageModal').modal('show');
                             });
-
-                            //
-
-
-                            $(function () {
-                                $('img').on('click', function () {
-                                    $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
-                                    $('#enlargeImageModal').modal('show');
-                                });
-                            });
-                        </script>
+                        });
+                    </script>
 @endsection
