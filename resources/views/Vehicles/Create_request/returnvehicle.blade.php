@@ -425,6 +425,40 @@
             var allType = hideFields();
 
         });
+		
+		 $(document).ready(function () {
+
+                    $('#date_of_incident').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                    //
+                    $('#dateofincident').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+                });
+				
+				$(document).ready(function () {
+
+                    $('input[name="date"]').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+
+
+                });
+
+                $('#ss_date').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
 
         function hideFields() {
             var allType = $("input[name='transaction']:checked").val();
@@ -476,6 +510,76 @@
                 });
 
                 // fine
+				
+				//Post perk form to server using ajax (add)
+                $('#add_fines').on('click', function () {
+                    var strUrl = '/vehicle_management/addvehiclefines';
+                    var formName = 'add-fines-form';
+                    var modalID = 'add-fines-modal';
+                    var submitBtnID = 'add_fines';
+                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
+				
+				// Incident
+				
+				 //Post perk form to server using ajax (add)
+                $('#add_vehicleincidents').on('click', function () {
+                    var strUrl = '/vehicle_management/addvehicleincidents';
+                    var formName = 'add-incidents-form';
+                    var modalID = 'add-incidents-modal';
+                    var submitBtnID = 'add_vehicleincidents';
+                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
+				
+				function clone(id, file_index, child_id) {
+				var clone = document.getElementById(id).cloneNode(true);
+				clone.setAttribute("id", file_index);
+				clone.setAttribute("name", file_index);
+				clone.style.display = "table-row";
+				clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+				clone.querySelector('#' + child_id).disabled = false;
+				clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+				return clone;
+			}
+			function addFile() {
+				var table = document.getElementById("tab_tab");
+				var file_index = document.getElementById("file_index");
+				file_index.value = ++file_index.value;
+				var file_clone = clone("file_row", file_index.value, "document");
+				var name_clone = clone("name_row", file_index.value, "name");
+				var final_row = document.getElementById("final_row").cloneNode(false);
+				table.appendChild(file_clone);
+				table.appendChild(name_clone);
+				table.appendChild(final_row);
+				var total_files = document.getElementById("total_files");
+				total_files.value = ++total_files.value;
+				//change the following using jquery if necessary
+				var remove = document.getElementsByName("remove");
+				for (var i = 0; i < remove.length; i++)
+					remove[i].style.display = "inline";
+			}
+			
+			// General Cost
+			
+			 //Post perk form to server using ajax (add)
+                $('#add_costs').on('click', function () {
+                    var strUrl = '/vehicle_management/addcosts';
+                    var formName = 'add-costs-form';
+                    var modalID = 'add-costs-modal';
+                    var submitBtnID = 'add_costs';
+                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
+
+
 
 
     </script>
