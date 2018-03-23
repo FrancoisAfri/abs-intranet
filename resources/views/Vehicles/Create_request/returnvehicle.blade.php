@@ -96,7 +96,8 @@
                                             <i class="fa fa-bullseye"></i>
                                         </div>
                                         <input type="text" id="vehiclemodel" class="form-control pull-left"
-                                               name="vehiclemodel" value="{{ (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : ''}}"
+                                               name="vehiclemodel"
+                                               value="{{ (!empty($vehiclemodeler->name)) ?  $vehiclemodeler->name : ''}}"
                                                readonly>
                                     </div>
                                 </div>
@@ -213,7 +214,8 @@
                                         </div>
                                         <input type="text" id="start_mileage_id" class="form-control pull-left"
                                                name="start_mileage_id"
-                                               value="{{ !empty($OdometerReading->odometer_reading) ? $OdometerReading->odometer_reading : ''}}" readonly>
+                                               value="{{ !empty($OdometerReading->odometer_reading) ? $OdometerReading->odometer_reading : ''}}"
+                                               readonly>
                                     </div>
                                 </div>
                             </div>
@@ -253,8 +255,8 @@
                                     </button>
                                 </div>
                             </div>
-                      
-							 <div class="box-footer">
+
+                            <div class="box-footer">
 
 
                             </div>
@@ -267,18 +269,18 @@
                                 </button>
 
                                 @if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_image === 1)
-                                     <button type="button" id="cat_module"
+                                    <button type="button" id="cat_module"
                                             class="btn btn-info btn-xs" data-toggle="modal"
                                             data-target="#add-returnimage-modal">Inspection Images
                                     </button>
                                 @endif
-								
-								@if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_documents === 1)
+
+                                @if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_documents === 1)
                                     <button type="button" id="cat_module"
                                             class="btn btn-muted btn-xs" data-toggle="modal"
                                             data-target="#add-returndocument-modal">Inspection Documents
                                     </button>
-								@endif
+                                @endif
 
                             </div>
                             <!-- /.box-footer -->
@@ -425,40 +427,40 @@
             var allType = hideFields();
 
         });
-		
-		 $(document).ready(function () {
 
-                    $('#date_of_incident').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+        $(document).ready(function () {
 
-                    //
-                    $('#dateofincident').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+            $('#date_of_incident').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
 
-                });
-				
-				$(document).ready(function () {
+            //
+            $('#dateofincident').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
 
-                    $('input[name="date"]').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+        });
+
+        $(document).ready(function () {
+
+            $('input[name="date"]').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
 
 
-                });
+        });
 
-                $('#ss_date').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
-                });
+        $('#ss_date').datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true,
+            todayHighlight: true
+        });
 
         function hideFields() {
             var allType = $("input[name='transaction']:checked").val();
@@ -497,89 +499,88 @@
         });
 
         //fuel log
-		   //Post perk form to server using ajax (add)
-                $('#add_vehiclefuellog').on('click', function () {
-                    var strUrl = '/vehicle_management/addvehiclefuellog';
-                    var formName = 'add-fuel-form';
-                    var modalID = 'add-fuel-modal';
-                    var submitBtnID = 'add_vehiclefuellog';
-                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id}}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+        //Post perk form to server using ajax (add)
+        $('#add_vehiclefuellog').on('click', function () {
+            var strUrl = '/vehicle_management/addvehiclefuellog';
+            var formName = 'add-fuel-form';
+            var modalID = 'add-fuel-modal';
+            var submitBtnID = 'add_vehiclefuellog';
+            var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id}}';
+            var successMsgTitle = 'New Record Added!';
+            var successMsg = 'The Record  has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
 
-                // fine
-				
-				//Post perk form to server using ajax (add)
-                $('#add_fines').on('click', function () {
-                    var strUrl = '/vehicle_management/addvehiclefines';
-                    var formName = 'add-fines-form';
-                    var modalID = 'add-fines-modal';
-                    var submitBtnID = 'add_fines';
-                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-				
-				// Incident
-				
-				 //Post perk form to server using ajax (add)
-                $('#add_vehicleincidents').on('click', function () {
-                    var strUrl = '/vehicle_management/addvehicleincidents';
-                    var formName = 'add-incidents-form';
-                    var modalID = 'add-incidents-modal';
-                    var submitBtnID = 'add_vehicleincidents';
-                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-				
-				function clone(id, file_index, child_id) {
-				var clone = document.getElementById(id).cloneNode(true);
-				clone.setAttribute("id", file_index);
-				clone.setAttribute("name", file_index);
-				clone.style.display = "table-row";
-				clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
-				clone.querySelector('#' + child_id).disabled = false;
-				clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
-				return clone;
-			}
-			function addFile() {
-				var table = document.getElementById("tab_tab");
-				var file_index = document.getElementById("file_index");
-				file_index.value = ++file_index.value;
-				var file_clone = clone("file_row", file_index.value, "document");
-				var name_clone = clone("name_row", file_index.value, "name");
-				var final_row = document.getElementById("final_row").cloneNode(false);
-				table.appendChild(file_clone);
-				table.appendChild(name_clone);
-				table.appendChild(final_row);
-				var total_files = document.getElementById("total_files");
-				total_files.value = ++total_files.value;
-				//change the following using jquery if necessary
-				var remove = document.getElementsByName("remove");
-				for (var i = 0; i < remove.length; i++)
-					remove[i].style.display = "inline";
-			}
-			
-			// General Cost
-			
-			 //Post perk form to server using ajax (add)
-                $('#add_costs').on('click', function () {
-                    var strUrl = '/vehicle_management/addcosts';
-                    var formName = 'add-costs-form';
-                    var modalID = 'add-costs-modal';
-                    var submitBtnID = 'add_costs';
-                    var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+        // fine
 
+        //Post perk form to server using ajax (add)
+        $('#add_fines').on('click', function () {
+            var strUrl = '/vehicle_management/addvehiclefines';
+            var formName = 'add-fines-form';
+            var modalID = 'add-fines-modal';
+            var submitBtnID = 'add_fines';
+            var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
+            var successMsgTitle = 'New Record Added!';
+            var successMsg = 'The Record  has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
 
+        // Incident
+
+        //Post perk form to server using ajax (add)
+        $('#add_vehicleincidents').on('click', function () {
+            var strUrl = '/vehicle_management/addvehicleincidents';
+            var formName = 'add-incidents-form';
+            var modalID = 'add-incidents-modal';
+            var submitBtnID = 'add_vehicleincidents';
+            var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
+            var successMsgTitle = 'New Record Added!';
+            var successMsg = 'The Record  has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+
+        function clone(id, file_index, child_id) {
+            var clone = document.getElementById(id).cloneNode(true);
+            clone.setAttribute("id", file_index);
+            clone.setAttribute("name", file_index);
+            clone.style.display = "table-row";
+            clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+            clone.querySelector('#' + child_id).disabled = false;
+            clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+            return clone;
+        }
+
+        function addFile() {
+            var table = document.getElementById("tab_tab");
+            var file_index = document.getElementById("file_index");
+            file_index.value = ++file_index.value;
+            var file_clone = clone("file_row", file_index.value, "document");
+            var name_clone = clone("name_row", file_index.value, "name");
+            var final_row = document.getElementById("final_row").cloneNode(false);
+            table.appendChild(file_clone);
+            table.appendChild(name_clone);
+            table.appendChild(final_row);
+            var total_files = document.getElementById("total_files");
+            total_files.value = ++total_files.value;
+            //change the following using jquery if necessary
+            var remove = document.getElementsByName("remove");
+            for (var i = 0; i < remove.length; i++)
+                remove[i].style.display = "inline";
+        }
+
+        // General Cost
+
+        //Post perk form to server using ajax (add)
+        $('#add_costs').on('click', function () {
+            var strUrl = '/vehicle_management/addcosts';
+            var formName = 'add-costs-form';
+            var modalID = 'add-costs-modal';
+            var submitBtnID = 'add_costs';
+            var redirectUrl = '/vehicle_management/return_vehicle/{{ $returnVeh->id }}';
+            var successMsgTitle = 'New Record Added!';
+            var successMsg = 'The Record  has been updated successfully.';
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
 
 
     </script>

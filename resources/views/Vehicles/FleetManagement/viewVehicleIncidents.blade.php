@@ -351,6 +351,7 @@
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 			});
+			
 			function clone(id, file_index, child_id) {
 				var clone = document.getElementById(id).cloneNode(true);
 				clone.setAttribute("id", file_index);

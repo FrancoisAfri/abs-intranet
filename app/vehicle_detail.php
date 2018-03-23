@@ -21,5 +21,9 @@ class vehicle_detail extends Model
     public function vehiclefines() {
         return $this->hasMany(vehicle_fines::class, 'vehicleID');
     }
+	
+	 public function vehiclefuelLog() {
+        return $this->hasMany(fuellogVehicle::class, 'vehicle_id');
+    }
 
 }

@@ -14,6 +14,7 @@ use App\vehicle;
 use App\vehicle_booking;
 use App\vehiclemake;
 use App\vehiclemodel;
+use App\vehicle_fuel_log;
 use App\fleet_licence_permit;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
@@ -663,6 +664,8 @@ class VehicleReportsController extends Controller
         $licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
+        $Destination = $request['destination'];
+        $Purpose = $request['purpose'];
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
@@ -691,9 +694,19 @@ class VehicleReportsController extends Controller
                     $query->where('driver_id', $driverID);
                 }
             })
+			 ->where(function ($query) use ($Destination) {
+                if (!empty($Destination)) {
+                    $query->where('destination', 'ILIKE', "%$Destination%");
+                }
+            }) 
+			->where(function ($query) use ($Purpose) {
+                if (!empty($Purpose)) {
+                    $query->where('purpose', 'ILIKE', "%$Purpose%");
+                }
+            })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('collect_timestamp', [$actionFrom, $actionTo]);
+                    $query->whereBetween('booking_date', [$actionFrom, $actionTo]);
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
@@ -741,6 +754,10 @@ class VehicleReportsController extends Controller
         $vehicleType = $reportData['vehicle_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
+        //$Destination = $request['destination'];
+        //$Purpose = $request['purpose'];
+		
+		
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
