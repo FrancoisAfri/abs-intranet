@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Users;
+use App\CompanyIdentity;
 use App\permits_licence;
 use App\vehicle_maintenance;
 use App\Vehicle_managemnt;
@@ -171,7 +172,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             return view('Vehicles.Reports.vehiclebooking_results')->with($data);
 
 
@@ -215,7 +216,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             return view('Vehicles.Reports.vehiclefuel_results')->with($data);
 
         } elseif ($reportID == 3) { // Fines
@@ -264,7 +265,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             return view('Vehicles.Reports.vehiclefinelog_results')->with($data);
 
         } elseif ($reportID == 4) { // Services
@@ -307,7 +308,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             return view('Vehicles.Reports.servicelog_results')->with($data);
         } elseif ($reportID == 5) { // Vehicle Incidents Details
 
@@ -349,7 +350,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             return view('Vehicles.Reports.incident_results')->with($data);
         } elseif ($reportID == 6) { // Vehicle Details
 
@@ -391,7 +392,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         } elseif ($reportID == 7) { // Vehicle Contract
 
@@ -433,7 +434,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         } elseif ($reportID == 8) { // Expired Documents
 
@@ -475,7 +476,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         } elseif ($reportID == 9) { // External Diesel Log
 
@@ -517,7 +518,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         } elseif ($reportID == 10) { // Internal Diesel Log
 
@@ -559,7 +560,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         } elseif ($reportID == 11) { // Diesel Log
 
@@ -601,7 +602,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         } elseif ($reportID == 13) { // Alerts Report
 
@@ -643,7 +644,7 @@ class VehicleReportsController extends Controller
             $data['active_mod'] = 'Fleet Management';
             $data['active_rib'] = 'Reports';
 
-            AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
             //return view('Vehicles.Reports.incident_results')->with($data);
         }
 
@@ -655,9 +656,8 @@ class VehicleReportsController extends Controller
         $reportData = $request->all();
         unset($reportData['_token']);
         $actionFrom = $actionTo = 0;
-
+		$vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
-        $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
         $licenceType = $reportData['licence_type'];
@@ -668,8 +668,20 @@ class VehicleReportsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $vehiclebookings = vehicle_booking::
-        where(function ($query) use ($vehicleType) {
+        $vehiclebookings = vehicle_booking::select('vehicle_booking.*', 'vehicle_make.name as vehicle_make',
+                        'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
+						'vehicle_details.vehicle_registration as v_registration',
+						'hr_people.first_name as driver_name',
+						'hr_people.surname as driver_surname',
+						'hr.first_name as apr_firstname',
+						'hr.surname as apr_surname')
+		->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
+		->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
+		->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
+		->leftJoin('vehicle_details', 'vehicle_booking.vehicle_id', '=', 'vehicle_details.id')
+		->leftJoin('hr_people', 'vehicle_booking.approver3_id', '=', 'hr_people.id')
+		->leftJoin('hr_people as hr', 'vehicle_booking.driver_id', '=', 'hr.id')
+        ->where(function ($query) use ($vehicleType) {
             if (!empty($vehicleType)) {
                 $query->where('vehicle_type', $vehicleType);
             }
@@ -686,21 +698,24 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
+					$vehicle = $vehicleArray[$i].',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
+                   // $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
             ->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
             ->get();
-
-        if (!empty($vehiclebookings))
-            $vehiclebookings = $vehiclebookings->load('driverBooking', 'bookingMake', 'bookingModel'
-		, 'bookingType', 'bookingVehicle', 'approverBooking');
-
-        return $vehiclebookings;
-
+		for ($i = 0; $i < count($vehicleArray); $i++) {
+						$vehicle .= $vehicleArray[$i].',';
+                }
+				
+		$data['vehicle_id'] = rtrim($vehicle,",");
+		$data['report_type'] = $reportType;
+		$data['vehicle_type'] = $vehicleType;
+		$data['driver_id'] = $driverID;
+		$data['action_date'] = $actionDate;
         $data['vehiclebookings'] = $vehiclebookings;
-       // $data['vehicledetail'] = $vehicledetail;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
@@ -710,9 +725,82 @@ class VehicleReportsController extends Controller
 
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
-
-        AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.bookinglog_results')->with($data);
+    }
+	public function bookingReportsPrint(Request $request)
+    {
+        $reportData = $request->all();
+        unset($reportData['_token']);
+        $actionFrom = $actionTo = 0;
+
+        $vehicleArray = isset($reportData['vehicle_id']) ? intval($reportData['vehicle_id']) : 0;
+	
+		
+        $reportType = $reportData['report_type'];
+        $vehicleType = $reportData['vehicle_type'];
+        $driverID = $reportData['driver_id'];
+        $actionDate = $request['action_date'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+        $vehiclebookings = vehicle_booking::select('vehicle_booking.*', 'vehicle_make.name as vehicle_make',
+                        'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
+						'vehicle_details.vehicle_registration as v_registration',
+						'hr_people.first_name as driver_name',
+						'hr_people.surname as driver_surname',
+						'hr.first_name as apr_firstname',
+						'hr.surname as apr_surname')
+		->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
+		->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
+		->leftJoin('vehicle_managemnet', 'vehicle_booking.vehicle_type', '=', 'vehicle_managemnet.id')
+		->leftJoin('vehicle_details', 'vehicle_booking.vehicle_id', '=', 'vehicle_details.id')
+		->leftJoin('hr_people', 'vehicle_booking.approver3_id', '=', 'hr_people.id')
+		->leftJoin('hr_people as hr', 'vehicle_booking.driver_id', '=', 'hr.id')
+        ->where(function ($query) use ($vehicleType) {
+            if (!empty($vehicleType))
+                $query->where('vehicle_type', $vehicleType);
+        })
+            ->where(function ($query) use ($driverID) {
+                if (!empty($driverID))
+                    $query->where('driver_id', $driverID);
+            })
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('collect_timestamp', [$actionFrom, $actionTo]);
+                }
+            })
+            ->Where(function ($query) use ($vehicleArray) {
+				if (!empty($vehicleArray))
+					$query->whereIn('vehicle_id', [$vehicleArray]);
+            })
+            ->orderBy('vehicle_id', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $data['vehiclebookings'] = $vehiclebookings;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+		
+		$user = Auth::user()->load('person');
+		$companyDetails = CompanyIdentity::first();
+        $data['company_name'] = $companyDetails->full_company_name;
+        $logo = $companyDetails->company_logo;
+        $data['company_logo'] = url('/') . Storage::disk('local')->url("logos/$logo");
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
+		
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.booking_report_print')->with($data);
     }
 
     public function jobcard()
@@ -727,7 +815,7 @@ class VehicleReportsController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
 
-        AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.index')->with($data);
     }
 
@@ -773,7 +861,7 @@ class VehicleReportsController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
 
-        AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.fuellog_results')->with($data);
     }
 
@@ -823,7 +911,7 @@ class VehicleReportsController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
 
-        AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.finelog_results')->with($data);
     }
 
@@ -866,7 +954,7 @@ class VehicleReportsController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
 
-        AuditReportsController::store('Policy', 'Policy Search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.Servicedetailslog_results')->with($data);
     }
 
