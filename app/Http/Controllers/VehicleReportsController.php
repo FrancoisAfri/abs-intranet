@@ -721,8 +721,6 @@ class VehicleReportsController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-            return $vehiclebookings;
-
 		for ($i = 0; $i < count($vehicleArray); $i++) {
 						$vehicle .= $vehicleArray[$i].',';
                 }
@@ -827,8 +825,6 @@ class VehicleReportsController extends Controller
 
      public function fuelReports(Request $request)
     {
-
-
         $reportData = $request->all();
         unset($reportData['_token']);
         
@@ -849,15 +845,14 @@ class VehicleReportsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
-
+		
         $fuelLog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status','vehicle_fuel_log.id as fuelLogID', 'vehicle_details.vehicle_make as vehiclemake','vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype','vehicle_make.name as VehicleMake','vehicle_model.name as VehicleModel',
              'vehicle_managemnet.name as vehicletypes')
-            ->leftJoin('vehicle_details', 'vehicle_details.vehicleID', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehiclemake', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehiclemodel', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicletype', '=', 'vehicle_managemnet.id')
+            ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($vehicleType) {
                     if (!empty($vehicleType)) {
                         $query->where('vehicle_type', $vehicleType);
@@ -881,10 +876,6 @@ class VehicleReportsController extends Controller
                     })
                 ->get();
 
-               return $fuelLog;
-
-            
-
         for ($i = 0; $i < count($vehicleArray); $i++) {
                         $vehicle .= $vehicleArray[$i].',';
                 }
@@ -895,7 +886,6 @@ class VehicleReportsController extends Controller
         $data['vehicle_type'] = $vehicleType;
         $data['driver_id'] = $driverID;
         $data['action_date'] = $actionDate;
-       // $data['vehiclebookings'] = $vehiclebookings;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
