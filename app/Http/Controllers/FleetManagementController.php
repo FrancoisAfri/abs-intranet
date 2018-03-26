@@ -43,7 +43,7 @@ class FleetManagementController extends Controller
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
+        $ContactCompany = ContactCompany::where('status', 1)->orderBy('id', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
@@ -69,10 +69,6 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
 
-
-       // $veggvg =  vehicle_milege::all();
-      //  return $veggvg;
-
         $data['vehicleConfig'] = $vehicleConfig;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
         $data['images'] = $images;
@@ -89,7 +85,7 @@ class FleetManagementController extends Controller
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = " FleetManagement";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -122,7 +118,7 @@ class FleetManagementController extends Controller
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -138,7 +134,6 @@ class FleetManagementController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FleetManagement.add_vehicle')->with($data);
-
     }
 
 
@@ -156,8 +151,8 @@ class FleetManagementController extends Controller
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
-
-
+		if (!empty($SysData['financial_institution'])) $SysData['company'] = 0;
+		if (!empty($SysData['company'])) $SysData['financial_institution'] = 0;
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
@@ -235,7 +230,7 @@ class FleetManagementController extends Controller
         $Vehiclemilege->save();
 
 
-        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Fleet Management', 'New Vehicle Added', "Accessed By User", 0);;
         return response()->json();
     }
 
@@ -252,7 +247,8 @@ class FleetManagementController extends Controller
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
-
+		if (!empty($SysData['financial_institution'])) $SysData['company'] = 0;
+		if (!empty($SysData['company'])) $SysData['financial_institution'] = 0;
         $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
         $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
@@ -316,12 +312,11 @@ class FleetManagementController extends Controller
 
     public function viewDetails(vehicle_maintenance $maintenance)
     {
-
         $ID = $maintenance->id;
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
-        $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
+        $ContactCompany = ContactCompany::where('status', 1)->orderBy('id', 'asc')->get();
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -341,31 +336,34 @@ class FleetManagementController extends Controller
 
         // if ($maintenance->status == 1) {
         $ID = $maintenance->id;
-        //return $ID;
+		
         $vehiclemaintenance = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_make.name as vehiclemake',
-                'vehicle_model.name as vehiclemodel', 'vehicle_managemnet.name as vehicletype', 'division_level_fives.name as company', 'division_level_fours.name as Department', 'hr_people.first_name as first_name', 'hr_people.surname as surname'
-                , 'contact_companies.name as Vehicle_Owner ')
+            ->select('vehicle_details.*', 'vehicle_make.name as vehiclemake'
+			,'vehicle_model.name as vehiclemodel', 'vehicle_managemnet.name as vehicletype'
+			,'division_level_fives.name as company','div_fives.name as company_owner'
+			, 'division_level_fours.name as Department', 'hr_people.first_name as first_name'
+			, 'hr_people.surname as surname','contact_companies.name as Vehicle_Owner ')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('hr_people', 'vehicle_details.responsible_for_maintenance', '=', 'hr_people.id')
-            ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
+            ->leftJoin('contact_companies', 'vehicle_details.financial_institution', '=', 'contact_companies.id')
+            ->leftJoin('division_level_fives as div_fives', 'vehicle_details.company', '=', 'div_fives.id')
             ->where('vehicle_details.id', $ID)
             ->orderBy('vehicle_details.id')
             ->get();
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
-        $vehiclemaintenances = $vehiclemaintenance->first();
-
+        //$vehiclemaintenances = $vehiclemaintenance->first();
+//return $vehiclemaintenances;
         $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("Vehicle/registration_papers/$registrationPapers") : '';
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -392,11 +390,10 @@ class FleetManagementController extends Controller
         $data['vehicledetail'] = $vehicledetail;
         $data['ContactCompany'] = $ContactCompany;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
-        $data['vehiclemaintenances'] = $vehiclemaintenances;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Details Accessed', "Accessed by User", 0);
 
         return view('Vehicles.FleetManagement.viewfleetDetails')->with($data);
     }
@@ -427,7 +424,7 @@ class FleetManagementController extends Controller
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -440,7 +437,7 @@ class FleetManagementController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Images Accessed', "Accessed by User", 0);
         //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewfleetImage')->with($data);
     }
@@ -518,7 +515,7 @@ class FleetManagementController extends Controller
 
         $image->update();
 
-        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Fleet Management', 'Vehicle Image Edited', "Accessed By User", 0);;
         return response()->json();
     }
 
@@ -559,7 +556,7 @@ class FleetManagementController extends Controller
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -575,7 +572,7 @@ class FleetManagementController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Keys Accessed', "Accessed by User", 0);
         //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.key_tracking')->with($data);
     }
@@ -590,6 +587,7 @@ class FleetManagementController extends Controller
 
         $vehicleDetails->status = $stastus;
         $vehicleDetails->update();
+		AuditReportsController::store('Fleet Management', 'Vehicle De-activated', "Accessed by User", 0);
         return back();
     }
 
@@ -610,15 +608,6 @@ class FleetManagementController extends Controller
         $datelost = $SysData['date_lost'] = str_replace('/', '-', $SysData['date_lost']);
         $datelost = $SysData['date_lost'] = strtotime($SysData['date_lost']);
 
-        // $issuedby = $SysData['issued_by'];
-        // $Employee = HRPerson::where('id', $issuedby)->orderBy('id', 'desc')->get()->first();
-        // $name = $Employee->first_name . ' ' . $Employee->surname;
-
-        // $controller = $SysData['safe_controller'];
-        // $Employee = HRPerson::where('id', $controller)->orderBy('id', 'desc')->get()->first();
-        // $safecontroller = $Employee->first_name . ' ' . $Employee->surname;
-
-
         $keytracking = new keytracking();
         $keytracking->key_number = $SysData['key_number'];
         $keytracking->key_type = !empty($SysData['key_type']) ? $SysData['key_type'] : 0;
@@ -637,7 +626,7 @@ class FleetManagementController extends Controller
         $keytracking->captured_by = $SysData['employee'];
         $keytracking->safeController = !empty($SysData['safe_controller']) ? $SysData['safe_controller'] : '';
         $keytracking->save();
-
+		AuditReportsController::store('Fleet Management', 'Vehicle Key Added', "Accessed by User", 0);
         return response()->json();
 
     }
@@ -720,7 +709,7 @@ class FleetManagementController extends Controller
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -737,7 +726,7 @@ class FleetManagementController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.permits')->with($data);
     }

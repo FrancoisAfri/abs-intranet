@@ -53,30 +53,6 @@
                     </div>
                 </div>
                     @endif
-                    
-                     
-
-                   <!--  @foreach($division_levels as $division_level)
-                        <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                            <label for="{{ 'division_level_' . $division_level->level }}"
-                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-black-tie"></i>
-                                    </div>
-                                    <select id="{{ 'division_level_' . $division_level->level }}"
-                                            name="{{ 'division_level_' . $division_level->level }}"
-                                            class="form-control select2"
-                                            onchange="divDDOnChange(this, null, 'add-vehicledetails-modal')"
-                                            style="width: 100%;">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach -->
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
@@ -95,7 +71,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group{{ $errors->has('vehiclemodel_id') ? ' has-error' : '' }}">
                             <label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
 
@@ -119,8 +94,6 @@
                                 </select>
                             </div>
                         </div>
-
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
                         <div class="col-sm-8">
@@ -138,8 +111,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label for="year" class="col-sm-2 control-label">Year</label>
                         <div class="col-sm-8">
@@ -153,7 +124,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Registration</label>
                         <div class="col-sm-8">
@@ -162,7 +132,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Chassis Number</label>
                         <div class="col-sm-8">
@@ -171,7 +140,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Engine Number</label>
                         <div class="col-sm-8">
@@ -180,8 +148,6 @@
                         </div>
 
                     </div>
-
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Color</label>
                         <div class="col-sm-8">
@@ -190,7 +156,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group{{ $errors->has('metre_reading_type') ? ' has-error' : '' }}">
                         <label for="Leave_type" class="col-sm-2 control-label"> Metre Reading Type </label>
                         <div class="col-sm-9">
@@ -203,8 +168,6 @@
 
                         </div>
                     </div>
-
-
                     <div class="form-group odometer-field">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
                         <div class="col-sm-8">
@@ -213,7 +176,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group hours-field">
                         <label for="path" class="col-sm-2 control-label">Hours Reading</label>
                         <div class="col-sm-8">
@@ -222,7 +184,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group">
                         <label for="fuel_type" class="col-sm-2 control-label">Fuel Type</label>
                         <div class="col-sm-8">
@@ -240,8 +201,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Size of Fuel Tank</label>
                         <div class="col-sm-8">
@@ -250,7 +209,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Fleet Number</label>
                         <div class="col-sm-8">
@@ -259,7 +217,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Cell Number</label>
                         <div class="col-sm-8">
@@ -269,7 +226,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
                         <div class="col-sm-8">
@@ -278,7 +234,6 @@
                         </div>
 
                     </div>
-
                     <div class="form-group">
                         <label for="vehicle_owner" class="col-sm-2 control-label">Vehicle Owner</label>
                         <div class="col-sm-8">
@@ -297,9 +252,8 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group{{ $errors->has('title_type') ? ' has-error' : '' }}">
-                        <label for="Leave_type" class="col-sm-2 control-label"> Title Holder </label>
+                        <label for="title_type" class="col-sm-2 control-label"> Title Holder </label>
                         <div class="col-sm-9">
                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fin"
                                 name="title_type" value="1" checked> Financial Institution                                                         
@@ -308,7 +262,6 @@
                                 Company </label>
                         </div>
                     </div>
-
                     <div class="form-group fin-field">
                         <label for="financial_institution" class="col-sm-2 control-label">Financial Institution</label>
                         <div class="col-sm-8">
@@ -327,7 +280,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group comp-field">
                         <label for="company" class="col-sm-2 control-label">Company</label>
                         <div class="col-sm-8">
@@ -345,7 +297,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group notes-field{{ $errors->has('extras') ? ' has-error' : '' }}">
                         <label for="extras" class="col-sm-2 control-label">Extras</label>
                         <div class="col-sm-8">
@@ -358,8 +309,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>
 
@@ -374,7 +323,6 @@
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
-
                     <div class="form-group supDoc-field{{ $errors->has('registration_papers') ? ' has-error' : '' }}">
                         <label for="registration_papers" class="col-sm-2 control-label">Registration Papers</label>
                         <div class="col-sm-8">
@@ -388,8 +336,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label for="property_type" class="col-sm-2 control-label">Property Type</label>
                         <div class="col-sm-8">
@@ -405,8 +351,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -418,7 +362,3 @@
         </div>
     </div>
 </div>
-
-
-
-       

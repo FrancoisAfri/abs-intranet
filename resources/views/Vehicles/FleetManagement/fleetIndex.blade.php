@@ -277,10 +277,12 @@
             if (allType == 1) {
                 $('.comp-field').hide();
                 $('.fin-field').show();
+				$('#company').val('');
             }
             else if (allType == 2) {
                 $('.fin-field').hide();
                 $('.comp-field').show();
+				$('#financial_institution').val('');
             }
             return allType;
         }

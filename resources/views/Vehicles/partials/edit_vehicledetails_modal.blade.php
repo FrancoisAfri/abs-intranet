@@ -316,8 +316,8 @@
                             <select class="form-control " style="width: 100%;" id="financial_institution"
                             name="financial_institution">
                             <option value="0">*** Select Financial Institution ***</option>
-                            @foreach($vehicle as $Vehicle)
-                            <option value="{{ $Vehicle->id }}">{{ (!empty( $vehice->name)) ?  $vehice->name : ''}}</option>
+                            @foreach($ContactCompany as $ContactCompan)
+                            <option value="{{ $ContactCompan->id }}">{{ (!empty( $ContactCompan->name)) ?  $ContactCompan->name : ''}}</option>
 
                             @endforeach
                         </select>

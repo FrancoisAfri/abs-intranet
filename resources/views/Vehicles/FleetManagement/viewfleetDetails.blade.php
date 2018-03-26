@@ -33,12 +33,6 @@
                 </div>
 
                 <div align="center" class="box box-default">
-                <!-- <div class="box-header with-border">
-                        <h3 class="box-title"> Vehicle Management-{{ !empty($vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year) ? $vehiclemaintenances->vehicle_model . ' ' . $vehiclemaintenances->vehicle_registration . ' ' . $vehiclemaintenances->year : ''}}
-
-                        </h3>
-                    </div> -->
-
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
@@ -155,8 +149,7 @@
                                     <td class="caption">Vehicle Color</td>
                                     <td>{{ !empty($vehiclemaintenance->vehicle_color) ? $vehiclemaintenance->vehicle_color : ''}}</td>
                                     <td class="caption">Purchase Price</td>
-                                    <td>0
-                                    </td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Odometer</td>
@@ -180,13 +173,14 @@
                                     <td class="caption">Division</td>
                                     <td>{{ !empty($vehiclemaintenance->company) ? $vehiclemaintenance->company : ''}}</td>
                                     <td class="caption">Vehicle Owner Name</td>
-                                    <td>{{ !empty($vehiclemaintenance->Vehicle_Owner) ? $vehiclemaintenance->Vehicle_Owner : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->title_type) && ($vehiclemaintenance->title_type == 1) 
+									? $vehiclemaintenance->Vehicle_Owner : $vehiclemaintenance->company_owner}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Department</td>
                                     <td>{{ !empty($vehiclemaintenance->Department) ? $vehiclemaintenance->Department : ''}}</td>
                                     <td class="caption">Title Holder Name</td>
-                                    <td>Marhine Plant Hire</td>
+                                    <td>{{ !empty($vehiclemaintenance->title_type) && ($vehiclemaintenance->title_type == 1)   ? 'Financial Institution' : ' Company'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Responsible Person</td>

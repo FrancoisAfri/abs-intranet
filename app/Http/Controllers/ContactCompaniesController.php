@@ -46,7 +46,7 @@ class ContactCompaniesController extends Controller
      */
     public function create()
     {
-        $deparments = DB::table('division_level_fours')->where('active', 1)->orderBy('name', 'asc')->get();
+        $deparments = DB::table('division_level_fives')->where('active', 1)->orderBy('name', 'asc')->get();
         $dept = DB::table('division_setup')->where('level', 4)->first();
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $data['page_title'] = "Contacts";
@@ -184,7 +184,7 @@ class ContactCompaniesController extends Controller
         $compRegDoc = $company->comp_reg_doc;
         $provinces = Province::where('country_id', 1)->where('id', $company->phys_province)->get()->first();
         $dept = DB::table('division_setup')->where('level', 4)->first();
-        $deparments = DB::table('division_level_fours')->where('active', 1)->where('id', $company->dept_id)->first();
+        $deparments = DB::table('division_level_fives')->where('active', 1)->where('id', $company->dept_id)->first();
         $canEdit = (in_array($user->type, [1, 3]) || ($user->type == 2 && ($user->person->company_id && $user->person->company_id == $company->id))) ? true : false;
 
         $data['page_title'] = "Clients";
@@ -297,7 +297,7 @@ class ContactCompaniesController extends Controller
     {
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $dept = DB::table('division_setup')->where('level', 4)->first();
-        $deparments = DB::table('division_level_fours')->where('active', 1)->orderBy('name', 'asc')->get();
+        $deparments = DB::table('division_level_fives')->where('active', 1)->orderBy('name', 'asc')->get();
         $data['page_title'] = "Clients";
         $data['page_description'] = "Edit Company Details";
         $data['breadcrumb'] = [
