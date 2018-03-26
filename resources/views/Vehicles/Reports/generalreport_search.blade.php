@@ -239,7 +239,7 @@
 			else if (type == 2) $('#report_form').attr('action', '/vehicle_management/fuel_report');
 			else if (type == 3) $('#report_form').attr('action', '/vehicle_management/fine_report');
 			else if (type == 4) $('#report_form').attr('action', '/vehicle_management/report_services');
-			else if (type == 5) $('#report_form').attr('action', '/activity/search');
+			else if (type == 5) $('#report_form').attr('action', '/vehicle_management/report_incidents');
 			else if (type == 6) $('#report_form').attr('action', '/activity/search');
 			else if (type == 7) $('#report_form').attr('action', '/activity/search');
 			else if (type == 8) $('#report_form').attr('action', '/activity/search');
@@ -260,6 +260,8 @@
 		} else if (levID == 3) {
             $('.dest-field').hide();
 		}else if (levID == 4) {
+            $('.dest-field').hide();
+        }else if (levID == 5) {
             $('.dest-field').hide();
         }
 		}

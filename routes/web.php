@@ -568,6 +568,7 @@ Route::post('vehicle_management/booking_report', 'VehicleReportsController@booki
 Route::post('vehicle_management/fuel_report', 'VehicleReportsController@fuelReports');
 Route::post('vehicle_management/fine_report', 'VehicleReportsController@fineReports');
 Route::post('vehicle_management/report_services', 'VehicleReportsController@vehicleService');
+Route::post('vehicle_management/report_incidents', 'VehicleReportsController@vehicleIncidentsDetails');
 Route::post('fleet/reports/booking/print', 'VehicleReportsController@bookingReportsPrint');
 //Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
