@@ -827,8 +827,6 @@ class VehicleReportsController extends Controller
 
      public function fuelReports(Request $request)
     {
-
-
         $reportData = $request->all();
         unset($reportData['_token']);
         
@@ -849,15 +847,13 @@ class VehicleReportsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
-
         $fuelLog = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status','vehicle_fuel_log.id as fuelLogID', 'vehicle_details.vehicle_make as vehiclemake','vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype','vehicle_make.name as VehicleMake','vehicle_model.name as VehicleModel','vehicle_managemnet.name as vehicletypes' , 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-            ->leftJoin('vehicle_details', 'vehicle_details.id', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
-           ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
+            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status','vehicle_fuel_log.id as fuelLogID', 'vehicle_details.vehicle_make as vehiclemake','vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype','vehicle_make.name as VehicleMake','vehicle_model.name as VehicleModel',
+             'vehicle_managemnet.name as vehicletypes')
+            ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($vehicleType) {
                     if (!empty($vehicleType)) {
                         $query->where('vehicle_type', $vehicleType);
@@ -881,10 +877,6 @@ class VehicleReportsController extends Controller
                     })
                 ->get();
 
-              // return $fuelLog;
-
-            
-
         for ($i = 0; $i < count($vehicleArray); $i++) {
                         $vehicle .= $vehicleArray[$i].',';
                 }
@@ -895,7 +887,6 @@ class VehicleReportsController extends Controller
         $data['vehicle_type'] = $vehicleType;
         $data['driver_id'] = $driverID;
         $data['action_date'] = $actionDate;
-       // $data['vehiclebookings'] = $vehiclebookings;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
@@ -971,7 +962,7 @@ class VehicleReportsController extends Controller
         return view('Vehicles.Reports.fuellog_results')->with($data);
     }
 
-    public function fineReports(Request $request)
+    public function vehicleFineDetails(vehicle_detail $vehicleID)
     {
         $reportData = $request->all();
         unset($reportData['_token']);
@@ -998,6 +989,7 @@ class VehicleReportsController extends Controller
             ->select('vehicle_fines.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
             ->orderBy('vehicle_fines.id')
+            ->where('vehicleID', $vehicleID->id)
             ->get();
 
        // return $vehiclefines;
@@ -1066,7 +1058,7 @@ class VehicleReportsController extends Controller
         return view('Vehicles.Reports.finelog_results')->with($data);
     }
 
-    public function vehicleService(Request $request)
+    public function vehicleServiceDetails(vehicle_detail $vehicleID)
     {
 
         $reportData = $request->all();
@@ -1128,6 +1120,15 @@ class VehicleReportsController extends Controller
 
         $totalamount_paid = $serviceDetails->sum('total_cost');
 
+        $vehicledetail = DB::table('vehicle_details')
+            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->orderBy('vehicle_details.id', 'desc')
+            ->where('vehicle_details.id', $vehicleID->id)
+            ->first();
 
 
         $data['serviceDetails'] = $serviceDetails;

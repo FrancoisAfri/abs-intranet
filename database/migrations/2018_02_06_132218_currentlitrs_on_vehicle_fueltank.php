@@ -13,9 +13,9 @@ class CurrentlitrsOnVehicleFueltank extends Migration
      */
     public function up()
     {
-        Schema::table('fuel_tanks', function (Blueprint $table) {
-    $table->double('current_fuel_litres')->nullable();
-});
+        /*Schema::table('fuel_tanks', function (Blueprint $table) {
+   /$table->double('current_fuel_litres')->nullable();
+});*/
 }
 
 /**
@@ -25,8 +25,8 @@ class CurrentlitrsOnVehicleFueltank extends Migration
  */
 public function down()
 {
-    Schema::table('fuel_tanks', function (Blueprint $table) {
+    /*Schema::table('fuel_tanks', function (Blueprint $table) {
           $table->dropColumn('current_fuel_litres');
-    });
+    });*/
 }
 }
