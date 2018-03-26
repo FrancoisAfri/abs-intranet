@@ -251,8 +251,8 @@ class FleetManagementController extends Controller
 		if (!empty($SysData['company'])) $SysData['financial_institution'] = 0;
         $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
-        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
-        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
+        $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
+        $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
@@ -357,8 +357,6 @@ class FleetManagementController extends Controller
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
-        //$vehiclemaintenances = $vehiclemaintenance->first();
-//return $vehiclemaintenances;
         $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("Vehicle/registration_papers/$registrationPapers") : '';
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
