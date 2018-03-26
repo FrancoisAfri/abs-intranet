@@ -16,6 +16,8 @@ class vehicle_fuel_log extends Model
     
 
 
-
+	public function fuellogVehicle() {
+			return $this->belongsTo(vehicle_detail::class, 'vehicle_id');
+		}
 							
 }

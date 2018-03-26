@@ -17,7 +17,7 @@ class vehicle_booking extends Model
 	, 'vehicle_model', 'vehicle_reg','usage_type','UserID','registration_no','year','fleet_number'
 	,'cancel_status','collect_timestamp','return_timestamp', 'booking_date' ];
 
-	public function driverBooking(){
+	public function driverBookings(){
         return $this->belongsTo(HRPerson::class, 'driver_id');
     }
 	
