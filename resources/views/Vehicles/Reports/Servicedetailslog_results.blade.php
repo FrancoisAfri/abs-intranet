@@ -18,8 +18,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Services Details Report -
-                            for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
+                        <h3 class="box-title">Vehicle Services Details Report </h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -44,6 +43,7 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
+                                <th style="width: 10px"></th>
                                 <th>Date</th>
                                 <th>Garage</th>
                                 <th>Next Service Date</th>
@@ -56,7 +56,7 @@
                             <tbody>
                             @foreach($serviceDetails as $details)
                                 <tr>
-
+                                    <td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
                                     <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
                                     <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
                                     <td>{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
@@ -72,6 +72,7 @@
                             </tbody>
                             <tfoot>
                             <tr>
+                                <th style="width: 10px"></th>
                                 <th>Date</th>
                                 <th>Garage</th>
                                 <th>Next Service Date</th>
@@ -84,9 +85,19 @@
                             <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
                             <class
                             ="caption">
+                            <td></td>
                             <td colspan="6" style="text-align:right">Total</td>
                             <td style="text-align: right" nowrap>{{ !empty($totalamount_paid) ? 'R' .number_format($totalamount_paid, 2) : '' }}</td>
                         </table>
+                            <div class="box-footer">
+
+                                <div class="row no-print">
+                                    <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                                class="fa fa-arrow-left"></i> Back to Search Page
+                                    </button>
+                                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
+                                </div>
+                            </div>
                     </div>
                     <!-- /.box-body -->
 
@@ -152,7 +163,7 @@
 
             //Cancel button
             $('#cancel').click(function () {
-                location.href = '/users/users-access';
+                location.href = "/vehicle_management/vehicle_reports";
             });
 
             //Vertically center modals on page
