@@ -228,8 +228,8 @@
 
                 $('#rdo_fin, #rdo_comp').on('ifChecked', function () {
                     var allType = hidenFields();
-                    if (allType == 1) $('#box-subtitle').html('Site Address');
-                    else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
+                    if (allType == 1) $('#box-subtitle').html('Financial Institutions');
+                    else if (allType == 2) $('#box-subtitle').html('Company');
                 });
 
 
