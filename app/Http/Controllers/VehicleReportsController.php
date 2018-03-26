@@ -1038,17 +1038,17 @@ class VehicleReportsController extends Controller
 
 
 
-        // $total =  DB::table('vehicle_details')->where('id', $vehicleID->id)->get('amount');
-//        $total = $vehiclefines->sum('amount');
-//        $totalamount_paid = $vehiclefines->sum('amount_paid');
+       // $total =  DB::table('vehicle_details')->where('id', $vehicleID->id)->get('amount');
+        $total = $vehiclefines->sum('amount');
+        $totalamount_paid = $vehiclefines->sum('amount_paid');
 
         $fineType = array(1 => 'Speeding', 2 => 'Parking', 3 => 'Moving Violation', 4 => 'Expired Registration', 5 => 'No Drivers Licence', 6 => 'Other');
 
         $status = array(1 => 'Captured', 2 => 'Fine Queried', 3 => 'Fine Revoked', 4 => 'Fine Paid');
 
-        //$data['total'] = $total;
-       // $data['totalamount_paid'] = $totalamount_paid;
-        //$data['vehicledetail'] = $vehicledetail;
+        $data['total'] = $total;
+        $data['totalamount_paid'] = $totalamount_paid;
+      //  $data['vehicledetail'] = $vehicledetail;
         $data['fineType'] = $fineType;
         $data['status'] = $status;
         $data['vehiclefines'] = $vehiclefines;
@@ -1066,29 +1066,19 @@ class VehicleReportsController extends Controller
         return view('Vehicles.Reports.finelog_results')->with($data);
     }
 
-    public function vehicleServiceDetails(vehicle_detail $vehicleID)
+    public function vehicleService(Request $request)
     {
-
 
         $serviceDetails = DB::table('vehicle_serviceDetails')
             ->select('vehicle_serviceDetails.*')
             ->orderBy('vehicle_serviceDetails.id')
-            ->where('vehicleID', $vehicleID->id)
+        //   ->where('vehicleID', $vehicleID->id)
             ->get();
 
-        //return $serviceDetails;
+        return $serviceDetails;
 
         $totalamount_paid = $serviceDetails->sum('total_cost');
 
-        $vehicledetail = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->orderBy('vehicle_details.id', 'desc')
-            ->where('vehicle_details.id', $vehicleID->id)
-            ->first();
 
 
         $data['serviceDetails'] = $serviceDetails;

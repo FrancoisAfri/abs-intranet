@@ -90,11 +90,21 @@
                             <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
                             <class
                             ="caption">
+                            <td style="text-align: right" nowrap></td>
                             <td colspan="6" style="text-align:right">Total</td>
-                            {{--<td style="text-align: right">{{number_format($total, 2) }}</td>--}}
-                            {{--<td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>--}}
+                            <td style="text-align: right">{{number_format($total, 2) }}</td>
+                            <td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>
                             <td style="text-align: right" nowrap></td>
                         </table>
+                            <div class="box-footer">
+
+                                <div class="row no-print">
+                                    <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                                class="fa fa-arrow-left"></i> Back to Search Page
+                                    </button>
+                                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
+                                </div>
+                            </div>
                     </div>
                     <!-- /.box-body -->
 
@@ -144,7 +154,10 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-
+            //Cancel button
+            $('#cancel').click(function () {
+                location.href = "/vehicle_management/vehicle_reports";
+            });
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -158,10 +171,7 @@
                 "autoWidth": true
             });
 
-            //Cancel button
-            $('#cancel').click(function () {
-                location.href = '/users/users-access';
-            });
+
 
             //Vertically center modals on page
             function reposition() {
