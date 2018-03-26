@@ -854,10 +854,10 @@ class VehicleReportsController extends Controller
         $fuelLog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status','vehicle_fuel_log.id as fuelLogID', 'vehicle_details.vehicle_make as vehiclemake','vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype','vehicle_make.name as VehicleMake','vehicle_model.name as VehicleModel',
              'vehicle_managemnet.name as vehicletypes')
-            ->leftJoin('vehicle_details', 'vehicle_details.vehicleID', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehiclemake', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehiclemodel', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicletype', '=', 'vehicle_managemnet.id')
+            ->leftJoin('vehicle_details', 'vehicle_details.id', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($vehicleType) {
                     if (!empty($vehicleType)) {
                         $query->where('vehicle_type', $vehicleType);
