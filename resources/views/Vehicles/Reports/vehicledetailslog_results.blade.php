@@ -43,28 +43,47 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
+
                                 <th style="width: 10px"></th>
-                                <th>Date Reported</th>
-                                <th>Reported By	</th>
-                                <th>Odometer Reading Km</th>
-                                <th>Incident Type</th>
-                                <th>Severity</th>
-                                <th>Cost </th>
-                                <th>Status</th>
+                                <th>Vehicle type</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>Color</th>
+                                <th>Chassis Number</th>
+                                <th>VIN Number</th>
+                                <th>Fuel Type</th>
+                                <th>Tank Size</th>
+                                <th>Kilometer/Hours Reading</th>
+                                <th>Division</th>
+                                <th>Department</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($vehicleincidents as $details)
+                            @foreach($vehicledetails as $details)
                                 <tr>
-                                    <td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
-                                    <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
-                                    <td>{{ !empty($details->firstname.''.$details->surname) ?  $details->firstname.''.$details->surname: '' }}</td>
-                                    <td>{{ !empty($details->odometer_reading) ?  $details->odometer_reading: '' }}</td>
-                                    <td>{{ !empty($details->IncidentType) ?  $details->IncidentType: 'Nill' }}</td>
-                                    <td>{{ (!empty($details->severity)) ?  $severity[$details->severity] : 'Nill'}}</td>
-                                    <td>{{ !empty($details->Cost) ? 'R' .number_format($details->Cost, 2) : '' }}</td>
-                                    <td>{{ !empty($details->status) ?  $status[$details->status] : ''}}</td>
-
+                                    <td>
+                                        <div class="product-img">
+                                            <img src="{{ (!empty($details->image)) ? Storage::disk('local')->url("Vehicle/images/$details->image") : 'http://placehold.it/60x50' }}"
+                                                 alt="Product Image" width="50" height="50">
+                                        </div>
+                                    </td>
+                                    <td>{{ !empty($details->vehicle_type) ?  $details->vehicle_type: '' }}</td>
+                                    <td>{{ !empty($details->vehicle_make) ?  $details->vehicle_make: '' }}</td>
+                                    <td>{{ !empty($details->vehicle_model) ?  $details->vehicle_model: '' }}</td>
+                                    <td>{{ !empty($details->year) ?  $details->year: '' }}</td>
+                                    <td>{{ !empty($details->vehicle_color) ?  $details->vehicle_color: '' }}</td>
+                                    <td>{{ !empty($details->chassis_number) ?  $details->chassis_number: '' }}</td>
+                                    <td>{{ !empty($details->engine_number) ?  $details->engine_number: '' }}</td>
+                                    <td>{{ !empty($details->fuel_type) ?  $status[$details->fuel_type] : ''}}</td>
+                                    <td>{{ !empty($details->size_of_fuel_tank) ?  $details->size_of_fuel_tank : ''}}</td>
+                                    @if (isset($details) && $details->hours_reading === 0)
+                                        <td>{{ !empty($details->hours_reading) ? $details->hours_reading : ''}}</td>
+                                    @else
+                                        <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : ''}}</td>
+                                    @endif
+                                    <td>{{ !empty($details->company) ? $details->company : ''}}</td>
+                                    <td>{{ !empty($details->Department) ? $details->Department : ''}}</td>
                                     @endforeach
                                 </tr>
 
@@ -72,25 +91,32 @@
                             <tfoot>
                             <tr>
                                 <th style="width: 10px"></th>
-                                <th>Date Reported</th>
-                                <th>Reported By	</th>
-                                <th>Odometer Reading Km</th>
-                                <th>Incident Type</th>
-                                <th>Severity</th>
-                                <th>Cost </th>
-                                <th>Status</th>
+                                <th>Vehicle type</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>Color</th>
+                                <th>Chassis Number</th>
+                                <th>VIN Number</th>
+                                <th>Fuel Type</th>
+                                <th>Tank Size</th>
+                                <th>Kilometer/Hours Reading</th>
+                                <th>Division</th>
+                                <th>Department</th>
                             </tr>
                             </tfoot>
                         </table>
-                            <div class="box-footer">
+                        <div class="box-footer">
 
-                                <div class="row no-print">
-                                    <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                                class="fa fa-arrow-left"></i> Back to Search Page
-                                    </button>
-                                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
-                                </div>
+                            <div class="row no-print">
+                                <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                            class="fa fa-arrow-left"></i> Back to Search Page
+                                </button>
+                                <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>
+                                    Print report
+                                </button>
                             </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
 
