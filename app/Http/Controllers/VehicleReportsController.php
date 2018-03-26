@@ -721,6 +721,8 @@ class VehicleReportsController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
+            return $vehiclebookings;
+
 		for ($i = 0; $i < count($vehicleArray); $i++) {
 						$vehicle .= $vehicleArray[$i].',';
                 }
@@ -845,7 +847,6 @@ class VehicleReportsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-		
         $fuelLog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status','vehicle_fuel_log.id as fuelLogID', 'vehicle_details.vehicle_make as vehiclemake','vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype','vehicle_make.name as VehicleMake','vehicle_model.name as VehicleModel',
              'vehicle_managemnet.name as vehicletypes')
@@ -963,6 +964,26 @@ class VehicleReportsController extends Controller
 
     public function vehicleFineDetails(vehicle_detail $vehicleID)
     {
+        $reportData = $request->all();
+        unset($reportData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $vehicle = '';
+        $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
+        $reportID = $reportData['report_id'];
+        $reportType = $reportData['report_type'];
+        $vehicleType = $reportData['vehicle_type'];
+        $licenceType = $reportData['licence_type'];
+        $driverID = $reportData['driver_id'];
+        $actionDate = $request['action_date'];
+        $Destination = $request['destination'];
+        $Purpose = $request['purpose'];
+
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
 
         $vehiclefines = DB::table('vehicle_fines')
             ->select('vehicle_fines.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
@@ -971,19 +992,45 @@ class VehicleReportsController extends Controller
             ->where('vehicleID', $vehicleID->id)
             ->get();
 
-        $vehicledetail = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->orderBy('vehicle_details.id', 'desc')
-            ->where('vehicle_details.id', $vehicleID->id)
-            ->first();
+       // return $vehiclefines;
+
+        $vehiclefines = DB::table('vehicle_fines')
+            ->select('vehicle_fines.*','vehicle_details.vehicle_make as vehiclemake','vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype',
+                'vehicle_make.name as VehicleMake','vehicle_model.name as VehicleModel','vehicle_managemnet.name as vehicletypes' , 'hr_people.first_name as firstname',
+                'hr_people.surname as surname','vehicle_details.vehicle_registration as vehicle_registration')
+            ->leftJoin('vehicle_details', 'vehicle_details.id', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
+            ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
+            ->where(function ($query) use ($vehicleType) {
+                if (!empty($vehicleType)) {
+                    $query->where('vehicle_type', $vehicleType);
+                }
+            })
+            ->where(function ($query) use ($driverID) {
+                if (!empty($driverID)) {
+                    $query->where('driver', $driverID);
+                }
+            })
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->Where(function ($query) use ($vehicleArray) {
+                for ($i = 0; $i < count($vehicleArray); $i++) {
+                    $vehicle = $vehicleArray[$i].',';
+                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
+                }
+            })
+            ->get();
 
         //return $vehiclefines;
 
-        // $total =  DB::table('vehicle_details')->where('id', $vehicleID->id)->get('amount');
+
+
+       // $total =  DB::table('vehicle_details')->where('id', $vehicleID->id)->get('amount');
         $total = $vehiclefines->sum('amount');
         $totalamount_paid = $vehiclefines->sum('amount_paid');
 
@@ -993,7 +1040,7 @@ class VehicleReportsController extends Controller
 
         $data['total'] = $total;
         $data['totalamount_paid'] = $totalamount_paid;
-        $data['vehicledetail'] = $vehicledetail;
+      //  $data['vehicledetail'] = $vehicledetail;
         $data['fineType'] = $fineType;
         $data['status'] = $status;
         $data['vehiclefines'] = $vehiclefines;
@@ -1014,14 +1061,13 @@ class VehicleReportsController extends Controller
     public function vehicleServiceDetails(vehicle_detail $vehicleID)
     {
 
-
         $serviceDetails = DB::table('vehicle_serviceDetails')
             ->select('vehicle_serviceDetails.*')
             ->orderBy('vehicle_serviceDetails.id')
-            ->where('vehicleID', $vehicleID->id)
+        //   ->where('vehicleID', $vehicleID->id)
             ->get();
 
-        //return $serviceDetails;
+        return $serviceDetails;
 
         $totalamount_paid = $serviceDetails->sum('total_cost');
 

@@ -18,8 +18,7 @@
                     {{ csrf_field() }}
 
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Fines Report -
-                            for {{$vehicledetail->vehicle_make . ' ' . $vehicledetail->vehicle_model }} </h3>
+                        <h3 class="box-title">Vehicle Fines Report</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i></button>
@@ -44,6 +43,7 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
+                                <th style="width: 10px"></th>
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Reference</th>
@@ -58,7 +58,7 @@
                             <tbody>
                             @foreach($vehiclefines as $fine)
                                 <tr>
-
+                                    <td>{{ (!empty($fine->VehicleMake) ) ? $fine->VehicleMake." ".$fine->VehicleModel." ".$fine->vehicletypes." ".$fine->vehicle_registration : ''}}</td>
                                     <td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
                                     <td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
                                     <td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
@@ -75,6 +75,7 @@
                             </tbody>
                             <tfoot>
                             <tr>
+                                <th style="width: 10px"></th>
                                 <th> Date</th>
                                 <th>Time</th>
                                 <th>Reference</th>
@@ -89,11 +90,21 @@
                             <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
                             <class
                             ="caption">
+                            <td style="text-align: right" nowrap></td>
                             <td colspan="6" style="text-align:right">Total</td>
                             <td style="text-align: right">{{number_format($total, 2) }}</td>
                             <td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>
                             <td style="text-align: right" nowrap></td>
                         </table>
+                            <div class="box-footer">
+
+                                <div class="row no-print">
+                                    <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                                class="fa fa-arrow-left"></i> Back to Search Page
+                                    </button>
+                                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
+                                </div>
+                            </div>
                     </div>
                     <!-- /.box-body -->
 
@@ -143,7 +154,10 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-
+            //Cancel button
+            $('#cancel').click(function () {
+                location.href = "/vehicle_management/vehicle_reports";
+            });
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -157,10 +171,7 @@
                 "autoWidth": true
             });
 
-            //Cancel button
-            $('#cancel').click(function () {
-                location.href = '/users/users-access';
-            });
+
 
             //Vertically center modals on page
             function reposition() {

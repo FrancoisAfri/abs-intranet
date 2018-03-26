@@ -237,8 +237,8 @@
 		{
 			if (type == 1)	$('#report_form').attr('action', '/vehicle_management/booking_report');
 			else if (type == 2) $('#report_form').attr('action', '/vehicle_management/fuel_report');
-			else if (type == 3) $('#report_form').attr('action', '/activity/search');
-			else if (type == 4) $('#report_form').attr('action', '/activity/search');
+			else if (type == 3) $('#report_form').attr('action', '/vehicle_management/fine_report');
+			else if (type == 4) $('#report_form').attr('action', '/vehicle_management/report_services');
 			else if (type == 5) $('#report_form').attr('action', '/activity/search');
 			else if (type == 6) $('#report_form').attr('action', '/activity/search');
 			else if (type == 7) $('#report_form').attr('action', '/activity/search');
@@ -257,10 +257,11 @@
 		} else if (levID == 2) {
 			$('.dest-field').hide();
 			//$('.neg-field').hide();
-		} else if (levID == 5) {
-			$('.Sick-field').hide();
-			$('.neg-field').show();
-		}
+		} else if (levID == 3) {
+            $('.dest-field').hide();
+		}else if (levID == 4) {
+            $('.dest-field').hide();
+        }
 		}
     </script>
 @endsection
