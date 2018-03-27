@@ -64,7 +64,6 @@ class VehicleReportsController extends Controller
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
 
 
-
         $vehicledetail = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
@@ -726,7 +725,7 @@ class VehicleReportsController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        return $vehiclebookings;
+        // return $vehiclebookings;
 
         for ($i = 0; $i < count($vehicleArray); $i++) {
             $vehicle .= $vehicleArray[$i] . ',';
@@ -820,9 +819,13 @@ class VehicleReportsController extends Controller
         $data['active_rib'] = 'Reports';
 
         $user = Auth::user()->load('person');
-        $companyDetails = CompanyIdentity::first();
-        $data['company_name'] = $companyDetails->full_company_name;
-        $logo = $companyDetails->company_logo;
+        $companyDetails = CompanyIdentity::systemSettings();
+        //return $companyDetails;
+        $companyname = $companyDetails['full_company_name'];
+        $companylogo = $companyDetails['company_logo_url'];
+
+        $data['company_name'] = $companyname;
+        $logo = $companylogo;
         $data['company_logo'] = url('/') . Storage::disk('local')->url("logos/$logo");
         $data['date'] = date("d-m-Y");
         $data['user'] = $user;
@@ -906,6 +909,87 @@ class VehicleReportsController extends Controller
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.fuellog_results')->with($data);
+    }
+
+    public function fuelReportPrint(Request $request)
+    {
+        $reportData = $request->all();
+        unset($reportData['_token']);
+        $actionFrom = $actionTo = 0;
+
+        $vehicleArray = isset($reportData['vehicle_id']) ? intval($reportData['vehicle_id']) : 0;
+
+
+        $reportType = $reportData['report_type'];
+        $vehicleType = $reportData['vehicle_type'];
+        $driverID = $reportData['driver_id'];
+        $actionDate = $request['action_date'];
+
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+        $fuelLog = DB::table('vehicle_fuel_log')
+            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status', 'vehicle_fuel_log.id as fuelLogID', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel', 'vehicle_managemnet.name as vehicletypes', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+            ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
+            ->where(function ($query) use ($vehicleType) {
+                if (!empty($vehicleType)) {
+                    $query->where('vehicle_type', $vehicleType);
+                }
+            })
+            ->where(function ($query) use ($driverID) {
+                if (!empty($driverID)) {
+                    $query->where('driver', $driverID);
+                }
+            })
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->Where(function ($query) use ($vehicleArray) {
+                for ($i = 0; $i < count($vehicleArray); $i++) {
+                    $vehicle = $vehicleArray[$i] . ',';
+                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
+                }
+            })
+            //->orderBy('vehicle_id', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        //return $fuelLog;
+
+        $data['fuelLog'] = $fuelLog;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.fuel_report_print')->with($data);
+
     }
 
     public function jobcard()
@@ -1055,6 +1139,100 @@ class VehicleReportsController extends Controller
         return view('Vehicles.Reports.finelog_results')->with($data);
     }
 
+     public function fineReportPrint(Request $request)
+    {
+        $reportData = $request->all();
+        unset($reportData['_token']);
+        $actionFrom = $actionTo = 0;
+
+        $vehicleArray = isset($reportData['vehicle_id']) ? intval($reportData['vehicle_id']) : 0;
+
+        $reportType = $reportData['report_type'];
+        $vehicleType = $reportData['vehicle_type'];
+        $driverID = $reportData['driver_id'];
+        $actionDate = $request['action_date'];
+        //$Destination = $request['destination'];
+        //$Purpose = $request['purpose'];
+
+
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+        $vehiclefines = DB::table('vehicle_fines')
+            ->select('vehicle_fines.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype',
+                'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel', 'vehicle_managemnet.name as vehicletypes', 'hr_people.first_name as firstname',
+                'hr_people.surname as surname', 'vehicle_details.vehicle_registration as vehicle_registration')
+            ->leftJoin('vehicle_details', 'vehicle_fines.vehicleID', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
+            ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
+            ->where(function ($query) use ($vehicleType) {
+                if (!empty($vehicleType)) {
+                    $query->where('vehicle_type', $vehicleType);
+                }
+            })
+            ->where(function ($query) use ($driverID) {
+                if (!empty($driverID)) {
+                    $query->where('driver', $driverID);
+                }
+            })
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->Where(function ($query) use ($vehicleArray) {
+                for ($i = 0; $i < count($vehicleArray); $i++) {
+                    $vehicle = $vehicleArray[$i] . ',';
+                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
+                }
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+
+        $total = $vehiclefines->sum('amount');
+        $totalamount_paid = $vehiclefines->sum('amount_paid');
+
+        $fineType = array(1 => 'Speeding', 2 => 'Parking', 3 => 'Moving Violation', 4 => 'Expired Registration', 5 => 'No Drivers Licence', 6 => 'Other');
+
+        $status = array(1 => 'Captured', 2 => 'Fine Queried', 3 => 'Fine Revoked', 4 => 'Fine Paid');
+
+        $data['total'] = $total;
+        $data['totalamount_paid'] = $totalamount_paid;
+        $data['fineType'] = $fineType;
+        $data['status'] = $status;
+        $data['vehiclefines'] = $vehiclefines;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.fine_report_print')->with($data);
+
+      }
+
     public function vehicleServiceDetails(Request $request)
     {
 
@@ -1088,7 +1266,83 @@ class VehicleReportsController extends Controller
             ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
-            //  ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
+            ->where(function ($query) use ($vehicleType) {
+                if (!empty($vehicleType)) {
+                    $query->where('vehicle_type', $vehicleType);
+                }
+            })
+            ->where(function ($query) use ($driverID) {
+                if (!empty($driverID)) {
+                    $query->where('driver', $driverID);
+                }
+            })
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->Where(function ($query) use ($vehicleArray) {
+                for ($i = 0; $i < count($vehicleArray); $i++) {
+                    $vehicle = $vehicleArray[$i] . ',';
+                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
+                }
+            })
+            ->get();
+
+        $serviceDetails = $serviceDetail->unique('id');;
+
+
+        $totalamount_paid = $serviceDetails->sum('total_cost');
+
+
+        $data['serviceDetails'] = $serviceDetails;
+        $data['totalamount_paid'] = $totalamount_paid;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.Servicedetailslog_results')->with($data);
+    }
+
+    public function ServiceReportPrint(Request $request){
+        $reportData = $request->all();
+        unset($reportData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $vehicle = '';
+        $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
+        $reportID = $reportData['report_id'];
+        $reportType = $reportData['report_type'];
+        $vehicleType = $reportData['vehicle_type'];
+        $licenceType = $reportData['licence_type'];
+        $driverID = $reportData['driver_id'];
+        $actionDate = $request['action_date'];
+        $Destination = $request['destination'];
+        $Purpose = $request['purpose'];
+
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+
+        $serviceDetail = DB::table('vehicle_serviceDetails')
+            ->select('vehicle_serviceDetails.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel',
+                'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel',
+                'vehicle_details.vehicle_registration as vehicle_registration')
+            ->leftJoin('vehicle_details', 'vehicle_serviceDetails.vehicleID', '=', 'vehicle_details.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
                     $query->where('vehicle_type', $vehicleType);
@@ -1130,8 +1384,19 @@ class VehicleReportsController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
 
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+
         AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-        return view('Vehicles.Reports.Servicedetailslog_results')->with($data);
+        return view('Vehicles.Reports.service_report_print')->with($data);
     }
 
     public function vehicleIncidentsDetails(Request $request)
@@ -1241,7 +1506,6 @@ class VehicleReportsController extends Controller
         }
 
 
-
         $vehicledetails = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
@@ -1276,7 +1540,7 @@ class VehicleReportsController extends Controller
 
         $status = array(1 => '   Unleaded', 2 => 'Lead replacement', 3 => 'Diesel');
 
-       // return $vehicledetails;
+        // return $vehicledetails;
 
         $data['vehicledetails'] = $vehicledetails;
         $data['status'] = $status;
