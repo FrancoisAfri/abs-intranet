@@ -132,17 +132,8 @@ class HelpdeskController extends Controller {
 			$helpdeskSetup = helpDesk_setup::where('helpdesk_id', $service->id)->first();
 			$autoEscalationSettings = auto_escalation_settings::where('helpdesk_id', $service->id)->first();
 			$unresolvedTicketsSettings = unresolved_tickets_settings::where('helpdesk_id', $service->id)->first();
-		   $counRow = autoRensponder::count();
 
-			if ($counRow ==  0) {
-            $autRensponder = new autoRensponder();
-            $autRensponder->save();
-            }
-			else{
-                $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();  
-            }
-
-            $autoRensponder = autoRensponder::orderBy('id', 'des')->get()->first();  
+            $autoRensponder = autoRensponder::where('helpdesk_id',$serviceID)->orderBy('id', 'des')->get()->first();  
              
             $settings = system_email_setup::orderBy('id', 'des')->get()->first();  
                 
@@ -152,8 +143,9 @@ class HelpdeskController extends Controller {
                          ->where('operator.helpdesk_id', $serviceID)
                         ->orderBy('operator.operator_id')
                         ->get();
-
-            $HelpdeskAdmin = DB::table('helpdesk_Admin')
+			$unresolved_tickets_settings = unresolved_tickets_settings::where('helpdesk_id',$serviceID)->first();
+           //return $unresolved_tickets_settings;
+			$HelpdeskAdmin = DB::table('helpdesk_Admin')
                   ->select('helpdesk_Admin.*','hr_people.first_name as firstname','hr_people.surname as surname')
                   ->leftJoin('hr_people', 'helpdesk_Admin.admin_id', '=', 'hr_people.id')
                   ->where('helpdesk_Admin.helpdesk_id', $serviceID)
@@ -175,6 +167,7 @@ class HelpdeskController extends Controller {
              $data['serviceName'] = $serviceName;    
              $data['service'] = $service;
              $data['description'] = $description;
+             $data['unresolved_tickets_settings'] = $unresolved_tickets_settings;
              $data['operators'] = $operators;
             // $data['$description'] = 'description';
              $data['page_title'] = "View Help Desk  ($serviceName) " ;
@@ -285,7 +278,7 @@ class HelpdeskController extends Controller {
         if (!empty($helpdeskTickets))
             $helpdeskTickets->load('ticket');
 
-        helpdeskTickets
+        //helpdeskTickets
 
         $systems = HelpDesk::orderBy('name', 'asc')->get();
 
@@ -399,9 +392,10 @@ class HelpdeskController extends Controller {
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
-        //return $SysData;
+		//return $SysData;
         $service->tickets_low = $request->input('tickets_low');
+        $service->tickets_critical = $request->input('tickets_critical');
+        $service->critical_oficehrs = $request->input('critical_oficehrs');
         $service->low_ah = $request->input('low_ah');
         $service->esc_low_email = $request->input('esc_low_email');
         $service->esc_low_sms = $request->input('esc_low_sms');
@@ -428,6 +422,7 @@ class HelpdeskController extends Controller {
         $service->aftoffice_hrs_critical_sms = $request->input('aftoffice_hrs_critical_sms');
 		$service->helpdesk_id = $request->input('helpdesk_id');
         $service->save();
+		//return $service;
         return back();
     }
 
