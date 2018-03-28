@@ -334,7 +334,7 @@
                     <i class="fa fa-anchor pull-right"></i>
                        <h3 class="box-title">Notify Managers on unresolved tickets</h3>
                 </div>
-                <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($unresolvedTicketsSettings->id) ? '/help_desk/unresolved_tickets/'.$unresolvedTicketsSettings->id : '/help_desk/unresolved_tickets'}}">
+                <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($unresolved_tickets_settings->id) ? '/help_desk/unresolved_tickets/'.$unresolved_tickets_settings->id : '/help_desk/unresolved_tickets'}}">
 						<input type="hidden" name="helpdesk_id" id="helpdesk_id" value="{{ $serviceID }}"/>                   
 						{{ csrf_field() }}
 
@@ -350,94 +350,57 @@
 							</tr>
 							<tr id="modules-list">
 								<td>Low </td>
-								<td><input type="text" size="2" name="tickets_low" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
-								<td style="text-align:center;"><input type="checkbox" name="low_ah" value="1"></td>
+								<td><input type="text" size="2" name="tickets_low" value="{{!empty($unresolved_tickets_settings->tickets_low) ? $unresolved_tickets_settings->tickets_low : '' }}"></td>
+								<td style="text-align:center;"><input type="checkbox" name="low_ah" value="1" {{ !empty($unresolved_tickets_settings->low_ah) && $unresolved_tickets_settings->low_ah == 1 ? "checked='checked'" : '' }}></td>
 								<td>
-									<input type="checkbox" name="esc_low_email" value="1"> Email
-									<input type="checkbox" name="esc_low_sms" value="1"> SMS
+									<input type="checkbox" name="esc_low_email" value="1" {{ !empty($unresolved_tickets_settings->esc_low_email) && $unresolved_tickets_settings->esc_low_email == 1 ? "checked='checked'" : '' }}> Email
+									<input type="checkbox" name="esc_low_sms" value="1" {{ !empty($unresolved_tickets_settings->esc_low_sms) && $unresolved_tickets_settings->esc_low_sms == 1 ? "checked='checked'" : '' }}> SMS
 								</td>
 								<td>
-									<input type="checkbox" name="aftoffice_hrs_low_email" value="1"> Email
-									<input type="checkbox" name="aftoffice_hrs_low_sms" value="1"> SMS
+									<input type="checkbox" name="aftoffice_hrs_low_email" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_low_email) && $unresolved_tickets_settings->aftoffice_hrs_low_email == 1 ? "checked='checked'" : '' }}> Email
+									<input type="checkbox" name="aftoffice_hrs_low_sms" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_low_sms) && $unresolved_tickets_settings->aftoffice_hrs_low_sms == 1 ? "checked='checked'" : '' }}> SMS
 								</td>
-							  
 							</tr>
 							<tr id="modules-list">
 								<td>Normal </td>
-								<td><input type="text" size="2" name="tickets_normal" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
-								<td style="text-align:center;"><input type="checkbox" name="normal_oficehrs" value="1"></td>
+								<td><input type="text" size="2" name="tickets_normal" value="{{!empty($unresolved_tickets_settings->tickets_normal) ? $unresolved_tickets_settings->tickets_normal : '' }}"></td>
+								<td style="text-align:center;"><input type="checkbox" name="normal_oficehrs" value="1" {{ !empty($unresolved_tickets_settings->normal_oficehrs) && $unresolved_tickets_settings->normal_oficehrs == 1 ? "checked='checked'" : '' }}></td>
 								<td>       
-									<input type="checkbox" name="office_hrs_normal_email" value="1"> Email
-									<input type="checkbox" name="office_hrs_normal_sms" value="1"> SMS
+									<input type="checkbox" name="office_hrs_normal_email" value="1" {{ !empty($unresolved_tickets_settings->office_hrs_normal_email) && $unresolved_tickets_settings->office_hrs_normal_email == 1 ? "checked='checked'" : '' }}> Email
+									<input type="checkbox" name="office_hrs_normal_sms" value="1" {{ !empty($unresolved_tickets_settings->office_hrs_normal_sms) && $unresolved_tickets_settings->office_hrs_normal_sms == 1 ? "checked='checked'" : '' }}> SMS
 								</td>
 								<td>
-									<input type="checkbox" name="aftoffice_hrs_nomal_email" value="1"> Email
-									<input type="checkbox" name="aftoffice_hrs_nomal_sms" value="1"> SMS
+									<input type="checkbox" name="aftoffice_hrs_nomal_email" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_nomal_email) && $unresolved_tickets_settings->aftoffice_hrs_nomal_email == 1 ? "checked='checked'" : '' }}> Email
+									<input type="checkbox" name="aftoffice_hrs_nomal_sms" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_nomal_sms) && $unresolved_tickets_settings->aftoffice_hrs_nomal_sms == 1 ? "checked='checked'" : '' }}> SMS
 								</td>
 							</tr>
-
 							<tr id="modules-list">
 								<td>High </td>
-								<td><input type="text" size="2" name="tickets_high" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
-								 <input type="hidden" class="checkbox selectall"  name="high_oficehrs" value="0">
-								<td style="text-align:center;"><div class="sms"><input type="checkbox" name="high_oficehrs" value="1"></div></td>
-								  <td>
-										   <!--  <div ><input type="checkbox" name="esc_high_email">Email </div> 
-											<div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
-											<!--  -->
-											 <input type="hidden" class="checkbox selectall"  name="office_hrs_high_email" value="0">
-											 <div class="sms"><input type="checkbox" name="office_hrs_high_email" value="1"> Email</div>
-
-										  <input type="hidden" class="checkbox selectall"  name="office_hrs_high_sms" value="0">
-										  <div class="sms"><input type="checkbox" name="office_hrs_high_sms" value="1"> SMS</div>
-
-										  </td>
-										  <td>
-										  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_email" value="0">
-										 <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_email" value="1"> Email</div>
-
-										  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_high_sms" value="0">
-										  <div class="sms"><input type="checkbox" name="aftoffice_hrs_high_sms" value="1"> SMS</div>
-											<!--  -->
-										   <!--  <div ><input type="checkbox" name="esc_low_email">Email </div> 
-											<div class="sms"><input type="checkbox" name="esc_high_email"> SMS</div> -->
-										  </td>
+								<td><input type="text" size="2" name="tickets_high" value="{{!empty($unresolved_tickets_settings->tickets_high) ? $unresolved_tickets_settings->tickets_high : '' }}"></td>
+								<td style="text-align:center;"><input type="checkbox" name="high_oficehrs" value="1" {{ !empty($unresolved_tickets_settings->high_oficehrs) && $unresolved_tickets_settings->high_oficehrs == 1 ? "checked='checked'" : '' }}></td>
+								<td>
+									<input type="checkbox" name="office_hrs_high_email" value="1" {{ !empty($unresolved_tickets_settings->office_hrs_high_email) && $unresolved_tickets_settings->office_hrs_high_email == 1 ? "checked='checked'" : '' }}> Email
+									<input type="checkbox" name="office_hrs_high_sms" value="1" {{ !empty($unresolved_tickets_settings->office_hrs_high_sms) && $unresolved_tickets_settings->office_hrs_high_sms == 1 ? "checked='checked'" : '' }}> SMS
+								</td>
+								<td>
+									<input type="checkbox" name="aftoffice_hrs_high_email" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_high_email) && $unresolved_tickets_settings->aftoffice_hrs_high_email == 1 ? "checked='checked'" : '' }}> Email
+									<input type="checkbox" name="aftoffice_hrs_high_sms" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_high_sms) && $unresolved_tickets_settings->aftoffice_hrs_high_sms == 1 ? "checked='checked'" : '' }}> SMS
+								</td>
 							</tr>
-
                      <tr id="modules-list">
-                      
                         <td>Critical </td>
-                        <td><input type="text" size="2" name="tickets_critical" value="{{!empty($autoEscalationSettings->auto_low) ? $autoEscalationSettings->auto_low : '' }}"></td>
-                        <!--  <input type="hidden" class="checkbox selectall"  name="critical_oficehrs" value="0"> -->
+                        <td><input type="text" size="2" name="tickets_critical" value="{{!empty($unresolved_tickets_settings->tickets_critical) ? $unresolved_tickets_settings->tickets_critical : '' }}"></td>
+                        <td style="text-align:center;"><input type="checkbox" name="critical_oficehrs" value="1" {{ !empty($unresolved_tickets_settings->critical_oficehrs) && $unresolved_tickets_settings->critical_oficehrs == 1 ? "checked='checked'" : '' }}></td>
+                        <td>
+							<input type="checkbox" name="office_hrs_critical_email" value="1" {{ !empty($unresolved_tickets_settings->office_hrs_critical_email) && $unresolved_tickets_settings->office_hrs_critical_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="office_hrs_critical_sms" value="1" {{ !empty($unresolved_tickets_settings->office_hrs_critical_sms) && $unresolved_tickets_settings->office_hrs_critical_sms == 1 ? "checked='checked'" : '' }}> SMS
 
-                          <input type="hidden" class="checkbox selectall"  name="critical_oficehrs" value="0">
-                        <td style="text-align:center;"><div class="sms"><input type="checkbox" name="critical_oficehrs" value="1"></div></td>
-                        <!--  <td style="text-align:center;"><input type="checkbox" name="low_ah"></td> -->
-                        
-                         <td>
-                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_critical_email"> SMS</div> -->
-                                    <!--  -->
-                                     <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_email" value="0">
-                                     <div class="sms"><input type="checkbox" name="office_hrs_critical_email" value="1"> Email</div>
-
-                                      <input type="hidden" class="checkbox selectall"  name="office_hrs_critical_sms" value="0">
-                                     <div class="sms"><input type="checkbox" name="office_hrs_critical_sms" value="1"> SMS</div>
-
-                                  </td>
-                                  <td>
-                                    <!-- <div ><input type="checkbox" name="esc_low_email">Email </div> 
-                                    <div class="sms"><input type="checkbox" name="esc_critical_email"> SMS</div> -->
-                                    <!--  -->
-                                    <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_email" value="0">
-                                 <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_email" value="1"> Email</div>
-
-                                  <input type="hidden" class="checkbox selectall"  name="aftoffice_hrs_critical_sms" value="0">
-                                  <div class="sms"><input type="checkbox" name="aftoffice_hrs_critical_sms" value="1"> SMS</div>
-
-                                  </td>
+						</td>
+                        <td>
+                            <input type="checkbox" name="aftoffice_hrs_critical_email" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_critical_email) && $unresolved_tickets_settings->aftoffice_hrs_critical_email == 1 ? "checked='checked'" : '' }}> Email
+							<input type="checkbox" name="aftoffice_hrs_critical_sms" value="1" {{ !empty($unresolved_tickets_settings->aftoffice_hrs_critical_sms) && $unresolved_tickets_settings->aftoffice_hrs_critical_sms == 1 ? "checked='checked'" : '' }}> SMS
+						</td>
                     </tr>
-                    
             </table>
                          
                     <!-- /.box-body -->
