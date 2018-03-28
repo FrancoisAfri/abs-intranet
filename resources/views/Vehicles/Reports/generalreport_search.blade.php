@@ -24,7 +24,7 @@
                     <!-- audits -->
                     {{ csrf_field() }}
 
-                    <div class="box-body">
+                    <div class="box-body" id="vehicle_details">
 
                         <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
                             <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
@@ -94,33 +94,26 @@
                             </div>
                         </div>
 
-                        <div class="form-group detail-field {{ $errors->has('licence_type') ? ' has-error' : '' }}">
-                            <label for="path" class="col-sm-2 control-label">Company</label>
-                            <div class="col-sm-8">
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="vehicle_type" name="vehicle_type">
-                                    <option value="">*** Select a Company ***</option>
-                                    @foreach($ContactCompany as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
-                                    @endforeach
-                                </select>
+                        @foreach($division_levels as $division_level)
+                            <div class="form-group  detail-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                <label for="{{ 'division_level_' . $division_level->level }}"
+                                       class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-black-tie"></i>
+                                        </div>
+                                        <select id="{{ 'division_level_' . $division_level->level }}"
+                                                name="{{ 'division_level_' . $division_level->level }}"
+                                                class="form-control"
+                                                onchange="divDDOnChange(this, null, 'vehicle_details')">
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
 
-                        <div class="form-group licence-field {{ $errors->has('licence_type') ? ' has-error' : '' }}">
-                            <label for="licence_type" class="col-sm-2 control-label">Licence Type</label>
-                            <div class="col-sm-8">
-
-                                <select class="form-control select2" style="width: 100%;" id="licence_type"
-                                        name="licence_type">
-                                    <option value="">*** Select an Licence Type ***</option>
-                                    @foreach($licence as $licencetype)
-                                        <option value="{{ $licencetype->id }}">{{ $licencetype->name}}</option>
-                                    @endforeach
-                                </select>
-
-                            </div>
-                        </div>
                         <div class="form-group {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
                             <label for="vehicle_id" class="col-sm-2 control-label">Vehicle </label>
                             <div class="col-sm-8">
@@ -302,5 +295,38 @@
 
 
         }
+
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
+
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        var parentContainer = $('#add-vehicledetails-modal');
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, 0, 0, parentContainer);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
     </script>
 @endsection
