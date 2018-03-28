@@ -1,47 +1,28 @@
 @extends('layouts.main_layout')
-
 @section('page_dependencies')
-    <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
-    <!-- DataTables -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
-
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-md-offset-0">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/System/policy/update_status">
-                    {{ csrf_field() }}
-
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Fuel Report </h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                        class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
-                                        class="fa fa-remove"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        @if (count($errors) > 0)
-                            <div class="alert alert-danger alert-dismissible fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
-                                </button>
-                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        <table id="emp-list-table" class="table table-bordered table-striped table-hover">
-                            <thead>
+                <div class="box-header with-border">
+                    <i class="fa fa-truck pull-right"></i>
+                    <h3 class="box-title">Fleet Fuel Report</h3>
+                </div>
+                <div class="box-body">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div style="overflow-X:auto;">
+                            <form class="form-horizontal" method="POST" action="/fleet/reports/fuel/print">
+                                <input type="hidden" name="vehicle_id" value="{{!empty($vehicle_id) ? $vehicle_id : 0}}">
+                                <input type="hidden" name="report_type" value="{{!empty($report_type) ? $report_type : ''}}">
+                                <input type="hidden" name="vehicle_type" value="{{!empty($vehicle_type) ? $vehicle_type : ''}}">
+                                <input type="hidden" name="driver_id" value="{{!empty($driver_id) ? $driver_id : ''}}">
+                                <input type="hidden" name="action_date" value="{{!empty($action_date) ? $action_date : ''}}">               
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
                             <tr>
                                 <th>Vehicle</th>
                                 <th>Date</th>
@@ -87,55 +68,45 @@
                                 <th>Rate per Litre</th>
                             </tr>
                             </tfoot>
-                        </table>
-                            <div class="box-footer">
-
-                                <div class="row no-print">
-                                    <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                                class="fa fa-arrow-left"></i> Back to Search Page
-                                    </button>
-                                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
+                                </table>
+                                <div class="box-footer">
+                                    
+                                    <div class="row no-print">
+                                        <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                                    class="fa fa-arrow-left"></i> Back to Search Page
+                                        </button>
+                                            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
-                    <!-- /.box-body -->
+                @endsection
 
-                </form>
-            </div>
-        </div>
+                @section('page_script')
+                    <!-- DataTables -->
+                        <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+                        <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+                        <!-- End Bootstrap File input -->
+                        <script>
+                            function postData(id, data) {
+                                if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
+                            }
 
-    </div>
-@endsection
+                            //Cancel button click event
+                            document.getElementById("cancel").onclick = function () {
+                                location.href = "/vehicle_management/vehicle_reports";
+                            };
+                            $(function () {
+                                $('#example2').DataTable({
+                                    "paging": true,
+                                    "lengthChange": true,
+                                    "searching": true,
+                                    "ordering": true,
+                                    "info": true,
+                                    "autoWidth": true
+                                });
+                            });
 
-@section('page_script')
-    <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-    <!-- End Bootstrap File input -->
-    <script>
-        $(function () {
-
-            //Tooltip
-            $('[data-toggle="tooltip"]').tooltip();
-
-            //Initialize the data table
-            $('#emp-list-table').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": true
-            });
-
-            //Cancel button
-            $('#cancel').click(function () {
-                location.href = "/vehicle_management/vehicle_reports";
-            });
-
-            //Show success action modal
-            @if(Session('changes_saved'))
-            $('#success-action-modal').modal('show');
-            @endif
-        });
-    </script>
+                        </script>
 @endsection

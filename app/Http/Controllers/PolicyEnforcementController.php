@@ -554,8 +554,7 @@ class PolicyEnforcementController extends Controller
             ->orderBy('policy_users.id')
             ->get();
 
-          //  return $Policies;
-
+           
         $PolicyID = $Policies->first()->policy_id;
         $Policy = Policy::where('id', $PolicyID)->first();
 
