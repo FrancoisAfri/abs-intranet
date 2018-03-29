@@ -78,7 +78,7 @@
                                                value="1" {{$policy->read_understood === 1 ? 'checked ="checked"' : 0 }}>
                                     </td>
                                     <td style="vertical-align: middle;"
-                                        nowrap>{{ (!empty( $policy->firstname . ' ' . $policy->firstname)) ? $policy->firstname . ' ' . $policy->firstname : ''}}</td>
+                                        nowrap>{{ (!empty( $policy->firstname . ' ' . $policy->surname)) ? $policy->firstname . ' ' . $policy->surname : ''}}</td>
 
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->company )) ? $policy->company : ''}}</td>
