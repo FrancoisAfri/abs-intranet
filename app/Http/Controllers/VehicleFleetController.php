@@ -18,6 +18,7 @@ use App\safe;
 Use App\reminders;
 use App\HRPerson;
 use App\tank;
+use App\vehicle_documets;
 use App\images;
 use App\incident_type;
 use App\vehicle_fuel_log;
@@ -63,11 +64,22 @@ class VehicleFleetController extends Controller
 
         $ID = $maintenance->id;
 
-        $vehicleDocumets = DB::table('vehicle_documets')
-            ->select('vehicle_documets.*')
-            ->orderBy('vehicle_documets.id')
-            ->where('vehicleID', $ID)
-            ->get();
+        $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID
+        )->get();
+         $Expdate = $vehicleDocumets->first()->exp_date;
+         return $Expdate;
+       
+
+        $currentTime = time();
+
+        //   if (empty($vehicleDocumets))
+        //    $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID)->get();
+        //    $Expdate = $vehicleDocumets->first()->expiry_type;
+        // else
+        //     $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID)->get();
+
+         return $vehicleDocumets;
+        //expiry_type
 
 
         $data['page_title'] = " View Fleet Details";

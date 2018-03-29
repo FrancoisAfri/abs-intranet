@@ -537,6 +537,8 @@ Route::post('vehicle_management/add_new_document', 'FleetManagementController@ne
 Route::get('vehicle_management/document/{documents}/delete', 'FleetManagementController@deleteDoc');
 Route::patch('vehicle_management/edit_vehicledoc/{vehicledocumets}', 'FleetManagementController@editVehicleDoc');
 
+Route::get('vehicle_management/vehicledoc_act/{documents}', 'FleetManagementController@ActivateDoc');
+
 Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@viewnotes');
 Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
 Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote');
@@ -571,6 +573,7 @@ Route::post('vehicle_management/fine_report', 'VehicleReportsController@vehicleF
 Route::post('vehicle_management/report_services', 'VehicleReportsController@vehicleServiceDetails');
 Route::post('vehicle_management/report_incidents', 'VehicleReportsController@vehicleIncidentsDetails');
 Route::post('vehicle_management/report_vehicle_details', 'VehicleReportsController@vehiclesDetails');
+Route::post('vehicle_management/report_expiry_documents', 'VehicleReportsController@vehiclesExpiry_documents');
 Route::post('fleet/reports/booking/print', 'VehicleReportsController@bookingReportsPrint');
 Route::post('fleet/reports/fuel/print', 'VehicleReportsController@fuelReportPrint');
 Route::post('fleet/reports/fine/print', 'VehicleReportsController@fineReportPrint');

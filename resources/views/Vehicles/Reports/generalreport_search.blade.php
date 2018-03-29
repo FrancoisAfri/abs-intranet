@@ -57,12 +57,12 @@
                                     <option value="4">Service</option>
                                     <option value="5">Incidents</option>
                                     <option value="6">Vehicle Details</option>
-                                    <option value="7">Vehicle Contract</option>
+                                    {{--<option value="7">Vehicle Contract</option>--}}
                                     <option value="8">Expired Documents</option>
                                     <option value="9">External Diesel Log</option>
                                     <option value="10">Internal Diesel Log</option>
                                     <option value="11">Diesel Log</option>
-                                    {{--<option value="12" >Incidents</option>--}}
+                                    {{--<option value="12" >Incidents</option>--}}k
                                     <option value="13">Alerts Report</option>
                                 </select>
                             </div>
@@ -262,8 +262,8 @@
             else if (type == 4) $('#report_form').attr('action', '/vehicle_management/report_services');
             else if (type == 5) $('#report_form').attr('action', '/vehicle_management/report_incidents');
             else if (type == 6) $('#report_form').attr('action', '/vehicle_management/report_vehicle_details');
-            else if (type == 7) $('#report_form').attr('action', '/activity/search');
-            else if (type == 8) $('#report_form').attr('action', '/activity/search');
+            else if (type == 7) $('#report_form').attr('action', '/vehicle_management/search');
+            else if (type == 8) $('#report_form').attr('action' ,'/vehicle_management/report_expiry_documents');
             else if (type == 9) $('#report_form').attr('action', '/activity/search');
             else if (type == 10) $('#report_form').attr('action', '/activity/search');
             else if (type == 11) $('#report_form').attr('action', '/activity/search');
@@ -291,6 +291,9 @@
             } else if (levID == 6) {
                 $('.dest-field').hide();
                 $('.detail-field').show();
+            }else if (levID == 8) {
+                $('.dest-field').hide();
+                $('.detail-field').hide();
             }
 
 

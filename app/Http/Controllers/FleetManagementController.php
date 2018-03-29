@@ -846,7 +846,6 @@ class FleetManagementController extends Controller
 
         $currentDate = time();
 
-
         $vehicledocumets = new vehicle_documets();
         $vehicledocumets->type = !empty($SysData['type']) ? $SysData['type'] : 0;
         $vehicledocumets->description = $SysData['description'];
@@ -855,6 +854,8 @@ class FleetManagementController extends Controller
         $vehicledocumets->exp_date = $Expdate;
         $vehicledocumets->upload_date = $currentDate;
         $vehicledocumets->vehicleID = $SysData['valueID'];
+        $vehicledocumets->expiry_type = 0;
+        $vehicledocumets->status = 1;
         $vehicledocumets->save();
 
         //Upload supporting document
@@ -923,6 +924,20 @@ class FleetManagementController extends Controller
         AuditReportsController::store('Fleet Management', 'document  Deleted', "document has been deleted", 0);
         return back();
         //return redirect('/vehicle_management/document/$maintenance->id');
+    }
+
+    public function ActivateDoc(vehicle_documets $documents){
+
+        if ($documents->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $documents->status = $stastus;
+        $documents->update();
+
+        AuditReportsController::store('Fleet Management', 'Document Type Activate status', "Document status has been changed", 0);
+        return back();
     }
 
     public function newnotes(Request $request)

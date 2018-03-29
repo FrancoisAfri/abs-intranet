@@ -67,6 +67,7 @@
                             <th>Date Uploaded</th>
                             <th>Date From</th>
                             <th>Expiry Date</th>
+                            <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($vehicleDocumets) > 0)
@@ -100,6 +101,11 @@
                                     <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
                                     <td>{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
                                     <td>{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : '' }}</td>
+                                     <td>
+                                        <button vehice="button" id="view_ribbons" class="btn {{ (!empty($document->status) && $document->status == 1) ? " btn-danger " : "btn-success " }}
+                                          btn-xs" onclick="postData({{$document->id}}, 'actdeac');"><i class="fa {{ (!empty($document->status) && $document->status == 1) ?
+                                          " fa-times " : "fa-check " }}"></i> {{(!empty($document->status) && $document->status == 1) ? "De-Activate" : "Activate"}}</button>
+                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
                                                 data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
@@ -174,7 +180,7 @@
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
             <script>
                 function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehice/fleetcard_act/" + id;
+                    if (data == 'actdeac') location.href = "/vehicle_management/vehicledoc_act/" + id;
 
                 }
 
