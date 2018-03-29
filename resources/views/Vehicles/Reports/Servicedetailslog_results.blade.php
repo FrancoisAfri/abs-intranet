@@ -27,7 +27,6 @@
                                 <input type="hidden" name="destination" value="{{!empty($destination) ? $destination : ''}}">
                                 <input type="hidden" name="purpose" value="{{!empty($purpose) ? $purpose : ''}}">
                                 <table id="example2" class="table table-bordered table-hover">
-
                                     <thead>
                                     <tr>
                                         <th style="width: 10px"></th>
