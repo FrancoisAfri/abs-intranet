@@ -1767,12 +1767,23 @@ class VehicleReportsController extends Controller
          }
 
 
+         // $Details = DB::table('vehicle_details')->get();
+         // return $Details;
+
+ 
+
+
+
         $vehicleDocumets = DB::table('vehicle_documets')
-            ->select('vehicle_documets.*','vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel','vehicle_details.vehicle_registration as vehicle_registration')
+            ->select('vehicle_documets.*','vehicle_details.vehicle_make as vehiclemake','vehicle_details.fleet_number as fleet_number'
+                ,'vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel','vehicle_details.vehicle_registration as vehicle_registration',
+                'division_level_fives.name as company', 'division_level_fours.name as Department')
             ->leftJoin('vehicle_details', 'vehicle_documets.vehicleID', '=', 'vehicle_details.id')
             ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
+            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
                     $query->where('vehicle_type', $vehicleType);
@@ -1796,7 +1807,8 @@ class VehicleReportsController extends Controller
             })
           //  ->where('vehicle_incidents.id','desc')
             ->get();
-           // return $vehicleDocumets;
+            
+            //return $vehicleDocumets;
 
 
          // permit licences
