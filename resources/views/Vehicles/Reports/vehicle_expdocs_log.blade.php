@@ -50,7 +50,8 @@
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                                 <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
                                                 <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
-                                                 <td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
+                                                <td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
+                                                <td bgcolor="red"> Expired </td>
 
                                             </tr>
                                         @endforeach
@@ -112,17 +113,17 @@
                                     @if (count($VehicleLicences) > 0)
                                         @foreach ($VehicleLicences as $filling)
                                             <tr id="categories-list">
-                                                <td nowrap>
-                                                    <button details="button" id="edit_compan"
-                                                            class="btn btn-warning  btn-xs"
-                                                            data-toggle="modal" data-target="#edit-fuelRecords-modal"
-                                                            data-id="{{ $filling->id }}"><i
-                                                                class="fa fa-pencil-square-o"></i> Edit
-                                                    </button>
-                                                </td>
-                                                <td>{{ (!empty( $filling->type)) ?  $status[$filling->type] : ''}} </td>
+                                        
                                                 <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
+                                                <td>{{ (!empty( $filling->VehicleMake)) ?  $filling->VehicleMake : ''}} </td>
+                                                <td>{{ (!empty( $filling->VehicleModel)) ?  $filling->VehicleModel : ''}} </td>
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
+                                                <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
+                                                <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
+                                                <td>{{ (!empty( $filling->supplier)) ?  $filling->supplier : ''}}</td>
+                                                <td>{{ (!empty( $filling->captured_by)) ?  $filling->captured_by : ''}} </td>
+                                                <td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
+                                                <td bgcolor="red"> Expired </td>
                                             </tr>
                                         @endforeach
                                     @endif

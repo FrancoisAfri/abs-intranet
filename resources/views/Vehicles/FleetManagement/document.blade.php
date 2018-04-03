@@ -74,7 +74,7 @@
                             @foreach ($vehicleDocumets as $document)
                                 <tr id="categories-list">
                                   
-                                     @if (isset($document) && $document->exp_date >= $currentTime)
+                                     @if (isset($document) && $document->exp_date < $currentTime)
                                        <td bgcolor="red" nowrap>
                                         <button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-newdoc-modal"

@@ -73,7 +73,7 @@
                                <tr id="categories-list">
                             
                                     
-                                      @if (isset($permit) && $permit->exp_date >= $currentdate)
+                                      @if (isset($permit) && $permit->exp_date < $currentdate)
                                       <td bgcolor="red" nowrap>
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
                                             data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
