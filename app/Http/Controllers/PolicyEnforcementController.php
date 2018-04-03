@@ -468,7 +468,6 @@ class PolicyEnforcementController extends Controller
 
     public function reports()
     {
-
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $policy = Policy::where('status', 1)->get();
         $data['page_title'] = "Policy Enforcement System";
@@ -657,6 +656,7 @@ class PolicyEnforcementController extends Controller
 
     public function viewpolicyUsers(Request $request)
     {
+		
         $results = $request->all();
         unset($results['_token']);
         unset($results['emp-list-table_length']);

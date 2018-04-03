@@ -422,7 +422,7 @@
                     <i class="fa fa-anchor pull-right"></i>
                     <h3 class="box-title">Auto-responder messages</h3>
                 </div>
-                  <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/auto_responder_messages">
+                  <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/auto_responder_messages {{!empty($unresolved_tickets_settings->id) ? '/help_desk/unresolved_tickets/'.$unresolved_tickets_settings->id : '/help_desk/unresolved_tickets'}}">
                     {{ csrf_field() }}
 
                     <div class="box-body">

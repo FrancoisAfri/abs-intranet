@@ -48,18 +48,6 @@
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                                        <label for="days" class="col-sm-2 control-label">Policy Date</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control daterangepicker" id="action_date"
-                                                       name="action_date" value="" placeholder="Select Policy Date...">
-
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-right"><i
                                                     class="fa fa-search"></i> Search
