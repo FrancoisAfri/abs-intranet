@@ -691,7 +691,7 @@ class FleetManagementController extends Controller
 
         $status = array(1 => 'Active', 2 => 'InActive');
 
-
+        $currentdate = time();
         $ID = $maintenance->id;
         //return $ID;
 
@@ -703,7 +703,6 @@ class FleetManagementController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -712,6 +711,7 @@ class FleetManagementController extends Controller
         ];
 
 
+        $data['currentdate'] = $currentdate;
         $data['permitlicence'] = $permitlicence;
         $data['status'] = $status;
         $data['name'] = $name;
@@ -856,6 +856,7 @@ class FleetManagementController extends Controller
         $vehicledocumets->vehicleID = $SysData['valueID'];
         $vehicledocumets->expiry_type = 0;
         $vehicledocumets->status = 1;
+        $vehicledocumets->currentdate = time();
         $vehicledocumets->save();
 
         //Upload supporting document

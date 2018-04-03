@@ -66,12 +66,43 @@
                                 <th>Captured By</th>
                                 <th>Date Captured</th>
                                 <th> Document</th>
+                                <th style="width: 10px; text-align: center;"></th>
                             </tr>
                             @if (count($permits) > 0)
                               @foreach ($permits as $permit)
                                <tr id="categories-list">
                             
-                                    <td nowrap>
+                                    
+                                      @if (isset($permit) && $permit->exp_date >= $currentdate)
+                                      <td bgcolor="red" nowrap>
+                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
+                                            data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
+                                            data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"    
+                                            data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
+                                            data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
+                                            
+                                    <td bgcolor="red">{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
+                                    <td bgcolor="red">{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
+                                    <td bgcolor="red">{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
+                                    <td bgcolor="red">{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
+                                    <td bgcolor="red">{{ (!empty($permit->status)) ?  $status[$permit->status] : ''}}</td>
+                                    <td bgcolor="red">{{ !empty($permit->captured_by) ? $permit->captured_by : ''}}</td>
+                                    <td bgcolor="red">{{ !empty($permit->date_captured) ? date(' d M Y', $permit->date_captured) : '' }}</td>
+                                    <td bgcolor="red" nowrap>
+                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($permit->document))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("Vehicle/permits_licence/$permit->document") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
+                                    </td>
+                                          <td bgcolor="red"> Expired </td>  
+                                       @else
+                                       <td nowrap>
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
                                             data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
                                             data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"    
@@ -97,7 +128,7 @@
                                             @endif
                                         </div>
                                     </td>
-
+                                         @endif
                                 </tr>
                             @endforeach
                         @else

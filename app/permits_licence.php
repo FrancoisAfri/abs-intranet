@@ -13,4 +13,8 @@ class permits_licence extends Model
         'Supplier', 'permit_licence', 'date_issued', 'exp_date', 'status', 'captured_by', 'date_captured',
         'document', 'vehicleID', 'default_documrnt', 'permits_licence_no'];
 
+    public function vehiclepermitslicence(){
+        return $this->belongsTo(permits_licence::class, 'vehicleID');
+    }
+
 }

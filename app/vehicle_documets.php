@@ -8,5 +8,9 @@ class vehicle_documets extends Model
 {
     protected $table = 'vehicle_documets';
 
-    protected $fillable = ['name', 'description', 'document', 'upload_date', 'user_name', 'status', 'vehicleID', 'default_documrnt', 'exp_date', 'date_from', 'type', 'role' , 'expiry_type'];
+    protected $fillable = ['name', 'description', 'document', 'upload_date', 'user_name', 'status', 'vehicleID', 'default_documrnt', 'exp_date', 'date_from', 'type', 'role' , 'expiry_type','currentdate'];
+
+     public function vehicledocumets(){
+        return $this->belongsTo(vehicledocumets::class, 'vehicleID');
+    }
 }

@@ -26,4 +26,12 @@ class vehicle_detail extends Model
         return $this->hasMany(fuellogVehicle::class, 'vehicle_id');
     }
 
+     public function vehicleDocs() {
+        return $this->hasMany(vehicle_documets::class, 'vehicleID');
+    }
+
+     public function vehicleLicences() {
+        return $this->hasMany(permits_licence::class, 'vehicleID');
+    }
+
 }

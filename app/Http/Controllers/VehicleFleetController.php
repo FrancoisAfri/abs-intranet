@@ -63,25 +63,12 @@ class VehicleFleetController extends Controller
         ################## WELL DETAILS ###############
 
         $ID = $maintenance->id;
-
-        $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID
-        )->get();
-         $Expdate = $vehicleDocumets->first()->exp_date;
-         return $Expdate;
-       
-
+     
         $currentTime = time();
 
-        //   if (empty($vehicleDocumets))
-        //    $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID)->get();
-        //    $Expdate = $vehicleDocumets->first()->expiry_type;
-        // else
-        //     $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID)->get();
+        $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID)->get();
 
-         return $vehicleDocumets;
-        //expiry_type
-
-
+        $data['currentTime'] = $currentTime;
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
