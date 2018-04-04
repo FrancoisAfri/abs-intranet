@@ -17,26 +17,25 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">Vehicle Documments Report</h3>
+                    <h3 class="box-title">Vehicle Expired Documments Report</h3>
                 </div>
                 <div class="box-body">
                     <div class="box">
+                        <h3 class="box-title">Expired Vehicle Documents</h3>
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div style="overflow-X:auto;">
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Transaction Date</th>
-                                        <th>Transaction Type</th>
-                                        <th>Fleet No.</th>
-                                        <th>Reg. No.</th>
-                                        <th>Supplier/Employee</th>
-                                        <th>Reading before filling</th>
-                                        <th>Reading after filling</th>
-                                        <th> Litres</th>
-                                        <th>Rate Per Litre</th>
-                                        <th>Cost</th>
+                                        <th>Fleet Number</th>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Registration</th>
+                                        <th>Division</th>
+                                        <th>Department</th>
+                                        <th>Expired Date</th>
+                                        <th>Days Remaining </th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -44,31 +43,30 @@
                                         @foreach ($vehicleDocumets as $filling)
                                             <tr id="categories-list">
 
-                                                <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
+                                               <!--  <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td> -->
                                                 <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
+                                                <td>{{ (!empty( $filling->VehicleMake)) ?  $filling->VehicleMake : ''}} </td>
+                                                <td>{{ (!empty( $filling->VehicleModel)) ?  $filling->VehicleModel : ''}} </td>
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
-                                                <td>{{ (!empty( $filling->Supplier)) ?  $filling->Supplier : ''}} </td>
-                                                <td>{{ (!empty($filling->reading_before_filling)) ?  $filling->reading_before_filling : ''}}</td>
-                                                <td>{{ (!empty($filling->current_fuel_litres)) ?  number_format($filling->current_fuel_litres, 2) : ''}}</td>
-                                                <td>{{ (!empty( $filling->litres)) ?  number_format($filling->litres, 2) : ''}} </td>
-                                                <td>{{ (!empty( $filling->cost_per_litre)) ? 'R'.number_format($filling->cost_per_litre, 2) : ''}} </td>
-                                                <td>{{ (!empty( $filling->total_cost)) ? 'R'.number_format($filling->total_cost, 2) : ''}} </td>
+                                                <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
+                                                <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
+                                                <td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
+                                                <td bgcolor="red"> Expired </td>
+
                                             </tr>
                                         @endforeach
                                     @endif
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>Transaction Date</th>
-                                        <th>Transaction Type</th>
-                                        <th>Fleet No.</th>
-                                        <th>Reg. No.</th>
-                                        <th>Supplier/Employee</th>
-                                        <th>Reading before filling</th>
-                                        <th>Reading after filling</th>
-                                        <th> Litres</th>
-                                        <th>Rate Per Litre</th>
-                                        <th>Cost</th>
+                                        <th>Fleet Number</th>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Registration</th>
+                                        <th>Division</th>
+                                        <th>Department</th>
+                                        <th>Expired Date</th>
+                                        <th>Days Remaining </th>
                                     </tr>
                                     </tfoot>
                                 </table>
@@ -92,68 +90,56 @@
                 {{--</div>--}}
                 <div class="box-body">
                     <div class="box">
-
-                            <h5 class="box-title"> Vehicle Licence Report</h5>
-
+                        <h3 class="box-title">Vehicle Licence Report</h3>
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div style="overflow-X:auto;">
                                 <table id="example" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 5px; text-align: center;"></th>
-                                        <th style="width: 5px; text-align: center;">Date Taken</th>
-                                        <th>Vehicle Fleet No. </th>
-                                        <th>Vehicle Reg. No.</th>
-                                        <th>Odometer Reading</th>
-                                        <th>Hours Reading</th>
-                                        <th>Captured by</th>
-                                        <th>Service Station</th>
-                                        <th> Litres</th>
-                                        <th>Rate Per Litre</th>
-                                        <th>Cost</th>
-                                        <th style="width: 8px; text-align: center;">Status</th>
+                                        <th>Fleet Number</th>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Registration</th>
+                                        <th>Division</th>
+                                        <th>Department</th>
+                                        <th>Supplier</th>
+                                        <th>Captured By</th>
+                                        <th>Date Expired</th>
+                                        <th style="width: 8px; text-align: center;">Days Remaining</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @if (count($VehicleLicences) > 0)
                                         @foreach ($VehicleLicences as $filling)
                                             <tr id="categories-list">
-                                                <td nowrap>
-                                                    <button details="button" id="edit_compan"
-                                                            class="btn btn-warning  btn-xs"
-                                                            data-toggle="modal" data-target="#edit-fuelRecords-modal"
-                                                            data-id="{{ $filling->id }}"><i
-                                                                class="fa fa-pencil-square-o"></i> Edit
-                                                    </button>
-                                                </td>
-                                                <td>{{ (!empty( $filling->type)) ?  $status[$filling->type] : ''}} </td>
+                                        
                                                 <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
+                                                <td>{{ (!empty( $filling->VehicleMake)) ?  $filling->VehicleMake : ''}} </td>
+                                                <td>{{ (!empty( $filling->VehicleModel)) ?  $filling->VehicleModel : ''}} </td>
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
-                                                <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
-                                                <td>{{ (!empty( $filling->Staion)) ?  $filling->Staion : ''}} </td>
-                                                <td>{{ (!empty( $filling->litres)) ?  number_format($filling->litres, 2) : ''}} </td>
-                                                <td>{{ (!empty( $filling->cost_per_litre)) ? 'R'.number_format($filling->cost_per_litre, 2) : ''}} </td>
-                                                <td>{{ (!empty( $filling->total_cost)) ? 'R'.number_format($filling->total_cost, 2) : ''}} </td>
-                                                <td>{{ (!empty( $filling->iStatus)) ?  $booking[$filling->iStatus] : ''}} </td>
+                                                <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
+                                                <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
+                                                <td>{{ (!empty( $filling->supplier)) ?  $filling->supplier : ''}}</td>
+                                                <td>{{ (!empty( $filling->captured_by)) ?  $filling->captured_by : ''}} </td>
+                                                <td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
+                                                <td bgcolor="red"> Expired </td>
                                             </tr>
                                         @endforeach
                                     @endif
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th style="width: 5px; text-align: center;"></th>
-                                        <th style="width: 5px; text-align: center;">Date Taken</th>
-                                        <th>Vehicle Fleet No. </th>
-                                        <th>Vehicle Reg. No.</th>
-                                        <th>Odometer Reading</th>
-                                        <th>Hours Reading</th>
-                                        <th>Captured by</th>
-                                        <th>Service Station</th>
-                                        <th> Litres</th>
-                                        <th>Rate Per Litre</th>
-                                        <th>Cost</th>
-                                        <th style="width: 5px; text-align: center;">Status</th>
+                                        <th>Fleet Number</th>
+                                        <th>Make</th>
+                                        <th>Model</th>
+                                        <th>Registration</th>
+                                        <th>Division</th>
+                                        <th>Department</th>
+                                        <th>Supplier</th>
+                                        <th>Captured By</th>
+                                        <th>Date Expired</th>
+                                        <th style="width: 8px; text-align: center;">Days Remaining</th>
                                     </tr>
                                     </tfoot>
                                 </table>
