@@ -583,14 +583,11 @@ class VehicleManagemntController extends Controller
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_configuration', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
-
         $data['configuration'] = $configuration;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Setup';
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.vehicle_setup')->with($data);
-
-
     }
 
     public function Configuration(Request $request, vehicle_config $configuration)

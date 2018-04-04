@@ -16,7 +16,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Date of Incident</label>
                         <div class="col-sm-8">
@@ -24,8 +23,6 @@
                                    value="{{ old('date') }}" placeholder="Select  date of incident   ...">
                         </div>
                     </div>
-
-
                     {{--  <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Incident Type  </label>
                         <div class="col-sm-8">
@@ -53,10 +50,6 @@
                             </select>
                         </div>
                     </div>
-
-                    
-
-
                     <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Severity  </label>
                         <div class="col-sm-8">
@@ -68,8 +61,6 @@
                             </select>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Reported by </label>
                         <div class="col-sm-8">
@@ -82,15 +73,13 @@
                             </select>
                         </div>
                     </div>
-
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="odometer_reading" name="odometer_reading" value="0"
-                                   placeholder="Enter Contact Person" required>
+                            <input type="number" class="form-control" id="odometer_reading" name="odometer_reading" value=""
+                                   placeholder="Enter Odometer Reading" required>
                         </div>
                     </div>
-
                      <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Status</label>
                         <div class="col-sm-8">
@@ -102,7 +91,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">
@@ -111,23 +99,20 @@
                                       placeholder="Enter description..." rows="3">{{ old('description') }}</textarea>
                         </div>
                     </div>
-
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Claim Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="claim_number" name="claim_number" value=""
-                                   placeholder="Enter Name" required>
+                                   placeholder="Enter Claim Number" required>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Cost</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="Cost" name="Cost" value="0"
+                            <input type="number" class="form-control" id="Cost" name="Cost" value=""
                                    placeholder="Enter Cost" required>
                         </div>
                     </div>
-                 
                     <div id="tab_10">
 						<hr class="hr-text" data-content="DOCUMENTS UPLOAD">
 						<div class="row" id="tab_tab">
@@ -163,6 +148,4 @@
         </div>
     </div>
 </div>
-</div>
-
-           
+</div>      

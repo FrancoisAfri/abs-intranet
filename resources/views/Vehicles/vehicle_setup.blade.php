@@ -342,13 +342,19 @@
                                         Critical
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td class="caption" colspan="2">Auto-Cancel if collection overdue</td>
 
                                     <td colspan="6"><input type="number" name="service_overdue_days"
                                                            value="{{ $configuration->service_overdue_days }}" size="20"
                                                            maxlength="7" placeholder="Enter Hours " required=""> Hours
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Fleet Incidents Upload Directory</td>
+
+                                    <td colspan="6"><input type="text" name="incidents_upload_directory"
+                                                           value="{{ $configuration->incidents_upload_directory }}" 
+                                                           placeholder="Fleet Incidents Upload Directory">
                                 </tr>
                             </table>
                         </div>

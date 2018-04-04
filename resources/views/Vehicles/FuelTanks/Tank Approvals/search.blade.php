@@ -17,7 +17,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> Driver Details Report </h3>
+                    <h3 class="box-title">Fuel Tank Search Resutls </h3>
                 </div>
                 <div class="box-body">
                     <div class="box">
@@ -40,10 +40,9 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($Approvals) > 0)
-                                        @foreach ($Approvals as $filling)
+                                    @if (count($tankResults) > 0)
+                                        @foreach ($tankResults as $filling)
                                             <tr id="categories-list">
-
                                                 <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
                                                 <td>{{ (!empty( $filling->type)) ?  $status[$filling->type] : ''}} </td>
                                                 <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
@@ -94,7 +93,7 @@
                 <div class="box-body">
                     <div class="box">
 
-                            <h5 class="box-title"> Other Fuel </h5>
+                            <h3 class="box-title">Station Fuel Search Resutls</h3>
 
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -117,8 +116,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($company) > 0)
-                                        @foreach ($company as $filling)
+                                    @if (count($stationResukts) > 0)
+                                        @foreach ($stationResukts as $filling)
                                             <tr id="categories-list">
                                                 <td nowrap>
                                                     <button details="button" id="edit_compan"
@@ -128,7 +127,7 @@
                                                                 class="fa fa-pencil-square-o"></i> Edit
                                                     </button>
                                                 </td>
-                                                <td>{{ (!empty( $filling->type)) ?  $status[$filling->type] : ''}} </td>
+                                                <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
                                                 <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                                 <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>

@@ -1047,8 +1047,6 @@ class VehicleFleetController extends Controller
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return back();
     }
-
-
     public function viewIncidents(vehicle_maintenance $maintenance)
     {
         $ID = $maintenance->id;
@@ -1083,11 +1081,6 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->orderBy('vehicle_incidents.id')
             ->get();
-
-        // return $vehicleincidents;
-
-//        $name = VehicleIncidentsDocuments::orderBy('id')->get();
-//        return $name;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1124,7 +1117,7 @@ class VehicleFleetController extends Controller
         unset($SysData['_token']);
 
         $currentDate = time();
-
+		$vehicleCong = vehicle_config::orderBy('id', 'asc')->first();
         $dateofincident = $SysData['date_of_incident'] = str_replace('/', '-', $SysData['date_of_incident']);
         $dateofincident = $SysData['date_of_incident'] = strtotime($SysData['date_of_incident']);
 
@@ -1153,8 +1146,8 @@ class VehicleFleetController extends Controller
                 $ext = end($Explode);
                 $ext = strtolower($ext);
                 if (in_array($ext, $Extensions)) {
-                    if (!is_dir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents')) mkdir('/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents', 0775);
-                    move_uploaded_file($Files['tmp_name'][$index], '/home/erpmfgonlineco/abs-intranet/storage/app/Vehicle/vehicleIncidents/' . $fileName) or die('Could not move file!');
+                    if (!is_dir("$vehicleCong->incidents_upload_directory")) mkdir("$vehicleCong->incidents_upload_directory", 0775);
+                    move_uploaded_file($Files['tmp_name'][$index], "$vehicleCong->incidents_upload_directory/" . $fileName) or die('Could not move file!');
 
                     $document = new VehicleIncidentsDocuments($SysData);
                     $document->display_name = $Name;
@@ -1191,21 +1184,20 @@ class VehicleFleetController extends Controller
         $incident->Update();
 
 
-        //Upload supporting document
-//        if ($request->hasFile('documents')) {
-//            $fileExt = $request->file('documents')->extension();
-//            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-//                $fileName = $incident->id . "_documents." . $fileExt;
-//                $request->file('documents')->storeAs('Vehicle/vehicleIncidents', $fileName);
-//                //Update file name in the table
-//                $incident->document = $fileName;
-//                $incident->update();
-//            }
-//        }
+       // Upload supporting document
+        if ($request->hasFile('documents')) {
+           $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = $incident->id . "_documents." . $fileExt;
+                $request->file('documents')->storeAs('Vehicle/vehicleIncidents', $fileName);
+                //Update file name in the table
+                $incident->document = $fileName;
+                $incident->update();
+            }
+        }
         return response()->json();
 
-
-        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet Incident Edited', "Edited By User", 0);
         return back();
     }
 
