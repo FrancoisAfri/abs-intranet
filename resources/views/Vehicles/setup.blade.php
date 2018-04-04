@@ -30,7 +30,7 @@
 				  </a>
 
 				  <a href="/vehicle_management/fillingstaion" class="btn btn-app">
-					<i class="fa fa-bitbucket"></i> Vehicle Station 
+					<i class="fa fa-bitbucket"></i> Filling Stations
 				  </a>
 
 				  <a href="/vehicle_management/Document_type"  class="btn btn-app">

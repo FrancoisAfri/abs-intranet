@@ -669,7 +669,7 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $licenceType = $reportData['licence_type'];
+        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -848,7 +848,7 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $licenceType = $reportData['licence_type'];
+        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -1083,12 +1083,12 @@ class VehicleReportsController extends Controller
 
         $vehiclefines = DB::table('vehicle_fines')
             ->select('vehicle_fines.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype',
-                'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel', 'vehicle_managemnet.name as vehicletypes', 'hr_people.first_name as firstname',
+                'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_types', 'hr_people.first_name as firstname',
                 'hr_people.surname as surname', 'vehicle_details.vehicle_registration as vehicle_registration')
             ->leftJoin('vehicle_details', 'vehicle_fines.vehicleID', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
@@ -1138,7 +1138,7 @@ class VehicleReportsController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
 
-        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', 'Fleet ManagementFine Report', "Accessed By User", 0);
         return view('Vehicles.Reports.finelog_results')->with($data);
     }
 
@@ -1165,12 +1165,12 @@ class VehicleReportsController extends Controller
         }
         $vehiclefines = DB::table('vehicle_fines')
             ->select('vehicle_fines.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype',
-                'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel', 'vehicle_managemnet.name as vehicletypes', 'hr_people.first_name as firstname',
+                'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_types', 'hr_people.first_name as firstname',
                 'hr_people.surname as surname', 'vehicle_details.vehicle_registration as vehicle_registration')
             ->leftJoin('vehicle_details', 'vehicle_fines.vehicleID', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
@@ -1325,7 +1325,7 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $licenceType = $reportData['licence_type'];
+        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -1413,7 +1413,7 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $licenceType = $reportData['licence_type'];
+        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -1590,7 +1590,7 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $licenceType = $reportData['licence_type'];
+        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -1667,7 +1667,7 @@ class VehicleReportsController extends Controller
          $reportID = $reportData['report_id'];
          $reportType = $reportData['report_type'];
          $vehicleType = $reportData['vehicle_type'];
-         $licenceType = $reportData['licence_type'];
+         //$licenceType = $reportData['licence_type'];
          $driverID = $reportData['driver_id'];
          $actionDate = $request['action_date'];
          $Destination = $request['destination'];
@@ -1784,11 +1784,6 @@ class VehicleReportsController extends Controller
                     $query->where('vehicle_type', $vehicleType);
                 }
             })
-            // ->where(function ($query) use ($driverID) {
-            //     if (!empty($driverID)) {
-            //         $query->where('driver', $driverID);
-            //     }
-            // })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('currentdate', [$actionFrom, $actionTo]);
@@ -1803,11 +1798,7 @@ class VehicleReportsController extends Controller
             ->where('vehicle_documets.exp_date', '<' ,$currentTime)
             ->orderby('vehicle_documets.id','desc')
             ->get();
-            
-            //return $vehicleDocumets;
 
-
-         // permit licences
             $VehicleLicences = DB::table('permits_licence')
             ->select('permits_licence.*','vehicle_details.vehicle_make as vehiclemake','vehicle_details.fleet_number as fleet_number'
                 ,'vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel','vehicle_details.vehicle_registration as vehicle_registration',
@@ -1824,11 +1815,6 @@ class VehicleReportsController extends Controller
                     $query->where('vehicle_type', $vehicleType);
                 }
             })
-            // ->where(function ($query) use ($driverID) {
-            //     if (!empty($driverID)) {
-            //         $query->where('driver', $driverID);
-            //     }
-            // })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('currentdate', [$actionFrom, $actionTo]);
@@ -1843,8 +1829,6 @@ class VehicleReportsController extends Controller
             ->where('permits_licence.exp_date', '<' ,$currentTime)
             ->orderby('permits_licence.id','desc')
             ->get();
-
-       // return $VehicleLicences; 
 
         $data['vehicleDocumets'] = $vehicleDocumets;
         $data['VehicleLicences'] = $VehicleLicences;

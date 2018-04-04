@@ -52,7 +52,7 @@
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th style="width: 10px"></th>
+                        <th>Fleet Details</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Reference</th>
@@ -68,7 +68,7 @@
                     @if (count($vehiclefines) > 0)
                         @foreach($vehiclefines as $fine)
                             <tr>
-                                <td>{{ (!empty($fine->VehicleMake) ) ? $fine->VehicleMake." ".$fine->VehicleModel." ".$fine->vehicletypes." ".$fine->vehicle_registration : ''}}</td>
+                                <td>{{ (!empty($fine->vehicle_make) ) ? $fine->vehicle_make." ".$fine->vehicle_model." ".$fine->vehicle_types." ".$fine->vehicle_registration : ''}}</td>
                                 <td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
                                 <td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
                                 <td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
@@ -77,14 +77,14 @@
                                 <td>{{ !empty($fine->firstname . ' ' . $fine->surname ) ?  $fine->firstname . ' ' . $fine->surname : '' }}</td>
                                 <td style="text-align: center">{{ !empty($fine->amount  ) ?  'R '.number_format($fine->amount, 2) :'' }} </td>
                                 <td style="text-align: center">{{ !empty($fine->amount_paid  ) ?  'R '.number_format($fine->amount_paid, 2) :'' }}</td>
-                                <td style="text-align: center">{{  !empty($fine->fine_status  ) ?  $status[$fine->fine_status] :'' }}</td>
+                                <td>{{  !empty($fine->fine_status  ) ?  $status[$fine->fine_status] :'' }}</td>
                             </tr>
                         @endforeach
                     @endif
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th style="width: 10px"></th>
+                        <th>Fleet Details</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Reference</th>
@@ -100,9 +100,9 @@
                     <class
                     ="caption">
                     <td style="text-align: right" nowrap></td>
-                    <td colspan="6" style="text-align:right">Total</td>
-                    <td style="text-align: right">{{number_format($total, 2) }}</td>
-                    <td style="text-align: right">{{number_format($totalamount_paid, 2) }}</td>
+                    <th colspan="6" style="text-align:right">Total</th>
+                    <td style="text-align: right">{{'R '.number_format($total, 2) }}</td>
+                    <td style="text-align: right">{{'R '.number_format($totalamount_paid, 2) }}</td>
                     <td style="text-align: right" nowrap></td>
                 </table>
             </div>

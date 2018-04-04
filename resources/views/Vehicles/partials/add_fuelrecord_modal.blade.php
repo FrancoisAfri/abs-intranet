@@ -82,7 +82,7 @@
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
                                     id="service_station" name="service_station">
-                                <option value="0">*** Select tank  ***</option>
+                                <option value="0">*** Service Station  ***</option>
                                 @foreach($servicestation as $station)
                                     <option value="{{ $station->id }}">{{ $station->name }}</option>
                                 @endforeach

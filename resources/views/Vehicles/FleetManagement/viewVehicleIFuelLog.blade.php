@@ -255,17 +255,12 @@
                 $('#next_button').click(function () {
                     location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$imonth. '_' . 'n' . '_' . $iYear }}';
                 });
-
-
                 var moduleId;
                 //Initialize Select2 Elements
                 $(".select2").select2();
                 $('.zip-field').hide();
                 $('.transaction-field').hide();
-
-
                 //Tooltip
-
                 $('[data-toggle="tooltip"]').tooltip();
 
                 //Vertically center modals on page
@@ -288,9 +283,7 @@
 
                 //Show success action modal
                 $('#success-action-modal').modal('show');
-
                 //
-
                 $(".js-example-basic-multiple").select2();
 
                 //Initialize iCheck/iRadio Elements
@@ -346,7 +339,6 @@
 
                 });
 
-
                 $(document).ready(function () {
 
                     $('#date').datepicker({
@@ -364,13 +356,11 @@
 
                 });
 
-
                 // 
                 $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
                     var allType = hideFields();
 
                 });
-
 
                 function hideFields() {
                     var allType = $("input[name='transaction']:checked").val();
@@ -384,27 +374,6 @@
                     }
                     return allType;
                 }
-
-                //
-                // 
-                //   $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
-                //     var allType = hideFields();
-
-                // });
-
-                // function hideFields() {
-                //     var allType = $("input[name='transactions']:checked").val();
-                //     if (allType == 1) {
-                //         $('.transaction-field').hide();
-                //         $('.Tanks-field').show();
-                //     }
-                //     else if (allType == 2) {
-                //         $('.transaction-field').show();
-                //         $('.Tanks-field').hide();
-                //     }
-                //     return allType;
-                // }
-
 
                 //Post perk form to server using ajax (add)
                 $('#add_vehiclefuellog').on('click', function () {
