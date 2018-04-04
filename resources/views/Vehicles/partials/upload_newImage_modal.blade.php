@@ -3,22 +3,16 @@
         <div class="modal-content">
             <form class="form-horizontal" name="add-new-vehicleImage-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
-
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">Upload new Image</h4>
                 </div>
-
-
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
                     {{--<div class="form-group{{ $errors->has('image_type') ? ' has-error' : '' }}">--}}
                     {{--<label for="Leave_type" class="col-sm-3 control-label"> Upload Type</label>--}}
-
                     {{--<div class="col-sm-8">--}}
                     {{--<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_single"--}}
                     {{--name="image_type" value="1"--}}
@@ -27,10 +21,8 @@
                     {{--Bulk </label>--}}
                     {{--</div>--}}
                     {{--</div>--}}
-
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
-
                     <div class="form-group Single-field">
                         <label for="path" class="col-sm-3 control-label">Image name</label>
                         <div class="col-sm-8">
@@ -38,7 +30,6 @@
                                    placeholder="Enter name" required>
                         </div>
                     </div>
-
                     <div class="form-group Single-field">
                         <label for="path" class="col-sm-3 control-label">Image Description</label>
                         <div class="col-sm-8">
@@ -46,7 +37,6 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="image" class="col-sm-3 control-label">Upload</label>
 
@@ -55,18 +45,15 @@
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
-
-                    <div class="form-group zip-field">
+                    <!--<div class="form-group zip-field">
                         <label for="days" class="col-sm-3 control-label">Note</label>
                         <div class="col-sm-8">
 
                             <textarea class="form-control" id="note" name="note"
                                       placeholder="Please make sure you zip the files you wish to upload and then upload the zip file. The files in zip file will then be uploaded..."
                                       rows="3" readonly="">{{ old('note') }}</textarea>
-
                         </div>
                     </div>
-
                     <div class="form-group zip-field">
                         <label for="image" class="col-sm-3 control-label">Upload Zip File</label>
 
@@ -75,8 +62,7 @@
                             <input type="file" id="images" name="images" class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
-                    </div>
-
+                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

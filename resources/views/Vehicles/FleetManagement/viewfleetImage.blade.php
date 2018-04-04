@@ -7,7 +7,6 @@
 
 @endsection
 @section('content')
-
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
@@ -20,11 +19,9 @@
                         </button>
                     </div>
                 </div>
-
                 <div align="center" class="box box-default">
                     <div class="box-header with-border">
                         <h3 class="box-title"> Image(s)
-
                         </h3>
                     </div>
                     <div class="box-body">
@@ -100,37 +97,32 @@
                                                 <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("Vehicle/images/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"
                                                      alt="Product Image" width="50" height="50">
                                             </div>
-
-
-                                            <div class="modal fade" id="enlargeImageModal" tabindex="-1"
-                                                         role="dialog" align="center"
-                                                         aria-labelledby="enlargeImageModal" aria-hidden="true">
-                                                        <!--  <div class="modal-dialog modal" role="document"> -->
-                                                        <div class="modal-dialog modal-sm" >
-                                                            {{--<div class="modal-content">--}}
-                                                                {{--<div class="modal-header">--}}
-                                                                    {{--<button type="button" class="close"--}}
-                                                                            {{--data-dismiss="modal"--}}
-                                                                            {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
-                                                                    {{--</button>--}}
-                                                                {{--</div>--}}
-                                                                <div class="modal-body" align="center">
-                                                                    <img src="" class="enlargeImageModalSource"
-                                                                         style="width: 200%;">
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
+											<div class="modal fade" id="enlargeImageModal" tabindex="-1"
+													 role="dialog" align="center"
+													 aria-labelledby="enlargeImageModal" aria-hidden="true">
+													<!--  <div class="modal-dialog modal" role="document"> -->
+												<div class="modal-dialog modal-sm" >
+													{{--<div class="modal-content">--}}
+														{{--<div class="modal-header">--}}
+															{{--<button type="button" class="close"--}}
+																	{{--data-dismiss="modal"--}}
+																	{{--aria-label="Close"><span aria-hidden="true">x</span>--}}
+															{{--</button>--}}
+														{{--</div>--}}
+														<div class="modal-body" align="center">
+															<img src="" class="enlargeImageModalSource"
+																 style="width: 200%;">
+														</div>
+													</div>
+												</div> 
+											</div>
                                         </td>
                                         <td>{{ !empty($vehiclemaintenance->description) ? $vehiclemaintenance->description : ''}}</td>
-
                                         <td>{{ !empty($vehiclemaintenance->upload_date) ? date(' d M Y', $vehiclemaintenance->upload_date) : '' }}</td>
                                         <td>{{ !empty($maintenance->vehicle_registration) ? $maintenance->vehicle_registration : ''}}</td>
-
                                         <td>{{ !empty($vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname ) ? $vehiclemaintenance->first_name . ' ' . $vehiclemaintenance->surname : ''}}</td>
                                     </tr>
                                 @endforeach
-
                             @else
                                 <tr id="categories-list">
                                     <td colspan="9">
@@ -158,26 +150,18 @@
             </div>
             @endsection
             @section('page_script')
-
-
-
                 <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
                         type="text/javascript"></script>
                 <!-- the main fileinput plugin file -->
                 <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
                 <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
                 <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-
-
-
                 <script src="/custom_components/js/modal_ajax_submit.js"></script>
                 <script>
-
                     $('#back_button').click(function () {
                         location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                     });
                     $(function () {
-
                         var moduleId;
                         //Tooltip
                         $('[data-toggle="tooltip"]').tooltip();
@@ -192,24 +176,19 @@
                             // or four works better for larger screens.
                             dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
                         }
-
                         // Reposition when a modal is shown
                         $('.modal').on('show.bs.modal', reposition);
                         // Reposition when the window is resized
                         $(window).on('resize', function () {
                             $('.modal:visible').each(reposition);
                         });
-
                         //
-
-
                         $(function () {
                             $('img').on('click', function () {
                                 $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
                                 $('#enlargeImageModal').modal('show');
                             });
                         });
-
                         //Initialize iCheck/iRadio Elements
 
 //                        $(document).ready(function () {
@@ -221,14 +200,11 @@
 //                            });
 //
 //                        });
-
                         $('#rdo_single, #rdo_zip').on('ifChecked', function () {
                             var allType = hideFields();
                             if (allType == 1) $('#box-subtitle').html('Site Address');
                             else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
                         });
-
-
                         function hideFields() {
                             var allType = $("input[name='image_type']:checked").val();
                             if (allType == 1) {
@@ -241,8 +217,6 @@
                             }
                             return allType;
                         }
-
-
                         //Post perk form to server using ajax (add)
                         $('#add-vehicle_image').on('click', function () {
 
@@ -256,8 +230,6 @@
                             var successMsg = 'The Image  has been updated successfully.';
                             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                         });
-
-
                         var ImageID;
                         $('#edit-package-modal').on('show.bs.modal', function (e) {
                             //console.log('kjhsjs');
@@ -265,7 +237,6 @@
                               if (parseInt(btnEdit.data('id')) > 0) {
                               ImageID = btnEdit.data('id');
                              }
-
                             var name = btnEdit.data('name');
                             var description = btnEdit.data('description');
                             var images = btnEdit.data('images');
@@ -274,8 +245,6 @@
                             modal.find('#description').val(description);
                             modal.find('#image').val(images);
                         });
-
-
                         $('#edit_image').on('click', function () {
                             var strUrl = '/vehicle_management/edit_images/' + ImageID;
                             var formName = 'edit-image-form';

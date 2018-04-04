@@ -360,6 +360,9 @@
                         </div>
                         <br>
                         <div class="box-footer">
+						<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
+                                        class="fa fa-arrow-left"></i> Back
+                        </button>
                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-cog"></i> Save
                             </button>
                         </div>
@@ -396,6 +399,10 @@
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script type="text/javascript">
+	//Cancel button click event
+		document.getElementById("cancel").onclick = function () {
+			location.href = '/vehicle_management/setup';
+		};
         $(function () {
             $(".select2").select2();
             $('.hours-field').hide();
