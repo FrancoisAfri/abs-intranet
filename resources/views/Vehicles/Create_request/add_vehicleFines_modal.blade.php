@@ -207,8 +207,11 @@
                     </div>
 
                     
-                    <input type="hidden" id="valueID" name="valueID"
-                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+                     <input type="hidden" id="valueID" name="valueID"
+                        value="{{ !empty($vehiclebookings->vehicle_id) ? $vehiclebookings->vehicle_id : ''}}">
+                    
+                    <input type="hidden" id="vehiclebookingID" name="vehiclebookingID"
+                        value="{{ !empty($returnVeh->id) ? $returnVeh->id : ''}}">
 
                 </div>
                 <div class="modal-footer">

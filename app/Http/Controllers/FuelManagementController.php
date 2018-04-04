@@ -185,7 +185,6 @@ class FuelManagementController extends Controller
         $company = $vehiclemaintenance->first()->company;
         $Department = $vehiclemaintenance->first()->Department;
 
-
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = " FleetManagement";
         $data['breadcrumb'] = [
@@ -222,16 +221,26 @@ class FuelManagementController extends Controller
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
-        $Fueltank = DB::table('fuel_tank_topUp')
-            ->select('fuel_tank_topUp.*','fuel_tanks.*' ,'division_level_fives.name as Supplier')
-            ->leftJoin('fuel_tanks', 'fuel_tank_topUp.tank_id', '=', 'fuel_tanks.id')
+//        $Fueltank = DB::table('fuel_tank_topUp')
+//            ->select('fuel_tank_topUp.*','fuel_tanks.*' ,'division_level_fives.name as Supplier')
+//            ->leftJoin('fuel_tanks', 'fuel_tank_topUp.tank_id', '=', 'fuel_tanks.id')
+//            ->leftJoin('division_level_fives', 'fuel_tanks.division_level_5', '=', 'division_level_fives.id')
+//            ->orderBy('fuel_tank_topUp.id')
+//            ->where('fuel_tank_topUp.tank_id', $ID)
+//            ->get();
+        
+         $Fueltank = DB::table('fuel_tanks')
+            ->select('fuel_tanks.*','fuel_tank_topUp.*' ,'division_level_fives.name as Supplier')
+            ->leftJoin('fuel_tank_topUp', 'fuel_tanks.id', '=', 'fuel_tank_topUp.tank_id')
             ->leftJoin('division_level_fives', 'fuel_tanks.division_level_5', '=', 'division_level_fives.id')
             ->orderBy('fuel_tank_topUp.id')
             ->where('fuel_tank_topUp.tank_id', $ID)
             ->get();
 
+           // return $Fueltank;
+
         $keyStatus = array(1 => 'Incoming', 2 => '= Outgoi',);
-        $tank = $Fueltank->first()->tank_name;
+       // $tank = $Fueltank->first()->tank_name;
 
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = " FleetManagement";
@@ -291,7 +300,7 @@ class FuelManagementController extends Controller
         $current = DB::table('fuel_tanks')->where('id', $ID)->pluck('current_fuel_litres')->first();
 
 
-        $tank = $Fueltank->first()->tank_name;
+       // $tank = $Fueltank->first()->tank_name;
         //    $current = $Fueltanks->first()->current_fuel_litres;
 
 
@@ -338,33 +347,35 @@ class FuelManagementController extends Controller
 
         $FueltankTopUpwhere = FueltankTopUp::where('tank_id', $ID)->orderBy('id', 'desc')->get();
 
+       // return $FueltankTopUpwhere;
+
         $FueltankPrivateUse = FueltankPrivateUse::where('status', 1)->orderBy('id', 'desc')->get();
 
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
+//        $Fueltank = DB::table('fuel_tank_topUp')
+//            ->select('fuel_tank_topUp.*', 'division_level_fives.name as company', 'division_level_fours.name as Department',
+//             'contact_companies.name as Supplier')
+//            ->leftJoin('contact_companies', 'fuel_tank_topUp.supplier_id', '=', 'contact_companies.id')
+//            ->where('fuel_tanks.id', $ID)
+//
+//            ->get();
+        
         $Fueltank = DB::table('fuel_tanks')
-            ->select('fuel_tanks.*', 'division_level_fives.name as company', 'division_level_fours.name as Department',
-                'fuel_tank_topUp.*', 'contact_companies.name as Supplier')
-            ->leftJoin('division_level_fives', 'fuel_tanks.division_level_5', '=', 'division_level_fives.id')
-            ->leftJoin('division_level_fours', 'fuel_tanks.division_level_4', '=', 'division_level_fours.id')
+            ->select('fuel_tanks.*','fuel_tank_topUp.*' ,'division_level_fives.name as Supplier')
             ->leftJoin('fuel_tank_topUp', 'fuel_tanks.id', '=', 'fuel_tank_topUp.tank_id')
-            ->leftJoin('contact_companies', 'fuel_tank_topUp.supplier_id', '=', 'contact_companies.id')
-            ->orderBy('fuel_tanks.id')
-            ->where('fuel_tanks.id', $ID)
+            ->leftJoin('division_level_fives', 'fuel_tanks.division_level_5', '=', 'division_level_fives.id')
+            ->orderBy('fuel_tank_topUp.id')
+            ->where('fuel_tank_topUp.tank_id', $ID)
             ->get();
 
-        //return $Fueltank;
+        // return $Fueltank;
 
         $keyStatus = array(1 => 'Incoming', 2 => '= Outgoi',);
 
         $current = DB::table('fuel_tanks')->where('id', $ID)->pluck('current_fuel_litres')->first();
-
-
-        $tank = $Fueltank->first()->tank_name;
-        //    $current = $Fueltanks->first()->current_fuel_litres;
-
-
+        
         $FueltankTopUp = FueltankTopUp::orderBy('id', 'desc')->get();
         $Fueltanks = Fueltanks::where('id', $ID)->orderBy('id', 'desc')->first();
         // return $Fueltanks;

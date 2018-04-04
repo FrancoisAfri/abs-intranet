@@ -20,7 +20,7 @@
                                     id="driver" name="driver">
                                 <option value="0">*** Select Driver  ***</option>
                                 @foreach($employees as $driver)
-                                    <option value="{{ $driver->id }}">{{ $driver->first_name . ' ' . $driver->surname }}</option>
+                                <option value="{{ $driver->id }}">{{ $driver->first_name . ' ' . $driver->surname }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -71,7 +71,7 @@
                                     id="tank_name" name="tank_name">
                                 <option value="0">*** Select tank  ***</option>
                                 @foreach($fueltank as $tank)
-                                    <option value="{{ $tank->id }}">{{ $tank->tank_name }}</option>
+                                <option value="{{ $tank->id }}">{{ $tank->tank_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -84,7 +84,7 @@
                                     id="service_station" name="service_station">
                                 <option value="0">*** Select tank  ***</option>
                                 @foreach($servicestation as $station)
-                                    <option value="{{ $station->id }}">{{ $station->name }}</option>
+                                <option value="{{ $station->id }}">{{ $station->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -116,21 +116,21 @@
                     </div>
 
                     @if (isset($MetreType) && $MetreType === 1)
-                        <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">Odometer Reading </label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="Odometer_reading" name="Odometer_reading" value=""
-                                       placeholder="Enter Odometer reading Reading" required>
-                            </div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Odometer Reading </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="Odometer_reading" name="Odometer_reading" value=""
+                                   placeholder="Enter Odometer reading Reading" required>
                         </div>
+                    </div>
                     @else
-                        <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">Hours Reading</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
-                                       placeholder="Enter Hours Reading" required>
-                            </div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Hours Reading</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
+                                   placeholder="Enter Hours Reading" required>
                         </div>
+                    </div>
                     @endif
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
@@ -156,14 +156,19 @@
                                     id="rensonsible_person" name="rensonsible_person">
                                 <option value="0">*** Select User  ***</option>
                                 @foreach($employees as $user)
-                                    <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname }}</option>
+                                <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
-                    <input type="hidden" id="valueID" name="valueID"
-                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+
+                <input type="hidden" id="valueID" name="valueID"
+                value="{{ !empty($vehiclebookings->vehicle_id) ? $vehiclebookings->vehicle_id : ''}}">
+               
+                
+                <input type="hidden" id="vehiclebookingID" name="vehiclebookingID"
+                value="{{ !empty($returnVeh->id) ? $returnVeh->id : ''}}">
 
                 </div>
                 <div class="modal-footer">
@@ -178,4 +183,3 @@
 </div>
 </div>
 
-           
