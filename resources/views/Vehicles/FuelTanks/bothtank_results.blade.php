@@ -9,7 +9,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">{{$tank}} </h3>
+                    <h3 class="box-title">{{ !empty($tank->tank_name) ? $tank->tank_name : ''}} </h3>
                 </div>
                 {{ csrf_field() }}
                 <div class="box-body">
@@ -56,19 +56,18 @@
                                                        id="edit_compan" class="btn btn-default  btn-xs"
                                                        data-id="{{ $booking->id }}">select</a>
                                                 </td>
-                                               
                                                 <td>{{ !empty($booking->topup_date) ? date(' d M Y', $booking->topup_date) : '' }}</td>
                                                 <td>{{ (!empty($booking->type)) ?  $keyStatus[$booking->type] : ''}}</td>
                                                 <td>{{ (!empty($booking->Supplier)) ?  $booking->Supplier : ''}}</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>{{ (!empty($booking->reading_before_filling)) ?  $booking->reading_before_filling : ''}}</td>
-                                                <td>{{ (!empty($booking->current_fuel_litres)) ?  number_format($booking->current_fuel_litres, 2) : ''}}</td>
+                                                <td>Nill</td>
+                                                <td>Nill</td>
+                                                <td>{{ (!empty($booking->reading_before_filling)) ?  $booking->reading_before_filling : 'Nill'}}</td>
+                                                <td>{{ (!empty($booking->reading_after_filling)) ? 'R' .number_format($booking->reading_after_filling, 2) : ''}}</td>
                                                 <td>{{ (!empty($booking->litres)) ?  number_format($booking->litres, 2) : ''}}</td>
                                                 <td>{{ (!empty($booking->cost_per_litre)) ?  'R' .number_format($booking->cost_per_litre, 2) : ''}}</td>
                                                 <td>{{ !empty($booking->total_cost) ? 'R' .number_format($booking->total_cost, 2) : '' }}</td>
                                                 <td></td>
-                                                <td></td>
+                                                <td>Nill</td>
                                             </tr>
                                         @endforeach
                                     @endif

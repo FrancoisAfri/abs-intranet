@@ -225,7 +225,6 @@ class VehicleFleetController extends Controller
         $reminders->vehicleID = $SysData['valueID'];
         $reminders->status = 1;
         $reminders->save();
-
         return response()->json();
 
     }
@@ -330,7 +329,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             'date' => 'required',
-            'document_number' => 'required|unique:general_cost,document_number',
+            //'document_number' => 'required|unique:general_cost,document_number',
             'supplier_name' => 'required',
         ]);
         $SysData = $request->all();
@@ -349,6 +348,7 @@ class VehicleFleetController extends Controller
         $generalcost->description = $SysData['description'];
         $generalcost->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $generalcost->vehicleID = $SysData['valueID'];
+        $generalcost->vehiclebookingID = !empty($SysData['vehiclebookingID']) ? $SysData['vehiclebookingID'] : 0;
         $generalcost->save();
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
@@ -953,6 +953,7 @@ class VehicleFleetController extends Controller
         $vehicle_fines->fine_type = !empty($fineData['fine_type']) ? $fineData['fine_type'] : 0;
         $vehicle_fines->driver = !empty($fineData['driver']) ? $fineData['driver'] : 0;
         $vehicle_fines->fine_status = !empty($fineData['fine_status']) ? $fineData['fine_status'] : 0;
+        $vehicle_fines->vehiclebookingID = !empty($fineData['vehiclebookingID']) ? $fineData['vehiclebookingID'] : 0;
         $vehicle_fines->save();
 
         //Upload supporting document
@@ -1135,6 +1136,7 @@ class VehicleFleetController extends Controller
         $vehicleincidents->severity = !empty($SysData['severity']) ? $SysData['severity'] : 0;
         $vehicleincidents->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
+        $vehicleincidents->vehiclebookingID = !empty($SysData['vehiclebookingID']) ? $SysData['vehiclebookingID'] : 0;
         $vehicleincidents->save();
 
         # document
@@ -1491,6 +1493,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             'tank_name' => 'bail|required',
+            'Odometer_reading' => 'bail|required',
             'document_number' => 'required|unique:vehicle_fuel_log,document_number',
 
         ]);
@@ -1535,8 +1538,8 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->status = $BookingDetail['status'];
         $vehiclefuellog->Hoursreading = !empty($fuelData['hours_reading']) ? $fuelData['hours_reading'] : '';
         $vehiclefuellog->published_at = date("Y-m-d H:i:s");
+        $vehiclefuellog->vehiclebookingID = !empty($fuelData['vehiclebookingID']) ? $fuelData['vehiclebookingID'] : 0;
         $vehiclefuellog->save();
-
         AuditReportsController::store('Fleet Management', 'add vehiclefuel log', "Accessed by User", 0);
         return response()->json();
 

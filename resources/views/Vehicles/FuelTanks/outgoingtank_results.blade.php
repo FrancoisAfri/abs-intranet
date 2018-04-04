@@ -9,7 +9,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">{{$tank}} </h3>
+                    <h3 class="box-title">Outgoing for {{ !empty($tank->tank_name) ? $tank->tank_name : ''}} </h3>
                 </div>
                 {{ csrf_field() }}
                 <div class="box-body">
