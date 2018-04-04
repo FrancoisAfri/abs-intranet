@@ -1076,13 +1076,15 @@ class VehicleFleetController extends Controller
         $status = array(1 => 'Minor', 2 => 'Major', 3 => 'Critical');
 
         $ID = $maintenance->id;
-        $vehicleincidents = DB::table('vehicle_incidents')
-            ->select('vehicle_incidents.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+        $vehicleincidents = vehicle_incidents::
+            select('vehicle_incidents.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_incidents.reported_by', '=', 'hr_people.id')
             ->where('vehicleID', $ID)
             ->orderBy('vehicle_incidents.id')
             ->get();
-
+       if (!empty($vehicleincidents))  $vehicleincidents = $vehicleincidents->load('incidentDoc');
+	  // return $vehicleincidents;
+		$vehicleCong = vehicle_config::orderBy('id', 'asc')->first();
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1092,6 +1094,7 @@ class VehicleFleetController extends Controller
 
         $data['incidentType'] = $incidentType;
         $data['ContactCompany'] = $ContactCompany;
+        $data['vehicleCong'] = $vehicleCong;
         $data['name'] = $name;
         $data['status'] = $status;
         $data['fineType'] = $fineType;
@@ -1135,7 +1138,7 @@ class VehicleFleetController extends Controller
         # document
         $numFiles = $index = 0;
         $totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
-        $Extensions = array('jpg', 'png', 'jpeg', 'bmp', 'doc', 'pdf', 'ods', 'exe', 'csv', 'odt', 'xls', 'xlsx', 'docx', 'txt');
+        $Extensions = array('pdf', 'docx', 'doc');
 
         $Files = isset($_FILES['document']) ? $_FILES['document'] : array();
         while ($numFiles != $totalFiles) {
@@ -1149,7 +1152,7 @@ class VehicleFleetController extends Controller
                 $ext = strtolower($ext);
                 if (in_array($ext, $Extensions)) {
                     if (!is_dir("$vehicleCong->incidents_upload_directory")) mkdir("$vehicleCong->incidents_upload_directory", 0775);
-                    move_uploaded_file($Files['tmp_name'][$index], "$vehicleCong->incidents_upload_directory/" . $fileName) or die('Could not move file!');
+                    move_uploaded_file($Files['tmp_name'][$index], "$vehicleCong->incidents_upload_directory".'/' . $fileName) or die('Could not move file!');
 
                     $document = new VehicleIncidentsDocuments($SysData);
                     $document->display_name = $Name;
