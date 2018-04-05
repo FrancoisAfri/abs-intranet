@@ -81,7 +81,7 @@
                                         <td>{{ (!empty( $tanks->tank_name)) ?  $tanks->tank_name : ''}} </td>
                                         <td>{{ (!empty( $tanks->tank_description)) ?  $tanks->tank_description : ''}} </td>
                                         <td>{{ (!empty( $tanks->tank_capacity)) ? number_format($tanks->tank_capacity, 2) : ''}} </td>
-                                        <td>{{ !empty($tanks->current_fuel_litres) ?  number_format($tanks->current_fuel_litres, 2) : '' }}</td>
+                                        <td>{{ !empty($tanks->current_fuel_litres) ?  number_format($tanks->current_fuel_litres, 2) : 0 }}</td>
                                         <td>{{ (!empty( $tanks->Department)) ?  $tanks->Department : ''}} </td>
                                         <td>{{ (!empty( $tanks->company)) ?  $tanks->company : ''}} </td>
                                         <td>{{ (!empty( $tanks->tank_location)) ?  $tanks->tank_location : ''}} </td>

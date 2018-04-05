@@ -408,6 +408,13 @@ Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingCo
 
 ###
 
+##########################  Alerts  #########################
+Route::get('vehicle_management/vehicle_alerts', 'vehiclealertController@index');
+
+
+
+
+
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
 Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
 Route::patch('vehice/edit_fleet/{fleet}', 'VehicleManagemntController@editfleet');

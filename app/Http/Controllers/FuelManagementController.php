@@ -48,9 +48,7 @@ class FuelManagementController extends Controller
             ->leftJoin('division_level_fours', 'fuel_tanks.division_level_4', '=', 'division_level_fours.id')
             ->orderBy('fuel_tanks.id')
             ->get();
-
-
-        // Fueltanks::orderBy('id', 'asc')->get();
+   
 
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Types Management";
@@ -89,10 +87,7 @@ class FuelManagementController extends Controller
         $tankcapacity = $FueltankData['tank_capacity'] = str_replace(',', '', $FueltankData['tank_capacity']);
         $tankcapacity = $FueltankData['tank_capacity'] = str_replace('. 00', '', $FueltankData['tank_capacity']);
 
-        //convert literes to number
-
-//        $currentlitres = $FueltankData['current_fuel_litres'] = str_replace(',', '', $FueltankData['current_fuel_litres']);
-//        $currentlitres = $FueltankData['current_fuel_litres'] = str_replace('. 00', '', $FueltankData['current_fuel_litres']);
+        $currentlitres = $FueltankData['current_fuel_litres'] = str_replace('. 00', '', $FueltankData['current_fuel_litres']);
 
         $Fueltanks->division_level_1 = !empty($FueltankData['division_level_1']) ? $FueltankData['division_level_1'] : 0;
         $Fueltanks->division_level_2 = !empty($FueltankData['division_level_2']) ? $FueltankData['division_level_2'] : 0;
