@@ -1056,8 +1056,7 @@ class VehicleFleetController extends Controller
         //return $ContactCompany;
 
         $incidentType = incident_type::orderBy('id', 'asc')->get();
-        // return $incidentType;
-
+       
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         $currentDate = time();
@@ -1077,14 +1076,18 @@ class VehicleFleetController extends Controller
 
         $ID = $maintenance->id;
         $vehicleincidents = vehicle_incidents::
-            select('vehicle_incidents.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+            select('vehicle_incidents.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname','incident_type.name as IncidintType')
+            ->leftJoin('incident_type', 'vehicle_incidents.incident_type', '=', 'incident_type.id')
             ->leftJoin('hr_people', 'vehicle_incidents.reported_by', '=', 'hr_people.id')
             ->where('vehicleID', $ID)
             ->orderBy('vehicle_incidents.id')
             ->get();
        if (!empty($vehicleincidents))  $vehicleincidents = $vehicleincidents->load('incidentDoc');
 	  // return $vehicleincidents;
-		$vehicleCong = vehicle_config::orderBy('id', 'asc')->first();
+	$vehicleCong = vehicle_config::orderBy('id', 'asc')->first();  
+        
+       // return $vehicleincidents;
+        
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1108,6 +1111,16 @@ class VehicleFleetController extends Controller
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewVehicleIncidents')->with($data);
+    }
+    
+    public function fixVehicle(vehicle_incidents $vehicle){
+       // return $vehicle;
+        
+        // vehicle_fixed value is one wen the the vehicle has been fixed
+        $vehicle->vehicle_fixed = 1;	
+	$vehicle->update();
+	AuditReportsController::store('MVehicle Incidents', "Vehicle Incidents Page Accessed", "Edited by User", 0);
+	return back();
     }
 
     public function addvehicleincidents(Request $request)
@@ -1133,6 +1146,7 @@ class VehicleFleetController extends Controller
         $vehicleincidents->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->vehiclebookingID = !empty($SysData['vehiclebookingID']) ? $SysData['vehiclebookingID'] : 0;
+        $vehicleincidents->vehicle_fixed =  0; 
         $vehicleincidents->save();
 
         # document
@@ -1171,7 +1185,7 @@ class VehicleFleetController extends Controller
 
         $this->validate($request, [
             //'date' => 'required',
-            'claim_number' => 'required|unique:vehicle_incidents,claim_number',
+            //'claim_number' => 'required|unique:vehicle_incidents,claim_number',
         ]);
         $IncuData = $request->all();
         unset($IncuData['_token']);
