@@ -104,6 +104,8 @@ class FuelManagementController extends Controller
         $Fueltanks->tank_description = $FueltankData['tank_description'];
         $Fueltanks->tank_capacity = $tankcapacity;
         $Fueltanks->tank_manager = !empty($FueltankData['tank_manager']) ? $FueltankData['tank_manager'] : 0;
+        $Fueltanks->current_fuel_litres = 0;
+        $Fueltanks->available_litres =  0;
         $Fueltanks->status = 1;
         $Fueltanks->save();
 
@@ -757,7 +759,7 @@ class FuelManagementController extends Controller
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
             ->get();
 
-        return $Approvals;
+       // return $Approvals;
 
 
         $data['page_title'] = "Fuel Tank Approval";

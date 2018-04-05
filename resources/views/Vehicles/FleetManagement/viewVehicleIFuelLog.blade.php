@@ -133,11 +133,11 @@
                             <th>Fuel in Litres</th>
                             <th>Cost per Litres</th>
                             <th>Cost (R)</th>
-                            {{--@if (isset($MetreType) && $MetreType === 1)--}}
+                            @if (isset($MetreType) && $MetreType === 1)
                                 <th>Odometer Reading</th>
-                            {{--@else--}}
-                                <th>Kilometre Per Litre</th>
-                            {{--@endif--}}
+                            @else
+                                <th>Hours Per Litre</th>
+                            @endif
                             <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
@@ -154,8 +154,11 @@
                                     <td>{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
                                     <td>{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td>{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
+                                    @if (isset($MetreType) && $MetreType === 1)
                                     <td>{{ !empty($details->Odometer_reading) ? $details->Odometer_reading : ''}}</td>
+                                     @else
                                     <td>{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,l' : ''}}</td>
+                                     @endif
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->
                                     <td>

@@ -28,7 +28,7 @@
                             <tr>
 
                                 <th>Transaction Date</th>
-                                {{--  <th>Transaction Type</th>  --}}
+                                <th>Transaction Type</th> 
                                 <th>Supplier/Employee</th>
                                 <th>Fleet No.</th>
                                 <th>Reg. No.</th>
@@ -50,11 +50,12 @@
                                     <tr style="text-align:center">
 
                                         <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
+                                        <td></td>
                                         <td>{{ (!empty( $filling->Supplier)) ?  $filling->Supplier : ''}} </td>
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
-                                        <td>0</td>
-                                        <td>0</td>
+                                        <td>{{ (!empty( $filling->reading_before_filling)) ? 'R'.number_format($filling->reading_before_filling, 2) : 0}} </td>
+                                        <td>{{ (!empty( $filling->reading_after_filling)) ? 'R'.number_format($filling->reading_after_filling, 2) : 0}} </td>
                                         <td>{{ (!empty( $filling->litres)) ?  number_format($filling->litres, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->cost_per_litre)) ? 'R'.number_format($filling->cost_per_litre, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->total_cost)) ? 'R'.number_format($filling->total_cost, 2) : ''}} </td>
@@ -89,7 +90,7 @@
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                                 &times;
                                             </button>
-                                            No Fuel Tank to display, please start by adding a new Fuel Tank..
+                                           No resutls for this Query .......
                                         </div>
                                     </td>
                                 </tr>
