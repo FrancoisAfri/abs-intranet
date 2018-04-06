@@ -32,82 +32,64 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 5px; text-align: center;"></th>
                                         <th>Transaction Date</th>
                                         <th>Transaction Type</th>
                                         <th>Supplier/Employee</th>
-                                        <th>Fleet No.</th>
-                                        <th>Reg. No.</th>
                                         <th>Reading before filling</th>
                                         <th>Reading after filling</th>
                                         <th>Litres</th>
                                         <th>Rate Per Litre</th>
                                         <th>Cost</th>
                                         <th>Litres Available</th>
-                                        <th>Usage</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @if (count($Fueltank) > 0)
-                                        @foreach ($Fueltank as $booking)
+                                        @foreach ($Fueltank as $tank)
                                             <tr id="categories-list">
-                                                <td>
-                                                    <a href="/vehicle_management/bookingdetails/"
-                                                       id="edit_compan" class="btn btn-default  btn-xs"
-                                                       data-id="{{ $booking->id }}">select</a>
-                                                </td>
-                                                <td>{{ !empty($booking->topup_date) ? date(' d M Y', $booking->topup_date) : '' }}</td>
-                                                <td>{{ (!empty($booking->type)) ?  $keyStatus[$booking->type] : ''}}</td>
-                                                <td>{{ (!empty($booking->Supplier)) ?  $booking->Supplier : ''}}</td>
-                                                <td>Nill</td>
-                                                <td>Nill</td>
-                                                <td>{{ (!empty($booking->reading_before_filling)) ?  number_format($booking->reading_before_filling, 2) : 0}}</td>
-                                                <td>{{ (!empty($booking->reading_after_filling)) ? number_format($booking->reading_after_filling, 2) : ''}}</td>
-                                                <td>{{ (!empty($booking->litres)) ?  number_format($booking->litres, 2) : ''}}</td>
-                                                <td>{{ (!empty($booking->cost_per_litre)) ?  'R' .number_format($booking->cost_per_litre, 2) : ''}}</td>
-                                                <td>{{ !empty($booking->total_cost) ? 'R' .number_format($booking->total_cost, 2) : '' }}</td>
-                                                <td></td>
-                                                <td>Nill</td>
+                                                <td>{{ !empty($tank->topup_date) ? date(' d M Y', $tank->topup_date) : '' }}</td>
+                                                <td>{{ (!empty($tank->type)) ?  $topUpStatus[$tank->type] : ''}}</td>
+                                                <td>{{ (!empty($tank->Supplier)) ?  $tank->Supplier : ''}}</td>
+                                                <td>{{ (!empty($tank->reading_before_filling)) ?  number_format($tank->reading_before_filling, 2) : 0}}</td>
+                                                <td>{{ (!empty($tank->reading_after_filling)) ? number_format($tank->reading_after_filling, 2) : ''}}</td>
+                                                <td>{{ (!empty($tank->litres)) ?  number_format($tank->litres, 2) : ''}}</td>
+                                                <td>{{ (!empty($tank->cost_per_litre)) ?  'R' .number_format($tank->cost_per_litre, 2) : ''}}</td>
+                                                <td>{{ !empty($tank->total_cost) ? 'R' .number_format($tank->total_cost, 2) : '' }}</td>
+                                                <td>{{ (!empty($tank->available_litres)) ?  $tank->available_litres : ''}}</td>
                                             </tr>
                                         @endforeach
                                     @endif
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th style="width: 5px; text-align: center;"></th>
                                         <th>Transaction Date</th>
                                         <th>Transaction Type</th>
                                         <th>Supplier/Employee</th>
-                                        <th>Fleet No.</th>
-                                        <th>Reg. No.</th>
                                         <th>Reading before filling</th>
                                         <th>Reading after filling</th>
                                         <th>Litres</th>
                                         <th>Rate Per Litre</th>
                                         <th>Cost</th>
                                         <th>Litres Available</th>
-                                        <th>Usage</th>
                                     </tr>
                                     </tfoot>
                                 </table>
                                 <div class="box-footer" style="text-align: center;">
                                     <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                                class="fa fa-arrow-left"></i> Cancel
+                                                class="fa fa-arrow-left"></i> Back
                                     </button>
                                     <button type="button" id="cat_module" class="btn btn-primary btn-xs"
                                             data-toggle="modal" data-target="#add-topUp-modal"><i
                                                 class="fa fa-caret-square-o-up"></i> Top Up
                                     </button>
-                                    <button type="button" id="cat_module" class="btn btn-primary btn-xs"
+                                    <!--<button type="button" id="cat_module" class="btn btn-primary btn-xs"
                                             data-toggle="modal" data-target="#add-gauge-modal"><i
                                                 class="fa fa-tachometer"></i> Gauge
-                                    </button>
+                                    </button>-->
                                     <button type="button" id="cat_module" class="btn btn-primary btn-xs"
                                             data-toggle="modal" data-target="#add-private-modal"><i
                                                 class="fa fa-tag"></i> Private Usage
                                     </button>
-
-
                                 </div>
                             </div>
                             @include('Vehicles.FuelTanks.partials.topUp_modal')
@@ -148,7 +130,7 @@
 
                             //Cancel button click event
                             document.getElementById("cancel").onclick = function () {
-                                location.href = "/vehicle_management/create_request";
+							location.href = "/vehicle_management/vehice_tank/" + {{$ID}};
                             };
                             $(function () {
                                 $('#example2').DataTable({
@@ -300,7 +282,7 @@
                                     _token: $('#' + modalID).find('input[name=_token]').val()
                                 };
                                 var submitBtnID = 'add-fueltank';
-                                var redirectUrl = '/vehicle_management/fuel_tank';
+                                var redirectUrl = "/vehicle_management/vehice_tank/" + {{$ID}};;
                                 var successMsgTitle = 'Fuel Tank Added!';
                                 var successMsg = 'The Fuel Tank has been added successfully.';
                                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -313,7 +295,7 @@
                                 var formName = 'add-topUp-form';
                                 var modalID = 'add-topUp-modal';
                                 var submitBtnID = 'add-tanktopUp';
-                                var redirectUrl = '/vehicle_management/tanksearch/{{ $ID }}#';
+                                var redirectUrl = "/vehicle_management/vehice_tank/" + {{$ID}};
                                 var successMsgTitle = 'New Record  Added!';
                                 var successMsg = 'The Tank Top Up Details has been updated successfully.';
                                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -326,7 +308,7 @@
                                 var formName = 'add-private-form';
                                 var modalID = 'add-private-modal';
                                 var submitBtnID = 'add_privateUse';
-                                var redirectUrl = '/vehicle_management/tanksearch/{{ $ID }}';
+                                var redirectUrl = "/vehicle_management/vehice_tank/" + {{$ID}};;
                                 var successMsgTitle = 'New Record  Added!';
                                 var successMsg = 'The Tank private Usage Details has been updated successfully.';
                                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

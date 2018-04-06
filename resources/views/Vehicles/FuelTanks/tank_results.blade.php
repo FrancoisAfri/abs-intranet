@@ -55,7 +55,7 @@
                                                 </td>
                                                
                                                 <td>{{ !empty($booking->topup_date) ? date(' d M Y', $booking->topup_date) : '' }}</td>
-                                                <td>{{ (!empty($booking->type)) ?  $keyStatus[$booking->type] : ''}}</td>
+                                                <td>{{ (!empty($booking->type)) ?  $topUpStatus[$booking->type] : ''}}</td>
                                                 <td>{{ (!empty($booking->Supplier)) ?  $booking->Supplier : ''}}</td>
                                                 <td>{{ (!empty($booking->reading_before_filling)) ?  number_format($booking->reading_before_filling, 2) : 0.00}}</td>
                                                  <td>{{ (!empty($booking->reading_after_filling)) ?  number_format($booking->reading_after_filling, 2) : ''}}</td>

@@ -232,8 +232,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="form-group">
                                 <label for="end_mileage_id" class="col-sm-2 control-label"> Additional Actions </label>
                                 <div class="col-sm-10">
@@ -255,13 +253,9 @@
                                     </button>
                                 </div>
                             </div>
-
                             <div class="box-footer">
-
-
                             </div>
                             <!-- /.box-footer -->
-
                             <div class="box-footer" style="text-align: center;">
                                 <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
                                 <button type="submit" name="command" id="update" class="btn btn-primary pull-right">
@@ -281,7 +275,6 @@
                                             data-target="#add-returndocument-modal">Inspection Documents
                                     </button>
                                 @endif
-
                             </div>
                             <!-- /.box-footer -->
                         </div>
@@ -290,8 +283,6 @@
         </div>
         <!-- /.box -->
     </div>
-
-
     @include('Vehicles.Create_request.return_document_modal')
     @include('Vehicles.Create_request.return_image_modal')
     <!-- Addition Actions -->

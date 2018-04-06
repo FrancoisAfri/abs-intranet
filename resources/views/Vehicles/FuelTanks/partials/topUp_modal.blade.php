@@ -59,12 +59,11 @@
                             <label for="reading_before_filling" class="col-sm-2 control-label">Reading before
                                 filling</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="reading_before_filling"
-                                       name="reading_before_filling" value="{{ (!empty($booking->available_litres ))  ?  $booking->reading_before_filling + $booking->litres  : 0 }}"
-                                       placeholder="Enter reading before filling" readonly="">
+							{{ (!empty($current))  ?  $current  : 0 }}
+                                <input type="hidden" name="reading_before_filling" value="{{ (!empty($current))  ?  $current  : 0 }}">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label for="reading_after_filling" class="col-sm-2 control-label">Reading After
                                 filling</label>
                             <div class="col-sm-8">
@@ -72,7 +71,7 @@
                                        name="reading_after_filling" value=""
                                        placeholder="Enter reading after filling" required>
                             </div>
-                        </div>
+                        </div>-->
 
                         <div class="form-group">
                             <label for="litres" class="col-sm-2 control-label">Litres</label>
