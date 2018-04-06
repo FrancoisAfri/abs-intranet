@@ -40,12 +40,19 @@ class vehiclealertController extends Controller
        // alertsIndex
         
        // $vehiclebooking = vehicle_detail::OrderBy('id', 'asc')->get();
-         $status = array(1 => 'Minor Incidents Outstanding', 2 => 'Major Incidents Outstanding', 3 => 'Critical Incidents Outstanding');
+         $status = array(1 => 'Vehicle Minor Incidents Outstanding', 2 => 'Vehicle Major Incidents Outstanding', 3 => 'Vehicle Critical Incidents Outstanding');
+         
+         $keys = array(1 => 'Vehicle Key In Use', 2 => 'Vehicle Key Reallocated', 3 => 'Vehicle Key Lost', 4 => 'Vehicle Key In Safe');
         
         $vehiclebooking = DB::table('vehicle_details')
                 ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ', 'vehicle_booking.return_datetime as return_date ', 
                         'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 
-                        'division_level_fives.name as company', 'division_level_fours.name as Department' ,'vehicle_incidents.severity as Severity')
+                        'division_level_fives.name as company', 'division_level_fours.name as Department' ,'vehicle_incidents.severity as Severity',
+                        'keytracking.key_status as lost','permits_licence.exp_date as licenceExpiredate', 'permits_licence.permit_licence as permitlicence_name',
+                        'permits_licence.permits_licence_no as permitslicenceNumber' ,'fleet_licence_permit.name as permitlicenceName')
+                ->leftJoin('permits_licence', 'vehicle_details.id', '=', 'permits_licence.vehicleID')
+                ->leftJoin('fleet_licence_permit', 'permits_licence.permit_licence', '=', 'fleet_licence_permit.id')
+                ->leftJoin('keytracking', 'vehicle_details.id', '=', 'keytracking.vehicle_id')
                 ->leftJoin('vehicle_incidents', 'vehicle_details.id', '=', 'vehicle_incidents.vehicleID')
                 ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
                 ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
@@ -56,10 +63,13 @@ class vehiclealertController extends Controller
                 //->where('vehicle_details.booking_status', '!=', 1)
                // ->whereNotIn('vehicle_incidents.severity', [ 2, 3])//check if the booking is not approved
                 //->orWhereNull('vehicle_incidents.severity') // allow nulls
-                ->orderBy('vehicle_details.id')
+                ->orderBy('vehicle_details.id', 'asc')
+                //->unique('vehicle_details.id')
                 ->get();
         
-     //   return $vehiclebooking;
+      //   $vehiclebooking = $vehiclebookings->unique('id');
+        
+      // return $vehiclebooking;
         
         
         
@@ -71,6 +81,7 @@ class vehiclealertController extends Controller
         ];
 
         $data['vehiclebooking'] = $vehiclebooking;
+        $data['keys'] = $keys;
         $data['status'] = $status;
 //        $data['licence'] = $licence;
         $data['active_mod'] = 'Fleet Management';

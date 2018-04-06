@@ -550,6 +550,8 @@ class FleetManagementController extends Controller
             ->orderBy('keytracking.id')
             ->where('vehicle_id', $ID)
             ->get();
+        
+      //  return $keytracking;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -786,8 +788,8 @@ class FleetManagementController extends Controller
     public function editPermit(Request $request, permits_licence $permit)
     {
         $this->validate($request, [
-            'Supplier' => 'required',
-            'permits_licence_no' => 'required|unique:permits_licence,permits_licence_no',
+           // 'Supplier' => 'required',
+            //'permits_licence_no' => 'required|unique:permits_licence,permits_licence_no',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);

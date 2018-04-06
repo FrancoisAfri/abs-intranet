@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class permit_licence extends Model
 {
-    protected $table = 'permit_licence';
+    // protected $table = 'permit_licence';
 
-    protected $fillable = ['name', 'description', 'status'];
+    // protected $fillable = ['name', 'description', 'status'];
 }

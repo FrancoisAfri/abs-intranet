@@ -1114,8 +1114,6 @@ class VehicleFleetController extends Controller
     }
     
     public function fixVehicle(vehicle_incidents $vehicle){
-       // return $vehicle;
-        
         // vehicle_fixed value is one wen the the vehicle has been fixed
         $vehicle->vehicle_fixed = 1;	
 	$vehicle->update();

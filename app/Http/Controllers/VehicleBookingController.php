@@ -204,7 +204,7 @@ class VehicleBookingController extends Controller {
                 ->orderBy('vehicle_details.id')
                 ->get();
 
-       //return  $vehiclebookings;
+                //  return  $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 
