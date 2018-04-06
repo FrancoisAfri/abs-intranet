@@ -1413,11 +1413,8 @@ class VehicleFleetController extends Controller
     public function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
     {
 
-        // query the vehicle_configuration  table and bring back the values
-
         $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
-//            if(!empty($approvals))
-//                $approvals = 0;
+
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
         $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
         $fueltanks = Fueltanks::where('id', $tankID)->orderBy('id', 'desc')->get();
@@ -1535,9 +1532,12 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->published_at = date("Y-m-d H:i:s");
         $vehiclefuellog->vehiclebookingID = !empty($fuelData['vehiclebookingID']) ? $fuelData['vehiclebookingID'] : 0;
         $vehiclefuellog->save();
+		if (!empty($fuelData['transaction']) &&  $fuelData['transaction'] == 1)
+		{
+			FueltankTopUp
+		}
         AuditReportsController::store('Fleet Management', 'add vehiclefuel log', "Accessed by User", 0);
         return response()->json();
-
     }
 
     public function viewBookingLog(vehicle_maintenance $maintenance)

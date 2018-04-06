@@ -13,11 +13,8 @@ class vehicle_fuel_log extends Model
 								'Hoursreading' ,'description', 'captured_by','vehicleID', 'rensonsible_person',
 								'service_station','transaction_type','cost_per_litre','total_cost','tank_and_other','status'
 								,'reject_reason','reject_timestamp','rejector_id','published_at'];
-    
-
 
 	public function fuellogVehicle() {
 			return $this->belongsTo(vehicle_detail::class, 'vehicle_id');
-		}
-							
+		}					
 }

@@ -45,7 +45,6 @@
                                     <h3 class="box-title">Search Fuel Tank Details </h3>
                                 </div>
                                 <div class="box-body" id="vehicle_details">
-
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Tank Name </label>
                                         <div class="col-sm-10">
@@ -60,7 +59,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                                         <label for="days" class="col-sm-2 control-label">Transaction Date</label>
                                         <div class="col-sm-10">
@@ -75,7 +73,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group{{ $errors->has('transaction_type') ? ' has-error' : '' }}">
                                         <label for="transaction_type" class="col-sm-2 control-label"> Transaction Type</label>
                                         <div class="col-sm-9">
@@ -84,8 +81,6 @@
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_both" name="transaction_type" value="3" checked> Both  </label>
                                         </div>
                                     </div>
-
-
                                     <div class="form-group usage-field{{ $errors->has('usage_type') ? ' has-error' : '' }}">
                                         <label for="usage_type" class="col-sm-2 control-label"> Usage </label>
                                         <div class="col-sm-10">
@@ -95,15 +90,9 @@
                                             <label class="radio-inline"><input type="radio" id="rdo_usage"
                                                                                name="usage_type" value="2">
                                                 Private </label>
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          id="rdo_usage"
-                                                                                                          name="usage_type"
-                                                                                                          value="3"
-                                                                                                          checked> Both
-                                            </label>
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" checked> Both</label>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">employee</label>
                                         <div class="col-sm-10">
@@ -121,10 +110,11 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-
                                 <div class="box-footer">
+									<button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                                class="fa fa-arrow-left"></i> Back
+                                    </button>
                                     <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-search"></i> Search </button>
                                 </div>
                             </div>
@@ -163,6 +153,10 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
     <script type="text/javascript">
+	//Cancel button click event
+		document.getElementById("cancel").onclick = function () {
+		location.href = "/vehicle_management/fuel_tank/";
+		};
         $(function () {
             $(".select2").select2();
             $('form[name="leave-application-form"]').attr('action', '/vehicle_management/both/{{ $ID }}');
@@ -258,7 +252,5 @@
             $('#required_to').datepicker({});
 
         });
-
-
     </script>
 @endsection

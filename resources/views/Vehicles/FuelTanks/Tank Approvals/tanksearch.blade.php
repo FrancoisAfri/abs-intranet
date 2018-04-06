@@ -19,7 +19,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border" align="center">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">FuelTank Search criteria</h3>
+                    <h3 class="box-title">Fuel Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                 <form name="leave-application-form" class="form-horizontal" method="POST" action=" "
