@@ -113,6 +113,8 @@
                             <th> Severity</th>
                             <th>Cost (R)</th>
                             <th style="width: 5px; text-align: center;">Documents</th>
+                            <th style="width: 10px; text-align: center;"></th>
+                           
                         </tr>
                         @if (count($vehicleincidents) > 0)
                             @foreach ($vehicleincidents as $details)
@@ -136,7 +138,7 @@
                                     <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
                                     <td>{{ !empty($details->odometer_reading) ? number_format($details->odometer_reading, 2) : '' }}</td>
-                                    <td>{{ (!empty($details->incident_type)) ?  $fineType[$details->incident_type] : ''}}</td>
+                                    <td>{{ (!empty($details->IncidintType)) ?  $details->IncidintType : ''}}</td>
                                     <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
                                     <td>{{ !empty($details->Cost) ? 'R' .number_format($details->Cost, 2) : '' }}</td>
                                     <td nowrap>
@@ -153,8 +155,16 @@
                                             @endif
                                         </div>	 
                                     </td>
-                                    <td>{{ !empty($details->fine_status) ?  $status[$details->fine_status] : ''}}</td>
-                                    </td>
+                                   
+                                    @if (isset($details) && $details->vehicle_fixed != 1)
+                                   <td>
+                                        <button type="button" id="view_ribbons" class="btn {{ (!empty($details->vehicle_fixed) || $details->vehicle_fixed == 1 || $details->vehicle_fixed == 2 && $details->vehicle_fixed == 3) ? " btn-success " : "btn-danger" }}
+                                            btn-xs" onclick="postData({{$details->id}}, 'actdeac');"><i class="fa {{ (!empty($details->vehicle_fixed) && $details->vehicle_fixed == 1) ?
+                                            " fa-times " : "fa-check " }}"></i> {{(!empty($details->vehicle_fixed) && $details->vehicle_fixed == 1) ? "De-Activate" : "Fix Car"}}</button>
+                                  </td>
+                                       @else
+                                           <td></td>
+                                  @endif
                                 </tr>
                             @endforeach
                         @else
@@ -217,13 +227,18 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
             <script>
                 function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
+                   // if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
+                    if (data == 'actdeac') location.href = "/vehicle_management/fixvehicle/" + id;
 
                 }
 			$(function () {
                 $('#back_button').click(function () {
                     location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 });
+                
+             
+                
+                
 
 
                 var moduleId;

@@ -163,7 +163,10 @@ class VehicleBookingController extends Controller {
 
 
         $vehiclebookings = DB::table('vehicle_details')
-                ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ', 'vehicle_booking.return_datetime as return_date ', 'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 'division_level_fives.name as company', 'division_level_fours.name as Department')
+                ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ', 'vehicle_booking.return_datetime as return_date ', 
+                        'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 
+                        'division_level_fives.name as company', 'division_level_fours.name as Department' ,'vehicle_incidents.severity as Severity')
+                ->leftJoin('vehicle_incidents', 'vehicle_details.id', '=', 'vehicle_incidents.vehicleID')
                 ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
                 ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
                 ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
@@ -196,11 +199,12 @@ class VehicleBookingController extends Controller {
                   }
                   }) */
                 ->where('vehicle_details.booking_status', '!=', 1)
-                // ->where('vehicle_booking.status' , '=', 12 )
+                ->whereNotIn('vehicle_incidents.severity', [ 2, 3])//check if the booking is not approved
+                ->orWhereNull('vehicle_incidents.severity') // allow nulls
                 ->orderBy('vehicle_details.id')
                 ->get();
 
-        //return  $vehiclebookings;
+       //return  $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 

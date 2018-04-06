@@ -408,6 +408,11 @@ Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingCo
 
 ###
 
+##########################  Alerts  #########################
+Route::get('vehicle_management/vehicle_alerts', 'vehiclealertController@index');
+
+
+
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
 Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
 Route::patch('vehice/edit_fleet/{fleet}', 'VehicleManagemntController@editfleet');
@@ -515,6 +520,9 @@ Route::patch('vehicle_management/edit_fines/{fines}', 'VehicleFleetController@ed
 Route::get('vehicle_management/incidents/{maintenance}', 'VehicleFleetController@viewIncidents');
 Route::post('vehicle_management/addvehicleincidents', 'VehicleFleetController@addvehicleincidents');
 Route::patch('vehicle_management/edit_vehicleincidents/{incident}', 'VehicleFleetController@editvehicleincidents');
+##fix vehicle
+Route::get('vehicle_management/fixvehicle/{vehicle}', 'VehicleFleetController@fixVehicle');
+
 
 Route::get('vehicle_management/insurance/{maintenance}', 'VehicleFleetController@viewInsurance');
 Route::post('vehicle_management/addpolicy', 'VehicleFleetController@addInsurance');

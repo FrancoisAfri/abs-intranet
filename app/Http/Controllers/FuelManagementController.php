@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Validator;
 
 class FuelManagementController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -65,6 +66,7 @@ class FuelManagementController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.fueltanks')->with($data);
+
     }
 
     public function Addfueltank(Request $request)
@@ -73,6 +75,7 @@ class FuelManagementController extends Controller
             'tank_capacity' => 'required',
             'tank_name' => 'required',
             'tank_manager' => 'required',
+
         ]);
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
@@ -83,7 +86,7 @@ class FuelManagementController extends Controller
         $tankcapacity = $FueltankData['tank_capacity'] = str_replace(',', '', $FueltankData['tank_capacity']);
         $tankcapacity = $FueltankData['tank_capacity'] = str_replace('. 00', '', $FueltankData['tank_capacity']);
 
-        //convert literes to number
+        $currentlitres = $FueltankData['current_fuel_litres'] = str_replace('. 00', '', $FueltankData['current_fuel_litres']);
 
         $Fueltanks->division_level_1 = !empty($FueltankData['division_level_1']) ? $FueltankData['division_level_1'] : 0;
         $Fueltanks->division_level_2 = !empty($FueltankData['division_level_2']) ? $FueltankData['division_level_2'] : 0;
@@ -119,6 +122,9 @@ class FuelManagementController extends Controller
 
         $tankcapacity = $FueltankData['tank_capacity'] = str_replace(',', '', $FueltankData['tank_capacity']);
         $tankcapacity = $FueltankData['tank_capacity'] = str_replace('. 00', '', $FueltankData['tank_capacity']);
+
+        //convert literes to number
+
 
         $Fueltanks->division_level_1 = !empty($FueltankData['division_level_1']) ? $FueltankData['division_level_1'] : 0;
         $Fueltanks->division_level_2 = !empty($FueltankData['division_level_2']) ? $FueltankData['division_level_2'] : 0;
@@ -188,6 +194,7 @@ class FuelManagementController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Viewtank')->with($data);
+
     }
 
     public function incoming(Request $request, Fueltanks $tank)
@@ -243,7 +250,6 @@ class FuelManagementController extends Controller
         ]);
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
-
         $ID = $tank->id;
         $Fueltanks = Fueltanks::where('id', $ID)->orderBy('id', 'desc')->get()->first();
 
@@ -301,7 +307,6 @@ class FuelManagementController extends Controller
         ]);
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
-
         $ID = $tank->id;
         $Fueltanks = Fueltanks::where('id', $ID)->orderBy('id', 'desc')->get()->first();
 
@@ -328,6 +333,7 @@ class FuelManagementController extends Controller
         $topUpStatus = array(1 => 'Incoming', 2 => '= Outgoing', 3 => 'Private Usage');
 
         $current = DB::table('fuel_tanks')->where('id', $ID)->pluck('current_fuel_litres')->first();
+        
         $FueltankTopUp = FueltankTopUp::orderBy('id', 'desc')->get();
         $Fueltanks = Fueltanks::where('id', $ID)->orderBy('id', 'desc')->first();
 
@@ -351,6 +357,7 @@ class FuelManagementController extends Controller
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.bothtank_results')->with($data);
     }
+
 
     public function TanktopUp(Request $request)
     {
@@ -415,7 +422,9 @@ class FuelManagementController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fuel Tank Top Up', "Accessed By User", 0);
         return response()->json();
+
     }
+
 
     public function TankprivateUse(Request $request)
     {
@@ -453,7 +462,6 @@ class FuelManagementController extends Controller
         $topUp->tank_id = !empty($FueltankData['tank_id']) ? $FueltankData['tank_id'] : 0;
         $topUp->status = 1;
         $topUp->save();
-         //update the tank with the new Capacity
         
         AuditReportsController::store('Fleet Management', 'Fuel Tank Private Use', "Accessed By User", 0);
         return response()->json();
@@ -643,10 +651,8 @@ class FuelManagementController extends Controller
         $hrDetails = HRPerson::where('status', 1)->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_maintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
-        // return $vehicle_maintenance;
         $tank = DB::table('vehicle_fuel_log')->get();
 
-        // $topUpStatus = array(1 => 'Incoming', 2 => '= Outgoing', 3 => 'Private Usage');
         $actionFrom = $actionTo = 0;
         $actionDate = $request['action_date'];
         if (!empty($actionDate)) {
