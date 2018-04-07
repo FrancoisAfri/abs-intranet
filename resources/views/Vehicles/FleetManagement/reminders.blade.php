@@ -135,7 +135,7 @@
         <!-- Include delete warning Modal form-->
 
             @if (count($reminders) > 0)
-                @include('Vehicles.warnings.reminders_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this vehicle model ? This action cannot be undone.'])
+                @include('Vehicles.warnings.reminders_warning_action', ['modal_title' => 'Delete Reminder', 'modal_content' => 'Are you sure you want to delete this vehicle model ? This action cannot be undone.'])
             @endif
 
         </div>   

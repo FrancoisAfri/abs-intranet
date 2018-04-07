@@ -13,4 +13,7 @@ class vehicle_documets extends Model
      public function vehicledocumets(){
         return $this->belongsTo(vehicledocumets::class, 'vehicleID');
     }
+	public function documentType() {
+        return $this->belongsTo(fleet_documentType::class, 'type');
+    }
 }

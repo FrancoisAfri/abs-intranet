@@ -33,6 +33,7 @@ Use App\vehicle_serviceDetails;
 use App\ribbons_access;
 use App\service_station;
 use App\Fueltanks;
+use App\fleet_documentType;
 use App\vehicle_config;
 use App\ContactPerson;
 use App\vehicle;
@@ -61,6 +62,7 @@ class VehicleFleetController extends Controller
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        $documentTypes = fleet_documentType::where('status', 1)->orderBy('name')->get();
         ################## WELL DETAILS ###############
 
         $ID = $maintenance->id;
@@ -68,7 +70,8 @@ class VehicleFleetController extends Controller
         $currentTime = time();
 
         $vehicleDocumets = vehicle_documets::where(['vehicleID' => $ID])->orderBy('vehicle_documets',$ID)->get();
-
+		if (!empty($vehicleDocumets)) $vehicleDocumets = $vehicleDocumets->load('documentType');
+		
         $data['currentTime'] = $currentTime;
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -82,6 +85,7 @@ class VehicleFleetController extends Controller
         $data['vehiclemaker'] = $vehiclemaker;
         $data['employees'] = $employees;
         $data['vehicleDocumets'] = $vehicleDocumets;
+        $data['documentTypes'] = $documentTypes;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
@@ -142,20 +146,23 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-        //return $vehiclenotes;
-
+		$loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+		
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
             ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-
+		
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['employees'] = $employees;
         $data['vehiclenotes'] = $vehiclenotes;
+		$data['name'] = $name;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
@@ -205,7 +212,7 @@ class VehicleFleetController extends Controller
     public function addreminder(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required|unique:reminders,name',
+            'name' => 'required|unique:vehicle_reminders,name',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1385,7 +1392,6 @@ class VehicleFleetController extends Controller
         if ($icurrentmonth < 10) {
             $icurrentmonth = 0. . $icurrentmonth;
         } else $icurrentmonth = $icurrentmonth;
-
 
         $data['MetreType'] = $MetreType;
         $data['icurrentmonth'] = $icurrentmonth;

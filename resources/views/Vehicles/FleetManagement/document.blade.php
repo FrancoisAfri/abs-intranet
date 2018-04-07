@@ -63,11 +63,11 @@
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
                             <th style="width: 5px; text-align: center;"></th>
+                            <th>Document Type</th>
                             <th>Description</th>
                             <th>Date Uploaded</th>
                             <th>Date From</th>
                             <th>Expiry Date</th>
-                            <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($vehicleDocumets) > 0)
@@ -141,6 +141,7 @@
                                             @endif
                                         </div>
                                     </td>
+                                    <td>{{ !empty($document->documentType) ? $document->documentType->name : ''}}</td>
                                     <td>{{ !empty($document->description) ? $document->description : ''}}</td>
                                     <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
                                     <td>{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
@@ -191,7 +192,7 @@
         @include('Vehicles.partials.edit_newdocument_modal')
         <!-- Include delete warning Modal form-->
             @if (count($vehicleDocumets) > 0)
-                @include('Vehicles.warnings.documents_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Document? This action cannot be undone.'])
+                @include('Vehicles.warnings.documents_warning_action', ['modal_title' => 'Delete Document', 'modal_content' => 'Are you sure you want to delete this Document? This action cannot be undone.'])
             @endif
 
         </div>

@@ -38,10 +38,10 @@
                                 </div>
 
                                 <select id="type" name="type" class="form-control">
-                                    <!-- <option value="0">*** Select Fuel Type ***</option> -->
-                                    <option value="1"> Inspection</option>
-                                    <option value="2"> General Documents</option>
-                                    <option value="3"> Tracking Certificates</option>
+                                    <option value="0">*** Select Document Type ***</option> 
+                                    @foreach($documentTypes as $documentType)
+                                    <option value="{{ $documentType->id }}">{{ $documentType->name}}</option>
+                                @endforeach
                                 </select>
                             </div>
                         </div>

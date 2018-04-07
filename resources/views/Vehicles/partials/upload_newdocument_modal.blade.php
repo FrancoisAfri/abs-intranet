@@ -36,10 +36,10 @@
                                 </div>
 
                                 <select id="type" name="type" class="form-control">
-                                    <!-- <option value="0">*** Select Fuel Type ***</option> -->
-                                    <option value="1"> Inspection</option>
-                                    <option value="2"> General Documents</option>
-                                    <option value="3"> Tracking Certificates</option>
+                                    <option value="0">*** Select Document Type ***</option> 
+                                    @foreach($documentTypes as $documentType)
+                                    <option value="{{ $documentType->id }}">{{ $documentType->name}}</option>
+                                @endforeach
                                 </select>
                             </div>
                         </div>
@@ -92,19 +92,6 @@
                                    value="{{ old('exp_date') }}" placeholder="Select  Expiry date ...">
                         </div>
                     </div>
-
-                    {{--<div class="form-group">--}}
-                    {{--<label for="role" class="col-sm-2 control-label">Role</label>--}}
-                    {{--<div class="col-sm-8">--}}
-                    {{--<select class="form-control select2" style="width: 100%;" id="role" name="role">--}}
-                    {{--<option value="">*** Select a Role ***</option>--}}
-                    {{--@foreach($employees as $employee)--}}
-                    {{--<option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>--}}
-                    {{--@endforeach--}}
-                    {{--</select>--}}
-                    {{--</div>--}}
-                    {{--</div>--}}
-
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 
