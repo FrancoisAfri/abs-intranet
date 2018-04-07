@@ -151,13 +151,13 @@
                                     <td>{{ !empty($details->tank_and_other) ?  $status[$details->tank_and_other] : ''}}</td>
                                     <td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
                                     <td>{{ !empty($details->Staion) ?  $details->Staion : ''}}</td>
-                                    <td>{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
-                                    <td>{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
-                                    <td>{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
+                                    <td style="text-align: center">{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
+                                    <td style="text-align: center">{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
+                                    <td style="text-align: center">{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
                                     @if (isset($MetreType) && $MetreType === 1)
-                                    <td>{{ !empty($details->Odometer_reading) ? $details->Odometer_reading : ''}}</td>
+                                    <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading : ''}}</td>
                                      @else
-                                    <td>{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,l' : ''}}</td>
+                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,l' : ''}}</td>
                                      @endif
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->
@@ -172,12 +172,12 @@
                             <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
                             <class="caption">
                             <td colspan="6" style="text-align:right">Total</td>
-                            <td style="text-align: right">{{number_format($iTotalLitres, 2) }}</td>
-                            <td style="text-align: right">&nbsp;</td>
-                            <td style="text-align: right" nowrap>{{'R '.number_format($sCurrency, 2)}}</td>
-                            <td style="text-align: right"><span style="float:right"></span></br><span
+                            <td style="text-align: center">{{number_format($iTotalLitres, 2) }}</td>
+                            <td style="text-align: center">&nbsp;</td>
+                            <td style="text-align: center" nowrap>{{'R '.number_format($sCurrency, 2)}}</td>
+                            <td style="text-align: center"><span style="float:right"></span></br><span
                                         style="float:right"></span></td>
-                            <td style="text-align: right">$iAvgKMperLitre</td>
+                            <td style="text-align: center"></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
 

@@ -36,6 +36,7 @@ use App\Fueltanks;
 use App\vehicle_config;
 use App\ContactPerson;
 use App\vehicle;
+use App\FueltankTopUp;
 use App\vehicle_detail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -1287,16 +1288,12 @@ class VehicleFleetController extends Controller
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
 
-        // return  date('Y', $date);
-        //return $date;
-
         $now = Carbon::now();
 
         $startExplode = explode('_', $date);
         $imonth = $startExplode[0];
         $command = (!empty($startExplode[1]) ? $startExplode[1] : 0);
         $iYear = (!empty($startExplode[2]) ? $startExplode[2] : 0);
-
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
 
@@ -1306,7 +1303,7 @@ class VehicleFleetController extends Controller
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $servicestation = fleet_fillingstation::orderBy('id', 'desc')->get();
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
-
+ 
         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
         $commands = $command;
 
@@ -1327,7 +1324,7 @@ class VehicleFleetController extends Controller
             } else $imonth = $imonth + 1;
         }
 
-//                ################## WELL DETAILS ###############
+        ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
@@ -1336,7 +1333,7 @@ class VehicleFleetController extends Controller
         $loggedInEmplID = Auth::user()->person->id;
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
-        //return $name;
+
         ###################>>>>>#################
         $fineType = array(1 => 'Accident', 2 => 'Mechanical Fault', 3 => 'Electronic Fault', 4 => 'Damaged', 5 => 'Attempted Hi-jacking', 6 => 'Hi-jacking', 7 => 'Other');
 
@@ -1351,7 +1348,7 @@ class VehicleFleetController extends Controller
             $vehicle_fuel_log = vehicle_fuel_log::latest()->first();
 
         $datetaken = date('n');
-        //return $datetaken;
+
         if ($imonth < 10) {
             $imonth = 0. . $imonth;
         } else $imonth = $imonth;
@@ -1372,9 +1369,6 @@ class VehicleFleetController extends Controller
             ->whereYear('vehicle_fuel_log.created_at', '=', $iYear)// show record for this year
             // ->where('vehicle_fuel_log.status','!=', 1)
             ->get();
-
-        //return $vehiclefuellog;
-
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1424,7 +1418,7 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
     }
 
-    public function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
+    public static function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
     {
 
         $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
@@ -1450,7 +1444,7 @@ class VehicleFleetController extends Controller
             $details = array('status' => 1, 'first_name' => $User->first_name, 'surname' => $User->surname, 'email' => $User->email);
             return $details;
 
-        } elseif ($approvals->fuel_require_tank_manager_approval == 1) {
+        } elseif ($approvals->fuel_require_tank_manager_approval == 1 && $status < 4) {
 
             //
             if (!empty($fueltanks)) {
@@ -1462,9 +1456,7 @@ class VehicleFleetController extends Controller
                 $userID = $fueltanks->first()->tank_manager;
 
             $UserDetails = HRPerson::where('id', $userID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
-            //
-            //riverHeadDetails = HRPerson::where('id', $driverHead)->where('status', 1)->select('first_name', 'surname', 'email')->first();
-
+            
             if ($UserDetails == null) {
                 $details = array('status' => 4, 'first_name' => $UserDetails->first_name, 'surname' => $UserDetails->surname, 'email' => $UserDetails->email);
                 return $details;
@@ -1473,7 +1465,7 @@ class VehicleFleetController extends Controller
                 $details = array('status' => 4, 'first_name' => $UserDetails->first_name, 'surname' => $UserDetails->surname, 'email' => $UserDetails->email);
                 return $details;
             }
-        } elseif ($approvals->fuel_require_ceo_approval == 1) {
+        } elseif ($approvals->fuel_require_ceo_approval == 1 && $status < 10) {
 
             $Dept = DivisionLevelFour::where('manager_id', $hrDetails->division_level_4)->get()->first();
 
@@ -1487,9 +1479,12 @@ class VehicleFleetController extends Controller
                 $details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
                 return $details;
             }
-        } else {
-
-            $details = array('status' => 4, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
+        } 
+		else 
+		{
+			if ($status == 4 || $status == 10) $newStatus = 1;
+			else  $newStatus = 4;
+            $details = array('status' => $newStatus, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
             return $details;
         }
     }
@@ -1501,7 +1496,6 @@ class VehicleFleetController extends Controller
             'tank_name' => 'bail|required',
             'Odometer_reading' => 'bail|required',
             'document_number' => 'required|unique:vehicle_fuel_log,document_number',
-
         ]);
         $fuelData = $request->all();
         unset($fuelData['_token']);
@@ -1516,10 +1510,8 @@ class VehicleFleetController extends Controller
         $hrID = $fuelData['rensonsible_person'];
         $tankID = $fuelData['tank_name'];
 
-
         $BookingDetails = array();
         $BookingDetail = VehicleFleetController::BookingDetails(0, $hrID, 0, $tankID);
-
 
         $dateofincident = $fuelData['date'] = str_replace('/', '-', $fuelData['date']);
         $dateofincident = $fuelData['date'] = strtotime($fuelData['date']);
@@ -1548,7 +1540,20 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->save();
 		if (!empty($fuelData['transaction']) &&  $fuelData['transaction'] == 1)
 		{
-			FueltankTopUp
+			//FueltankTopUp FueltankTopUp
+			$topUp = new FueltankTopUp();
+			$topUp->document_no = $vehiclefuellog->document_number;
+			$topUp->document_date = $dateofincident;
+			$topUp->topup_date = $dateofincident;
+			$topUp->type = 2; //outgoing
+			$topUp->litres = $vehiclefuellog->litres;
+			$topUp->description = $vehiclefuellog->description;
+			$topUp->received_by = $vehiclefuellog->driver;
+			$topUp->captured_by = $loggedInEmplID; 
+			$topUp->tank_id = $vehiclefuellog->tank_name;
+			$topUp->vehicle_fuel_id = $vehiclefuellog->id;
+			$topUp->status = $BookingDetail['status'];
+			$topUp->save();
 		}
         AuditReportsController::store('Fleet Management', 'add vehiclefuel log', "Accessed by User", 0);
         return response()->json();
