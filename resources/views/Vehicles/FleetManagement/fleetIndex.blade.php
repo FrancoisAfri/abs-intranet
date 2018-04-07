@@ -37,8 +37,6 @@
                                     <h3 class="box-title">Search for a Vehicle</h3>
                                 </div>
                                 <div class="box-body" id="vehicle_details">
-
-
                                     @foreach($division_levels as $division_level)
                                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                             <label for="{{ 'division_level_' . $division_level->level }}"
@@ -58,7 +56,6 @@
                                             </div>
                                         </div>
                                     @endforeach
-
                                 <div class="form-group{{ $errors->has('property_type') ? ' has-error' : '' }}">
                                         <label for="property_type" class="col-sm-3 control-label"> Property
                                             Type </label>

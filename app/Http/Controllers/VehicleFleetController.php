@@ -126,8 +126,6 @@ class VehicleFleetController extends Controller
 
     public function viewnotes(vehicle_maintenance $maintenance)
     {
-
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         ################## WELL DETAILS ###############

@@ -265,11 +265,11 @@
                     <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Documents</a>
-
+<!--
                     <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Contracts</a>
-
+-->
 
                     <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"

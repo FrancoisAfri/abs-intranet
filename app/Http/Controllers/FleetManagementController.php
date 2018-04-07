@@ -43,10 +43,10 @@ class FleetManagementController extends Controller
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $ContactCompany = ContactCompany::where('status', 1)->orderBy('id', 'asc')->get();
+        $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
-        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
+        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('name', 'desc')->get();
 
         $images = images::orderBy('id', 'asc')->get();
 
@@ -54,7 +54,7 @@ class FleetManagementController extends Controller
         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
         $vehicleConfig = $vehicleConfigs->first();
 
-        //return $vehicleConfig;
+        //return $vehicleConfig; 073 955 0341
 
         // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
@@ -944,7 +944,8 @@ class FleetManagementController extends Controller
     public function newnotes(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+           // 'notes' => 'required',
+			'notes' => 'required|unique:notes,notes',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);

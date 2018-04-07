@@ -256,15 +256,7 @@
 				autoclose: true,
 				todayHighlight: true
 			});
-
-
-			
 		 });
-
-
-
-
-
 		//Post perk form to server using ajax (add)
 		$('#add_notes').on('click', function () {
 			var strUrl = '/vehicle_management/add_new_note';
@@ -276,8 +268,6 @@
 			var successMsg = 'The Note  has been updated successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
-
-		// });
 
 		var noteID;
 		$('#edit-note-modal').on('show.bs.modal', function (e) {
@@ -298,8 +288,6 @@
 			modal.find('#documents').val(documents);
 
 		});
-
-
 		//Post perk form to server using ajax (edit)
 		$('#edit_note').on('click', function () {
 			var strUrl = '/vehicle_management/edit_note/' + noteID;
@@ -312,7 +300,5 @@
 			var Method = 'PATCH';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
-
-
 	</script>
 @endsection

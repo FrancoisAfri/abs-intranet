@@ -778,8 +778,6 @@ class VehicleManagemntController extends Controller
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 		
-	
-
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
@@ -806,10 +804,7 @@ class VehicleManagemntController extends Controller
             })
             ->orderBy('vehicle_details.id', 'desc')
             ->get();
-
-        //return $vehiclemaintenance;
-
-
+			
         $data['hrDetails'] = $hrDetails;
         $data['division_levels'] = $divisionLevels;
         $data['companyID'] = $companyID;
