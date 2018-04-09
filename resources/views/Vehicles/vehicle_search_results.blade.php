@@ -173,7 +173,7 @@
 
                         //Cancel button click event
                         document.getElementById("cancel").onclick = function () {
-                            location.href = "/vehicle_management/Search";
+                            location.href = "/vehicle_management/manage_fleet";
                         };
                         $(function () {
                             $('#example2').DataTable({

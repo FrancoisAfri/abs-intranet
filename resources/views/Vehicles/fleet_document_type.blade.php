@@ -67,7 +67,7 @@
 
         <!-- Include delete warning Modal form-->
             @if (count($fleetdocumentType) > 0)
-                @include('Vehicles.warnings.document_warning_action', ['modal_title' => 'Delete Document Type', 'modal_content' => 'Are you sure you want to delete this Document Type? This action cannot be undone.'])
+                @include('Vehicles.warnings.documents_warning_action', ['modal_title' => 'Delete Document Type', 'modal_content' => 'Are you sure you want to delete this Document Type? This action cannot be undone.'])
             @endif
 
 </div>

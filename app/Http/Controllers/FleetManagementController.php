@@ -42,11 +42,11 @@ class FleetManagementController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $ContactCompany = ContactCompany::where('status', 1)->orderBy('id', 'asc')->get();
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'asc')->get();
+        $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
-        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
+        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('name', 'asc')->get();
 
         $images = images::orderBy('id', 'asc')->get();
 
@@ -54,7 +54,7 @@ class FleetManagementController extends Controller
         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
         $vehicleConfig = $vehicleConfigs->first();
 
-        //return $vehicleConfig;
+        //return $vehicleConfig; 073 955 0341
 
         // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
@@ -204,7 +204,7 @@ class FleetManagementController extends Controller
         //Upload supporting document
         if ($request->hasFile('registration_papers')) {
             $fileExt = $request->file('registration_papers')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('registration_papers')->isValid()) {
+            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('registration_papers')->isValid()) {
                 $fileName = $vehicle_maintenance->id . "_registration_papers." . $fileExt;
                 $request->file('registration_papers')->storeAs('Vehicle/registration_papers', $fileName);
                 //Update file name in the table
@@ -297,7 +297,7 @@ class FleetManagementController extends Controller
         //Upload supporting document
         if ($request->hasFile('registration_papers')) {
             $fileExt = $request->file('registration_papers')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('registration_papers')->isValid()) {
+            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('registration_papers')->isValid()) {
                 $fileName = $vehicle_maintenance->id . "_registration_papers." . $fileExt;
                 $request->file('registration_papers')->storeAs('Vehicle/registration_papers', $fileName);
                 //Update file name in the table
@@ -835,7 +835,11 @@ class FleetManagementController extends Controller
     public function newdocument(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            'type' => 'required',
+            'description' => 'required',
+            'date_from' => 'required',
+            'exp_date' => 'required',
+            'valueID' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -851,7 +855,6 @@ class FleetManagementController extends Controller
         $vehicledocumets = new vehicle_documets();
         $vehicledocumets->type = !empty($SysData['type']) ? $SysData['type'] : 0;
         $vehicledocumets->description = $SysData['description'];
-        $vehicledocumets->role = !empty($SysData['role']) ? $SysData['role'] : 0;
         $vehicledocumets->date_from = $datefrom;
         $vehicledocumets->exp_date = $Expdate;
         $vehicledocumets->upload_date = $currentDate;
@@ -881,7 +884,10 @@ class FleetManagementController extends Controller
     public function editVehicleDoc(Request $request, vehicle_documets $vehicledocumets)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+            'type' => 'required',
+            'description' => 'required',
+            'date_from' => 'required',
+            'exp_date' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -946,18 +952,18 @@ class FleetManagementController extends Controller
     public function newnotes(Request $request)
     {
         $this->validate($request, [
-            // 'issued_to' => 'required_if:key,1',
+           // 'notes' => 'required',
+			'notes' => 'required|unique:notes,notes',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $datecaptured = $SysData['date_captured'] = str_replace('/', '-', $SysData['date_captured']);
-        $datecaptured = $SysData['date_captured'] = strtotime($SysData['date_captured']);
         $currentDate = time();
-
+		$loggedInEmplID = Auth::user()->person->id;
+		
         $notes = new notes();
-        $notes->date_captured = $datecaptured;
-        $notes->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
+        $notes->date_captured = $currentDate;
+        $notes->captured_by = $loggedInEmplID;
         $notes->notes = $SysData['notes'];
         $notes->vehicleID = $SysData['valueID'];
         $notes->save();
@@ -988,10 +994,9 @@ class FleetManagementController extends Controller
         unset($SysData['_token']);
 
         $currentDate = time();
-
-
-        $note->date_captured = $currentDate;
-        $note->captured_by = !empty($SysData['captured_by']) ? $SysData['captured_by'] : 0;
+		$loggedInEmplID = Auth::user()->person->id;
+       // $note->date_captured = $currentDate;
+        $note->captured_by = $loggedInEmplID;
         $note->notes = $SysData['notes'];
         $note->vehicleID = $SysData['valueID'];
         $note->update();
