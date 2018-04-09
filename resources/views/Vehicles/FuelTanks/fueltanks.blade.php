@@ -77,7 +77,6 @@
                                         <td></td>
                                         @endif
                                         </td></td>
-
                                         <td>{{ (!empty( $tanks->tank_name)) ?  $tanks->tank_name : ''}} </td>
                                         <td>{{ (!empty( $tanks->tank_description)) ?  $tanks->tank_description : ''}} </td>
                                         <td>{{ (!empty( $tanks->tank_capacity)) ? number_format($tanks->tank_capacity, 2) : ''}} </td>

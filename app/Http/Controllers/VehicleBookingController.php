@@ -94,7 +94,7 @@ class VehicleBookingController extends Controller {
                 ->get();
 
 
-        //return $vehiclebookings;
+        return $vehiclebookings;
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [

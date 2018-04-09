@@ -1544,10 +1544,10 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->published_at = date("Y-m-d H:i:s");
         $vehiclefuellog->vehiclebookingID = !empty($fuelData['vehiclebookingID']) ? $fuelData['vehiclebookingID'] : 0;
         $vehiclefuellog->save();
-		if (!empty($fuelData['transaction']) &&  $fuelData['transaction'] == 1)
-		{
-			FueltankTopUp
-		}
+//		if (!empty($fuelData['transaction']) &&  $fuelData['transaction'] == 1)
+//		{
+//			FueltankTopUp
+//		}
         AuditReportsController::store('Fleet Management', 'add vehiclefuel log', "Accessed by User", 0);
         return response()->json();
     }
