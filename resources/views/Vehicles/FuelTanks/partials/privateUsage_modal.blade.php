@@ -12,7 +12,20 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="box-body" id="view_users">
-
+						<div class="form-group search-field" id="vehicle-field">
+                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <select class="form-control select2" style="width: 100%;"
+                                            id="vehicle_id" name="vehicle_id">
+                                        <option value="0">*** Select a Vehicle ***</option>
+                                        @foreach($vehicleDetails as $vehicle)
+                                            <option value="{{ $vehicle->id }}">{{ $vehicle->fleet_number."|".$vehicle->vehicle_registration }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="document_no" class="col-sm-2 control-label">Document Number </label>
                             <div class="col-sm-8">
@@ -40,21 +53,6 @@
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="litres" name="litres" value=""
                                        placeholder="Enter Litres ">
-                            </div>
-                        </div>
-						<div class="form-group">
-                            <label for="make_or_model" class="col-sm-2 control-label">Make/Model</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="make_or_model" name="make_or_model" value=""
-                                       placeholder="Enter Make/Model ">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="registration_number" class="col-sm-2 control-label">Registration Number</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="registration_number"
-                                       name="registration_number" value=""
-                                       placeholder="Enter registration number">
                             </div>
                         </div>
                         <div class="form-group">

@@ -628,7 +628,6 @@ class FleetManagementController extends Controller
         $keytracking->save();
 		AuditReportsController::store('Fleet Management', 'Vehicle Key Added', "Accessed by User", 0);
         return response()->json();
-
     }
 
     public function editKeys(Request $request, keytracking $keytracking)

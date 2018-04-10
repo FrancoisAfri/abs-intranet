@@ -32,11 +32,12 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
+                                        <th>Vehicle</th>
                                         <th>Transaction Date</th>
                                         <th>Transaction Type</th>
                                         <th>Supplier/Employee</th>
-                                        <th>Reading before filling</th>
-                                        <th>Reading after filling</th>
+                                        <th>Before filling</th>
+                                        <th>After filling</th>
                                         <th>Litres</th>
                                         <th>Rate Per Litre</th>
                                         <th>Cost</th>
@@ -48,9 +49,10 @@
                                     @if (count($Fueltank) > 0)
                                         @foreach ($Fueltank as $tank)
                                             <tr id="categories-list">
+                                                <td>{{ !empty($tank->v_nodel) ?  $tank->v_make."-".$tank->v_nodel."-".$tank->v_registration."-".$tank->fleet_number: '' }}</td>
                                                 <td>{{ !empty($tank->topup_date) ? date(' d M Y', $tank->topup_date) : '' }}</td>
                                                 <td>{{ (!empty($tank->type)) ?  $topUpStatus[$tank->type] : ''}}</td>
-                                                <td>{{ (!empty($tank->Supplier)) ?  $tank->Supplier : ''}}</td>
+                                                <td>{{ (!empty($tank->supplier)) ?  $tank->supplier : ''}}</td>
                                                 <td>{{ (!empty($tank->reading_before_filling)) ?  number_format($tank->reading_before_filling, 2) : 0}}</td>
                                                 <td>{{ (!empty($tank->reading_after_filling)) ? number_format($tank->reading_after_filling, 2) : ''}}</td>
                                                 <td>{{ (!empty($tank->litres)) ?  number_format($tank->litres, 2) : ''}}</td>

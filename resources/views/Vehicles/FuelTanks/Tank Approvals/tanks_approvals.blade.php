@@ -29,6 +29,7 @@
 
                                 <th>Transaction Date</th>
                                 <th>Transaction Type</th> 
+                                <th>Description</th> 
                                 <th>Supplier/Employee</th>
                                 <th>Fleet No.</th>
                                 <th>Reg. No.</th>
@@ -49,9 +50,10 @@
                                 @foreach ($Approvals as $filling)
                                     <tr style="text-align:center">
 
-                                        <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
-                                        <td></td>
-                                        <td>{{ (!empty( $filling->Supplier)) ?  $filling->Supplier : ''}} </td>
+                                        <td>{{ (!empty( $filling->topup_date)) ?   date(' d M Y', $filling->topup_date) : ''}} </td>
+                                        <td>{{ (!empty( $filling->type)) ?   $transactionType[$filling->type] : ''}}</td>
+                                        <td>{{ (!empty( $filling->description)) ?   $filling->description : ''}}</td>
+                                        <td>{{ (!empty( $filling->supplier)) ?  $filling->supplier : ''}} </td>
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                         <td>{{ (!empty( $filling->reading_before_filling)) ? 'R'.number_format($filling->reading_before_filling, 2) : 0}} </td>
@@ -70,7 +72,7 @@
                                         </td>
                                         <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
                                                                              id="decline_$aVehicles[id]"
-                                                                             onclick="$('#comment_id_{{$filling->tank_id}}').toggle(); uncheckCheckBoxes({{$filling->fuelLogID}}, 0);">
+                                                                             onclick="$('#comment_id_{{$filling->tank_id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
                                         </td>
                                         <td>
                                             {{--  <input type="text" size="30" id="comment_id_{{$filling->id}}" name="declined_{{$filling->id}}" style="display:none">         --}}
@@ -99,17 +101,14 @@
                         <!--   </div> -->
                         <!-- /.box-body -->
                         <div class="box-footer">
+							<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                             <button type="submit" class="btn btn-primary pull-right"> Submit</button>
-
-
                         </div>
                     </div>
             </div>
             <!-- Include add new prime rate modal -->
             {{--  @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')  --}}
-
             </form>
-
         </div>
 
 
@@ -125,11 +124,10 @@
             <script>
                 function postData(id, data) {
                     if (data == 'actdeac') location.href = "/vehice/station_act/" + id;
-
                 }
 
                 $('#back_button').click(function () {
-                    location.href = '/vehicle_management/setup';
+                    location.href = '/vehicle_management/tank_approval';
                 });
 
                 function toggle(source) {

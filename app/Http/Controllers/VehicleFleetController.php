@@ -1563,6 +1563,7 @@ class VehicleFleetController extends Controller
 			$topUp->document_date = $dateofincident;
 			$topUp->topup_date = $dateofincident;
 			$topUp->type = 2; //outgoing
+			$topUp->transaction_type = 1; //outgoing
 			$topUp->litres = $vehiclefuellog->litres;
 			$topUp->description = $vehiclefuellog->description;
 			$topUp->received_by = $vehiclefuellog->driver;
