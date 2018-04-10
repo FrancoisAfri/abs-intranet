@@ -24,6 +24,7 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
+                                        <th>Supplier</th>
                                         <th>Fleet Number Type</th>
                                         <th>Fuel Supplier</th>
                                         <th>km Reading</th>
@@ -39,8 +40,8 @@
                                     @if (count($externalFuelLog) > 0)
                                         @foreach ($externalFuelLog as $externallog)
                                             <tr>
-                                              <td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td> 
-<!--                                   <td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> -->
+                                                <td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> 
+                                                <td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td>                                    
                                                 <td> External </td> 
                                                 <td>{{ (!empty( $externallog->Odometer_reading)) ?  $externallog->Odometer_reading : 0}}  Km</td> 
                                                 <td>{{ (!empty( $externallog->Hoursreading)) ?  $externallog->Hoursreading : 0}} Hrs</td> 
@@ -50,11 +51,11 @@
                                                 <td> R {{ (!empty( $externallog->litres)) ?  number_format($externallog->total_cost/$externallog->litres, 2) : 0}} </td>
                                                 <td style="text-align: center"> R {{ !empty($externallog->total_cost) ? number_format($externallog->total_cost, 2) : 0 }}</td>
                                             </tr>
-                                        @endforeach
-                                    @endif
+                                       
                                     </tbody>
                                     <tfoot>
                                     <tr>
+                                        <th></th>
                                         <th>Fleet Number Type</th>
                                         <th>Fuel Supplier</th>
                                         <th>km Reading</th>
@@ -65,7 +66,28 @@
                                         <th>Avg price per Litre </th>
                                         <th>Amount </th>
                                     </tr>
-                                    </tfoot>
+                                     <tr class="caption">
+                                            <th colspan="3" style="text-align:center;"> Report Totals</th> 
+                                            <th> kms </th>  
+                                            <th> Hrs </th>  
+                                            <th> Litres </th>
+                                            <th> Avg Km/hr</th>
+                                            <th> Avg l/hr</th>
+                                            <th> Avg Price</th>
+                                            <th> Amount </th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" style="text-align:center;"></td> 
+                                            <td> 0</td> 
+                                            <td> 0</td> 
+                                            <td> 0</td> 
+                                            <td> 0 </td> 
+                                            <td> 0 </td> 
+                                            <td> 0</td> 
+                                            <td> 0 </td>
+                                    </tr>
+                                     @endforeach
+                                    @endif
                                 </table>
                                 <div class="box-footer">
                                     

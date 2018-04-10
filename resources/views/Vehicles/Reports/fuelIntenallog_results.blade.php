@@ -22,34 +22,37 @@
                                 <input type="hidden" name="driver_id" value="{{!empty($driver_id) ? $driver_id : ''}}">
                                 <input type="hidden" name="action_date" value="{{!empty($action_date) ? $action_date : ''}}">               
                                 <table id="example2" class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr>
-                                        <td> Date</td> 
-					<td> Time</td> 
-					<td colspan="3" style="text-align:center;">Driver Details</td> 
-					<td colspan="3" style="text-align:center;" > Supplier Details</td> 
-					<td colspan="3" style="text-align:center;" >Voucher </td> 
-                                    </tr>
-                                <tr class="caption">
-                                        <td >Date </td> 
-					<td >Fuel Consumption Type</td> 
-					<td >Previous Odo </td> 
-					<td > Current Odo</td> 
-					<td > Fuel Consumption</td> 
-					<td > Previous Hours</td> 
-					<td > Current Hours</td> 
-					<td > Fuel Consumption</td> 
-					<td > Litres</td> 
-					<td >Price Per Litre </td> 
-					<td >Amount </td>
+                                <thead>
+                                <tr>
+                                        <th>Fleet </th> 
+					<th>Supplier</th> 
+					<th>Date </th> 
+					<th> kms </th> 
+					<th> Hrs </th> 
+					<th> Litres</th> 
+					<th> Avg Cons (Odo) </th> 
+					<th> Avg Cons (Hrs)</th> 
+					<th> Avg price per Litre</th>  
+					<th>Amount </th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @if (count($fuel_tank_topUp) > 0)
                                         @foreach ($fuel_tank_topUp as $externallog)
                                             <tr>
+                                                
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
+                                                 <td>0</td>
 <!--                                              <td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td> 
-                                   <td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> 
+                                                    <td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> 
                                                 <td> External </td> 
                                                 <td>{{ (!empty( $externallog->Odometer_reading)) ?  $externallog->Odometer_reading : 0}}  Km</td> 
                                                 <td>{{ (!empty( $externallog->Hoursreading)) ?  $externallog->Hoursreading : 0}} Hrs</td> 
@@ -65,17 +68,36 @@
                                     <tfoot>
                                     
                                 <tr class="caption">
-                                        <td >Full </td> 
-					<td >Fuel Consumption Type</td> 
-					<td >Previous Odo </td> 
-					<td > Current Odo</td> 
-					<td > Fuel Consumption</td> 
-					<td > Previous Hours</td> 
-					<td > Current Hours</td> 
-					<td > Fuel Consumption</td> 
-					<td > Litres</td> 
-					<td >Price Per Litre </td> 
-					<td >Amount </td>
+                                        <th>Fleet </th> 
+					<th>Supplier</th> 
+					<th>Date </th> 
+					<th> kms </th> 
+					<th> Hrs </th> 
+					<th> Litres</th> 
+					<th> Avg Cons (Odo) </th> 
+					<th> Avg Cons (Hrs)</th> 
+					<th> Avg price per Litre</th>  
+					<th>Amount </th>
+                                    </tr>
+                                    <tr class="caption">
+                                                <th colspan="3" style="text-align:center;"> Report Totals</th> 
+						<th> kms </th>  
+						<th> Hrs </th>  
+                                                <th> Litres  Avg Km/lt</th>
+                                                <th> Avg l/hr</th>
+                                                <th> Avg Price</th>
+                                                <th> Supplier Details</th>
+                                                <th> Amount </th>
+				    </tr>
+                                    <tr>
+                                        <td colspan="3" style="text-align:center;"></td> 
+						<td> 0</td> 
+						<td> 0</td> 
+						<td> 0</td> 
+						<td> 0 </td> 
+						<td> 0 </td> 
+						<td> 0</td> 
+						<td>0 </td>
                                     </tr>
                                     </tfoot>
                                 </table>
