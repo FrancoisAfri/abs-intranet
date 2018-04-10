@@ -34,31 +34,31 @@
 
                                     <table id="example2" class="table table-bordered table-hover">
                                     <thead>
-                                    <tr>
-                                        <th>Fleet Number</th>
-                                        <th>Make</th>
-                                        <th>Model</th>
-                                        <th>Registration</th>
-                                        <th>Division</th>
-                                        <th>Department</th>
-                                        <th>Expired Date</th>
-                                        <th>Days Remaining </th>
+                                    <tr>		
+                                        <th>Fleet Number Type</th>
+                                        <th>Fuel Supplier</th>
+                                        <th>km Reading</th>
+                                        <th>Hour Reading</th>
+                                        <th>Litres</th>
+                                        <th>Avg Cons (Odo)</th>
+                                        <th>Avg Cons (Hrs)</th>
+                                        <th>Avg price per Litre </th>
+                                        <th>Amount </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($vehicleDocumets) > 0)
-                                        @foreach ($vehicleDocumets as $filling)
+                                    @if (count($externalFuelLog) > 0)
+                                        @foreach ($externalFuelLog as $filling)
                                             <tr id="categories-list">
-
                                                <!--  <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td> -->
-                                                <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
+<!--                                                <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                                 <td>{{ (!empty( $filling->VehicleMake)) ?  $filling->VehicleMake : ''}} </td>
                                                 <td>{{ (!empty( $filling->VehicleModel)) ?  $filling->VehicleModel : ''}} </td>
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                                 <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
                                                 <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
                                                 <td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
-                                                <td bgcolor="red"> Expired </td>
+                                                <td bgcolor="red"> Expired </td>-->
 
                                             </tr>
                                         @endforeach
@@ -66,14 +66,15 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>Fleet Number</th>
-                                        <th>Make</th>
-                                        <th>Model</th>
-                                        <th>Registration</th>
-                                        <th>Division</th>
-                                        <th>Department</th>
-                                        <th>Expired Date</th>
-                                        <th>Days Remaining </th>
+                                        <th>Fleet Number Type</th>
+                                        <th>Fuel Supplier</th>
+                                        <th>km Reading</th>
+                                        <th>Hour Reading</th>
+                                        <th>Litres</th>
+                                        <th>Avg Cons (Odo)</th>
+                                        <th>Avg Cons (Hrs)</th>
+                                        <th>Avg price per Litre </th>
+                                        <th>Amount </th>
                                     </tr>
                                     </tfoot>
                                 </table>

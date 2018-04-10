@@ -8,14 +8,14 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">Fleet Fines Report</h3>
+                    <h3 class="box-title">Fleet Bookings Report</h3>
                 </div>
                 <div class="box-body">
                     <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div style="overflow-X:auto;">
-                            <form class="form-horizontal" method="POST" action="/fleet/reports/fine/print">
+                            <form class="form-horizontal" method="POST" action="/fleet/reports/extOil/print">
                                 <input type="hidden" name="vehicle_id" value="{{!empty($vehicle_id) ? $vehicle_id : 0}}">
                                 <input type="hidden" name="report_type" value="{{!empty($report_type) ? $report_type : ''}}">
                                 <input type="hidden" name="vehicle_type" value="{{!empty($vehicle_type) ? $vehicle_type : ''}}">
@@ -24,63 +24,53 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th>Fleet Details</th>
-                                        <th>Date</th>
-                                        <th>Time</th>
-                                        <th>Reference</th>
-                                        <th>Location</th>
-                                        <th>Type</th>
-                                        <th>Driver</th>
-                                        <th>Amount</th>
-                                        <th>Amount Paid</th>
-                                        <th>Status</th>
+                                        <th>Fleet Number Type</th>
+                                        <th>Fuel Supplier</th>
+                                        <th>km Reading</th>
+                                        <th>Hour Reading</th>
+                                        <th>Litres</th>
+                                        <th>Avg Cons (Odo)</th>
+                                        <th>Avg Cons (Hrs)</th>
+                                        <th>Avg price per Litre </th>
+                                        <th>Amount </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($vehiclefines) > 0)
-                                        @foreach($vehiclefines as $fine)
+                                    @if (count($externalFuelLog) > 0)
+                                        @foreach ($externalFuelLog as $externallog)
                                             <tr>
-                                                 <td>{{ (!empty($fine->vehicle_make) ) ? $fine->vehicle_make." ".$fine->vehicle_model." ".$fine->vehicle_types." ".$fine->vehicle_registration : ''}}</td>
-                                                <td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
-                                                <td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
-                                                <td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
-                                                <td>{{ !empty($fine->location) ?  $fine->location : '' }}</td>
-                                                <td>{{ !empty($fine->fine_type) ?  $fineType[$fine->fine_type] : '' }}</td>
-                                                <td>{{ !empty($fine->firstname . ' ' . $fine->surname ) ?  $fine->firstname . ' ' . $fine->surname : '' }}</td>
-                                                <td style="text-align: center">{{ !empty($fine->amount  ) ?  'R '.number_format($fine->amount, 2) :'' }}</td>
-                                                <td style="text-align: center">{{ !empty($fine->amount_paid  ) ?  'R '.number_format($fine->amount_paid, 2) :'' }}</td>
-                                                <td>{{ !empty($fine->fine_status  ) ?  $status[$fine->fine_status] :'' }}</td>
+                                              <td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td> 
+<!--                                   <td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> -->
+                                                <td> External </td> 
+                                                <td>{{ (!empty( $externallog->Odometer_reading)) ?  $externallog->Odometer_reading : 0}}  Km</td> 
+                                                <td>{{ (!empty( $externallog->Hoursreading)) ?  $externallog->Hoursreading : 0}} Hrs</td> 
+                                                <td style="text-align: center">{{ !empty($externallog->litres) ? number_format($externallog->litres, 2) : 0 }}</td>
+                                                <td>{{ (!empty( $externallog->Odometer_reading)) ?  number_format($externallog->Odometer_reading/$externallog->litres, 2) : 0}} </td>
+                                                <td>{{ (!empty( $externallog->Hoursreading)) ?  number_format($externallog->Hoursreading/$externallog->litres, 2) : 0}} </td>
+                                                <td> R {{ (!empty( $externallog->litres)) ?  number_format($externallog->total_cost/$externallog->litres, 2) : 0}} </td>
+                                                <td style="text-align: center"> R {{ !empty($externallog->total_cost) ? number_format($externallog->total_cost, 2) : 0 }}</td>
                                             </tr>
                                         @endforeach
                                     @endif
                                     </tbody>
                                     <tfoot>
                                     <tr>
-										<th>Fleet Details</th>
-                                        <th>Date</th>
-                                        <th>Time</th>
-                                        <th>Reference</th>
-                                        <th>Location</th>
-                                        <th>Type</th>
-                                        <th>Driver</th>
-                                        <th>Amount</th>
-                                        <th>Amount Paid</th>
-                                        <th>Status</th>
+                                        <th>Fleet Number Type</th>
+                                        <th>Fuel Supplier</th>
+                                        <th>km Reading</th>
+                                        <th>Hour Reading</th>
+                                        <th>Litres</th>
+                                        <th>Avg Cons (Odo)</th>
+                                        <th>Avg Cons (Hrs)</th>
+                                        <th>Avg price per Litre </th>
+                                        <th>Amount </th>
                                     </tr>
                                     </tfoot>
-                                     <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                                        <class
-                                        ="caption">
-                                        <td style="text-align: right" nowrap></td>
-                                        <th colspan="6" style="text-align:right">Total</th>
-                                        <td style="text-align: center">{{  'R '.number_format($total, 2) }}</td>
-                                        <td style="text-align: center">{{  'R '.number_format($totalamount_paid, 2) }}</td>
-                                        <td style="text-align: right" nowrap></td>
                                 </table>
                                 <div class="box-footer">
                                     
                                     <div class="row no-print">
-                                        <button type="button" id="canceled" class="btn btn-default pull-left"><i
+                                        <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                     class="fa fa-arrow-left"></i> Back to Search Page
                                         </button>
                                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
@@ -105,8 +95,6 @@
                             document.getElementById("cancel").onclick = function () {
                                 location.href = "/vehicle_management/vehicle_reports";
                             };
-                            
-                            
                             $(function () {
                                 $('#example2').DataTable({
                                     "paging": true,
