@@ -1465,8 +1465,6 @@ class VehicleFleetController extends Controller
                 $fueltanks = HRPerson::where('id', $hrID)->where('status', 1)->first(); // to be changed to ceo
                 $userID = $fueltanks->id;
             } else
-
-
                 $userID = $fueltanks->first()->tank_manager;
 
             $UserDetails = HRPerson::where('id', $userID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
@@ -1525,10 +1523,8 @@ class VehicleFleetController extends Controller
         $hrID = $fuelData['rensonsible_person'];
         $tankID = $fuelData['tank_name'];
 
-
         $BookingDetails = array();
         $BookingDetail = VehicleFleetController::BookingDetails(0, $hrID, 0, $tankID);
-
 
         $dateofincident = $fuelData['date'] = str_replace('/', '-', $fuelData['date']);
         $dateofincident = $fuelData['date'] = strtotime($fuelData['date']);

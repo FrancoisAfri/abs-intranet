@@ -828,6 +828,7 @@ class FuelManagementController extends Controller
 						if(!empty($fuelTankToUp))
 						{
 							$fuelTankToUp->status = $BookingDetail['status'];
+							$fuelTankToUp->available_litres = $newFuel;
 							$fuelTankToUp->update();
 						}
 					}
@@ -894,7 +895,7 @@ class FuelManagementController extends Controller
             if (strlen(strstr($key, 'vehicleappprove'))) {
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
-                // $fuelLogID = $aValue[1];
+				
                 $topUDID = $aValue[1];
                 //    // Calculations
                 $TopUp = FueltankTopUp::where('id', $topUDID)->first();
@@ -931,7 +932,7 @@ class FuelManagementController extends Controller
 					$TopUpReject->reject_reason = $sValue;
 					$TopUpReject->reject_timestamp =  time();
 					$TopUpReject->rejector_id =  Auth::user()->person->id;
-					$TopUp->available_litres = $tank->available_litres;
+					$TopUp->available_litres = $tank->current_fuel_litres;
 					$TopUpReject->update();
                 }
             }
