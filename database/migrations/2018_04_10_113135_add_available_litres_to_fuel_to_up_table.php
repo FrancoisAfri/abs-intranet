@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCancelbookingIDToVehicleBooking extends Migration
+class AddAvailableLitresToFuelToUpTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCancelbookingIDToVehicleBooking extends Migration
      */
     public function up()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-           $table->integer('cancel_status')->nullable();
+        Schema::table('fuel_tank_topUp', function (Blueprint $table) {
+            $table->bigInteger('available_litres')->nullable()->unsigned()->index();
         });
     }
 
@@ -25,8 +25,8 @@ class AddCancelbookingIDToVehicleBooking extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->dropColumn('cancel_status');
+        Schema::table('fuel_tank_topUp', function (Blueprint $table) {
+            $table->dropColumn('available_litres');
         });
     }
 }

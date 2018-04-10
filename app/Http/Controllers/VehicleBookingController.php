@@ -92,9 +92,6 @@ class VehicleBookingController extends Controller {
                 ->where('vehicle_booking.status', '!=', 13)
                 // ->where('vehicle_booking.status', '!=', 12)
                 ->get();
-
-
-        return $vehiclebookings;
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [

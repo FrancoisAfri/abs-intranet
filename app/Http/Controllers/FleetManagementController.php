@@ -837,7 +837,6 @@ class FleetManagementController extends Controller
             'type' => 'required',
             'description' => 'required',
             'date_from' => 'required',
-            'exp_date' => 'required',
             'valueID' => 'required',
         ]);
         $SysData = $request->all();
@@ -845,10 +844,13 @@ class FleetManagementController extends Controller
 
         $datefrom = $SysData['date_from'] = str_replace('/', '-', $SysData['date_from']);
         $datefrom = $SysData['date_from'] = strtotime($SysData['date_from']);
-
-        $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
-        $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
-
+		
+		if (!empty($SysData['exp_date']))
+		{
+			$Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
+			$Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+		}
+		else $Expdate = 0;
         $currentDate = time();
 
         $vehicledocumets = new vehicle_documets();

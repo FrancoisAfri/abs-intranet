@@ -333,7 +333,7 @@ class FuelManagementController extends Controller
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         $Fueltank = DB::table('fuel_tank_topUp')
-            ->select('fuel_tanks.*','fuel_tank_topUp.*'
+            ->select('fuel_tank_topUp.*'
 			,'division_level_fives.name as Supplier','vehicle_make.name as v_make'
 			,'vehicle_model.name as v_nodel','vehicle_details.fleet_number as fleet_number'
 			,'vehicle_details.vehicle_registration as v_registration')
@@ -810,7 +810,7 @@ class FuelManagementController extends Controller
 					$BookingDetail = VehicleFleetController::BookingDetails($fuel->status, $fuel->rensonsible_person, 0, $fuel->tank_name);
 					$fuel->status = $BookingDetail['status'];
 					$fuel->update();
-					// Query Vehicle Fuel
+					// Query Vehicle Fueltank
 					if (!empty($fuel->tank_name))
 					{
 						//get tanks details and calculate tank new litres
@@ -828,6 +828,7 @@ class FuelManagementController extends Controller
 						if(!empty($fuelTankToUp))
 						{
 							$fuelTankToUp->status = $BookingDetail['status'];
+							$fuelTankToUp->available_litres = $newFuel;
 							$fuelTankToUp->update();
 						}
 					}
@@ -839,16 +840,38 @@ class FuelManagementController extends Controller
             if (strlen(strstr($sKey, 'declined_'))) {
                 list($sUnit, $iID) = explode("_", $sKey);
                 if ($sUnit == 'declined' && !empty($sValue)) {
-                    if (empty($sValue)) $sValue = $sReasonToReject;
 
-                    $fuelLog->updateOrCreate(['id' => $iID], ['status' => 14]);
-                    $fuelLog->updateOrCreate(['id' => $iID], ['reject_reason' => $sValue]);
-                    $fuelLog->updateOrCreate(['id' => $iID], ['reject_timestamp' => time()]);
-                    $fuelLog->updateOrCreate(['id' => $iID], ['rejector_id' => Auth::user()->person->id]);
+					$fuelReject = vehicle_fuel_log::where('id', $iID)->first();	
+					$fuelReject->status = 14;
+					$fuelReject->reject_reason = $sValue;
+					$fuelReject->reject_timestamp =  time();
+					$fuelReject->rejector_id =  Auth::user()->person->id;
+					$fuelReject->update();
+					
+					// Query Vehicle Fueltank
+					if (!empty($fuelReject->tank_name))
+					{
+						$tank = Fueltanks::where('id', $fuelReject->tank_name)->first();
+						//get tanks details and calculate tank new litres
+						
+						$fuelTankToUp = FueltankTopUp::
+						where('vehicle_fuel_id', $fuelReject->id)
+						->where('tank_id', $tank->id)
+						->first();
+						if(!empty($fuelTankToUp))
+						{
+							$fuelTankToUp->status = 14;
+							$fuelTankToUp->reject_reason = $sValue;
+							$fuelTankToUp->reject_timestamp =  time();
+							$fuelTankToUp->rejector_id =  Auth::user()->person->id;
+							$fuelTankToUp->available_litres = $tank->current_fuel_litres;
+							$fuelTankToUp->update();
+						}
+					}
                 }
             }
         }
-        $sReasonToReject = '';
+       // $sReasonToReject = '';
         AuditReportsController::store('Fleet Management', 'Fuel Station Approval', "Fuel Station has been updated", 0);
         // return back();
         return redirect('/vehicle_management/tank_approval');
@@ -872,30 +895,29 @@ class FuelManagementController extends Controller
             if (strlen(strstr($key, 'vehicleappprove'))) {
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
-                // $fuelLogID = $aValue[1];
-                $tankID = $aValue[1];
+				
+                $topUDID = $aValue[1];
                 //    // Calculations
-                $TopUp = DB::table('vehicle_fuel_log')->orderBy('id', 'asc')->where('tank_name', $tankID)->get();
-                // $Type = $TopUp->first()->type;
-                $iLitres = $TopUp->first()->litres;
-                $atank = DB::table('fuel_tanks')->orderBy('id', 'asc')->where('id', $tankID)->get();
-                $tankcapacity = $atank->first()->tank_capacity;
-                $CurrentAmount = $atank->first()->current_fuel_litres;
-
-                $NewAmount = $CurrentAmount - $iLitres;
-                if ($NewAmount > 0) { //Incoming
-                    DB::table('fuel_tanks')
-                        ->where('id', $tankID)
-                        ->update(['current_fuel_litres' => $NewAmount]);
+                $TopUp = FueltankTopUp::where('id', $topUDID)->first();
+                $Type = $TopUp->type;
+				$tankID = $TopUp->tank_id;
+                $iLitres = $TopUp->litres; 
+                $tank = Fueltanks::where('id', $tankID)->first();
+                $tankcapacity = $tank->tank_capacity;
+                $CurrentAmount = $tank->current_fuel_litres;
+				if ($Type == 1)	$newAmount = $CurrentAmount + $iLitres;
+				else $newAmount = $CurrentAmount - $iLitres;
+				
+                if ($newAmount > 0 && $newAmount < $tankcapacity) 
+				{
+					$BookingDetail = VehicleFleetController::BookingDetails($TopUp->status, $TopUp->rensonsible_person, 0, $tankID);
+					$TopUp->status = $BookingDetail['status'];
+					$TopUp->available_litres = $newAmount;
+					$TopUp->update();
+					
+					$tank->current_fuel_litres = $newAmount;
+					$tank->update();
                 }
-                if (count($sValue) > 1) {
-                    $status = $sValue[1];
-                } else $status = $sValue[0];
-                $tankID = $tankID;
-                // return $status;
-                DB::table('vehicle_fuel_log')
-                    ->where('tank_name', $tankID)
-                    ->update(['status' => 1]);
             }
         }
 		// Reject Reason
@@ -903,17 +925,19 @@ class FuelManagementController extends Controller
             if (strlen(strstr($sKey, 'declined_'))) {
                 list($sUnit, $iID) = explode("_", $sKey);
                 if ($sUnit == 'declined' && !empty($sValue)) {
-                    if (empty($sValue)) $sValue = $sReasonToReject;
 
-                    $fuelLog->updateOrCreate(['tank_name' => $iID], ['status' => 14]);
-                    $fuelLog->updateOrCreate(['tank_name' => $iID], ['reject_reason' => $sValue]);
-                    $fuelLog->updateOrCreate(['tank_name' => $iID], ['reject_timestamp' => time()]);
-                    $fuelLog->updateOrCreate(['tank_name' => $iID], ['rejector_id' => Auth::user()->person->id]);
-                    // $vehicle_maintenance->where('id',$iID)->update(['status' => 3],['reject_reason' => $sValue],['reject_timestamp' => time()]);
+					$TopUpReject = FueltankTopUp::where('id', $iID)->first();
+					$tank = Fueltanks::where('id', $TopUpReject->tank_id)->first();
+					$TopUpReject->status = 14;
+					$TopUpReject->reject_reason = $sValue;
+					$TopUpReject->reject_timestamp =  time();
+					$TopUpReject->rejector_id =  Auth::user()->person->id;
+					$TopUp->available_litres = $tank->current_fuel_litres;
+					$TopUpReject->update();
                 }
             }
         }
-        $sReasonToReject = '';
+       // $sReasonToReject = '';
         AuditReportsController::store('Fleet Management', 'Fuel Tank Approval', "Fuel status has been Updated", 0);
         return redirect('/vehicle_management/tank_approval');
     }
