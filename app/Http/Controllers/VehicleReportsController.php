@@ -2206,6 +2206,24 @@ class VehicleReportsController extends Controller
             ->orderby('vehicle_fuel_log.id','desc')
             ->get();
             
-            return $InternalFuelLog;
+            //return $InternalFuelLog;
+            
+            $fuel_tank_topUp = DB::table('fuel_tank_topUp')->get();
+            
+           // return $fuel_tank_topUp;
+            
+        $data['fuel_tank_topUp'] = $fuel_tank_topUp;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.fuelIntenallog_results')->with($data); 
      }
 }
