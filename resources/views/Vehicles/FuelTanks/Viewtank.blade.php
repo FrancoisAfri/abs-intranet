@@ -22,8 +22,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
-                {{--<form class="form-horizontal" method="POST" action="/vehicle_management/tanksearch/{{ $ID }}">--}}
+                <form name="leave-application-form" class="form-horizontal" method="POST" action="/vehicle_management/both/{{ $ID }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -78,19 +77,8 @@
                                         <div class="col-sm-9">
                                             <label class="radio-inline"><input type="radio" id="rdo_incoming" name="transaction_type" value="1">  Incoming </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_outgoing" name="transaction_type" value="2">  Outgoing </label>
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_both" name="transaction_type" value="3" checked> Both  </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group usage-field{{ $errors->has('usage_type') ? ' has-error' : '' }}">
-                                        <label for="usage_type" class="col-sm-2 control-label"> Usage </label>
-                                        <div class="col-sm-10">
-                                            <label class="radio-inline"><input type="radio" id="rdo_usage"
-                                                                               name="usage_type" value="1">
-                                                Business </label>
-                                            <label class="radio-inline"><input type="radio" id="rdo_usage"
-                                                                               name="usage_type" value="2">
-                                                Private </label>
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" checked> Both</label>
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_both" name="transaction_type" value="3"> Private Usage  </label>
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_both" name="transaction_type" value="0" checked> All  </label>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -101,7 +89,7 @@
                                                     <i class="fa fa-user-circle"></i>
                                                 </div>
                                                 <select class="form-control select2" style="width: 100%;"
-                                                        id="vehicle_type" name="vehicle_type">
+                                                        id="reciever_id" name="reciever_id">
                                                     <option value="">*** Select a User ***</option>
                                                     @foreach($employees as $User)
                                                         <option value="{{ $User->id }}"> {{ !empty($User->first_name . ' ' . $User->surname) ? $User->first_name . ' ' . $User->surname : ''}}</option>
@@ -227,15 +215,12 @@
             var allType = $("input[name='transaction_type']:checked").val();
             if (allType == 1) { //adjsut leave
                 $('.usage-field').hide();
-                $('form[name="leave-application-form"]').attr('action', '/vehicle_management/incoming/{{ $ID }}');
-                $('#gen-report').val("Submit");
+                 $('#gen-report').val("Submit");
             } else if (allType == 2) { //resert leave
                 $('.usage-field').show();
-                $('form[name="leave-application-form"]').attr('action', '/vehicle_management/outgoing/{{ $ID }}');
                 $('#gen-report').val("Submit");
             }else if (allType == 3) { //resert leave
                 $('.usage-field').show();
-                $('form[name="leave-application-form"]').attr('action', '/vehicle_management/both/{{ $ID }}');
                 $('#gen-report').val("Submit");
             }
             else

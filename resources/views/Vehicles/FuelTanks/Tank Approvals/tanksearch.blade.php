@@ -22,7 +22,7 @@
                     <h3 class="box-title">Fuel Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
-                <form name="leave-application-form" class="form-horizontal" method="POST" action=" "
+                <form name="fuel-search-form" class="form-horizontal" method="POST" action=" "
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
 
@@ -39,57 +39,8 @@
                                 </ul>
                             </div>
                         @endif
-
-
-                        <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">Fleet Number</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-truck"></i>
-                                    </div>
-                                    <input type='text' class="form-control" id='fleet_no'
-                                           name="fleet_no"/>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">Vehicle</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-truck"></i>
-                                    </div>
-                                    <select class="form-control select2" style="width: 100%;"
-                                            id="vehicle_type" name="vehicle_type">
-                                        <option value="0">*** Select a Vehicle ***</option>
-                                        @foreach($vehiclemodel as $type)
-                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Transaction Date</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control daterangepicker" id="action_date"
-                                           name="action_date" value="" placeholder="Select Action Date...">
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-                            <label for="Leave_type" class="col-sm-2 control-label"> Type</label>
+						<div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                            <label for="Leave_type" class="col-sm-2 control-label">Search Type</label>
 
                             <div class="col-sm-8">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
@@ -103,6 +54,53 @@
                                                                    value="3"> Other </label>
                             </div>
                         </div>
+                        <div class="form-group" id="vehicle-field">
+                            <label for="path" class="col-sm-2 control-label">Vehicle</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-truck"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;"
+                                            id="vehicle_type" name="vehicle_id">
+                                        <option value="0">*** Select a Vehicle ***</option>
+                                        @foreach($vehicleDetails as $vehicle)
+                                            <option value="{{ $vehicle->id }}">{{ $vehicle->fleet_number."|".$vehicle->vehicle_registration}} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group tank-field">
+                            <label for="path" class="col-sm-2 control-label">Tank</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-truck"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;"
+                                            id="vehicle_type" name="vehicle_type">
+                                        <option value="0">*** Select a Tank ***</option>
+                                        @foreach($fueltank as $tank)
+                                            <option value="{{ $tank->id }}">{{ $tank->tank_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Transaction Date</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
+                                    <input type="text" class="form-control daterangepicker" id="action_date"
+                                           name="action_date" value="" placeholder="Select Action Date...">
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group search-field">
                             <label for="status" class="col-sm-2 control-label">Status</label>
                             <div class="col-sm-8">
@@ -110,7 +108,6 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-star-o"></i>
                                     </div>
-
                                     <select id="status" name="status" class="form-control">
                                         <option value="0">*** Select Status ***</option>
                                         <option value="1"> Rejected</option>
@@ -121,8 +118,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <!-- /.box-body -->
                         <!-- <div class="box-footer">
                             <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Cancel</button>
@@ -131,7 +126,7 @@
                         <div class="box-footer">
                             {{--  <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>  --}}
                             <button type="submit" id="gen-report" name="gen-report" class="btn btn-default pull-right">
-                                <i class="fa fa-search"></i> Search
+                                <i class="fa fa-search"></i> Submit
                             </button>
                         </div>
                         <!-- /.box-footer -->
@@ -194,6 +189,7 @@
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
+            $('.tank-field').hide();
             $('.search-field').show();
             //Cancel button click event
 
@@ -275,26 +271,28 @@
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='application_type']:checked").val();
-            if (allType == 1) { //adjsut leave
+            if (allType == 1) {
 
                 $('.search-field').show();
-                $('form[name="leave-application-form"]').attr('action', '/vehicle_management/search');
+                $('.tank-field').hide();
+                $('form[name="fuel-search-form"]').attr('action', '/vehicle_management/search');
                 $('#gen-report').val("Submit");
             }
-            else if (allType == 2) { //resert leave
+            else if (allType == 2) {
                 $('.search-field').hide();
-                $('form[name="leave-application-form"]').attr('action', '/vehicle_management/tankApproval');
+                $('.tank-field').show();
+                $('form[name="fuel-search-form"]').attr('action', '/vehicle_management/tankApproval');
                 $('#gen-report').val("Submit");
             }
             else if (allType == 3) {
                 $('.search-field').hide();
-                $('form[name="leave-application-form"]').attr('action', '/vehicle_management/other');
+                $('.tank-field').hide();
+				$('#vehicle-field').show();
+                $('form[name="fuel-search-form"]').attr('action', '/vehicle_management/other');
                 $('#gen-report').val("Submit");
             }
 
             return allType;
         }
-
-
     </script>
 @endsection

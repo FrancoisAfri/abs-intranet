@@ -98,20 +98,15 @@
                         <!--   </div> -->
                         <!-- /.box-body -->
                         <div class="box-footer">
+							<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                             <button type="submit" class="btn btn-primary pull-right"> Submit</button>
-
-
                         </div>
                     </div>
             </div>
             <!-- Include add new prime rate modal -->
             {{--  @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')  --}}
-
             </form>
-
         </div>
-
-
         @endsection
 
         @section('page_script')
@@ -128,7 +123,7 @@
                 }
 
                 $('#back_button').click(function () {
-                    location.href = '/vehicle_management/setup';
+                    location.href = '/vehicle_management/tank_approval';
                 });
 
                 function toggle(source) {
