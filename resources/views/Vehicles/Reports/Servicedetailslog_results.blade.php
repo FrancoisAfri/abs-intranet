@@ -96,7 +96,7 @@
                         <!-- End Bootstrap File input -->
                         <script>
                             function postData(id, data) {
-                                if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
+                                if (data == 'actdeac') location.href = "/vehicle_management/vehicle_reports";
                             }
 
                             //Cancel button click event

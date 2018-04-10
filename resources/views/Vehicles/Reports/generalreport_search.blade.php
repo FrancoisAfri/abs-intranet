@@ -262,11 +262,11 @@
             else if (type == 4) $('#report_form').attr('action', '/vehicle_management/report_services');
             else if (type == 5) $('#report_form').attr('action', '/vehicle_management/report_incidents');
             else if (type == 6) $('#report_form').attr('action', '/vehicle_management/report_vehicle_details');
-            else if (type == 7) $('#report_form').attr('action', '/vehicle_management/search');
+            else if (type == 7) $('#report_form').attr('action', '/vehicle_management/search1');
             else if (type == 8) $('#report_form').attr('action' ,'/vehicle_management/report_expiry_documents');
-            else if (type == 9) $('#report_form').attr('action', '/activity/search');
-            else if (type == 10) $('#report_form').attr('action', '/activity/search');
-            else if (type == 11) $('#report_form').attr('action', '/activity/search');
+            else if (type == 9) $('#report_form').attr('action', '/vehicle_management/report_external_diesel');
+            else if (type == 10) $('#report_form').attr('action', '/vehicle_management/report_internal_diesel');
+            else if (type == 11) $('#report_form').attr('action', '/activity/search12');
 
             //changetype
 
@@ -294,8 +294,13 @@
             }else if (levID == 8) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+            }else if (levID == 9) {
+                $('.dest-field').hide();
+                $('.detail-field').hide();
+            }else if (levID == 10) {
+                $('.dest-field').hide();
+                $('.detail-field').hide();
             }
-
 
         }
 

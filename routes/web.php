@@ -582,12 +582,19 @@ Route::post('vehicle_management/report_services', 'VehicleReportsController@vehi
 Route::post('vehicle_management/report_incidents', 'VehicleReportsController@vehicleIncidentsDetails');
 Route::post('vehicle_management/report_vehicle_details', 'VehicleReportsController@vehiclesDetails');
 Route::post('vehicle_management/report_expiry_documents', 'VehicleReportsController@vehiclesExpiry_documents');
+Route::post('vehicle_management/report_external_diesel', 'VehicleReportsController@vehiclesExternaldiesel');
+Route::post('vehicle_management/report_internal_diesel', 'VehicleReportsController@vehiclesInternaldiesel');
 Route::post('fleet/reports/booking/print', 'VehicleReportsController@bookingReportsPrint');
 Route::post('fleet/reports/fuel/print', 'VehicleReportsController@fuelReportPrint');
 Route::post('fleet/reports/fine/print', 'VehicleReportsController@fineReportPrint');
 Route::post('fleet/reports/Service/print', 'VehicleReportsController@ServiceReportPrint');
 Route::post('fleet/reports/incident/print', 'VehicleReportsController@IncidentReportPrint');
 Route::post('fleet/reports/details/print', 'VehicleReportsController@DetailsReportPrint');
+
+Route::post('fleet/reports/expdocs/print', 'VehicleReportsController@ExpdocsReportPrint');
+Route::post('fleet/reports/expLic/print', 'VehicleReportsController@ExpLicencesReportPrint');
+Route::post('fleet/reports/extOil/print', 'VehicleReportsController@ExternalOilReportPrint');
+
 //Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
   // ***************
