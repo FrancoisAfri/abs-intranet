@@ -58,7 +58,7 @@
                                                 <td>{{ (!empty($tank->litres)) ?  number_format($tank->litres, 2) : ''}}</td>
                                                 <td>{{ (!empty($tank->cost_per_litre)) ?  'R' .number_format($tank->cost_per_litre, 2) : ''}}</td>
                                                 <td>{{ !empty($tank->total_cost) ? 'R' .number_format($tank->total_cost, 2) : '' }}</td>
-                                                <td>{{ (!empty($tank->available_litres)) ?  $tank->available_litres : ''}}</td>
+                                                <td>{{ $tank->available_litres}}</td>
                                                 <td>{{ !empty($tank->status) ?  $bookingStatus[$tank->status]  : ''}}</td>
                                             </tr>
                                         @endforeach
