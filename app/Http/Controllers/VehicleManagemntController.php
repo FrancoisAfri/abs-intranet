@@ -57,7 +57,7 @@ class VehicleManagemntController extends Controller
     public function index()
     {
 
-        $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $Vehiclemanagemnt = Vehicle_managemnt::orderBy('name', 'asc')->get();
 
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Types Management";
@@ -342,8 +342,8 @@ class VehicleManagemntController extends Controller
     {
         $permit->delete();
 
-        AuditReportsController::store('Fleet Management', 'fleetcard  Deleted', "fleet has been deleted", 0);
-        return redirect('/vehicle_management/fillingstaion');
+        AuditReportsController::store('Fleet Management', 'Permit Type  Deleted', "fleet has been deleted", 0);
+        return redirect('/vehicle_management/Permit');
     }
 
     public function Fleet_DocumentType(Request $request)

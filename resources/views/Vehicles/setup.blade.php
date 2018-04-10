@@ -51,9 +51,6 @@
                     <i class="fa fa-ban"></i>  Add Safe  
                   </a>
 
-                  <a href="/vehicle_management/Incidents_type" class="btn btn-app">
-                    <i class="fa fa-bullseye"></i>  Incident Type
-                  </a>
 
 			</div>
           <!-- /.box-body -->
