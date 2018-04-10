@@ -296,8 +296,8 @@ class VehicleManagemntController extends Controller
     public function AddlicencePermit(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
             'description' => 'required',
+			'name' => 'required|unique:fleet_licence_permit,name',
 
         ]);
         $SysData = $request->all();

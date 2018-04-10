@@ -26,7 +26,7 @@ class AddCancelbookingIDToVehicleBooking extends Migration
     public function down()
     {
         Schema::table('vehicle_booking', function (Blueprint $table) {
-           $table->integer('cancel_status')->nullable();
+            $table->dropColumn('cancel_status');
         });
     }
 }
