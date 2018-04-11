@@ -36,31 +36,6 @@
                                 </select>
                             </div>
                         </div>
-                   
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Contact Number</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="contact_number" name="contact_number"
-                                   value="{{ old('contact_number') }}" data-inputmask='"mask": "(999) 999-9999"'
-                                   placeholder="Enter Contact Number" data-mask>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Contact E-Mail</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control" id="contact_email" name="contact_email" value=""
-                                   placeholder="Enter Contact E-Mail" required>
-                        </div>
-                    </div>
-                    <div class="form-group ">
-                        <label for="address" class="col-sm-2 control-label">Address</label>
-                        <div class="col-sm-8">
-
-                            <textarea class="form-control" id="address" name="address"
-                                      placeholder="Enter address..." rows="3">{{ old('description') }}</textarea>
-
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Policy/Document Number</label>
                         <div class="col-sm-8">
