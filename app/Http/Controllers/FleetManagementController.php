@@ -315,8 +315,8 @@ class FleetManagementController extends Controller
         $ID = $maintenance->id;
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();
-        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
-        $ContactCompany = ContactCompany::where('status', 1)->orderBy('id', 'asc')->get();
+        $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('name', 'asc')->get();
+        $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -671,7 +671,6 @@ class FleetManagementController extends Controller
 
     public function permits_licences(vehicle_maintenance $maintenance)
     {
-
         $ID = $maintenance->id;
 
         $companies = ContactCompany::orderBy('name', 'asc')->get();
@@ -697,9 +696,12 @@ class FleetManagementController extends Controller
         //return $ID;
 
         $permits = DB::table('permits_licence')
-            ->select('permits_licence.*', 'contact_companies.name as comp_name', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+            ->select('permits_licence.*', 'contact_companies.name as comp_name'
+			, 'hr_people.first_name as firstname', 'hr_people.surname as surname'
+			, 'fleet_licence_permit.name as license_name')
             ->leftJoin('hr_people', 'permits_licence.Supplier', '=', 'hr_people.id')
             ->leftJoin('contact_companies', 'permits_licence.Supplier', '=', 'contact_companies.id')
+            ->leftJoin('fleet_licence_permit', 'permits_licence.permit_licence', '=', 'fleet_licence_permit.id')
             ->orderBy('permits_licence.id')
             ->where('vehicleID', $ID)
             ->get();
@@ -733,6 +735,7 @@ class FleetManagementController extends Controller
     public function addPermit(Request $request)
     {
         $this->validate($request, [
+            'permit_licence' => 'required',
             'Supplier' => 'required',
             'permits_licence_no' => 'required|unique:permits_licence,permits_licence_no',
         ]);
@@ -755,18 +758,47 @@ class FleetManagementController extends Controller
 
         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
+		
+		$oldPermit = permits_licence::
+					where('permit_licence', $SysData['permit_licence'])
+					->where('vehicleID', $SysData['valueID'])
+					->where('status', 1)
+					
+					->first();
 
-        $permits = new permits_licence();
-        $permits->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
-        $permits->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
-        $permits->exp_date = $Expdate;
-        $permits->date_issued = $dates;
-        $permits->status = !empty($SysData['status']) ? $SysData['status'] : 1;
-        $permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
-        $permits->captured_by = $name;
-        $permits->date_captured = $currentDate;
-        $permits->vehicleID = $SysData['valueID'];
-        $permits->save();
+		if (!empty($oldPermit->permit_licence))
+		{
+			
+			$oldPermit->status = 2;
+			$oldPermit->update();
+			
+			$permits = new permits_licence();
+			$permits->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
+			$permits->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
+			$permits->exp_date = $Expdate;
+			$permits->date_issued = $dates;
+			$permits->status = !empty($SysData['status']) ? $SysData['status'] : 1;
+			$permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
+			$permits->captured_by = $name;
+			$permits->date_captured = $currentDate;
+			$permits->vehicleID = $SysData['valueID'];
+			$permits->save();	
+		}
+		else
+		{
+			$permits = new permits_licence();
+			$permits->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
+			$permits->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
+			$permits->exp_date = $Expdate;
+			$permits->date_issued = $dates;
+			$permits->status = !empty($SysData['status']) ? $SysData['status'] : 1;
+			$permits->permits_licence_no = !empty($SysData['permits_licence_no']) ? $SysData['permits_licence_no'] : 0;
+			$permits->captured_by = $name;
+			$permits->date_captured = $currentDate;
+			$permits->vehicleID = $SysData['valueID'];
+			$permits->save();
+		}
+       
 
         //Upload supporting document
         if ($request->hasFile('documents')) {

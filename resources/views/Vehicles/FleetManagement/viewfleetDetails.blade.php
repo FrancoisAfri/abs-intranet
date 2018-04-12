@@ -31,13 +31,11 @@
                         </button>
                     </div>
                 </div>
-
                 <div align="center" class="box box-default">
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                 <strong class="lead">Vehicle Details</strong><br>
-
                                 @if(!empty($vehiclemaker))
                                     | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
                                     &nbsp;
@@ -65,14 +63,11 @@
                                     -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
                                     <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
                                 @endif
-
                             </p>
                         </div>
                     </div>
                     <div class="box-body">
-
                         <table class="table table-striped table-bordered">
-
                             @foreach ($vehiclemaintenance as $vehiclemaintenance)
                                 <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}"
                                    class="btn btn-app">
@@ -86,7 +81,6 @@
                                 <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                                     <i class="fa fa-tint"></i> Fuel Log
                                 </a>
-
                                 {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
                                 {{--<i class="fa fa-file-o"></i> Oil Log--}}
                                 {{--</a>--}}
@@ -321,7 +315,6 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
-
         $('#cancel').click(function () {
             location.href = '/vehicle_management/manage_fleet';
         });
