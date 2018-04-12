@@ -1066,6 +1066,8 @@ class FleetManagementController extends Controller
         $ID = $maintenance->id;
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $employees = HRPerson::where('status', 1)->get();
+        $safe = safe::where('status', 1)->get();
          
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -1075,10 +1077,26 @@ class FleetManagementController extends Controller
 
         $ID = $maintenance->id;
 
+        $status = array(1 => 'Active', 2 => ' Allocate', 3 => 'In Use', 4 => 'Empty', 5=> 'Evacate', 6=> 'In Storage', 7=> 'Discarded', 8=> 'Rental' , 9=> 'Sold');
+         
+        $vehicle_details = DB::table('vehicle_details')->get();
+      //  return $vehicle_details;
         
-        $fireextinguishers = DB::table('fire_extinguishers')->get();
-      
-
+        $fireextinguishers = DB::table('fire_extinguishers')
+            ->select('fire_extinguishers.*','vehicle_details.division_level_4','vehicle_details.division_level_5',
+                    'contact_companies.name as comp_name', 'hr_people.first_name as firstname', 
+                    'hr_people.surname as surname','division_level_fives.name as company', 'division_level_fours.name as Department')
+            ->leftJoin('vehicle_details', 'fire_extinguishers.vehicle_id', '=', 'vehicle_details.id')
+            ->leftJoin('hr_people', 'fire_extinguishers.capturer_id', '=', 'hr_people.id')
+            ->leftJoin('contact_companies', 'fire_extinguishers.supplier_id', '=', 'contact_companies.id')
+            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
+            ->orderBy('fire_extinguishers.id')
+            //->where('vehicle_id', $ID)
+            ->get();
+        
+       // return $fireextinguishers;
+               
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1086,6 +1104,9 @@ class FleetManagementController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
+        $data['safe'] = $safe;
+        $data['status'] = $status;
+        $data['employees'] = $employees;
         $data['ContactCompany'] = $ContactCompany;
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
@@ -1097,7 +1118,6 @@ class FleetManagementController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Fleet Management', 'Vehicle Images Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewfireextinguishers')->with($data);
         
     }
@@ -1105,9 +1125,11 @@ class FleetManagementController extends Controller
     public function addvehicleextinguisher(Request $request){
         
         $this->validate($request, [
-            //'name' => 'required',
-            // 'description' => 'required',
-           // 'image' => 'required',
+            'bar_code' => 'required',
+            'item_no' => 'required',
+             'Weight' => 'required',
+             'supplier_id' => 'required',
+            'image' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1121,11 +1143,15 @@ class FleetManagementController extends Controller
 
         $vehiclefirextinguishers = new vehicle_fire_extinguishers($SysData);
         $vehiclefirextinguishers->date_purchased = $datepurchased;
-     // $vehicleImages->description = $SysData['description'];
-//        $vehicleImages->vehicle_maintanace = $SysData['valueID'];
-//        $vehicleImages->upload_date = $currentDate;
-//        $vehicleImages->user_name = $userLogged->id;
-//        $vehicleImages->default_image = 1;
+        $vehiclefirextinguishers->vehicle_id = $SysData['valueID']; 
+        $vehiclefirextinguishers->capturer_id = $userLogged->id;
+        $vehiclefirextinguishers->Cost = !empty($SysData['Cost']) ? $SysData['Cost'] : 0;
+        $vehiclefirextinguishers->rental_amount = !empty($SysData['rental_amount']) ? $SysData['rental_amount'] : 0;
+        $vehiclefirextinguishers->supplier_id = !empty($SysData['']) ? $SysData['supplier_id'] : 0;
+        $vehiclefirextinguishers->item_no = !empty($SysData['item_no']) ? $SysData['item_no'] : 0;
+        $vehiclefirextinguishers->Weight = !empty($SysData['Weight']) ? $SysData['Weight'] : 0;
+        $vehiclefirextinguishers->purchase_order = !empty($SysData['purchase_order']) ? $SysData['purchase_order'] : 0;
+        $vehiclefirextinguishers->Status = 1;
         $vehiclefirextinguishers->save();
 
         //Upload Image picture
@@ -1139,7 +1165,70 @@ class FleetManagementController extends Controller
                $vehiclefirextinguishers->update();
            }
        }
+        AuditReportsController::store('Fleet Management', 'Vehicle Fire Fire Extinguishers Accessed', "Accessed by User", 0);
+        return response()->json(); 
+    }
+    
+    
+    public function editeditfireexting(Request $request ,vehicle_fire_extinguishers $extinguishers){
+       $this->validate($request, [
+            //'name' => 'required',
+            // 'description' => 'required',
+           // 'image' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+        
+        
+         $userLogged = Auth::user()->load('person');
+  
+        $datepurchased = $SysData['date_purchased'] = str_replace('/', '-', $SysData['date_purchased']);
+        $datepurchased = $SysData['date_purchased'] = strtotime($SysData['date_purchased']);
+        
+        $extinguishers->date_purchased = $datepurchased;
+        $extinguishers->vehicle_id = $SysData['valueID']; 
+        $extinguishers->capturer_id = $userLogged->id;
+        $extinguishers->Cost = !empty($SysData['Cost']) ? $SysData['Cost'] : 0;
+        $extinguishers->rental_amount = !empty($SysData['rental_amount']) ? $SysData['rental_amount'] : 0;
+        $extinguishers->supplier_id = !empty($SysData['']) ? $SysData['supplier_id'] : 0;
+        $extinguishers->item_no = !empty($SysData['item_no']) ? $SysData['item_no'] : 0;
+        $extinguishers->Weight = !empty($SysData['Weight']) ? $SysData['Weight'] : 0;
+        $extinguishers->purchase_order = !empty($SysData['purchase_order']) ? $SysData['purchase_order'] : 0;
+        $extinguishers->bar_code = !empty($SysData['bar_code']) ? $SysData['bar_code'] : '';
+        $extinguishers->Serial_number = !empty($SysData['Serial_number']) ? $SysData['Serial_number'] : '';
+        $extinguishers->invoice_number = !empty($SysData['invoice_number']) ? $SysData['invoice_number'] : '';
+        $extinguishers->Status = 1;
+        $extinguishers->update();
 
+        //Upload Image picture
+       if ($request->hasFile('image')) {
+           $fileExt = $request->file('image')->extension();
+           if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+               $fileName = "image" . time() . '.' . $fileExt;
+               $request->file('image')->storeAs('Vehicle/fireextinguishers/images', $fileName);
+               //Update file name in the database
+               $extinguishers->image = $fileName;
+               $extinguishers->update();
+           }
+       }
+        AuditReportsController::store('Fleet Management', 'Vehicle Fire Fire Extinguishers Accessed', "Accessed by User", 0);
+        return response()->json(); 
+        
+    }
+
+    public function changeStatus(Request $request ,vehicle_fire_extinguishers $fireextinguishers){
+         $this->validate($request, [
+           // 'name' => 'required',
+            // 'description' => 'required',
+           // 'image' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+        
+        $fireextinguishers->Status = $SysData['Status'];
+        $fireextinguishers->update;
+         
+        AuditReportsController::store('Fleet Management', 'Vehicle Fire Fire Extinguishers Accessed', "Accessed by User", 0);
         return response()->json(); 
     }
 

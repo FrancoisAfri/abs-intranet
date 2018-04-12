@@ -58,48 +58,10 @@
                             </p>
                         </div>
                     </div>
-                    <div align="center">
-                        <!--  -->
-                       <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-bars"></i> General Details
-                        </a>
-                       <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-book"></i> Booking Log
-                        </a>
-
-                      <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-tint"></i> Fuel Log
-                        </a>
-
-                       {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
-                            {{--<i class="fa fa-file-o"></i> Oil Log--}}
-                        {{--</a>--}}
-
-                        <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-medkit"></i> Incidents
-                        </a>
-                         <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-list-alt"></i> Fines
-                        </a>
-                         <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-area-chart"></i> Service Details
-                        </a>
-                        <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-car"></i>Insurance
-                        </a>
-                        <a href="{{ '/vehicle_management/warranties/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-snowflake-o"></i>Warranties
-                        </a>
-                        <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
-                            <i class="fa fa-money"></i> General Cost
-                        </a>
-                        <!--  -->
-                    </div>
                     <table class="table table-bordered">
                         <tr>
+                             <th style="width: 10px; text-align: center;"></th>
                             <th style="width: 10px; text-align: center;"></th>
-                            <th style="width: 10px; text-align: center;"></th>
-                            <th>SubAssets</th>
                             <th>Barcode</th>
                             <th>Item</th>
                             <th>Company</th>
@@ -109,41 +71,61 @@
                             <th>Date Purchased</th>
                             <th>Cost </th>
                             <th>Rental Amount </th>
+                            <th>Status </th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($fireextinguishers) > 0)
                             @foreach ($fireextinguishers as $extinguishers)
                                 <tr id="categories-list">
                                     <td nowrap>
-                                        <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-policy-modal"
-                                                data-id="{{ $extinguishers->id }}"
-                                               ><i class="fa fa-pencil-square-o"></i> Edit
-
+                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
+                                                data-toggle="modal" data-target="#edit-firestatus-modal"
+                                                data-id="{{ $extinguishers->id }}" data-bar_code="{{$extinguishers->bar_code}}"
+                                                data-item_no="{{ $extinguishers->item_no }}" data-Description="{{$extinguishers->Description}}"
+                                                data-Weight="{{ $extinguishers->Weight }}" data-Serial_number="{{$extinguishers->Serial_number}}"
+                                                data-purchase_order="{{ $extinguishers->purchase_order }}" data-invoice_number="{{$extinguishers->invoice_number}}"
+                                                data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{$extinguishers->date_purchased}}"
+                                                data-Cost="{{ $extinguishers->Cost }}" data-rental_amount="{{$extinguishers->rental_amount}}"
+                                               
+                                        ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
-                                    <td></td>
-                                    <td>{{ (!empty( $extinguishers->image)) ?  $extinguishers->name : ''}} </td>
+                                    <td>
+                                        <div class="product-img">
+                                        <img src="{{ (!empty($extinguishers->image)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/images/$extinguishers->image") : 'http://placehold.it/60x50' }}"
+                                                             alt="Product Image" width="100" height="75">
+                                       </div> 
+                                    </td>
                                     <td>{{ (!empty( $extinguishers->bar_code)) ?  $extinguishers->bar_code : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->item_no)) ?  $extinguishers->item_no : ''}} </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ (!empty( $extinguishers->company)) ?  $extinguishers->company : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->Department)) ?  $extinguishers->Department : ''}} </td>
+                                    <td> </td>
+                                    <td>{{ (!empty( $extinguishers->Serial_number)) ?  $extinguishers->Serial_number : ''}} </td>
+                                    <td>{{ !empty($extinguishers->date_purchased) ? date(' d M Y', $extinguishers->date_purchased) : '' }} </td>
+                                    <td>{{ !empty($extinguishers->Cost) ?  'R' .number_format($extinguishers->Cost, 2): '' }}</td>
+                                    <td>{{ !empty($extinguishers->rental_amount) ?  'R' .number_format($extinguishers->rental_amount, 2): 0 }}</td>
+                                    <td>{{ (!empty( $extinguishers->Status)) ?  $status[$extinguishers->Status] : ''}} </td>
+                                    <td nowrap>
+                                        
+                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
+                                                data-toggle="modal" data-target="#add-safe-modal"
+                                                data-id="{{ $extinguishers->id }}" data-Status="{{ $extinguishers->Status }}"
+                                                ><i class="fa fa-pencil-square-o"></i>
+                                            Edit
+                                        </button>
+                                    </td>
+
                                 </tr>
                             @endforeach
                         @else
                             <tr id="categories-list">
-                                <td colspan="10">
+                                <td colspan="14">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
                                         </button>
-                                        No Record for this vehicle, please start by adding a new Record for this
+                                        No Record for this vehicle, please start by adding Record for this
                                         vehicle..
                                     </div>
                                 </td>
@@ -160,11 +142,11 @@
                     </div>
                 </div>
             </div>
-        </form>
-            <!-- Include  modal -->
+        <!-- Include Modal form-->
           @include('Vehicles.partials.add_fire_extinguishers_modal')
-            
-
+          @include('Vehicles.partials.fire_extinguishers_status_modal')
+          @include('Vehicles.partials.edit_fireextinguisher_modal')
+          @include('Vehicles.partials.add_extinguisherstatus_modal')
         </div>
         @endsection
 
@@ -202,7 +184,7 @@
                     if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
                 }
-			$(function () {
+            $(function () {
                 $('#back_button').click(function () {
                     location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 });
@@ -271,7 +253,6 @@
 
                 });
 
-                //Post perk form to server using ajax (add)
                 $('#addfireextinguishers').on('click', function () {
                     var strUrl = '/vehicle_management/addfireextinguishers';
                     var formName = 'add-fireextinguishers-form';
@@ -283,63 +264,85 @@
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
-
-                var policyID;
-                $('#edit-policy-modal').on('show.bs.modal', function (e) {
+//                $('#edit_status').on('click', function () {
+//                    var strUrl = '/vehicle_management/changestatus';
+//                    var formName = 'edit-module-form';
+//                    var modalID = 'add-safe-modal';
+//                    var submitBtnID = 'edit_status';
+//                    var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+//                    var successMsgTitle = 'New Record Added!';
+//                    var successMsg = 'The Record  has been updated successfully.';
+//                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+//                });
+                
+               var reject_ID;
+                $('#add-safe-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    if (parseInt(btnEdit.data('id')) > 0) {
-                        policyID = btnEdit.data('id');
-                     }
-
-                    var service_provider = btnEdit.data('service_provider');
-                    var contact_person = btnEdit.data('contact_person');
-                    var contact_number = btnEdit.data('contact_number');
-                    var contact_email = btnEdit.data('contact_email');
-                    var address = btnEdit.data('address');
-                    var policy_no = btnEdit.data('policy_no');
-                    var inception_date = btnEdit.data('inceptiondate');
-                    var exp_date = btnEdit.data('exp_date');
-                    var value_coverd = btnEdit.data('value_coverd');
-                    var premium_amount = btnEdit.data('premium_amount');
-                    var type = btnEdit.data('type');
-                    var warranty_amount = btnEdit.data('warranty_amount');
-                    var description = btnEdit.data('description');
-                    var notes = btnEdit.data('notes');
-                    var documents = btnEdit.data('documents');
-                    var name = btnEdit.data('name');
+                    reject_ID = btnEdit.data('id');
+                    var Status = btnEdit.data('Status');
+                    var modal = $(this);
+                   modal.find('#Status').val(Status);
+                });
+                //Post module form to server using ajax (ADD)
+                
+                
+                 $('#edit_status').on('click', function() {
+                var strUrl = '/vehicle_management/changestatus/' + reject_ID;
+                var formName = 'edit-module-form';
+                var modalID = 'add-safe-modal';
+                var submitBtnID = 'edit_status';
+                var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
+                
+                     
+                var fire_ID;
+                $('#edit-firestatus-modal').on('show.bs.modal', function (e) {
+                    var btnEdit = $(e.relatedTarget);
+                    fire_ID = btnEdit.data('id');
+                    var bar_code = btnEdit.data('bar_code');
+                    var item_no = btnEdit.data('item_no');
+                    var Description = btnEdit.data('Description');
+                    var Weight = btnEdit.data('Weight');
+                    var Serial_number = btnEdit.data('Serial_number');
+                    var purchase_order = btnEdit.data('purchase_order');
+                    var invoice_number = btnEdit.data('invoice_number');
+                    var supplier_id = btnEdit.data('supplier_id');
+                    var date_purchased = btnEdit.data('date_purchased');
+                    var Cost = btnEdit.data('Cost');
+                    var rental_amount = btnEdit.data('rental_amount');
                     var valueID = btnEdit.data('valueID');
                     var modal = $(this);
-                    modal.find('#service_provider').val(service_provider);
-                    modal.find('#contact_person').val(contact_person);
-                    modal.find('#contact_number').val(contact_number);
-                    modal.find('#contact_email').val(contact_email);
-                    modal.find('#address').val(address);
-                    modal.find('#policy_no').val(policy_no);
-                    modal.find('#inception_date').val(inception_date);
-                    modal.find('#exp_date').val(exp_date);
-                    modal.find('#value_coverd').val(value_coverd);
-                    modal.find('#premium_amount').val(premium_amount);
-                    modal.find('#type').val(type);
-                    modal.find('#warranty_amount').val(warranty_amount);
-                    modal.find('#description').val(description);
-                    modal.find('#notes').val(notes);
-                    modal.find('#documents').val(documents);
-                    modal.find('#name').val(name);
-                    modal.find('#valueID').val(valueID);
+                   modal.find('#bar_code').val(bar_code);
+                   modal.find('#item_no').val(item_no);
+                   modal.find('#Description').val(Description);
+                   modal.find('#Weight').val(Weight);
+                   modal.find('#Serial_number').val(Serial_number);
+                   modal.find('#purchase_order').val(purchase_order);
+                   modal.find('#invoice_number').val(invoice_number);
+                   modal.find('#supplier_id').val(supplier_id);
+                   modal.find('#date_purchased').val(date_purchased);
+                   modal.find('#Cost').val(Cost);
+                   modal.find('#rental_amount').val(rental_amount);
+                   modal.find('#valueID').val(valueID);
                 });
-
-                 $('#edit_insurance').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_policy/'+ policyID ;
-                    var formName = 'edit-policy-form';
-                    var modalID = 'edit-policy-modal';
-                    var submitBtnID = 'edit_insurance';
-                    var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Policy Details have been updated!';
-                    var successMsg = 'The Policy Details has been updated successfully.';
-                    var Method = 'PATCH';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                //Post module form to server using ajax (ADD)
+                
+                
+              $('#edit_firestatus').on('click', function() {
+                var strUrl = '/vehicle_management/editfireexting/' + fire_ID;
+                var formName = 'edit-firestatus-form';
+                var modalID = 'edit-firestatus-modal';
+                var submitBtnID = 'edit_firestatus';
+                var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
-			});
-			
+                             
+            });
+     
             </script>
 @endsection
