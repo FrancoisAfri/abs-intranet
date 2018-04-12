@@ -39,7 +39,7 @@ class FuelManagementController extends Controller
     {
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $Fueltanks = DB::table('fuel_tanks')
             ->select('fuel_tanks.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname',
