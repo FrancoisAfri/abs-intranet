@@ -10,5 +10,5 @@ class vehicle_fire_extinguishers extends Model
 
     protected $fillable = ['date_purchased','vehicle_id','supplier_id','bar_code',
                             'item_no','Description','Weight','Serial_number','invoice_number','purchase_order',
-                            'Cost','rental_amount','image','Status','notes'];
+                            'Cost','rental_amount','image','Status','notes','capturer_id'];
 }

@@ -1,26 +1,32 @@
-<div id="add_fireextinguishers-modal" class="modal modal-default fade">
-    <div class="modal-dialog modal-lg">
+<div id="edit-firestatus-modal" class="modal modal-default fade">
+     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          
-            <form class="form-horizontal" method="POST" name="add-fireextinguishers-form">
+            <form class="form-horizontal" method="POST" name="edit-firestatus-form">
                 {{ csrf_field() }}
-               
+                {{ method_field('PATCH') }}
+
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Vehicle Fire  Extinguishers </h4>
+                    <h4 class="modal-title">Edit Vehicle Fire Extinguisher</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-                    <div class="box-body" id="vehicle_details">
 
-  
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Enter Barcode</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="bar_code" name="bar_code"
                                    value="" placeholder="Enter Barcode ">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="bar_code" name="bar_code" value=""
+                                   placeholder="Enter Description" required>
                         </div>
                     </div>
                         
@@ -31,13 +37,7 @@
                                    value="" placeholder="Enter Item">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Enter Description</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="Description" name="Description"
-                                   value="" placeholder="Enter Description ">
-                        </div>
-                    </div>
+                   
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Enter Weight (kg)</label>
                         <div class="col-sm-8">
@@ -83,7 +83,7 @@
                         <label for="path" class="col-sm-2 control-label">Date Purchased </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_purchased" name="date_purchased"
-                                   value="{{ old('date_issued') }}" placeholder="Select  Purchased date ...">
+                                   value="{{ old('date_purchased') }}" placeholder="Select  Purchased date ...">
                         </div>
                     </div>
                         
@@ -117,19 +117,19 @@
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
-                        
+                  
                     <input type="hidden" id="valueID" name="valueID"
-                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">    
-                         
-                        
+                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}"> 
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="addfireextinguishers" class="btn btn-warning"><i
-                                class="fa fa-cloud-upload"></i> Save
+                    <button type="button" id="edit_firestatus" class="btn btn-warning"><i class="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+        
+           

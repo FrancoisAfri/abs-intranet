@@ -394,7 +394,7 @@
                 var incidentID;
                 $('#edit-incidents-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    fineID = btnEdit.data('id');
+                    incidentID = btnEdit.data('id');
                     var date_of_incident = btnEdit.data('dateofincident');
                     var incident_type = btnEdit.data('incident_type');
                     var severity = btnEdit.data('severity');
