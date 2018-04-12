@@ -58,6 +58,7 @@
                         <table class="table table-bordered">
                             <tr>
                                <th style="width: 10px; text-align: center;"></th>
+							    <th>License Type</th>
                                 <th>Supplier</th>
                                 <th>Permit/Licence Number </th>
                                 <th> Date Issued </th>
@@ -69,66 +70,66 @@
                                 <th style="width: 10px; text-align: center;"></th>
                             </tr>
                             @if (count($permits) > 0)
-                              @foreach ($permits as $permit)
-                               <tr id="categories-list">
+								@foreach ($permits as $permit)
+								<tr id="categories-list">
                             
                                     
-                                      @if (isset($permit) && $permit->exp_date < $currentdate)
-                                      <td bgcolor="red" nowrap>
+                                    @if (isset($permit) && $permit->exp_date < $currentdate)
+										<td bgcolor="red" nowrap>
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
                                             data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
                                             data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"    
                                             data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
                                             data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
-                                            
-                                    <td bgcolor="red">{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
-                                    <td bgcolor="red">{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
-                                    <td bgcolor="red">{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
-                                    <td bgcolor="red">{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
-                                    <td bgcolor="red">{{ (!empty($permit->status)) ?  $status[$permit->status] : ''}}</td>
-                                    <td bgcolor="red">{{ !empty($permit->captured_by) ? $permit->captured_by : ''}}</td>
-                                    <td bgcolor="red">{{ !empty($permit->date_captured) ? date(' d M Y', $permit->date_captured) : '' }}</td>
-                                    <td bgcolor="red" nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($permit->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Vehicle/permits_licence/$permit->document") }}"
-                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                          <td bgcolor="red"> Expired </td>  
-                                       @else
-                                       <td nowrap>
+										<td bgcolor="red">{{ !empty($permit->license_name) ? $permit->license_name : '' }}</td>
+										<td bgcolor="red">{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
+										<td bgcolor="red">{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
+										<td bgcolor="red">{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
+										<td bgcolor="red">{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
+										<td bgcolor="red">{{ (!empty($permit->status)) ?  $status[$permit->status] : ''}}</td>
+										<td bgcolor="red">{{ !empty($permit->captured_by) ? $permit->captured_by : ''}}</td>
+										<td bgcolor="red">{{ !empty($permit->date_captured) ? date(' d M Y', $permit->date_captured) : '' }}</td>
+										<td bgcolor="red" nowrap>
+											<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+												<label for="document" class="control-label"></label>
+												@if(!empty($permit->document))
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="{{ Storage::disk('local')->url("Vehicle/permits_licence/$permit->document") }}"
+													   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+												@else
+												<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+												@endif
+											</div>
+										</td>
+										<td bgcolor="red"> Expired </td>  
+									@else
+										<td nowrap>
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
                                             data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
                                             data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"    
-                                            data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
+                                            data-permit_licence="{{ $permit->permit_licence }}" data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
                                             data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
-                                            
-                                    <td>{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
-                                    <td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
-                                    <td>{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
-                                    <td>{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
-                                    <td>{{ (!empty($permit->status)) ?  $status[$permit->status] : ''}}</td>
-                                    <td>{{ !empty($permit->captured_by) ? $permit->captured_by : ''}}</td>
-                                    <td>{{ !empty($permit->date_captured) ? date(' d M Y', $permit->date_captured) : '' }}</td>
-                                    <td nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($permit->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Vehicle/permits_licence/$permit->document") }}"
-                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                            <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                         @endif
+										<td>{{ !empty($permit->license_name) ? $permit->license_name : '' }}</td>
+										<td>{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
+										<td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
+										<td>{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
+										<td>{{ !empty($permit->exp_date) ? date(' d M Y', $permit->exp_date) : '' }}</td>
+										<td>{{ (!empty($permit->status)) ?  $status[$permit->status] : ''}}</td>
+										<td>{{ !empty($permit->captured_by) ? $permit->captured_by : ''}}</td>
+										<td>{{ !empty($permit->date_captured) ? date(' d M Y', $permit->date_captured) : '' }}</td>
+										<td nowrap>
+											<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+												<label for="document" class="control-label"></label>
+												@if(!empty($permit->document))
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="{{ Storage::disk('local')->url("Vehicle/permits_licence/$permit->document") }}"
+													   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+												@else
+												<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+												@endif
+											</div>
+										</td>
+                                    @endif
                                 </tr>
                             @endforeach
                         @else
@@ -230,9 +231,6 @@
                     //Show success action modal
                     $('#success-action-modal').modal('show');
                 });
-
-                
-
                 $('input[name="date_issued"]').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
@@ -250,21 +248,12 @@
                 autoclose: true,
                 todayHighlight: true
             });
-
-
-      
-
                 //Initialize iCheck/iRadio Elements
                 $('input').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
                     radioClass: 'iradio_square-blue',
                     increaseArea: '10%' // optional
                 });
-
-                
-
-            
-
                 //Post perk form to server using ajax (add)
                 $('#add_permit').on('click', function () {
                     var strUrl = '/vehicle_management/addPermit';
@@ -276,7 +265,6 @@
                     var successMsg = 'The Permits/Licences Details has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
-
                 //
                 var permitID;
                 $('#edit-permit-modal').on('show.bs.modal', function (e) {
@@ -285,6 +273,7 @@
                      if (parseInt(btnEdit.data('id')) > 0) {
                       permitID = btnEdit.data('id');
                     }
+                    var permitLicence = btnEdit.data('permit_licence');
                     var Supplier = btnEdit.data('Supplier');
                     var permits_licence_no = btnEdit.data('permits_licence_no');
                     var date_issued = btnEdit.data('date_issued');
@@ -293,16 +282,15 @@
                     var captured_by = btnEdit.data('captured_by');
                     var modal = $(this);
                     modal.find('#name').val(name);
-                    modal.find('#Supplier').val(Supplier);
                     modal.find('#permits_licence_no').val(permits_licence_no);
                     modal.find('#date_issued').val(date_issued);
                     modal.find('#exp_date').val(exp_date);
                     modal.find('#status').val(status);
                     modal.find('#captured_by').val(captured_by);
+					modal.find('select#permit_licence').val(Supplier);
+					modal.find('select#Supplier').val(Supplier);
                     //modal.find('#documents').val(documents);
                 });
-
-   
             //Post perk form to server using ajax (edit)
             $('#edit_permit').on('click', function() {
                 var strUrl = '/vehicle_management/edit_permit/' + permitID;
@@ -314,8 +302,5 @@
                 var successMsg = 'The  details have been updated successfully!';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
-     
-
     </script>
 @endsection

@@ -101,6 +101,7 @@
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
                             <th>Service Provider</th>
+                            <th>Contact Person</th>
                             <th>Policy/Document #</th>
                             <th>Type</th>
                             <th>Inception Date</th>
@@ -111,45 +112,45 @@
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($vehiclewarranties) > 0)
-                            @foreach ($vehiclewarranties as $reminder)
+                            @foreach ($vehiclewarranties as $warranty)
                                 <tr id="categories-list">
                                     <td nowrap>
-                                        <button reminder="button" id="edit_compan" class="btn btn-warning  btn-xs"
+                                        <button warranty="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#edit-warrantie-modal"
-                                                data-id="{{ $reminder->id }}" data-name="{{ $reminder->name }}"
-                                                data-description="{{ $reminder->description }}"
-                                                data-service_provider="{{ $reminder->service_provider }}"
-                                                data-contact_person="{{ $reminder->contact_person }}"
-                                                data-contact_number="{{ $reminder->contact_number }}"
-                                                data-contact_email="{{ $reminder->contact_email }}"
-                                                data-address="{{ $reminder->address }}"
-                                                data-inceptiondate="{{ date(' d M Y', $reminder->inception_date)}}"
-                                                data-expdate="{{ date(' d M Y', $reminder->exp_date)}}"
-                                                data-policy_no="{{ $reminder->policy_no }}"
-                                                data-warranty_period="{{ $reminder->warranty_period }}"
-                                                data-kilometers="{{ $reminder->kilometers }}"
-                                                data-warranty_amount="{{ $reminder->warranty_amount }}"
-                                                data-type="{{ $reminder->type }}"
-                                                data-notes="{{ $reminder->notes }}"
-                                                data-document="{{ $reminder->document }}"
+                                                data-id="{{ $warranty->id }}" data-name="{{ $warranty->name }}"
+                                                data-description="{{ $warranty->description }}"
+                                                data-service_provider="{{ $warranty->service_provider }}"
+                                                data-contact_person="{{ $warranty->contact_person }}"
+                                                data-contact_number="{{ $warranty->contact_number }}"
+                                                data-contact_email="{{ $warranty->contact_email }}"
+                                                data-address="{{ $warranty->address }}"
+                                                data-inceptiondate="{{ date(' d M Y', $warranty->inception_date)}}"
+                                                data-expdate="{{ date(' d M Y', $warranty->exp_date)}}"
+                                                data-policy_no="{{ $warranty->policy_no }}"
+                                                data-warranty_period="{{ $warranty->warranty_period }}"
+                                                data-kilometers="{{ $warranty->kilometers }}"
+                                                data-warranty_amount="{{ $warranty->warranty_amount }}"
+                                                data-type="{{ $warranty->type }}"
+                                                data-notes="{{ $warranty->notes }}"
+                                                data-document="{{ $warranty->document }}"
                                         ><i class="fa fa-pencil-square-o"></i> Edit
 
                                         </button>
                                     </td>
-
-                                    <td>{{ !empty($reminder->serviceprovider) ? $reminder->serviceprovider : '' }}</td>
-                                    <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
-                                    <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
-                                    <td>{{ !empty($reminder->inception_date) ? date(' d M Y', $reminder->inception_date) : '' }}</td>
-                                    <td>{{ !empty($reminder->exp_date) ? date(' d M Y', $reminder->exp_date) : '' }}</td>
-                                    <td>{{ !empty($reminder->warranty_amount) ?  'R' .number_format($reminder->warranty_amount, 2) : '' }}</td>                                                           
-                                    <td>{{ !empty($reminder->kilometers) ? 'km' .number_format($reminder->kilometers, 2) : '' }}</td>
+                                    <td>{{ !empty($warranty->serviceprovider) ? $warranty->serviceprovider : '' }}</td>
+                                    <td style="width: 20px;">{{ !empty($warranty->first_name) ? $warranty->first_name." ".$warranty->surname." |".$warranty->cell_number." |".$warranty->res_address : '' }}</td>
+                                    <td>{{ !empty($warranty->policy_no) ?  $warranty->policy_no : '' }}</td>
+                                    <td>{{ !empty($warranty->type) ? $warranty->type : '' }}</td>
+                                    <td>{{ !empty($warranty->inception_date) ? date(' d M Y', $warranty->inception_date) : '' }}</td>
+                                    <td>{{ !empty($warranty->exp_date) ? date(' d M Y', $warranty->exp_date) : '' }}</td>
+                                    <td>{{ !empty($warranty->warranty_amount) ?  'R' .number_format($warranty->warranty_amount, 2) : '' }}</td>                                                           
+                                    <td>{{ !empty($warranty->kilometers) ? 'km' .number_format($warranty->kilometers, 2) : '' }}</td>
                                     <td nowrap>
                                         <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
-                                            @if(!empty($reminder->document))
+                                            @if(!empty($warranty->document))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Vehicle/warranty/$reminder->document") }}"
+                                                   href="{{ Storage::disk('local')->url("Vehicle/warranty/$warranty->document") }}"
                                                    target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                             @else
                                                 <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
@@ -158,11 +159,11 @@
                                     </td>
                                     <td>
                                         <!--   leave here  -->
-                                        <button reminder="button" id="view_ribbons"
-                                                class="btn {{ (!empty($reminder->status) && $reminder->status == 1) ? " btn-danger " : "btn-success " }}
-                                                        btn-xs" onclick="postData({{$reminder->id}}, 'actdeac');"><i
-                                                    class="fa {{ (!empty($reminder->status) && $reminder->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($reminder->status) && $reminder->status == 1) ? "De-Activate" : "Activate"}}
+                                        <button warranty="button" id="view_ribbons"
+                                                class="btn {{ (!empty($warranty->status) && $warranty->status == 1) ? " btn-danger " : "btn-success " }}
+                                                        btn-xs" onclick="postData({{$warranty->id}}, 'actdeac');"><i
+                                                    class="fa {{ (!empty($warranty->status) && $warranty->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($warranty->status) && $warranty->status == 1) ? "De-Activate" : "Activate"}}
                                         </button>
                                     </td>
 
@@ -170,7 +171,7 @@
                             @endforeach
                         @else
                             <tr id="categories-list">
-                                <td colspan="10">
+                                <td colspan="12">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;

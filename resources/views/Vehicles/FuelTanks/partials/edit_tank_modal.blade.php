@@ -75,11 +75,11 @@
                         </div>
                     </div> -->
                     <div class="form-group safe-field">
-                        <label for="tank_manager" class="col-sm-2 control-label">Employee </label>
+                        <label for="tank_manager" class="col-sm-2 control-label">Tank Manager </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="tank_manager"
                                     name="tank_manager">
-                                <option value="0">*** Select a Employee ***</option>
+                                <option value="0">*** Select a Tank Manager ***</option>
                                 @foreach($employees as $employee)
                                     <option value="{{ $employee->id }}" {{ !empty($tanks->tank_manager) && ($tanks->tank_manager == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                 @endforeach

@@ -15,7 +15,7 @@
                     <div id="success-alert"></div>
 
                     <div class="form-group safe-field">
-                        <label for="permit_licence" class="col-sm-3 control-label">Permit/Licence </label>
+                        <label for="permit_licence" class="col-sm-3 control-label">License Permit/Licence </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="permit_licence"
                                     name="permit_licence">
@@ -26,7 +26,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group safe-field">
                         <label for="Supplier" class="col-sm-3 control-label">Supplier </label>
                         <div class="col-sm-8">
@@ -38,7 +37,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Permit/Licence Number </label>
                         <div class="col-sm-8">
@@ -52,31 +50,26 @@
                         <label for="path" class="col-sm-3 control-label">Date Issued </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_issued" name="date_issued"
-                                   value="{{ old('date_issued') }}" placeholder="Select  issue date ...">
+                                   value="{{ old('date_issued') }}" placeholder="Select  Issued date ...">
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Expiry Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="exp_date" name="exp_date"
-                                   value="{{ old('exp_date') }}" placeholder="Select  issue date ...">
+                                   value="{{ old('exp_date') }}" placeholder="Select Expiry Date ...">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="Status" class="col-sm-3 control-label">Status </label>
                         <div class="col-sm-8">
-
                             <select id="status" name="status" class="form-control">
                                 <option value="0">*** Select Status ***</option>
                                 <option value="1"> Active</option>
                                 <option value="2"> InActive</option>
                             </select>
-
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="path" class="col-sm-3 control-label">Captured By </label>
                         <div class="col-sm-8">
@@ -84,7 +77,6 @@
                                    value="{{ !empty($name)  ? $name : ''}}" placeholder="Select  User ..." readonly="">
                         </div>
                     </div>
-
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-3 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -94,7 +86,6 @@
                                    data-show-upload="false">
                         </div>
                     </div>
-					
 					<input type="hidden" id="valueID" name="valueID"
                         value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 					

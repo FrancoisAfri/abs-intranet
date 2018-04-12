@@ -70,20 +70,12 @@
                                        placeholder="Enter the tank capacity...">
                             </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <label for="current_fuel_litres" class="col-sm-2 control-label">Add Litres</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="current_fuel_litres"
-                                       name="current_fuel_litres" value="" onchange="convertMoney(this.value, 2);"
-                                       placeholder="Enter Fuel Litres" required>
-                            </div>
-                        </div> -->
                         <div class="form-group safe-field">
-                            <label for="tank_manager" class="col-sm-2 control-label">Employee </label>
+                            <label for="tank_manager" class="col-sm-2 control-label">Tank Manager </label>
                             <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;" id="tank_manager"
                                         name="tank_manager">
-                                    <option value="0">*** Select a Employee ***</option>
+                                    <option value="0">*** Select a Tank Manager ***</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>
                                     @endforeach

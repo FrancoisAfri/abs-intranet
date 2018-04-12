@@ -428,12 +428,12 @@ class VehicleFleetController extends Controller
 
         $ID = $maintenance->id;
         $vehiclewarranties = DB::table('vehicle_warranties')
-            ->select('vehicle_warranties.*', 'contact_companies.name as serviceprovider')
+            ->select('vehicle_warranties.*','contacts_contacts.*', 'contact_companies.name as serviceprovider')
             ->leftJoin('contact_companies', 'vehicle_warranties.service_provider', '=', 'contact_companies.id')
+            ->leftJoin('contacts_contacts', 'vehicle_warranties.contact_person', '=', 'contacts_contacts.id')
             ->orderBy('vehicle_warranties.id')
             ->where('vehicleID', $ID)
             ->get();
-
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -441,8 +441,6 @@ class VehicleFleetController extends Controller
             ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-
-
         $data['companies'] = $companies;
         $data['contactPeople'] = $contactPeople;
         $data['ContactCompany'] = $ContactCompany;
@@ -464,7 +462,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             'policy_no' => 'required|unique:vehicle_warranties,policy_no',
-            'email' => 'required|email|max:255',
+            
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
