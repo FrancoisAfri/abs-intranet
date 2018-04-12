@@ -406,7 +406,9 @@ Route::patch('vehicle_management/{confirm}/confirmreturn', 'VehicleBookingContro
 // vehicle_ispection
 Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingController@viewVehicleIspectionDocs'); 
 
-###
+### fire_extinguishers
+Route::get('vehicle_management/fire_extinguishers/{maintenance}', 'FleetManagementController@viewfireExtinguishers'); 
+Route::post('vehicle_management/addfireextinguishers', 'FleetManagementController@addvehicleextinguisher');
 
 ##########################  Alerts  #########################
 Route::get('vehicle_management/vehicle_alerts', 'vehiclealertController@index');

@@ -2057,10 +2057,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->where('vehicle_fuel_log.tank_and_other', '=' ,2)
-            ->orderby('vehicle_fuel_log.id','desc')
+            ->orderby('vehicle_fuel_log.service_station','desc')
             ->get();
             
-            //return $externalFuelLog;
             
         $data['externalFuelLog'] = $externalFuelLog;
       // $data['VehicleLicences'] = $VehicleLicences;
@@ -2176,16 +2175,16 @@ class VehicleReportsController extends Controller
              $actionFrom = strtotime($startExplode[0]);
              $actionTo = strtotime($startExplode[1]);
          }
-        
-          $InternalFuelLog = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*','vehicle_details.vehicle_make as vehiclemake','vehicle_details.fleet_number as fleet_number'
-                ,'vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype', 'fleet_fillingstation.name as Supplier',
-                    'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel','vehicle_details.vehicle_registration as vehicle_registration')
-            ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
+//        
+     $test = DB::table('fuel_tanks')
+            ->select('fuel_tanks.*','fuel_tank_topUp.*','vehicle_details.vehicle_make as vehiclemake','vehicle_details.fleet_number as fleet_number'
+                ,'vehicle_details.vehicle_model as vehiclemodel','vehicle_details.vehicle_type as vehicletype','vehicle_make.name as VehicleMake', 
+                'vehicle_model.name as VehicleModel','vehicle_details.vehicle_registration as vehicle_registration')
+            ->leftJoin('fuel_tank_topUp', 'fuel_tanks.id', '=', 'fuel_tank_topUp.tank_id')
+            ->leftJoin('vehicle_details', 'fuel_tank_topUp.tank_id', '=', 'vehicle_details.id')
             ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
-            ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
                     $query->where('vehicle_type', $vehicleType);
@@ -2202,10 +2201,28 @@ class VehicleReportsController extends Controller
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
-           ->where('vehicle_fuel_log.tank_and_other', '=' ,1)
-            ->orderby('vehicle_fuel_log.id','desc')
+            ->where('fuel_tank_topUp.type', '=' ,1)
+            ->orderby('fuel_tanks.id','desc')
             ->get();
             
-            return $InternalFuelLog;
+         
+          
+          $fuel_tank_topUp = DB::table('fuel_tank_topUp')->get();
+                  
+                   return $fuel_tank_topUp;
+            
+        $data['fuel_tank_topUp'] = $fuel_tank_topUp;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fleet Cards Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.fuelIntenallog_results')->with($data); 
      }
 }
