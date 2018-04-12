@@ -84,7 +84,7 @@
                                                 data-item_no="{{ $extinguishers->item_no }}" data-Description="{{$extinguishers->Description}}"
                                                 data-Weight="{{ $extinguishers->Weight }}" data-Serial_number="{{$extinguishers->Serial_number}}"
                                                 data-purchase_order="{{ $extinguishers->purchase_order }}" data-invoice_number="{{$extinguishers->invoice_number}}"
-                                                data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{$extinguishers->date_purchased}}"
+                                                data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{date(' d M Y', $extinguishers->date_purchased)}}"
                                                 data-Cost="{{ $extinguishers->Cost }}" data-rental_amount="{{$extinguishers->rental_amount}}"
                                                
                                         ><i class="fa fa-pencil-square-o"></i> Edit
@@ -95,7 +95,7 @@
                                         <img src="{{ (!empty($extinguishers->image)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/images/$extinguishers->image") : 'http://placehold.it/60x50' }}"
                                                              alt="Product Image" width="100" height="75">
                                        </div> 
-                                    </td>
+                                    </td>                
                                     <td>{{ (!empty( $extinguishers->bar_code)) ?  $extinguishers->bar_code : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->item_no)) ?  $extinguishers->item_no : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->company)) ?  $extinguishers->company : ''}} </td>
@@ -112,7 +112,7 @@
                                                 data-toggle="modal" data-target="#add-safe-modal"
                                                 data-id="{{ $extinguishers->id }}" data-Status="{{ $extinguishers->Status }}"
                                                 ><i class="fa fa-pencil-square-o"></i>
-                                            Edit
+                                            Change Status
                                         </button>
                                     </td>
 
@@ -137,7 +137,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add_fireextinguishers-modal">Add New FIRE Extinguishers
+                                data-target="#add_fireextinguishers-modal">Add New Fire Extinguishers
                         </button>
                     </div>
                 </div>
@@ -264,16 +264,6 @@
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
-//                $('#edit_status').on('click', function () {
-//                    var strUrl = '/vehicle_management/changestatus';
-//                    var formName = 'edit-module-form';
-//                    var modalID = 'add-safe-modal';
-//                    var submitBtnID = 'edit_status';
-//                    var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
-//                    var successMsgTitle = 'New Record Added!';
-//                    var successMsg = 'The Record  has been updated successfully.';
-//                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-//                });
                 
                var reject_ID;
                 $('#add-safe-modal').on('show.bs.modal', function (e) {
@@ -340,7 +330,7 @@
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+              });
                              
             });
      
