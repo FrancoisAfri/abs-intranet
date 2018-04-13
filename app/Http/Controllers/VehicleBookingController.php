@@ -158,10 +158,12 @@ class VehicleBookingController extends Controller {
         $startDate = strtotime($requiredFrom);
         $EndDate = strtotime($requiredTo);
 
+               $status = array(1 => 'Active', 2 => 'Require Approval', 3 => 'Rejected', 4 => 'Inactive');
 
+       // return $vehicletype;
         $vehiclebookings = DB::table('vehicle_details')
                 ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ', 'vehicle_booking.return_datetime as return_date ', 
-                        'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 
+                        'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicletype', 
                         'division_level_fives.name as company', 'division_level_fours.name as Department' ,'vehicle_incidents.severity as Severity')
                 ->leftJoin('vehicle_incidents', 'vehicle_details.id', '=', 'vehicle_incidents.vehicleID')
                 ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
@@ -195,13 +197,15 @@ class VehicleBookingController extends Controller {
                   $query->where('vehicle_booking.return_datetime', '!=', $EndDate);
                   }
                   }) */
-                ->where('vehicle_details.booking_status', '!=', 1)
-                ->whereNotIn('vehicle_incidents.severity', [ 2, 3])//check if the booking is not approved
-                ->orWhereNull('vehicle_incidents.severity') // allow nulls
-                ->orderBy('vehicle_details.id')
+               ->where('vehicle_details.status', '=', 1)
+               ->where('vehicle_details.booking_status', '!=', 1)
+              // ->whereNotIn('!empty(vehicle_incidents.severity) ? vehicle_incidents.severity : 0', [ 2, 3])         
+              // ->whereNotIn('vehicle_incidents.severity', [ 2, 3])//check if the booking is not approved
+             //   ->WhereNull('vehicle_incidents.severity') // allow nulls
+                ->orderBy('vehicle_details.id', 'asc')
                 ->get();
 
-                //  return  $vehiclebookings;
+              //  return  $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 

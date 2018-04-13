@@ -19,6 +19,7 @@
                                 <thead>
                                 <tr>
                                     <th style="width: 5px; text-align: center;"></th>
+                                    <th style="width: 5px; text-align: center;"></th>
                                     <th>Vehicle</th>
                                     <th>Type</th>
                                     <th>Fleet Number</th>
@@ -33,13 +34,20 @@
                                 @if (count($vehiclebooking) > 0)
                                     @foreach ($vehiclebooking as $booking)
                                         <tr id="categories-list">
+                                            
                                             <td>
                                                 <a href="{{ '/vehicle_management/bookingdetails/' . $booking->id . '/' . $vehicleDates}}"
                                                    id="edit_compan" class="btn btn-default  btn-xs"
                                                    data-id="{{ $booking->id }}">select</a>
                                             </td>
+                                            <td>
+                                                <div class="product-img">
+                                                        <img src="{{ (!empty($booking->image)) ? Storage::disk('local')->url("Vehicle/images/$booking->image") : 'http://placehold.it/60x50' }}"
+                                                             alt="Product Image" width="50" height="50">
+                                                    </div>
+                                            </td>
                                             <td>{{ !empty($booking->vehicle_make . ' ' . $booking->vehicle_model . ' ' . $booking->year ) ? $booking->vehicle_make . ' ' . $booking->vehicle_model  . ' ' . $booking->year: ''}}</td>
-                                            <td>{{ !empty($booking->vehicle_type) ? $booking->vehicle_type : ''}}</td>
+                                            <td>{{ !empty($booking->vehicletype) ? $booking->vehicletype : ''}}</td>
                                             <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
                                             <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
                                             <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
@@ -52,6 +60,7 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
+                                    <th style="width: 5px; text-align: center;"></th>
                                     <th style="width: 5px; text-align: center;"></th>
                                     <th>Vehicle</th>
                                     <th>Type</th>
