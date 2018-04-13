@@ -88,12 +88,12 @@ class vehiclealertController extends Controller {
 //                })
 //                ->get();
                 
-                $vuya = vehicle_detail::with('vehicle_booking')
-                                 ->select('vehicle_details.*')
-                                 ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
-                                 ->get();
-                
-                return $vuya;
+//                $vuya = vehicle_detail::with('vehicle_booking')
+//                                 ->select('vehicle_details.*')
+//                                 ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
+//                                 ->get();
+//                
+//                return $vuya;
 
 
         $data['page_title'] = " Fleet Management ";
