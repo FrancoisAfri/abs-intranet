@@ -770,11 +770,9 @@ class VehicleManagemntController extends Controller
         $fleetID = $request['fleet_number'];
         $registration_number = $request['registration_number'];
         $promotionID = $request['promotion_type'];
+        $statusType = $request['status_type'];
 
-        //return $propertyID;
-        //  $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get(); 
-        // return $vehiclemodel;
-
+      
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         
         $vehiclestatus = array(1 => 'Active', 2 => 'Require Approval', 3 => 'Rejected', 4 => 'Inactive');
@@ -788,26 +786,48 @@ class VehicleManagemntController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-            ->where(function ($query) use ($vehicleID) {
+             
+                ->where(function ($query) use ($departmentID) {
+                    if (!empty($departmentID)) {
+                        $query->where('vehicle_details.division_level_4', $departmentID);
+                    }
+                })
+                 ->where(function ($query) use ($companyID) {
+                    if (!empty($companyID)) {
+                        $query->where('vehicle_details.division_level_5', $companyID);
+                    }
+                })
+               
+                ->where(function ($query) use ($propertyID) {
+                if (!empty($propertyID)) {
+                    $query->where('vehicle_details.property_type', $propertyID);
+                }
+            })
+                ->where(function ($query) use ($vehicleID) {
                 if (!empty($vehicleID)) {
                     $query->where('vehicle_details.vehicle_type', $vehicleID);
                 }
             })
-            ->where(function ($query) use ($fleetID) {
-                if (!empty($fleetID)) {
-                    $query->where('vehicle_details.fleet_number', $fleetID);
+             ->where(function ($query) use ($fleetID) {
+                    if (!empty($fleetID)) {
+                        $query->where('vehicle_details.fleet_number', 'ILIKE', "%$fleetID%");
+                    }
+                })
+             ->where(function ($query) use ($registration_number) {
+                    if (!empty($registration_number)) {
+                        $query->where('vehicle_details.vehicle_registration', 'ILIKE', "%$registration_number%");
+                    }
+                })
+            ->where(function ($query) use ($statusType) {
+                if (!empty($statusType)) {
+                    $query->where('vehicle_details.status', $statusType);
                 }
             })
-            ->where(function ($query) use ($registration_number) {
-                if (!empty($registration_number)) {
-                    $query->where('vehicle_details.vehicle_registration', $registration_number);
-                }
-            })
-            ->orderBy('vehicle_details.id', 'desc')
-            ->where('vehicle_details.status', 1)//check if the booking is not approved
+            ->orderBy('vehicle_details.id', 'asc')
+            //->where('vehicle_details.status','=', 1)//check if the booking is not approved
             ->get();
             
-          //  return $vehiclemaintenance;
+           
 			
         $data['hrDetails'] = $hrDetails;
         $data['division_levels'] = $divisionLevels;

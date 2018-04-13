@@ -37,6 +37,12 @@ class FleetManagementController extends Controller
         $this->middleware('auth');
     }
 
+    
+    public function VehicleSearch(Request $request){
+      
+        
+    }
+
     public function fleetManagent()
     {
         $vehicle = vehicle::orderBy('id', 'asc')->get();
@@ -70,6 +76,8 @@ class FleetManagementController extends Controller
             ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
             ->orderBy('vehicle_details.id')
             ->get();
+        
+        
         
        
 

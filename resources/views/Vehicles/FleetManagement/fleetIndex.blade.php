@@ -61,7 +61,10 @@
                                             Type </label>
                                         <div class="col-sm-7">
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_product"
-                                                name="property_type" value="1" checked> Internal                                                          
+                                                name="property_type" value="" checked disabled="disabled">                                                           
+                                            </label>
+                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_product"
+                                                name="property_type" value="1" > Internal                                                          
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_product" name="property_type" value="2">
                                                 External </label>
@@ -119,17 +122,21 @@
                                              </label>
                                         <div class="col-sm-7">
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_status"
-                                                name="status_type" value="1" checked> Active                                                          
+                                                name="status_type" value="0" checked  > All                                                          
                                             </label>
+                                            <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="1">
+                                                Active </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="2">
                                                 Require
                                                 Approval </label>
                                              <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="3">
                                                 Rejected </label>
                                              <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="4">
+                                                Inactive </label>
+<!--                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="4">
                                                 All </label>
                                              <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="5">
-                                                External </label>            
+                                                External </label>            -->
 
                                         </div>
                                 </div>
@@ -309,7 +316,7 @@
         var loadAll = loadAllDivs;
         loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
         parentDDID = ddID;
-        loadAllDivs = -1;
+        loadAllDivs = 1;
         @endforeach
 
         //Load divisions drop down
