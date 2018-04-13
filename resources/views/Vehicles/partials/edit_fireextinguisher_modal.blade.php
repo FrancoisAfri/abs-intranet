@@ -22,19 +22,21 @@
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Description</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="bar_code" name="bar_code" value=""
-                                   placeholder="Enter Description" required>
-                        </div>
-                    </div>
+                    
                         
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Item</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="item_no" name="item_no"
                                    value="" placeholder="Enter Item">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="Description" name="Description" value=""
+                                   placeholder="Enter Description" required>
                         </div>
                     </div>
                    
@@ -95,13 +97,13 @@
                         </div>
                     </div>
                         
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Rental Amount</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="rental_amount" name="rental_amount" value=""
                                    placeholder="Enter Rental Amount">
                         </div>
-                    </div>
+                    </div>-->
                        
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>

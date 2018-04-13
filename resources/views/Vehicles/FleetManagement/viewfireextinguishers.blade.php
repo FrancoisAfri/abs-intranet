@@ -111,7 +111,7 @@
                                          <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#add-safe-modal"
                                                 data-id="{{ $extinguishers->id }}" data-Status="{{ $extinguishers->Status }}"
-                                                ><i class="fa fa-pencil-square-o"></i>
+                                                ><i class="fa fa-stack-overflow"></i>
                                             Change Status
                                         </button>
                                     </td>
