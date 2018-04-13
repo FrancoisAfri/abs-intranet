@@ -146,7 +146,7 @@ class FleetManagementController extends Controller
         $this->validate($request, [
 
             'vehicle_type' => 'required',
-			'vehicle_registration' => 'required|unique:vehicle_details,vehicle_registration',
+	    'vehicle_registration' => 'required|unique:vehicle_details,vehicle_registration',
             // 'name' => 'required',
             // 'description' => 'required',
         ]);
@@ -240,6 +240,12 @@ class FleetManagementController extends Controller
         $Vehiclemilege->type = 1;
         $Vehiclemilege->booking_id = 0;
         $Vehiclemilege->save();
+        
+        
+        // #send emeail to the Admin if vehicle needs AppprovAL
+         if ($vehicleConfig == 1) {
+             #Send email 
+         }
 
 
         AuditReportsController::store('Fleet Management', 'New Vehicle Added', "Accessed By User", 0);;
