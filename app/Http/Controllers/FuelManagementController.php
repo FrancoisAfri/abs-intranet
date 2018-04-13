@@ -812,20 +812,21 @@ class FuelManagementController extends Controller
 					// Query Vehicle Fueltank
 					if (!empty($fuel->tank_name))
 					{
-						//get tanks details and calculate tank new litres
-						$fuelTank = Fueltanks::where('id', $fuel->tank_name)->first();
-						$newFuel = $fuelTank->current_fuel_litres - $fuel->litres;
-						
-						$fuelTank->available_litres = $newFuel;
-						$fuelTank->current_fuel_litres = $newFuel;
-						$fuelTank->update();
-						
 						$fuelTankToUp = FueltankTopUp::
 						where('vehicle_fuel_id', $fuel->id)
 						->where('tank_id', $fuelTank->id)
+						->whereNotIn('status', [1, 14])
 						->first();
 						if(!empty($fuelTankToUp))
 						{
+							//get tanks details and calculate tank new litres
+							$fuelTank = Fueltanks::where('id', $fuel->tank_name)->first();
+							$newFuel = $fuelTank->current_fuel_litres - $fuel->litres;
+							
+							$fuelTank->available_litres = $newFuel;
+							$fuelTank->current_fuel_litres = $newFuel;
+							$fuelTank->update();
+						
 							$fuelTankToUp->status = $BookingDetail['status'];
 							$fuelTankToUp->available_litres = $newFuel;
 							$fuelTankToUp->update();
@@ -896,7 +897,7 @@ class FuelManagementController extends Controller
                 $name = $aValue[0];
 				
                 $topUDID = $aValue[1];
-                //    // Calculations
+                // Calculations
                 $TopUp = FueltankTopUp::where('id', $topUDID)->first();
                 $Type = $TopUp->type;
 				$tankID = $TopUp->tank_id;
