@@ -143,6 +143,7 @@ class FleetManagementController extends Controller
         $this->validate($request, [
 
             'vehicle_type' => 'required',
+			'vehicle_registration' => 'required|unique:vehicle_details,vehicle_registration',
             // 'name' => 'required',
             // 'description' => 'required',
         ]);
