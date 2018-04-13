@@ -108,7 +108,7 @@
                             <th>Serial Number</th>
                             <th>Date Purchased</th>
                             <th>Cost </th>
-                            <th>Rental Amount </th>
+<!--                            <th>Rental Amount </th>-->
                             <th>Status </th>
                             <th style="width: 5px; text-align: center;"></th>
                             </tr>
@@ -141,11 +141,10 @@
                                     <td>{{ (!empty( $extinguishers->item_no)) ?  $extinguishers->item_no : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->company)) ?  $extinguishers->company : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->Department)) ?  $extinguishers->Department : ''}} </td>
-<!--                                    <td> </td>-->
                                     <td>{{ (!empty( $extinguishers->Serial_number)) ?  $extinguishers->Serial_number : ''}} </td>
                                     <td>{{ !empty($extinguishers->date_purchased) ? date(' d M Y', $extinguishers->date_purchased) : '' }} </td>
                                     <td>{{ !empty($extinguishers->Cost) ?  'R' .number_format($extinguishers->Cost, 2): '' }}</td>
-                                    <td>{{ !empty($extinguishers->rental_amount) ?  'R' .number_format($extinguishers->rental_amount, 2): 0 }}</td>
+<!--                                    <td>{{ !empty($extinguishers->rental_amount) ?  'R' .number_format($extinguishers->rental_amount, 2): 0 }}</td>-->
                                     <td>{{ (!empty( $extinguishers->Status)) ?  $status[$extinguishers->Status] : ''}} </td>
                                     <td nowrap>
                                         
@@ -172,7 +171,7 @@
                                     <th>Serial Number</th>
                                     <th>Date Purchased</th>
                                     <th>Cost </th>
-                                    <th>Rental Amount </th>
+<!--                                    <th>Rental Amount </th>-->
                                     <th>Status </th>
                                     <th style="width: 5px; text-align: center;"></th>
                             </tr>
