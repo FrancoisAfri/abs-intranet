@@ -1069,6 +1069,7 @@ class FleetManagementController extends Controller
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->get();
         $safe = safe::where('status', 1)->get();
+      
          
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -1083,17 +1084,17 @@ class FleetManagementController extends Controller
         $vehicle_details = DB::table('vehicle_details')->get();
       //  return $vehicle_details;
         
-        $fireextinguishers = DB::table('fire_extinguishers')
-            ->select('fire_extinguishers.*','vehicle_details.division_level_4','vehicle_details.division_level_5',
+        $fireextinguishers = DB::table('vehicle_fire_extinguisher')
+            ->select('vehicle_fire_extinguisher.*','vehicle_details.division_level_4','vehicle_details.division_level_5',
                     'contact_companies.name as comp_name', 'hr_people.first_name as firstname', 
                     'hr_people.surname as surname','division_level_fives.name as company', 'division_level_fours.name as Department')
-            ->leftJoin('vehicle_details', 'fire_extinguishers.vehicle_id', '=', 'vehicle_details.id')
-            ->leftJoin('hr_people', 'fire_extinguishers.capturer_id', '=', 'hr_people.id')
-            ->leftJoin('contact_companies', 'fire_extinguishers.supplier_id', '=', 'contact_companies.id')
+            ->leftJoin('vehicle_details', 'vehicle_fire_extinguisher.vehicle_id', '=', 'vehicle_details.id')
+            ->leftJoin('hr_people', 'vehicle_fire_extinguisher.capturer_id', '=', 'hr_people.id')
+            ->leftJoin('contact_companies', 'vehicle_fire_extinguisher.supplier_id', '=', 'contact_companies.id')
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-            ->orderBy('fire_extinguishers.id')
-            //->where('vehicle_id', $ID)
+            ->orderBy('vehicle_fire_extinguisher.id')
+            ->where('vehicle_id', $ID)
             ->get();
         
        // return $fireextinguishers;
@@ -1179,9 +1180,6 @@ class FleetManagementController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-        
-        
-         $userLogged = Auth::user()->load('person');
   
         $datepurchased = $SysData['date_purchased'] = str_replace('/', '-', $SysData['date_purchased']);
         $datepurchased = $SysData['date_purchased'] = strtotime($SysData['date_purchased']);
@@ -1217,16 +1215,17 @@ class FleetManagementController extends Controller
         
     }
 
-    public function changeStatus(Request $request ,vehicle_fire_extinguishers $fireextinguishers){
+    public function changeStatus(Request $request, vehicle_fire_extinguishers $fireextinguishers){
          $this->validate($request, [
-           // 'name' => 'required',
+            //'name' => 'required',
             // 'description' => 'required',
            // 'image' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
         
-        $fireextinguishers->Status = $SysData['Status'];
+        $fireextinguishers = new vehicle_fire_extinguishers($SysData);
+        $fireextinguishers->Status = 5;
         $fireextinguishers->update;
          
         AuditReportsController::store('Fleet Management', 'Vehicle Fire Fire Extinguishers Accessed', "Accessed by User", 0);
