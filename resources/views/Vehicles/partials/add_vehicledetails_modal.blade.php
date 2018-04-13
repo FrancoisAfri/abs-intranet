@@ -15,7 +15,7 @@
                     <div id="success-alert"></div>
                     <div class="box-body" id="vehicle_details">
 
-                    @if (isset($vehicleConfig) && $vehicleConfig == 1)
+                   <!--  @if (isset($vehicleConfig) && $vehicleConfig == 1)
                     <div class="form-group">
                     <label for="status" class="col-sm-2 control-label">Status</label>
                     <div class="col-sm-8">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                    @endif
+                    @endif -->
 
 
                        @foreach($division_levels as $division_level)

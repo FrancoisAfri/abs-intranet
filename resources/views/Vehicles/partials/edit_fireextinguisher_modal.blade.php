@@ -15,7 +15,7 @@
                     <div id="success-alert"></div>
 
                      <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Enter Barcode</label>
+                        <label for="path" class="col-sm-2 control-label"> Barcode</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="bar_code" name="bar_code"
                                    value="" placeholder="Enter Barcode ">
@@ -31,7 +31,7 @@
                     </div>
                         
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Enter Item</label>
+                        <label for="path" class="col-sm-2 control-label"> Item</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="item_no" name="item_no"
                                    value="" placeholder="Enter Item">
@@ -39,14 +39,14 @@
                     </div>
                    
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Enter Weight (kg)</label>
+                        <label for="path" class="col-sm-2 control-label"> Weight (kg)</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="Weight" name="Weight"
                                    value="" placeholder="Enter Weight (kg)">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Enter Serial Number</label>
+                        <label for="path" class="col-sm-2 control-label"> Serial Number</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="Serial_number" name="Serial_number"
                                    value="" placeholder="Enter Serial Number">
@@ -54,14 +54,14 @@
                     </div>
                    
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Enter Invoice Number</label>
+                        <label for="path" class="col-sm-2 control-label"> Invoice Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="invoice_number" name="invoice_number"
                                    value="" placeholder="Enter  Invoice Number">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Enter Purchase Order Number</label>
+                        <label for="path" class="col-sm-2 control-label"> Purchase Order Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="purchase_order" name="purchase_order"
                                    value="" placeholder="Enter Purchase Order Number">

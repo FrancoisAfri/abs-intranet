@@ -52,8 +52,9 @@ class FleetManagementController extends Controller
         $images = images::orderBy('id', 'asc')->get();
 
         //check  vehicle_configuration table if new_vehicle_approval is active
-        $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
-        $vehicleConfig = $vehicleConfigs->first();
+        
+         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = !empty($vehicleConfigs->first()) ? $vehicleConfigs->first() : 0;
 
         //return $vehicleConfig; 
 
@@ -69,6 +70,8 @@ class FleetManagementController extends Controller
             ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
             ->orderBy('vehicle_details.id')
             ->get();
+        
+       
 
         $data['vehicleConfig'] = $vehicleConfig;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
@@ -150,12 +153,15 @@ class FleetManagementController extends Controller
         unset($SysData['_token']);
 
         $currentDate = time();
+        
+        $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = $vehicleConfigs->first();
+         
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
 		if (!empty($SysData['financial_institution'])) $SysData['company'] = 0;
 		if (!empty($SysData['company'])) $SysData['financial_institution'] = 0;
         $vehicle_maintenance = new vehicle_maintenance();
-        $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
         $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
         $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
@@ -187,6 +193,10 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->title_type = !empty($SysData['title_type']) ? $SysData['title_type'] : 0;
         $vehicle_maintenance->name = $Username;
         $vehicle_maintenance->booking_status = !empty($SysData['booking_status']) ? $SysData['booking_status'] : 0;
+         if ($vehicleConfig == 1) {
+             $vehicle_maintenance->status = 2;
+        } else
+            $vehicle_maintenance->status = 1;
         $vehicle_maintenance->save();
 
         $loggedInEmplID = Auth::user()->person->id;
@@ -355,6 +365,8 @@ class FleetManagementController extends Controller
             ->where('vehicle_details.id', $ID)
             ->orderBy('vehicle_details.id')
             ->get();
+        
+       // return $vehiclemaintenance;
 
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
 
@@ -1183,6 +1195,8 @@ class FleetManagementController extends Controller
         $datepurchased = $SysData['date_purchased'] = str_replace('/', '-', $SysData['date_purchased']);
         $datepurchased = $SysData['date_purchased'] = strtotime($SysData['date_purchased']);
         
+         $userLogged = Auth::user()->load('person');
+        
         $extinguishers->date_purchased = $datepurchased;
         $extinguishers->vehicle_id = $SysData['valueID']; 
         $extinguishers->capturer_id = $userLogged->id;
@@ -1223,7 +1237,7 @@ class FleetManagementController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
         
-        $fireextinguishers = new vehicle_fire_extinguishers($SysData);
+        //$fireextinguishers = new vehicle_fire_extinguishers($SysData);
         $fireextinguishers->Status = 5;
         $fireextinguishers->update;
          

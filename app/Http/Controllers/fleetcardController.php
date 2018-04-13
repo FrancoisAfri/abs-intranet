@@ -347,7 +347,7 @@ class fleetcardController extends Controller
             ->orderBy('drver_details.id')
             ->get();
 
-        return $drverdetails;
+        //return $drverdetails;
 
         $status = array(1 => ' Active', 2 => ' InActive');
 
@@ -387,10 +387,14 @@ class fleetcardController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->orderBy('vehicle_details.id')
-            ->whereNotIn('vehicle_details.status', [1, 3])
+            ->where('vehicle_details.status', 2)
             ->get();
 
         //return $Vehiclemanagemnt;
+        
+         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+         $vehicleConfig = $vehicleConfigs->first();
+        
 
         $data['page_title'] = "Vehicle Approval";
         $data['page_description'] = "Vehicle Approvals";
