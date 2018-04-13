@@ -1,28 +1,25 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-    <!-- bootstrap datepicker -->
-    <!-- Include Date Range Picker -->
+
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-    <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
+    <!--  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
+
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-md-12">
-            <div class="box box-warning">
+        <div class="col-md-12 col-md-offset-0">
+            <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Fire Extinguishers  </h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
-                        </button>
-                    </div>
+                    <i class="fa fa-truck pull-right"></i>
+                    <h3 class="box-title"> Vehicle Booking Log </h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -31,15 +28,18 @@
                                 <strong class="lead">Vehicle Details</strong><br>
 
                                 @if(!empty($vehiclemaker))
-                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em> &nbsp;
+                                    | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($vehiclemodeler))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong> <em>{{ $vehiclemodeler->name }}</em>
+                                    -| &nbsp; &nbsp; <strong>Vehicle Model:</strong>
+                                    <em>{{ $vehiclemodeler->name }}</em>
                                     &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($vehicleTypes))
-                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em> &nbsp;
+                                    -| &nbsp; &nbsp; <strong>Vehicle Type:</strong> <em>{{ $vehicleTypes->name }}</em>
+                                    &nbsp;
                                     &nbsp;
                                 @endif
                                 @if(!empty($maintenance->vehicle_registration))
@@ -58,28 +58,69 @@
                             </p>
                         </div>
                     </div>
-                    <table class="table table-bordered">
-                        <tr>
-                             <th style="width: 10px; text-align: center;"></th>
+                    <div align="center">
+                        <!--  -->
+                        <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-bars"></i> General Details
+                        </a>
+                        <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-book"></i> Booking Log
+                        </a>
+
+                        <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-tint"></i> Fuel Log
+                        </a>
+
+                        <a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-file-o"></i> Oil Log
+                        </a>
+
+                        <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-medkit"></i> Incidents
+                        </a>
+                        <a href="{{ '/vehicle_management/fines/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-list-alt"></i> Fines
+                        </a>
+                        <a href="{{ '/vehicle_management/service_details/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-area-chart"></i> Service Details
+                        </a>
+                        <a href="{{ '/vehicle_management/insurance/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-car"></i>Insurance
+                        </a>
+                        <a href="{{ '/vehicle_management/warranties/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-snowflake-o"></i>Warranties
+                        </a>
+                        <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
+                            <i class="fa fa-money"></i> General Cost
+                        </a>
+                        <!--  -->
+                    </div>
+                    <div style="overflow-X:auto;">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                            <th style="width: 10px; text-align: center;"></th>
                             <th style="width: 10px; text-align: center;"></th>
                             <th>Barcode</th>
                             <th>Item</th>
                             <th>Company</th>
                             <th>Department</th>
-                            <th>Last Audit</th>
                             <th>Serial Number</th>
                             <th>Date Purchased</th>
                             <th>Cost </th>
                             <th>Rental Amount </th>
                             <th>Status </th>
                             <th style="width: 5px; text-align: center;"></th>
-                        </tr>
-                        @if (count($fireextinguishers) > 0)
-                            @foreach ($fireextinguishers as $extinguishers)
-                                <tr id="categories-list">
-                                    <td nowrap>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if (count($fireextinguishers) > 0)
+                                <ul class="products-list product-list-in-box">
+                                    @foreach ($fireextinguishers as $extinguishers)
+                                        <tr>
+                                            <td nowrap>
                                         <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-firestatus-modal"
+                                                data-toggle="modal" data-target="#edit-fireextinghuisher-modal"
                                                 data-id="{{ $extinguishers->id }}" data-bar_code="{{$extinguishers->bar_code}}"
                                                 data-item_no="{{ $extinguishers->item_no }}" data-Description="{{$extinguishers->Description}}"
                                                 data-Weight="{{ $extinguishers->Weight }}" data-Serial_number="{{$extinguishers->Serial_number}}"
@@ -100,7 +141,7 @@
                                     <td>{{ (!empty( $extinguishers->item_no)) ?  $extinguishers->item_no : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->company)) ?  $extinguishers->company : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->Department)) ?  $extinguishers->Department : ''}} </td>
-                                    <td> </td>
+<!--                                    <td> </td>-->
                                     <td>{{ (!empty( $extinguishers->Serial_number)) ?  $extinguishers->Serial_number : ''}} </td>
                                     <td>{{ !empty($extinguishers->date_purchased) ? date(' d M Y', $extinguishers->date_purchased) : '' }} </td>
                                     <td>{{ !empty($extinguishers->Cost) ?  'R' .number_format($extinguishers->Cost, 2): '' }}</td>
@@ -109,7 +150,7 @@
                                     <td nowrap>
                                         
                                          <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#add-safe-modal"
+                                                data-toggle="modal" data-target="#change_status-modal"
                                                 data-id="{{ $extinguishers->id }}" data-Status="{{ $extinguishers->Status }}"
                                                 ><i class="fa fa-stack-overflow"></i>
                                             Change Status
@@ -118,40 +159,53 @@
 
                                 </tr>
                             @endforeach
-                        @else
-                            <tr id="categories-list">
-                                <td colspan="14">
-                                    <div class="alert alert-danger alert-dismissable">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                            &times;
-                                        </button>
-                                        No Record for this vehicle, please start by adding Record for this
-                                        vehicle..
-                                    </div>
-                                </td>
+                            @endif
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                    <th style="width: 10px; text-align: center;"></th>
+                                    <th style="width: 10px; text-align: center;"></th>
+                                    <th>Barcode</th>
+                                    <th>Item</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Serial Number</th>
+                                    <th>Date Purchased</th>
+                                    <th>Cost </th>
+                                    <th>Rental Amount </th>
+                                    <th>Status </th>
+                                    <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                        @endif
-                    </table>
-                    <!--   </div> -->
-                    <!-- /.box-body -->
+                            </tfoot>
+                        </table>
+                        <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                        <button type="button" class="btn btn-default pull-left" id="cancel">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add_fireextinguishers-modal">Add New Fire Extinguishers
+                                data-target="#add_fireextinguishers-modal">Add Fire Extinguishers
                         </button>
                     </div>
+                            @include('Vehicles.partials.viewbookinglog_modal')
+                        
+                    </div>
                 </div>
-            </div>
-        <!-- Include Modal form-->
           @include('Vehicles.partials.add_fire_extinguishers_modal')
           @include('Vehicles.partials.fire_extinguishers_status_modal')
           @include('Vehicles.partials.edit_fireextinguisher_modal')
           @include('Vehicles.partials.add_extinguisherstatus_modal')
-        </div>
+            </div>
         @endsection
 
         @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
+            <!-- DataTables -->
+                <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+                <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+                <script src="/custom_components/js/modal_ajax_submit.js"></script>
+                <!-- time picker -->
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+                <!-- Select2 -->
+                <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+                <script src="/custom_components/js/modal_ajax_submit.js"></script>
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
             <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
@@ -266,7 +320,7 @@
 
                 
                var reject_ID;
-                $('#add-safe-modal').on('show.bs.modal', function (e) {
+                $('#change_status-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
                     reject_ID = btnEdit.data('id');
                     var Status = btnEdit.data('Status');
@@ -276,11 +330,11 @@
                 //Post module form to server using ajax (ADD)
                 
                 
-                 $('#edit_status').on('click', function() {
+                 $('#change_status').on('click', function() {
                 var strUrl = '/vehicle_management/changestatus/' + reject_ID;
                 var formName = 'edit-module-form';
-                var modalID = 'add-safe-modal';
-                var submitBtnID = 'edit_status';
+                var modalID = 'change_status-modal';
+                var submitBtnID = 'change_status';
                 var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
@@ -289,7 +343,7 @@
                 
                      
                 var fire_ID;
-                $('#edit-firestatus-modal').on('show.bs.modal', function (e) {
+                $('#edit-fireextinghuisher-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
                     fire_ID = btnEdit.data('id');
                     var bar_code = btnEdit.data('bar_code');
@@ -318,14 +372,13 @@
                    modal.find('#rental_amount').val(rental_amount);
                    modal.find('#valueID').val(valueID);
                 });
-                //Post module form to server using ajax (ADD)
                 
                 
-              $('#edit_firestatus').on('click', function() {
+              $('#edit_fireextinghuisher').on('click', function() {
                 var strUrl = '/vehicle_management/editfireexting/' + fire_ID;
-                var formName = 'edit-firestatus-form';
-                var modalID = 'edit-firestatus-modal';
-                var submitBtnID = 'edit_firestatus';
+                var formName = 'edit-fireextinghuisher-form';
+                var modalID = 'edit-fireextinghuisher-modal';
+                var submitBtnID = 'edit_fireextinghuisher';
                 var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';

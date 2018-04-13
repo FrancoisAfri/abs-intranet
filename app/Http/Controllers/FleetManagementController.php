@@ -1202,7 +1202,7 @@ class FleetManagementController extends Controller
         $datepurchased = $SysData['date_purchased'] = str_replace('/', '-', $SysData['date_purchased']);
         $datepurchased = $SysData['date_purchased'] = strtotime($SysData['date_purchased']);
         
-         $userLogged = Auth::user()->load('person');
+        $userLogged = Auth::user()->load('person');
         
         $extinguishers->date_purchased = $datepurchased;
         $extinguishers->vehicle_id = $SysData['valueID']; 

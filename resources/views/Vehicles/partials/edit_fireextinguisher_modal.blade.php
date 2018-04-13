@@ -1,7 +1,7 @@
-<div id="edit-firestatus-modal" class="modal modal-default fade">
+<div id="edit-fireextinghuisher-modal" class="modal modal-default fade">
      <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-firestatus-form">
+            <form class="form-horizontal" method="POST" name="edit-fireextinghuisher-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -126,7 +126,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_firestatus" class="btn btn-warning"><i class="fa fa-floppy-o"></i> Save
+                    <button type="button" id="edit_fireextinghuisher" class="btn btn-warning"><i class="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
             </form>

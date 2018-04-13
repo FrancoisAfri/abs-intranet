@@ -1,4 +1,4 @@
-<div id="add-safe-modal" class="modal modal-default fade">
+<div id="change_status-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-module-form">
@@ -36,7 +36,7 @@
                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_status" class="btn btn-warning"><i class="fa fa-floppy-o"></i> Save
+                    <button type="button" id="change_status" class="btn btn-warning"><i class="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
             </form>
