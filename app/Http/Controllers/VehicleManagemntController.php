@@ -595,7 +595,7 @@ class VehicleManagemntController extends Controller
         $config = $request->all();
         unset($config['_token']);
         //return $config;
-        $configuration->update($config);
+        $configuration->update(!empty($config) ? $config : 0);
         return back();
     }
 
@@ -776,6 +776,8 @@ class VehicleManagemntController extends Controller
         // return $vehiclemodel;
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        
+        $vehiclestatus = array(1 => 'Active', 2 => 'Require Approval', 3 => 'Rejected', 4 => 'Inactive');
 		
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -802,7 +804,10 @@ class VehicleManagemntController extends Controller
                 }
             })
             ->orderBy('vehicle_details.id', 'desc')
+            ->where('vehicle_details.status', 1)//check if the booking is not approved
             ->get();
+            
+          //  return $vehiclemaintenance;
 			
         $data['hrDetails'] = $hrDetails;
         $data['division_levels'] = $divisionLevels;

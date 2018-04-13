@@ -120,7 +120,7 @@
 
                                     <td colspan="6"><input type="number" name="permit_days"
                                                            value="{{ $configuration->permit_days }}" size="20"
-                                                           maxlength="7" placeholder="Enter Permit Days" required="">
+                                                           maxlength="7" placeholder="Enter Permit Days" >
                                     </td>
                                 </tr>
 
@@ -128,7 +128,7 @@
                                     <td class="caption" colspan="2">Currency</td>
                                     <td colspan="3"><input type="text" name="currency"
                                                            value="{{ $configuration->currency }}" size="20"
-                                                           maxlength="4" placeholder="Enter Currency" required=""></td>
+                                                           maxlength="4" placeholder="Enter Currency"></td>
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Approvals Done By</td>
@@ -281,12 +281,12 @@
 
                                     <td colspan="6"><input type="number" name="service_days"
                                                            value="{{ $configuration->service_days }}" size="20"
-                                                           maxlength="7" placeholder="Enter service days" required="">
+                                                           maxlength="7" placeholder="Enter service days" >
                                         Days
                                         <br>
                                         <br>
                                         <input type="number" name="service_km" value="{{ $configuration->service_km }}"
-                                               size="20" maxlength="7" placeholder="Enter service km" required=""> km
+                                               size="20" maxlength="7" placeholder="Enter service km" > km
                                     </td>
                                 </tr>
 
@@ -298,12 +298,12 @@
                                     <td colspan="6"><input type="number" name="service_overdue_days"
                                                            value="{{ $configuration->service_overdue_days }}" size="20"
                                                            maxlength="7" placeholder="Enter service overdue days"
-                                                           required=""> Days
+                                                          > Days
                                         <br>
                                         <br>
                                         <input type="number" name="service_overdue_km" name="service_overdue_days"
                                                value="{{ $configuration->service_overdue_km }}" size="20" maxlength="7"
-                                               placeholder="Enter service overdue km " required=""> km
+                                               placeholder="Enter service overdue km " > km
                                     </td>
                                 </tr>
 
@@ -313,12 +313,12 @@
                                     <td colspan="6"><input type="number" name="no_bookings_days"
                                                            value="{{ $configuration->no_bookings_days }}" size="20"
                                                            maxlength="7" placeholder="Enter no bookings days"
-                                                           required=""> Days
+                                                          > Days
                                         <br>
                                         <br>
                                         <input type="number" name="no_bookings_km"
                                                value="{{ $configuration->no_bookings_km }}" size="20" maxlength="7"
-                                               placeholder="Enter no bookings km" required=""> km
+                                               placeholder="Enter no bookings km" > km
                                     </td>
                                 </tr>
 
@@ -347,7 +347,7 @@
 
                                     <td colspan="6"><input type="number" name="service_overdue_days"
                                                            value="{{ $configuration->service_overdue_days }}" size="20"
-                                                           maxlength="7" placeholder="Enter Hours " required=""> Hours
+                                                           maxlength="7" placeholder="Enter Hours " > Hours
                                 </tr>
 								<tr>
                                     <td class="caption" colspan="2">Fleet Incidents Upload Directory</td>
