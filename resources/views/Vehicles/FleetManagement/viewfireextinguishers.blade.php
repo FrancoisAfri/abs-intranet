@@ -109,8 +109,8 @@
                                     <td nowrap>
                                         
                                          <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#add-safe-modal"
-                                                data-id="{{ $extinguishers->id }}" data-Status="{{ $extinguishers->Status }}"
+                                                data-toggle="modal" data-target="#change-fire-status-modal"
+												data-id="{{ $extinguishers->id }}" data-id="{{ $extinguishers->Status }}" 
                                                 ><i class="fa fa-pencil-square-o"></i>
                                             Change Status
                                         </button>
@@ -144,9 +144,8 @@
             </div>
         <!-- Include Modal form-->
           @include('Vehicles.partials.add_fire_extinguishers_modal')
-          @include('Vehicles.partials.fire_extinguishers_status_modal')
-          @include('Vehicles.partials.edit_fireextinguisher_modal')
-          @include('Vehicles.partials.add_extinguisherstatus_modal')
+          
+          @include('Vehicles.partials.change_extinguisherstatus_modal')
         </div>
         @endsection
 
@@ -184,12 +183,8 @@
                     if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
                 }
-            $(function () {
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-                });
-
-                var moduleId;
+				
+				var moduleId;
                 //Initialize Select2 Elements
                 $(".select2").select2();
                 $('.zip-field').hide();
@@ -197,10 +192,10 @@
 
                 //Tooltip
 
-                 //Phone mask
-                $("[data-mask]").inputmask();
-
                 $('[data-toggle="tooltip"]').tooltip();
+
+                //Phone mask
+                $("[data-mask]").inputmask();
 
                 //Vertically center modals on page
                 function reposition() {
@@ -227,7 +222,7 @@
 
                 $(".js-example-basic-multiple").select2();
 
-                     //Initialize iCheck/iRadio Elements
+                //Initialize iCheck/iRadio Elements
                 $('input').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
                     radioClass: 'iradio_square-blue',
@@ -237,102 +232,81 @@
 
                 $(document).ready(function () {
 
-                    $('#date_purchased').datepicker({
+                    $('input[name="date_purchased"]').datepicker({
                         format: 'dd/mm/yyyy',
                         autoclose: true,
                         todayHighlight: true
                     });
-
-
-                     $('#inceptiondate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
                 });
 
-                $('#addfireextinguishers').on('click', function () {
+                //Post form to server using ajax (add)
+				$('#add-fire-extinguishers').on('click', function () {
                     var strUrl = '/vehicle_management/addfireextinguishers';
                     var formName = 'add-fireextinguishers-form';
                     var modalID = 'add_fireextinguishers-modal';
-                    var submitBtnID = 'addfireextinguishers';
+                    var submitBtnID = 'add-fire-extinguishers';
                     var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 });
 
-                
-               var reject_ID;
-                $('#add-safe-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    reject_ID = btnEdit.data('id');
-                    var Status = btnEdit.data('Status');
-                    var modal = $(this);
-                   modal.find('#Status').val(Status);
-                });
-                //Post module form to server using ajax (ADD)
-                
-                
-                 $('#edit_status').on('click', function() {
-                var strUrl = '/vehicle_management/changestatus/' + reject_ID;
-                var formName = 'edit-module-form';
-                var modalID = 'add-safe-modal';
-                var submitBtnID = 'edit_status';
-                var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-                
-                     
                 var fire_ID;
-                $('#edit-firestatus-modal').on('show.bs.modal', function (e) {
+                $('#edit-warrantie-modal').on('show.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
-                    fire_ID = btnEdit.data('id');
-                    var bar_code = btnEdit.data('bar_code');
-                    var item_no = btnEdit.data('item_no');
-                    var Description = btnEdit.data('Description');
-                    var Weight = btnEdit.data('Weight');
-                    var Serial_number = btnEdit.data('Serial_number');
-                    var purchase_order = btnEdit.data('purchase_order');
-                    var invoice_number = btnEdit.data('invoice_number');
-                    var supplier_id = btnEdit.data('supplier_id');
-                    var date_purchased = btnEdit.data('date_purchased');
-                    var Cost = btnEdit.data('Cost');
-                    var rental_amount = btnEdit.data('rental_amount');
+                    if (parseInt(btnEdit.data('id')) > 0) {
+                        fire_ID = btnEdit.data('id');
+                    }
+                   // console.log('gets here: ' + fire_ID);
+
+                    var service_provider = btnEdit.data('service_provider');
+                    var contact_person = btnEdit.data('contact_person');
+                    var contact_number = btnEdit.data('contact_number');
+                    var contact_email = btnEdit.data('contact_email');
+                    var address = btnEdit.data('address');
+                    var policy_no = btnEdit.data('policy_no');
+                    var inceptiondate = btnEdit.data('inceptiondate');
+                    var exp_date = btnEdit.data('expdate');
+                    var warranty_period = btnEdit.data('warranty_period');
+                    var kilometers = btnEdit.data('kilometers');
+                    var type = btnEdit.data('type');
+                    var warranty_amount = btnEdit.data('warranty_amount');
+                    var description = btnEdit.data('description');
+                    var notes = btnEdit.data('notes');
+                    var documents = btnEdit.data('documents');
+                    var name = btnEdit.data('name');
                     var valueID = btnEdit.data('valueID');
                     var modal = $(this);
-                   modal.find('#bar_code').val(bar_code);
-                   modal.find('#item_no').val(item_no);
-                   modal.find('#Description').val(Description);
-                   modal.find('#Weight').val(Weight);
-                   modal.find('#Serial_number').val(Serial_number);
-                   modal.find('#purchase_order').val(purchase_order);
-                   modal.find('#invoice_number').val(invoice_number);
-                   modal.find('#supplier_id').val(supplier_id);
-                   modal.find('#date_purchased').val(date_purchased);
-                   modal.find('#Cost').val(Cost);
-                   modal.find('#rental_amount').val(rental_amount);
-                   modal.find('#valueID').val(valueID);
+                    modal.find('#service_provider').val(service_provider);
+                    modal.find('#contact_person').val(contact_person);
+                    modal.find('#contact_number').val(contact_number);
+                    modal.find('#contact_email').val(contact_email);
+                    modal.find('#address').val(address);
+                    modal.find('#policy_no').val(policy_no);
+                    modal.find('#inceptiondate').val(inceptiondate);
+                    modal.find('#expdate').val(exp_date);
+                    modal.find('#warranty_period').val(warranty_period);
+                    modal.find('#kilometers').val(kilometers);
+                    modal.find('#type').val(type);
+                    modal.find('#warranty_amount').val(warranty_amount);
+                    modal.find('#description').val(description);
+                    modal.find('#notes').val(notes);
+                    modal.find('#documents').val(documents);
+                    modal.find('#name').val(name);
+                    modal.find('#valueID').val(valueID);
                 });
-                //Post module form to server using ajax (ADD)
-                
-                
-              $('#edit_firestatus').on('click', function() {
-                var strUrl = '/vehicle_management/editfireexting/' + fire_ID;
-                var formName = 'edit-firestatus-form';
-                var modalID = 'edit-firestatus-modal';
-                var submitBtnID = 'edit_firestatus';
-                var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+
+
+                $('#edit_warrantie').on('click', function () {
+                    var strUrl = '/vehicle_management/edit_warrantie/' + fire_ID;
+                    var formName = 'edit-warrantie-form';
+                    var modalID = 'edit-warrantie-modal';
+                    var submitBtnID = 'edit_warrantie';
+                    var redirectUrl = '/vehicle_management/warranties/{{ $maintenance->id }}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-              });
-                             
-            });
-     
+                    var Method = 'PATCH'
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
             </script>
 @endsection

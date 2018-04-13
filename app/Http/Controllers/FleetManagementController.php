@@ -1167,7 +1167,7 @@ class FleetManagementController extends Controller
                $vehiclefirextinguishers->update();
            }
        }
-        AuditReportsController::store('Fleet Management', 'Vehicle Fire Fire Extinguishers Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Fire Extinguishers Accessed', "Accessed by User", 0);
         return response()->json(); 
     }
     
@@ -1210,7 +1210,7 @@ class FleetManagementController extends Controller
                $extinguishers->update();
            }
        }
-        AuditReportsController::store('Fleet Management', 'Vehicle Fire Fire Extinguishers Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Vehicle Fire Extinguishers Accessed', "Accessed by User", 0);
         return response()->json(); 
         
     }
