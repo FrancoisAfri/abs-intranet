@@ -57,10 +57,10 @@ class VehicleReportsController extends Controller
     public function general()
     {
         $vehicle = vehicle::orderBy('id', 'asc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('name', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $hrDetails = HRPerson::where('status', 1)->get();
+        $hrDetails = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $licence = $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
