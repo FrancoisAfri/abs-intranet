@@ -50,6 +50,20 @@ class vehiclealertController extends Controller {
             12 => "Returned",
             13 => "Cancelled",
             14 => "Rejected");
+        
+        
+        $user = Auth::user()->load('person');
+        $managerID = $user->person->manager_id;
+       
+        $manager = !empty($managerID) ? $managerID : $user->id;
+       // return $manager;
+        
+       //$managersID =  DB::table('hr_people')->pluck('manager_id');
+        $manager = HRPerson::pluck('manager_id');
+        return $manager;
+               // Mail::to($manager->email)->send(new ApproveQuote($manager, $quote->id));
+        
+       
 
         $vehiclebooking = DB::table('vehicle_details')
                 ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ', 'vehicle_booking.return_datetime as return_date ',

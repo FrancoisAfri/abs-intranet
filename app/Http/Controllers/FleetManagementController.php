@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Users;
+use App\Mail\approve_vehiclemail;
+use App\Mail\assignUsertoAdmin;
 use App\ContactCompany;
 use App\DivisionLevel;
 Use App\permits_licence;
@@ -38,11 +40,7 @@ class FleetManagementController extends Controller
     }
 
     
-    public function VehicleSearch(Request $request){
-      
-        
-    }
-
+   
     public function fleetManagent()
     {
         $vehicle = vehicle::orderBy('id', 'asc')->get();
@@ -77,9 +75,10 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
         
+        //return $vehiclemaintenance;
+//         $adminUser = DB::table('hr_people')->where('position', 2)->orderBy('id', 'asc')->get();
+//        return $adminUser;
         
-        
-       
 
         $data['vehicleConfig'] = $vehicleConfig;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
@@ -126,6 +125,8 @@ class FleetManagementController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->orderBy('vehicle_details.id')
             ->get();
+        
+        //return $vehiclemaintenance;
 
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = "FleetManagement";
@@ -234,7 +235,6 @@ class FleetManagementController extends Controller
         }
 
         // add Details into vehicle Milege table
-
         //types
         //1 =  vehicle creation
        // 2 =  vehicle collected
@@ -250,11 +250,27 @@ class FleetManagementController extends Controller
         $Vehiclemilege->save();
         
         
-        // #send emeail to the Admin if vehicle needs AppprovAL
+        
          if ($vehicleConfig == 1) {
-             #Send email 
-         }
-
+             
+              $manager = HRPerson::pluck('manager_id');
+                foreach ($manager as $managerID) {
+                  $managerid = !empty($managerID) ? $managerID : 1; 
+                   Mail::to($manager->email)->send(new approve_vehiclemail($manager ,$SysData['vehicle_registration']));
+                   
+                }
+              #mail to manager
+                $user = Auth::user()->load('person');
+                $managerIDs = $user->person->manager_id;
+                
+               if  ($managerIDs ==  null){
+                     $managerid = !empty($managerID) ? $managerID : $user->id;
+                     $manager = HRPerson::find($managerid);
+                     //send an email to user to inform them that they should assign a manager
+                      Mail::to($manager->email)->send(new assignUsertoAdmin($manager));
+                }
+              
+            }
 
         AuditReportsController::store('Fleet Management', 'New Vehicle Added', "Accessed By User", 0);;
         return response()->json();

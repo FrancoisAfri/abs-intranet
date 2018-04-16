@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Confirmation Email</title>
+    <title>{{ $company_name }} - Quote Approval Required</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -214,14 +214,15 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that your the Vehicle you Added for  {{ $company_name }}  has been Approved! For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
+                                                    Hi {{ $manager->first_name }},<br><br>
+                                                    We would like to inform you that our records show that you do not have a an administrator assigned to you <a target="_blank" href="{{ $quote_url }}">click here.</a>
                                                 </td>
                                             </tr>
+
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    {{ $company_name }} Online System
+                                                    {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>

@@ -148,7 +148,7 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->get();
 
-		$loggedInEmplID = Auth::user()->person->id;
+        $loggedInEmplID = Auth::user()->person->id;
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
 		
@@ -1663,9 +1663,7 @@ class VehicleFleetController extends Controller
 
     public function deletefuelLog(Request $request, vehicle_fuel_log $fuel)
     {
-
         $fuel->delete();
-
         AuditReportsController::store('Fleet Management', 'Vehicle Fuel Log  Deleted', "Document Type has been deleted", 0);
         return back();
     }

@@ -274,7 +274,7 @@
 
             if (levID == 1) {
                 $('.licence-field').hide();
-                $('.Sick-field').show();
+                $('.dest-field').show();
                 $('.detail-field').hide();
             } else if (levID == 2) {
                 $('.dest-field').hide();
