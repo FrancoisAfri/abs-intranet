@@ -23,7 +23,6 @@
                                    value="" placeholder="Enter Barcode ">
                         </div>
                     </div>
-                        
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Item</label>
                         <div class="col-sm-8">
@@ -67,7 +66,7 @@
                                    value="" placeholder="Enter Purchase Order Number">
                         </div>
                     </div>
-                     <div class="form-group user-field">
+                    <div class="form-group user-field">
                         <label for="issued_to" class="col-sm-2 control-label">Supplier </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;" id="supplier_id" name="supplier_id">
@@ -77,16 +76,14 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>    
-                
-                     <div class="form-group ">
+                    </div>
+                    <div class="form-group ">
                         <label for="path" class="col-sm-2 control-label">Date Purchased </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_purchased" name="date_purchased"
-                                   value="{{ old('date_issued') }}" placeholder="Select  Purchased date ...">
+                                   value="{{ old('date_purchased') }}" placeholder="Select  Purchased date ...">
                         </div>
-                    </div>
-                        
+                    </div>   
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Cost</label>
                         <div class="col-sm-8">
@@ -94,15 +91,6 @@
                                    placeholder="Enter Cost">
                         </div>
                     </div>
-                        
-<!--                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Rental Amount</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="rental_amount" name="rental_amount" value=""
-                                   placeholder="Enter Rental Amount">
-                        </div>
-                    </div>-->
-                       
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>
 
@@ -122,10 +110,11 @@
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">    
                          
                         
+					</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="addfireextinguishers" class="btn btn-warning"><i
+                    <button type="button" id="add-fire-extinguishers" class="btn btn-warning"><i
                                 class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>

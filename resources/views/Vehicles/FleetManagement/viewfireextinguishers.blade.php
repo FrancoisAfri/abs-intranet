@@ -19,7 +19,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> Vehicle Booking Log </h3>
+                    <h3 class="box-title"> Vehicle Fire Extinguishers </h3>
                 </div>
                 <div class="box-body">
                     <div class="row">
@@ -97,36 +97,35 @@
                     </div>
                     <div style="overflow-X:auto;">
                         <table id="example2" class="table table-bordered table-hover">
-                            <thead>
                             <tr>
-                            <th style="width: 10px; text-align: center;"></th>
-                            <th style="width: 10px; text-align: center;"></th>
-                            <th>Barcode</th>
-                            <th>Item</th>
-                            <th>Company</th>
-                            <th>Department</th>
-                            <th>Serial Number</th>
-                            <th>Date Purchased</th>
-                            <th>Cost </th>
-<!--                            <th>Rental Amount </th>-->
-                            <th>Status </th>
-                            <th style="width: 5px; text-align: center;"></th>
+								<th style="width: 10px; text-align: center;"></th>
+								<th style="width: 10px; text-align: center;"></th>
+								<th>Barcode</th>
+								<th>Item</th>
+								<th>Service Provier</th>
+								<th>Serial Number</th>
+								<th>Weight</th>
+								<th>Invoice Number</th>
+								<th>PO Number</th>
+								<th>Date Purchased</th>
+								<th>Cost</th>
+								<th>Capturer By</th>
+								<th style="width: 5px; text-align: center;"></th>
+								<th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            </thead>
-                            <tbody>
                             @if (count($fireextinguishers) > 0)
                                 <ul class="products-list product-list-in-box">
                                     @foreach ($fireextinguishers as $extinguishers)
                                         <tr>
-                                            <td nowrap>
+                                            <td>
                                         <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-fireextinghuisher-modal"
+                                                data-toggle="modal" data-target="#edit-fire-extinghuisher-modal"
                                                 data-id="{{ $extinguishers->id }}" data-bar_code="{{$extinguishers->bar_code}}"
-                                                data-item_no="{{ $extinguishers->item_no }}" data-Description="{{$extinguishers->Description}}"
-                                                data-Weight="{{ $extinguishers->Weight }}" data-Serial_number="{{$extinguishers->Serial_number}}"
+                                                data-item_no="{{ $extinguishers->item_no }}" data-description="{{$extinguishers->Description}}"
+                                                data-weight="{{ $extinguishers->Weight }}" data-serial_number="{{$extinguishers->Serial_number}}"
                                                 data-purchase_order="{{ $extinguishers->purchase_order }}" data-invoice_number="{{$extinguishers->invoice_number}}"
                                                 data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{date(' d M Y', $extinguishers->date_purchased)}}"
-                                                data-Cost="{{ $extinguishers->Cost }}" data-rental_amount="{{$extinguishers->rental_amount}}"
+                                                data-cost="{{ $extinguishers->Cost }}"
                                                
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -139,252 +138,213 @@
                                     </td>                
                                     <td>{{ (!empty( $extinguishers->bar_code)) ?  $extinguishers->bar_code : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->item_no)) ?  $extinguishers->item_no : ''}} </td>
-                                    <td>{{ (!empty( $extinguishers->company)) ?  $extinguishers->company : ''}} </td>
-                                    <td>{{ (!empty( $extinguishers->Department)) ?  $extinguishers->Department : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->comp_name)) ?  $extinguishers->comp_name : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->Serial_number)) ?  $extinguishers->Serial_number : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->Weight)) ?  $extinguishers->Weight : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->invoice_number)) ?  $extinguishers->invoice_number : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->purchase_order)) ?  $extinguishers->purchase_order : ''}} </td>
                                     <td>{{ !empty($extinguishers->date_purchased) ? date(' d M Y', $extinguishers->date_purchased) : '' }} </td>
                                     <td>{{ !empty($extinguishers->Cost) ?  'R' .number_format($extinguishers->Cost, 2): '' }}</td>
-<!--                                    <td>{{ !empty($extinguishers->rental_amount) ?  'R' .number_format($extinguishers->rental_amount, 2): 0 }}</td>-->
-                                    <td>{{ (!empty( $extinguishers->Status)) ?  $status[$extinguishers->Status] : ''}} </td>
+                                    <td>{{ !empty($extinguishers->firstname) ?  $extinguishers->firstname." ".$extinguishers->surname: '' }}</td>
+                                    <td>{{ (!empty( $extinguishers->Status)) ?  $statusArray[$extinguishers->Status] : ''}} </td>
                                     <td nowrap>
-                                        
                                          <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#change_status-modal"
-                                                data-id="{{ $extinguishers->id }}" data-Status="{{ $extinguishers->Status }}"
+                                                data-toggle="modal" data-target="#change-fire-status-modal"
+                                                data-id="{{ $extinguishers->id }}" data-status="{{ $extinguishers->Status }}"
                                                 ><i class="fa fa-stack-overflow"></i>
                                             Change Status
                                         </button>
                                     </td>
-
                                 </tr>
                             @endforeach
                             @endif
                             </tbody>
                             <tfoot>
                             <tr>
-                                    <th style="width: 10px; text-align: center;"></th>
-                                    <th style="width: 10px; text-align: center;"></th>
-                                    <th>Barcode</th>
-                                    <th>Item</th>
-                                    <th>Company</th>
-                                    <th>Department</th>
-                                    <th>Serial Number</th>
-                                    <th>Date Purchased</th>
-                                    <th>Cost </th>
-<!--                                    <th>Rental Amount </th>-->
-                                    <th>Status </th>
-                                    <th style="width: 5px; text-align: center;"></th>
+								<th style="width: 10px; text-align: center;"></th>
+								<th style="width: 10px; text-align: center;"></th>
+								<th>Barcode</th>
+								<th>Item</th>
+								<th>Service Provier</th>
+								<th>Serial Number</th>
+								<th>Date Purchased</th>
+								<th>Cost </th>
+								<th>Status </th>
+								<th style="width: 5px; text-align: center;"></th>
                             </tr>
                             </tfoot>
                         </table>
                         <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="button" class="btn btn-default pull-left" id="cancel">Back</button>
-                        <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add_fireextinguishers-modal">Add Fire Extinguishers
-                        </button>
-                    </div>
-                            @include('Vehicles.partials.viewbookinglog_modal')
-                        
+						<div class="box-footer">
+							<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+							<button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
+									data-target="#add_fireextinguishers-modal">Add Fire Extinguishers
+							</button>
+						</div>                        
                     </div>
                 </div>
-          @include('Vehicles.partials.add_fire_extinguishers_modal')
-          @include('Vehicles.partials.fire_extinguishers_status_modal')
-          @include('Vehicles.partials.edit_fireextinguisher_modal')
-          @include('Vehicles.partials.add_extinguisherstatus_modal')
             </div>
+        <!-- Include Modal form-->
+          @include('Vehicles.partials.add_fire_extinguishers_modal')
+          
+          @include('Vehicles.partials.edit_fireextinguisher_modal')
+          @include('Vehicles.partials.change_extinguisherstatus_modal')
+        </div>
         @endsection
 
-        @section('page_script')
+@section('page_script')
             <!-- DataTables -->
-                <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-                <script src="/custom_components/js/modal_ajax_submit.js"></script>
-                <!-- time picker -->
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-                <!-- Select2 -->
-                <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-                <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                    type="text/javascript"></script>
-            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-                    type="text/javascript"></script>
-            <!-- the main fileinput plugin file -->
-            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-            <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-            <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<!-- time picker -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+	<!-- Select2 -->
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-            <!-- InputMask -->
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<!-- InputMask -->
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 
-              <!-- Ajax dropdown options load -->
-            <script src="/custom_components/js/load_dropdown_options.js"></script>
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
+	  <!-- Ajax dropdown options load -->
+	<script src="/custom_components/js/load_dropdown_options.js"></script>
+	<script>
 
-                }
-            $(function () {
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-                });
+		$(document).ready(function () {
 
-                var moduleId;
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                $('.zip-field').hide();
+			$('#date_purchased').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+	
+		});
 
+		$(function () {
+			var fireID;
+			//Tooltip
+			$('[data-toggle="tooltip"]').tooltip();
 
-                //Tooltip
+			//Initialize Select2 Elements
+			$(".select2").select2();
+			
+			document.getElementById("back_button").onclick = function () {
+			location.href = '//vehicle_management/viewdetails/{{ $maintenance->id }}';	};
+			
+			//Vertically center modals on page
+			function reposition() {
+				var modal = $(this),
+					dialog = modal.find('.modal-dialog');
+				modal.css('display', 'block');
+				// Dividing by two centers the modal exactly, but dividing by three
+				// or four works better for larger screens.
+				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+			}
+			
+			// Reposition when a modal is shown
+			$('.modal').on('show.bs.modal', reposition);
+			// Reposition when the window is resized
+			$(window).on('resize', function () {
+				$('.modal:visible').each(reposition);
+			});
 
-                 //Phone mask
-                $("[data-mask]").inputmask();
+			//Show success action modal
+			$('#success-action-modal').modal('show');
+			
+			 //Post form to server using ajax (add)
+			$('#add-fire-extinguishers').on('click', function () {
+				var strUrl = '/vehicle_management/addfireextinguishers';
+				var formName = 'add-fireextinguishers-form';
+				var modalID = 'add_fireextinguishers-modal';
+				var submitBtnID = 'add-fire-extinguishers';
+				var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+				var successMsgTitle = 'New Record Added!';
+				var successMsg = 'New Record Successfully Added!';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
+			
+			$('#edit-fire-extinghuisher-modal').on('show.bs.modal', function (e) {
+				//console.log('kjhsjs');
+				var btnEdit = $(e.relatedTarget);
+				fireID = btnEdit.data('id');
+				var barCode = btnEdit.data('bar_code');
+				var itemNo = btnEdit.data('item_no');
+				var desc = btnEdit.data('description');
+				var weights = btnEdit.data('weight');
+				var serialNumber = btnEdit.data('serial_number');
+				var purchaseOrder = btnEdit.data('purchase_order');
+				var invoiceNumber = btnEdit.data('invoice_number');
+				var supplierID = btnEdit.data('supplier_id');
+				var datePurchased = btnEdit.data('date_purchased');
+				var amount = btnEdit.data('cost');
 
-                $('[data-toggle="tooltip"]').tooltip();
-
-                //Vertically center modals on page
-                function reposition() {
-                    var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                    modal.css('display', 'block');
-
-                    // Dividing by two centers the modal exactly, but dividing by three
-                    // or four works better for larger screens.
-                    dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                }
-
-                // Reposition when a modal is shown
-                $('.modal').on('show.bs.modal', reposition);
-                // Reposition when the window is resized
-                $(window).on('resize', function () {
-                    $('.modal:visible').each(reposition);
-                });
-
-                //Show success action modal
-                $('#success-action-modal').modal('show');
-
-                //
-
-                $(".js-example-basic-multiple").select2();
-
-                     //Initialize iCheck/iRadio Elements
-                $('input').iCheck({
-                    checkboxClass: 'icheckbox_square-blue',
-                    radioClass: 'iradio_square-blue',
-                    increaseArea: '10%' // optional
-                });
-
-
-                $(document).ready(function () {
-
-                    $('#date_purchased').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                     $('#inceptiondate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                });
-
-                $('#addfireextinguishers').on('click', function () {
-                    var strUrl = '/vehicle_management/addfireextinguishers';
-                    var formName = 'add-fireextinguishers-form';
-                    var modalID = 'add_fireextinguishers-modal';
-                    var submitBtnID = 'addfireextinguishers';
-                    var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-
-                
-               var reject_ID;
-                $('#change_status-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    reject_ID = btnEdit.data('id');
-                    var Status = btnEdit.data('Status');
-                    var modal = $(this);
-                   modal.find('#Status').val(Status);
-                });
-                //Post module form to server using ajax (ADD)
-                
-                
-                 $('#change_status').on('click', function() {
-                var strUrl = '/vehicle_management/changestatus/' + reject_ID;
-                var formName = 'edit-module-form';
-                var modalID = 'change_status-modal';
-                var submitBtnID = 'change_status';
-                var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
+				var modal = $(this);
+				modal.find('#bar_code').val(barCode);
+				modal.find('#item_no').val(itemNo);
+				modal.find('#Description').val(desc);
+				modal.find('#Weight').val(weights);
+				modal.find('#Serial_number').val(serialNumber);
+				modal.find('#purchase_order').val(purchaseOrder);
+				modal.find('#invoice_number').val(invoiceNumber);
+				modal.find('select#supplier_id').val(supplierID).trigger("change");
+				modal.find('#date_purchased').val(datePurchased);
+				modal.find('#Cost').val(amount);
+				//console.log(amount);
+			});
+			
+			$('#update-fire-extinguishers').on('click', function() {
+				
+					var strUrl = '/vehicle_management/editfireexting/' + fireID;
+					var formName = 'edit-fireextinguishers-form';
+					var modalID = 'edit-fire-extinghuisher-modal';
+					var submitBtnID = 'update-fire-extinguishers';
+					var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+					var successMsgTitle = 'The Record  has been updated successfully';
                     var successMsg = 'The Record  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-                
-                     
-                var fire_ID;
-                $('#edit-fireextinghuisher-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    fire_ID = btnEdit.data('id');
-                    var bar_code = btnEdit.data('bar_code');
-                    var item_no = btnEdit.data('item_no');
-                    var Description = btnEdit.data('Description');
-                    var Weight = btnEdit.data('Weight');
-                    var Serial_number = btnEdit.data('Serial_number');
-                    var purchase_order = btnEdit.data('purchase_order');
-                    var invoice_number = btnEdit.data('invoice_number');
-                    var supplier_id = btnEdit.data('supplier_id');
-                    var date_purchased = btnEdit.data('date_purchased');
-                    var Cost = btnEdit.data('Cost');
-                    var rental_amount = btnEdit.data('rental_amount');
-                    var valueID = btnEdit.data('valueID');
-                    var modal = $(this);
-                   modal.find('#bar_code').val(bar_code);
-                   modal.find('#item_no').val(item_no);
-                   modal.find('#Description').val(Description);
-                   modal.find('#Weight').val(Weight);
-                   modal.find('#Serial_number').val(Serial_number);
-                   modal.find('#purchase_order').val(purchase_order);
-                   modal.find('#invoice_number').val(invoice_number);
-                   modal.find('#supplier_id').val(supplier_id);
-                   modal.find('#date_purchased').val(date_purchased);
-                   modal.find('#Cost').val(Cost);
-                   modal.find('#rental_amount').val(rental_amount);
-                   modal.find('#valueID').val(valueID);
-                });
-                
-                
-              $('#edit_fireextinghuisher').on('click', function() {
-                var strUrl = '/vehicle_management/editfireexting/' + fire_ID;
-                var formName = 'edit-fireextinghuisher-form';
-                var modalID = 'edit-fireextinghuisher-modal';
-                var submitBtnID = 'edit_fireextinghuisher';
-                var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-              });
-                             
             });
-     
-            </script>
+			
+			$('#change-fire-status-modal').on('show.bs.modal', function (e) {
+				var btnChange = $(e.relatedTarget);
+				fireID = btnChange.data('id');
+				var change = btnChange.data('status');
+				var modal = $(this);
+				
+				modal.find('select#Status').val(change).trigger("change");
+				modal.find('#fire_id').val(fireID);
+            });
+			$('#change-fire-status').on('click', function() {
+				
+				var strUrl = '/vehicle_management/changestatus/' + fireID;
+				var formName = 'change-fire-status-form';
+				var modalID = 'change-fire-status-modal';
+				var submitBtnID = 'update-fire-extinguishers';
+				var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+				var successMsgTitle = 'The Record  has been updated successfully';
+				var successMsg = 'The Record  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+        });
+    </script>
 @endsection

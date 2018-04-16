@@ -196,11 +196,7 @@
             <!-- Include add new prime rate modal -->
             @include('Vehicles.partials.add_vehicleWarranties_modal')
             @include('Vehicles.partials.edit_vehicleWarranties_modal')
-
-
         </div>
-
-
         @endsection
 
         @section('page_script')
