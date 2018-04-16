@@ -107,7 +107,7 @@
                         <label for="path" class="col-sm-2 control-label">Cost</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="cost" name="Cost" value="0"
-                                   placeholder="Enter Name" required>
+                                   placeholder="Enter Cost" required>
                         </div>
                     </div>
                  
@@ -128,11 +128,8 @@
                                    placeholder="Enter Name" required>
                         </div>
                     </div>
-
-                    
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
