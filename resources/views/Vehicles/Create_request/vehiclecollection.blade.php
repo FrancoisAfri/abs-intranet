@@ -164,8 +164,40 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label">Odometer
+                          @if (isset($vehiclebookings) && $vehiclebookings->metre_reading_type === 1)
+                             <div class="form-group">
+                                <label for="path" class="col-sm-2 control-label">Odometer </label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                             <i class="fa fa-spinner"></i>
+                                        </div>
+                                        <input type="text" id="start_mileage_id" class="form-control pull-left"
+                                               name="start_mileage_id"
+                                               value="{{  (!empty($vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : '' }}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+                              @else
+                             <div class="form-group">
+                                <label for="path" class="col-sm-2 control-label">HoursReading </label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                             <i class="fa fa-spinner"></i>
+                                        </div>
+                                        <input type="text" id="hours_reading" class="form-control pull-left"
+                                               name="hours_reading"
+                                               value="{{  (!empty($vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : '' }}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+                               @endif   
+                            
+<!--                            <div class="form-group">
+                                <label for="path" class="col-sm-2 control-label">hours_reading
                                     Reading </label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
@@ -175,9 +207,29 @@
                                         {{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}
                                         <input type="hidden" id="start_mileage_id" name="start_mileage_id"
                                                value="{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}">
+                                        <input type="hidden" id="hours_reading" name="hours_reading"
+                                               value="{{ (!empty( $vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : ''}}">
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="form-group">
+                                <label for="path" class="col-sm-2 control-label">hours_reading
+                                    Reading </label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-spinner"></i>
+                                        </div>
+                                        {{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}
+                                        <input type="hidden" id="start_mileage_id" name="start_mileage_id"
+                                               value="{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}">
+                                        <input type="hidden" id="hours_reading" name="hours_reading"
+                                               value="{{ (!empty( $vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : ''}}">
+                                    </div>
+                                </div>
+                            </div>-->
+                            
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label">Destination </label>
                                 <div class="col-sm-8">

@@ -212,7 +212,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-spinner"></i>
                                                     </div>
-                                                    <input type="text" id ="vehicletype" class="form-control form-control-sm pull-left" name="vehicletype" value="{{ (!empty($vehicle->odometer_reading)) ? $vehicle->odometer_reading : ''}}" readonly>
+                                                    <input type="text" id ="odometer_reading" class="form-control form-control-sm pull-left" name="odometer_reading" value="{{ (!empty($vehicle->odometer_reading)) ? $vehicle->odometer_reading : ''}}" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -224,7 +224,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-spinner"></i>
                                                     </div>
-                                                    <input type="text" id ="vehicletype" class="form-control form-control-sm pull-left" name="vehicletype" value="{{ (!empty($vehicle->hours_reading)) ? $vehicle->hours_reading : ''}}" readonly>
+                                                    <input type="text" id ="hours_reading" class="form-control form-control-sm pull-left" name="hours_reading" value="{{ (!empty($vehicle->hours_reading)) ? $vehicle->hours_reading : ''}}" readonly>
                                                 </div>
                                             </div>
                                         </div>
