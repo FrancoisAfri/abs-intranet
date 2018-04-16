@@ -243,8 +243,8 @@ class FleetManagementController extends Controller
         $Vehiclemilege = new vehicle_milege();
         $Vehiclemilege->date_created = time();
         $Vehiclemilege->vehicle_id = $vehicle_maintenance->id;
-        $Vehiclemilege->odometer_reading = $SysData['odometer_reading'];
-        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
+        $Vehiclemilege->odometer_reading = !empty($SysData['odometer_reading']) ? $SysData['odometer_reading'] : 0;
+        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : 0;
         $Vehiclemilege->type = 1;
         $Vehiclemilege->booking_id = 0;
         $Vehiclemilege->save();
@@ -252,24 +252,15 @@ class FleetManagementController extends Controller
         
         
          if ($vehicleConfig == 1) {
-             
-              $manager = HRPerson::pluck('manager_id');
-                foreach ($manager as $managerID) {
-                  $managerid = !empty($managerID) ? $managerID : 1; 
-                   Mail::to($manager->email)->send(new approve_vehiclemail($manager ,$SysData['vehicle_registration']));
-                   
-                }
+            
               #mail to manager
                 $user = Auth::user()->load('person');
                 $managerIDs = $user->person->manager_id;
-                
-               if  ($managerIDs ==  null){
-                     $managerid = !empty($managerID) ? $managerID : $user->id;
-                     $manager = HRPerson::find($managerid);
+                $managerid = !empty($managerID) ? $managerID : 1; 
+                $manager = HRPerson::find($managerid);
                      //send an email to user to inform them that they should assign a manager
-                      Mail::to($manager->email)->send(new assignUsertoAdmin($manager));
-                }
-              
+              //Mail::to($manager->email)->send(new approve_vehiclemail($manager));
+                  
             }
 
         AuditReportsController::store('Fleet Management', 'New Vehicle Added', "Accessed By User", 0);;

@@ -205,7 +205,6 @@ class VehicleBookingController extends Controller {
                 ->orderBy('vehicle_details.id', 'asc')
                 ->get();
 
-              //  return  $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 
@@ -244,6 +243,7 @@ class VehicleBookingController extends Controller {
         $vehicleTypes = Vehicle_managemnt::where('id', $vehicle->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
 
+        //return $vehicle;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";

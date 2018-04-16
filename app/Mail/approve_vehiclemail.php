@@ -22,14 +22,14 @@ class approve_vehiclemail extends Mailable
     
     public $email;
     public $manager;
-    public $vehicle_registration;
+   // public $vehicle_registration;
     
-    public function __construct( $email, $vehicle_registration)
+    public function __construct( $email, $vehicle_registration ,$manager)
 
     {
  
         $this->email = $email;
-        $this->$vehicle_registration = $vehicle_registration;
+       // $this->$vehicle_registration = $vehicle_registration;
         $this->manager = $manager;
         
        

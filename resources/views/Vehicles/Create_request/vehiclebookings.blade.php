@@ -203,19 +203,32 @@
                                                 </div>
                                             </div>
                                         </div>
-										<div class="form-group">
-											<label for="path" class="col-sm-2 control-label">Odometer
-												Reading </label>
-											<div class="col-sm-8">
-												<div class="input-group">
-													<div class="input-group-addon">
-														<i class="fa fa-spinner"></i>
-													</div>
-													{{ (!empty( $vehicle->odometer_reading)) ?  $vehicle->odometer_reading : ''}}
-													<input type="hidden" name="odometer_reading" value="{{ (!empty( $vehicle->odometer_reading)) ?  $vehicle->odometer_reading : ''}}">
-												</div>
-											</div>
-										</div>
+                                       
+                                        @if (isset($vehicle) && $vehicle->metre_reading_type === 1)
+                                         <div class="form-group">
+                                            <label for="path" class="col-sm-2 control-label">OdometerReading</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-spinner"></i>
+                                                    </div>
+                                                    <input type="text" id ="vehicletype" class="form-control form-control-sm pull-left" name="vehicletype" value="{{ (!empty($vehicle->odometer_reading)) ? $vehicle->odometer_reading : ''}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @else
+                                         <div class="form-group">
+                                            <label for="path" class="col-sm-2 control-label">HoursReading</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">
+                                                        <i class="fa fa-spinner"></i>
+                                                    </div>
+                                                    <input type="text" id ="vehicletype" class="form-control form-control-sm pull-left" name="vehicletype" value="{{ (!empty($vehicle->hours_reading)) ? $vehicle->hours_reading : ''}}" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                         @endif			
                                         <input type="hidden" id="vehicle_id" name="vehicle_id"
                                                value="{{ !empty($vehicle->id) ? $vehicle->id : ''}}">
 

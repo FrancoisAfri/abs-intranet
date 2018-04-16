@@ -31,7 +31,7 @@
                                 <th>Vehicle Model/Year</th>
                                 <th>Fleet Number</th>
                                 <th>Vehicle Registration</th>
-                                <th>Odometer</th>
+                                <th>Odometer/Hours</th>
                                 <th>Company</th>
                                 <th>Department</th>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
@@ -55,7 +55,8 @@
                                         <td>{{ (!empty( $filling->vehiclemodel . ' ' . $filling->year )) ?   $filling->vehiclemodel . ' ' . $filling->year : ''}} </td>
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
-                                        <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
+                                        <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading.''.'Kms' : '' }} </br>
+                                            {{ !empty($filling->hours_reading) ? $filling->hours_reading.''.'Hrs' : '' }}</td>
                                         <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
                                         <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
                                         <td style='text-align:center'>
