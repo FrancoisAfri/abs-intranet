@@ -203,7 +203,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                             @if (isset($vehiclebookings) && $vehiclebookings->metre_reading_type === 1)
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label"> Start Odometer
                                     Reading </label>
@@ -214,11 +214,28 @@
                                         </div>
                                         <input type="text" id="start_mileage_id" class="form-control pull-left"
                                                name="start_mileage_id"
-                                               value="{{ !empty($OdometerReading->odometer_reading) ? $OdometerReading->odometer_reading : ''}}"
+                                               value="{{ !empty($vehiclebookings->odometer_reading) ? $vehiclebookings->odometer_reading : ''}}"
                                                readonly>
                                     </div>
                                 </div>
                             </div>
+                                @else
+                             <div class="form-group">
+                                <label for="path" class="col-sm-2 control-label"> Start Hours
+                                    Reading </label>
+                                <div class="col-sm-8">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-tachometer"></i>
+                                        </div>
+                                        <input type="text" id="start_mileage_id" class="form-control pull-left"
+                                               name="start_mileage_id"
+                                               value="{{ !empty($vehiclebookings->odometer_reading) ? $vehiclebookings->odometer_reading : ''}}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+                              @endif    
                             <div class="form-group">
                                 <label for="end_mileage_id" class="col-sm-2 control-label"> End Odometer
                                     Reading </label>
