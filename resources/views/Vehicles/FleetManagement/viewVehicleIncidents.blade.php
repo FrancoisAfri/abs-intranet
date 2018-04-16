@@ -384,5 +384,18 @@
 				for (var i = 0; i < remove.length; i++)
 					remove[i].style.display = "inline";
 			}
+			
+			function removeFile(row_name)
+			{
+				var row=row_name.parentNode.parentNode.id;
+				var rows=document.getElementsByName(row);
+				while(rows.length>0)
+					rows[0].parentNode.removeChild(rows[0]);
+				var total_files = document.getElementById("total_files");
+				total_files.value=--total_files.value;
+				var remove=document.getElementsByName("remove");
+				if(total_files.value == 1)
+					remove[1].style.display='none';
+			}
             </script>
 @endsection
