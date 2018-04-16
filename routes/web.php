@@ -409,7 +409,7 @@ Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingCo
 ### fire_extinguishers
 Route::get('vehicle_management/fire_extinguishers/{maintenance}', 'FleetManagementController@viewfireExtinguishers'); 
 Route::post('vehicle_management/addfireextinguishers', 'FleetManagementController@addvehicleextinguisher');
-Route::patch('vehicle_management/changestatus/{fireextinguishers}', 'FleetManagementController@changestatus');
+Route::patch('vehicle_management/changestatus/{extinguishers}', 'FleetManagementController@changeFirestatus');
 Route::patch('vehicle_management/editfireexting/{extinguishers}', 'FleetManagementController@editeditfireexting');
 
 ##########################  Alerts  #########################

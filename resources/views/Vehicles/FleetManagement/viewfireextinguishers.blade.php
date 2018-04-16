@@ -102,12 +102,15 @@
 								<th style="width: 10px; text-align: center;"></th>
 								<th>Barcode</th>
 								<th>Item</th>
-								<th>Company</th>
 								<th>Service Provier</th>
 								<th>Serial Number</th>
+								<th>Weight</th>
+								<th>Invoice Number</th>
+								<th>PO Number</th>
 								<th>Date Purchased</th>
-								<th>Cost </th>
-								<th>Status </th>
+								<th>Cost</th>
+								<th>Capturer By</th>
+								<th style="width: 5px; text-align: center;"></th>
 								<th style="width: 5px; text-align: center;"></th>
                             </tr>
                             @if (count($fireextinguishers) > 0)
@@ -116,13 +119,13 @@
                                         <tr>
                                             <td>
                                         <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-fireextinghuisher-modal"
+                                                data-toggle="modal" data-target="#edit-fire-extinghuisher-modal"
                                                 data-id="{{ $extinguishers->id }}" data-bar_code="{{$extinguishers->bar_code}}"
-                                                data-item_no="{{ $extinguishers->item_no }}" data-Description="{{$extinguishers->Description}}"
-                                                data-Weight="{{ $extinguishers->Weight }}" data-Serial_number="{{$extinguishers->Serial_number}}"
+                                                data-item_no="{{ $extinguishers->item_no }}" data-description="{{$extinguishers->Description}}"
+                                                data-weight="{{ $extinguishers->Weight }}" data-serial_number="{{$extinguishers->Serial_number}}"
                                                 data-purchase_order="{{ $extinguishers->purchase_order }}" data-invoice_number="{{$extinguishers->invoice_number}}"
                                                 data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{date(' d M Y', $extinguishers->date_purchased)}}"
-                                                data-Cost="{{ $extinguishers->Cost }}"
+                                                data-cost="{{ $extinguishers->Cost }}"
                                                
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -135,16 +138,19 @@
                                     </td>                
                                     <td>{{ (!empty( $extinguishers->bar_code)) ?  $extinguishers->bar_code : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->item_no)) ?  $extinguishers->item_no : ''}} </td>
-                                    <td>{{ (!empty( $extinguishers->company)) ?  $extinguishers->company : ''}} </td>
-                                    <td>{{ (!empty( $extinguishers->Department)) ?  $extinguishers->Department : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->comp_name)) ?  $extinguishers->comp_name : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->Serial_number)) ?  $extinguishers->Serial_number : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->Weight)) ?  $extinguishers->Weight : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->invoice_number)) ?  $extinguishers->invoice_number : ''}} </td>
+                                    <td>{{ (!empty( $extinguishers->purchase_order)) ?  $extinguishers->purchase_order : ''}} </td>
                                     <td>{{ !empty($extinguishers->date_purchased) ? date(' d M Y', $extinguishers->date_purchased) : '' }} </td>
                                     <td>{{ !empty($extinguishers->Cost) ?  'R' .number_format($extinguishers->Cost, 2): '' }}</td>
-                                    <td>{{ (!empty( $extinguishers->Status)) ?  $status[$extinguishers->Status] : ''}} </td>
+                                    <td>{{ !empty($extinguishers->firstname) ?  $extinguishers->firstname." ".$extinguishers->surname: '' }}</td>
+                                    <td>{{ (!empty( $extinguishers->Status)) ?  $statusArray[$extinguishers->Status] : ''}} </td>
                                     <td nowrap>
                                          <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#change-status-modal"
-                                                data-id="{{ $extinguishers->id }}" data-Status="{{ $extinguishers->Status }}"
+                                                data-toggle="modal" data-target="#change-fire-status-modal"
+                                                data-id="{{ $extinguishers->id }}" data-status="{{ $extinguishers->Status }}"
                                                 ><i class="fa fa-stack-overflow"></i>
                                             Change Status
                                         </button>
@@ -159,7 +165,6 @@
 								<th style="width: 10px; text-align: center;"></th>
 								<th>Barcode</th>
 								<th>Item</th>
-								<th>Company</th>
 								<th>Service Provier</th>
 								<th>Serial Number</th>
 								<th>Date Purchased</th>
@@ -182,6 +187,7 @@
         <!-- Include Modal form-->
           @include('Vehicles.partials.add_fire_extinguishers_modal')
           
+          @include('Vehicles.partials.edit_fireextinguisher_modal')
           @include('Vehicles.partials.change_extinguisherstatus_modal')
         </div>
         @endsection
@@ -232,6 +238,7 @@
 				autoclose: true,
 				todayHighlight: true
 			});
+	
 		});
 
 		$(function () {
@@ -273,7 +280,7 @@
 				var submitBtnID = 'add-fire-extinguishers';
 				var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
 				var successMsgTitle = 'New Record Added!';
-				var successMsg = 'The Record  has been updated successfully.';
+				var successMsg = 'New Record Successfully Added!';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
 			
@@ -283,28 +290,61 @@
 				fireID = btnEdit.data('id');
 				var barCode = btnEdit.data('bar_code');
 				var itemNo = btnEdit.data('item_no');
-				var description = btnEdit.data('Description');
-				var weight = btnEdit.data('Weight');
-				var serial_number = btnEdit.data('Serial_number');
+				var desc = btnEdit.data('description');
+				var weights = btnEdit.data('weight');
+				var serialNumber = btnEdit.data('serial_number');
 				var purchaseOrder = btnEdit.data('purchase_order');
 				var invoiceNumber = btnEdit.data('invoice_number');
 				var supplierID = btnEdit.data('supplier_id');
 				var datePurchased = btnEdit.data('date_purchased');
-				var cost = btnEdit.data('Cost');
+				var amount = btnEdit.data('cost');
 
 				var modal = $(this);
-				modal.find('#bar_code').val(bar_code);
+				modal.find('#bar_code').val(barCode);
 				modal.find('#item_no').val(itemNo);
-				modal.find('#Description').val(description);
-				modal.find('#Weight').val(weight);
-				modal.find('#Serial_number').val(serial_number);
+				modal.find('#Description').val(desc);
+				modal.find('#Weight').val(weights);
+				modal.find('#Serial_number').val(serialNumber);
 				modal.find('#purchase_order').val(purchaseOrder);
 				modal.find('#invoice_number').val(invoiceNumber);
-				modal.find('#supplier_id').val(supplierID);
+				modal.find('select#supplier_id').val(supplierID).trigger("change");
 				modal.find('#date_purchased').val(datePurchased);
-				modal.find('#Cost').val(cost);
-			//console.log('kjhsjs');
-		 });
+				modal.find('#Cost').val(amount);
+				//console.log(amount);
+			});
+			
+			$('#update-fire-extinguishers').on('click', function() {
+				
+					var strUrl = '/vehicle_management/editfireexting/' + fireID;
+					var formName = 'edit-fireextinguishers-form';
+					var modalID = 'edit-fire-extinghuisher-modal';
+					var submitBtnID = 'update-fire-extinguishers';
+					var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+					var successMsgTitle = 'The Record  has been updated successfully';
+                    var successMsg = 'The Record  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+			
+			$('#change-fire-status-modal').on('show.bs.modal', function (e) {
+				var btnChange = $(e.relatedTarget);
+				fireID = btnChange.data('id');
+				var change = btnChange.data('status');
+				var modal = $(this);
+				
+				modal.find('select#Status').val(change).trigger("change");
+				modal.find('#fire_id').val(fireID);
+            });
+			$('#change-fire-status').on('click', function() {
+				
+				var strUrl = '/vehicle_management/changestatus/' + fireID;
+				var formName = 'change-fire-status-form';
+				var modalID = 'change-fire-status-modal';
+				var submitBtnID = 'update-fire-extinguishers';
+				var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+				var successMsgTitle = 'The Record  has been updated successfully';
+				var successMsg = 'The Record  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
         });
     </script>
 @endsection
