@@ -812,14 +812,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Job Card Management';
-        $ribbon->description = 'Job Card Management';
-        $ribbon->ribbon_path = 'Jobcard_management/Job_card';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
+//        $ribbon = new module_ribbons();
+//        $ribbon->active = 1;
+//        $ribbon->sort_order = 4;
+//        $ribbon->ribbon_name = 'Job Card Management';
+//        $ribbon->description = 'Job Card Management';
+//        $ribbon->ribbon_path = 'Jobcard_management/Job_card';
+//        $ribbon->access_level = 3;
+//        $module->addRibbon($ribbon);
 
          $ribbon = new module_ribbons();
          $ribbon->active = 1;
@@ -1142,6 +1142,70 @@ class DatabaseSeeder extends Seeder
         $module->addRibbon($ribbon);
 
         //
+        
+        //# 
+        $module = new modules(); //Job card module
+        $module->active = 1;
+        $module->name = 'Job Cards';
+        $module->code_name = 'job_caads';
+        $module->path = 'jobcards';
+        $module->font_awesome = 'fa fa-archive';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'My Job Cards';
+        $ribbon->description = 'My Job Cards';
+        $ribbon->ribbon_path = 'jobcards/mycards';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Approvals';
+        $ribbon->description = 'My approval';
+        $ribbon->ribbon_path = 'jobcards/approval';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Approval process';
+        $ribbon->description = 'My Approval process';
+        $ribbon->ribbon_path = 'jobcards/approval_process';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Search Job Cards';
+        $ribbon->description = 'Search Job Cards';
+        $ribbon->ribbon_path = 'jobcards/search';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'reports';
+        $ribbon->ribbon_path = 'jobcards/reports';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        
+         $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Set Up';
+        $ribbon->description = 'set up';
+        $ribbon->ribbon_path = 'jobcards/set_up';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        ///
 
         $module = new modules(); //Task Management
         $module->active = 1;
