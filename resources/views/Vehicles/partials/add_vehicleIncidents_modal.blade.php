@@ -119,11 +119,6 @@
 							<div class="col-sm-6" id="file_row" style="margin-bottom: 15px; display:none">
 								<input type="file" id="document" disabled="disabled" class="form-control">
 							</div>
-							
-							<!-- <tr style="display:none" id="file_row">
-		<td class = "caption">File on Disk</td>
-		<td colspan="3"><input type="file" id="upload" onchange="select_file(this)" disabled="disabled"><input type="button" name="remove" value="Remove" onclick="removeFile(this)"></td>
-	</tr>-->
 							<div class="col-sm-6" style="margin-bottom: 15px;">
 								<input type="file" id="document" name="document[1]"
 								class="form-control">
