@@ -9,7 +9,7 @@ use App\HRPerson;
 use App\vehicle_detail;
 use App\vehicle;
 use App\vehicle_config;
-use App\jobcard_config;
+use App\jobcards_config;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
 use Illuminate\Support\Facades\Auth;
@@ -120,7 +120,7 @@ class JobcardController extends Controller
     
     public function configuration(){
         
-        $configuration = jobcard_config::all();
+        $configuration = jobcards_config::all();
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
