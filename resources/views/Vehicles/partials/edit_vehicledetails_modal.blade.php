@@ -195,6 +195,8 @@
 
                              </div>
                          </div>
+                        
+<!--                         <option value="{{ $type->id }}" {{ ($vehiclemaintenance->vehicle_type == $type->id) ? ' selected' : '' }}>{{ $type->name }}</option>-->
 
                          <div class="form-group odometer-field">
                             <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
