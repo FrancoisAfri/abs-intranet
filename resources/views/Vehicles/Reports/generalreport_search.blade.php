@@ -69,26 +69,26 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
+                            <label for="vehicle_type" class="col-sm-2 control-label">Vehicle Type</label>
                             <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
                                         id="vehicle_type" name="vehicle_type">
                                     <option value="">*** Select a Vehicle Type ***</option>
-                                    @foreach($Vehicle_types as $Vehicle)
-                                        <option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>
+                                    @foreach($Vehicle_types as $type)
+                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group detail-field {{ $errors->has('licence_type') ? ' has-error' : '' }}">
-                            <label for="path" class="col-sm-2 control-label">Manufacturer</label>
+                            <label for="vehicle_make" class="col-sm-2 control-label">Manufacturer</label>
                             <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
-                                        id="vehicle_type" name="vehicle_type">
+                                        id="vehicle_make" name="vehicle_make">
                                     <option value="">*** Select a Manufacturer  ***</option>
-                                    @foreach($Vehicle_types as $Vehicle)
-                                        {{--<option value="{{ $Vehicle->id }}">{{ $Vehicle->name }}</option>--}}
+                                    @foreach($vehiclemakes as $vehiclemake)
+                                        {{--<option value="{{ $vehiclemake->id }}">{{ $vehiclemake->name }}</option>--}}
                                     @endforeach
                                 </select>
                             </div>

@@ -268,10 +268,10 @@
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Notification Method on approvals/rejections</td>
-                                    <td colspan="3"><input type="radio" name="notification_method" value="email">Email
+                                    <td colspan="3"><input type="radio" name="notification_method" value="email"{{ $configuration->notification_method === 'email' ? 'checked ="checked"' : 0 }}>Email
                                         &nbsp;
-                                        <input type="radio" name="notification_method" value="sms">SMS &nbsp;
-                                        <input type="radio" name="notification_method" value="employee_based">Employee
+                                        <input type="radio" name="notification_method" value="sms"{{ $configuration->notification_method === 'sms' ? 'checked ="checked"' : 0 }}>SMS &nbsp;
+                                        <input type="radio" name="notification_method" value="employee_based"{{ $configuration->notification_method === 'employee_based' ? 'checked ="checked"' : 0 }}>Employee
                                         Based
                                     </td>
                                 </tr>
