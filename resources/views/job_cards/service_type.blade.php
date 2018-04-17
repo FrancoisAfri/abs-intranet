@@ -10,15 +10,13 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Fleet Cards Types</h3>
+                    <h3 class="box-title"> Add Service Type </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
+
                     <!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">
@@ -29,19 +27,21 @@
                                 <th style="width: 5px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($FleetType) > 0)
-                              @foreach ($FleetType as $fleet)
+                            @if (count($servicetype) > 0)
+                              @foreach ($servicetype as $service_type)
                                <tr id="categories-list">
                                <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $fleet->id }}" data-name="{{ $fleet->name }}" data-description="{{$fleet->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-servicetype-modal"
+                                                data-id="{{ $service_type->id }}" data-name="{{ $service_type->name }}" data-description="{{$service_type->description}}" >
+                                            <i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
-                                     <td>{{ (!empty( $fleet->name)) ?  $fleet->name : ''}} </td>
-                                     <td>{{ (!empty( $fleet->description)) ?  $fleet->description : ''}} </td>
+                                     <td>{{ (!empty( $service_type->name)) ?  $service_type->name : ''}} </td>
+                                     <td>{{ (!empty( $service_type->description)) ?  $service_type->description : ''}} </td>
                                   <td>
                                     <!--   leave here  -->
-                                    <button vehice="button" id="view_ribbons" class="btn {{ (!empty($fleet->status) && $fleet->status == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$fleet->id}}, 'actdeac');"><i class="fa {{ (!empty($fleet->status) && $fleet->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($fleet->status) && $fleet->status == 1) ? "De-Activate" : "Activate"}}</button>
+                                    <button vehice="button" id="view_ribbons" class="btn {{ (!empty($service_type->status) && $service_type->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$service_type->id}}, 'actdeac');"><i class="fa {{ (!empty($service_type->status) && $service_type->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($service_type->status) && $service_type->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
                                  <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
@@ -51,27 +51,26 @@
                         <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No Fleet Cards Types to display, please start by adding a new Fleet Cards Types...
+                            No Record to display, please start by adding a new Record....
                         </div>
                         </td>
                         </tr>
                            @endif
                             </table>
-                      <!--   </div> -->
-                                   <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-fleet-modal">Add new Fleet Cards</button>
+                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                     <button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-servicetype-modal">Add new service Type</button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_fleetcard_modal')
-        @include('Vehicles.partials.edit_fleetcard_modal')
+        @include('job_cards.partials.add_servicetype_modal')
+        @include('job_cards.partials.edit_servicetype_modal')
           <!-- Include delete warning Modal form-->
-     @if (count($FleetType) > 0)
-         @include('Vehicles.warnings.fleetcard_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])
+           @if (count($service_type) > 0)
+         @include('job_cards.partials.servicetype_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Service Type? This action cannot be undone.'])
     @endif
+      
 </div>
 
 
@@ -83,13 +82,12 @@
 <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 <script>
        function postData(id , data ){   
-            if(data == 'actdeac') location.href = "/vehice/fleetcard_act/" + id; 
+            if(data == 'actdeac') location.href = "/jobcards/service_act/" + id; 
           
         }
-         $('#back_button').click(function () {
-                location.href = '/vehicle_management/setup';
+        $('#back_button').click(function () {
+                location.href = '/jobcards/set_up';
             });
-
         $(function () {
             var moduleId;
             //Initialize Select2 Elements
@@ -124,49 +122,47 @@
 
             //save Fleet
             //Post module form to server using ajax (ADD)
-            $('#add-fleet-card').on('click', function() {
+            $('#add-servicetype').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/vehice/add_fleetcard';
-                var modalID = 'add-fleet-modal';
+                var strUrl = '/jobcards/addservicetype';
+                var modalID = 'add-servicetype-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'add-fleet-card';
-                var redirectUrl = '/vehicle_management/fleet_card';
-                var successMsgTitle = 'Fleet Type Added!';
-                var successMsg = 'The Fleet Type has been updated successfully.';
-                //var formMethod = 'PATCH';
-              //  modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                var submitBtnID = 'add-servicetype';
+                var redirectUrl = '/jobcards/servicetype';
+                var successMsgTitle = 'Service Type Added!';
+                var successMsg = 'The Service Type has been updated successfully.';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-              var fleetID;
-            $('#edit-package-modal').on('show.bs.modal', function (e) {
+              var sevicetypeID;
+            $('#edit-servicetype-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                fleetID = btnEdit.data('id');
+                sevicetypeID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
              });
-            $('#edit_fleetcard').on('click', function () {
-                var strUrl = '/vehice/edit_fleetcard/' + fleetID;
-                var modalID = 'edit-package-modal';
+            $('#edit_servicetype').on('click', function () {
+                var strUrl = '/jobcards/edit_servicetype/' + sevicetypeID;
+                var modalID = 'edit-servicetype-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'edit_fleetcard';
-                var redirectUrl = '/vehicle_management/Manage_fleet_types';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Fleet Type has been updated successfully.';
+                var submitBtnID = 'edit_servicetype';
+                var redirectUrl = '/jobcards/servicetype';
+                var successMsgTitle = 'Service Type Added!';
+                var successMsg = 'The Service Type has been updated successfully.';
                 var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                  modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
         });

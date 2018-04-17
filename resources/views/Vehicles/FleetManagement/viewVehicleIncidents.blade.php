@@ -168,10 +168,10 @@
                                    <td>
                                         <button type="button" id="view_ribbons" class="btn {{ (!empty($details->vehicle_fixed) || $details->vehicle_fixed == 1 || $details->vehicle_fixed == 2 && $details->vehicle_fixed == 3) ? " btn-success " : "btn-danger" }}
                                             btn-xs" onclick="postData({{$details->id}}, 'actdeac');"><i class="fa {{ (!empty($details->vehicle_fixed) && $details->vehicle_fixed == 1) ?
-                                            " fa-times " : "fa-check " }}"></i> {{(!empty($details->vehicle_fixed) && $details->vehicle_fixed == 1) ? "De-Activate" : "Fix Car"}}</button>
+                                            " fa-times " : "fa-check " }}"></i> {{ $details->vehicle_fixed == 0 ? "Fix Car" : ""}}</button>
                                   </td>
                                        @else
-                                           <td></td>
+                                           <td>Fixed</td>
                                   @endif
                                 </tr>
                             @endforeach
