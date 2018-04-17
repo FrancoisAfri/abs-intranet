@@ -4,6 +4,8 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
+	<!-- iCheck -->
+	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 
 @endsection
 @section('content')
@@ -157,11 +159,22 @@
                 <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
                 <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
                 <script src="/custom_components/js/modal_ajax_submit.js"></script>
+				<!-- iCheck -->
+				<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+    
                 <script>
                     $('#back_button').click(function () {
                         location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                     });
                     $(function () {
+						$('.zip-field').hide();
+						$('.single-field').show();
+						//Initialize iCheck/iRadio Elements
+						$('input').iCheck({
+							checkboxClass: 'icheckbox_square-blue',
+							radioClass: 'iradio_square-blue',
+							increaseArea: '20%' // optional
+						});
                         var moduleId;
                         //Tooltip
                         $('[data-toggle="tooltip"]').tooltip();
@@ -189,34 +202,24 @@
                                 $('#enlargeImageModal').modal('show');
                             });
                         });
-                        //Initialize iCheck/iRadio Elements
 
-//                        $(document).ready(function () {
-//
-//                            $('#year').datepicker({
-//                                minViewMode: 'years',
-//                                autoclose: true,
-//                                format: 'yyyy'
-//                            });
-//
-//                        });
                         $('#rdo_single, #rdo_zip').on('ifChecked', function () {
+							
                             var allType = hideFields();
-                            if (allType == 1) $('#box-subtitle').html('Site Address');
-                            else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
                         });
                         function hideFields() {
-                            var allType = $("input[name='image_type']:checked").val();
+                            var allType = $("input[name='upload_type']:checked").val();
                             if (allType == 1) {
                                 $('.zip-field').hide();
-                                $('.Single-field').show();
+                                $('.single-field').show();
                             }
                             else if (allType == 2) {
-                                $('.Single-field').hide();
+                                $('.single-field').hide();
                                 $('.zip-field').show();
                             }
                             return allType;
                         }
+
                         //Post perk form to server using ajax (add)
                         $('#add-vehicle_image').on('click', function () {
 

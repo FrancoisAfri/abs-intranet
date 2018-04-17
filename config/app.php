@@ -164,6 +164,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
 		Maatwebsite\Excel\ExcelServiceProvider::class,
+		ZanySoft\Zip\ZipServiceProvider::class,
 
         /*
          * Package Service Providers...
