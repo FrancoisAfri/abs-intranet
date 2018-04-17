@@ -1504,7 +1504,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             'tank_name' => 'bail|required',
-            'Odometer_reading' => 'bail|required',
+            //'Odometer_reading' => 'bail|required',
             'document_number' => 'required|unique:vehicle_fuel_log,document_number',
 
         ]);

@@ -136,7 +136,13 @@
                             @if (isset($MetreType) && $MetreType === 1)
                                 <th>Odometer Reading</th>
                             @else
-                                <th>Hours Per Litre</th>
+                                <th>Hours Reading</th>
+                            @endif
+
+                            @if (isset($MetreType) && $MetreType === 1)
+                            <th>Kilometre Per Litre</th>
+                            @else
+                            <th>Hours Per Litre</th>
                             @endif
                             <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
@@ -158,6 +164,11 @@
                                     <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading : ''}}</td>
                                      @else
                                     <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,l' : ''}}</td>
+                                     @endif
+                                      @if (isset($MetreType) && $MetreType === 1)
+                                        <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading / $details->litres : 0}}</td>
+                                     @else
+                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading /$details->litres : 0 }}</td>
                                      @endif
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->
@@ -183,7 +194,7 @@
 
                         @else
                             <tr id="categories-list">
-                                <td colspan="12">
+                                <td colspan="15">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;

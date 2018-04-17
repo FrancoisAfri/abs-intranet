@@ -82,7 +82,9 @@ class VehicleBookingController extends Controller {
         ###################>>>>>#################
 
         $vehiclebookings = DB::table('vehicle_booking')
-                ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake', 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake', 'vehicle_model.name as vehicleModel', 
+                        'vehicle_managemnet.name as vehicleType', 'hr_people.first_name as firstname', 'hr_people.surname as surname','vehicle_details.image')
+                ->leftJoin('vehicle_details', 'vehicle_booking.vehicle_id', '=', 'vehicle_details.id')
                 ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
                 ->leftJoin('vehicle_make', 'vehicle_booking.vehicle_make', '=', 'vehicle_make.id')
                 ->leftJoin('vehicle_model', 'vehicle_booking.vehicle_model', '=', 'vehicle_model.id')
@@ -92,6 +94,9 @@ class VehicleBookingController extends Controller {
                 ->where('vehicle_booking.status', '!=', 13)
                 // ->where('vehicle_booking.status', '!=', 12)
                 ->get();
+        
+       // return $vehiclebookings;
+        
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -205,7 +210,6 @@ class VehicleBookingController extends Controller {
                 ->orderBy('vehicle_details.id', 'asc')
                 ->get();
 
-              //  return  $vehiclebookings;
 
         $vehiclebooking = $vehiclebookings->unique('id');
 
@@ -244,6 +248,7 @@ class VehicleBookingController extends Controller {
         $vehicleTypes = Vehicle_managemnt::where('id', $vehicle->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
 
+        //return $vehicle;
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -378,16 +383,21 @@ class VehicleBookingController extends Controller {
             //'driver ' => 'required'
             'driver' => 'bail|required',
             'Usage_type' => 'bail|required',
-            'odometer_reading' => 'bail|required',
+           // 'odometer_reading' => 'bail|required',
         ]);
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
         // call the status function
         $BookingDetails = array();
 
+      //  return $vehicleData;
 
         $hrID = $vehicleData['driver'];
         $BookingDetail = VehicleBookingController::BookingDetails(0, $hrID, $hrID);
+        
+        $vehicleDetails = vehicle_detail::where('id', $vehicle->id)->orderBy('id', 'desc')->first();
+        
+        
 
         $loggedInEmplID = Auth::user()->person->id;
         $users = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
@@ -415,9 +425,16 @@ class VehicleBookingController extends Controller {
         } else
             $Vehiclebookings->status = $BookingDetail['status'];
         $Vehiclebookings->cancel_status = 0;  // 0 is the for vehicle not booked
+          if($vehicleDetails->metre_reading_type  === 1)
         $Vehiclebookings->start_mileage_id = $vehicleData['odometer_reading'];
+          else
+        $Vehiclebookings->start_mileage_id = $vehicleData['hours_reading'];
+              
         $Vehiclebookings->booking_date = time();
         $Vehiclebookings->save();
+        
+        
+       
 
         $vehicle->booking_status = 1;
         $vehicle->update();
@@ -440,7 +457,7 @@ class VehicleBookingController extends Controller {
         else
             $vehicle_model = $vehiclemaker->name . ' ' . $vehicle_model1->name . ' ' . $vehicleTypes->name . ' ' . $Vehiclebookings->year;
         #mail to user
-        Mail::to($usedetails->email)->send(new vehiclebooking_manager_notification($usedetails->first_name, $usedetails->surname, $usedetails->email, $request['required_from'], $request['required_to'], $usageType[$request['Usage_type']], $driver, $request['destination'], $request['purpose'], $vehicle_model));
+        Mail::to($usedetails->email)->send(new vehiclebooking_manager_notification($usedetails->first_name, $usedetails->surname, $usedetails->email, $request['required_from'], $request['required_to'], $request['Usage_type'], $driver, $request['destination'], $request['purpose'], $vehicle_model));
 
         #mail to manager
         Mail::to($BookingDetail['email'])->send(new vehicle_bookings($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
@@ -712,16 +729,17 @@ class VehicleBookingController extends Controller {
         $doc = vehicle_collect_documents::count();
         $image = vehicle_collect_image::count();
 
-        //return $doc;
+      //  return $bookingID;
 
         $vehiclebookings = DB::table('vehicle_booking')
-                ->select('vehicle_booking.*', 'vehicle_details.*', 'vehicle_details.name as vehicle_make', 'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                ->select('vehicle_booking.*', 'vehicle_details.*', 'vehicle_details.name as vehicle_make','vehicle_details.metre_reading_type',
+                        'hr_people.first_name as firstname', 'hr_people.surname as surname')
                 ->leftJoin('hr_people', 'vehicle_booking.driver_id', '=', 'hr_people.id')
                 ->leftJoin('vehicle_details', 'vehicle_booking.vehicle_id', '=', 'vehicle_details.id')
                 ->where('vehicle_booking.id', $bookingID)
                 ->orderBy('vehicle_booking.id')
                 ->first();
-
+     
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -820,10 +838,17 @@ class VehicleBookingController extends Controller {
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
         $loggedInEmplID = Auth::user()->person->id;
+        
+        $vehicleID = $confirm->vehicle_id ;
+        $vehicleDetails = vehicle_detail::where('id', $vehicleID)->orderBy('id', 'desc')->first();
+        
         $confirm->collector_id = $loggedInEmplID;
         $confirm->status = 11;
-        $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
         $confirm->collect_timestamp = $currentDate = time();
+          if($vehicleDetails->metre_reading_type  === 1)
+        $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
+        else
+        $confirm->start_mileage_id = $vehicleData['hours_reading'];
         $confirm->update();
         $ID = $confirm->id;
 
@@ -854,7 +879,7 @@ class VehicleBookingController extends Controller {
         $Vehiclemilege->date_created = time();
         $Vehiclemilege->date_taken = time();
         $Vehiclemilege->vehicle_id = $confirm->vehicle_id;
-        $Vehiclemilege->odometer_reading = $vehicleData['start_mileage_id'];
+        $Vehiclemilege->odometer_reading = !empty($SysData['start_mileage_id']) ? $SysData['start_mileage_id'] : 0;
         $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
         $Vehiclemilege->type = 2;
         $Vehiclemilege->booking_id = $confirm->id;

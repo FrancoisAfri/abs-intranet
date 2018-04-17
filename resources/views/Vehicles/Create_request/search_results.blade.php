@@ -8,7 +8,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">Internal Vehicle Management </h3>
+                    <h3 class="box-title">Internal Vehicle Management</h3>
                 </div>
                 <div class="box-body">
                     <div class="box">
@@ -26,7 +26,7 @@
                                     <th>Registration Number</th>
                                     <th>Company</th>
                                     <th>Department</th>
-                                    <th>Odometer Reading</th>
+                                    <th>Odometer / Hours Reading</th>
                                     <th>Notices</th>
                                 </tr>
                                 </thead>
@@ -52,7 +52,9 @@
                                             <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
                                             <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
                                             <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
-                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading.'Kms' : ''}} <br>
+                                                {{ !empty($booking->hours_reading ) ? $booking->hours_reading.'Hrs' : ''}}
+                                            </td>
                                             <td></td>
                                         </tr>
                                     @endforeach

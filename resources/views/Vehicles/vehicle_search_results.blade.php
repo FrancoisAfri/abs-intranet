@@ -102,17 +102,13 @@
                                                     </div>
                             </div>
                             </td>
-
                             <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
                             <td>{{ !empty($card->fleet_number) ? $card->fleet_number : ''}}</td>
                             <td>{{ !empty($card->vehicle_registration) ? $card->vehicle_registration : ''}}</td>
                             <td>{{ !empty($card->chassis_number) ? $card->chassis_number : ''}}</td>
                             <td>{{ !empty($card->engine_number) ? $card->engine_number : ''}}</td>
-                            @if (isset($card) && $card->hours_reading === 0)
-                                <td>{{ !empty($card->hours_reading) ? $card->hours_reading : ''}}</td>
-                            @else
-                                <td>{{ !empty($card->odometer_reading) ? $card->odometer_reading : ''}}</td>
-                            @endif
+                                <td>{{ !empty($card->hours_reading) ? $card->hours_reading.'Hrs' : ''}}</br>
+                            {{ !empty($card->odometer_reading) ? $card->odometer_reading.'Kms' : ''}}</td>
                             <td>{{ !empty($card->company) ? $card->company : ''}}</td>
                             <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
                         <!--  <td>

@@ -27,6 +27,7 @@ rel="stylesheet">
                         <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
+                                <th style="width: 10px; text-align: center;"></th>
                                 <th>Vehicle</th>
                                 <th>Fleet Number</th>
                                 <th>Vehicle Registration</th>
@@ -46,6 +47,13 @@ rel="stylesheet">
                             <ul class="products-list product-list-in-box">
                                 @foreach ($vehiclebookings as $booking)
                                 <tr>
+                                   
+                                    <td>
+                                       <div class="product-img">
+                                                        <img src="{{ (!empty($booking->image)) ? Storage::disk('local')->url("Vehicle/images/$booking->image") : 'http://placehold.it/60x50' }}"
+                                                             alt="Product Image" width="50" height="50">
+                                        </div>
+                                    </td>
                                     {{--dnt allow editing for approved and rejected bookings--}}
                                     @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 && $booking->status !== 11 && $booking->status !== 12)
                                     <td nowrap>
@@ -108,6 +116,7 @@ rel="stylesheet">
                      </tbody>
                      <tfoot>
                         <tr>
+                            <th style="width: 10px; text-align: center;"></th>
                             <th style="width: 10px; text-align: center;"></th>
                             <th>Vehicle</th>
                             <th>Fleet Number</th>
