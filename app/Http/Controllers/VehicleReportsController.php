@@ -58,7 +58,7 @@ class VehicleReportsController extends Controller
     {
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('name', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+        $vehiclemakes = vehiclemake::orderBy('name', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $licence = $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
@@ -87,6 +87,7 @@ class VehicleReportsController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['licence'] = $licence;
         $data['vehicledetail'] = $vehicledetail;
+        $data['vehiclemakes'] = $vehiclemakes;
         $data['hrDetails'] = $hrDetails;
         $data['Vehicle_types'] = $Vehicle_types;
         $data['licence'] = $licence;
@@ -96,8 +97,7 @@ class VehicleReportsController extends Controller
         AuditReportsController::store('Fleet Management', 'Reports Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.generalreport_search')->with($data);
     }
-
-//  
+  
 
     public function bookingReports(Request $request)
     {
@@ -114,8 +114,7 @@ class VehicleReportsController extends Controller
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
         $Purpose = $request['purpose'];
-        
-        return $reportData;
+
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
@@ -136,7 +135,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('hr_people as hr', 'vehicle_booking.driver_id', '=', 'hr.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_booking.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -202,14 +201,12 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
 
         $vehicleArray = isset($reportData['vehicle_id']) ? intval($reportData['vehicle_id']) : 0;
-
-
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
-        //$Destination = $request['destination'];
-        //$Purpose = $request['purpose'];
+        $Destination = $request['destination'];
+        $Purpose = $request['purpose'];
 
 
         if (!empty($actionDate)) {
@@ -231,23 +228,38 @@ class VehicleReportsController extends Controller
             ->leftJoin('vehicle_details', 'vehicle_booking.vehicle_id', '=', 'vehicle_details.id')
             ->leftJoin('hr_people', 'vehicle_booking.approver3_id', '=', 'hr_people.id')
             ->leftJoin('hr_people as hr', 'vehicle_booking.driver_id', '=', 'hr.id')
-            ->where(function ($query) use ($vehicleType) {
-                if (!empty($vehicleType))
-                    $query->where('vehicle_type', $vehicleType);
-            })
-            ->where(function ($query) use ($driverID) {
-                if (!empty($driverID))
-                    $query->where('driver_id', $driverID);
-            })
-            ->where(function ($query) use ($actionFrom, $actionTo) {
-                if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('collect_timestamp', [$actionFrom, $actionTo]);
-                }
-            })
-            ->Where(function ($query) use ($vehicleArray) {
-                if (!empty($vehicleArray))
-                    $query->whereIn('vehicle_id', [$vehicleArray]);
-            })
+			->where(function ($query) use ($vehicleType) {
+				if (!empty($vehicleType)) {
+					$query->where('vehicle_booking.vehicle_type', $vehicleType);
+				}
+			})
+			->where(function ($query) use ($driverID) {
+				if (!empty($driverID)) {
+					$query->where('driver_id', $driverID);
+				}
+			})
+			->where(function ($query) use ($Destination) {
+				if (!empty($Destination)) {
+					$query->where('destination', 'ILIKE', "%$Destination%");
+				}
+			})
+			->where(function ($query) use ($Purpose) {
+				if (!empty($Purpose)) {
+					$query->where('purpose', 'ILIKE', "%$Purpose%");
+				}
+			})
+			->where(function ($query) use ($actionFrom, $actionTo) {
+				if ($actionFrom > 0 && $actionTo > 0) {
+					$query->whereBetween('booking_date', [$actionFrom, $actionTo]);
+				}
+			})
+			->Where(function ($query) use ($vehicleArray) {
+				for ($i = 0; $i < count($vehicleArray); $i++) {
+					$vehicle = $vehicleArray[$i] . ',';
+					$query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
+					// $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
+				}
+			})
             ->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
             ->get();
@@ -310,7 +322,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -330,8 +342,6 @@ class VehicleReportsController extends Controller
                 }
             })
             ->get();
-
-        //return $fuelLog;
 
         for ($i = 0; $i < count($vehicleArray); $i++) {
             $vehicle .= $vehicleArray[$i] . ',';
@@ -385,7 +395,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -407,8 +417,6 @@ class VehicleReportsController extends Controller
             //->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
             ->get();
-
-        //return $fuelLog;
 
         $data['fuelLog'] = $fuelLog;
         $data['page_title'] = " Fleet Management ";
@@ -437,67 +445,6 @@ class VehicleReportsController extends Controller
 
     }
 
-    public function jobcard()
-    {
-        $data['page_title'] = " Fleet Management ";
-        $data['page_description'] = "Fleet Cards Report ";
-        $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
-        ];
-
-        $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Reports';
-
-        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-        return view('Vehicles.Reports.index')->with($data);
-    }
-
-
-    public function vehicleFuelDetails(vehicle_detail $vehicleID)
-    {
-        $vehiclefuellog = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
-            ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
-            ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
-            ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
-            ->orderBy('vehicle_fuel_log.id')
-            ->where('vehicle_fuel_log.vehicleID', $vehicleID->id)
-            ->get();
-
-        //  return  $vehiclefuellog;
-
-
-        $vehicledetail = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->orderBy('vehicle_details.id', 'desc')
-            ->where('vehicle_details.id', $vehicleID->id)
-            ->first();
-
-        $fineType = array(1 => 'Speeding', 2 => 'Parking', 3 => 'Moving Violation', 4 => 'Expired Registration', 5 => 'No Drivers Licence', 6 => 'Other');
-        $status = array(1 => 'Captured', 2 => 'Fine Queried', 3 => 'Fine Revoked', 4 => 'Fine Paid');
-
-        $data['vehiclefuellog'] = $vehiclefuellog;
-        $data['vehicledetail'] = $vehicledetail;
-        $data['fineType'] = $fineType;
-        $data['status'] = $status;
-        $data['page_title'] = " Fleet Management ";
-        $data['page_description'] = "Fleet Cards Report ";
-        $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
-        ];
-
-        $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Reports';
-
-        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-        return view('Vehicles.Reports.fuellog_results')->with($data);
-    }
 
     public function vehicleFineDetails(Request $request)
     {
@@ -507,14 +454,9 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
         $vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
-        $reportID = $reportData['report_id'];
-        $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
-        $Destination = $request['destination'];
-        $Purpose = $request['purpose'];
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
@@ -534,7 +476,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -570,8 +512,13 @@ class VehicleReportsController extends Controller
         $data['fineType'] = $fineType;
         $data['status'] = $status;
         $data['vehiclefines'] = $vehiclefines;
+		$data['vehicle_id'] = rtrim($vehicle, ",");
+        $data['report_type'] = $reportType;
+        $data['vehicle_type'] = $vehicleType;
+        $data['driver_id'] = $driverID;
+        $data['action_date'] = $actionDate;
         $data['page_title'] = " Fleet Management ";
-        $data['page_description'] = "Fleet Cards Report ";
+        $data['page_description'] = "Fleet Fines Report ";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
@@ -616,7 +563,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('hr_people', 'vehicle_fines.driver', '=', 'hr_people.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -653,7 +600,7 @@ class VehicleReportsController extends Controller
         $data['status'] = $status;
         $data['vehiclefines'] = $vehiclefines;
         $data['page_title'] = " Fleet Management ";
-        $data['page_description'] = "Fleet Cards Report ";
+        $data['page_description'] = "Fleet Fines Report ";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
@@ -701,8 +648,6 @@ class VehicleReportsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
-
         $serviceDetail = DB::table('vehicle_serviceDetails')
             ->select('vehicle_serviceDetails.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel',
                 'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel',
@@ -713,7 +658,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -790,7 +735,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -867,8 +812,6 @@ class VehicleReportsController extends Controller
             $actionTo = strtotime($startExplode[1]);
         }
 
-        // return $serviceDetails;
-
         $vehicleincident = DB::table('vehicle_incidents')
             ->select('vehicle_incidents.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel',
                 'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel',
@@ -882,7 +825,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('incident_type', 'vehicle_incidents.incident_type', '=', 'incident_type.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -907,8 +850,6 @@ class VehicleReportsController extends Controller
 
         $severity = array(1 => ' Minor', 2 => ' Major ', 3 => 'Critical ');
         $status = array(1 => '  Reported', 2 => '  Scheduled for Repair  ', 3 => ' Resolved  ');
-
-        // return $vehicleincidents;
 
         $data['status'] = $status;
         $data['severity'] = $severity;
@@ -964,7 +905,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('incident_type', 'vehicle_incidents.incident_type', '=', 'incident_type.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($driverID) {
@@ -1032,6 +973,7 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
+        $vehicleMake = $reportData['vehicle_make'];
         //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
@@ -1056,14 +998,14 @@ class VehicleReportsController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
-//            ->where(function ($query) use ($driverID) {
-//                if (!empty($driverID)) {
-//                    $query->where('driver', $driverID);
-//                }
-//            })
+			->where(function ($query) use ($vehicleMake) {
+                if (!empty($vehicleMake)) {
+                    $query->where('vehicle_details.vehicle_make', $vehicleMake);
+                }
+            })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('currentDate', [$actionFrom, $actionTo]);
@@ -1133,14 +1075,9 @@ class VehicleReportsController extends Controller
              ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
              ->where(function ($query) use ($vehicleType) {
                  if (!empty($vehicleType)) {
-                     $query->where('vehicle_type', $vehicleType);
+                     $query->where('vehicle_details.vehicle_type', $vehicleType);
                  }
              })
-//            ->where(function ($query) use ($driverID) {
-//                if (!empty($driverID)) {
-//                    $query->where('driver', $driverID);
-//                }
-//            })
              ->where(function ($query) use ($actionFrom, $actionTo) {
                  if ($actionFrom > 0 && $actionTo > 0) {
                      $query->whereBetween('currentDate', [$actionFrom, $actionTo]);
@@ -1223,7 +1160,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
@@ -1254,7 +1191,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
@@ -1325,7 +1262,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
@@ -1408,7 +1345,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
@@ -1484,7 +1421,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
 //            ->where(function ($query) use ($actionFrom, $actionTo) {
@@ -1551,7 +1488,7 @@ class VehicleReportsController extends Controller
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
 //            ->where(function ($query) use ($actionFrom, $actionTo) {
@@ -1629,14 +1566,9 @@ class VehicleReportsController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
                 }
             })
-//            ->where(function ($query) use ($actionFrom, $actionTo) {
-//                if ($actionFrom > 0 && $actionTo > 0) {
-//                    $query->whereBetween('currentdate', [$actionFrom, $actionTo]);
-//                }
-//            })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
                     $vehicle = $vehicleArray[$i] . ',';

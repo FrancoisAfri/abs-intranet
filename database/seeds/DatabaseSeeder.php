@@ -886,6 +886,15 @@ class DatabaseSeeder extends Seeder
         
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
+        $ribbon->sort_order = 8;
+        $ribbon->ribbon_name = 'Job Cards ';
+        $ribbon->description = ' Job Cards ';
+        $ribbon->ribbon_path = 'vehicle_management/job_cards';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
         $ribbon->sort_order = 9;
         $ribbon->ribbon_name = 'Alerts';
         $ribbon->description = 'Vehicle Alerts';
