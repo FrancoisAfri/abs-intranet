@@ -185,18 +185,13 @@
                             <label for="Leave_type" class="col-sm-2 control-label"> Metre Reading Type </label>
                             <div class="col-sm-9">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                  id="rdo_package"
-                                  name="promotion_type"
-                                  value="1" checked>
-                                  Kilometres
-                              </label>
-                              <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type"
-                                 value="2"> Hours </label>
+                                  id="rdo_package" name="promotion_type" value="1" {{ (old('$maintenance->metre_reading_type->') == 1) ? ' checked' : '' }}{{ ($maintenance->metre_reading_type === 1) ? ' checked' : '' }}>  Kilometres  </label>
 
+                                <label class="radio-inline"><input type="radio" id="rdo_product" name="promotion_type"
+                                 value="2" {{ (old('$maintenance->metre_reading_type->') == 2) ? ' checked' : '' }}{{ ($maintenance->metre_reading_type === 2) ? ' checked' : '' }}> Hours </label>
                              </div>
                          </div>
                         
-<!--                         <option value="{{ $type->id }}" {{ ($vehiclemaintenance->vehicle_type == $type->id) ? ' selected' : '' }}>{{ $type->name }}</option>-->
 
                          <div class="form-group odometer-field">
                             <label for="path" class="col-sm-2 control-label">Odometer Reading</label>

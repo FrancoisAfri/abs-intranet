@@ -145,7 +145,7 @@
                                     <td class="caption">Purchase Price</td>
                                     <td></td>
                                 </tr>
-                                 @if (isset($maintenance) && $maintenance->maintenance === 1)
+                                 @if (isset($maintenance) && $maintenance->metre_reading_type === 1)
                                 <tr>
                                     <td class="caption">Odometer Reading</td>
                                     <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
@@ -333,12 +333,22 @@
         });
 //
         $(function () {
+        
+        
+//        if($maintenance->metre_reading_type == 1)
+//            $('.odometer-field').show();
+//        }else  $('.odometer-field').show();
+       
+           
+            
+            
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
+            
 
             //Vertically center modals on page
             function reposition() {
