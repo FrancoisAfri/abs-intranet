@@ -145,12 +145,21 @@
                                     <td class="caption">Purchase Price</td>
                                     <td></td>
                                 </tr>
+                                 @if (isset($maintenance) && $maintenance->metre_reading_type === 1)
                                 <tr>
-                                    <td class="caption">Odometer</td>
+                                    <td class="caption">Odometer Reading</td>
                                     <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
                                     <td class="caption">Vehicle Cell Number</td>
                                     <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
                                 </tr>
+                                @else
+                                <tr>
+                                    <td class="caption">Hours Reading</td>
+                                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
+                                    <td class="caption">Vehicle Cell Number</td>
+                                    <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
+                                </tr>
+                                @endif
                                 <tr>
                                     <td class="caption">Fuel Type</td>
                                     <td>{{ (!empty($vehiclemaintenance->fuel_type)) ?  $fueltype[$vehiclemaintenance->fuel_type] : ''}} </td>
@@ -324,12 +333,22 @@
         });
 //
         $(function () {
+        
+        
+//        if($maintenance->metre_reading_type == 1)
+//            $('.odometer-field').show();
+//        }else  $('.odometer-field').show();
+       
+           
+            
+            
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
+            
 
             //Vertically center modals on page
             function reposition() {
