@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColoumnVehicleFireExtinguishers extends Migration
+class AddColumnToIncidentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColoumnVehicleFireExtinguishers extends Migration
      */
     public function up()
     {
-        Schema::table('vehicle_fire_extinguisher', function (Blueprint $table) {
-           $table->integer('capturer_id')->unsigned()->index()->nullable();
+     Schema::table('vehicle_incidents', function (Blueprint $table) {
+           $table->integer('hours_reading')->unsigned()->index()->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddColoumnVehicleFireExtinguishers extends Migration
      */
     public function down()
     {
-        Schema::table('fire_extinguishers', function (Blueprint $table) {
-            $table->dropColumn('vehicle_fire_extinguisher');
+        Schema::table('vehicle_incidents', function (Blueprint $table) {
+            $table->dropColumn('hours_reading');
         });
     }
 }

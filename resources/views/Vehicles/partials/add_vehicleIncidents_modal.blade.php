@@ -73,6 +73,7 @@
                             </select>
                         </div>
                     </div>
+                     @if (isset($maintenance) && $maintenance->maintenance === 1)
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
                         <div class="col-sm-8">
@@ -80,6 +81,15 @@
                                    placeholder="Enter Odometer Reading" required>
                         </div>
                     </div>
+                     @else
+                     <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Hours Reading</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="hours_reading" name="hours_reading" value=""
+                                   placeholder="Enter Odometer Reading" required>
+                        </div>
+                    </div>
+                     @endif
                      <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Status</label>
                         <div class="col-sm-8">

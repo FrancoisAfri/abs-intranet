@@ -1152,6 +1152,8 @@ class VehicleFleetController extends Controller
         $vehicleincidents->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $vehicleincidents->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
         $vehicleincidents->vehiclebookingID = !empty($SysData['vehiclebookingID']) ? $SysData['vehiclebookingID'] : 0;
+        $vehicleincidents->odometer_reading = !empty($SysData['odometer_reading']) ? $SysData['odometer_reading'] : 0;
+        $vehicleincidents->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : 0;
         $vehicleincidents->vehicle_fixed =  0; 
         $vehicleincidents->save();
 
@@ -1206,6 +1208,8 @@ class VehicleFleetController extends Controller
         $incident->severity = !empty($SysData['severity']) ? $SysData['severity'] : 0;
         $incident->status = !empty($SysData['status']) ? $SysData['status'] : 0;
         $incident->reported_by = !empty($SysData['reported_by']) ? $SysData['reported_by'] : 0;
+        $incident->odometer_reading = !empty($SysData['odometer_reading']) ? $SysData['odometer_reading'] : 0;
+        $incident->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : 0;
         $incident->Update();
 
 
