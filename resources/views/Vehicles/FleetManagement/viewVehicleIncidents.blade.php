@@ -142,9 +142,9 @@
                                     <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
                                      @if (isset($maintenance) && $maintenance->maintenance === 1)
-                                    <td>{{ !empty($details->odometer_reading) ? number_format($details->odometer_reading, 2) : '' }}</td>
+                                    <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : '' }}</td>
                                     @else
-                                    <td></td>
+                                      <td>{{ !empty($details->hours_reading) ? $details->hours_reading : '' }}</td>
                                     @endif
                                     <td>{{ (!empty($details->IncidintType)) ?  $details->IncidintType : ''}}</td>
                                     <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
@@ -244,11 +244,6 @@
                     location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
                 });
                 
-             
-                
-                
-
-
                 var moduleId;
                 //Initialize Select2 Elements
                 $(".select2").select2();
@@ -301,7 +296,6 @@
                     });
 
                 });
-
 
                 //Post perk form to server using ajax (add)
                 $('#add_vehicleincidents').on('click', function () {
