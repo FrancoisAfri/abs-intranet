@@ -194,10 +194,7 @@
             @if (count($vehicleDocumets) > 0)
                 @include('Vehicles.warnings.documents_warning_action', ['modal_title' => 'Delete Document', 'modal_content' => 'Are you sure you want to delete this Document? This action cannot be undone.'])
             @endif
-
         </div>
-
-
         @endsection
 
         @section('page_script')
@@ -296,8 +293,6 @@
                         increaseArea: '10%' // optional
                     });
 
-                  
-
                         $('#date_from').datepicker({
                             format: 'dd/mm/yyyy',
                             autoclose: true,
@@ -323,10 +318,6 @@
                             autoclose: true,
                             todayHighlight: true
                         });
-
-
-
-
 
                 $('#rdo_single, #rdo_bulke').on('ifChecked', function () {
                     var allType = hideFields();
