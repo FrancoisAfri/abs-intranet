@@ -64,13 +64,12 @@ class vehiclealertController extends Controller {
                 ->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date ', 'vehicle_booking.return_datetime as return_date ',
                         'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 
                         'division_level_fives.name as company', 'division_level_fours.name as Department', 'vehicle_incidents.severity as Severity',
-                        'keytracking.key_status as lost', 'permits_licence.exp_date as licenceExpiredate', 'permits_licence.permit_licence as permitlicence_name',
+                         'permits_licence.exp_date as licenceExpiredate', 'permits_licence.permit_licence as permitlicence_name',
                         'permits_licence.permits_licence_no as permitslicenceNumber', 'fleet_licence_permit.name as permitlicenceName', 
                         'vehicle_booking.status as BookingStatus')
                 ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
                 ->leftJoin('permits_licence', 'vehicle_details.id', '=', 'permits_licence.vehicleID')
                 ->leftJoin('fleet_licence_permit', 'permits_licence.permit_licence', '=', 'fleet_licence_permit.id')
-                ->leftJoin('keytracking', 'vehicle_details.id', '=', 'keytracking.vehicle_id')
                 ->leftJoin('vehicle_incidents', 'vehicle_details.id', '=', 'vehicle_incidents.vehicleID')
                 // ->leftJoin('vehicle_booking', 'vehicle_details.id', '=', 'vehicle_booking.vehicle_id')
                 ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
@@ -78,8 +77,10 @@ class vehiclealertController extends Controller {
                 ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
                 ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
                 ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-                //->where('vehicle_details.booking_status', '!=', 1)
-                // ->whereNotIn('vehicle_incidents.severity', [ 2, 3])//check if the booking is not approved
+                //->where('vehicle_booking.vehicle_fixed', '!=', 1)
+                ->where('vehicle_incidents.vehicle_fixed', '!=', 1)
+                ->where('vehicle_details.booking_status', '!=', 1)
+                 //->whereNIn('vehicle_incidents.severity', [ 2, 3])//check if the booking is not approved
                 //->orWhereNull('vehicle_incidents.severity') // allow nulls
                 ->orderBy('id', 'asc')
                 //->unique('vehicle_details.id')

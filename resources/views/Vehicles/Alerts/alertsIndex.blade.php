@@ -8,16 +8,19 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">Active Vehicle Alerts</h3>
+                    <h3 class="box-title">Fleet Alerts</h3>
                 </div>
                 <div class="box-body">
                     <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div style="overflow-X:auto;">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example1" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
+                                    <th colspan="8" style="text-align: center"><font size="+3">Collection Overdue</font></th>
+                                </tr>
+								<tr>
                                     <th style="width: 5px; text-align: center;"></th>
                                     <th>Fleet Number</th>
                                     <th>Make</th>
@@ -25,8 +28,7 @@
                                     <th>Registration Number</th>
                                     <th>Company</th>
                                     <th>Department</th>
-                                    <th>Odometer Reading</th>
-                                    <th>Alerts</th>
+                                    <th>Odometer/Hours Reading</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -45,11 +47,6 @@
                                             <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
                                             <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
                                             <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
-                                            <td>{{ !empty($booking->Severity ) ? $status[$booking->Severity] : '' }} </br>
-											{{ !empty($booking->lost ) ? $keys[$booking->lost] : ''}}</br>
-											{{ !empty($booking->BookingStatus ) ? $bookingStatus[$booking->BookingStatus] : ''}}
-											</td>
-                                           
                                         </tr>
                                     @endforeach
                                 @endif
@@ -57,14 +54,300 @@
                                 <tfoot>
                                 <tr>
                                     <th style="width: 5px; text-align: center;"></th>
-                                    <th>Vehicle</th>
-                                    <th>Type</th>
                                     <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
                                     <th>Registration Number</th>
                                     <th>Company</th>
                                     <th>Department</th>
-                                    <th>Odometer Reading</th>
-                                    <th>Notices</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+							<table id="example8" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="8" style="text-align: center"><font size="+3">Return Overdue</font></th>
+                                </tr>
+								<tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (count($vehiclebooking) > 0)
+                                    @foreach ($vehiclebooking as $booking)
+                                        <tr id="categories-list">
+                                            <td>
+                                                <a href="{{ '/vehicle_management/viewdetails/' . $booking->id }}"
+                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   data-id="{{ $booking->id }}">View</a>
+                                            </td>
+                                            <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_make) ? $booking->vehicle_make : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_model) ? $booking->vehicle_model : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
+                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
+                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+							<table id="example3" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="8" style="text-align: center"><font size="+3">Incidents</font></th>
+                                </tr>
+								<tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (count($vehiclebooking) > 0)
+                                    @foreach ($vehiclebooking as $booking)
+                                        <tr id="categories-list">
+                                            <td>
+                                                <a href="{{ '/vehicle_management/viewdetails/' . $booking->id }}"
+                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   data-id="{{ $booking->id }}">View</a>
+                                            </td>
+                                            <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_make) ? $booking->vehicle_make : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_model) ? $booking->vehicle_model : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
+                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
+                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+							<table id="example4" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="8" style="text-align: center"><font size="+3">Service Due</font></th>
+                                </tr>
+								<tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (count($vehiclebooking) > 0)
+                                    @foreach ($vehiclebooking as $booking)
+                                        <tr id="categories-list">
+                                            <td>
+                                                <a href="{{ '/vehicle_management/viewdetails/' . $booking->id }}"
+                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   data-id="{{ $booking->id }}">View</a>
+                                            </td>
+                                            <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_make) ? $booking->vehicle_make : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_model) ? $booking->vehicle_model : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
+                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
+                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+							<table id="example5" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="8" style="text-align: center"><font size="+3">Warranty Expired</font></th>
+                                </tr>
+								<tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (count($vehiclebooking) > 0)
+                                    @foreach ($vehiclebooking as $booking)
+                                        <tr id="categories-list">
+                                            <td>
+                                                <a href="{{ '/vehicle_management/viewdetails/' . $booking->id }}"
+                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   data-id="{{ $booking->id }}">View</a>
+                                            </td>
+                                            <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_make) ? $booking->vehicle_make : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_model) ? $booking->vehicle_model : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
+                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
+                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                   <td colspan="9">&nbsp;</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+							<table id="example6" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="8" style="text-align: center"><font size="+3">Permits Expired</font></th>
+                                </tr>
+								<tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (count($vehiclebooking) > 0)
+                                    @foreach ($vehiclebooking as $booking)
+                                        <tr id="categories-list">
+                                            <td>
+                                                <a href="{{ '/vehicle_management/viewdetails/' . $booking->id }}"
+                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   data-id="{{ $booking->id }}">View</a>
+                                            </td>
+                                            <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_make) ? $booking->vehicle_make : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_model) ? $booking->vehicle_model : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
+                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
+                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+							<table id="example7" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="9" style="text-align: center"><font size="+3">Documents Expired</font</th>
+                                </tr>
+								<tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (count($vehiclebooking) > 0)
+                                    @foreach ($vehiclebooking as $booking)
+                                        <tr id="categories-list">
+                                            <td>
+                                                <a href="{{ '/vehicle_management/viewdetails/' . $booking->id }}"
+                                                   id="edit_compan" class="btn btn-default  btn-xs"
+                                                   data-id="{{ $booking->id }}">View</a>
+                                            </td>
+                                            <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_make) ? $booking->vehicle_make : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_model) ? $booking->vehicle_model : ''}}</td>
+                                            <td>{{ !empty($booking->vehicle_registration) ? $booking->vehicle_registration : ''}}</td>
+                                            <td>{{ !empty($booking->company) ? $booking->company : ''}}</td>
+                                            <td>{{ !empty($booking->Department) ? $booking->Department : ''}}</td>
+                                            <td>{{ !empty($booking->odometer_reading ) ? $booking->odometer_reading : ''}}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th style="width: 5px; text-align: center;"></th>
+                                    <th>Fleet Number</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration Number</th>
+                                    <th>Company</th>
+                                    <th>Department</th>
+                                    <th>Odometer/Hours Reading</th>
                                 </tr>
                                 </tfoot>
                             </table>

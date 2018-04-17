@@ -1124,9 +1124,9 @@ class VehicleFleetController extends Controller
         
         // vehicle_fixed value is one wen the the vehicle has been fixed
         $vehicle->vehicle_fixed = 1;	
-	$vehicle->update();
-	AuditReportsController::store('MVehicle Incidents', "Vehicle Incidents Page Accessed", "Edited by User", 0);
-	return back();
+		$vehicle->update();
+		AuditReportsController::store('Fleet Management', "Vehicle Fixed", "Edited by User", 0);
+		return back();
     }
 
     public function addvehicleincidents(Request $request)
