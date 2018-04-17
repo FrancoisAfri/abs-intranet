@@ -1146,8 +1146,8 @@ class DatabaseSeeder extends Seeder
         //# 
         $module = new modules(); //Job card module
         $module->active = 1;
-        $module->name = 'Job Cards';
-        $module->code_name = 'job_caads';
+        $module->name = 'Job Card Management';
+        $module->code_name = 'job_cards';
         $module->path = 'jobcards';
         $module->font_awesome = 'fa fa-archive';
         $module->save();
@@ -1165,7 +1165,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Approvals';
-        $ribbon->description = 'My approval';
+        $ribbon->description = 'Job Cards Approvals';
         $ribbon->ribbon_path = 'jobcards/approval';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
@@ -1173,8 +1173,8 @@ class DatabaseSeeder extends Seeder
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Approval process';
-        $ribbon->description = 'My Approval process';
+        $ribbon->ribbon_name = 'Process Flow';
+        $ribbon->description = 'Job Cards process Flow';
         $ribbon->ribbon_path = 'jobcards/approval_process';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
@@ -1182,7 +1182,7 @@ class DatabaseSeeder extends Seeder
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 4;
-        $ribbon->ribbon_name = 'Search Job Cards';
+        $ribbon->ribbon_name = 'Search';
         $ribbon->description = 'Search Job Cards';
         $ribbon->ribbon_path = 'jobcards/search';
         $ribbon->access_level = 3;
@@ -1200,8 +1200,8 @@ class DatabaseSeeder extends Seeder
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 6;
-        $ribbon->ribbon_name = 'Set Up';
-        $ribbon->description = 'set up';
+        $ribbon->ribbon_name = 'SetUp';
+        $ribbon->description = 'setUp';
         $ribbon->ribbon_path = 'jobcards/set_up';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
