@@ -34,7 +34,7 @@
                                     @foreach ($vehiclebooking as $booking)
                                         <tr id="categories-list">
                                             <td>
-                                                <a href="{{ '/vehicle_management/bookingdetails/' . $booking->id }}"
+                                                <a href="{{ '/vehicle_management/viewdetails/' . $booking->id }}"
                                                    id="edit_compan" class="btn btn-default  btn-xs"
                                                    data-id="{{ $booking->id }}">View</a>
                                             </td>
