@@ -108,7 +108,11 @@
                             <th style="width: 10px; text-align: center;"></th>
                             <th>Date Reported</th>
                             <th>Reported By</th>
+                              @if (isset($maintenance) && $maintenance->maintenance === 1)
                             <th>Odometer Reading</th>
+                            @else
+                            <th>Hours Reading</th>
+                            @endif
                             <th>Incident Type</th>
                             <th> Severity</th>
                             <th>Cost (R)</th>
@@ -137,7 +141,11 @@
                                     </td>
                                     <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
+                                     @if (isset($maintenance) && $maintenance->maintenance === 1)
                                     <td>{{ !empty($details->odometer_reading) ? number_format($details->odometer_reading, 2) : '' }}</td>
+                                    @else
+                                    <td></td>
+                                    @endif
                                     <td>{{ (!empty($details->IncidintType)) ?  $details->IncidintType : ''}}</td>
                                     <td>{{ (!empty($details->severity)) ?  $status[$details->severity] : ''}}</td>
                                     <td>{{ !empty($details->Cost) ? 'R' .number_format($details->Cost, 2) : '' }}</td>
