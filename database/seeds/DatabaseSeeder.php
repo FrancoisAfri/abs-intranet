@@ -1199,7 +1199,7 @@ class DatabaseSeeder extends Seeder
         
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 1;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'SetUp';
         $ribbon->description = 'setUp';
         $ribbon->ribbon_path = 'jobcards/set_up';
