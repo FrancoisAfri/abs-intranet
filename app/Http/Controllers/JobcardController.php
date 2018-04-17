@@ -8,7 +8,8 @@ use App\permits_licence;
 use App\HRPerson;
 use App\vehicle_detail;
 use App\vehicle;
-use App\servicetype;
+use App\vehicle_config;
+use App\jobcard_config;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
 use Illuminate\Support\Facades\Auth;
@@ -119,7 +120,7 @@ class JobcardController extends Controller
     
     public function configuration(){
         
-        $servicetype = servicetype::where('status',1)->get();
+        $configuration = jobcard_config::all();
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
@@ -127,11 +128,11 @@ class JobcardController extends Controller
             ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['servicetype'] = $servicetype;
+        $data['configuration'] = $configuration;
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
         
         AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
-        return view('job_cards.service_type')->with($data); 
+        return view('job_cards.configuration')->with($data); 
     }
 }

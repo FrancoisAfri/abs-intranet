@@ -16,9 +16,7 @@ class CreatejobcardsConfigTable extends Migration
       Schema::create('jobcard_config', function (Blueprint $table) {
 
             $table->increments('id');
-            $table->string('name')->nullable();
-            $table->string('description')->nullable();
-            $table->smallinteger('status')->nullable();
+            $table->smallInteger('use_procurement')->nullable();
             $table->timestamps();
 
         });
@@ -39,7 +37,7 @@ class CreatejobcardsConfigTable extends Migration
 
     {
 
-        Schema::dropIfExists('service_type');
+        Schema::dropIfExists('use_procurement');
 
     }
 
