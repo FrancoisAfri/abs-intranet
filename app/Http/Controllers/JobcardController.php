@@ -92,7 +92,7 @@ class JobcardController extends Controller
         $service->name = $SysData['name'];
         $service->description = $SysData['description'];
         $service->update();
-        AuditReportsController::store('Fleet Management', ' service Type edited', "Accessed By User", 0);;
+        AuditReportsController::store('Fleet Management', ' service Type edited', "Accessed By User", 0);
         return response()->json();
     }
     
@@ -106,5 +106,32 @@ class JobcardController extends Controller
         $service->update();
         
         return back();
+    }
+    
+    public function deleteservicetype(servicetype $service){
+        $service->delete();
+
+        AuditReportsController::store('Fleet Management', ' service Type Deleted', "Accessed By User", 0);
+      
+        return redirect('/jobcards/servicetype');
+    
+    }
+    
+    public function configuration(){
+        
+        $servicetype = servicetype::where('status',1)->get();
+        $data['page_title'] = "Job Card Settings";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['servicetype'] = $servicetype;
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Setup';
+        
+        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        return view('job_cards.service_type')->with($data); 
     }
 }

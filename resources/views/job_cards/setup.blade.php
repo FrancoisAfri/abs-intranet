@@ -23,11 +23,11 @@
             <div class="box-body">
                 <div align="center">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Vehicle Configuration</h3>
+                        <h3 class="box-title">Job Cards Configuration</h3>
                     </div>
                     <div class="box-body">
 
-                        <a href="/vehicle_management/vehicle_configuration" class="btn btn-app">
+                        <a href="/jobcards/configuration" class="btn btn-app">
                             <i class="fa fa-cog"></i> Settings
                         </a>
 

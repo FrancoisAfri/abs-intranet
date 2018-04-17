@@ -25,7 +25,7 @@
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th style="width: 5px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;"></th>
+<!--                                <th style="width: 5px; text-align: center;"></th>-->
                             </tr>
                             @if (count($servicetype) > 0)
                               @foreach ($servicetype as $service_type)
@@ -43,7 +43,7 @@
                                       btn-xs" onclick="postData({{$service_type->id}}, 'actdeac');"><i class="fa {{ (!empty($service_type->status) && $service_type->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($service_type->status) && $service_type->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+<!--                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>-->
                                 </tr>
                                    @endforeach
                                @else

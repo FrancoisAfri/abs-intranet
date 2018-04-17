@@ -634,7 +634,9 @@ Route::get('jobcards/servicetype', 'JobcardController@servicetype');
 Route::post('jobcards/addservicetype', 'JobcardController@addservicetype');
 Route::patch('jobcards/edit_servicetype/{service}', 'JobcardController@editservicetype');
 Route::get('jobcards/service_act/{service}', 'JobcardController@servicetype_act');
+Route::get('jobcards/serveice/{service}', 'JobcardController@deleteservicetype');
 
+Route::get('jobcards/configuration', 'JobcardController@configuration');
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');

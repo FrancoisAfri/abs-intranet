@@ -1163,7 +1163,7 @@ class DatabaseSeeder extends Seeder
         
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 1;
+        $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Approvals';
         $ribbon->description = 'My approval';
         $ribbon->ribbon_path = 'jobcards/approval';
@@ -1172,7 +1172,7 @@ class DatabaseSeeder extends Seeder
         
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 1;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Approval process';
         $ribbon->description = 'My Approval process';
         $ribbon->ribbon_path = 'jobcards/approval_process';
@@ -1181,7 +1181,7 @@ class DatabaseSeeder extends Seeder
         
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 1;
+        $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Search Job Cards';
         $ribbon->description = 'Search Job Cards';
         $ribbon->ribbon_path = 'jobcards/search';
@@ -1190,7 +1190,7 @@ class DatabaseSeeder extends Seeder
         
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 1;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'reports';
         $ribbon->ribbon_path = 'jobcards/reports';
@@ -1199,7 +1199,7 @@ class DatabaseSeeder extends Seeder
         
          $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 1;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Set Up';
         $ribbon->description = 'set up';
         $ribbon->ribbon_path = 'jobcards/set_up';
