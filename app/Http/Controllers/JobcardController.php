@@ -9,6 +9,7 @@ use App\HRPerson;
 use App\vehicle_detail;
 use App\vehicle;
 use App\vehicle_config;
+use App\servicetype;
 use App\jobcards_config;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
@@ -112,7 +113,7 @@ class JobcardController extends Controller
     public function deleteservicetype(servicetype $service){
         $service->delete();
 
-        AuditReportsController::store('Fleet Management', ' service Type Deleted', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', ' service Type Deleted', "Accessed By User", 0);
       
         return redirect('/jobcards/servicetype');
     
@@ -120,7 +121,8 @@ class JobcardController extends Controller
     
     public function configuration(){
         
-        $configuration = jobcards_config::all();
+        
+        $configuration = jobcards_config::first(); 
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
@@ -134,5 +136,15 @@ class JobcardController extends Controller
         
         AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
         return view('job_cards.configuration')->with($data); 
+    }
+    public function configurationSetings(Request $request){
+        
+        $SysData = $request->all();
+        unset($SysData['_token']);
+        
+        $config = new jobcards_config();
+        $config->updateOrCreate(['id' => 1], ['use_procurement' => !empty($SysData['use_procurement']) ? $SysData['use_procurement'] : 0]);   
+        AuditReportsController::store('Job Card Management', 'configurationSetings updated', "Accessed By User", 0);
+        return back();
     }
 }

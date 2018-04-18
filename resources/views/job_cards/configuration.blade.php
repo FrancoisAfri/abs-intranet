@@ -16,7 +16,7 @@
                     <h3 class="box-title">Job Card Configuration</h3>
                 </div>
                 <form class="form-horizontal" method="POST"
-                      action="/vehicle_management/configuration" enctype="multipart/form-data">
+                      action="/jobcards/configuration_setings" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="box-body">
                         @if (count($errors) > 0)
@@ -32,6 +32,15 @@
                             </div>
                         @endif
                         <div class="box-body" style="max-height: 600px; overflow-y: scroll;">
+                            <table class="table table-striped table-bordered">
+                                <tr>
+                                    <td class="caption" colspan="2">Use procurement</td>
+                                    <input type="hidden" name="use_procurement" value="0">
+                                    <td colspan="3"><input type="checkbox" name="use_procurement"
+                                                           value="1" {{(!empty($configuration->use_procurement) && $configuration->use_procurement === 1) ? 'checked ="checked"' : 0 }}>
+                                  
+                                    </td>
+                                </tr>
 
                             </table>
                         </div>
