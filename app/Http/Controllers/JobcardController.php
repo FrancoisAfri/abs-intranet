@@ -52,7 +52,7 @@ class JobcardController extends Controller
     public function servicetype(){
         
         
-        $servicetype = servicetype::where('status',1)->get();
+        $servicetype = servicetype::orderBy('name',1)->get();
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
