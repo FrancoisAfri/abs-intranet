@@ -422,7 +422,8 @@ class VehicleBookingController extends Controller {
         if ($BookingDetail['status'] == 10) {
             $Vehiclebookings->status = $BookingDetail['status'];
             $Vehiclebookings->approver3_id = $loggedInEmplID;
-        } else
+        } 
+		else
             $Vehiclebookings->status = $BookingDetail['status'];
         $Vehiclebookings->cancel_status = 0;  // 0 is the for vehicle not booked
           if($vehicleDetails->metre_reading_type  === 1)
@@ -433,9 +434,6 @@ class VehicleBookingController extends Controller {
         $Vehiclebookings->booking_date = time();
         $Vehiclebookings->save();
         
-        
-       
-
         $vehicle->booking_status = 1;
         $vehicle->update();
         #mail to User
@@ -844,7 +842,7 @@ class VehicleBookingController extends Controller {
         
         $confirm->collector_id = $loggedInEmplID;
         $confirm->status = 11;
-        $confirm->collect_timestamp = $currentDate = time();
+        $confirm->collect_timestamp = time();
           if($vehicleDetails->metre_reading_type  === 1)
         $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
         else

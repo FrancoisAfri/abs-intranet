@@ -637,6 +637,16 @@ Route::get('jobcards/service_act/{service}', 'JobcardController@servicetype_act'
 Route::get('jobcards/serveice/{service}', 'JobcardController@deleteservicetype');
 
 Route::get('jobcards/configuration', 'JobcardController@configuration');
+Route::post('jobcards/configuration_setings/{config}', 'JobcardController@configurationSetings');
+
+Route::get('jobcards/mycards', 'JobcardController@myjobcards');
+
+Route::get('jobcards/approval_process', 'JobcardController@procesflow');
+Route::post('jobcards/add_processflow', 'JobcardController@addprocessflow');
+Route::patch('jobcards/edit_step/{steps}', 'JobcardController@editprocessflow');
+Route::get('jobcards/process_act/{steps}', 'JobcardController@steps_act');
+
+
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
