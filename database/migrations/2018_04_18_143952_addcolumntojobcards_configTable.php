@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatejobcardsConfigTable extends Migration
+class AddcolumntojobcardsConfigTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,33 +13,20 @@ class CreatejobcardsConfigTable extends Migration
      */
    public function up()
     {
-      Schema::create('jobcard_config', function (Blueprint $table) {
-
-            $table->increments('id');
-            $table->smallInteger('use_procurement')->nullable();
-            $table->timestamps();
-
+     Schema::table('jobcard_config', function (Blueprint $table) {
+           $table->smallInteger('mechanic_sms')->nullable();
         });
-
     }
 
     /**
-
      * Reverse the migrations.
-
      *
-
      * @return void
-
      */
-
     public function down()
-
     {
-
-        Schema::dropIfExists('jobcard_config');
-
+        Schema::table('jobcard_config', function (Blueprint $table) {
+            $table->dropColumn('mechanic_sms');
+        });
     }
-
 }
-
