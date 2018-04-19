@@ -820,7 +820,6 @@ class VehicleFleetController extends Controller
         }
 
         return response()->json();
-
     }
 
     public function editservicedetails(Request $request, vehicle_serviceDetails $details)
