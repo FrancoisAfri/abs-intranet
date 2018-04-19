@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Add Service Type </h3>
+                    <h3 class="box-title">Service Types </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -67,7 +67,7 @@
         @include('job_cards.partials.add_servicetype_modal')
         @include('job_cards.partials.edit_servicetype_modal')
           <!-- Include delete warning Modal form-->
-           @if (count($service_type) > 0)
+           @if (count($servicetype) > 0)
          @include('job_cards.partials.servicetype_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Service Type? This action cannot be undone.'])
     @endif
       
