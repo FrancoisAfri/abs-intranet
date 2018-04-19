@@ -1,7 +1,7 @@
-<div id="edit-servicetype-modal" class="modal modal-default fade">
+<div id="edit-step-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-servicetype-form">
+            <form class="form-horizontal" method="POST" name="edit-step-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -32,7 +32,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_servicetype" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save
+                    <button type="button" id="edit_step" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save
                     </button>
                 </div>
             </form>

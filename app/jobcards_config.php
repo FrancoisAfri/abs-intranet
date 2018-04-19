@@ -8,5 +8,5 @@ class jobcards_config extends Model
 {
     protected $table = 'jobcard_config';
 
-    protected $fillable = ['use_procurement'];
+    protected $fillable = ['use_procurement','mechanic_sms'];
 }

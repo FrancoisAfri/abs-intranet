@@ -16,7 +16,7 @@
                     <h3 class="box-title">Job Card Configuration</h3>
                 </div>
                 <form class="form-horizontal" method="POST"
-                      action="/jobcards/configuration_setings" enctype="multipart/form-data">
+                      action="/jobcards/configuration_setings/{{$configuration->id}}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="box-body">
                         @if (count($errors) > 0)
@@ -38,6 +38,15 @@
                                     <input type="hidden" name="use_procurement" value="0">
                                     <td colspan="3"><input type="checkbox" name="use_procurement"
                                                            value="1" {{(!empty($configuration->use_procurement) && $configuration->use_procurement === 1) ? 'checked ="checked"' : 0 }}>
+                                  
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="caption" colspan="2">Send mechanic to sms</td>
+                                    <input type="hidden" name="mechanic_sms" value="0">
+                                    <td colspan="3"><input type="checkbox" name="mechanic_sms"
+                                                           value="1" {{(!empty($configuration->mechanic_sms) && $configuration->mechanic_sms === 1) ? 'checked ="checked"' : 0 }}>
                                   
                                     </td>
                                 </tr>
