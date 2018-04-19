@@ -96,7 +96,7 @@
     <script type="text/javascript">
 	//Cancel button click event
 		document.getElementById("cancel").onclick = function () {
-			location.href = '/vehicle_management/setup';
+			location.href = '/jobcards/set_up';
 		};
         $(function () {
             $(".select2").select2();
