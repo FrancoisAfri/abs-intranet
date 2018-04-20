@@ -378,7 +378,7 @@ class JobcardController extends Controller
             }
         }
         
-        AuditReportsController::store('Job Card Management', ' process flow edited', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User", 0);
         return response()->json();
 
      }
