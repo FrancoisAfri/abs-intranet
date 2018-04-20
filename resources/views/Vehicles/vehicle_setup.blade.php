@@ -356,6 +356,13 @@
                                                            value="{{ $configuration->incidents_upload_directory }}" 
                                                            placeholder="Fleet Incidents Upload Directory">
                                 </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Alerts Days</td>
+
+                                    <td colspan="6"><input type="text" name="alert_days"
+                                                           value="{{ $configuration->alert_days }}" 
+                                                           placeholder="Days">
+                                </tr>
                             </table>
                         </div>
                         <br>

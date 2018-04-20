@@ -159,6 +159,10 @@
                                                        class="btn btn-primary  btn-xs" data-id="{{ $booking->id }}"><i
                                                                 class="fa fa-hand-lizard-o"></i> Inspection</a>
                                                 </td>
+											@else 
+												<td>
+                                                    
+                                                </td>
                                         </tr>
                             @endif
                             @endforeach
