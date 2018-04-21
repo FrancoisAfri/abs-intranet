@@ -648,6 +648,7 @@ Route::post('jobcards/add_processflow', 'JobcardController@addprocessflow');
 Route::patch('jobcards/edit_step/{steps}', 'JobcardController@editprocessflow');
 Route::get('jobcards/process_act/{steps}', 'JobcardController@steps_act');
 
+Route::post('jobcards/addjobcard', 'JobcardController@addjobcardmanagement');
 
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
