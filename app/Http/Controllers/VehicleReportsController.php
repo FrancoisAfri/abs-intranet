@@ -513,7 +513,7 @@ class VehicleReportsController extends Controller
         $data['status'] = $status;
         $data['vehiclefines'] = $vehiclefines;
 		$data['vehicle_id'] = rtrim($vehicle, ",");
-        $data['report_type'] = $reportType;
+        //$data['report_type'] = $reportType;
         $data['vehicle_type'] = $vehicleType;
         $data['driver_id'] = $driverID;
         $data['action_date'] = $actionDate;
@@ -1145,7 +1145,6 @@ class VehicleReportsController extends Controller
              $actionTo = strtotime($startExplode[1]);
          }
 
-
         $currentTime = time();
         
         $vehicleDocumets = DB::table('vehicle_documets')
@@ -1583,15 +1582,16 @@ class VehicleReportsController extends Controller
           
           $fuel_tank_topUp = DB::table('fuel_tank_topUp')->get();
                   
-                   return $fuel_tank_topUp;
+                   //return $fuel_tank_topUp;
             
-        $data['fuel_tank_topUp'] = $fuel_tank_topUp;
+        $data['fuel_tank_topUp'] = $test;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
         ];
+		
 
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';

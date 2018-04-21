@@ -63,7 +63,7 @@
                                     <option value="10">Internal Diesel Log</option>
                                     <option value="11">Diesel Log</option>
                                     {{--<option value="12" >Incidents</option>--}}k
-                                    <option value="13">Alerts Report</option>
+                                    {{--<option value="13">Alerts Report</option>--}}
                                 </select>
                             </div>
                         </div>

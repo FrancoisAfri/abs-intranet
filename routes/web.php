@@ -608,6 +608,8 @@ Route::get('vehicle_management/vehicle_reports/viewbookingdetails/{vehicleID}', 
 Route::get('vehicle_management/vehicle_reports/viewfueldetails/{vehicleID}', 'VehicleReportsController@vehicleFuelDetails');
 Route::get('vehicle_management/vehicle_reports/viewservicedetails/{vehicleID}', 'VehicleReportsController@vehicleServiceDetails');
 Route::get('vehicle_management/vehicle_reports/Incidents_details/{vehicleID}', 'VehicleReportsController@vehicleIncidentsDetails');
+Route::get('alerts/print_pdf', 'vehiclealertController@printPdfAlerts');
+//Route::get('downloadExcel', 'vehiclealertController@printPdfAlerts');
 // Performance Appraisals Module
 
 Route::get('appraisal/setup', 'AppraisalSetupController@index');

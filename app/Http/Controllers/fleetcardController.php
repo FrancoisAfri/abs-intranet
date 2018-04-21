@@ -156,7 +156,7 @@ class fleetcardController extends Controller
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/fleet_cards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
