@@ -23,7 +23,7 @@
 															   value="2"> Bulk</label>
 						</div>
                     </div>-->
-                    <div class="form-group single-field">
+                   <!-- <div class="form-group single-field">
                         <label for="path" class="col-sm-3 control-label">Image name</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="name" name="name" value=""
@@ -36,12 +36,12 @@
                             <input type="text" class="form-control" id="description" name="description" value=""
                                    placeholder="Enter Description" required>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group single-field">
                         <label for="image" class="col-sm-3 control-label">Upload</label>
 
                         <div class="col-sm-8">
-                            <input type="file" id="image" name="image[]" multiple class="file file-loading"
+                            <input type="file" id="image" name="images[]" multiple class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
