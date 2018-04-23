@@ -488,37 +488,43 @@ class FleetManagementController extends Controller
     public function addImages(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            //'name' => 'required',
             // 'description' => 'required',
-            'image' => 'required',
+            'images.*' => 'required',
+            'valueID' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
+		$images = !empty($SysData['images']) ? $SysData['images'] : array();
         $currentDate = time();
-
         $userLogged = Auth::user()->load('person');
+		$count = 0;
+		foreach ($images as $image)
+		{
+			$count ++;
+			$imageArray = explode(".",$image);
+			$vehicleImages = new images();
+			$vehicleImages->name = $imageArray[0];
+			// $vehicleImages->description = $SysData['description'];
+			$vehicleImages->vehicle_maintanace = $SysData['valueID'];
+			$vehicleImages->upload_date = $currentDate;
+			$vehicleImages->user_name = $userLogged->id;
+			$vehicleImages->default_image = 1;
+			$vehicleImages->save();
 
-        $vehicleImages = new images($SysData);
-        // $vehicleImages->name = $SysData['name'];
-        // $vehicleImages->description = $SysData['description'];
-        $vehicleImages->vehicle_maintanace = $SysData['valueID'];
-        $vehicleImages->upload_date = $currentDate;
-        $vehicleImages->user_name = $userLogged->id;
-        $vehicleImages->default_image = 1;
-        $vehicleImages->save();
-
-        //Upload Image picture
-        if ($request->hasFile('image')) {
-            $fileExt = $request->file('image')->extension();
-            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = "image" . time() . '.' . $fileExt;
-                $request->file('image')->storeAs('Vehicle/images', $fileName);
-                //Update file name in the database
-                $vehicleImages->image = $fileName;
-                $vehicleImages->update();
-            }
-        }
+			//Upload Image picture
+			if ($request->hasFile('images')) {
+				$fileExt = $image->extension();
+				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
+					$fileName = "image" .$count. '.' . $fileExt;
+					$image->storeAs('Vehicle/images', $fileName);
+					//Update file name in the database
+					$vehicleImages->image = $fileName;
+					$vehicleImages->update();
+				}
+			}
+			$image = '';
+		}
 
         return response()->json();
     }
