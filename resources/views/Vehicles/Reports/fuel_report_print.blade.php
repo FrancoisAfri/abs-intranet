@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Task Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
+  <title>Fuel Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -73,7 +73,7 @@
                              <td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
                              <td></td>
                              <td></td>
-                             <td>{{ !empty($details->service_station) ?  $details->service_station: 'Nill' }}</td>
+                             <td>{{ !empty($details->service_station) ?  $details->service_station: 'Null' }}</td>
 							<td style="text-align: center">{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }} </td>
 							<td style="text-align: center">{{ !empty($details->litres) ?  $details->litres: '' }}</td>
 							<td style="text-align: center">{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>

@@ -388,15 +388,14 @@ class vehiclealertController extends Controller {
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Alerts';
 		
-		$user = Auth::user()->load('person');
-        $companyDetails = CompanyIdentity::systemSettings();
-        //return $companyDetails;
-        $companyname = $companyDetails['full_company_name'];
-        $companylogo = $companyDetails['company_logo_url'];
+		$companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
 
-        $data['company_name'] = $companyname;
-        $logo = $companylogo;
-        $data['company_logo'] = url('/') . Storage::disk('local')->url("logos/$logo");
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['date'] = date("d-m-Y");
         $data['user'] = $user;
 

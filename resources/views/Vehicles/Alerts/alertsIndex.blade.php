@@ -366,9 +366,9 @@
                             </table>
                             <div class="box-footer">
                                 <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                            class="fa fa-arrow-left"></i> Back
+                                            class="fa fa-arrow-left"></i> Back 
                                 </button>
-								<a href="{{ '/alerts/print_pdf'}}" class="dt-button buttons-copy buttons-html5 pull-right" target="_blank">Print PDF</a> 		
+								<a href="{{ '/alerts/print_pdf'}}" class="btn btn-primary pull-right" target="_blank">Print PDF</a> 		
                             </div>
                         </div>
                     </div>
