@@ -141,7 +141,6 @@
 
 			$(function () {
 			   
-				var moduleId;
 				//Tooltip
 				$('[data-toggle="tooltip"]').tooltip();
 
@@ -223,28 +222,28 @@
 					bindDatePicker();
 					});
 
-		   var fleetID;
+			var fleetID;
 			$('#edit-vehiclefleet-modal').on('show.bs.modal', function (e) {
 				var btnEdit = $(e.relatedTarget);
 				fleetID = btnEdit.data('id');
-				var fleet_number = btnEdit.data('fleet_number');
-				var cardTypeId = btnEdit.data('card_type_id');
-				var company_id = btnEdit.data('company_id');
-				var holder_id = btnEdit.data('holder_id');
-				var card_number = btnEdit.data('card_number');
-				var cvs_number = btnEdit.data('cvs_number');
-				var issuedDate = btnEdit.data('issued_date');
-				var expiryDate = btnEdit.data('expiry_date');
+				var Fleet_number = btnEdit.data('fleet_number');
+				var CardTypeId = btnEdit.data('card_type_id');
+				var Company_id = btnEdit.data('company_id');
+				var Holder_id = btnEdit.data('holder_id');
+				var Card_number = btnEdit.data('card_number');
+				var CVs_number = btnEdit.data('cvs_number');
+				var IssuedDate = btnEdit.data('issued_date');
+				var ExpiryDate = btnEdit.data('expiry_date');
 				var Status = btnEdit.data('status');
 				var modal = $(this);
-				modal.find('#fleet_number').val(fleet_number);
-				modal.find('select#card_type_id').val(cardTypeId).trigger("change");
-				modal.find('#company_id').val(company_id);
-				modal.find('#holder_id').val(holder_id);
-				modal.find('#card_number').val(card_number);
-				modal.find('#cvs_number').val(cvs_number);
-				modal.find('#issued_date').val(issuedDate);
-				modal.find('#expiry_date').val(expiryDate);
+				modal.find('#fleet_number').val(Fleet_number);
+				modal.find('select#card_type_id').val(CardTypeId).trigger("change");
+				modal.find('#company_id').val(Company_id);
+				modal.find('#holder_id').val(Holder_id);
+				modal.find('#card_number').val(Card_number);
+				modal.find('#cvs_number').val(CVs_number);
+				modal.find('#issued_date').val(IssuedDate);
+				modal.find('#expiry_date').val(ExpiryDate);
 				modal.find('#status').val(Status);
 			});
 
