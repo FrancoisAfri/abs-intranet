@@ -454,10 +454,24 @@ class VehicleBookingController extends Controller {
             $vehicle_model = '';
         else
             $vehicle_model = $vehiclemaker->name . ' ' . $vehicle_model1->name . ' ' . $vehicleTypes->name . ' ' . $Vehiclebookings->year;
-        #mail to user
-        Mail::to($usedetails->email)->send(new vehiclebooking_manager_notification($usedetails->first_name, $usedetails->surname, $usedetails->email, $request['required_from'], $request['required_to'], $request['Usage_type'], $driver, $request['destination'], $request['purpose'], $vehicle_model));
-
+        
+        //not tested
         #mail to manager
+        // got and get all the administrators iDS
+         $managersID = DB::table('security_modules_access')
+                   ->select('security_modules_access.*','security_modules.*') 
+                   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                   ->where('code_name', 'vehicle')
+                   ->where('access_level','>=', 4)
+                   ->pluck('user_id');
+         
+           foreach ($managersID as $manID) {
+               $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+               
+             Mail::to($usedetails->email)->send(new vehiclebooking_manager_notification($usedetails->first_name, $usedetails->surname, $usedetails->email, $request['required_from'], $request['required_to'], $request['Usage_type'], $driver, $request['destination'], $request['purpose'], $vehicle_model));
+        }
+             
+        #mail to user
         Mail::to($BookingDetail['email'])->send(new vehicle_bookings($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
 
 
