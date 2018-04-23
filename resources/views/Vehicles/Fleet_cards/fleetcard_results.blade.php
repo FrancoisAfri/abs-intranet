@@ -39,34 +39,34 @@
 					</tr>
 					</thead>
 					<tbody>
-					@if (count($fleetcard) > 0)
-						@foreach ($fleetcard as $fleet)
+					@if (count($fleetcards) > 0)
+						@foreach ($fleetcards as $fleetcard)
 							<tr id="categories-list">
 								<td nowrap>
 									<button vehice="button" id="edit_compan"
 											class="btn btn-warning  btn-xs" data-toggle="modal"
 											data-target="#edit-vehiclefleet-modal"
-											data-id="{{ $fleet->id }}"
-											data-fleet_number="{{ $fleet->fleet_number }}"
-											data-cvs_number="{{ $fleet->cvs_number }}"
-											data-holder_id="{{ $fleet->holder_id }}"
-											data-company_id="{{ $fleet->company_id }}"
-											data-card_number="{{$fleet->card_number}}"
-											data-card_type_id="{{ $fleet->card_type_id }}"
-											data-issued_date="{{ date("d/m/Y", $fleet->issued_date)}}"
-											data-expiry_date="{{date("d/m/Y",  $fleet->expiry_date)}}"
-											data-status="{{ $fleet->status }}"><i class="fa fa-pencil-square-o"></i> Edit
+											data-id="{{ $fleetcard->id }}"
+											data-fleet_number="{{ $fleetcard->fleet_number }}"
+											data-cvs_number="{{ $fleetcard->cvs_number }}"
+											data-holder_id="{{ $fleetcard->holder_id }}"
+											data-company_id="{{ $fleetcard->company_id }}"
+											data-card_number="{{$fleetcard->card_number}}"
+											data-card_type_id="{{ $fleetcard->card_type_id }}"
+											data-issued_date="{{ date("d/m/Y", $fleetcard->issued_date)}}"
+											data-expiry_date="{{date("d/m/Y",  $fleetcard->expiry_date)}}"
+											data-status="{{ $fleetcard->status }}"><i class="fa fa-pencil-square-o"></i> Edit
 									</button>
 								</td>
-								<td>{{ !empty($fleet->type_name ) ? $fleet->type_name : '' }}</td>
-								<td>{{ !empty($fleet->fleetnumber ) ? $fleet->fleetnumber : '' }}</td>
-								<td>{{ !empty($fleet->first_name . '' . $fleet->surname ) ? $fleet->first_name . '' . $fleet->surname : ''}}</td>
-								<td>{{ !empty($fleet->card_number) ? $fleet->card_number : ''}}</td>
-								<td>{{ !empty($fleet->cvs_number) ? $fleet->cvs_number : ''}}</td>
-								<td>{{ !empty($fleet->Vehicle_Owner) ? $fleet->Vehicle_Owner : ''}}</td>
-								<td>{{ !empty($fleet->issued_date ) ? date("d/m/Y", $fleet->issued_date) : ''}}</td>
-								<td>{{ !empty($fleet->expiry_date ) ? date("d/m/Y",  $fleet->expiry_date) : ''}}</td>
-								<td>{{ !empty($fleet->status) ? $status[$fleet->status] : ''}}</td>
+								<td>{{ !empty($fleetcard->type_name ) ? $fleetcard->type_name : '' }}</td>
+								<td>{{ !empty($fleetcard->fleetnumber ) ? $fleetcard->fleetnumber : '' }}</td>
+								<td>{{ !empty($fleetcard->first_name . '' . $fleetcard->surname ) ? $fleetcard->first_name . '' . $fleetcard->surname : ''}}</td>
+								<td>{{ !empty($fleetcard->card_number) ? $fleetcard->card_number : ''}}</td>
+								<td>{{ !empty($fleetcard->cvs_number) ? $fleetcard->cvs_number : ''}}</td>
+								<td>{{ !empty($fleetcard->Vehicle_Owner) ? $fleetcard->Vehicle_Owner : ''}}</td>
+								<td>{{ !empty($fleetcard->issued_date ) ? date("d/m/Y", $fleetcard->issued_date) : ''}}</td>
+								<td>{{ !empty($fleetcard->expiry_date ) ? date("d/m/Y",  $fleetcard->expiry_date) : ''}}</td>
+								<td>{{ !empty($fleetcard->status) ? $status[$fleetcard->status] : ''}}</td>
 							</tr>
 						@endforeach
 					@endif
