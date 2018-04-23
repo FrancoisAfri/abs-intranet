@@ -14,6 +14,10 @@ use App\jobcard_maintanance;
 use App\ContactCompany;
 use App\processflow;
 use App\jobcards_config;
+use App\CompanyIdentity;
+use App\module_access;
+use App\module_ribbons;
+use App\modules;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
 use Illuminate\Support\Facades\Auth;
@@ -247,8 +251,38 @@ class JobcardController extends Controller
         return back();  
      }
      
+     
      //myJobcards
+     
+      public function jobcardStatus($status = 0, $hrID = 0, $jobID = 0) {
+          
+            //CompanyIdentity;
+            //module_access;
+            //module_ribbons;
+            //modules; 
+          
+          $status = DB::table('security_modules')->get();
+          return $status;
+
+      }
      public function myjobcards(){
+         
+//         $status = DB::table('security_modules')
+//                 ->select('security_modules.*','security_modules_access.*') 
+//                 ->leftJoin('security_modules_access', 'security_modules.id', '=', 'security_modules_access.id')
+//                 ->where('code_name', 'job_cards')
+//                 ->get();
+         
+         
+         
+         $status = DB::table('security_modules_access')
+                   ->select('security_modules_access.*','security_modules.*') 
+                   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                   ->where('code_name', 'job_cards')
+                   ->where('access_level','>=', 4)
+                   ->pluck('user_id');
+                   //->get();
+          return $status;
          
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
        
