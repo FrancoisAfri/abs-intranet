@@ -107,11 +107,7 @@
 
                                         <div class="col-sm-10">
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          id="rdo_package"
-                                                                                                          name="status"
-                                                                                                          value="1"
-                                                                                                          checked>
-                                                Active
+                                             id="rdo_package" name="status" value="1" checked> Active
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_product"
                                                                                name="status" value="2"> Inactive
@@ -122,8 +118,6 @@
 
                                         </div>
                                     </div>
-
-
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-left"><i
                                                     class="fa fa-search"></i> Search
@@ -173,88 +167,83 @@
     <!-- time picker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
-        $(function () {
-            $(".select2").select2();
-            //Tooltip
-            $('[data-toggle="tooltip"]').tooltip();
+	$(function () {
+		$(".select2").select2();
+		//Tooltip
+		$('[data-toggle="tooltip"]').tooltip();
 
-            //Vertically center modals on page
+		//Vertically center modals on page
 
-            //Phone mask
-            $("[data-mask]").inputmask();
+		//Phone mask
+		$("[data-mask]").inputmask();
 
-            //Vertically center modals on page
-            function reposition() {
-                var modal = $(this),
-                    dialog = modal.find('.modal-dialog');
-                modal.css('display', 'block');
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
-                // Dividing by two centers the modal exactly, but dividing by three
-                // or four works better for larger screens.
-                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-            }
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
 
-            // Reposition when a modal is shown
-            $('.modal').on('show.bs.modal', reposition);
-            // Reposition when the window is resized
-            $(window).on('resize', function () {
-                $('.modal:visible').each(reposition);
-            });
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
 
-            //Show success action modal
-            $('#success-action-modal').modal('show');
-        });
+		//Show success action modal
+		$('#success-action-modal').modal('show');
+	});
 
-        //Initialize iCheck/iRadio Elements
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '10%' // optional
-        });
+	//Initialize iCheck/iRadio Elements
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-blue',
+		radioClass: 'iradio_square-blue',
+		increaseArea: '10%' // optional
+	});
 
-        $(document).ready(function () {
+	$(document).ready(function () {
 
-            $('#issued_date').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-
-        });
-
-        $('#expiry_date').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
-
-       
-
-         //Post module form to server using ajax (ADD)
-           $('#add-fleet-card').on('click', function () {
-                var strUrl = '/vehicle_management/add_vehiclefleetcard';
-                var modalID = 'add-fleetcard-modal';
-                var objData = {
-                    card_type_id: $('#'+modalID).find('#card_type_id').val(),
-                    fleet_number: $('#'+modalID).find('#fleet_number').val(),
-                    company_id: $('#'+modalID).find('#company_id').val(),
-                    holder_id: $('#'+modalID).find('#holder_id').val(),
-                    card_number: $('#'+modalID).find('#card_number').val(),
-                    cvs_number: $('#'+modalID).find('#cvs_number').val(),
-                    issued_date: $('#'+modalID).find('#issued_date').val(),
-                    expiry_date: $('#'+modalID).find('#expiry_date').val(),
-                    status: $('#'+modalID).find('input:checked[name = status]').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
-                var submitBtnID = 'add-fleet-card';
-                var redirectUrl = '/vehicle_management/fleet_cards';
-                var successMsgTitle = 'New Record Added!';
-                var successMsg = 'The Record  has been updated successfully.';
-                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
+		$('#issued_date').datepicker({
+			format: 'dd/mm/yyyy',
+			autoclose: true,
+			todayHighlight: true
+		});
 
 
+	});
 
+	$('#expiry_date').datepicker({
+		format: 'dd/mm/yyyy',
+		autoclose: true,
+		todayHighlight: true
+	});
+
+	//Post module form to server using ajax (ADD)
+   $('#add-fleet-card').on('click', function () {
+		var strUrl = '/vehicle_management/add_vehiclefleetcard';
+		var modalID = 'add-fleetcard-modal';
+		var objData = {
+			card_type_id: $('#'+modalID).find('#card_type_id').val(),
+			fleet_number: $('#'+modalID).find('#fleet_number').val(),
+			company_id: $('#'+modalID).find('#company_id').val(),
+			holder_id: $('#'+modalID).find('#holder_id').val(),
+			card_number: $('#'+modalID).find('#card_number').val(),
+			cvs_number: $('#'+modalID).find('#cvs_number').val(),
+			issued_date: $('#'+modalID).find('#issued_date').val(),
+			expiry_date: $('#'+modalID).find('#expiry_date').val(),
+			status: $('#'+modalID).find('input:checked[name = status]').val(),
+			_token: $('#'+modalID).find('input[name=_token]').val()
+		};
+		var submitBtnID = 'add-fleet-card';
+		var redirectUrl = '/vehicle_management/fleet_cards';
+		var successMsgTitle = 'New Record Added!';
+		var successMsg = 'The Record  has been updated successfully.';
+		modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+	});
     </script>
 @endsection

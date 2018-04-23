@@ -36,7 +36,7 @@
                                     id="fleet_number" name="fleet_number">
                                 <option value="">*** Select a Vehicle ***</option>
                                 @foreach($vehicle_detail as $Fleetcard)
-                                    <option value="{{ $Fleetcard->id }}" {{ (!empty($fleet->fleet_number == $Fleetcard->id)) ? ' selected' : '' }}>{{ $Fleetcard->fleet_number }}</option>
+                                    <option value="{{ $Fleetcard->id }}">{{ $Fleetcard->fleet_number }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -51,7 +51,7 @@
                                     id="company_id" name="company_id">
                                 <option value="">*** Select a Company ***</option>
                                 @foreach($contactcompanies as $Company)
-                                    <option value="{{ $Company->id }}" {{ (!empty($fleet->company_id == $Company->id)) ? ' selected' : '' }}>{{ $Company->name }}</option>
+                                    <option value="{{ $Company->id }}">{{ $Company->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -65,7 +65,7 @@
                                     id="holder_id" name="holder_id">
                                 <option value="">*** Select an Employee ***</option>
                                 @foreach($hrDetails as $user)
-                                    <option value="{{ $user->id }}" {{ (!empty($fleet->holder_id == $user->id)) ? ' selected' : '' }}>{{ $user->first_name . ' ' .  $user->surname }}</option>
+                                    <option value="{{ $user->id }}" >{{ $user->first_name . ' ' .  $user->surname }}</option>
                                 @endforeach
                             </select>
                         </div>

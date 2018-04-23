@@ -104,7 +104,7 @@ class fleetcardController extends Controller
 
         //return $vehiclefleetcards;
 
-        $fleetcard = DB::table('vehicle_fleet_cards')
+        $fleetcards = DB::table('vehicle_fleet_cards')
             ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner'
                 , 'hr_people.first_name as first_name', 'hr_people.surname as surname'
                 , 'fleet_type.name as type_name', 'vehicle_details.fleet_number as fleetnumber')
@@ -152,11 +152,11 @@ class fleetcardController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['status'] = $status;
-        $data['fleetcard'] = $fleetcard;
+        $data['fleetcards'] = $fleetcards;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/fleet_cards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
