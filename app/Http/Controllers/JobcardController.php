@@ -163,7 +163,6 @@ class JobcardController extends Controller
         $config->mechanic_sms = !empty($SysData['mechanic_sms']) ? $SysData['mechanic_sms'] : 0;
         $config->update();
 
-        
         AuditReportsController::store('Job Card Management', 'configurationSetings updated', "Accessed By User", 0);
         return back();
     }
@@ -247,7 +246,9 @@ class JobcardController extends Controller
         else
             $stastus = 1;
         $steps->status = $stastus;
-        $steps->update();  
+        $steps->update();
+		
+		AuditReportsController::store('Job Card Management', ' process flow status Changed', "Accessed By User", 0);		
         return back();  
      }
      
@@ -255,35 +256,36 @@ class JobcardController extends Controller
      //myJobcards
      
       public function jobcardStatus($status = 0, $hrID = 0, $jobID = 0) {
+         
+          $user = Auth::user()->person->user_id;
+          // get from hrPerson where id is $hrID
           
-            //CompanyIdentity;
-            //module_access;
-            //module_ribbons;
-            //modules; 
-          
-          $status = DB::table('security_modules')->get();
-          return $status;
-
-      }
-     public function myjobcards(){
-         
-//         $status = DB::table('security_modules')
-//                 ->select('security_modules.*','security_modules_access.*') 
-//                 ->leftJoin('security_modules_access', 'security_modules.id', '=', 'security_modules_access.id')
-//                 ->where('code_name', 'job_cards')
-//                 ->get();
-         
-         
-         
-         $status = DB::table('security_modules_access')
-                   ->select('security_modules_access.*','security_modules.*') 
+             $status = DB::table('security_modules_access')
+                   ->select('security_modules_access.user_id') 
                    ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-                   ->where('code_name', 'job_cards')
-                   ->where('access_level','>=', 4)
-                   ->pluck('user_id');
-                   //->get();
-          return $status;
-         
+                   ->where('security_modules.code_name', 'job_cards')
+                   ->where('security_modules_access.access_level','>=', 4)
+                   ->where('security_modules_access.user_id', $hrID)
+                   ->first();
+  
+           $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
+          
+      }
+      
+     public function myjobcards(){         
+       $hrID = Auth::user()->person->user_id;
+       $hrjobtile = Auth::user()->person->position;
+       $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
+                   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                   ->where('security_modules.code_name', 'job_cards') ->where('security_modules_access.access_level','>=', 4)
+                   ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
+                    
+       $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
+       
+       $rowcolumn = $processflow->count();
+      
+       if(($rowcolumn >0 )){
+                   
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
        
         $servicetype = servicetype::where('status',1)->get();
@@ -296,7 +298,6 @@ class JobcardController extends Controller
 				 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
         
          
-       
         $jobcardmaintanance = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*','vehicle_details.*','contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
@@ -344,7 +345,13 @@ class JobcardController extends Controller
         $data['active_rib'] = 'My Job Cards';
         
         AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
-        return view('job_cards.myjob_cards')->with($data);    
+       return view('job_cards.myjob_cards')->with($data); 
+       
+       }else  {
+//           return redirect('/');
+            return back();
+			return back()->with('success_edit', "The are not permitted to view this page.");
+        }
      }
      
      public function addjobcardmanagement(Request $request){
@@ -415,6 +422,23 @@ class JobcardController extends Controller
         AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User", 0);
         return response()->json();
 
+     }
+     
+     public function jobcardsApprovals(){
+         
+       
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        // $data['incidentType'] = $incidentType;
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Setup';
+
+        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        return view('job_cards.search')->with($data); 
      }
 }
 

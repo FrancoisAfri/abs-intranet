@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Add  Type </h3>
+                    <h3 class="box-title">Job Cards </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -37,7 +37,7 @@
                                     <th>Registration</th>
                                     <th>Job Card Date </th>
                                     <th>Completion Date</th>
-                                    <th>Instruction</th>
+									<th style="width: 5px; text-align: center;">Instruction</th>
                                     <th>Mechanic</th>
                                     <th>Service Type</th>
                                     <th>Supplier</th>
@@ -46,8 +46,10 @@
                             @if (count($jobcardmaintanance) > 0)
                               @foreach ($jobcardmaintanance as $jobcard)
                                <tr id="configuration-list">
-                                <td></td>
-                                 <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
+                                <td>
+                               <a href="{{ '/Product/price/' . $jobcard->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View</a></td>
+                                </td> 
+								<td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
                                 <td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model)) 
                                     ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
                                 <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
@@ -81,7 +83,11 @@
         @include('job_cards.partials.add_jobcard_modal')
         @include('job_cards.partials.edit_servicetype_modal')
           <!-- Include delete warning Modal form-->
-
+		  
+		   <!-- Confirmation Modal -->
+        @if(Session('success_edit'))
+            @include('job_cards.partials.success_action', ['modal_title' => "User not permitted!", 'modal_content' => session('success_edit')])
+        @endif
 </div>
 @endsection
 @section('page_script')

@@ -397,8 +397,6 @@ class VehicleBookingController extends Controller {
         
         $vehicleDetails = vehicle_detail::where('id', $vehicle->id)->orderBy('id', 'desc')->first();
         
-        
-
         $loggedInEmplID = Auth::user()->person->id;
         $users = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $users->first_name . ' ' . $users->surname;
