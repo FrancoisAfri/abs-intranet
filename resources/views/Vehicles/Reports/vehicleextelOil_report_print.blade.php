@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Expired Licences Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
+    <title>External Fuel Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -51,48 +51,70 @@
             <div class="box-body">
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
-                    <tr>
-                      <th>Fleet Number Type</th>
-                                        <th>Fuel Supplier</th>
-                                        <th>km Reading</th>
-                                        <th>Hour Reading</th>
-                                        <th>Litres</th>
-                                        <th>Avg Cons (Odo)</th>
-                                        <th>Avg Cons (Hrs)</th>
-                                        <th>Avg price per Litre </th>
-                                        <th>Amount </th>
-                    </tr>
+						<tr>
+							<th>Supplier</th>
+							<th>Fleet Number</th>
+							<th>Fuel Supplier</th>
+							<th>km Reading</th>
+							<th>Hour Reading</th>
+							<th>Litres</th>
+							<th>Avg Cons (Odo)</th>
+							<th>Avg Cons (Hrs)</th>
+							<th>Avg price per Litre </th>
+							<th>Amount </th>
+						</tr>
                     </thead>
                     <tbody>
-                    @if (count($externalFuelLog ) > 0)
-                        @foreach($externalFuelLog  as $externallog)
-                            <tr>
-                              <td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td> 
-<!--                                   <td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> -->
-                              <td> External </td> 
-                              <td>{{ (!empty( $externallog->Odometer_reading)) ?  $externallog->Odometer_reading : 0}}  Km</td> 
-                              <td>{{ (!empty( $externallog->Hoursreading)) ?  $externallog->Hoursreading : 0}} Hrs</td> 
-                              <td style="text-align: center">{{ !empty($externallog->litres) ? number_format($externallog->litres, 2) : 0 }}</td>
-                              <td>{{ (!empty( $externallog->Odometer_reading)) ?  number_format($externallog->Odometer_reading/$externallog->litres, 2) : 0}} </td>
-                              <td>{{ (!empty( $externallog->Hoursreading)) ?  number_format($externallog->Hoursreading/$externallog->litres, 2) : 0}} </td>
-                              <td> R {{ (!empty( $externallog->litres)) ?  number_format($externallog->total_cost/$externallog->litres, 2) : 0}} </td>
-                              <td style="text-align: center"> R {{ !empty($externallog->total_cost) ? number_format($externallog->total_cost, 2) : 0 }}</td>
-                            </tr>
-                        @endforeach
-                    @endif
+                   @if (count($externalFuelLog) > 0)
+							@foreach ($externalFuelLog as $externallog)
+								<tr>
+									<td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> 
+									<td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td>                                    
+									<td> External </td> 
+									<td>{{ (!empty( $externallog->Odometer_reading)) ?  $externallog->Odometer_reading : 0}}  Km</td> 
+									<td>{{ (!empty( $externallog->Hoursreading)) ?  $externallog->Hoursreading : 0}} Hrs</td> 
+									<td style="text-align: center">{{ !empty($externallog->litres) ? number_format($externallog->litres, 2) : 0 }}</td>
+									<td>{{ (!empty( $externallog->Odometer_reading)) ?  number_format($externallog->Odometer_reading/$externallog->litres, 2) : 0}} </td>
+									<td>{{ (!empty( $externallog->Hoursreading)) ?  number_format($externallog->Hoursreading/$externallog->litres, 2) : 0}} </td>
+									<td> R {{ (!empty( $externallog->litres)) ?  number_format($externallog->total_cost/$externallog->litres, 2) : 0}} </td>
+									<td style="text-align: center"> R {{ !empty($externallog->total_cost) ? number_format($externallog->total_cost, 2) : 0 }}</td>
+								</tr>
+							@endforeach
+						@endif
                     </tbody>
                     <tfoot>
-                    <tr>
-                      <th>Fleet Number Type</th>
-                      <th>Fuel Supplier</th>
-                      <th>km Reading</th>
-                      <th>Hour Reading</th>
-                      <th>Litres</th>
-                      <th>Avg Cons (Odo)</th>
-                      <th>Avg Cons (Hrs)</th>
-                      <th>Avg price per Litre </th>
-                      <th>Amount </th>
-                    </tr>
+						<tr>
+							<th>Supplier</th>
+							<th>Fleet Number</th>
+							<th>Fuel Supplier</th>
+							<th>km Reading</th>
+							<th>Hour Reading</th>
+							<th>Litres</th>
+							<th>Avg Cons (Odo)</th>
+							<th>Avg Cons (Hrs)</th>
+							<th>Avg price per Litre </th>
+							<th>Amount </th>
+						</tr>
+						<tr class="caption">
+							<th colspan="3" style="text-align:right;"> Report Totals</th> 
+							<th> kms </th>  
+							<th> Hrs </th>  
+							<th> Litres </th>
+							<th> Avg Km/l</th>
+							<th> Avg hr/l</th>
+							<th> Avg Price (R)</th>
+							<th> Amount (R)</th>
+						</tr>
+						<tr>
+							<td colspan="3" style="text-align:right;"></td> 
+								<td>{{ !empty($totalKms) ? number_format($totalKms, 2) : 0 }}</td> 
+								<td>{{ !empty($totalHours) ? number_format($totalHours, 2) : 0 }}</td> 
+								<td>{{ !empty($totalLitres) ? number_format($totalLitres, 2) : 0 }}</td> 
+								<td>{{ !empty($totalAvgKms) ? number_format($totalAvgKms, 2) : 0 }}</td> 
+								<td>{{ !empty($totAlavgHrs) ? number_format($totAlavgHrs, 2) : 0 }}</td> 
+								<td>{{ !empty($totalAvgCost) ? number_format($totalAvgCost, 2) : 0 }}</td> 
+								<td>{{ !empty($totalCost) ? number_format($totalCost, 2) : 0 }}</td>
+						</tr>
                     </tfoot>
                 </table>
             </div>

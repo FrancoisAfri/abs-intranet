@@ -1,6 +1,8 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row">
@@ -40,43 +42,41 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($serviceDetails) > 0)
-                                       @foreach($serviceDetails as $details)
-                                            <tr>
-                                                <td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
-                                                <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
-                                                <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
-                                            
-                                                <td style="text-align: center">{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
-                                                <td style="text-align: center">{{ !empty($details->nxt_service_km) ? date(' d M Y', $details->nxt_service_km) : ''}} </td>
-                                                 <td></td>
-                                                <td style="text-align: center">{{ !empty($details->invoice_number) ?  $details->invoice_number : ''}} </td>
-                                                <td style="text-align: center">{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : ''}} </td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
+										@if (count($serviceDetails) > 0)
+										   @foreach($serviceDetails as $details)
+												<tr>
+													<td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
+													<td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
+													<td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
+												
+													<td style="text-align: center">{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
+													<td style="text-align: center">{{ !empty($details->nxt_service_km) ? date(' d M Y', $details->nxt_service_km) : ''}} </td>
+													 <td></td>
+													<td style="text-align: center">{{ !empty($details->invoice_number) ?  $details->invoice_number : ''}} </td>
+													<td style="text-align: center">{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : ''}} </td>
+												</tr>
+											@endforeach
+										@endif
                                     </tbody>
-                                    <tfoot>
-                                    <tr>
-                                       <th style="width: 10px"></th>
-                                        <th>Date</th>
-                                        <th>Garage</th>
-                                        <th>Next Service Date</th>
-                                        <th>Next Service Km</th>
-                                        <th>Licence Renewal Date</th>
-                                        <th>Invoice Number</th>
-                                        <th style="width: 5px; text-align: center;">Total Cost</th>
-                                    </tr>
+									<tfoot>
+										<tr>
+											<td colspan="7" style="text-align:right">Total</td>
+											<td style="text-align: right" nowrap>{{ !empty($totalamount_paid) ? 'R' .number_format($totalamount_paid, 2) : '' }}</td>
+										</tr>
+										<tr>
+										   <th style="width: 10px"></th>
+											<th>Date</th>
+											<th>Garage</th>
+											<th>Next Service Date</th>
+											<th>Next Service Km</th>
+											<th>Licence Renewal Date</th>
+											<th>Invoice Number</th>
+											<th style="width: 5px; text-align: center;">Total Cost</th>
+										</tr>
                                     </tfoot>
-                                    <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                                    <class
-                                    ="caption">
-                                    <td></td>
-                                    <td colspan="6" style="text-align:right">Total</td>
-                                    <td style="text-align: right" nowrap>{{ !empty($totalamount_paid) ? 'R' .number_format($totalamount_paid, 2) : '' }}</td>
+                                    <input type="hidden" name="vehicle_id" value="$iVehicleID">
                                 </table>
                                 <div class="box-footer">
-                                    
                                     <div class="row no-print">
                                         <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                     class="fa fa-arrow-left"></i> Back to Search Page
@@ -93,6 +93,15 @@
                     <!-- DataTables -->
                         <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                         <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+						<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+						<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
                         <!-- End Bootstrap File input -->
                         <script>
                             function postData(id, data) {
@@ -110,7 +119,11 @@
                                     "searching": true,
                                     "ordering": true,
                                     "info": true,
-                                    "autoWidth": true
+                                    "autoWidth": true,
+									dom: 'Bfrtip',
+									buttons: [
+										'copy', 'csv', 'excel'
+									]
                                 });
                             });
 

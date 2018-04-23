@@ -1,6 +1,8 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row">
@@ -23,51 +25,51 @@
                                 <input type="hidden" name="action_date" value="{{!empty($action_date) ? $action_date : ''}}">               
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
-                            <tr>
-                                <th>Vehicle</th>
-                                <th>Date</th>
-                                <th>Driver</th>
-                                <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Service Station</th>
-                                <th>Odometer Reading</th>
-                                <th>litres</th>
-                                <th>Cost</th>
-                                <th>Rate per Litre</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($fuelLog as $details)
-                                <tr>
-                                    <td>{{ !empty($details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes) ?  $details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes: '' }}</td>
-                                    <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
-                                    <td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{ !empty($details->service_station) ?  $details->service_station: 'Nill' }}</td>
-                                    <td>{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }}</td>
-                                    <td>{{ !empty($details->litres) ?  $details->litres: '' }}</td>
-                                    <td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
-                                    <td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
+										<tr>
+											<th>Vehicle</th>
+											<th>Date</th>
+											<th>Driver</th>
+											<th>Purpose</th>
+											<th>Destination</th>
+											<th>Service Station</th>
+											<th>Odometer Reading</th>
+											<th>litres</th>
+											<th>Cost</th>
+											<th>Rate per Litre</th>
+										</tr>
+									</thead>
+									<tbody>
+									@foreach($fuelLog as $details)
+										<tr>
+											<td>{{ !empty($details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes) ?  $details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes: '' }}</td>
+											<td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+											<td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
+											<td></td>
+											<td></td>
+											<td>{{ !empty($details->service_station) ?  $details->service_station: 'Nill' }}</td>
+											<td>{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }}</td>
+											<td>{{ !empty($details->litres) ?  $details->litres: '' }}</td>
+											<td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
+											<td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
 
-                                    @endforeach
-                                </tr>
+											@endforeach
+										</tr>
 
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th>Vehicle</th>
-                                <th>Date</th>
-                                <th>Driver</th>
-                                <th>Purpose</th>
-                                <th>Destination</th>
-                                <th>Service Station</th>
-                                <th>Odometer Reading</th>
-                                <th>litres</th>
-                                <th>Cost</th>
-                                <th>Rate per Litre</th>
-                            </tr>
-                            </tfoot>
+									</tbody>
+									<tfoot>
+									<tr>
+										<th>Vehicle</th>
+										<th>Date</th>
+										<th>Driver</th>
+										<th>Purpose</th>
+										<th>Destination</th>
+										<th>Service Station</th>
+										<th>Odometer Reading</th>
+										<th>litres</th>
+										<th>Cost</th>
+										<th>Rate per Litre</th>
+									</tr>
+									</tfoot>
                                 </table>
                                 <div class="box-footer">
                                     
@@ -87,6 +89,15 @@
                     <!-- DataTables -->
                         <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                         <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+						<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+						<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+                    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
                         <!-- End Bootstrap File input -->
                         <script>
                             function postData(id, data) {
@@ -104,7 +115,11 @@
                                     "searching": true,
                                     "ordering": true,
                                     "info": true,
-                                    "autoWidth": true
+                                    "autoWidth": true,
+									dom: 'Bfrtip',
+									buttons: [
+										'copy', 'csv', 'excel'
+									]
                                 });
                             });
 

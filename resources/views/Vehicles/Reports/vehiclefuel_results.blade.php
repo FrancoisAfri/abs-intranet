@@ -66,9 +66,7 @@
                                             <img src="{{ (!empty($fine->image)) ? Storage::disk('local')->url("Vehicle/images/$fine->image") : 'http://placehold.it/60x50' }}"
                                                  alt="Product Image" width="50" height="50">
                                         </div>
-
                                     </td>
-
                                     <td>{{ !empty($fine->vehicle_model . ' ' . $fine->year ) ? $fine->vehicle_model  . ' ' . $fine->year: ''}}</td>
                                     <td>{{ !empty($fine->fleet_number) ? $fine->fleet_number : ''}}</td>
                                     <td>{{ !empty($fine->vehicle_registration) ? $fine->vehicle_registration : ''}}</td>

@@ -358,7 +358,7 @@ class FuelManagementController extends Controller
 			->where('fuel_tank_topUp.tank_id', $ID)
             ->orderBy('fuel_tank_topUp.id')
             ->get();
-//return $Fueltank;
+
         $topUpStatus = array(1 => 'Incoming', 2 => 'Outgoing', 3 => 'Private Usage');
 
         $current = DB::table('fuel_tanks')->where('id', $ID)->pluck('current_fuel_litres')->first();

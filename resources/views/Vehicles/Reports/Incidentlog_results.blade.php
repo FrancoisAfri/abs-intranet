@@ -1,6 +1,8 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row">
@@ -88,6 +90,15 @@
                     <!-- DataTables -->
                         <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
                         <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+						<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+						<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+						<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+						<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
                         <!-- End Bootstrap File input -->
                         <script>
                             function postData(id, data) {
@@ -105,7 +116,11 @@
                                     "searching": true,
                                     "ordering": true,
                                     "info": true,
-                                    "autoWidth": true
+                                    "autoWidth": true,
+									dom: 'Bfrtip',
+									buttons: [
+										'copy', 'csv', 'excel'
+									]
                                 });
                             });
 
