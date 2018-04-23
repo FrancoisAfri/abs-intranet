@@ -60,9 +60,8 @@
                                     {{--<option value="7">Vehicle Contract</option>--}}
                                     <option value="8">Expired Documents</option>
                                     <option value="9">External Diesel Log</option>
-                                    <option value="10">Internal Diesel Log</option>
-                                    <option value="11">Diesel Log</option>
-                                    {{--<option value="12" >Incidents</option>--}}k
+                                   {{-- <option value="10">Internal Diesel Log</option>
+                                    <option value="11">Diesel Log</option>--}}
                                     {{--<option value="13">Alerts Report</option>--}}
                                 </select>
                             </div>
