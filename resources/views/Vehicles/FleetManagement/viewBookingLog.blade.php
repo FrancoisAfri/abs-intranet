@@ -190,7 +190,7 @@
                             <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                         class="fa fa-arrow-left"></i> Back
                             </button>
-                            @include('Vehicles.partials.viewbookinglog_modal')
+                            
                         </div>
                     </div>
                 </div>
