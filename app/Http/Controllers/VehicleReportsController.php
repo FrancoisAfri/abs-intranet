@@ -16,6 +16,7 @@ use App\vehicle_booking;
 use App\vehiclemake;
 use App\vehiclemodel;
 use App\DivisionLevel;
+use App\FleetType;
 use App\vehicle_fuel_log;
 use App\fleet_licence_permit;
 use Illuminate\Http\Request;
@@ -64,7 +65,10 @@ class VehicleReportsController extends Controller
         $licence = $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-
+		$hrDetails = HRPerson::where('status', 1)->get();
+        $fleetcardtype = FleetType::orderBy('id', 'desc')->get();
+        $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
+        
 
         $vehicledetail = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -82,7 +86,10 @@ class VehicleReportsController extends Controller
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
         ];
-
+		
+		$data['fleetcardtype'] = $fleetcardtype;
+        $data['hrDetails'] = $hrDetails;
+        $data['contactcompanies'] = $contactcompanies;
         $data['ContactCompany'] = $ContactCompany;
         $data['division_levels'] = $divisionLevels;
         $data['licence'] = $licence;
@@ -1480,7 +1487,7 @@ class VehicleReportsController extends Controller
         return view('Vehicles.Reports.fuelexternallog_results')->with($data); 
      }
      
-     public function ExternalOilReportPrint(Request $request){
+    public function ExternalOilReportPrint(Request $request){
          $reportData = $request->all();
          unset($reportData['_token']);
 
@@ -1648,5 +1655,181 @@ class VehicleReportsController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.fuelIntenallog_results')->with($data); 
+     }
+	 
+	public function fleetCardReport(Request $request){
+          
+		$vehicleData = $request->all();
+        unset($vehicleData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $cardtype = $request['card_type_id'];
+        $company = $request['company_id'];
+        $holder = $vehicleData['driver_id'];
+		$actionDate = $request['action_date'];
+		$vehicle = '';
+        $vehicleArray = isset($vehicleData['vehicle_id']) ? $vehicleData['vehicle_id'] : array();
+		$vehicleType = $vehicleData['vehicle_type'];
+		
+        if (!empty($actionDate)) {
+             $startExplode = explode('-', $actionDate);
+             $actionFrom = strtotime($startExplode[0]);
+             $actionTo = strtotime($startExplode[1]);
+        }
+		$status = array(1 => ' Active', 2 => ' InActive');
+		
+        $fleetcards = DB::table('vehicle_fleet_cards')
+            ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner'
+                , 'hr_people.first_name as first_name', 'hr_people.surname as surname'
+                , 'fleet_type.name as type_name', 'vehicle_details.fleet_number as fleetnumber')
+            ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
+            ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
+            ->leftJoin('fleet_type', 'vehicle_fleet_cards.card_type_id', '=', 'fleet_type.id')
+            ->leftJoin('vehicle_details', 'vehicle_fleet_cards.fleet_number', '=', 'vehicle_details.id')
+            ->where(function ($query) use ($cardtype) {
+                if (!empty($cardtype)) {
+                    $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
+                }
+            })
+			->where(function ($query) use ($vehicleType) {
+                if (!empty($vehicleType)) {
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
+                }
+            })
+			->Where(function ($query) use ($vehicleArray) {
+                for ($i = 0; $i < count($vehicleArray); $i++) {
+                    $vehicle = $vehicleArray[$i] . ',';
+                    $query->whereOr('vehicle_fleet_cards.fleet_number', '=', $vehicleArray[$i]);
+                }
+            })
+            ->where(function ($query) use ($company) {
+                if (!empty($company)) {
+                    $query->where('vehicle_fleet_cards.company_id', $company);
+                }
+            })
+            ->where(function ($query) use ($holder) {
+                if (!empty($holder)) {
+                    $query->where('vehicle_fleet_cards.holder_id', $holder);
+                }
+            })
+			->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('issued_date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->orderBy('vehicle_fleet_cards.fleet_number', 'asc')
+            ->get();
+        
+		//return $fleetcards;
+		$data['status'] = $status;
+		$data['vehicle_id'] = rtrim($vehicle, ",");
+        $data['vehicle_type'] = $vehicleType;
+        $data['driver_id'] = $holder;
+        $data['action_date'] = $actionDate;
+        $data['company_id'] = $company;
+        $data['card_type_id'] = $cardtype;
+        $data['fleetcards'] = $fleetcards;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fleet Card Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+
+        AuditReportsController::store('Fleet Management', 'Fleet Card Report', "Accessed By User", 0);
+        return view('Vehicles.Reports.fleet_card_report')->with($data); 
+     }
+	 
+	 public function fleetCardReportPrint(Request $request){
+         
+		 $vehicleData = $request->all();
+        unset($vehicleData['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $cardtype = $request['card_type_id'];
+        $company = $request['company_id'];
+        $holder = $vehicleData['driver_id'];
+		$actionDate = $request['action_date'];
+		$vehicle = isset($vehicleData['vehicle_id']) ? $vehicleData['vehicle_id'] : array();
+		$vehicleArray = (explode(",",$vehicle));
+		$vehicleType = $vehicleData['vehicle_type'];
+		
+        if (!empty($actionDate)) {
+             $startExplode = explode('-', $actionDate);
+             $actionFrom = strtotime($startExplode[0]);
+             $actionTo = strtotime($startExplode[1]);
+        }
+		$status = array(1 => ' Active', 2 => ' InActive');
+		
+        $fleetcards = DB::table('vehicle_fleet_cards')
+            ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner'
+                , 'hr_people.first_name as first_name', 'hr_people.surname as surname'
+                , 'fleet_type.name as type_name', 'vehicle_details.fleet_number as fleetnumber')
+            ->leftJoin('contact_companies', 'vehicle_fleet_cards.company_id', '=', 'contact_companies.id')
+            ->leftJoin('hr_people', 'vehicle_fleet_cards.holder_id', '=', 'hr_people.id')
+            ->leftJoin('fleet_type', 'vehicle_fleet_cards.card_type_id', '=', 'fleet_type.id')
+            ->leftJoin('vehicle_details', 'vehicle_fleet_cards.fleet_number', '=', 'vehicle_details.id')
+            ->where(function ($query) use ($cardtype) {
+                if (!empty($cardtype)) {
+                    $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
+                }
+            })
+			->where(function ($query) use ($vehicleType) {
+                if (!empty($vehicleType)) {
+                    $query->where('vehicle_details.vehicle_type', $vehicleType);
+                }
+            })
+			->Where(function ($query) use ($vehicleArray) {
+                for ($i = 0; $i < count($vehicleArray); $i++) {
+                    $query->whereOr('vehicle_fleet_cards.fleet_number', '=', $vehicleArray[$i]);
+                }
+            })
+            ->where(function ($query) use ($company) {
+                if (!empty($company)) {
+                    $query->where('vehicle_fleet_cards.company_id', $company);
+                }
+            })
+            ->where(function ($query) use ($holder) {
+                if (!empty($holder)) {
+                    $query->where('vehicle_fleet_cards.holder_id', $holder);
+                }
+            })
+			->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('issued_date', [$actionFrom, $actionTo]);
+                }
+            })
+            ->orderBy('vehicle_fleet_cards.fleet_number', 'asc')
+            ->get();
+        
+		$status = array(1 => ' Active', 2 => ' InActive');
+		$data['fleetcards'] = $fleetcards;
+		$data['status'] = $status;
+		$data['page_title'] = " Fleet Management ";
+		$data['page_description'] = "Fleet Cards Report ";
+		$data['breadcrumb'] = [
+			 ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+			 ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+		];
+
+		$data['active_mod'] = 'Fleet Management';
+		$data['active_rib'] = 'Reports';
+
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
+
+		$data['support_email'] = $companyDetails['support_email'];
+		$data['company_name'] = $companyName;
+		$data['full_company_name'] = $companyDetails['full_company_name'];
+		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
+
+         AuditReportsController::store('Fleet Management', 'Fleet Cards Report Printed', "Accessed By User", 0);
+        return view('Vehicles.Reports.fleet_cards_report_print')->with($data);   
      }
 }

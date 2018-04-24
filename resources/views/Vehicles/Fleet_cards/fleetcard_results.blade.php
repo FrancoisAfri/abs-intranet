@@ -16,7 +16,7 @@
 <div class="box box-primary">
 <div class="box-header with-border">
 	<i class="fa fa-truck pull-right"></i>
-	<h3 class="box-title"> Fleet Cards Report </h3>
+	<h3 class="box-title"> Fleet Cards</h3>
 </div>
 <div class="box-body">
 	<div class="box">
@@ -35,7 +35,7 @@
 						<th>Issued By</th>
 						<th>Issued Date</th>
 						<th>Expiry Date</th>
-						<th>Active</th>
+						<th>Status</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -110,7 +110,7 @@
 		<!-- Ajax form submit -->
 		<script src="/custom_components/js/modal_ajax_submit.js"></script>
 		<!-- End Bootstrap File input -->
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
@@ -118,29 +118,27 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script> -->
 		<script>
 			//Cancel button click event
 			document.getElementById("cancel").onclick = function () {
 				location.href = "/vehicle_management/fleet_cards";
 			};
+			
 			$(function () {
-				$('#example2').DataTable({
-					"paging": true,
-					"lengthChange": true,
-					"searching": true,
-					"ordering": true,
-					"info": true,
-					"autoWidth": true,
-					dom: 'Bfrtip',
-					buttons: [
-						'copy', 'csv', 'excel', 'print'
-					]
+				
+				$('#issued_date').datepicker({
+					format: 'dd/mm/yyyy',
+					autoclose: true,
+					todayHighlight: true
 				});
-			});
 
-			$(function () {
-			   
+				$('#expiry_date').datepicker({
+					format: 'dd/mm/yyyy',
+					autoclose: true,
+					todayHighlight: true
+				});
+
 				//Tooltip
 				$('[data-toggle="tooltip"]').tooltip();
 
@@ -174,6 +172,8 @@
 				radioClass: 'iradio_square-blue',
 				increaseArea: '10%' // optional
 			});
+<<<<<<< HEAD
+=======
 			
 				$(function () {
 					var bindDatePicker = function() {
@@ -221,6 +221,7 @@
 					
 					bindDatePicker();
 					});
+>>>>>>> 5067566d6beab8673795cce3217f315d6a5cccad
 
 			var fleetID;
 			$('#edit-vehiclefleet-modal').on('show.bs.modal', function (e) {
@@ -247,7 +248,6 @@
 				modal.find('#status').val(Status);
 			});
 
-		  
 			 $('#edit_vehiclefleetcard').on('click', function () {
 				var strUrl = '/vehicle_management/edit_vehiclefleetcard/' + fleetID;
 				//var formName = 'edit-vehiclefleet-form';
