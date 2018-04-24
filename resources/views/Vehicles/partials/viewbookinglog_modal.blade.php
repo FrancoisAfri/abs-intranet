@@ -222,49 +222,12 @@
                                 </div>
                             </div>
                         </div>
-
-<!-- 
-
-
-                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                           <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents Collect </label>
-                           <div class="col-sm-8">
-                            @if(!empty($booking->collectDoc))
-                            <a class="btn btn-default btn-flat btn-block pull-right "
-                            href="{{  (!empty($booking->collectDoc)) ? Storage::disk('local')->url("projects/collectiondocuments/$booking->collectDoc") : '' }}" target="_blank"><i
-                            class="fa fa-file-pdf-o"></i> View Document</a>
-                            @else
-                            <a class="btn btn-default pull-centre "><i
-                                class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                @endif
-                            </div>
-                        </div>
-
-
-                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                           <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents Return  </label>
-                           <div class="col-sm-8">
-                            @if(!empty($booking->returnDoc))
-                            <a class="btn btn-default btn-flat btn-block pull-right "
-                            href="{{ $booking->returnDoc}}" target="_blank"><i
-                            class="fa fa-file-pdf-o"></i> View Document</a>
-                            @else
-                            <a class="btn btn-default pull-centre "><i
-                                class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                @endif
-                            </div>
-                        </div>
- -->
-                        
-
                         <input type="hidden" id="valueID" name="valueID"
                         value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-               <!--  <button type="button" id="add_vehiclefuellog" class="btn btn-warning"><i class="fa fa-cloud-upload"></i>
-                Save -->
             </button>
         </div>
     </form>
@@ -272,4 +235,3 @@
 </div>
 </div>
 </div>
-
