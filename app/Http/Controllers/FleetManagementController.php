@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Users;
 use App\Mail\approve_vehiclemail;
 use App\Mail\assignUsertoAdmin;
+use App\Mail\vehiclemanagerApproval;
 use App\ContactCompany;
 use App\DivisionLevel;
 Use App\permits_licence;
@@ -48,7 +49,7 @@ class FleetManagementController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+		$divisionLevels  = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
@@ -244,8 +245,8 @@ class FleetManagementController extends Controller
         $Vehiclemilege = new vehicle_milege();
         $Vehiclemilege->date_created = time();
         $Vehiclemilege->vehicle_id = $vehicle_maintenance->id;
-        $Vehiclemilege->odometer_reading = $SysData['odometer_reading'];
-        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
+        $Vehiclemilege->odometer_reading = !empty($SysData['odometer_reading']) ? $SysData['odometer_reading'] : 0;
+        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : 0;
         $Vehiclemilege->type = 1;
         $Vehiclemilege->booking_id = 0;
         $Vehiclemilege->save();
@@ -254,21 +255,27 @@ class FleetManagementController extends Controller
         
          if ($vehicleConfig == 1) {
              
-              $manager = HRPerson::pluck('manager_id');
-                foreach ($manager as $managerID) {
-                  $managerid = !empty($managerID) ? $managerID : 1; 
-                   Mail::to($manager->email)->send(new approve_vehiclemail($manager ,$SysData['vehicle_registration']));
-                   
-                }
+//              $manager = HRPerson::pluck('manager_id');
+//                foreach ($manager as $managerID) {
+//                  $managerid = !empty($managerID) ? $managerID : 1; 
+//                   Mail::to($manager->email)->send(new approve_vehiclemail($manager ,$SysData['vehicle_registration']));
+//                   
+//                }
               #mail to manager
-                $user = Auth::user()->load('person');
-                $managerIDs = $user->person->manager_id;
-                
-               if  ($managerIDs ==  null){
-                     $managerid = !empty($managerID) ? $managerID : $user->id;
-                     $manager = HRPerson::find($managerid);
-                     //send an email to user to inform them that they should assign a manager
-                      Mail::to($manager->email)->send(new assignUsertoAdmin($manager));
+               
+                 $managerIDs = DB::table('security_modules_access')
+                   ->select('security_modules_access.*','security_modules.*') 
+                   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                   ->where('code_name', 'vehicle')
+                   ->where('access_level','>=', 4)
+                   ->pluck('user_id');
+         
+           foreach ($managerIDs as $manID) {
+                    $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+                    $email = $usedetails->email; $firstname = $usedetails->first_name; $surname = $usedetails->surname; $email = $usedetails->email;
+                     Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
+    
+                   // Mail::to($manager->email)->send(new assignUsertoAdmin($manager));
                 }
               
             }
@@ -285,7 +292,6 @@ class FleetManagementController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
 
         $currentDate = time();
         $userLogged = Auth::user()->load('person');

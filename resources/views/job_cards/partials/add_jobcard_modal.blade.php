@@ -28,18 +28,24 @@
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Job card Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="card_date" name="card_date"
-                                   value="{{ old('date') }}" placeholder="Select  start date  ...">
+                            <input type="text" class="form-control datepicker" id="card_date" name="card_date"
+                                   value="{{ old('date') }}" placeholder="Select start date  ...">
                         </div>
                     </div>
                     
                       <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Schedule Date </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="schedule_date" name="schedule_date"
-                                   value="{{ old('date') }}" placeholder="Select  start date  ...">
+                            <input type="text" class="form-control datepicker" id="schedule_date" name="schedule_date"
+                                   value="{{ old('date') }}" placeholder="Select start date  ...">
                         </div>
                     </div>
+					 <div class="form-group">
+                        <label for="completion_date" class="col-sm-2 control-label">Completion Date</label>
+                        <div class="col-sm-8">
+                           <input type="text" class="form-control datepicker" id="completion_date" name="completion_date" value="{{ old('completion_date') }}" placeholder="Click to Select a Date...">
+                        </div>
+                      </div>
                      <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Service by Agent</label>
                         <div class="col-sm-8">
@@ -51,7 +57,7 @@
                         <label for="date" class="col-sm-2 control-label"> Booking Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="booking_date" name="booking_date"
-                                   value="{{ old('date') }}" placeholder="Select  start date  ...">
+                                   value="{{ old('date') }}" placeholder="Select date  ...">
                         </div>
                     </div>
                     
@@ -107,21 +113,21 @@
                         <div class="col-sm-8">
                             
                             <input type="number" class="form-control" id="service_time" name="service_time" value=""
-                                   placeholder="Enter name" required>
+                                   placeholder="Enter service time" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Machine Hour Metre</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="machine_hour_metre" name="machine_hour_metre" value=""
-                                   placeholder="Enter name" required>
+                                   placeholder="Enter metres" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Machine Odometer</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="machine_odometer" name="machine_odometer" value=""
-                                   placeholder="Enter Description" required>
+                                   placeholder="" required>
                         </div>
                     </div>
                     <div class="form-group">

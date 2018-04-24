@@ -54,8 +54,20 @@
                                 <input type="text" class="form-control datepicker" id="schedule_date" name="schedule_date" value="{{ old('schedule_date') }}" placeholder="Click to Select a Date...">
                             </div>
                         </div>
-                    </div>
+                      </div>
 
+					  <div class="form-group">
+                        <label for="completion_date" class="col-sm-2 control-label">Completion Date</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control datepicker" id="completion_date" name="completion_date" value="{{ old('completion_date') }}" placeholder="Click to Select a Date...">
+                            </div>
+                        </div>
+                      </div>
+					  
                     <div class="form-group">
                         <label for="end_date" class="col-sm-2 control-label"> Service by Agent</label>
 
