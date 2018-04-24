@@ -88,7 +88,7 @@ class fleetcardController extends Controller
         $fleetnumber = $request['fleet_number'];
         $company = $request['company_id'];
         $holder = $vehicleData['holder_id'];
-        //$status = $vehicleData['status'];
+        $status = $vehicleData['status'];
 
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -132,15 +132,13 @@ class fleetcardController extends Controller
                     $query->where('vehicle_fleet_cards.holder_id', $holder);
                 }
             })
-            // ->where(function ($query) use ($status) {
-            //     if (!empty($status)) {
-            //         $query->where('vehicle_fleet_cards.status', $status);
-            //     }
-            // })
+            ->where(function ($query) use ($status) {
+                 if (!empty($status)) {
+                     $query->where('vehicle_fleet_cards.status', $status);
+                 }
+            })
             ->orderBy('vehicle_fleet_cards.id', 'asc')
             ->get();
-
-        //return $fleetcard;
 
         $status = array(1 => ' Active', 2 => ' InActive');
 

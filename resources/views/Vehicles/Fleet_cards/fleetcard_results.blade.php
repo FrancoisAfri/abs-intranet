@@ -16,7 +16,7 @@
 <div class="box box-primary">
 <div class="box-header with-border">
 	<i class="fa fa-truck pull-right"></i>
-	<h3 class="box-title"> Fleet Cards Report </h3>
+	<h3 class="box-title"> Fleet Cards</h3>
 </div>
 <div class="box-body">
 	<div class="box">
@@ -35,7 +35,7 @@
 						<th>Issued By</th>
 						<th>Issued Date</th>
 						<th>Expiry Date</th>
-						<th>Active</th>
+						<th>Status</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -110,7 +110,7 @@
 		<!-- Ajax form submit -->
 		<script src="/custom_components/js/modal_ajax_submit.js"></script>
 		<!-- End Bootstrap File input -->
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
@@ -118,29 +118,27 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script> -->
 		<script>
 			//Cancel button click event
 			document.getElementById("cancel").onclick = function () {
 				location.href = "/vehicle_management/fleet_cards";
 			};
+			
 			$(function () {
-				$('#example2').DataTable({
-					"paging": true,
-					"lengthChange": true,
-					"searching": true,
-					"ordering": true,
-					"info": true,
-					"autoWidth": true,
-					dom: 'Bfrtip',
-					buttons: [
-						'copy', 'csv', 'excel', 'print'
-					]
+				
+				$('#issued_date').datepicker({
+					format: 'dd/mm/yyyy',
+					autoclose: true,
+					todayHighlight: true
 				});
-			});
 
-			$(function () {
-			   
+				$('#expiry_date').datepicker({
+					format: 'dd/mm/yyyy',
+					autoclose: true,
+					todayHighlight: true
+				});
+
 				//Tooltip
 				$('[data-toggle="tooltip"]').tooltip();
 
@@ -174,53 +172,6 @@
 				radioClass: 'iradio_square-blue',
 				increaseArea: '10%' // optional
 			});
-			{{--  date  --}}
-				$(function () {
-					var bindDatePicker = function() {
-							$(".date").datetimepicker({
-							format:'YYYY-MM-DD',
-								icons: {
-									time: "fa fa-clock-o",
-									date: "fa fa-calendar",
-									up: "fa fa-arrow-up",
-									down: "fa fa-arrow-down"
-								}
-							}).find('input:first').on("blur",function () {
-								// check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
-								// update the format if it's yyyy-mm-dd
-								var date = parseDate($(this).val());
-
-								if (! isValidDate(date)) {
-									//create date based on momentjs (we have that)
-									date = moment().format('YYYY-MM-DD');
-								}
-
-								$(this).val(date);
-							});
-						}
-					
-					var isValidDate = function(value, format) {
-							format = format || false;
-							// lets parse the date to the best of our knowledge
-							if (format) {
-								value = parseDate(value);
-							}
-
-							var timestamp = Date.parse(value);
-
-							return isNaN(timestamp) == false;
-					}
-					
-					var parseDate = function(value) {
-							var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
-							if (m)
-								value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
-
-							return value;
-					}
-					
-					bindDatePicker();
-					});
 
 			var fleetID;
 			$('#edit-vehiclefleet-modal').on('show.bs.modal', function (e) {
@@ -247,7 +198,6 @@
 				modal.find('#status').val(Status);
 			});
 
-		  
 			 $('#edit_vehiclefleetcard').on('click', function () {
 				var strUrl = '/vehicle_management/edit_vehiclefleetcard/' + fleetID;
 				//var formName = 'edit-vehiclefleet-form';

@@ -48,7 +48,7 @@ class FleetManagementController extends Controller
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
-        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'asc')->get();
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();

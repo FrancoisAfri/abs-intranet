@@ -57,6 +57,7 @@
                                     <option value="4">Service</option>
                                     <option value="5">Incidents</option>
                                     <option value="6">Vehicle Details</option>
+                                    <option value="7">Fleet Card Report</option>
                                     {{--<option value="7">Vehicle Contract</option>--}}
                                     <option value="8">Expired Documents</option>
                                     <option value="9">External Diesel Log</option>
@@ -159,8 +160,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Action Date</label>
+                        <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
+                            <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -173,8 +174,32 @@
                                 </div>
                             </div>
                         </div>
+						
+						<div class="form-group card-field">
+							<label for="path" class="col-sm-2 control-label">Card Type</label>
+							<div class="col-sm-10">
 
-
+								<select class="form-control select2" style="width: 100%;"
+										id="card_type_id" name="card_type_id">
+									<option value="">*** Select a Card Type ***</option>
+									@foreach($fleetcardtype as $card)
+										<option value="{{ $card->id }}">{{ $card->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="form-group card-field">
+							<label for="path" class="col-sm-2 control-label">Issued By</label>
+							<div class="col-sm-10">
+								<select class="form-control select2" style="width: 100%;"
+										id="company_id" name="company_id">
+									<option value="">*** Select a Company ***</option>
+									@foreach($contactcompanies as $Company)
+										<option value="{{ $Company->id }}">{{ $Company->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -231,6 +256,7 @@
 
         $('.licence-field').hide();
         $('.detail-field').hide();
+        $('.card-field').hide();
 
         $(function () {
             //Initialize Select2 Elements
@@ -261,7 +287,7 @@
             else if (type == 4) $('#report_form').attr('action', '/vehicle_management/report_services');
             else if (type == 5) $('#report_form').attr('action', '/vehicle_management/report_incidents');
             else if (type == 6) $('#report_form').attr('action', '/vehicle_management/report_vehicle_details');
-            else if (type == 7) $('#report_form').attr('action', '/vehicle_management/search1');
+            else if (type == 7) $('#report_form').attr('action', '/vehicle_management/fleet_card_report');
             else if (type == 8) $('#report_form').attr('action' ,'/vehicle_management/report_expiry_documents');
             else if (type == 9) $('#report_form').attr('action', '/vehicle_management/report_external_diesel');
             else if (type == 10) $('#report_form').attr('action', '/vehicle_management/report_internal_diesel');
@@ -275,30 +301,42 @@
                 $('.licence-field').hide();
                 $('.dest-field').show();
                 $('.detail-field').hide();
+                $('.card-field').hide();
             } else if (levID == 2) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+                $('.card-field').hide();
             } else if (levID == 3) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+                $('.card-field').hide();
             } else if (levID == 4) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+                $('.card-field').hide();
             } else if (levID == 5) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+                $('.card-field').hide();
             } else if (levID == 6) {
                 $('.dest-field').hide();
                 $('.detail-field').show();
+                $('.card-field').show();
+            }else if (levID == 7) {
+                $('.dest-field').hide();
+                $('.card-field').show();
+                $('.detail-field').hide();
             }else if (levID == 8) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
             }else if (levID == 9) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+                $('.card-field').hide();
             }else if (levID == 10) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+                $('.card-field').hide();
             }
 
         }
