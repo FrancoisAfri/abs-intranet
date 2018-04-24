@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Approval </h3>
+                    <h3 class="box-title"> Job Crad Approval </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -19,13 +19,12 @@
                     </div>
                 </div>
                 <form name="leave-application-form" class="form-horizontal" method="POST"
-                      action="/vehicle_management/vehicleApproval"
-                      enctype="multipart/form-data">
+                      action="/jobcards/appovecards" enctype="multipart/form-data">
+                      
                     {{ csrf_field() }}
 
-
-                    <div class="box-body">
-                        <table class="table table-bordered">
+                    <div style="overflow-X:auto;">
+                        <table id="example2" class="table table-bordered table-hover">
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Job Card #</th>
@@ -34,38 +33,38 @@
                                 <th>Completion Date</th>
                                 <th>Mechanic </th>
                                 <th>Service Type</th>
-                                <th>Comments </th>
+                                <th style="width:3px; text-align: center;">Comments </th>
                                 <th>Status</th>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
                                                                                           id="checkallaccept"
                                                                                           onclick="checkAllboxAccept()"/>
                                 </th>
                                 <th style="width: 5px; text-align: center;">Decline</th>
-                                <td></td>
+                                <th></th>
                             </tr>
 
                             @if (count($jobcardmaintanance) > 0)
                                 @foreach ($jobcardmaintanance as $filling)
                                     <tr style="text-align:center">
-                                        <td></td>
+                                        <td>
+					  <a href="{{ '/jobcards/viewjobcard/' . $filling->id }}" id="edit_compan" class="btn btn-warning  btn-xs">View</a></td>
                                         <td>{{ !empty($filling->jobcard_number ) ? $filling->jobcard_number : '' }}</td>
                                        <td>{{ (!empty( $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model)) 
                                     ?  $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model : ''}} </td>
                                         <td>{{ !empty($filling->vehicle_registration ) ? $filling->vehicle_registration : '' }}</td>
-                                        <td></td>
-									
-                                        <td>{{ !empty($filling->firstname.''. $filling->surname ) ? $filling->firstname.''. $filling->surname : '' }}</td>
+                                       <td>{{ !empty($filling->completion_date ) ? date(' d M Y', $filling->completion_date) : 'Nill' }}</td>
+                                        <td>{{ !empty($filling->firstname.' '. $filling->surname ) ? $filling->firstname.' '. $filling->surname : '' }}</td>
                                         <td>{{ !empty($filling->servicetype ) ? $filling->servicetype : '' }}</td>
                                         <td>{{ !empty($filling->instruction ) ? $filling->instruction : '' }}</td>
                                         <td>{{ !empty($filling->status ) ? $filling->status : '' }}</td>
                                       
                                         <td style='text-align:center'>
                                             <input type="hidden" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}" value="0">
+                                                   id="cardappprove_{{ $filling->id }}"
+                                                   name="cardappprove_{{ $filling->id }}" value="0">
                                             <input type="checkbox" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}"
+                                                   id="cardappprove_{{ $filling->id }}"
+                                                   name="cardappprove_{{ $filling->id }}"
                                                    value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
                                         <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
@@ -98,15 +97,12 @@
                         <!--   </div> -->
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary pull-right"> Submit</button>
+                            <button type="submit" class="btn btn-warning pull-right"> Submit</button>
 
 
                         </div>
                     </div>
-            </div>
-            <!-- Include add new prime rate modal -->
-            {{--  @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')  --}}
-
+            </div>         
             </form>
 
         </div>

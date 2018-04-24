@@ -15,6 +15,7 @@ use App\FleetType;
 use App\ContactCompany;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
+//use App\Mail\confirm_collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -371,8 +372,6 @@ class fleetcardController extends Controller
 
     public function vehicle_approval(Request $request)
     {
-
-
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
@@ -424,7 +423,7 @@ class fleetcardController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-        //return $results;
+       return $vehicle_maintenance;
 
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {

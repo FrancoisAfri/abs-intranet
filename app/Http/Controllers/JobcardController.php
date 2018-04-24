@@ -258,6 +258,7 @@ class JobcardController extends Controller
       public function jobcardStatus($status = 0, $hrID = 0, $jobID = 0) {
          
           $user = Auth::user()->person->user_id;
+		  $hrjobtile = Auth::user()->person->position;
           // get from hrPerson where id is $hrID
           
              $status = DB::table('security_modules_access')
@@ -270,6 +271,8 @@ class JobcardController extends Controller
   
            $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
           
+		  
+		  
       }
       
      public function myjobcards(){         
@@ -281,7 +284,7 @@ class JobcardController extends Controller
                    ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
                     
        $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
-       
+       //return $processflow;
        $rowcolumn = $processflow->count();
       
        if(($rowcolumn >0 )){
@@ -324,14 +327,13 @@ class JobcardController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->get();  
         
-       // return $jobcardmaintanance;
         
         $configuration = jobcards_config::first(); 
-        $data['page_title'] = "Job Card Settings";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
-            ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Job Card Management', 'path' => 'jobcards/mycards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Cards ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['Status'] = $Status;
@@ -372,6 +374,10 @@ class JobcardController extends Controller
         $bookingdate = $SysData['booking_date'] = str_replace('/', '-', $SysData['booking_date']);
         $bookingdate = $SysData['booking_date'] = strtotime($SysData['booking_date']);
         
+        $completiondate = $SysData['completion_date'] = str_replace('/', '-', $SysData['completion_date']);
+        $completiondate = $SysData['completion_date'] = strtotime($SysData['completion_date']);
+        
+        
         $flow = jobcard_maintanance::orderBy('id','desc')->latest()->first();
         $flowprocee = !empty($flow->jobcard_number) ? $flow->jobcard_number : 0  ; 
        
@@ -390,6 +396,7 @@ class JobcardController extends Controller
         $jobcardmaintanance->inspection_info = !empty($SysData['inspection_info']) ? $SysData['inspection_info'] : '';
         $jobcardmaintanance->mechanic_id = !empty($SysData['mechanic_id']) ? $SysData['mechanic_id'] : 0;
         $jobcardmaintanance->instruction = !empty($SysData['instruction']) ? $SysData['instruction'] : '';
+        $jobcardmaintanance->completion_date = $completiondate;
         $jobcardmaintanance->jobcard_number = $flowprocee + 1;
         $jobcardmaintanance->status = 1;
         $jobcardmaintanance->save();
@@ -426,16 +433,20 @@ class JobcardController extends Controller
      
      public function jobcardsApprovals(){
          
+         
        
+        $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
-            ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
         ];
 
-        // $data['incidentType'] = $incidentType;
+//        $data['newstep'] = $newstep;
+//        $data['positions'] = $positions;
+//        $data['processflow'] = $processflow;
         $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Setup';
+        $data['active_rib'] = 'Approvals';
 
         AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
         return view('job_cards.search')->with($data); 
@@ -467,7 +478,8 @@ class JobcardController extends Controller
         }
 
         $jobcardmaintanance = DB::table('jobcard_maintanance')
-            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration','contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
+                    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
                     'hr_people.first_name as firstname', 'hr_people.surname as surname')
             ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
@@ -500,48 +512,55 @@ class JobcardController extends Controller
                 ->orderBy('jobcard_maintanance.id', 'asc')
                 ->get(); 
         
-//          $jobcardmaintanance = DB::table('jobcard_maintanance')
-//                   ->select('jobcard_maintanance.*' ,'vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration')
-//                   ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
-//                   ->where(function ($query) use ($actionFrom, $actionTo) {
-//                        if ($actionFrom > 0 && $actionTo > 0) {
-//                            $query->whereBetween('jobcard_maintanance.date', [$actionFrom, $actionTo]);
-//                        }
-//                    })
-//                    ->where(function ($query) use ($jobcard) {
-//                        if (!empty($jobcard)) {
-//                            $query->where('c.jobcard_number',$jobcard);
-//                        }
-//                    })
-//                    ->where(function ($query) use ($fleetnumber) {
-//                        if (!empty($fleetnumber)) {
-//                            $query->where('vehicle_details.fleet_number', 'ILIKE', "%$fleetnumber%");
-//                        }
-//                    })
-//                    ->where(function ($query) use ($registrationNo) {
-//                        if (!empty($registrationNo)) {
-//                            $query->where('vehicle_details.vehicle_registration', 'ILIKE', "%$registrationNo%");
-//                        }
-//                    })
-//                    ->get();
-                    
-         //return $jobcardmaintanance;
-          
-
-                
+     
       
-       // $data['page_description'] = "Job Card Management";
-        $data['breadcrumb'] = [
-            ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
-        ];
-        
+          $data['page_title'] = "Job Card Approvals";
+          $data['page_description'] = "Job Card Management";
+          $data['breadcrumb'] = [
+                ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Job Card Approval ', 'active' => 1, 'is_module' => 0]
+            ];
+
+    //        $data['newstep'] = $newstep;
+    //        $data['positions'] = $positions;
         $data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Setup';
+        $data['active_rib'] = 'Approvals';
 
         AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
         return view('job_cards.Job_card_approval')->with($data); 
      }
+     
+     public function appovecards(Request $request , jobcard_maintanance $jobcards){
+         $this->validate($request, [
+            // 'date_uploaded' => 'required',
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+        //return $results;
+
+        foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
+        
+        foreach ($results as $key => $sValue) {
+            if (strlen(strstr($key, 'cardappprove'))) {
+                $aValue = explode("_", $key);
+                $name = $aValue[0];
+                $cardID = $aValue[1];
+                //return $name;
+                if (count($sValue) > 1) {
+                    $status = $sValue[1];
+                } else $status = $sValue[0];
+                $cardsID = $cardID;
+                return $status;
+                $jobcards->updateOrCreate(['id' => $cardsID], ['status' => $status]);
+            }
+        }
+     }
+    
 }
 
