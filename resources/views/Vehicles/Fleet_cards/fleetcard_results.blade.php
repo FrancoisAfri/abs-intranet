@@ -174,7 +174,7 @@
 				radioClass: 'iradio_square-blue',
 				increaseArea: '10%' // optional
 			});
-			{{--  date  --}}
+			
 				$(function () {
 					var bindDatePicker = function() {
 							$(".date").datetimepicker({

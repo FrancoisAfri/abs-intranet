@@ -651,6 +651,7 @@ Route::get('jobcards/process_act/{steps}', 'JobcardController@steps_act');
 Route::post('jobcards/addjobcard', 'JobcardController@addjobcardmanagement');
 
 Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
+Route::post('jobcards/jobcardsearch', 'JobcardController@jobcardsearch');
 
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');

@@ -26,7 +26,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/vehicle_management/vehiclesearch">
+                <form class="form-horizontal" method="POST" action="/jobcards/jobcardsearch">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -52,10 +52,7 @@
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Job Card # </label>
                                         <div class="col-sm-8">
-                                                
-                                                <input type='text' class="form-control" id='jobcard_id'
-                                                       name="jobcard_id"/>
-                                            
+                                            <input type='text' class="form-control" id='jobcard_id' name="jobcard_id"/>  
                                         </div>
                                     </div>
 
@@ -69,20 +66,14 @@
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Fleet Number </label>
                                         <div class="col-sm-8">
-                                            
-                                                <input type='text' class="form-control" id='fleet_number'
-                                                       name="fleet_number"/>
-                                            
+                                             <input type='text' class="form-control" id='fleet_number'name="fleet_number"/>
                                         </div>
                                     </div>
 
                                      <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Registration Number </label>
                                         <div class="col-sm-8">
-                                            
-                                                <input type='text' class="form-control" id='registration_no'
-                                                       name="registration_no"/>
-                                            
+                                                <input type='text' class="form-control" id='registration_no' name="registration_no"/> 
                                         </div>
                                     </div>
 
@@ -116,9 +107,8 @@
                                             </div>
                                     </div>
                                    
-
                                     </div>
-                                <div class="box-footer">
+                                    <div class="box-footer">
                                     <button type="submit" class="btn btn-primary pull-right"><i
                                                 class="fa fa-search"></i> Search
                                     </button>
@@ -242,6 +232,5 @@
         });
 
         
-
     </script>
 @endsection
