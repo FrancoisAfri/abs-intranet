@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddcolumjobcardmaintananceTables extends Migration
+class AddcolumnToJobcardmaintainceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,7 @@ class AddcolumjobcardmaintananceTables extends Migration
      */
     public function up()
     {
-       Schema::table('jobcard_maintanance', function (Blueprint $table) {
-           $table->string('status_display')->nullable();
-        });
+        //
     }
 
     /**
@@ -25,9 +23,6 @@ class AddcolumjobcardmaintananceTables extends Migration
      */
     public function down()
     {
-        Schema::table('jobcard_maintanance', function (Blueprint $table) {
-            $table->dropColumn('status_display');
-        });
+        //
     }
 }
-
