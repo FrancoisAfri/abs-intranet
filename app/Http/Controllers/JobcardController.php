@@ -18,6 +18,7 @@ use App\CompanyIdentity;
 use App\module_access;
 use App\module_ribbons;
 use App\modules;
+use App\Mail\NextjobstepNotification;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
 use Illuminate\Support\Facades\Auth;
@@ -270,9 +271,7 @@ class JobcardController extends Controller
                    ->first();
   
            $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
-          
-		  
-		  
+								  
       }
       
      public function myjobcards(){         
@@ -284,7 +283,9 @@ class JobcardController extends Controller
                    ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
                     
        $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
-       //return $processflow;
+       $processss = processflow::take(1);
+	  // return $processss;
+	  // return $processflow->step_number->take(1);
        $rowcolumn = $processflow->count();
       
        if(($rowcolumn >0 )){
@@ -315,7 +316,9 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();  
              
-       
+     //   return $jobcardmaintanance;
+        
+        
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
@@ -363,6 +366,9 @@ class JobcardController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
+        
+        $processflow = processflow::order('id', 'acs')->first();
+        $jobtitle = !empty($processflow->job_title) ? $processflow->job_title : 0  ; 
         
         $carddate = $SysData['card_date'] = str_replace('/', '-', $SysData['card_date']);
         $carddate = $SysData['card_date'] = strtotime($SysData['card_date']);
@@ -426,6 +432,15 @@ class JobcardController extends Controller
             }
         }
         
+           // send emails
+              $users = HRPerson::where('position', $jobtitle)->pluck('user_id');
+               foreach ($users as $manID) {
+                 $usedetails = HRPerson::where('user_id',$manID)->select('first_name', 'surname', 'email')->first();
+                 $email = $usedetails->email; $firstname = $usedetails->first_name; $surname = $usedetails->surname; $email = $usedetails->email;
+                     Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
+               }
+        
+        
         AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User", 0);
         return response()->json();
 
@@ -476,12 +491,14 @@ class JobcardController extends Controller
             $actionTo = strtotime($startExplode[1]);
            
         }
-
+        
+        //processflow  status
+        
         $jobcardmaintanance = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
                     'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
-                    'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                    'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
             ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
             ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
@@ -489,6 +506,7 @@ class JobcardController extends Controller
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
                 ->where(function ($query) use ($actionFrom, $actionTo) {
                         if ($actionFrom > 0 && $actionTo > 0) {
                             $query->whereBetween('jobcard_maintanance.date', [$actionFrom, $actionTo]);
@@ -511,8 +529,10 @@ class JobcardController extends Controller
                     })
                 ->orderBy('jobcard_maintanance.id', 'asc')
                 ->get(); 
+                    
+                //   return $jobcardmaintanance;
         
-     
+                   
       
           $data['page_title'] = "Job Card Approvals";
           $data['page_description'] = "Job Card Management";
@@ -521,8 +541,6 @@ class JobcardController extends Controller
                 ['title' => 'Job Card Approval ', 'active' => 1, 'is_module' => 0]
             ];
 
-    //        $data['newstep'] = $newstep;
-    //        $data['positions'] = $positions;
         $data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Approvals';
@@ -538,7 +556,7 @@ class JobcardController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-        //return $results;
+      //  return $results;
 
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
@@ -556,10 +574,46 @@ class JobcardController extends Controller
                     $status = $sValue[1];
                 } else $status = $sValue[0];
                 $cardsID = $cardID;
-                return $status;
-                $jobcards->updateOrCreate(['id' => $cardsID], ['status' => $status]);
+                
+               $getStatus = DB::table('jobcard_maintanance')->where('id',$cardsID)->get();
+               $statusflow = $getStatus->first()->status;
+             
+               $processflow = processflow::where('step_number', '>' , $statusflow)->where('status', 1)->orderBy('step_number','asc')->first();
+                
+               $jobcards->updateOrCreate(['id' => $cardsID], ['status' => $processflow->step_number]);
+               
+               // send email to the next person the step
+               $users = HRPerson::where('position', $processflow->job_title)->pluck('user_id');
+               foreach ($users as $manID) {
+                 $usedetails = HRPerson::where('user_id',$manID)->select('first_name', 'surname', 'email')->first();
+                 $email = $usedetails->email; $firstname = $usedetails->first_name; $surname = $usedetails->surname; $email = $usedetails->email;
+                     Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
+               }
+            }
+            
+            // decline
+            
+            foreach ($results as $sKey => $sValue) {
+            if (strlen(strstr($sKey, 'declined_'))) {
+                list($sUnit, $iID) = explode("_", $sKey);
+                if ($sUnit == 'declined' && !empty($sValue)) {
+                    if (empty($sValue)) $sValue = $sReasonToReject;
+
+                    $jobcard = jobcard_maintanance::where('id' ,$iID )->first();
+                    $jobcard->status = 0;
+                    $jobcard->reject_reason = $sValue;
+                    $jobcard->reject_timestamp = time();
+                    $jobcard->rejector_id =  Auth::user()->person->id;
+                    $jobcard->update();
+                    // $vehicle_maintenance->where('id',$iID)->update(['status' => 3],['reject_reason' => $sValue],['reject_timestamp' => time()]);
+                }
             }
         }
+        $sReasonToReject = '';
+        }
+        
+       AuditReportsController::store('Job Card Management', 'Approve Job Card', "Accessed By User", 0);
+        return back();
      }
     
 }

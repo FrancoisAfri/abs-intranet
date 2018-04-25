@@ -40,7 +40,7 @@
                                                                                           onclick="checkAllboxAccept()"/>
                                 </th>
                                 <th style="width: 5px; text-align: center;">Decline</th>
-                                <th></th>
+                                <th style="width: 5px; text-align: center;"> ................... </th>
                             </tr>
 
                             @if (count($jobcardmaintanance) > 0)
@@ -56,7 +56,7 @@
                                         <td>{{ !empty($filling->firstname.' '. $filling->surname ) ? $filling->firstname.' '. $filling->surname : '' }}</td>
                                         <td>{{ !empty($filling->servicetype ) ? $filling->servicetype : '' }}</td>
                                         <td>{{ !empty($filling->instruction ) ? $filling->instruction : '' }}</td>
-                                        <td>{{ !empty($filling->status ) ? $filling->status : '' }}</td>
+                                        <td>{{ !empty($filling->aStatus ) ? $filling->aStatus : 'Declined' }}</td>
                                       
                                         <td style='text-align:center'>
                                             <input type="hidden" class="checkbox selectall"
@@ -67,16 +67,15 @@
                                                    name="cardappprove_{{ $filling->id }}"
                                                    value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
-                                        <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
-                                                                             id="decline_$aVehicles[id]"
+                                        <td style="text-align:center"><input type="checkbox" class="checkalldeclines "id="decline_$aVehicles[id]"
                                                                              onclick="$('#comment_id_{{$filling->id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
                                         </td>
-                                        <td>
+                                        <td style="width: 15px;">
                                             {{--  <input type="text" size="30" id="comment_id_{{$filling->id}}" name="declined_{{$filling->id}}" style="display:none">         --}}
                                             <textarea class="form-control" id="comment_id_{{$filling->id}}"
                                                       name="declined_{{$filling->id}}"
                                                       placeholder="Enter rejection reason ..." rows="2"
-                                                      style="display:none"></textarea>
+                                                      style="display:none" ></textarea>
                                         </td>
                                        
                                     </tr>

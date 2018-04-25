@@ -31,7 +31,7 @@
                                     <th>Registration</th>
                                     <th>Job Card Date </th>
                                     <th>Completion Date</th>
-									<th style="width: 5px; text-align: center;">Instruction</th>
+				    <th style="width: 5px; text-align: center;">Instruction</th>
                                     <th>Mechanic</th>
                                     <th>Service Type</th>
                                     <th>Supplier</th>
@@ -46,7 +46,7 @@
                                 <td>
                                <a href="{{ '/Product/price/' . $jobcard->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View</a></td>
                                 </td> 
-								<td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
+			        <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
                                 <td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model)) 
                                     ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
                                 <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>

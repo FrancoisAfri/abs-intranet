@@ -423,7 +423,7 @@ class fleetcardController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-       return $vehicle_maintenance;
+      // return $vehicle_maintenance;
 
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
