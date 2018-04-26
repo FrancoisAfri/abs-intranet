@@ -421,19 +421,19 @@ Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@
 Route::post('vehice/add_fleet', 'VehicleManagemntController@Addfleet');
 Route::patch('vehice/edit_fleet/{fleet}', 'VehicleManagemntController@editfleet');
 Route::get('/vehice/fleet_act/{fleet}', 'VehicleManagemntController@VehicleAct');
-Route::get('vehice/Manage_fleet/{fleet}/delete', 'VehicleManagemntController@deletefleet');
+Route::post('vehice/Manage_fleet/{fleet}', 'VehicleManagemntController@deletefleet');
 // ---
 Route::get('vehicle_management/fleet_card', 'VehicleManagemntController@Fleet_Card');
 Route::post('vehice/add_fleetcard', 'VehicleManagemntController@AddfleetCards');
 Route::patch('vehice/edit_fleetcard/{card}', 'VehicleManagemntController@editfleetcard');
 Route::get('/vehice/fleetcard_act/{card}', 'VehicleManagemntController@fleetcardAct');
-Route::get('vehice/Manage_fleetcard_types/{card}/delete', 'VehicleManagemntController@deletefleetcard');
+Route::post('vehice/Manage_fleetcard_types/{card}', 'VehicleManagemntController@deletefleetcard');
 // ---
 Route::get('vehicle_management/fillingstaion', 'VehicleManagemntController@Fleet_fillingstaion');
 Route::post('vehice/add_fillingstation', 'VehicleManagemntController@Addfillingstation');
 Route::patch('vehice/edit_station/{station}', 'VehicleManagemntController@editstation');
 Route::get('/vehice/station_act/{station}', 'VehicleManagemntController@stationcardAct');
-Route::get('vehice/station/{station}/delete', 'VehicleManagemntController@deletestation');
+Route::post('vehice/station/{station}', 'VehicleManagemntController@deletestation');
 // ---
 Route::get('vehicle_management/Permit', 'VehicleManagemntController@Fleet_licencePermit');
 Route::post('vehice/add_license', 'VehicleManagemntController@AddlicencePermit');
@@ -463,7 +463,7 @@ Route::get('vehicle_management/vehice_model/{model}', 'VehicleManagemntControlle
 Route::post('vehice/addvehicle_model/{vehiclemake}', 'VehicleManagemntController@AddVehicleModel');
 Route::patch('vehice/edit_vehicle_model/{vmodel}', 'VehicleManagemntController@editvehiclemodel');
 Route::get('/vehice/vehiclemodle_act/{vmodel}', 'VehicleManagemntController@vehiclemodelAct');
-Route::get('vehice/vehiclemodel/{vmodel}/delete', 'VehicleManagemntController@deleteVehiclemodel');
+Route::post('vehice/vehiclemodel/{vmodel}', 'VehicleManagemntController@deleteVehiclemodel');
 // --- vehicle Search
 Route::post('vehicle_management/vehicle/Search', 'VehicleManagemntController@VehicleSearch');
 // ---

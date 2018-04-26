@@ -44,7 +44,7 @@
                                       btn-xs" onclick="postData({{$vehice->id}}, 'actdeac');"><i class="fa {{ (!empty($vehice->status) && $vehice->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($vehice->status) && $vehice->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-model-warning-modal" data-id="{{ $vehice->id }}"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -71,7 +71,7 @@
         @include('Vehicles.partials.edit_model_modal')
           <!-- Include delete warning Modal form-->
      @if (count($vehiclemodel) > 0)
-         @include('Vehicles.warnings.vehiclemodel_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this vehicle model ? This action cannot be undone.'])
+         @include('Vehicles.warnings.vehiclemodel_warning_action', ['modal_title' => 'Delete Vehicle model', 'modal_content' => 'Are you sure you want to delete this vehicle model ? This action cannot be undone.'])
     @endif
 </div>
 
@@ -170,6 +170,26 @@
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+
+                    var modelID;
+                    $('#delete-model-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        modelID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_model').on('click', function () {
+                        var strUrl = '/vehice/vehiclemodel/'+ modelID;
+                        var modalID = 'delete-model-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_model';
+                        var redirectUrl = '/vehicle_management/vehice_model/{{$vehicleID}}';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
+
 
         });
     </script>
