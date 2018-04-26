@@ -665,7 +665,6 @@ class VehicleManagemntController extends Controller
     public function deleteVehiclemake(Request $request, vehiclemake $vmake)
     {
         $vmake->delete();
-
         AuditReportsController::store('Vehicle Make', 'Vehicle Make Deleted', "Vehicle Make has been deleted", 0);
         return redirect('/vehicle_management/vehice_make');
     }
