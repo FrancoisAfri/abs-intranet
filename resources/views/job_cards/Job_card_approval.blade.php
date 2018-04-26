@@ -57,7 +57,9 @@
                                         <td>{{ !empty($filling->servicetype ) ? $filling->servicetype : '' }}</td>
                                         <td>{{ !empty($filling->instruction ) ? $filling->instruction : '' }}</td>
                                         <td>{{ !empty($filling->aStatus ) ? $filling->aStatus : 'Declined' }}</td>
-                                      
+                                       @if (isset($filling) && $filling->status === 0 || $filling->status === $stepnumber)
+                                        <td></td>
+                                          @else
                                         <td style='text-align:center'>
                                             <input type="hidden" class="checkbox selectall"
                                                    id="cardappprove_{{ $filling->id }}"
@@ -65,8 +67,14 @@
                                             <input type="checkbox" class="checkbox selectall"
                                                    id="cardappprove_{{ $filling->id }}"
                                                    name="cardappprove_{{ $filling->id }}"
-                                                   value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
+                                                   value="1" >
                                         </td>
+                                     @endif
+                                        
+                                         @if (isset($filling) && $filling->status === 0 || $filling->status === $stepnumber)
+                                         <td></td>
+                                        <td></td>
+                                           @else
                                         <td style="text-align:center"><input type="checkbox" class="checkalldeclines "id="decline_$aVehicles[id]"
                                                                              onclick="$('#comment_id_{{$filling->id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
                                         </td>
@@ -77,7 +85,9 @@
                                                       placeholder="Enter rejection reason ..." rows="2"
                                                       style="display:none" ></textarea>
                                         </td>
+                                    
                                        
+                                       @endif
                                     </tr>
                                 @endforeach
                             @else

@@ -653,7 +653,8 @@ Route::get('jobcards/process_act/{steps}', 'JobcardController@steps_act');
 Route::post('jobcards/addjobcard', 'JobcardController@addjobcardmanagement');
 
 Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
-Route::post('jobcards/jobcardsearch', 'JobcardController@jobcardsearch');
+//Route::get('jobcards/search', 'JobcardController@jobcardsApprovals');
+Route::get('jobcards/search', 'JobcardController@jobcardsearch');
 
 Route::post('jobcards/appovecards', 'JobcardController@appovecards');
 //    -Kpi Types

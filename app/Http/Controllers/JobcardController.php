@@ -19,6 +19,7 @@ use App\module_access;
 use App\module_ribbons;
 use App\modules;
 use App\Mail\NextjobstepNotification;
+use App\Mail\DeclinejobstepNotification;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
 use Illuminate\Support\Facades\Auth;
@@ -316,8 +317,6 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();  
              
-     //   return $jobcardmaintanance;
-        
         
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -367,7 +366,7 @@ class JobcardController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
         
-        $processflow = processflow::order('id', 'acs')->first();
+        $processflow = processflow::orderBy('id', 'acs')->first();
         $jobtitle = !empty($processflow->job_title) ? $processflow->job_title : 0  ; 
         
         $carddate = $SysData['card_date'] = str_replace('/', '-', $SysData['card_date']);
@@ -446,10 +445,70 @@ class JobcardController extends Controller
 
      }
      
-     public function jobcardsApprovals(){
+     public function jobcardsearch(){
          
-         
-       
+//         $this->validate($request, [
+//
+//        ]);
+//        $SysData = $request->all();
+//        unset($SysData['_token']);
+//        
+//        $jobcard = $request['jobcard_id'];
+//        $fleetnumber = $request['fleet_number'];
+//        $registrationNo = $request['registration_no'];
+//        $status = $request['status'];
+//        $servicetypeID = $request['service_type_id'];
+//        $mechanicID = $request['mechanic_id'];
+//        
+//        //$jobcardmaintanance =  jobcard_maintanance::orderBy('id','desc')->get();
+//        
+//        $actionFrom = $actionTo = 0;
+//        $actionDate = $request['date'];
+//        if (!empty($actionDate)) {
+//            $startExplode = explode('-', $actionDate);
+//            $actionFrom = strtotime($startExplode[0]);
+//            $actionTo = strtotime($startExplode[1]);
+//           
+//        }
+//        
+//        //processflow  status
+//        
+//        $jobcardmaintanance = DB::table('jobcard_maintanance')
+//            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
+//                    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+//                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+//                    'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+//            ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+//            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+//            ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+//            ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+//            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+//            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+//            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+//            ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+//                ->where(function ($query) use ($actionFrom, $actionTo) {
+//                        if ($actionFrom > 0 && $actionTo > 0) {
+//                            $query->whereBetween('jobcard_maintanance.date', [$actionFrom, $actionTo]);
+//                        }
+//                    })
+//                    ->where(function ($query) use ($jobcard) {
+//                        if (!empty($jobcard)) {
+//                            $query->where('c.jobcard_number',$jobcard);
+//                        }
+//                    })
+//                    ->where(function ($query) use ($fleetnumber) {
+//                        if (!empty($fleetnumber)) {
+//                            $query->where('vehicle_details.fleet_number', 'ILIKE', "%$fleetnumber%");
+//                        }
+//                    })
+//                    ->where(function ($query) use ($registrationNo) {
+//                        if (!empty($registrationNo)) {
+//                            $query->where('vehicle_details.vehicle_registration', 'ILIKE', "%$registrationNo%");
+//                        }
+//                    })
+//                ->orderBy('jobcard_maintanance.id', 'asc')
+//                ->get(); 
+                    
         $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
@@ -457,42 +516,14 @@ class JobcardController extends Controller
             ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
         ];
 
-//        $data['newstep'] = $newstep;
-//        $data['positions'] = $positions;
-//        $data['processflow'] = $processflow;
         $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Approvals';
+        $data['active_rib'] = 'Search Job Cards';
 
         AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
         return view('job_cards.search')->with($data); 
      }
      
-     public function jobcardsearch(Request $request){
-        $this->validate($request, [
-
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
-        
-        $jobcard = $request['jobcard_id'];
-        $fleetnumber = $request['fleet_number'];
-        $registrationNo = $request['registration_no'];
-        $status = $request['status'];
-        $servicetypeID = $request['service_type_id'];
-        $mechanicID = $request['mechanic_id'];
-        
-        //$jobcardmaintanance =  jobcard_maintanance::orderBy('id','desc')->get();
-        
-        $actionFrom = $actionTo = 0;
-        $actionDate = $request['date'];
-        if (!empty($actionDate)) {
-            $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
-           
-        }
-        
-        //processflow  status
+     public function jobcardsApprovals(){
         
         $jobcardmaintanance = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
@@ -507,32 +538,15 @@ class JobcardController extends Controller
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
-                ->where(function ($query) use ($actionFrom, $actionTo) {
-                        if ($actionFrom > 0 && $actionTo > 0) {
-                            $query->whereBetween('jobcard_maintanance.date', [$actionFrom, $actionTo]);
-                        }
-                    })
-                    ->where(function ($query) use ($jobcard) {
-                        if (!empty($jobcard)) {
-                            $query->where('c.jobcard_number',$jobcard);
-                        }
-                    })
-                    ->where(function ($query) use ($fleetnumber) {
-                        if (!empty($fleetnumber)) {
-                            $query->where('vehicle_details.fleet_number', 'ILIKE', "%$fleetnumber%");
-                        }
-                    })
-                    ->where(function ($query) use ($registrationNo) {
-                        if (!empty($registrationNo)) {
-                            $query->where('vehicle_details.vehicle_registration', 'ILIKE', "%$registrationNo%");
-                        }
-                    })
-                ->orderBy('jobcard_maintanance.id', 'asc')
-                ->get(); 
+            ->orderBy('jobcard_maintanance.id', 'asc')
+            ->get(); 
                     
-                //   return $jobcardmaintanance;
+                   //return $jobcardmaintanance;
         
-                   
+           $steps =  processflow::latest()->first();     
+           $stepnumber = !empty($steps->step_number) ? $steps->step_number : 0  ; 
+           
+         //  return $stepnumber;
       
           $data['page_title'] = "Job Card Approvals";
           $data['page_description'] = "Job Card Management";
@@ -541,6 +555,7 @@ class JobcardController extends Controller
                 ['title' => 'Job Card Approval ', 'active' => 1, 'is_module' => 0]
             ];
 
+        $data['stepnumber'] = $stepnumber;
         $data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Approvals';
@@ -592,20 +607,42 @@ class JobcardController extends Controller
             }
             
             // decline
-            
+                 
             foreach ($results as $sKey => $sValue) {
             if (strlen(strstr($sKey, 'declined_'))) {
                 list($sUnit, $iID) = explode("_", $sKey);
                 if ($sUnit == 'declined' && !empty($sValue)) {
                     if (empty($sValue)) $sValue = $sReasonToReject;
 
-                    $jobcard = jobcard_maintanance::where('id' ,$iID )->first();
-                    $jobcard->status = 0;
+                            $getStatus = DB::table('jobcard_maintanance')->where('id',$iID)->get();
+                            $statusflow = $getStatus->first()->status;
+                            
+                          
+                    $jobcard = jobcard_maintanance::where('id' ,$iID )->first();  // when declined move back to the last step
+                      if($statusflow === 0 ){
+                          // status 0 means declined
+                         $jobcard->status = 0;  
+                      }elseif($statusflow === 1){
+                          $jobcard->status = 0;
+                      }else
+                    $jobcard->status = $statusflow - 1;
                     $jobcard->reject_reason = $sValue;
                     $jobcard->reject_timestamp = time();
                     $jobcard->rejector_id =  Auth::user()->person->id;
                     $jobcard->update();
                     // $vehicle_maintenance->where('id',$iID)->update(['status' => 3],['reject_reason' => $sValue],['reject_timestamp' => time()]);
+                    
+                     if($statusflow != 0 ){
+                     $processflow = processflow::where('step_number', $statusflow - 1)->where('status', 1)->orderBy('step_number','asc')->first();
+                     $user = HRPerson::where('position', $processflow->job_title)->pluck('user_id');
+                     foreach ($user as $manID) {
+                        $usedetails = HRPerson::where('user_id',$manID)->select('first_name', 'surname', 'email')->first();
+                        $email = $usedetails->email; $firstname = $usedetails->first_name; $surname = $usedetails->surname; $email = $usedetails->email; $reason = $sValue;
+                         Mail::to($email)->send(new DeclinejobstepNotification($firstname, $surname, $email ,$reason ));
+                       }
+                     }else{
+                         //
+                     }
                 }
             }
         }
