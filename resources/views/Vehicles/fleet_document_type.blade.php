@@ -39,7 +39,7 @@
                                       btn-xs" onclick="postData({{$document->id}}, 'actdeac');"><i class="fa {{ (!empty($document->status) && $document->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($document->status) && $document->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-documents-warning-modal" data-id="{{ $document->id }}"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -166,6 +166,24 @@
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
+            var documtsID;
+                    $('#delete-documents-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        documtsID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_documents').on('click', function () {
+                        var strUrl = '/vehice/document/'+ documtsID;
+                        var modalID = 'delete-documents-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_documents';
+                        var redirectUrl = '/vehicle_management/Document_type';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
         });
     </script>
 @endsection

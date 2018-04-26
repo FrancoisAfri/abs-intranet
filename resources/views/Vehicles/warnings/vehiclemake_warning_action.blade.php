@@ -16,10 +16,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">No</button>
-                <button type="button" id="delete_contact" class="btn btn-outline pull-right">Yes</button>
-				   
+                <button type="button" id="delete_contact" class="btn btn-outline pull-right">Yes</button>	   
 			</form>
-			
         </div>
         <!-- /.modal-content -->
     </div>

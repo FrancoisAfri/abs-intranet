@@ -39,7 +39,7 @@
                                       btn-xs" onclick="postData({{$filling->id}}, 'actdeac');"><i class="fa {{ (!empty($filling->status) && $filling->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($filling->status) && $filling->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-station-warning-modal" data-id="{{ $filling->id }}"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -57,7 +57,7 @@
                                    <!-- /.box-body -->
                     <div class="box-footer">
                      <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-station-modal">Add new  Filling Station </button>
+                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-station-modal" data-id="{{ $filling->id }}">Add new  Filling Station </button>
                     </div>
              </div>
         </div>
@@ -66,7 +66,7 @@
         @include('Vehicles.partials.edit_fillingstation_modal')
         <!-- Include delete warning Modal form-->
             @if (count($fleetfillingstation) > 0)
-                @include('Vehicles.warnings.station_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])
+                @include('Vehicles.warnings.station_warning_action', ['modal_title' => 'Delete Vehicle station', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])
             @endif
 
 </div>
@@ -162,8 +162,27 @@
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Fleet Type has been updated successfully.';
                 var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+            
+            var stationID;
+                    $('#delete-station-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        stationID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_station').on('click', function () {
+                        var strUrl = '/vehice/station/'+ stationID;
+                        var modalID = 'delete-station-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_station';
+                        var redirectUrl = '/vehicle_management/fillingstaion';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
 
         });
     </script>

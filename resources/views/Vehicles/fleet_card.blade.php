@@ -43,7 +43,7 @@
                                       btn-xs" onclick="postData({{$fleet->id}}, 'actdeac');"><i class="fa {{ (!empty($fleet->status) && $fleet->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($fleet->status) && $fleet->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-fleetcard-warning-modal" data-id="{{ $fleet->id }}" ><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -70,7 +70,7 @@
         @include('Vehicles.partials.edit_fleetcard_modal')
           <!-- Include delete warning Modal form-->
      @if (count($FleetType) > 0)
-         @include('Vehicles.warnings.fleetcard_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])
+         @include('Vehicles.warnings.fleetcard_warning_action', ['modal_title' => 'Delete Fleet Cards Type', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])
     @endif
 </div>
 
@@ -162,12 +162,32 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_fleetcard';
-                var redirectUrl = '/vehicle_management/Manage_fleet_types';
+                var redirectUrl = '/vehicle_management/fleet_card';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The Fleet Type has been updated successfully.';
                 var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+
+                  var fleetcardID;
+                    $('#delete-fleetcard-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        fleetcardID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_fleetcard').on('click', function () {
+                        var strUrl = '/vehice/Manage_fleetcard_types/'+ fleetcardID;
+                        var modalID = 'delete-fleetcard-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_fleetcard';
+                        var redirectUrl = '/vehicle_management/fleet_card';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
+
 
         });
     </script>
