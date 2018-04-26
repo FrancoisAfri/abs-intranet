@@ -43,7 +43,7 @@
                                       btn-xs" onclick="postData({{$vehice->id}}, 'actdeac');"><i class="fa {{ (!empty($vehice->status) && $vehice->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($vehice->status) && $vehice->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-fleet-warning-modal" data-id="{{ $vehice->id }}" ><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -70,7 +70,7 @@
         @include('Vehicles.partials.edit_fleet_modal')
           <!-- Include delete warning Modal form-->
      @if (count($Vehiclemanagemnt) > 0)
-         @include('Vehicles.warnings.fleet_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet Type? This action cannot be undone.'])
+         @include('Vehicles.warnings.fleet_warning_action', ['modal_title' => 'Delete Vehicle Type', 'modal_content' => 'Are you sure you want to delete this Vehicle Type? This action cannot be undone.'])
     @endif
 </div>
 
@@ -166,6 +166,25 @@
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+
+                var typeID;
+                    $('#delete-fleet-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        typeID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_fleet').on('click', function () {
+                        var strUrl = '/vehice/Manage_fleet/'+ typeID;
+                        var modalID = 'delete-fleet-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_fleet';
+                        var redirectUrl = '/vehicle_management/Manage_fleet_types';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
 
         });
     </script>

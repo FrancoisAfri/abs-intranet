@@ -143,6 +143,10 @@ class DatabaseSeeder extends Seeder
             'value' => 'Indian',
             'status' => 1,
         ]);
+		DB::table('ethnicities')->insert([
+            'value' => 'White',
+            'status' => 1,
+        ]);
         //insert public Holidays
         DB::table('public_holidays')->insert([
             'day' => 1482789600,

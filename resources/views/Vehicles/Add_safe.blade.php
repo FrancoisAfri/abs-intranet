@@ -43,7 +43,7 @@
                                       btn-xs" onclick="postData({{$vehice->id}}, 'actdeac');"><i class="fa {{ (!empty($vehice->status) && $vehice->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($vehice->status) && $vehice->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-safe-warning-modal" data-id="{{ $vehice->id }}"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -70,7 +70,7 @@
         @include('Vehicles.partials.edit_safe_modal')
           <!-- Include delete warning Modal form-->
       @if (count($safe) > 0)
-         @include('Vehicles.warnings.safe_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Safe ? This action cannot be undone.'])
+         @include('Vehicles.warnings.safe_warning_action', ['modal_title' => 'Delete safe', 'modal_content' => 'Are you sure you want to delete this Safe ? This action cannot be undone.'])
     @endif
 </div>
 
@@ -166,6 +166,25 @@
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+
+            var safeID;
+                    $('#delete-safe-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        safeID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_safe').on('click', function () {
+                        var strUrl = '/vehicle_management/Manage_safe/'+ safeID;
+                        var modalID = 'delete-safe-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_safe';
+                        var redirectUrl = '/vehicle_management/safe';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
 
         });
     </script>
