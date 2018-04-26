@@ -601,7 +601,7 @@ class VehicleManagemntController extends Controller
 
     public function vehicemake()
     {
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('name', 'asc')->get();
 
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Management";
