@@ -1,6 +1,9 @@
 <div id="delete-contact-warning-modal" class="modal modal-warning  fade">
     <div class="modal-dialog">
         <div class="modal-content">
+		<form class="form-horizontal" method="POST" name="delete-contact-warning-modal-form">
+                {{ csrf_field() }}
+              
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
@@ -13,8 +16,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">No</button>
-                <a href="{{ '/vehice/vehiclemake/' . $vehice->id . '/delete' }}" class="btn btn-outline">Yes</a>
-            </div>
+                <button type="button" id="delete_contact" class="btn btn-outline pull-right">Yes</button>
+				   
 			</form>
 			
         </div>

@@ -18,9 +18,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-            {{ csrf_field() }}
-            {{ method_field('PATCH') }}
             <!-- /.box-header -->
                 <div class="box-body">
                     <table class="table table-bordered">
@@ -60,7 +57,7 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-contact-warning-modal"  data-make_id="{{ $vehice->id }}"><i class="fa fa-trash"></i>
+                                                data-target="#delete-contact-warning-modal"  data-id="{{ $vehice->id }}"><i class="fa fa-trash"></i>
                                             Delete
                                         </button>
                                     </td>
@@ -177,15 +174,39 @@
                         var modal = $(this);
                         modal.find('#name').val(name);
                         modal.find('#description').val(description);
-                    }); 
-					$('#delete-contact-warning-modal').on('show.bs.modal', function (e) {
-                        //console.log('kjhsjs');
-                        var btnEdit = $(e.relatedTarget);
-                        
-                        var MakeID = btnEdit.data('make_id');
-                        var modal = $(this);
-                        modal.find('#make_id').val(MakeID);
                     });
+                    
+
+                    var makeID;
+                    $('#delete-contact-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        makeID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_contact').on('click', function () {
+                        var strUrl = '/vehice/vehiclemake/'+ makeID;
+                        var modalID = 'delete-contact-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_contact';
+                        var redirectUrl = '/vehicle_management/vehice_make';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
+
+
+                    // var makeID;
+					// $('#delete-contact-warning-modal').on('show.bs.modal', function (e) {
+                    //     var btnEdit = $(e.relatedTarget);
+                    //     makeID = btnEdit.data('id'); 
+                    //     var btnEdit = $(e.relatedTarget);  
+                    //     var makeID = btnEdit.data('make_id');
+                    //     var modal = $(this);
+                    //     modal.find('#make_id').val(MakeID);
+                    // });
+
                     $('#edit_vehiclemake').on('click', function () {
                         var strUrl = '/vehice/edit_vehicle_make/' + fleetID;
                         var modalID = 'edit-package-modal';

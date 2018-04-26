@@ -457,7 +457,7 @@ Route::get('vehicle_management/vehice_make', 'VehicleManagemntController@vehicem
 Route::post('vehice/addvehicle_make', 'VehicleManagemntController@AddVehicleMake');
 Route::patch('vehice/edit_vehicle_make/{vmake}', 'VehicleManagemntController@editvehiclemake');
 Route::get('/vehice/vehiclemake_act/{vmake}', 'VehicleManagemntController@vehiclemakeAct');
-Route::get('vehice/vehiclemake/{vmake}/delete', 'VehicleManagemntController@deleteVehiclemake');
+Route::post('vehice/vehiclemake/{vmake}', 'VehicleManagemntController@deleteVehiclemake');
 // ---
 Route::get('vehicle_management/vehice_model/{model}', 'VehicleManagemntController@vehicemodel');
 Route::post('vehice/addvehicle_model/{vehiclemake}', 'VehicleManagemntController@AddVehicleModel');
