@@ -60,7 +60,7 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
+                                                data-target="#delete-contact-warning-modal"  data-make_id="{{ $vehice->id }}"><i class="fa fa-trash"></i>
                                             Delete
                                         </button>
                                     </td>
@@ -177,6 +177,14 @@
                         var modal = $(this);
                         modal.find('#name').val(name);
                         modal.find('#description').val(description);
+                    }); 
+					$('#delete-contact-warning-modal').on('show.bs.modal', function (e) {
+                        //console.log('kjhsjs');
+                        var btnEdit = $(e.relatedTarget);
+                        
+                        var MakeID = btnEdit.data('make_id');
+                        var modal = $(this);
+                        modal.find('#make_id').val(MakeID);
                     });
                     $('#edit_vehiclemake').on('click', function () {
                         var strUrl = '/vehice/edit_vehicle_make/' + fleetID;
