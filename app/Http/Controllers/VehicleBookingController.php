@@ -163,7 +163,7 @@ class VehicleBookingController extends Controller {
         $startDate = strtotime($requiredFrom);
         $EndDate = strtotime($requiredTo);
 
-               $status = array(1 => 'Active', 2 => 'Require Approval', 3 => 'Rejected', 4 => 'Inactive');
+        $status = array(1 => 'Active', 2 => 'Require Approval', 3 => 'Rejected', 4 => 'Inactive');
 
        // return $vehicletype;
         $vehiclebookings = DB::table('vehicle_details')
