@@ -92,7 +92,10 @@
             <!-- Include add new prime rate modal -->
             @include('Vehicles.partials.add_vehiclemake_modal')
             @include('Vehicles.partials.edit_vehiclemake_modal')
-
+			<!-- Include delete warning Modal form-->
+            @if (count($vehiclemake) > 0)
+                @include('Vehicles.warnings.vehiclemake_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet Make? This action cannot be undone.'])
+            @endif
         </div>
 
 
