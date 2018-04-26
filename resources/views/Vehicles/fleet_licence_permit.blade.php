@@ -43,7 +43,7 @@
                                       btn-xs" onclick="postData({{$filling->id}}, 'actdeac');"><i class="fa {{ (!empty($filling->status) && $filling->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($filling->status) && $filling->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-licence-warning-modal" data-id="{{ $filling->id }}"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -70,7 +70,7 @@
         @include('Vehicles.partials.edit_licence_modal')
         <!-- Include delete warning Modal form-->
             @if (count($licence_permit) > 0)
-                @include('Vehicles.warnings.license_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Fleet License Type/Permit? This action cannot be undone.'])
+                @include('Vehicles.warnings.license_warning_action', ['modal_title' => 'Delete Vehicle License Type/Permit', 'modal_content' => 'Are you sure you want to delete this Fleet License Type/Permit? This action cannot be undone.'])
             @endif
 
 </div>
@@ -169,6 +169,24 @@
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
+            var licenceID;
+                    $('#delete-licence-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        licenceID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_licence').on('click', function () {
+                        var strUrl = '/vehice/license/'+ licenceID;
+                        var modalID = 'delete-licence-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_licence';
+                        var redirectUrl = '/vehicle_management/Permit';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
         });
     </script>
 @endsection

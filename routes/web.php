@@ -439,19 +439,20 @@ Route::get('vehicle_management/Permit', 'VehicleManagemntController@Fleet_licenc
 Route::post('vehice/add_license', 'VehicleManagemntController@AddlicencePermit');
 Route::patch('vehice/edit_license/{permit}', 'VehicleManagemntController@editlicense');
 Route::get('/vehice/licence_act/{permit}', 'VehicleManagemntController@licensePermitAct');
-Route::get('vehice/license/{permit}/delete', 'VehicleManagemntController@deleteLicensePermit');
+Route::post('vehice/license/{permit}', 'VehicleManagemntController@deleteLicensePermit');
+
 // ---
 Route::get('vehicle_management/Document_type', 'VehicleManagemntController@Fleet_DocumentType');
 Route::post('vehice/add_document', 'VehicleManagemntController@AddDocumentType');
 Route::patch('vehice/edit_document/{document}', 'VehicleManagemntController@EditDocumentType');
 Route::get('/vehice/document_act/{document}', 'VehicleManagemntController@DocumentTypeAct');
-Route::get('vehice/document/{document}/delete', 'VehicleManagemntController@deleteDocument');
+Route::post('vehice/document/{document}', 'VehicleManagemntController@deleteDocument');
 //---
 Route::get('vehicle_management/Incidents_type', 'VehicleManagemntController@IncidentType');
 Route::post('vehice/incident_type', 'VehicleManagemntController@AddIncidentType');
 Route::patch('vehice/edit_incident/{incident}', 'VehicleManagemntController@EditIncidentType');
 Route::get('/vehice/incident_act/{incident}', 'VehicleManagemntController@incidentTypeAct');
-Route::get('vehice/incident/{incident}/delete', 'VehicleManagemntController@deleteIncident');
+Route::post('vehice/incident/{incident}', 'VehicleManagemntController@deleteIncident');
 // ----
 Route::get('vehicle_management/vehice_make', 'VehicleManagemntController@vehicemake');
 Route::post('vehice/addvehicle_make', 'VehicleManagemntController@AddVehicleMake');
@@ -485,7 +486,7 @@ Route::get('vehicle_management/safe', 'VehicleManagemntController@safe');
 Route::post('vehicle_management/addsafe', 'VehicleManagemntController@Addsafe');
 Route::patch('vehicle_management/edit_safe/{safe}', 'VehicleManagemntController@editsafe');
 Route::get('vehicle_management/safe_act/{safe}', 'VehicleManagemntController@safeAct');
-Route::get('vehicle_management/Manage_safe/{safe}/delete', 'VehicleManagemntController@deletesafe');
+Route::post('vehicle_management/Manage_safe/{safe}', 'VehicleManagemntController@deletesafe');
 
 //#*************** Fleet Management ************
 Route::get('vehicle_management/manage_fleet', 'FleetManagementController@fleetManagent');

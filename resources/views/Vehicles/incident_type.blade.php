@@ -43,7 +43,7 @@
                                       btn-xs" onclick="postData({{$incident->id}}, 'actdeac');"><i class="fa {{ (!empty($incident->status) && $incident->status == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($incident->status) && $incident->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-incidents-warning-modal" data-id="{{ $incident->id }}"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -61,7 +61,7 @@
                                    <!-- /.box-body -->
                     <div class="box-footer">
                      <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-incident-modal">Add new Incident Type </button>
+                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-incident-modal" >Add new Incident Type </button>
                     </div>
              </div>
         </div>
@@ -73,7 +73,6 @@
             @if (count($incidentType) > 0)
                 @include('Vehicles.warnings.incident_warning_action', ['modal_title' => 'Delete Incident Type', 'modal_content' => 'Are you sure you want to delete this Incident Type ? This action cannot be undone.'])
             @endif
-
 
 </div>
 
@@ -170,6 +169,25 @@
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+
+            var incidentsID;
+                    $('#delete-incidents-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        incidentsID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_incidents').on('click', function () {
+                        var strUrl = '/vehice/incident/'+ incidentsID;
+                        var modalID = 'delete-incidents-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_incidents';
+                        var redirectUrl = '/vehicle_management/Incidents_type';
+                       //var Method = 'PATCH';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+                    });
 
         });
     </script>
