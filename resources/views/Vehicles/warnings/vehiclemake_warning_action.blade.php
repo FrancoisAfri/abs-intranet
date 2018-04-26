@@ -7,12 +7,16 @@
                 <h4 class="modal-title"><i class="fa fa-warning"></i> {{ $modal_title }}</h4>
             </div>
             <div class="modal-body">
+			<form>
+			<input type="hidden">
                 <p>{{ $modal_content }}</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">No</button>
                 <a href="{{ '/vehice/vehiclemake/' . $vehice->id . '/delete' }}" class="btn btn-outline">Yes</a>
             </div>
+			</form>
+			
         </div>
         <!-- /.modal-content -->
     </div>
