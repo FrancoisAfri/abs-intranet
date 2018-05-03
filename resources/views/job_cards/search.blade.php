@@ -201,18 +201,17 @@
         });
 
         $('input[name="date"]').daterangepicker({
-                timePicker: false,
+
+            defaultDate: null
+               // timePicker: false,
                 //timePickerIncrement: 30,
-                locale: {
-                    //format: 'MM/DD/YYYY h:mm A'
-                    format: 'DD/MM/YYYY'
-                }
+               
             });
 
         $('.required_from').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
-            todayHighlight: true
+           // todayHighlight: true
         });
 
         //Initialize iCheck/iRadio Elements

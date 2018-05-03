@@ -12,5 +12,5 @@ class jobcard_maintanance extends Model
 							'estimated_hours','service_file_upload' ,'service_time',
 							'machine_hour_metre','machine_odometer','last_driver_id',
 							'inspection_info','inspection_file_upload','mechanic_id',
-							'instruction','status','jobcard_number'];
+							'instruction','status','jobcard_number','date_default'];
 }
