@@ -159,7 +159,7 @@
 
                     
                        <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
-                                    data-target="#upload-image-modal">Job Card Notes            
+                                    data-target="#add-note-modal">Job Card Notes            
                         </button>
 
                     <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
@@ -195,7 +195,7 @@
                 @endforeach
             </div>
         </div>
-      
+        @include('job_cards.partials.add_note_modal')
     </div>
 @endsection
 @section('page_script')
