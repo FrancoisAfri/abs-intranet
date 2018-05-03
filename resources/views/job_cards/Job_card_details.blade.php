@@ -161,15 +161,13 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Job Card Notes</a>
                     
-                       
-
-                    <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
+                    <a href="{{ '/jobcards/parts/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>
+                       data-id="{{ $vehiclemaintenance->id }}">Add Parts</a>
 
                     <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Documents</a>
+                       data-id="{{ $vehiclemaintenance->id }}">Request Cancellation</a>
 <!--
                     <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
@@ -178,16 +176,12 @@
 
                     <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Notes</a>
+                       data-id="{{ $vehiclemaintenance->id }}">Conclude Jobcard</a>
 
                     <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
-
-                   <a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
-
+                       data-id="{{ $vehiclemaintenance->id }}">Create Request</a>
+                       
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
