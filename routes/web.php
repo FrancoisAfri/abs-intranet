@@ -315,7 +315,9 @@ Route::post('help_desk/operator/assign/{operatorID}', 'Assign_ticketController@a
 
 Route::get('helpdesk/ticket', 'HelpdeskController@createTicket');
 Route::post('help_desk/operator/add/{serviceID}', 'HelpdeskController@Addoperator');
+Route::patch('help_desk/operator/edit/{serviceID}', 'HelpdeskController@editoperator');
 Route::post('help_desk/admin/add/{adminID}', 'HelpdeskController@addAdmin');
+Route::patch('help_desk/admin/edit/{adminID}', 'HelpdeskController@editAdmin');
 Route::post('help_desk/ticket/add', 'HelpdeskController@addTicket');
 Route::post('help_desk/ticket/client', 'HelpdeskController@clientlTicket');
 
@@ -329,7 +331,9 @@ Route::post('help_desk/auto_escalations', 'HelpdeskController@auto_escalations')
 Route::post('help_desk/unresolved_tickets/{service}', 'HelpdeskController@unresolved_tickets');
 Route::post('help_desk/unresolved_tickets', 'HelpdeskController@unresolved_tickets');
 Route::post('help_desk/auto_responder_messages', 'HelpdeskController@auto_responder_messages');
+Route::post('help_desk/auto_responder_messages/{service}', 'HelpdeskController@auto_responder_messages');
 Route::post('help_desk/email_setup', 'HelpdeskController@email_setup');
+Route::post('help_desk/email_setup/{service}', 'HelpdeskController@email_setup');
 
 #//************Fleet Card *******************
 Route::get('vehicle_management/fleet_cards', 'fleetcardController@index');

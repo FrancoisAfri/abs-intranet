@@ -58,7 +58,7 @@ class HelpdeskController extends Controller {
         $Sys->description = $SysData['description'];
         $Sys->status = 1;
         $Sys->save();
-        // AuditReportsController::store('Employee Records', 'Job Title Category Added', "price: $priceData[price]", 0);
+        AuditReportsController::store('Help Desk', 'Help Desk System Added', "price: $priceData[price]", 0);
         return response()->json();
     }
 
@@ -104,7 +104,7 @@ class HelpdeskController extends Controller {
         $data['systems'] = $systems;
         $data['active_mod'] = 'Help Desk';
         $data['active_rib'] = 'Create Ticket';
-        //AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
+        AuditReportsController::store('Help Desk', 'Help Desk Ticket Created', "Actioned By User", 0);
         return view('help_desk.create_ticket')->with($data);
     }
 
@@ -118,6 +118,7 @@ class HelpdeskController extends Controller {
         $service->description = $request->input('description');
         $service->update();
         AuditReportsController::store('Employee Records', 'Category Informations Edited', "Edited by User", 0);
+		AuditReportsController::store('Help Desk', 'Help Desk Added', "Actioned By User", 0);
         return response()->json(['new_name' => $service->name, 'new_description' => $service->description], 200);
     }
 
@@ -135,8 +136,8 @@ class HelpdeskController extends Controller {
 
             $autoRensponder = autoRensponder::where('helpdesk_id',$serviceID)->orderBy('id', 'des')->get()->first();  
              
-            $settings = system_email_setup::orderBy('id', 'des')->get()->first();  
-                
+            $emailSettings = system_email_setup::orderBy('id', 'des')->get()->first();  
+               
             $operators = DB::table('operator')
                         ->select('operator.*','hr_people.first_name as firstname','hr_people.surname as surname')
                         ->leftJoin('hr_people', 'operator.operator_id', '=', 'hr_people.id')
@@ -151,16 +152,13 @@ class HelpdeskController extends Controller {
                   ->leftJoin('hr_people', 'helpdesk_Admin.admin_id', '=', 'hr_people.id')
                   ->where('helpdesk_Admin.helpdesk_id', $serviceID)
                   ->orderBy('helpdesk_Admin.helpdesk_id')
-                  ->get();
-
-
-            
+                  ->get(); 
              $data['helpdeskSetup'] = $helpdeskSetup;          
              $data['autoEscalationSettings'] = $autoEscalationSettings;          
              $data['unresolvedTicketsSettings'] = $unresolvedTicketsSettings;          
              $data['autoRensponder'] = $autoRensponder;          
              $data['products'] = $service;
-             $data['settings'] = $settings;
+             $data['emailSettings'] = $emailSettings;
              $data['HelpdeskAdmin'] = $HelpdeskAdmin;
              $data['employees']= $employees;
              $data['systems'] = $systems;
@@ -200,7 +198,21 @@ class HelpdeskController extends Controller {
         $operator->helpdesk_id = $help_desk;
         $operator->status = 1;
         $operator->save();
-        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+        AuditReportsController::store('Help Desk', 'Help Desk Operator Added', "Actioned By User", 0);
+        return response()->json();
+    }
+	public function editoperator(Request $request, operator $serviceID) {
+        $this->validate($request, [
+                // 'name' => 'required',
+                // 'description'=> 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+		
+        $serviceID->operator_id = $request->input('operator_id');
+        $serviceID->update();
+        AuditReportsController::store('Help Desk', 'Help Desk Operator Edited', "Actioned By User", 0);
         return response()->json();
     }
 
@@ -216,7 +228,19 @@ class HelpdeskController extends Controller {
         $helpdeskadmin->helpdesk_id = $help_desk;
         $helpdeskadmin->status = 1;
         $helpdeskadmin->save();
-        AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+        AuditReportsController::store('Help Desk', 'Help Desk Added', "Actioned By User", 0);
+        return response()->json();
+    }
+	public function editAdmin(Request $request, helpdesk_Admin $adminID) {
+        $this->validate($request, [
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+		
+        $adminID->admin_id = $request->input('admin_id');
+        $adminID->update();
+        AuditReportsController::store('Help Desk', 'Help Desk Administrator Edited', "Actioned By User", 0);
         return response()->json();
     }
 
@@ -238,7 +262,7 @@ class HelpdeskController extends Controller {
         $tick->ticket_date = $currentDate = time();
         $tick->status = 1;
         $tick->save();
-        // AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+        // AuditReportsController::store('Help Desk', 'Help Desk Added', "Actioned By User", 0);
         return response()->json();
     }
 
@@ -261,7 +285,7 @@ class HelpdeskController extends Controller {
         $tick->ticket_date = $currentDate = time();
         $tick->status = 1;
         $tick->save();
-        // AuditReportsController::store('List Categories', 'List Categories Added', "Actioned By User", 0);
+        // AuditReportsController::store('Help Desk', 'Help Desk Added', "Actioned By User", 0);
         return response()->json();
     }
 
@@ -434,7 +458,6 @@ class HelpdeskController extends Controller {
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-        //return $SysData;
 
         $service->responder_messages = $request->input('responder_messages');
         $service->response_emails = $request->input('response_emails');
@@ -442,7 +465,6 @@ class HelpdeskController extends Controller {
         $service->ticket_completed = $request->input('ticket_completed');
         $service->helpdesk_id = $request->input('helpdesk_id');
         $service->save();
-        // DB::table('auto_rensponder')->where('id', 1) ->save($SysData);
 
         return back();
     }
@@ -454,10 +476,20 @@ class HelpdeskController extends Controller {
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
+		
+		$service->auto_processemails = $request->input('auto_processemails');
+        $service->anly_processreplies = $request->input('anly_processreplies');
+        $service->email_address = $request->input('email_address');
+        $service->server_name = $request->input('server_name');
+        $service->preferred_communication_method = $request->input('preferred_communication_method');
+        $service->server_port = $request->input('server_port');
+        $service->username = $request->input('username');
+        $service->password = $request->input('password');
+        $service->Signature_start = $request->input('Signature_start');
+        $service->helpdesk_id = $request->input('helpdesk_id');
+        $service->save();
 
-        DB::table('system_email_setup')->where('id', 1)->update($SysData);
-
-        return back();
+         return back();
     }
 
     #Search

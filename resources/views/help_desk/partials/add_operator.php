@@ -7,10 +7,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                     <h4 class="modal-title">Add New Operator Type</h4>
+                     <h4 class="modal-title">Add New Operator</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="leave-invalid-input-alert"></div>
+                    <div id="operator-invalid-input-alert"></div>
                     <div id="success-alert"></div>
                    		
                       <div class="form-group temp-field">
@@ -34,7 +34,7 @@
 				
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add_site" class="btn btn-primary">Add Site</button>
+                    <button type="button" id="add_site" class="btn btn-primary">Add Operator</button>
                 </div>
             </form>
         </div>
