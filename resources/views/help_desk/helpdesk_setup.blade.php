@@ -447,7 +447,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                    
-                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->responder_messages) ? date(' d M Y', $autoRensponder->responder_messages) : '' }}</textarea>
+                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->responder_messages) ? $autoRensponder->responder_messages: '' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -460,7 +460,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                   
-                                      <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->response_emails) ? date(' d M Y', $autoRensponder->response_emails) : '' }} </textarea>
+                                      <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->response_emails) ? $autoRensponder->response_emails : '' }} </textarea>
 
                                 </div>
                             </div>
@@ -473,7 +473,7 @@
                                     <div class="input-group-addon">
                                        <i class="fa fa-ticket"></i>
                                     </div>
-                                      <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completion_req) ? date(' d M Y', $autoRensponder->ticket_completion_req) : '' }}</textarea>
+                                      <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completion_req) ? $autoRensponder->ticket_completion_req : '' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -486,7 +486,7 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-ticket"></i>
                                     </div>
-                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completed) ? date(' d M Y', $autoRensponder->ticket_completed) : '' }}</textarea>
+                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completed) ? $autoRensponder->ticket_completed : '' }}</textarea>
                                     
                                 </div>
                             </div>
