@@ -143,6 +143,7 @@ class HelpdeskController extends Controller {
                          ->where('operator.helpdesk_id', $serviceID)
                         ->orderBy('operator.operator_id')
                         ->get();
+                        
 			$unresolved_tickets_settings = unresolved_tickets_settings::where('helpdesk_id',$serviceID)->first();
            //return $unresolved_tickets_settings;
 			$HelpdeskAdmin = DB::table('helpdesk_Admin')
