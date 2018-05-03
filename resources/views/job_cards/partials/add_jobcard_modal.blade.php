@@ -49,7 +49,7 @@
                      <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Service by Agent</label>
                         <div class="col-sm-8">
-                            <input type="checkbox" id="external_service" value="1" $sServiceAgent name="external_service" onclick="showHide();">
+                            <input type="checkbox" id="external_service" value="1" $sServiceAgent name="external_service" >
                         </div>
                     </div>
                    
@@ -60,7 +60,6 @@
                                    value="{{ old('date') }}" placeholder="Select date  ...">
                         </div>
                     </div>
-                    
                     <div class="form-group">
                         <label for="leave_type" class="col-sm-2 control-label">Supplier</label>
                         <div class="col-sm-8">
@@ -72,7 +71,6 @@
                                 </select>
                         </div>
                     </div>
-                    
                      <div class="form-group">
                         <label for="leave_type" class="col-sm-2 control-label">Service Type</label>
                         <div class="col-sm-8">
@@ -194,5 +192,4 @@
         </div>
     </div>
 </div>
-</div>
-           
+</div>     

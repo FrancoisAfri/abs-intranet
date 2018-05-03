@@ -57,9 +57,7 @@ class JobcardController extends Controller
     }
     
     public function servicetype(){
-        
-       
-        
+           
         $servicetype = servicetype::orderBy('name',1)->get();
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";
@@ -254,9 +252,7 @@ class JobcardController extends Controller
         return back();  
      }
      
-     
      //myJobcards
-     
       public function jobcardStatus($status = 0, $hrID = 0, $jobID = 0) {
          
           $user = Auth::user()->person->user_id;
@@ -275,82 +271,74 @@ class JobcardController extends Controller
 								  
       }
       
-     public function myjobcards(){         
-       $hrID = Auth::user()->person->user_id;
-       $hrjobtile = Auth::user()->person->position;
-       $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
+     public function myjobcards(){
+         
+		$hrID = Auth::user()->person->user_id;
+		$hrjobtile = Auth::user()->person->position;
+		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
                    ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
                    ->where('security_modules.code_name', 'job_cards') ->where('security_modules_access.access_level','>=', 4)
-                   ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
-                    
-       $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
-       $processss = processflow::take(1);
-	   //return $processflow;
-	  // return $processflow->step_number->take(1);
-       $rowcolumn = $processflow->count();
+                   ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();         
+		$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
+		$processss = processflow::take(1);
+		$rowcolumn = $processflow->count();
       
-       if(($rowcolumn >0 )){
+		if(($rowcolumn >0 )){
                    
-        $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-       
-        $servicetype = servicetype::where('status',1)->get();
-       
-        $users = HRPerson::where('status',1)->orderBy('id', 'asc')->get();
-        
-        $Status = array(-1=>'Rejected',1 => 'Job Card created',
-				 3=>'Completed',6=>'Procurement ',7=>'At Service',
-				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
-				 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
-        
-         
-        $jobcardmaintanance = DB::table('jobcard_maintanance')
-            ->select('jobcard_maintanance.*','vehicle_details.*','contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
-                    'hr_people.first_name as firstname', 'hr_people.surname as surname')
-            ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
-            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
-            ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
-            ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->orderBy('jobcard_maintanance.id', 'asc')
-            ->get();  
-            
-           // return time();;
-        
-        $vehicledetails =  DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
-                'division_level_fives.name as company', 'division_level_fours.name as Department')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
-            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-            ->get();  
-        
-        
-        $configuration = jobcards_config::first(); 
-        $data['page_title'] = "Job Cards";
-        $data['page_description'] = "Job Card Management";
-        $data['breadcrumb'] = [
-            ['title' => 'Job Card Management', 'path' => 'jobcards/mycards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Job Cards ', 'active' => 1, 'is_module' => 0]
-        ];
+			$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+			$servicetype = servicetype::where('status',1)->get();
+			
+			$users = HRPerson::where('status',1)->orderBy('id', 'asc')->get();
+			$Status = array(-1=>'Rejected',1 => 'Job Card created',
+					 3=>'Completed',6=>'Procurement ',7=>'At Service',
+					 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
+					 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
 
-        $data['Status'] = $Status;
-        $data['users'] = $users;
-        $data['ContactCompany'] = $ContactCompany;
-        $data['jobcardmaintanance'] = $jobcardmaintanance;
-        $data['servicetype'] = $servicetype;
-        $data['vehicledetails'] = $vehicledetails;
-        $data['configuration'] = $configuration;
-        $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'My Job Cards';
-        
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
-       return view('job_cards.myjob_cards')->with($data); 
+			$jobcardmaintanance = DB::table('jobcard_maintanance')
+				->select('jobcard_maintanance.*','vehicle_details.*','contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+					'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+						'hr_people.first_name as firstname', 'hr_people.surname as surname')
+				->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+				->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+				->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+				->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+				->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+				->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+				->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+				->orderBy('jobcard_maintanance.id', 'asc')
+				->get();  
+			
+			$vehicledetails =  DB::table('vehicle_details')
+				->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
+					'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
+					'division_level_fives.name as company', 'division_level_fours.name as Department')
+				->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+				->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+				->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+				->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
+				->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
+				->get();  
+			
+			$configuration = jobcards_config::first(); 
+			$data['page_title'] = "Job Cards";
+			$data['page_description'] = "Job Card Management";
+			$data['breadcrumb'] = [
+				['title' => 'Job Card Management', 'path' => 'jobcards/mycards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+				['title' => 'Job Cards ', 'active' => 1, 'is_module' => 0]
+			];
+
+			$data['Status'] = $Status;
+			$data['users'] = $users;
+			$data['ContactCompany'] = $ContactCompany;
+			$data['jobcardmaintanance'] = $jobcardmaintanance;
+			$data['servicetype'] = $servicetype;
+			$data['vehicledetails'] = $vehicledetails;
+			$data['configuration'] = $configuration;
+			$data['active_mod'] = 'Job Card Management';
+			$data['active_rib'] = 'My Job Cards';
+			
+			AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+			return view('job_cards.myjob_cards')->with($data); 
        
        }else  {
 //           return redirect('/');
