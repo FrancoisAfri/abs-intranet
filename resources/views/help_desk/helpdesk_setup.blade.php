@@ -422,7 +422,7 @@
                     <i class="fa fa-anchor pull-right"></i>
                     <h3 class="box-title">Auto-responder messages</h3>
                 </div>
-                  <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/auto_responder_messages {{!empty($unresolved_tickets_settings->id) ? '/help_desk/unresolved_tickets/'.$unresolved_tickets_settings->id : '/help_desk/unresolved_tickets'}}">
+                  <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($autoRensponder->id) ? '/help_desk/auto_responder_messages/'.$autoRensponder->id : '/help_desk/auto_responder_messages'}}">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -447,7 +447,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                    
-                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->responder_messages }}</textarea>
+                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Message sent when ticket completion has been requested:" rows="4">{{!empty($autoRensponder->responder_messages) ? $autoRensponder->responder_messages : ' ' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -460,7 +460,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                   
-                                      <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->response_emails }}</textarea>
+                                      <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->response_emails) ? $autoRensponder->response_emails : ' ' }}</textarea>
 
                                 </div>
                             </div>
@@ -473,7 +473,7 @@
                                     <div class="input-group-addon">
                                        <i class="fa fa-ticket"></i>
                                     </div>
-                                      <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->ticket_completion_req }}</textarea>
+                                      <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completion_req) ? $autoRensponder->ticket_completion_req : ' ' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -486,7 +486,7 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-ticket"></i>
                                     </div>
-                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ $autoRensponder->ticket_completed }}</textarea>
+                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completed) ? $autoRensponder->ticket_completed : ' ' }}</textarea>
                                     
                                 </div>
                             </div>
@@ -511,117 +511,89 @@
                     <i class="fa fa-anchor pull-right"></i>
                     <h3 class="box-title"> System Email Setup</h3>
                 </div>
-            <form class="form-horizontal" id="report_form" method="POST" action="/help_desk/email_setup">
+            <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($emailSettings->id) ? '/help_desk/email_setup/'.$emailSettings->id : '/help_desk/email_setup'}}">
                     {{ csrf_field() }}
-
                     <div class="box-body">
-                       
                          <table class="table table-bordered">
-                             
                             <tr>
                                 <td>Auto-process Emails:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                        <!-- <div><input type="checkbox" name="esc_low_email"></div> -->
-
-                                        <input type="hidden" class="checkbox selectall"  name="auto_processemails" value="0">
-                                     <div class="sms"><input type="checkbox" name="auto_processemails" value="1" > </div>
+                                     <div class="sms"><input type="checkbox" name="auto_processemails" value="1"  {{ !empty($emailSettings->auto_processemails) && $emailSettings->auto_processemails == 1 ? "checked='checked'" : '' }}> </div>
                                       
                                     </td> 
                                 </td>
                               </tr>
-                            
-                             <!--  -->
-                        
                             <tr>
                                 <td>Only process replies:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                         <input type="hidden" class="checkbox selectall"  name="anly_processreplies" value="0">
-                                     <div class="sms"><input type="checkbox" name="anly_processreplies" value="1" > </div>
+                                     <div class="sms"><input type="checkbox" name="anly_processreplies" value="1" {{ !empty($emailSettings->anly_processreplies) && $emailSettings->anly_processreplies == 1 ? "checked='checked'" : '' }}> </div>
 
                                     </td> 
                                 </td>
                               </tr>
-                            
-
                             <tr>
                                 <td>Email address:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="email" id ="email_address" class="form-control pull-left" name="email_address" value="" >
+                                       <input type="email" id ="email_address" class="form-control pull-left" name="email_address" value="{{!empty($emailSettings->email_address) ? $emailSettings->email_address : ' '}}" >
                                     </td> 
                                 </td>
                               </tr>
-                         
-
                               <div class="form-group">
                             <tr>
                                 <td>Server Name:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="server_name" class="form-control pull-left" name="server_name" value="" >
+                                       <input type="text" id ="server_name" class="form-control pull-left" name="server_name" value="{{!empty($emailSettings->server_name) ? $emailSettings->server_name : ' '}}" >
                                     </td> 
                                 </td>
                               </tr>
-                           
-
-
                               <tr>
                                 <td>Server Type:</td>
                                 <td>
                                          <div class="radio">
-                                            <label><input type="radio" name="preferred_communication_method" id="IMAP" value="1" checked>IMAP/Exchange</label>
+                                            <label><input type="radio" name="preferred_communication_method" id="IMAP" value="1"  {{ !empty($emailSettings->preferred_communication_method) && $emailSettings->preferred_communication_method == 1 ? "checked='checked'" : '' }}>IMAP/Exchange</label>
                                             <br>
-                                            <label><input type="radio" name="preferred_communication_method" id="POP3" value="2" checked>POP3</label>
+                                            <label><input type="radio" name="preferred_communication_method" id="POP3" value="2"  {{ !empty($emailSettings->preferred_communication_method) && $emailSettings->preferred_communication_method == 2 ? "checked='checked'" : '' }}>POP3</label>
                                             </div>
                                         </td>
                              </tr>
-                          
-
                             <tr>
                                 <td>Server Port:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="server_port" class="form-control pull-left" name="server_port" value="" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="number" id ="server_port" class="form-control pull-left" name="server_port" value="{{!empty($emailSettings->server_port) ? $emailSettings->server_port : ' '}}" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
-                            
-
-                           
                             <tr>
                                 <td>Username:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="username" class="form-control pull-left" name="username" value="" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="username" class="form-control pull-left" name="username" value="{{!empty($emailSettings->username) ? $emailSettings->username : ' '}}" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
-                           
-
-                             
                             <tr>
                                 <td>Password:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="password" class="form-control pull-left" name="password" value=" " placeholder="Default - POP3: 110; IMAP/Exchange: 143">
+                                       <input type="text" id ="password" class="form-control pull-left" name="password" value="{{!empty($emailSettings->password) ? $emailSettings->password : ' '}}" placeholder="Default - POP3: 110; IMAP/Exchange: 143">
                                     </td> 
                                 </td>
                               </tr>
-                          
                                <tr>
                                 <td>Signature Start String:</td>
                                 <td style="text-align: center; vertical-align: middle;">
                                     <td>
-                                       <input type="text" id ="Signature_start" class="form-control pull-left" name="Signature_start" value="" placeholder="Everything below & including this string will be removed.">
+                                       <input type="text" id ="Signature_start" class="form-control pull-left" name="Signature_start" value="{{!empty($emailSettings->Signature_start) ? $emailSettings->Signature_start : ' '}}" placeholder="Everything below & including this string will be removed.">
                                     </td> 
                                 </td>
                               </tr>
-
                             <!--  <input type="hidden" class="checkbox selectall"  name="helpdesk_id" value="{{ $serviceID }}"> -->
                                <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
-
                         </table>                         
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -639,12 +611,8 @@
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
-
                    <!--  <h3 class="box-title"> Help Desk Operators</h3> -->
-
                     <h3 class="box-title"> Operators for {{ $serviceName }}</h3>
-
-
                 </div>
                  {{ csrf_field() }}
                     {{ method_field('PATCH') }}
@@ -654,20 +622,20 @@
                 <table class="table table-bordered">
                      <tr><th style="width: 10px">#</th>
                      <th>Helpdesk</th>
-                     <th>User</th>
+                     <th>Operator</th>
                      <th></th>
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($operators) > 0)
-                        @foreach($operators as $jobTitle)
+                        @foreach($operators as $operator)
                          <tr id="jobtitles-list">
                            <td nowrap>
-                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-service-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->firstname }}" data-description="{{ $jobTitle->surname }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
-
+                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" 
+						  data-target="#edit-operators-modal" data-id="{{ $operator->id }}" data-operator_id="{{ $operator->operator_id }}""><i class="fa fa-pencil-square-o"></i> Edit</button>
                           <td>{{ $serviceName }} </td>
-                          <td>{{ ( $jobTitle->firstname . ' ' . $jobTitle->surname) }} </td>
+                          <td>{{ ( $operator->firstname . ' ' . $operator->surname) }} </td>
                           <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'OPeratoractdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_job_title" class="btn {{ (!empty($operator->status) && $operator->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$operator->id}}, 'OPeratoractdeac');"><i class="fa {{ (!empty($operator->status) && $operator->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($operator->status) && $operator->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
                           <!-- <td>
                            <button type="button" id="add_products_title" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-operator-modal">Add Operator</button>
@@ -693,7 +661,7 @@
             </div>
              <!-- Include add new prime rate modal -->
         @include('help_desk.partials.add_operators')
-        @include('help_desk.partials.edit_position')
+        @include('help_desk.partials.edit_operators')
         </div>
 
     
@@ -711,21 +679,21 @@
                 <table class="table table-bordered">
                      <tr><th style="width: 10px">#</th>
                      <th>Helpdesk</th>
-                     <th>User</th>
+                     <th>Administrator</th>
                      <th></th>
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($HelpdeskAdmin) > 0)
-                        @foreach($HelpdeskAdmin as $jobTitle)
+                        @foreach($HelpdeskAdmin as $admin)
                          <tr id="jobtitles-list">
                            <td nowrap>
-                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-service-modal" data-id="{{ $jobTitle->id }}" data-name="{{ $jobTitle->firstname }}" data-description="{{ $jobTitle->surname }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                          <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-administrator-modal" data-id="{{ $admin->id }}" data-admin_id="{{ $admin->admin_id }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
 
                           
                           <td>{{ $serviceName }} </td>
-                          <td>{{ ( $jobTitle->firstname . ' ' . $jobTitle->surname) }} </td>
+                          <td>{{ ( $admin->firstname . ' ' . $admin->surname) }} </td>
                           <td nowrap>
-                              <button type="button" id="view_job_title" class="btn {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$jobTitle->id}}, 'actdeac');"><i class="fa {{ (!empty($jobTitle->status) && $jobTitle->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($jobTitle->status) && $jobTitle->status == 1) ? "De-Activate" : "Activate"}}</button>
+                              <button type="button" id="view_job_title" class="btn {{ (!empty($admin->status) && $admin->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$admin->id}}, 'actdeac');"><i class="fa {{ (!empty($admin->status) && $admin->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($admin->status) && $admin->status == 1) ? "De-Activate" : "Activate"}}</button>
                           </td>
                          
                         </tr>
@@ -748,7 +716,7 @@
                 </div>
             </div>
         @include('help_desk.partials.add_admin')
-        @include('help_desk.partials.edit_position')
+        @include('help_desk.partials.edit_admin')
         </div>
     </div>
     @endsection
@@ -761,7 +729,6 @@
         function postData(id , data ){   
             if(data == 'OPeratoractdeac') location.href = "/helpdesk/operatorAct/" + id;
             else if(data == 'actdeac') location.href = "/helpdesk/help_deskAdmin/" + id; 
-           
         }
 
         $(function () {
@@ -789,8 +756,6 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-
-
                 $('#time_from').datetimepicker({
                     format: 'HH:mm:ss'
                 });
@@ -815,7 +780,6 @@
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
 
                   //Post module form to server using ajax (ADD)
             $('#add_admin').on('click', function() {
@@ -847,7 +811,27 @@
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
 
-             });
+            });
+			$('#edit-operators-modal').on('show.bs.modal', function (e) {
+                //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                serviceID = btnEdit.data('id');
+                var operatorID = btnEdit.data('operator_id');
+                //var employeeName = btnEdit.data('employeename');
+                var modal = $(this);
+				modal.find('select#operator_id').val(operatorID);
+
+            });
+			$('#edit-administrator-modal').on('show.bs.modal', function (e) {
+                //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                serviceID = btnEdit.data('id');
+                var adminID = btnEdit.data('admin_id');
+                //var employeeName = btnEdit.data('employeename');
+                var modal = $(this);
+				modal.find('select#admin_id').val(adminID);
+
+            });
             $('#update-service').on('click', function () {
                 var strUrl = '/help_desk/system/adit/' + serviceID;
                 var modalID = 'edit-service-modal';
@@ -857,11 +841,41 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_job_title';
-                 var redirectUrl = '/helpdesk/setup';
+                var redirectUrl = '/helpdesk/setup';
                 var successMsgTitle = 'Changes Saved!';
-                 var successMsg = 'The service has been updated successfully.';
+                var successMsg = 'The service has been updated successfully.';
                 var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            });
+			
+			$('#update-operator').on('click', function () {
+                var strUrl = '/help_desk/operator/edit/' + serviceID;
+                var modalID = 'edit-operators-modal';
+                var objData = {
+                    operator_id: $('#'+modalID).find('#operator_id').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'update-operator';
+                var redirectUrl = '/help_desk/service/' + {{$serviceID}};
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'Operator has been updated successfully.';
+                var Method = 'PATCH';
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            });
+			
+			$('#update-admin').on('click', function () {
+                var strUrl = '/help_desk/admin/edit/' + serviceID;
+                var modalID = 'edit-administrator-modal';
+                var objData = {
+                    admin_id: $('#'+modalID).find('#admin_id').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'update-admin';
+                var redirectUrl = '/help_desk/service/' + {{$serviceID}};
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'Aperator has been updated successfully.';
+                var Method = 'PATCH';
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
         });
     </script>
