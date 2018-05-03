@@ -13,6 +13,7 @@ use App\vehicle_detail;
 use App\jobcard_maintanance;
 use App\ContactCompany;
 use App\processflow;
+use App\jobcardnote;
 use App\jobcards_config;
 use App\CompanyIdentity;
 use App\module_access;
@@ -300,8 +301,9 @@ class JobcardController extends Controller
         $Status = array(-1=>'Rejected',1 => 'Job Card created',
 				 3=>'Completed',6=>'Procurement ',7=>'At Service',
 				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
-				 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
-        
+                 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
+                 
+                $currentUser = Auth::user()->person->id;
          
         $jobcardmaintanance = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*','vehicle_details.*','contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
@@ -314,10 +316,12 @@ class JobcardController extends Controller
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->where('jobcard_maintanance.user_id', $currentUser)
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();  
             
-           // return time();;
+           return $jobcardmaintanance;
+          // return time();;
         
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -406,6 +410,7 @@ class JobcardController extends Controller
         $jobcardmaintanance->jobcard_number = $flowprocee + 1;
         $jobcardmaintanance->status = 1;
         $jobcardmaintanance->date_default =  time();
+        $jobcardmaintanance->user_id = Auth::user()->person->id;
         $jobcardmaintanance->save();
         
         //Upload supporting document
@@ -743,6 +748,7 @@ class JobcardController extends Controller
     // return $card;
          
         $data['vehiclemaintenance'] = $vehiclemaintenance;
+        $data['card'] =$card;
         $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
@@ -755,6 +761,51 @@ class JobcardController extends Controller
 
         AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
         return view('job_cards.Job_card_details')->with($data);
+     }
+     public function viewjobcardnotes(jobcard_maintanance $card ){
+        $jobcardnote = DB::table('jobcard_notes')
+        ->select('jobcard_notes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+        ->leftJoin('hr_people', 'jobcard_notes.user_id', '=', 'hr_people.id')
+        ->where('jobcard_id', $card->jobcard_number)
+        ->Orderby('jobcard_notes.id','asc')
+        ->get();
+      // return $jobcardnote;
+
+
+        $data['card'] = $card;
+        $data['jobcardnote'] = $jobcardnote;
+        $data['page_title'] = "Job Card Search";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Search Job Cards';
+
+        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        return view('job_cards.add_jocard_notes')->with($data);
+     }
+
+     public function addjobcardnotes(Request $request){
+        $this->validate($request, [
+//              'step_name' => 'required',
+//              'job_title' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $jobcardnote =  new jobcardnote();
+        $jobcardnote->note_details = !empty($SysData['notes']) ? $SysData['notes'] : '';
+        $jobcardnote->vehicle_id = !empty($SysData['vehicle_id']) ? $SysData['vehicle_id'] : 0;
+        $jobcardnote->jobcard_id = !empty($SysData['jobcard_id']) ? $SysData['jobcard_id'] : 0;
+        $jobcardnote->user_id =  Auth::user()->person->id;
+        $jobcardnote->date_default = time();
+        $jobcardnote->save(); 
+
+        AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User", 0);
+        return response()->json();
      }
      
 }
