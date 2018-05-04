@@ -47,7 +47,7 @@
                                 @foreach ($jobcardmaintanance as $filling)
                                     <tr style="text-align:center">
                                         <td>
-					  <a href="{{ '/jobcards/viewjobcard/' . $filling->id }}" id="edit_compan" class="btn btn-warning  btn-xs">View</a></td>
+					  <a href="{{ '/jobcards/viewcard/' . $filling->id }}" id="edit_compan" class="btn btn-warning  btn-xs">View</a></td>
                                         <td>{{ !empty($filling->jobcard_number ) ? $filling->jobcard_number : '' }}</td>
                                        <td>{{ (!empty( $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model)) 
                                     ?  $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model : ''}} </td>
@@ -119,118 +119,118 @@
 
         @endsection
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <!-- Select2 -->
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<!-- Select2 -->
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehice/station_act/" + id;
+	<script>
+		function postData(id, data) {
+			if (data == 'actdeac') location.href = "/vehice/station_act/" + id;
 
-                }
+		}
 
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/setup';
-                });
+		$('#back_button').click(function () {
+			location.href = '/vehicle_management/setup';
+		});
 
-                function toggle(source) {
-                    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-                    for (var i = 0; i < checkboxes.length; i++) {
-                        if (checkboxes[i] != source)
-                            checkboxes[i].checked = source.checked;
-                    }
-                }
+		function toggle(source) {
+			var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+			for (var i = 0; i < checkboxes.length; i++) {
+				if (checkboxes[i] != source)
+					checkboxes[i].checked = source.checked;
+			}
+		}
 
-                //
-                function checkAllboxAccept() {
-                    if ($('#checkallaccept:checked').val() == 'on') {
-                        $('.selectall').prop('checked', true);
-                    }
-                    else {
-                        $('.selectall').prop('checked', false);
-                    }
-                }
+		//
+		function checkAllboxAccept() {
+			if ($('#checkallaccept:checked').val() == 'on') {
+				$('.selectall').prop('checked', true);
+			}
+			else {
+				$('.selectall').prop('checked', false);
+			}
+		}
 
-                function checkAllboxreject() {
-                    if ($('#checkallreject:checked').val() == 'on') {
-                        $('.reject').prop('checked', true);
-                    }
-                    else {
-                        $('.reject').prop('checked', false);
-                    }
-                }
+		function checkAllboxreject() {
+			if ($('#checkallreject:checked').val() == 'on') {
+				$('.reject').prop('checked', true);
+			}
+			else {
+				$('.reject').prop('checked', false);
+			}
+		}
 
-                $(function () {
-                    var moduleId;
-                    //Initialize Select2 Elements
-                    $(".select2").select2();
+		$(function () {
+			var moduleId;
+			//Initialize Select2 Elements
+			$(".select2").select2();
 
-                    //Tooltip
+			//Tooltip
 
-                    $('[data-toggle="tooltip"]').tooltip();
+			$('[data-toggle="tooltip"]').tooltip();
 
-                    //Vertically center modals on page
-                    function reposition() {
-                        var modal = $(this),
-                            dialog = modal.find('.modal-dialog');
-                        modal.css('display', 'block');
+			//Vertically center modals on page
+			function reposition() {
+				var modal = $(this),
+					dialog = modal.find('.modal-dialog');
+				modal.css('display', 'block');
 
-                        // Dividing by two centers the modal exactly, but dividing by three
-                        // or four works better for larger screens.
-                        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                    }
+				// Dividing by two centers the modal exactly, but dividing by three
+				// or four works better for larger screens.
+				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+			}
 
-                    // Reposition when a modal is shown
-                    $('.modal').on('show.bs.modal', reposition);
-                    // Reposition when the window is resized
-                    $(window).on('resize', function () {
-                        $('.modal:visible').each(reposition);
-                    });
+			// Reposition when a modal is shown
+			$('.modal').on('show.bs.modal', reposition);
+			// Reposition when the window is resized
+			$(window).on('resize', function () {
+				$('.modal:visible').each(reposition);
+			});
 
-                    //Show success action modal
-                    $('#success-action-modal').modal('show');
+			//Show success action modal
+			$('#success-action-modal').modal('show');
 
-                    $(".js-example-basic-multiple").select2();
+			$(".js-example-basic-multiple").select2();
 
-                    //Cancell booking
-                    //Post module form to server using ajax (ADD)
+			//Cancell booking
+			//Post module form to server using ajax (ADD)
 
-                    //save reject reason
-
-
-                    var reasonID;
-                    $('#decline-vehicle-modal').on('show.bs.modal', function (e) {
-                        var btnEdit = $(e.relatedTarget);
-                        if (parseInt(btnEdit.data('id')) > 0) {
-                            reasonID = btnEdit.data('id');
-                        }
-                        console.log('gets here: ' + reasonID);
-                        var description = btnEdit.data('description');
-                        var modal = $(this);
-                        modal.find('#description').val(description);
-                    });
-
-                    $('#rejection-reason').on('click', function () {
-                        var strUrl = '/vehicle_management/reject_vehicle/' + reasonID;
-                        var modalID = 'decline-vehicle-modal';
-                        var objData = {
-                            description: $('#' + modalID).find('#description').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'rejection-reason';
-                        var redirectUrl = '/vehicle_management/vehicle_approval';
-                        var successMsgTitle = 'Reason Added!';
-                        var successMsg = 'The reject reason has been updated successfully.';
-                        var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                    });
+			//save reject reason
 
 
-                });
+			var reasonID;
+			$('#decline-vehicle-modal').on('show.bs.modal', function (e) {
+				var btnEdit = $(e.relatedTarget);
+				if (parseInt(btnEdit.data('id')) > 0) {
+					reasonID = btnEdit.data('id');
+				}
+				console.log('gets here: ' + reasonID);
+				var description = btnEdit.data('description');
+				var modal = $(this);
+				modal.find('#description').val(description);
+			});
+
+			$('#rejection-reason').on('click', function () {
+				var strUrl = '/vehicle_management/reject_vehicle/' + reasonID;
+				var modalID = 'decline-vehicle-modal';
+				var objData = {
+					description: $('#' + modalID).find('#description').val(),
+					_token: $('#' + modalID).find('input[name=_token]').val()
+				};
+				var submitBtnID = 'rejection-reason';
+				var redirectUrl = '/vehicle_management/vehicle_approval';
+				var successMsgTitle = 'Reason Added!';
+				var successMsg = 'The reject reason has been updated successfully.';
+				var Method = 'PATCH';
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+			});
 
 
-            </script>
+		});
+
+
+	</script>
 @endsection
