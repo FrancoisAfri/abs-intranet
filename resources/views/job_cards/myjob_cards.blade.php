@@ -31,7 +31,7 @@
                                     <th>Registration</th>
                                     <th>Job Card Date </th>
                                     <th>Completion Date</th>
-				                    <th style="width: 5px; text-align: center;">Instruction</th>
+				    <th style="width: 5px; text-align: center;">Instruction</th>
                                     <th>Mechanic</th>
                                     <th>Service Type</th>
                                     <th>Supplier</th>

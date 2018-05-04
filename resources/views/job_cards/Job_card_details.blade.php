@@ -165,14 +165,9 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Add Parts</a>
 
-                    <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
+                    <a href="{{ '/jobcard/cancellation/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Request Cancellation</a>
-<!--
-                    <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Contracts</a>
--->
 
                     <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
@@ -188,9 +183,9 @@
 
                 </div>
                 @endforeach
+               
             </div>
         </div>
-        @include('job_cards.partials.add_note_modal')
     </div>
 @endsection
 @section('page_script')

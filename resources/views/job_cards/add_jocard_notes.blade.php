@@ -29,7 +29,7 @@
                               @foreach ($jobcardnote as $vehice)
                                <tr id="categories-list">
                               
-                                    <td>{{ (!empty( $vehice->date_default)) ?  date(' d M Y', $vehice->date_default) : ''}} </td>
+                                     <td>{{ (!empty( $vehice->date_default)) ?  date(' d M Y', $vehice->date_default) : ''}} </td>
                                      <td>{{ (!empty( $vehice->note_details)) ?  $vehice->note_details : ''}} </td>
                                      <td>{{ (!empty( $vehice->firstname . ' ' . $vehice->surname)) ?   $vehice->firstname . ' ' . $vehice->surname : ''}} </td>
                                      
@@ -76,7 +76,7 @@
           
         }
         $('#back_button').click(function () {
-                location.href = '/vehicle_management/setup';
+                location.href = '/jobcards/viewcard/{{$card->id}}';
             });
         $(function () {
             var moduleId;
