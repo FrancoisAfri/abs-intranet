@@ -7,7 +7,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">JobCard #{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</h4>
+                    <h4 class="modal-title">JobCard # {{ !empty($card->jobcard_number) ? $card->jobcard_number : ''}}</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -23,8 +23,13 @@
                         </div>
                      </div>
                     
-                    <input type="hidden" id="valueID" name="valueID"
-                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
+                           <input type="hidden" id="vehicle_id" name="vehicle_id"
+                           value="{{ !empty($vehiclemaintenance->vehicle_id) ? $vehiclemaintenance->vehicle_id : ''}}">
+
+
+                            <input type="hidden" id="jobcard_id" name="jobcard_id"
+                           value="{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}">
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

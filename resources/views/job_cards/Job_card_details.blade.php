@@ -157,10 +157,11 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Images</a>
 
+                       <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Job Card Notes</a>
                     
-                       <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
-                                    data-target="#add-note-modal">Job Card Notes            
-                        </button>
+                       
 
                     <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
@@ -335,7 +336,16 @@
                 return allType;
             }
 
-            
+            $('#add_notes').on('click', function () {
+                    var strUrl = '/jobcards/addjobcardnotes';
+                    var formName = 'add-note-form';
+                    var modalID = 'add-note-modal';
+                    var submitBtnID = 'add_notes';
+                    var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
 
         });
 

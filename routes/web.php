@@ -666,6 +666,9 @@ Route::post('jobcards/appovecards', 'JobcardController@appovecards');
 Route::get('jobcards/viewjobcard/{card}', 'JobcardController@viewcard');
 
 Route::get('jobcards/viewcard/{card}', 'JobcardController@viewjobcard');
+Route::post('jobcards/appovecards', 'JobcardController@appovecards');
+Route::post('jobcards/addjobcardnotes', 'JobcardController@addjobcardnotes');
+Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes');
 
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');

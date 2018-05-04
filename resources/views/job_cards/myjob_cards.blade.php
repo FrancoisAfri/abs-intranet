@@ -79,7 +79,6 @@
 									class="fa fa-arrow-left"></i> Back
 						<button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-jobcard-modal">Add new Job card</button>
 						</button>
-						
 					</div>
 				</div>
 			</div>
@@ -143,7 +142,24 @@ $(function () {
 		"autoWidth": true
 	});
 });
+function showHide()
+{    
+	if(document.getElementById('external_service').checked) 
+	{
+		$('.agent_field').show();
+		$('#mechanic_id').val('');
+		$('.mechanic_row').hide();
+	}
+	else
+	{
+		$('.agent_field').hide();
+		$('.mechanic_row').show();
+	}
+}
 $(function () {
+	
+	$('.agent_field').hide();
+		
 	var moduleId;
 	//Initialize Select2 Elements
 	$(".select2").select2();
