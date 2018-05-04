@@ -310,8 +310,6 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();  
             
-          // return $jobcardmaintanance;
-          // return time();;
         
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -347,9 +345,8 @@ class JobcardController extends Controller
        return view('job_cards.myjob_cards')->with($data); 
        
        }else  {
-//           return redirect('/');
-            return back();
-			return back()->with('success_edit', "The are not permitted to view this page.");
+           return redirect('/');
+			//return back()->with('success_edit', "The are not permitted to view this page.");
         }
      }
      
@@ -486,7 +483,6 @@ class JobcardController extends Controller
            $actionTo = strtotime($startExplode[1]);
           
        }
-       
        $jobcardmaintanance = DB::table('jobcard_maintanance')
            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
                'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
@@ -732,7 +728,7 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get(); 
          
-         return $vehiclemaintenance;
+         //return $vehiclemaintenance;
          
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['page_title'] = "Job Card Search";
@@ -787,6 +783,7 @@ class JobcardController extends Controller
         return view('job_cards.Job_card_details')->with($data);
      }
      public function viewjobcardnotes(jobcard_maintanance $card ){
+
         $jobcardnote = DB::table('jobcard_notes')
         ->select('jobcard_notes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
         ->leftJoin('hr_people', 'jobcard_notes.user_id', '=', 'hr_people.id')
@@ -795,6 +792,16 @@ class JobcardController extends Controller
         ->get();
       // return $jobcardnote;
 
+        $jobcardmaintanance = DB::table('jobcard_maintanance')
+                                ->select('jobcard_maintanance.*', 'jobcard_notes.user_id as user')
+                                ->leftJoin('jobcard_notes', 'jobcard_maintanance.jobcard_number', '=', 'jobcard_notes.id')
+                                ->where('jobcard_number', $card->jobcard_number)
+                                ->where('jobcard_notes.jobcard_id', $card->jobcard_number)
+                                 ->pluck('user_id');
+                               // ->get();
+                                //give me the person who created the card
+       
+                               // return $jobcardmaintanance;
 
         $data['card'] = $card;
         $data['jobcardnote'] = $jobcardnote;
@@ -828,6 +835,21 @@ class JobcardController extends Controller
         $jobcardnote->date_default = time();
         $jobcardnote->save(); 
 
+
+        $jobcard_number = $SysData['vehicle_id'];
+           // emils
+        $users = DB::table('jobcard_maintanance')
+        ->select('jobcard_maintanance.*', 'jobcard_notes.user_id as user')
+        ->leftJoin('jobcard_notes', 'jobcard_maintanance.jobcard_number', '=', 'jobcard_notes.id')
+        ->where('jobcard_number', $jobcard_number)
+        ->where('jobcard_notes.jobcard_id', $jobcard_number)
+         ->pluck('user_id');
+       // ->get();
+        //give me the person who created the card
+
+        //foreach ($user as $manID) {
+
+       // }
         AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User", 0);
         return response()->json();
      }
