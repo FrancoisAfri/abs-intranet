@@ -451,7 +451,7 @@ class JobcardController extends Controller
 
         $data['processflow'] = $processflow;
         $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Search Job Cards';
+        $data['active_rib'] = 'Search';
 
         AuditReportsController::store('Job Card Management', 'Job Card card search Page Accessed', "Accessed By User", Auth::user()->person->position);
         return view('job_cards.search')->with($data); 
@@ -534,7 +534,7 @@ class JobcardController extends Controller
 
         $data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Search Job Cards';
+        $data['active_rib'] = 'Search';
 
         AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Accessed By User", Auth::user()->person->position);
         return view('job_cards.search_results')->with($data); 

@@ -90,7 +90,7 @@
 							@if (count($jobcardmaintanance) > 0)
 									@foreach ($jobcardmaintanance as $jobcard)
 								<tr id="configuration-list">
-									<td><a href="{{ '/Product/price/' . $jobcard->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View</a></td>
+									<td><a href="{{ '/jobcards/viewcard/' . $jobcard->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View</a></td>
 									<td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
 									<td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model)) 
 										?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
