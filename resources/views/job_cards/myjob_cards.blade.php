@@ -55,73 +55,27 @@
                                 <td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname . '' . $jobcard->surname : '' }}</td>
                                 <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
                                 <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
-                                <td>{{ !empty($jobcard->status) ? $jobcard->status : '' }}</td>									
+                                <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>									
                                </tr>
-                            
-									@endforeach
+				@endforeach
                             @endif
                             </tbody>
                             <tfoot>
                             <tr>
-                                    <th style="width: 5px; text-align: center;"></th>
+                                   <th style="width: 5px; text-align: center;"></th>
                                     <th>Job Card #</th>
                                     <th>Vehicle Name</th>
                                     <th>Registration</th>
                                     <th>Job Card Date </th>
                                     <th>Completion Date</th>
-				<div style="overflow-X:auto;">
-					<table id="example2" class="table table-bordered table-hover">
-						<thead>
-							<tr>
-									<th style="width: 5px; text-align: center;"></th>
-									<th>Job Card #</th>
-									<th>Vehicle Name</th>
-									<th>Registration</th>
-									<th>Job Card Date </th>
-									<th>Completion Date</th>
-									<th style="width: 5px; text-align: center;">Instruction</th>
-									<th>Mechanic</th>
-									<th>Service Type</th>
-									<th>Supplier</th>
-									<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							@if (count($jobcardmaintanance) > 0)
-									@foreach ($jobcardmaintanance as $jobcard)
-								<tr id="configuration-list">
-									<td><a href="{{ '/jobcards/viewcard/' . $jobcard->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View</a></td>
-									<td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
-									<td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model)) 
-										?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
-									<td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
-									<td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
-									<td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
-									<td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
-									<td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname . '' . $jobcard->surname : '' }}</td>
-									<td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
-									<td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
-									<td>{{ !empty($jobcard->status) ? $jobcard->status : '' }}</td>									
-							   </tr>
-								@endforeach
-							@endif
-						</tbody>
-						<tfoot>
-							<tr>
-								<th style="width: 5px; text-align: center;"></th>
-								<th>Job Card #</th>
-								<th>Vehicle Name</th>
-								<th>Registration</th>
-								<th>Job Card Date </th>
-								<th>Completion Date</th>
-								<th style="width: 5px; text-align: center;">Instruction</th>
-								<th>Mechanic</th>
-								<th>Service Type</th>
-								<th>Supplier</th>
-								<th>Status</th>
-							</tr>
-						</tfoot>
-					</table>
+				    <th style="width: 5px; text-align: center;">Instruction</th>
+                                    <th>Mechanic</th>
+                                    <th>Service Type</th>
+                                    <th>Supplier</th>
+                                    <th>Status</th>
+                            </tr>
+                            </tfoot>
+                        </table>
 					<!-- /.box-body -->
 					<div class="box-footer">
 						<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
@@ -133,15 +87,13 @@
 			</div>
 	<!-- Include add new prime rate modal -->
 @include('job_cards.partials.add_jobcard_modal')
-@include('job_cards.partials.edit_servicetype_modal')
   <!-- Include delete warning Modal form-->
   
    <!-- Confirmation Modal -->
 @if(Session('success_edit'))
 	@include('job_cards.partials.success_action', ['modal_title' => "User not permitted!", 'modal_content' => session('success_edit')])
-@endif
-		</div>
-	</div>
+@endif		
+</div>
 @endsection
 
 @section('page_script')

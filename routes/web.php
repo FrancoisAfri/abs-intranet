@@ -672,6 +672,8 @@ Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes')
 
 Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes');
 
+Route::get('jobcards/parts','JobcardController@jobcardparts');
+
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
