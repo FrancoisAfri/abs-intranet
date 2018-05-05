@@ -32,7 +32,6 @@
                                    value="{{ old('date') }}" placeholder="Select start date  ...">
                         </div>
                     </div>
-                    
                       <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Schedule Date </label>
                         <div class="col-sm-8">
@@ -52,16 +51,14 @@
                             <input type="checkbox" id="external_service" value="1" $sServiceAgent name="external_service" onclick="showHide();">
                         </div>
                     </div>
-                   
-                     <div class="form-group ">
+                     <div class="form-group agent_field">
                         <label for="date" class="col-sm-2 control-label"> Booking Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="booking_date" name="booking_date"
                                    value="{{ old('date') }}" placeholder="Select date  ...">
                         </div>
                     </div>
-                    
-                    <div class="form-group">
+                    <div class="form-group agent_field">
                         <label for="leave_type" class="col-sm-2 control-label">Supplier</label>
                         <div class="col-sm-8">
                                 <select id="supplier_id" name="supplier_id" class="form-control">
@@ -72,7 +69,6 @@
                                 </select>
                         </div>
                     </div>
-                    
                      <div class="form-group">
                         <label for="leave_type" class="col-sm-2 control-label">Service Type</label>
                         <div class="col-sm-8">
@@ -84,14 +80,6 @@
                                 </select>
                         </div>
                     </div>
-                 
-<!--                   <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label"> Booking Date </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="booking_date" name="booking_date"
-                                   value="{{ old('date') }}" placeholder="Select  start date  ...">
-                        </div>
-                    </div>-->
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Estimated Hours</label>
                         <div class="col-sm-8">
@@ -161,7 +149,7 @@
                                    data-show-upload="false">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mechanic_row">
                         <label for="leave_type" class="col-sm-2 control-label">Mechanic</label>
                         <div class="col-sm-8">
                                 <select id="mechanic_id" name="mechanic_id" class="form-control">
@@ -182,8 +170,7 @@
                                 <textarea class="form-control" id="instruction" name="instruction" placeholder="Enter a inspection Info" rows="4">{{ old('description') }}</textarea>
                             </div>
                         </div>
-                    </div>
-                    
+                    </div> 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
