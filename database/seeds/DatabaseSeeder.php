@@ -1192,7 +1192,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
         
-         $ribbon = new module_ribbons();
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Reports';
@@ -1201,7 +1201,18 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
         
-         $ribbon = new module_ribbons();
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Parts';
+        $ribbon->description = 'Parts';
+        $ribbon->ribbon_path = 'jobcards/parts';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+        
+        
+        $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'SetUp';

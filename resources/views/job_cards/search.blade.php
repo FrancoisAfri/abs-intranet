@@ -81,8 +81,10 @@
                                             <label for="kpa_id" class="col-sm-2 control-label"> Status</label>
                                            <div class="col-sm-8">
                                                 <select id="status" name="status" class="form-control select2" style="width: 100%;" required>
-                                             <option value="0">*** Select Job Title ***</option>
-                                              
+                                             <option value="0">*** Select Status  ***</option>
+                                                @foreach($processflow as $Fleet)
+                                                    <option value="{{ $Fleet->id }}">{{ $Fleet->step_name }}</option>
+                                                @endforeach
                                                 </select>
                                             </div>
                                     </div>
@@ -199,18 +201,17 @@
         });
 
         $('input[name="date"]').daterangepicker({
-                timePicker: false,
+
+            defaultDate: null
+               // timePicker: false,
                 //timePickerIncrement: 30,
-                locale: {
-                    //format: 'MM/DD/YYYY h:mm A'
-                    format: 'DD/MM/YYYY'
-                }
+               
             });
 
         $('.required_from').datepicker({
             format: 'dd/mm/yyyy',
             autoclose: true,
-            todayHighlight: true
+           // todayHighlight: true
         });
 
         //Initialize iCheck/iRadio Elements

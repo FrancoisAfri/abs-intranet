@@ -79,11 +79,7 @@
                                                 data-notes="{{ $document->notes }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
-
-                                    </td>
-
-
-                                    
+                                    </td>                                    
                                     <td>{{ !empty($document->date_captured) ? date(' d M Y', $document->date_captured) : '' }}</td>
                                     <td>{{ !empty($document->firstname . ' ' . $document->surname ) ?  $document->firstname . ' ' . $document->surname : '' }}</td>
                                     <td>{{ !empty($document->notes) ?  $document->notes : '' }}</td>
@@ -105,7 +101,7 @@
 
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
+                                                data-target="#delete-note-warning-modal" data-id="{{ $document->id }}"><i class="fa fa-trash"></i>
                                             Delete
                                         </button>
                                     </td>
@@ -142,7 +138,7 @@
         <!-- Include delete warning Modal form-->
          <!-- Include delete warning Modal form-->
             @if (count($vehiclenotes) > 0)
-                @include('Vehicles.warnings.Note_warning_action', ['modal_title' => 'Delete Notes', 'modal_content' => 'Are you sure you want to delete this Note? This action cannot be undone.'])
+                @include('Vehicles.warnings.notes_warning_action', ['modal_title' => 'Delete Notes', 'modal_content' => 'Are you sure you want to delete this Note? This action cannot be undone.'])
             @endif
 
         </div>
@@ -300,5 +296,26 @@
 			var Method = 'PATCH';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
+
+		var noteID;
+            $('#delete-note-warning-modal').on('show.bs.modal', function (e) {
+                        var btnEdit = $(e.relatedTarget);
+                        noteID = btnEdit.data('id');
+                        var modal = $(this);
+                    });
+
+                    $('#delete_note').on('click', function () {
+                        var strUrl = '/vehicle_management/delete_note/'+ noteID;
+                        var modalID = 'delete-note-warning-modal';
+                        var objData = {
+                            _token: $('#' + modalID).find('input[name=_token]').val()
+                        };
+                        var submitBtnID = 'delete_note';
+                        var redirectUrl = '/vehicle_management/notes/{{$maintenance->id}}';
+                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
+              });
+
+    
+
 	</script>
 @endsection

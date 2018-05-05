@@ -41,36 +41,36 @@
                                     <td class="caption">Fleet Number</td>
                                     <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
                                     <td class="caption">Job Card Number</td>
-                                    <td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
                                 </tr>
                                 <tr>
 
                                     <td class="caption">vehicle registration Number</td>
                                     <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
                                     <td class="caption">Job Card Date</td>
-                                    <td>{{ !empty($vehiclemaintenance->engine_number) ? $vehiclemaintenance->engine_number : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption" width="25%">Make</td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehiclemake) ? $vehiclemaintenance->vehiclemake : ''}}</td>
+                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
                                     <td class="caption">Job Card Status</td>
-                                    <td>{{ !empty($vehiclemaintenance->vehicletype) ? $vehiclemaintenance->vehicletype : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption" width="25%">Model</td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehiclemodel) ? $vehiclemaintenance->vehiclemodel : ''}}</td>
+                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
                                     <td class="caption">Service File Attachment</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Vehicle Description </td>
-                                    <td>{{ !empty($vehiclemaintenance->chassis_number) ? $vehiclemaintenance->chassis_number : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->instruction) ? $vehiclemaintenance->instruction : ''}}</td>
                                     <td class="caption">Driver</td>
-                                    <td></td>
+                                    <td>{{ !empty($vehiclemaintenance->last_driver_id) ? $vehiclemaintenance->last_driver_id : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Current Odometer </td>
-                                    <td>{{ !empty($vehiclemaintenance->vehicle_color) ? $vehiclemaintenance->vehicle_color : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
                                     <td class="caption">Mechanic</td>
                                     <td></td>
                                 </tr>
@@ -91,13 +91,13 @@
                                 <tr>
                                     
                                     <td class="caption">Service Time</td>
-                                    <td>{{ (!empty($vehiclemaintenance->fuel_type)) ?  $fueltype[$vehiclemaintenance->fuel_type] : ''}} </td>
+                                    <td> </td>
                                     <td class="caption"></td>
-                                    <td>{{ !empty($vehiclemaintenance->tracking_umber) ? $vehiclemaintenance->tracking_umber : ''}}</td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Service Type</td>
-                                    <td>{{ !empty($vehiclemaintenance->size_of_fuel_tank) ? $vehiclemaintenance->size_of_fuel_tank : ''}}</td>
+                                    <td></td>
                                     <td class="caption">Servicing Agent</td>
                                     <td></td>
                                 </tr>
@@ -117,49 +117,75 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
-                   
-                    <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
+                <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+                            data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
+                            data-status="{{$vehiclemaintenance->status}}"
+                            data-division_level_5="{{$vehiclemaintenance->division_level_5 }}"
+                            data-division_level_4="{{ $vehiclemaintenance->division_level_4 }}"
+                            data-division_level_3="{{ $vehiclemaintenance->division_level_3 }}"
+                            data-division_level_2="{{ $vehiclemaintenance->division_level_2 }}"
+                            data-division_level_1="{{ $vehiclemaintenance->division_level_1 }}"
+                            data-responsible_for_maintenance="{{ $vehiclemaintenance->responsible_for_maintenance}}"
+                            data-vehicle_make="{{ $vehiclemaintenance->vehicle_make}}"
+                            data-responsible_for_maintenance="{{$vehiclemaintenance->responsible_for_maintenance}}"
+                            data-vehicle_model="{{$vehiclemaintenance->vehicle_model}}"
+                            data-vehicle_type="{{$vehiclemaintenance->vehicle_type}}"
+                            data-year="{{$vehiclemaintenance->year}}"
+                            data-vehicle_registration="{{$vehiclemaintenance->vehicle_registration}}"
+                            data-chassis_number="{{$vehiclemaintenance->chassis_number}}"
+                            data-engine_number="{{$vehiclemaintenance->engine_number}}"
+                            data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"
+                            data-metre_reading_type="{{$vehiclemaintenance->metre_reading_type}}"
+                            data-odometer_reading="{{$vehiclemaintenance->odometer_reading}}"
+                            data-hours_reading="{{$vehiclemaintenance->hours_reading}}"
+                            data-fuel_type="{{$vehiclemaintenance->fuel_type}}"
+                            data-size_of_fuel_tank="{{$vehiclemaintenance->size_of_fuel_tank}}"
+                            data-fleet_number="{{$vehiclemaintenance->fleet_number}}"
+                            data-cell_number="{{$vehiclemaintenance->cell_number}}"
+                            data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}"
+                            data-vehicle_owner="{{$vehiclemaintenance->vehicle_owner}}"
+                            data-title_type="{{$vehiclemaintenance->title_type}}"
+                            data-financial_institution="{{$vehiclemaintenance->financial_institution}}"
+                            data-extras="{{ $vehiclemaintenance->extras }}"
+                            data-property_type="{{ $vehiclemaintenance->property_type }}"
+                            data-company="{{ $vehiclemaintenance->company }}"
+
+                    ><i class="fa fa-pencil-square-o"></i> Edit
+                    </button>
+
+                    <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->vehicle_id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Images</a>
 
-                    <a href="{{ '/vehicle_management/keys/' . $vehiclemaintenance->id }}"
+                       <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a>
+                       data-id="{{ $vehiclemaintenance->id }}">Job Card Notes</a>
+                    
+                    <a href="{{ '/jobcards/parts/' . $vehiclemaintenance->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Add Parts</a>
 
-                    <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
+                    <a href="{{ '/jobcard/cancellation/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>
-
-                    <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Documents</a>
-<!--
-                    <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Contracts</a>
--->
+                       data-id="{{ $vehiclemaintenance->id }}">Request Cancellation</a>
 
                     <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Notes</a>
+                       data-id="{{ $vehiclemaintenance->id }}">Conclude Jobcard</a>
 
                     <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
-
-                   <a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
-
+                       data-id="{{ $vehiclemaintenance->id }}">Create Request</a>
+                       
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
 
                 </div>
                 @endforeach
+               
             </div>
         </div>
-      
     </div>
 @endsection
 @section('page_script')
@@ -194,9 +220,9 @@
 
     <script>
         $('#cancel').click(function () {
-            location.href = '/vehicle_management/manage_fleet';
+            location.href = '/jobcards/search';
         });
-//
+
         $(function () {
         
         
@@ -299,7 +325,16 @@
                 return allType;
             }
 
-            
+            $('#add_notes').on('click', function () {
+                    var strUrl = '/jobcards/addjobcardnotes';
+                    var formName = 'add-note-form';
+                    var modalID = 'add-note-modal';
+                    var submitBtnID = 'add_notes';
+                    var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
+                    var successMsgTitle = 'New Record Added!';
+                    var successMsg = 'The Record  has been updated successfully.';
+                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                });
 
         });
 

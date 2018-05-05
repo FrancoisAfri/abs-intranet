@@ -447,7 +447,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                    
-                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Message sent when ticket completion has been requested:" rows="4">{{!empty($autoRensponder->responder_messages) ? $autoRensponder->responder_messages : ' ' }}</textarea>
+                                    <textarea class="form-control" id="responder_messages" name="responder_messages" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->responder_messages) ? $autoRensponder->responder_messages: '' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -460,7 +460,7 @@
                                       <i class="fa fa-ticket"></i>
                                     </div>
                                   
-                                      <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->response_emails) ? $autoRensponder->response_emails : ' ' }}</textarea>
+                                      <textarea class="form-control" id="response_emails" name="response_emails" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->response_emails) ? $autoRensponder->response_emails : '' }} </textarea>
 
                                 </div>
                             </div>
@@ -473,7 +473,7 @@
                                     <div class="input-group-addon">
                                        <i class="fa fa-ticket"></i>
                                     </div>
-                                      <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completion_req) ? $autoRensponder->ticket_completion_req : ' ' }}</textarea>
+                                      <textarea class="form-control" id="ticket_completion_req" name="ticket_completion_req" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completion_req) ? $autoRensponder->ticket_completion_req : '' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -486,7 +486,7 @@
                                     <div class="input-group-addon">
                                       <i class="fa fa-ticket"></i>
                                     </div>
-                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completed) ? $autoRensponder->ticket_completed : ' ' }}</textarea>
+                                    <textarea class="form-control" id="ticket_completed" name="ticket_completed" placeholder="Message sent when ticket completion has been requested:" rows="4">{{ !empty($autoRensponder->ticket_completed) ? $autoRensponder->ticket_completed : '' }}</textarea>
                                     
                                 </div>
                             </div>
@@ -513,8 +513,11 @@
                 </div>
             <form class="form-horizontal" id="report_form" method="POST" action="{{!empty($emailSettings->id) ? '/help_desk/email_setup/'.$emailSettings->id : '/help_desk/email_setup'}}">
                     {{ csrf_field() }}
+
                     <div class="box-body">
+                       
                          <table class="table table-bordered">
+                             
                             <tr>
                                 <td>Auto-process Emails:</td>
                                 <td style="text-align: center; vertical-align: middle;">
@@ -524,6 +527,9 @@
                                     </td> 
                                 </td>
                               </tr>
+                            
+                             <!--  -->
+                        
                             <tr>
                                 <td>Only process replies:</td>
                                 <td style="text-align: center; vertical-align: middle;">
@@ -533,6 +539,8 @@
                                     </td> 
                                 </td>
                               </tr>
+                            
+
                             <tr>
                                 <td>Email address:</td>
                                 <td style="text-align: center; vertical-align: middle;">
@@ -541,6 +549,8 @@
                                     </td> 
                                 </td>
                               </tr>
+                         
+
                               <div class="form-group">
                             <tr>
                                 <td>Server Name:</td>
@@ -550,6 +560,9 @@
                                     </td> 
                                 </td>
                               </tr>
+                           
+
+
                               <tr>
                                 <td>Server Type:</td>
                                 <td>
@@ -560,6 +573,8 @@
                                             </div>
                                         </td>
                              </tr>
+                          
+
                             <tr>
                                 <td>Server Port:</td>
                                 <td style="text-align: center; vertical-align: middle;">
@@ -568,6 +583,9 @@
                                     </td> 
                                 </td>
                               </tr>
+                            
+
+                           
                             <tr>
                                 <td>Username:</td>
                                 <td style="text-align: center; vertical-align: middle;">
@@ -576,6 +594,9 @@
                                     </td> 
                                 </td>
                               </tr>
+                           
+
+                             
                             <tr>
                                 <td>Password:</td>
                                 <td style="text-align: center; vertical-align: middle;">
@@ -584,6 +605,7 @@
                                     </td> 
                                 </td>
                               </tr>
+                          
                                <tr>
                                 <td>Signature Start String:</td>
                                 <td style="text-align: center; vertical-align: middle;">
@@ -592,8 +614,10 @@
                                     </td> 
                                 </td>
                               </tr>
+
                             <!--  <input type="hidden" class="checkbox selectall"  name="helpdesk_id" value="{{ $serviceID }}"> -->
                                <input id="invisible_id" name="helpdesk_id" type="hidden" value="{{ $serviceID }}">
+
                         </table>                         
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -611,8 +635,12 @@
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
+
                    <!--  <h3 class="box-title"> Help Desk Operators</h3> -->
+
                     <h3 class="box-title"> Operators for {{ $serviceName }}</h3>
+
+
                 </div>
                  {{ csrf_field() }}
                     {{ method_field('PATCH') }}
@@ -729,6 +757,7 @@
         function postData(id , data ){   
             if(data == 'OPeratoractdeac') location.href = "/helpdesk/operatorAct/" + id;
             else if(data == 'actdeac') location.href = "/helpdesk/help_deskAdmin/" + id; 
+           
         }
 
         $(function () {
@@ -756,6 +785,8 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
+
+
                 $('#time_from').datetimepicker({
                     format: 'HH:mm:ss'
                 });
@@ -780,6 +811,7 @@
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
 
                   //Post module form to server using ajax (ADD)
             $('#add_admin').on('click', function() {

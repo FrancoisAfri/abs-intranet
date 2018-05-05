@@ -13,6 +13,7 @@ use App\vehicle_detail;
 use App\jobcard_maintanance;
 use App\ContactCompany;
 use App\processflow;
+use App\jobcardnote;
 use App\jobcards_config;
 use App\CompanyIdentity;
 use App\module_access;
@@ -52,14 +53,12 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card Settings Page Accessed', "Accessed By User", Auth::user()->person->position);
         return view('job_cards.setup')->with($data);
     }
     
     public function servicetype(){
-        
-       
-        
+           
         $servicetype = servicetype::orderBy('name',1)->get();
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";
@@ -72,7 +71,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
         
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card Management Service Type', "Accessed By User",  Auth::user()->person->position);
         return view('job_cards.service_type')->with($data);  
     }
     
@@ -88,7 +87,7 @@ class JobcardController extends Controller
         $servicetype->status = 1;
         $servicetype->save();
         
-        AuditReportsController::store('Job Card Management', 'New service Type added', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'New service Type added', "Accessed By User",  Auth::user()->person->position);
         return response()->json();
     }
     
@@ -103,7 +102,7 @@ class JobcardController extends Controller
         $service->name = $SysData['name'];
         $service->description = $SysData['description'];
         $service->update();
-        AuditReportsController::store('Fleet Management', ' service Type edited', "Accessed By User", 0);
+        AuditReportsController::store('Fleet Management', ' service Type edited', "Accessed By User",  Auth::user()->person->position);
         return response()->json();
     }
     
@@ -122,8 +121,7 @@ class JobcardController extends Controller
     public function deleteservicetype(servicetype $service){
         $service->delete();
 
-        AuditReportsController::store('Job Card Management', ' service Type Deleted', "Accessed By User", 0);
-      
+        AuditReportsController::store('Job Card Management', ' service Type Deleted', "Accessed By User",  Auth::user()->person->position);
         return redirect('/jobcards/servicetype');
     
     }
@@ -153,7 +151,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'SetUp';
         
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Accessed By User",  Auth::user()->person->position);
         return view('job_cards.configuration')->with($data); 
     }
     public function configurationSetings(Request $request, jobcards_config $config){
@@ -165,7 +163,7 @@ class JobcardController extends Controller
         $config->mechanic_sms = !empty($SysData['mechanic_sms']) ? $SysData['mechanic_sms'] : 0;
         $config->update();
 
-        AuditReportsController::store('Job Card Management', 'configurationSetings updated', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'configurationSetings updated', "Accessed By User", Auth::user()->person->position);
         return back();
     }
      
@@ -186,7 +184,7 @@ class JobcardController extends Controller
           //  ->where('jobcard_process_flow.status', 1)
             ->get();
         
-        $data['page_title'] = "Job Card Settings";
+        $data['page_title'] = "Job Card Processes";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -199,7 +197,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Process Flow';
         
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card Management Process Flow Accessed', "Accessed By User", Auth::user()->person->position);
         return view('job_cards.processflow')->with($data);     
      }
      
@@ -221,7 +219,7 @@ class JobcardController extends Controller
          $processflow->status = 1;
          $processflow->save();
          
-         AuditReportsController::store('Job Card Management', 'New service Type added', "Accessed By User", 0);
+         AuditReportsController::store('Job Card Management', 'New processflow has been added', "Accessed By User", Auth::user()->person->position);
         return response()->json();
      }
      
@@ -238,7 +236,7 @@ class JobcardController extends Controller
          $steps->job_title = !empty($SysData['job_title']) ? $SysData['job_title'] : 0;
          $steps->update();
          
-         AuditReportsController::store('Job Card Management', ' process flow edited', "Accessed By User", 0);
+         AuditReportsController::store('Job Card Management', ' process flow edited', "Accessed By User", Auth::user()->person->position);
         return response()->json();
      }
      
@@ -250,13 +248,10 @@ class JobcardController extends Controller
         $steps->status = $stastus;
         $steps->update();
 		
-		AuditReportsController::store('Job Card Management', ' process flow status Changed', "Accessed By User", 0);		
+		AuditReportsController::store('Job Card Management', ' process flow status Changed', "Accessed By User", Auth::user()->person->position);		
         return back();  
      }
-     
-     
-     //myJobcards
-     
+ 
       public function jobcardStatus($status = 0, $hrID = 0, $jobID = 0) {
          
           $user = Auth::user()->person->user_id;
@@ -283,30 +278,42 @@ class JobcardController extends Controller
                    ->where('security_modules.code_name', 'job_cards') ->where('security_modules_access.access_level','>=', 4)
                    ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
                     
-       $processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
-       $processss = processflow::take(1);
-	  // return $processss;
-	  // return $processflow->step_number->take(1);
-       $rowcolumn = $processflow->count();
+	$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
+	$processss = processflow::take(1);
+	$rowcolumn = $processflow->count();
       
        if(($rowcolumn >0 )){
                    
-        $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-       
+        $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $servicetype = servicetype::where('status',1)->get();
-       
-        $users = HRPerson::where('status',1)->orderBy('id', 'asc')->get();
-        
+        $users = HRPerson::where('status',1)->orderBy('id', 'asc')->get(); 
         $Status = array(-1=>'Rejected',1 => 'Job Card created',
 				 3=>'Completed',6=>'Procurement ',7=>'At Service',
 				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
-				 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
-        
+                 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
+                 
+                $currentUser = Auth::user()->person->id;
          
-        $jobcardmaintanance = DB::table('jobcard_maintanance')
-            ->select('jobcard_maintanance.*','vehicle_details.*','contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+//        $jobcardmaintanance = DB::table('jobcard_maintanance')
+//            ->select('jobcard_maintanance.*','vehicle_details.*','contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+//                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+//                    'hr_people.first_name as firstname', 'hr_people.surname as surname')
+//            ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+//            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+//            ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+//            ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+//            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+//            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+//            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+//            ->where('jobcard_maintanance.user_id', $currentUser)
+//            ->orderBy('jobcard_maintanance.id', 'asc')
+//            ->get();  
+        
+            $jobcardmaintanance = DB::table('jobcard_maintanance')
+            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
+                    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
-                    'hr_people.first_name as firstname', 'hr_people.surname as surname')
+                    'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
             ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
             ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
@@ -314,9 +321,13 @@ class JobcardController extends Controller
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+             ->where('jobcard_maintanance.user_id', $currentUser)   
             ->orderBy('jobcard_maintanance.id', 'asc')
-            ->get();  
-             
+            ->get(); 
+        
+      //  return $jobcardmaintanance;
+            
         
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -348,13 +359,12 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'My Job Cards';
         
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card Page Accessed', "Accessed By User", Auth::user()->person->position);
        return view('job_cards.myjob_cards')->with($data); 
        
        }else  {
-//           return redirect('/');
-            return back();
-			return back()->with('success_edit', "The are not permitted to view this page.");
+           return redirect('/');
+			//return back()->with('success_edit', "The are not permitted to view this page.");
         }
      }
      
@@ -404,6 +414,8 @@ class JobcardController extends Controller
         $jobcardmaintanance->completion_date = $completiondate;
         $jobcardmaintanance->jobcard_number = $flowprocee + 1;
         $jobcardmaintanance->status = 1;
+        $jobcardmaintanance->date_default =  time();
+        $jobcardmaintanance->user_id = Auth::user()->person->id;
         $jobcardmaintanance->save();
         
         //Upload supporting document
@@ -440,74 +452,97 @@ class JobcardController extends Controller
                }
         
         
-        AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User", Auth::user()->person->position);
         return response()->json();
 
      }
      
-     public function jobcardsearch(){
+     public function cardsearch(){
+           
+        $processflow = processflow::orderBy('id', 'asc')->get();
+       // return  $processflow ;
+        $data['page_title'] = "Job Card Search";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['processflow'] = $processflow;
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Search';
+
+        AuditReportsController::store('Job Card Management', 'Job Card card search Page Accessed', "Accessed By User", Auth::user()->person->position);
+        return view('job_cards.search')->with($data); 
+     }
+     public function jobcardsearch(Request $request){
          
-//         $this->validate($request, [
-//
-//        ]);
-//        $SysData = $request->all();
-//        unset($SysData['_token']);
-//        
-//        $jobcard = $request['jobcard_id'];
-//        $fleetnumber = $request['fleet_number'];
-//        $registrationNo = $request['registration_no'];
-//        $status = $request['status'];
-//        $servicetypeID = $request['service_type_id'];
-//        $mechanicID = $request['mechanic_id'];
-//        
-//        //$jobcardmaintanance =  jobcard_maintanance::orderBy('id','desc')->get();
-//        
-//        $actionFrom = $actionTo = 0;
-//        $actionDate = $request['date'];
-//        if (!empty($actionDate)) {
-//            $startExplode = explode('-', $actionDate);
-//            $actionFrom = strtotime($startExplode[0]);
-//            $actionTo = strtotime($startExplode[1]);
-//           
-//        }
-//        
-//        //processflow  status
-//        
-//        $jobcardmaintanance = DB::table('jobcard_maintanance')
-//            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
-//                    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
-//                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
-//                    'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
-//            ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
-//            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
-//            ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
-//            ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
-//            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-//            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-//            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-//            ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
-//                ->where(function ($query) use ($actionFrom, $actionTo) {
-//                        if ($actionFrom > 0 && $actionTo > 0) {
-//                            $query->whereBetween('jobcard_maintanance.date', [$actionFrom, $actionTo]);
-//                        }
-//                    })
-//                    ->where(function ($query) use ($jobcard) {
-//                        if (!empty($jobcard)) {
-//                            $query->where('c.jobcard_number',$jobcard);
-//                        }
-//                    })
-//                    ->where(function ($query) use ($fleetnumber) {
-//                        if (!empty($fleetnumber)) {
-//                            $query->where('vehicle_details.fleet_number', 'ILIKE', "%$fleetnumber%");
-//                        }
-//                    })
-//                    ->where(function ($query) use ($registrationNo) {
-//                        if (!empty($registrationNo)) {
-//                            $query->where('vehicle_details.vehicle_registration', 'ILIKE', "%$registrationNo%");
-//                        }
-//                    })
-//                ->orderBy('jobcard_maintanance.id', 'asc')
-//                ->get(); 
+        $this->validate($request, [
+
+       ]);
+       $SysData = $request->all();
+       unset($SysData['_token']);
+       
+       
+       $jobcard = $request['jobcard_id'];
+       $fleetnumber = $request['fleet_number'];
+       $registrationNo = $request['registration_no'];
+       $status = $request['status'];
+       $servicetypeID = $request['service_type_id'];
+       $mechanicID = $request['mechanic_id'];
+       
+       //$jobcardmaintanance =  jobcard_maintanance::orderBy('id','desc')->get();
+       
+       $actionFrom = $actionTo = 0;
+       $actionDate = $request['date'];
+       if (!empty($actionDate)) {
+           $startExplode = explode('-', $actionDate);
+           $actionFrom = strtotime($startExplode[0]);
+           $actionTo = strtotime($startExplode[1]);
+          
+       }
+       $jobcardmaintanance = DB::table('jobcard_maintanance')
+           ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
+               'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+               'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+               'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+           ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+           ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+           ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+           ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+           ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+           ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+           ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+           ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+        //    ->where(function ($query) use ($actionFrom, $actionTo) {
+        //        if ($actionFrom > 0 && $actionTo > 0) {
+        //                    $query->whereBetween('jobcard_maintanance.date_default', [$actionFrom, $actionTo]);
+        //                }
+        //            })
+                        ->where(function ($query) use ($jobcard) {
+                            if (!empty($jobcard)) {
+                                $query->where('jobcard_maintanance.jobcard_number',$jobcard);
+                            }
+                        })
+                        ->where(function ($query) use ($fleetnumber) {
+                            if (!empty($fleetnumber)) {
+                                $query->where('vehicle_details.fleet_number', 'ILIKE', "%$fleetnumber%");
+                            }
+                        })
+                        ->where(function ($query) use ($registrationNo) {
+                            if (!empty($registrationNo)) {
+                                $query->where('vehicle_details.vehicle_registration', 'ILIKE', "%$registrationNo%");
+                            }
+                        })
+                        ->where(function ($query) use ($status) {
+                            if (!empty($status)) {
+                                $query->where('jobcard_process_flow.id',$status);
+                            }
+                        })
+                        ->orderBy('jobcard_maintanance.id', 'asc')
+                        ->get(); 
+
+             //  return $jobcardmaintanance;
                     
         $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";
@@ -516,52 +551,95 @@ class JobcardController extends Controller
             ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Search Job Cards';
-
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
-        return view('job_cards.search')->with($data); 
-     }
-     
-     public function jobcardsApprovals(){
-        
-        $jobcardmaintanance = DB::table('jobcard_maintanance')
-            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
-                    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
-                    'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
-            ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
-            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
-            ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
-            ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
-            ->orderBy('jobcard_maintanance.id', 'asc')
-            ->get(); 
-                    
-                   //return $jobcardmaintanance;
-        
-           $steps =  processflow::latest()->first();     
-           $stepnumber = !empty($steps->step_number) ? $steps->step_number : 0  ; 
-           
-         //  return $stepnumber;
-      
-          $data['page_title'] = "Job Card Approvals";
-          $data['page_description'] = "Job Card Management";
-          $data['breadcrumb'] = [
-                ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Job Card Approval ', 'active' => 1, 'is_module' => 0]
-            ];
-
-        $data['stepnumber'] = $stepnumber;
         $data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Approvals';
+        $data['active_rib'] = 'Search';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
-        return view('job_cards.Job_card_approval')->with($data); 
+        AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Accessed By User", Auth::user()->person->position);
+        return view('job_cards.search_results')->with($data); 
+     }
+     
+
+
+     
+     public function jobcardsApprovals(){
+		
+		$hrID = Auth::user()->person->user_id;
+		$hrjobtile = Auth::user()->person->position;
+		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
+					   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+					   ->where('security_modules.code_name', 'job_cards') 
+					   ->where('security_modules_access.access_level','>=', 4)
+					   ->where('security_modules_access.user_id', $hrID)
+					   ->pluck('user_id')->first();
+						
+		$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
+		$lastProcess = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','desc')->first();
+		$statuses = array();
+		$status = '';
+		
+		$processss = processflow::take(1);
+		$rowcolumn = $processflow->count();
+		if($rowcolumn >0 || !empty($userAccess)){
+			
+			if (!empty($userAccess)) $statuses = array();
+			else 
+			{
+				foreach ($processflow as $process)
+				{
+					$status .= $process->step_number.',';
+				}
+				$status = rtrim($status, ",");;
+				$statuses = (explode(",",$status));						
+			}
+			$jobcardmaintanance = DB::table('jobcard_maintanance')
+				->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
+						'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+					'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+						'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+				->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+				->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+				->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+				->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+				->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+				->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+				->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+				->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+				->where(function ($query) use ($statuses) {
+					if (!empty($statuses)) {
+						for ($i = 0; $i < count($statuses); $i++) {
+							$query->whereOr('jobcard_maintanance.status', '=', $statuses[$i]);
+						}
+					}
+				})
+				->where('jobcard_maintanance.status','!=', $lastProcess->step_number)				
+				->orderBy('jobcard_maintanance.id', 'asc')
+				->get(); 
+
+			$steps =  processflow::latest()->first();     
+			$stepnumber = !empty($steps->step_number) ? $steps->step_number : 0  ; 
+			
+			$data['page_title'] = "Job Card Approvals";
+			$data['page_description'] = "Job Card Management";
+			$data['breadcrumb'] = [
+					['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+					['title' => 'Job Card Approval ', 'active' => 1, 'is_module' => 0]
+			];
+
+			$data['stepnumber'] = $stepnumber;
+			$data['jobcardmaintanance'] = $jobcardmaintanance;
+			$data['active_mod'] = 'Job Card Management';
+			$data['active_rib'] = 'Approvals';
+
+			AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+			return view('job_cards.Job_card_approval')->with($data);
+		}
+		else  {
+//           return redirect('/');
+			return back();
+			return back()->with('success_edit', "The are not permitted to view this page.");
+		}
+
      }
      
      public function appovecards(Request $request , jobcard_maintanance $jobcards){
@@ -649,7 +727,7 @@ class JobcardController extends Controller
         $sReasonToReject = '';
         }
         
-       AuditReportsController::store('Job Card Management', 'Approve Job Card', "Accessed By User", 0);
+       AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", Auth::user()->person->position);
         return back();
      }
     
@@ -672,7 +750,7 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get(); 
          
-         return $vehiclemaintenance;
+         //return $vehiclemaintenance;
          
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['page_title'] = "Job Card Search";
@@ -685,9 +763,178 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search Job Cards';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'My Job Card Page Accessed', "Accessed By User", Auth::user()->person->position);
         return view('job_cards.Job_card_details')->with($data); 
      }
-     
-}
 
+     public function viewjobcard(jobcard_maintanance $card){
+     
+         
+        $vehiclemaintenance = DB::table('jobcard_maintanance')
+            ->select('jobcard_maintanance.*','vehicle_details.*',
+                    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+                    'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+            ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+            ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+            ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+            ->where('jobcard_maintanance.id' ,$card->id )     
+            ->orderBy('jobcard_maintanance.id', 'asc')
+            ->get(); 
+         
+         
+        $data['vehiclemaintenance'] = $vehiclemaintenance;
+        $data['card'] =$card;
+        $data['page_title'] = "Job Card Search";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Search Job Cards';
+
+        AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User", Auth::user()->person->position);
+        return view('job_cards.Job_card_details')->with($data);
+     }
+     public function viewjobcardnotes(jobcard_maintanance $card ){
+
+        $jobcardnote = DB::table('jobcard_notes')
+        ->select('jobcard_notes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+        ->leftJoin('hr_people', 'jobcard_notes.user_id', '=', 'hr_people.id')
+        ->where('jobcard_id', $card->jobcard_number)
+        ->Orderby('jobcard_notes.id','asc')
+        ->get();
+      // return $jobcardnote;
+
+                                
+
+        $data['card'] = $card;
+        $data['jobcardnote'] = $jobcardnote;
+        $data['page_title'] = "Job Card Search";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Search Job Cards';
+
+        AuditReportsController::store('Job Card Management', 'view Jobcardnotes', "Accessed By User", Auth::user()->person->position);
+        return view('job_cards.add_jocard_notes')->with($data);
+     }
+
+     public function addjobcardnotes(Request $request){
+        $this->validate($request, [
+//              'step_name' => 'required',
+//              'job_title' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $jobcardnote =  new jobcardnote();
+        $jobcardnote->note_details = !empty($SysData['notes']) ? $SysData['notes'] : '';
+        $jobcardnote->vehicle_id = !empty($SysData['vehicle_id']) ? $SysData['vehicle_id'] : 0;
+        $jobcardnote->jobcard_id = !empty($SysData['jobcard_id']) ? $SysData['jobcard_id'] : 0;
+        $jobcardnote->user_id =  Auth::user()->person->id;
+        $jobcardnote->date_default = time();
+        $jobcardnote->save(); 
+
+
+        $jobcard_number = $SysData['vehicle_id'];
+           // emils
+        $users = DB::table('jobcard_maintanance')
+        ->select('jobcard_maintanance.*', 'jobcard_notes.user_id as user')
+        ->leftJoin('jobcard_notes', 'jobcard_maintanance.jobcard_number', '=', 'jobcard_notes.id')
+        ->where('jobcard_number', $jobcard_number)
+        ->where('jobcard_notes.jobcard_id', $jobcard_number)
+         ->pluck('user_id');
+       // ->get();
+        //give me the person who created the card
+
+        //foreach ($user as $manID) {
+
+       // }
+        AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User",  Auth::user()->person->position);
+        return response()->json();
+     }
+     
+     public function canceljobcardnotes(jobcard_maintanance $card){
+         
+       //  return $card;
+         
+         $hrID = Auth::user()->person->user_id;
+		$hrjobtile = Auth::user()->person->position;
+		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
+					   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+					   ->where('security_modules.code_name', 'job_cards') 
+					   ->where('security_modules_access.access_level','>=', 4)
+					   ->where('security_modules_access.user_id', $hrID)
+					   ->pluck('user_id')->first();
+						
+		$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
+		$lastProcess = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','desc')->first();
+                
+                return $userAccess;
+		$statuses = array();
+		$status = '';
+		
+		$processss = processflow::take(1);
+		$rowcolumn = $processflow->count();
+		if($rowcolumn >0 || !empty($userAccess)){
+			
+			if (!empty($userAccess)) $statuses = array();
+			else 
+			{
+				foreach ($processflow as $process)
+				{
+					$status .= $process->step_number.',';
+				}
+				$status = rtrim($status, ",");;
+				$statuses = (explode(",",$status));						
+			}
+			$jobcardmaintanance = DB::table('jobcard_maintanance')
+				->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
+						'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+					'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+						'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+				->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+				->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+				->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+				->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+				->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+				->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+				->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+				->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+				->where(function ($query) use ($statuses) {
+					if (!empty($statuses)) {
+						for ($i = 0; $i < count($statuses); $i++) {
+							$query->whereOr('jobcard_maintanance.status', '=', $statuses[$i]);
+						}
+					}
+				})
+				->where('jobcard_maintanance.status','!=', $lastProcess->step_number)				
+				->orderBy('jobcard_maintanance.id', 'asc')
+				->get(); 
+
+			return $jobcardmaintanance;
+                        
+                        
+         // get the person who created the ticket
+     }
+     
+   }
+   
+   //jobcard parts
+   
+   public function jobcardparts(){
+       
+   }
+}

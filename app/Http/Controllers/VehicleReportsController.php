@@ -167,9 +167,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                    // $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
             ->orderBy('vehicle_id', 'desc')
@@ -341,7 +339,6 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -494,7 +491,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -672,7 +669,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -842,7 +839,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -1018,7 +1015,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('id', '=', $vehicleArray[$i]);
                 }
             })
@@ -1174,7 +1171,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -1205,7 +1202,6 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -1442,7 +1438,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -1531,7 +1527,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -1632,7 +1628,7 @@ class VehicleReportsController extends Controller
             })
             ->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
                 }
             })
@@ -1698,7 +1694,7 @@ class VehicleReportsController extends Controller
             })
 			->Where(function ($query) use ($vehicleArray) {
                 for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle = $vehicleArray[$i] . ',';
+                    $vehicle .= $vehicleArray[$i] . ',';
                     $query->whereOr('vehicle_fleet_cards.fleet_number', '=', $vehicleArray[$i]);
                 }
             })

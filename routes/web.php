@@ -559,7 +559,7 @@ Route::get('vehicle_management/vehicledoc_act/{documents}', 'FleetManagementCont
 Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@viewnotes');
 Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
 Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote');
-Route::get('vehicle_management/note/{note}/delete', 'FleetManagementController@deleteNote');
+Route::post('vehicle_management/delete_note/{note}', 'FleetManagementController@deleteNote');
 
 //#
 Route::get('vehicle_management/general_cost/{maintenance}', 'VehicleFleetController@viewGeneralCost');
@@ -659,10 +659,21 @@ Route::post('jobcards/addjobcard', 'JobcardController@addjobcardmanagement');
 
 Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
 //Route::get('jobcards/search', 'JobcardController@jobcardsApprovals');
-Route::get('jobcards/search', 'JobcardController@jobcardsearch');
+Route::get('jobcards/search', 'JobcardController@cardsearch');
+Route::post('jobcards/jobcardsearch', 'JobcardController@jobcardsearch');
 
 Route::post('jobcards/appovecards', 'JobcardController@appovecards');
 Route::get('jobcards/viewjobcard/{card}', 'JobcardController@viewcard');
+
+Route::get('jobcards/viewcard/{card}', 'JobcardController@viewjobcard');
+Route::post('jobcards/appovecards', 'JobcardController@appovecards');
+Route::post('jobcards/addjobcardnotes', 'JobcardController@addjobcardnotes');
+Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes');
+
+Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes');
+
+Route::get('jobcards/parts','JobcardController@jobcardparts');
+
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
