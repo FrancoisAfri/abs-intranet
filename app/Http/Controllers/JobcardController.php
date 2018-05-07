@@ -1070,11 +1070,15 @@ class JobcardController extends Controller
 				->orderBy('jobcard_maintanance.id', 'asc')
 				->get(); 
 
-			return $jobcardmaintanance;
+			//return $jobcardmaintanance;
                         
                         
          // get the person who created the ticket
      }
      
+   }
+   
+   public function reports(){
+       
    }
 }
