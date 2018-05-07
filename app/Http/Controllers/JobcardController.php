@@ -962,8 +962,7 @@ class JobcardController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
- 
-        
+
          $jobcartparts =  new jobcart_parts();
          $jobcartparts->name = !empty($SysData['name']) ? $SysData['name'] : '';
          $jobcartparts->description = !empty($SysData['description']) ? $SysData['description'] : '';
