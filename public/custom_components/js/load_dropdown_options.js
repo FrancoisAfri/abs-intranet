@@ -374,7 +374,7 @@ function loadContactPeopleOptions(ddID, selectedOption, companyID, incInactive, 
 
 /* function to load contact people drop down options */
 function vehiclemakeDDOnChange(dropDownObj, vehiclemomdeDDID, selectedOption) {
-    console.log('gets here');
+   // console.log('gets here');
     vehiclemomdeDDID = vehiclemomdeDDID || 'vehiclemake_id';
     selectedOption = selectedOption || '';
 
