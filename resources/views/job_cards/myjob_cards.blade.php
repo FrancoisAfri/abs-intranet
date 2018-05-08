@@ -35,7 +35,7 @@
                                     <th>Service Type</th>
                                     <th>Supplier</th>
                                     <th>Status</th>
-                            </tr>
+                                    </tr>
                             </thead>
                             <tbody>
                             @if (count($jobcardmaintanance) > 0)
@@ -61,7 +61,7 @@
                             @endif
                             </tbody>
                             <tfoot>
-                            <tr>
+                             <tr>
                                    <th style="width: 5px; text-align: center;"></th>
                                     <th>Job Card #</th>
                                     <th>Vehicle Name</th>
@@ -73,15 +73,13 @@
                                     <th>Service Type</th>
                                     <th>Supplier</th>
                                     <th>Status</th>
-                            </tr>
+                                </tr>
                             </tfoot>
                         </table>
 					<!-- /.box-body -->
 					<div class="box-footer">
-						<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
-									class="fa fa-arrow-left"></i> Back
-						<button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-jobcard-modal">Add new Job card</button>
-						</button>
+						<button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-jobcard-modal"
+						data-card_date="{{ date('d/m/yy', $current_date)}}" >Add new Job card</button>
 					</div>
 				</div>
 			</div>
@@ -228,6 +226,15 @@ $(function () {
 			todayHighlight: true
 		});
 	});
+	
+	$('#add-jobcard-modal').on('show.bs.modal', function (e) {
+		
+		var btnEdit = $(e.relatedTarget);
+		var card_date = btnEdit.data('card_date');
+		var modal = $(this);
+		modal.find('#card_date').val(card_date);
+	});
+	
 	//Post perk form to server using ajax (add)
 	$('#add_jobcardtypes').on('click', function () {
 		var strUrl = '/jobcards/addjobcard';

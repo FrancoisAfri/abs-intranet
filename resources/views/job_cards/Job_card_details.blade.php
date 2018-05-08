@@ -160,11 +160,14 @@
                        <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Job Card Notes</a>
-                    
+                   
+                    <a href="/jobcards/parts"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Add Parts</a>
+
                     <a href="{{ '/jobcards/parts/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Add Parts</a>
-
+                       data-id="{{ $vehiclemaintenance->id }}">Print</a>
+                    
                     <a href="{{ '/jobcard/cancellation/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Request Cancellation</a>
@@ -186,6 +189,7 @@
                
             </div>
         </div>
+     
     </div>
 @endsection
 @section('page_script')
