@@ -8,8 +8,8 @@ use App\permits_licence;
 use App\HRPerson;
 use App\vehicle;
 use App\vehicle_config;
-use App\servicetype;
-use App\vehicle_detail;
+use App\jobcart_parts;
+use App\jobcard_category_parts;
 use App\jobcard_maintanance;
 use App\ContactCompany;
 use App\processflow;
@@ -859,7 +859,172 @@ class JobcardController extends Controller
         return response()->json();
      }
      
+
+     
+   
+   //jobcard parts
+   
+   public function jobcardparts(){
+     
+        $parts =  jobcard_category_parts::OrderBy('id','asc')->get();
+      //  return $parts;
+        $data['parts'] = $parts;
+        $data['page_title'] = "Job Card Catergory";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Parts';
+
+        AuditReportsController::store('Job Card Management', 'view job card parts', "Accessed By User", Auth::user()->person->position);
+        return view('job_cards.add_jobcard_category')->with($data);
+   }
+   
+   public function addpartscatergory(Request $request){
+       $this->validate($request, [
+             'name' => 'required',
+             'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $parts =  new jobcard_category_parts();
+        $parts->name = !empty($SysData['name']) ? $SysData['name'] : '';
+        $parts->description = !empty($SysData['description']) ? $SysData['description'] : '';
+        $parts->status = 1;
+        $parts->save(); 
+
+        AuditReportsController::store('Job Card Management', ' new parts catergory created', "Accessed By User", 0);
+        return response()->json();
+   }
+   
+   public function editpartscatagory(Request $request ,jobcard_category_parts $parts){
+      $this->validate($request, [
+             
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+       //$parts =  new jobcard_category_parts();
+        $parts->name = !empty($SysData['name']) ? $SysData['name'] : '';
+        $parts->description = !empty($SysData['description']) ? $SysData['description'] : '';
+        $parts->status = 1;
+        $parts->update(); 
+
+        AuditReportsController::store('Job Card Management', 'parts catergory  edited', "Accessed By User", 0);
+        return response()->json();  
+   }
+
+   public function jobcat_act(jobcard_category_parts $parts){
+       if ($parts->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+        $parts->status = $stastus;
+        $parts->update();
+		
+        AuditReportsController::store('Job Card Management', 'parts catergory  status Changed', "Accessed By User", Auth::user()->person->position);		
+        return back(); 
+   }
+   
+   public function deletepartscatergory(jobcard_category_parts $parts){ 
+       $parts->delete();
+      
+       // delete every parts assacoited with parts_catergory
+        DB::table('jobcard_parts')
+                    ->where('category_id', $parts->id)
+                    ->delete(); 
+      
+        AuditReportsController::store('Job Card Management', ' parts catergory Deleted', "Accessed By User",  Auth::user()->person->position);
+        return back();
+       // return redirect('/jobcards/servicetype');
+   }
+
+
+   public function viewjobcardparts(Request $request , jobcard_category_parts $parts ){
+      
+        $jobcartparts =  jobcart_parts::OrderBy('id','asc')->where('category_id', $parts->id)->get();
+        
+        $data['parts'] = $parts;
+        $data['jobcartparts'] = $jobcartparts;
+        $data['page_title'] = "Job Card Catergory";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Parts';
+
+        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", Auth::user()->person->position);
+        return view('job_cards.add_jobcard_parts')->with($data); 
+   }
+   
+   public function addjobcardparts(Request $request){
+      $this->validate($request, [
+             'name' => 'required',
+             'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+         $jobcartparts =  new jobcart_parts();
+         $jobcartparts->name = !empty($SysData['name']) ? $SysData['name'] : '';
+         $jobcartparts->description = !empty($SysData['description']) ? $SysData['description'] : '';
+         $jobcartparts->status =  1;
+         $jobcartparts->no_of_parts_available = !empty($SysData['no_of_parts_available']) ? $SysData['no_of_parts_available'] : 0;
+         $jobcartparts->category_id = !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
+         $jobcartparts->save();
+         
+          AuditReportsController::store('Job Card Management', 'new job card part created', "Accessed By User", 0);
+        return response()->json();
+   }
+   
+   public function editcardparts(Request $request ,jobcart_parts $parts ){
+       $this->validate($request, [
+             'name' => 'required',
+             'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+ 
+         $parts->name = !empty($SysData['name']) ? $SysData['name'] : '';
+         $parts->description = !empty($SysData['description']) ? $SysData['description'] : '';
+         $parts->no_of_parts_available = !empty($SysData['no_of_parts_available']) ? $SysData['no_of_parts_available'] : 0;;
+         $parts->update();
+         
+          AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
+        return response()->json(); 
+   }
+   public function parts_act(jobcart_parts $parts){
+       if ($parts->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+        $parts->status = $stastus;
+        $parts->update();
+		
+        AuditReportsController::store('Job Card Management', 'Job card parts status Changed', "Accessed By User", 0);		
+        return back(); 
+   }
+   
+   public function deletejobcards(jobcart_parts $parts){
+       $parts->delete();
+        AuditReportsController::store('Job Card Management', ' Job card parts deleted', "Accessed By User", 0);
+        return back();
+   }
+   
+   
+   
+   public function canceljobcardnotes(jobcard_maintanance $card){
+       }
+
      public function canceljobcardnotes(jobcard_maintanance $card){
+
          
        //  return $card;
          
@@ -926,8 +1091,5 @@ class JobcardController extends Controller
    }
    
    //jobcard parts
-   
-   public function jobcardparts(){
-       
-   }
+ 
 }

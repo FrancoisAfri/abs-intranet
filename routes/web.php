@@ -674,6 +674,19 @@ Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes')
 
 Route::get('jobcards/parts','JobcardController@jobcardparts');
 
+Route::post('jobcards/addcatergory','JobcardController@addpartscatergory');
+
+Route::get('jobcards/addparts/{parts}','JobcardController@viewjobcardparts');
+Route::patch('jobcards/edit_partscatagory/{parts}', 'JobcardController@editpartscatagory');
+Route::get('jobcards/card_act/{parts}', 'JobcardController@jobcat_act');
+Route::post('jobcards/delete_partscatergory/{parts}', 'JobcardController@deletepartscatergory');
+
+Route::post('jobcards/addjobcardparts','JobcardController@addjobcardparts');
+Route::get('jobcards/parts_act/{parts}', 'JobcardController@parts_act');
+Route::patch('jobcards/edit_cardparts/{parts}', 'JobcardController@editcardparts');
+Route::post('jobcards/delete_jobcards/{parts}', 'JobcardController@deletejobcards');
+
+
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');

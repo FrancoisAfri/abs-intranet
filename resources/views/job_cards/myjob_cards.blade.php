@@ -35,7 +35,7 @@
                                     <th>Service Type</th>
                                     <th>Supplier</th>
                                     <th>Status</th>
-                            </tr>
+                                    </tr>
                             </thead>
                             <tbody>
                             @if (count($jobcardmaintanance) > 0)
@@ -61,7 +61,7 @@
                             @endif
                             </tbody>
                             <tfoot>
-                            <tr>
+                             <tr>
                                    <th style="width: 5px; text-align: center;"></th>
                                     <th>Job Card #</th>
                                     <th>Vehicle Name</th>
@@ -73,7 +73,7 @@
                                     <th>Service Type</th>
                                     <th>Supplier</th>
                                     <th>Status</th>
-                            </tr>
+                                </tr>
                             </tfoot>
                         </table>
 					<!-- /.box-body -->
