@@ -287,7 +287,9 @@ class JobcardController extends Controller
                    
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $servicetype = servicetype::where('status',1)->get();
-        $users = HRPerson::where('status',1)->orderBy('id', 'asc')->get(); 
+		$position = DB::table('hr_positions')->where('status',1)->where('name', 'Mechanic')->first();
+
+        $users = HRPerson::where('status',1)->where('position',$position->id)->orderBy('id', 'asc')->get(); 
         $Status = array(-1=>'Rejected',1 => 'Job Card created',
 				 3=>'Completed',6=>'Procurement ',7=>'At Service',
 				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
@@ -312,9 +314,6 @@ class JobcardController extends Controller
 		->orderBy('jobcard_maintanance.id', 'asc')
 		->get(); 
         
-      //  return $jobcardmaintanance;
-            
-        
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
@@ -334,7 +333,8 @@ class JobcardController extends Controller
             ['title' => 'Job Card Management', 'path' => 'jobcards/mycards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Job Cards ', 'active' => 1, 'is_module' => 0]
         ];
-
+		
+        $data['current_date'] = time();
         $data['Status'] = $Status;
         $data['users'] = $users;
         $data['ContactCompany'] = $ContactCompany;
@@ -381,7 +381,7 @@ class JobcardController extends Controller
         
         $flow = jobcard_maintanance::orderBy('id','desc')->latest()->first();
         $flowprocee = !empty($flow->jobcard_number) ? $flow->jobcard_number : 0  ; 
-       
+
         $jobcardmaintanance = new jobcard_maintanance($SysData);
         $jobcardmaintanance->vehicle_id = !empty($SysData['vehicle_id']) ? $SysData['vehicle_id'] : 0;
         $jobcardmaintanance->card_date = !empty($carddate) ?$carddate : 0;
@@ -400,6 +400,8 @@ class JobcardController extends Controller
         $jobcardmaintanance->completion_date = $completiondate;
         $jobcardmaintanance->jobcard_number = $flowprocee + 1;
         $jobcardmaintanance->status = 1;
+        $jobcardmaintanance->rejector_id = 0;
+        $jobcardmaintanance->step_no = 0;
         $jobcardmaintanance->date_default =  time();
         $jobcardmaintanance->user_id = Auth::user()->person->id;
         $jobcardmaintanance->save();
@@ -430,7 +432,7 @@ class JobcardController extends Controller
         }
         
            // send emails
-              $users = HRPerson::where('position', $jobtitle)->pluck('user_id');
+             $users = HRPerson::where('position', $jobtitle)->pluck('user_id');
                foreach ($users as $manID) {
                  $usedetails = HRPerson::where('user_id',$manID)->select('first_name', 'surname', 'email')->first();
                  $email = $usedetails->email; $firstname = $usedetails->first_name; $surname = $usedetails->surname; $email = $usedetails->email;
