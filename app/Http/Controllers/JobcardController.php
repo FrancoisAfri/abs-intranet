@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Users;
 use App\permits_licence;
+use App\servicetype;
 use App\HRPerson;
 use App\vehicle;
 use App\vehicle_config;
@@ -1019,11 +1020,7 @@ class JobcardController extends Controller
    }
    
    
-   
-   public function canceljobcardnotes(jobcard_maintanance $card){
-       }
-
-     public function canceljobcardnotes(jobcard_maintanance $card){
+    public function canceljobcardnotes(jobcard_maintanance $card){
 
          
        //  return $card;
