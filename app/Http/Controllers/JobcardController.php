@@ -284,13 +284,15 @@ class JobcardController extends Controller
 		$processss = processflow::take(1);
 		$rowcolumn = $processflow->count();
       
-       if(($rowcolumn >0 || !empty($userAccess))){
+        if(($rowcolumn >0 || !empty($userAccess))){
                    
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $servicetype = servicetype::where('status',1)->get();
 		$position = DB::table('hr_positions')->where('status',1)->where('name', 'Mechanic')->first();
-
-        $users = HRPerson::where('status',1)->where('position',$position->id)->orderBy('id', 'asc')->get(); 
+		if (!empty($position))
+			$users = HRPerson::where('status',1)->where('position',$position->id)->orderBy('id', 'asc')->get(); 
+		else 
+			$users = $position; 
         $Status = array(-1=>'Rejected',1 => 'Job Card created',
 				 3=>'Completed',6=>'Procurement ',7=>'At Service',
 				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
