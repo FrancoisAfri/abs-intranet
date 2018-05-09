@@ -11,7 +11,7 @@ use App\vehicle;
 use App\vehicle_config;
 use App\jobcard_order_parts;
 use App\jobcart_parts;
-use App\servicetype;
+//use App\servicetype;
 use App\jobcard_category_parts;
 use App\jobcard_maintanance;
 use App\ContactCompany;
@@ -1078,6 +1078,7 @@ class JobcardController extends Controller
         $currentparts->status = 1;
         $currentparts->save();
         
+        // have to try to limit the user from going beyond 0
         DB::table('jobcard__order_parts')
                     ->where('jobcard_card_id', $SysData['category_id'])
                     ->where('category_id', $SysData['jobcard_parts_id'])
@@ -1091,6 +1092,7 @@ class JobcardController extends Controller
          AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
         return response()->json(); 
    }
+   
    public function canceljobcardnotes(jobcard_maintanance $card){
          
        //  return $card;
