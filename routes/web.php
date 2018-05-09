@@ -687,6 +687,10 @@ Route::patch('jobcards/edit_cardparts/{parts}', 'JobcardController@editcardparts
 Route::post('jobcards/delete_jobcards/{parts}', 'JobcardController@deletejobcards');
 
 
+Route::get('jobcard/parts/{jobcardparts}', 'JobcardController@viewparts');
+Route::post('jobcard/addjobparts', 'JobcardController@addjobparts');
+
+
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
@@ -982,6 +986,7 @@ Route::get('cms/cms_newsrankings/{news}', 'CmsController@cms_Star_rankings');
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
 //General Use (API)
+Route::post('api/jobcategorymodeldropdown', 'DropDownAPIController@jobcategorymomdelDDID')->name('jcmdropdown');
 Route::post('api/vehiclemodeldropdown', 'DropDownAPIController@vehiclemomdeDDID')->name('Vmmdropdown');
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');

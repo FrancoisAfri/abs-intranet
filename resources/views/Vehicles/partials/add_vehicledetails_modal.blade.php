@@ -95,6 +95,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div class="form-group{{ $errors->has('vehiclemodel_id') ? ' has-error' : '' }}">
                             <label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
 

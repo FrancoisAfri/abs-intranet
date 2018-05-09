@@ -34,7 +34,7 @@
                                         <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-partscatagory-modal" data-id="{{ $jobparts->id }}" data-name="{{ $jobparts->name }}" data-description="{{$jobparts->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
                                     <td>
-                                      <a href="{{ '/jobcards/addparts/' . $jobparts->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-steam"></i> Add parts</a></td>
+                                      <a href="{{ '/jobcards/addparts/' . $jobparts->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-steam"></i> Parts</a></td>
                                    </td>  
                                      <td>{{ (!empty( $jobparts->name)) ?  $jobparts->name : ''}} </td>
                                      <td>{{ (!empty( $jobparts->description)) ?  $jobparts->description : ''}} </td>
