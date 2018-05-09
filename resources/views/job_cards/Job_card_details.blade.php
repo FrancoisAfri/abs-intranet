@@ -165,30 +165,31 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Parts</a>
 
-                    <a href="{{ '/jobcards/print/' . $card->id }}"
+                    <a href="{{ '/jobcards/parts/' . $jobcard->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Print</a>
-                    
+                       data-id="{{ $jobcard->id }}">Print</a>
+					   <a href="{{ '/vehicle_management/notes/' . $jobcard->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $jobcard->id }}">Conclude Jobcard</a>
+                    <!--
                     <a href="{{ '/jobcard/cancellation/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Request Cancellation</a>
+                       data-id="{{ $jobcard->id }}">Request Cancellation</a>
 
-                    <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
+                    <a href="{{ '/vehicle_management/reminders/' . $jobcard->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Conclude Jobcard</a>
-
-                    <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Create Request</a>
-                       
+                       data-id="{{ $jobcard->id }}">Create Request</a>
+                       -->
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
+
                 </div>
                 @endforeach
+               
             </div>
         </div>
-         
+		@include('job_cards.partials.edit_jobcard_modal ')
     </div>
 @endsection
 @section('page_script')
@@ -226,112 +227,115 @@
             location.href = '/jobcards/search';
         });
 
-        $(function () {
-                    
-            $(".select2").select2();
-            $('.hours-field').hide();
-            $('.comp-field').hide();
-            var moduleId;
-            //Tooltip
-            $('[data-toggle="tooltip"]').tooltip();
-            
+	$(function () {
+	
+	
+//        if($maintenance->metre_reading_type == 1)
+//            $('.odometer-field').show();
+//        }else  $('.odometer-field').show();
+		$(".select2").select2();
+		$('.hours-field').hide();
+		$('.comp-field').hide();
+		var moduleId;
+		//Tooltip
+		$('[data-toggle="tooltip"]').tooltip();
+		
 
-            //Vertically center modals on page
-            function reposition() {
-                var modal = $(this),
-                    dialog = modal.find('.modal-dialog');
-                modal.css('display', 'block');
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
-                // Dividing by two centers the modal exactly, but dividing by three
-                // or four works better for larger screens.
-                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-            }
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
 
-            // Reposition when a modal is shown
-            $('.modal').on('show.bs.modal', reposition);
-            // Reposition when the window is resized
-            $(window).on('resize', function () {
-                $('.modal:visible').each(reposition);
-            });
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
 
-            //
-            $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
+		//
+		$('.datepicker').datepicker({
+			format: 'dd/mm/yyyy',
+			autoclose: true,
+			todayHighlight: true
+		});
 
-            //Initialize iCheck/iRadio Elements
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '10%' // optional
-            });
+		//Initialize iCheck/iRadio Elements
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-blue',
+			radioClass: 'iradio_square-blue',
+			increaseArea: '10%' // optional
+		});
 
-            $(document).ready(function () {
+		$(document).ready(function () {
 
-                $('#year').datepicker({
-                    minViewMode: 'years',
-                    autoclose: true,
-                    format: 'yyyy'
-                });
+			$('#year').datepicker({
+				minViewMode: 'years',
+				autoclose: true,
+				format: 'yyyy'
+			});
 
-            });
+		});
 
-            $('#rdo_package, #rdo_product').on('ifChecked', function () {
-                var allType = hideFields();
-                if (allType == 1) $('#box-subtitle').html('Site Address');
-                else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-            });
+		$('#rdo_package, #rdo_product').on('ifChecked', function () {
+			var allType = hideFields();
+			if (allType == 1) $('#box-subtitle').html('Site Address');
+			else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
+		});
 
-            //
+		//
 
-            $('#rdo_fin, #rdo_comp').on('ifChecked', function () {
-                var allType = hidenFields();
-                if (allType == 1) $('#box-subtitle').html('Site Address');
-                else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-            });
+		$('#rdo_fin, #rdo_comp').on('ifChecked', function () {
+			var allType = hidenFields();
+			if (allType == 1) $('#box-subtitle').html('Site Address');
+			else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
+		});
 
 
-            function hideFields() {
-                var allType = $("input[name='promotion_type']:checked").val();
-                if (allType == 1) {
-                    $('.hours-field').hide();
-                    $('.odometer-field').show();
-                }
-                else if (allType == 2) {
-                    $('.odometer-field').hide();
-                    $('.hours-field').show();
-                }
-                return allType;
-            }
+		function hideFields() {
+			var allType = $("input[name='promotion_type']:checked").val();
+			if (allType == 1) {
+				$('.hours-field').hide();
+				$('.odometer-field').show();
+			}
+			else if (allType == 2) {
+				$('.odometer-field').hide();
+				$('.hours-field').show();
+			}
+			return allType;
+		}
 
-            //
-            function hidenFields() {
-                var allType = $("input[name='title_type']:checked").val();
-                if (allType == 1) {
-                    $('.comp-field').hide();
-                    $('.fin-field').show();
-                }
-                else if (allType == 2) {
-                    $('.fin-field').hide();
-                    $('.comp-field').show();
-                }
-                return allType;
-            }
+		//
+		function hidenFields() {
+			var allType = $("input[name='title_type']:checked").val();
+			if (allType == 1) {
+				$('.comp-field').hide();
+				$('.fin-field').show();
+			}
+			else if (allType == 2) {
+				$('.fin-field').hide();
+				$('.comp-field').show();
+			}
+			return allType;
+		}
 
-            $('#add_notes').on('click', function () {
-                    var strUrl = '/jobcards/addjobcardnotes';
-                    var formName = 'add-note-form';
-                    var modalID = 'add-note-modal';
-                    var submitBtnID = 'add_notes';
-                    var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+		$('#add_notes').on('click', function () {
+				var strUrl = '/jobcards/addjobcardnotes';
+				var formName = 'add-note-form';
+				var modalID = 'add-note-modal';
+				var submitBtnID = 'add_notes';
+				var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
+				var successMsgTitle = 'New Record Added!';
+				var successMsg = 'The Record  has been updated successfully.';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
 
-        });
-
-    </script>
+	});
+</script>
 @endsection
