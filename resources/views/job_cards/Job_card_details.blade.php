@@ -161,8 +161,9 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        target="_blank">Job Card Notes</a>
                    
-                    <a href="/jobcards/parts"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Add Parts</a>
+                   <a href="{{ '/jobcard/parts/' . $card->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $vehiclemaintenance->id }}">Parts</a>
 
                     <a href="{{ '/jobcards/parts/' . $jobcard->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"

@@ -9,7 +9,9 @@ use App\servicetype;
 use App\HRPerson;
 use App\vehicle;
 use App\vehicle_config;
+use App\jobcard_order_parts;
 use App\jobcart_parts;
+use App\servicetype;
 use App\jobcard_category_parts;
 use App\jobcard_maintanance;
 use App\ContactCompany;
@@ -272,10 +274,9 @@ class JobcardController extends Controller
       }
       
      public function myjobcards(){         
-		
-		$hrID = Auth::user()->person->user_id;
-		$hrjobtile = Auth::user()->person->position;
-		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
+       $hrID = Auth::user()->person->user_id;
+       $hrjobtile = Auth::user()->person->position;
+       $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
                    ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
                    ->where('security_modules.code_name', 'job_cards') ->where('security_modules_access.access_level','>=', 4)
                    ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
@@ -384,7 +385,7 @@ class JobcardController extends Controller
         
         $flow = jobcard_maintanance::orderBy('id','desc')->latest()->first();
         $flowprocee = !empty($flow->jobcard_number) ? $flow->jobcard_number : 0  ; 
-
+       
         $jobcardmaintanance = new jobcard_maintanance($SysData);
         $jobcardmaintanance->vehicle_id = !empty($SysData['vehicle_id']) ? $SysData['vehicle_id'] : 0;
         $jobcardmaintanance->card_date = !empty($carddate) ?$carddate : 0;
@@ -403,8 +404,6 @@ class JobcardController extends Controller
         $jobcardmaintanance->completion_date = $completiondate;
         $jobcardmaintanance->jobcard_number = $flowprocee + 1;
         $jobcardmaintanance->status = 1;
-        $jobcardmaintanance->rejector_id = 0;
-        $jobcardmaintanance->step_no = 0;
         $jobcardmaintanance->date_default =  time();
         $jobcardmaintanance->user_id = Auth::user()->person->id;
         $jobcardmaintanance->save();
@@ -435,7 +434,7 @@ class JobcardController extends Controller
         }
         
            // send emails
-             $users = HRPerson::where('position', $jobtitle)->pluck('user_id');
+              $users = HRPerson::where('position', $jobtitle)->pluck('user_id');
                foreach ($users as $manID) {
                  $usedetails = HRPerson::where('user_id',$manID)->select('first_name', 'surname', 'email')->first();
                  $email = $usedetails->email; $firstname = $usedetails->first_name; $surname = $usedetails->surname; $email = $usedetails->email;
@@ -887,7 +886,6 @@ class JobcardController extends Controller
         return response()->json();
      }
      
-
      
    
    //jobcard parts
@@ -1046,9 +1044,79 @@ class JobcardController extends Controller
         return back();
    }
    
-   
-    public function canceljobcardnotes(jobcard_maintanance $card){
+   public function viewparts(jobcard_maintanance $jobcardparts ){
+      
+      
+       // $parts = jobcard_order_parts::orderBy('id','asc')->get();
+        
+        $parts = DB::table('jobcard__order_parts')
+        ->select('jobcard__order_parts.*', 'jobcard_parts.*')
+        ->leftJoin('jobcard_parts', 'jobcard__order_parts.jobcard_parts_id', '=', 'jobcard_parts.id')
+        ->where('jobcard__order_parts.jobcard_card_id' , $jobcardparts->id)
+        ->get();
+        
+        $cardparts = jobcard_category_parts::orderBy('id','asc')->get();
+       // return $parts;
+        $jobcard_category_parts = jobcard_category_parts::orderBy('id','asc')->get()->load(['jobcart_parts_model' => function($query) {
+                $query->orderBy('name', 'asc');
+            }]);
+       
+            
+        $data['parts'] = $parts;
+        $data['cardparts'] = $cardparts;
+        $data['jobcardparts'] = $jobcardparts;
+        $data['page_title'] = "Job Card Catergory";
+        $data['page_description'] = "Job Card Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
 
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Parts';
+
+        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", Auth::user()->person->position);
+        return view('job_cards.add_parts')->with($data); 
+   }
+   
+   public function addjobparts(Request $request){
+    $this->validate($request, [
+            // 'name' => 'required',
+            // 'description' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+        
+        $jobcartparts = jobcart_parts::where('id', $SysData['category_id'])->where('category_id' , $SysData['jobcard_parts_id'])->first();
+        $availblebalance =  $jobcartparts->no_of_parts_available;
+        
+        $transactionbalance = $availblebalance - $SysData['no_of_parts_used'];
+                
+        $currentparts = new jobcard_order_parts();
+        $currentparts->jobcard_parts_id =  !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
+        $currentparts->category_id =  !empty($SysData['jobcard_parts_id']) ? $SysData['jobcard_parts_id'] : 0;
+        $currentparts->no_of_parts_used =  !empty($SysData['no_of_parts_used']) ? $SysData['no_of_parts_used'] : 0;
+        $currentparts->jobcard_card_id =  !empty($SysData['jobcard_card_id']) ? $SysData['jobcard_card_id'] : 0;
+        $currentparts->avalaible_transaction = $transactionbalance;
+        $currentparts->created_by = Auth::user()->person->position;
+        $currentparts->date_created = time();
+        $currentparts->status = 1;
+        $currentparts->save();
+        
+        DB::table('jobcard__order_parts')
+                    ->where('jobcard_card_id', $SysData['category_id'])
+                    ->where('category_id', $SysData['jobcard_parts_id'])
+                    ->update(['avalaible_transaction' => $transactionbalance]);
+        
+         DB::table('jobcard_parts')
+                    ->where('id', $SysData['category_id'])
+                    ->where('category_id', $SysData['jobcard_parts_id'])
+                    ->update(['no_of_parts_available' => $transactionbalance]);
+        
+         AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
+        return response()->json(); 
+   }
+   public function canceljobcardnotes(jobcard_maintanance $card){
          
        //  return $card;
          
@@ -1113,7 +1181,4 @@ class JobcardController extends Controller
      }
      
    }
-   
-   //jobcard parts
- 
 }
