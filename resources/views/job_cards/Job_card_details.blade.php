@@ -32,7 +32,6 @@
                     </div>
                 </div>
                 <div align="center" class="box box-default">
-                    
                     <div class="box-body">
                         <table class="table table-striped table-bordered">
                             @foreach ($vehiclemaintenance as $vehiclemaintenance)
@@ -107,7 +106,8 @@
                                     <td class="caption">Service Date</td>
                                     <td></td>
                                 </tr>
-                                <tr><td colspan="4" class="caption">Job Card Instructions</td></tr>
+                                <tr>
+                                    <td colspan="4" class="caption">Job Card Instructions</td></tr>
                                      <tr>
 				         <td colspan="4" style="text-align:left;" height="40" border="1"></td>
 				     </tr>
@@ -165,7 +165,7 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Parts</a>
 
-                    <a href="{{ '/jobcards/parts/' . $vehiclemaintenance->id }}"
+                    <a href="{{ '/jobcards/print/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Print</a>
                     
@@ -184,13 +184,11 @@
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
-
                 </div>
                 @endforeach
-               
             </div>
         </div>
-     
+         
     </div>
 @endsection
 @section('page_script')
@@ -229,15 +227,7 @@
         });
 
         $(function () {
-        
-        
-//        if($maintenance->metre_reading_type == 1)
-//            $('.odometer-field').show();
-//        }else  $('.odometer-field').show();
-       
-           
-            
-            
+                    
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();
@@ -342,7 +332,6 @@
                 });
 
         });
-
 
     </script>
 @endsection
