@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Users;
 use App\permits_licence;
+use App\servicetype;
 use App\HRPerson;
 use App\vehicle;
 use App\vehicle_config;
@@ -280,41 +281,42 @@ class JobcardController extends Controller
                    ->where('security_modules.code_name', 'job_cards') ->where('security_modules_access.access_level','>=', 4)
                    ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
                     
-	$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
-	$processss = processflow::take(1);
-	$rowcolumn = $processflow->count();
+		$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
+		$processss = processflow::take(1);
+		$rowcolumn = $processflow->count();
       
-       if(($rowcolumn >0 )){
+        if(($rowcolumn >0 || !empty($userAccess))){
                    
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $servicetype = servicetype::where('status',1)->get();
-        $users = HRPerson::where('status',1)->orderBy('id', 'asc')->get(); 
+		$position = DB::table('hr_positions')->where('status',1)->where('name', 'Mechanic')->first();
+		if (!empty($position))
+			$users = HRPerson::where('status',1)->where('position',$position->id)->orderBy('id', 'asc')->get(); 
+		else 
+			$users = $position; 
         $Status = array(-1=>'Rejected',1 => 'Job Card created',
 				 3=>'Completed',6=>'Procurement ',7=>'At Service',
 				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
                  11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
                  
-            $currentUser = Auth::user()->person->id;
-         
-            $jobcardmaintanance = DB::table('jobcard_maintanance')
-            ->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
-                    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
-                    'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
-            ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
-            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
-            ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
-            ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
-             ->where('jobcard_maintanance.user_id', $currentUser)   
-            ->orderBy('jobcard_maintanance.id', 'asc')
-            ->get(); 
-        
-      //  return $jobcardmaintanance;
-            
+        $currentUser = Auth::user()->person->id;
+
+		$jobcardmaintanance = DB::table('jobcard_maintanance')
+		->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
+				'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+			'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+				'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+		->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+		->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+		->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+		->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+		->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+		->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+		->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+		->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+		 ->where('jobcard_maintanance.user_id', $currentUser)   
+		->orderBy('jobcard_maintanance.id', 'asc')
+		->get(); 
         
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -335,7 +337,8 @@ class JobcardController extends Controller
             ['title' => 'Job Card Management', 'path' => 'jobcards/mycards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Job Cards ', 'active' => 1, 'is_module' => 0]
         ];
-
+		
+        $data['current_date'] = time();
         $data['Status'] = $Status;
         $data['users'] = $users;
         $data['ContactCompany'] = $ContactCompany;
@@ -562,6 +565,7 @@ class JobcardController extends Controller
 						
 		$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
 		$lastProcess = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','desc')->first();
+		$lastStepNumber = !empty($lastProcess->step_number) ? $lastProcess->step_number : 0;
 		$statuses = array();
 		$status = '';
 		
@@ -599,7 +603,11 @@ class JobcardController extends Controller
 						}
 					}
 				})
-				->where('jobcard_maintanance.status','!=', $lastProcess->step_number)				
+				->where(function ($query) use ($lastStepNumber) {
+					if (!empty($lastStepNumber)) {
+						$query->where('jobcard_maintanance.status','!=', $lastStepNumber);
+					}
+				})			
 				->orderBy('jobcard_maintanance.id', 'asc')
 				->get(); 
 
@@ -923,8 +931,6 @@ class JobcardController extends Controller
         return back(); 
    }
    
-   
-
    public function deletepartscatergory(jobcard_category_parts $parts){ 
        $parts->delete();
       

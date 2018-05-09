@@ -155,9 +155,8 @@ class FleetManagementController extends Controller
     public function addvehicleDetails(Request $request)
     {
         $this->validate($request, [
-
             'vehicle_type' => 'required',
-	    'vehicle_registration' => 'required|unique:vehicle_details,vehicle_registration',
+			'vehicle_registration' => 'required|unique:vehicle_details,vehicle_registration',
             // 'name' => 'required',
             // 'description' => 'required',
         ]);
@@ -263,19 +262,21 @@ class FleetManagementController extends Controller
 //                }
               #mail to manager
                
-                 $managerIDs = DB::table('security_modules_access')
-                   ->select('security_modules_access.*','security_modules.*') 
-                   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-                   ->where('code_name', 'vehicle')
-                   ->where('access_level','>=', 4)
-                   ->pluck('user_id');
+			$managerIDs = DB::table('security_modules_access')
+			   ->select('security_modules_access.*','security_modules.*') 
+			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+			   ->where('code_name', 'vehicle')
+			   ->where('access_level','>=', 4)
+			   ->pluck('user_id');
          
            foreach ($managerIDs as $manID) {
                     $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
-                    $email = $usedetails->email; $firstname = $usedetails->first_name; $surname = $usedetails->surname; $email = $usedetails->email;
-                     Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
-    
-                   // Mail::to($manager->email)->send(new assignUsertoAdmin($manager));
+                    $email = !empty($usedetails->email) ? $usedetails->email : ''; 
+                    $firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+                    $surname = !empty($usedetails->surname) ? $usedetails->surname : '';
+					if (!empty($email))
+						Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
+
                 }
               
             }

@@ -62,7 +62,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Supplier</label>
                         <div class="col-sm-8">
                                 <select id="supplier_id" name="supplier_id" class="form-control">
-                                    <option value=" ">*** Select a Service type ***</option>
+                                    <option value="0">*** Select a Supplier ***</option>
                                     @foreach($ContactCompany as $details)
                                     <option value="{{ $details->id }}">{{ $details->name}}</option>
                                     @endforeach
