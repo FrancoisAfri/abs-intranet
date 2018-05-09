@@ -14,48 +14,6 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="box-body" id="vehicle_details">
-
-                   <!--  @if (isset($vehicleConfig) && $vehicleConfig == 1)
-                    <div class="form-group">
-                    <label for="status" class="col-sm-2 control-label">Status</label>
-                    <div class="col-sm-8">
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            
-                            <select id="status" name="status" class="form-control">
-                                <option value="0">*** Select Status ***</option>
-                                {{--  <option value="1"> Active  </option>  --}}
-                                <option value="2"> Require Approval </option>
-                                {{--  <option value="3"> Rejected</option>
-                                <option value="4"> Inactive </option>  --}}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                @else
-                <div class="form-group">
-                    <label for="status" class="col-sm-2 control-label">Status</label>
-                    <div class="col-sm-8">
-                        <div class="input-group">
-                            <div class="input-group-addon">
-                                <i class="fa fa-star-o"></i>
-                            </div>
-                            
-                            <select id="status" name="status" class="form-control">
-                                <option value="0">*** Select Status ***</option>
-                                 <option value="1"> Active  </option>
-                                <option value="2"> Require Approval </option>
-                                <option value="3"> Rejected</option>
-                                <option value="4"> Inactive </option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                    @endif -->
-
-
                        @foreach($division_levels as $division_level)
                         <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
@@ -288,23 +246,24 @@
                         </div>
                     </div>
                     <div class="form-group fin-field">
-                        <label for="financial_institution" class="col-sm-2 control-label">Financial Institution</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-university"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;" id="financial_institution"
-                                        name="financial_institution">
-                                    <option value="0">*** Select Financial Institution ***</option>
-                                    @foreach($ContactCompany as $company)
-                                        <option value="{{ $owner->id }}">
-                                            {{ (!empty( $company->name)) ?  $company->name : ''}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+						<label for="financial_institution" class="col-sm-2 control-label">Financial
+						Institution</label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-university"></i>
+								</div>
+								<select class="form-control " style="width: 100%;" id="financial_institution"
+									name="financial_institution">
+									<option value="0">*** Select Financial Institution ***</option>
+									@foreach($ContactCompany as $ContactCompan)
+									<option value="{{ $ContactCompan->id }}">{{ (!empty( $ContactCompan->name)) ?  $ContactCompan->name : ''}}</option>
+
+									@endforeach
+								</select>
+							</div>
+						</div>
+					</div>
                     <div class="form-group comp-field">
                         <label for="company" class="col-sm-2 control-label">Company</label>
                         <div class="col-sm-8">

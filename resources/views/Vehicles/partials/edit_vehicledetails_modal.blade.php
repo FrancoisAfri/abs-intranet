@@ -318,7 +318,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="form-group comp-field">
                 <label for="action" class="col-sm-2 control-label">Company </label>
                 <div class="col-sm-8">
@@ -335,7 +334,6 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group notes-field{{ $errors->has('extras') ? ' has-error' : '' }}">
             <label for="extras" class="col-sm-2 control-label">Extras</label>
             <div class="col-sm-8">
@@ -349,8 +347,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="form-group">
             <label for="image" class="col-sm-2 control-label">Image</label>
 

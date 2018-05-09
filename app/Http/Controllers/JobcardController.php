@@ -548,10 +548,7 @@ class JobcardController extends Controller
         AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Accessed By User", Auth::user()->person->position);
         return view('job_cards.search_results')->with($data); 
      }
-     
-
-
-     
+       
      public function jobcardsApprovals(){
 		
 		$hrID = Auth::user()->person->user_id;
@@ -763,9 +760,31 @@ class JobcardController extends Controller
      }
 
      public function viewjobcard(jobcard_maintanance $card){
-     
-         
-        $vehiclemaintenance = DB::table('jobcard_maintanance')
+			
+		$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $servicetype = servicetype::where('status',1)->get();
+		$position = DB::table('hr_positions')->where('status',1)->where('name', 'Mechanic')->first();
+		if (!empty($position))
+			$users = HRPerson::where('status',1)->where('position',$position->id)->orderBy('id', 'asc')->get(); 
+		else 
+			$users = $position; 
+        $Status = array(-1=>'Rejected',1 => 'Job Card created',
+				 3=>'Completed',6=>'Procurement ',7=>'At Service',
+				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
+                 11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
+		
+		$vehicledetails =  DB::table('vehicle_details')
+            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
+                'division_level_fives.name as company', 'division_level_fours.name as Department')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
+            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
+            ->get();  
+        
+        $jobcards = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*','vehicle_details.*',
                     'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
@@ -780,10 +799,16 @@ class JobcardController extends Controller
             ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
             ->where('jobcard_maintanance.id' ,$card->id )     
             ->orderBy('jobcard_maintanance.id', 'asc')
-            ->get(); 
-         
-         
-        $data['vehiclemaintenance'] = $vehiclemaintenance;
+            ->get();
+		
+		$configuration = jobcards_config::first(); 
+		$data['configuration'] = $configuration;
+        $data['users'] = $users;
+        $data['ContactCompany'] = $ContactCompany;
+        //$data['jobcardmaintanance'] = $jobcardmaintanance;
+        $data['servicetype'] = $servicetype;
+        $data['vehicledetails'] = $vehicledetails;
+        $data['jobcards'] = $jobcards;
         $data['card'] =$card;
         $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";
