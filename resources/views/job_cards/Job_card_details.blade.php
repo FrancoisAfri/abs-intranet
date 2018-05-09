@@ -34,7 +34,7 @@
                 <div align="center" class="box box-default">
                     <div class="box-body">
                         <table class="table table-striped table-bordered">
-                            @foreach ($vehiclemaintenance as $vehiclemaintenance)
+                             @foreach ($vehiclemaintenance as $vehiclemaintenance)
                              <!--  -->
                                 <tr>
                                     <td class="caption">Fleet Number</td>
@@ -165,21 +165,13 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Parts</a>
 
-                    <a href="{{ '/jobcards/parts/' . $jobcard->id }}"
+                    <a href="{{ '/jobcards/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Print</a>
-					   <a href="{{ '/vehicle_management/notes/' . $jobcard->id }}"
+                       data-id="{{ $card->id }}">Print</a>
+		    <a href="{{ '/vehicle_management/notes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Conclude Jobcard</a>
-                    <!--
-                    <a href="{{ '/jobcard/cancellation/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Request Cancellation</a>
+                       data-id="{{ $card->id }}">Conclude Jobcard</a>
 
-                    <a href="{{ '/vehicle_management/reminders/' . $jobcard->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Create Request</a>
-                       -->
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
@@ -189,7 +181,8 @@
                
             </div>
         </div>
-		@include('job_cards.partials.edit_jobcard_modal ')
+        @include('Vehicles.partials.add_safe_modal')
+		
     </div>
 @endsection
 @section('page_script')
