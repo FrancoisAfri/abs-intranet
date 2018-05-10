@@ -1143,6 +1143,8 @@ class JobcardController extends Controller
         unset($SysData['_token']);
         
         return $SysData;
+        
+        
    }
 
    public function canceljobcardnotes(jobcard_maintanance $card){
