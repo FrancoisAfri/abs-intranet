@@ -679,10 +679,8 @@ class JobcardController extends Controller
                $stadisplay = DB::table('jobcard_process_flow')->where('step_number', $processflow->step_number)->first();
                 $statusdisplay = !empty($stadisplay->step_name) ? $stadisplay->step_name : '' ;
          
-                DB::table('jobcard_maintanance')
-                    ->where('id', $cardsID)
-                    ->update(['status_display' => $statusdisplay]);
-                
+               DB::table('jobcard_maintanance')->where('id', $cardsID)->update(['status_display' => $statusdisplay]);
+                   
                // send email to the next person the step
                $users = HRPerson::where('position', $processflow->job_title)->pluck('user_id');
                foreach ($users as $manID) {
@@ -1138,16 +1136,10 @@ class JobcardController extends Controller
         $currentparts->save();
         
         // have to try to limit the user from going beyond 0
-        DB::table('jobcard__order_parts')
-                    ->where('jobcard_card_id', $SysData['category_id'])
-                    ->where('category_id', $SysData['jobcard_parts_id'])
-                    ->update(['avalaible_transaction' => $transactionbalance]);
-        
-         DB::table('jobcard_parts')
-                    ->where('id', $SysData['category_id'])
-                    ->where('category_id', $SysData['jobcard_parts_id'])
-                    ->update(['no_of_parts_available' => $transactionbalance]);
-        
+        DB::table('jobcard__order_parts')->where('jobcard_card_id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['avalaible_transaction' => $transactionbalance]);
+                      
+        DB::table('jobcard_parts')->where('id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['no_of_parts_available' => $transactionbalance]);
+                    
          AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
         return response()->json(); 
    }
@@ -1178,7 +1170,7 @@ class JobcardController extends Controller
 		$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
 		$lastProcess = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','desc')->first();
                 
-                return $userAccess;
+               // return $userAccess;
 		$statuses = array();
 		$status = '';
 		
