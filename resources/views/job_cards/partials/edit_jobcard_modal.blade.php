@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-jobcard-form">
                 {{ csrf_field() }}
-<!--                {{ method_field('PATCH') }}-->
+                {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -18,7 +18,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Vehicle</label>
                         <div class="col-sm-8">
                                 <select id="vehicle_id" name="vehicle_id" class="form-control">
-                                    <option value=" ">*** Select a Vehicle ***</option>
+                                    <option value="0">*** Select a Vehicle ***</option>
                                     @foreach($vehicledetails as $details)
                                     <option value="{{ $details->id }}">{{ $details->fleet_number . ' ' .  $details->vehicle_registration . ' ' . $details->vehicle_make . ' ' . $details->vehicle_model }}</option>
                                     @endforeach
@@ -73,7 +73,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Service Type</label>
                         <div class="col-sm-8">
                                 <select id="service_type" name="service_type" class="form-control">
-                                    <option value=" ">*** Select a Service type ***</option>
+                                    <option value="0">*** Select a Service type ***</option>
                                     @foreach($servicetype as $details)
                                     <option value="{{ $details->id }}">{{ $details->name}}</option>
                                     @endforeach
@@ -122,7 +122,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Driver</label>
                         <div class="col-sm-8">
                                 <select id="last_driver_id" name="last_driver_id" class="form-control">
-                                    <option value=" ">*** Select a driver  ***</option>
+                                    <option value="0">*** Select a driver  ***</option>
                                     @foreach($users as $details)
                                     <option value="{{ $details->id }}">{{$details->first_name . ' ' .  $details->surname }}</option>
                                     @endforeach
@@ -153,7 +153,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Mechanic</label>
                         <div class="col-sm-8">
                                 <select id="mechanic_id" name="mechanic_id" class="form-control">
-                                    <option value=" ">*** Select a mechanic  ***</option>
+                                    <option value="0">*** Select a mechanic  ***</option>
                                     @foreach($users as $details)
                                     <option value="{{ $details->id }}">{{ $details->first_name . ' ' .  $details->surname}}</option>
                                     @endforeach
@@ -174,7 +174,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="update_jobcardtypes" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
+                    <button type="button" id="update_jobcard" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>
             </form>

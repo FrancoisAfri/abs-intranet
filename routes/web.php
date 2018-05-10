@@ -656,6 +656,7 @@ Route::patch('jobcards/edit_step/{steps}', 'JobcardController@editprocessflow');
 Route::get('jobcards/process_act/{steps}', 'JobcardController@steps_act');
 
 Route::post('jobcards/addjobcard', 'JobcardController@addjobcardmanagement');
+Route::patch('jobcards/updatejobcard/{jobCard}', 'JobcardController@updateJobCard');
 
 Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
 //Route::get('jobcards/search', 'JobcardController@jobcardsApprovals');
