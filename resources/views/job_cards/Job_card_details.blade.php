@@ -163,7 +163,7 @@
                    
                    <a href="{{ '/jobcard/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Parts</a>
+                       data-id="{{ $jobcard->id }}">Parts</a>
 
                     <a href="{{ '/jobcards/parts/' . $jobcard->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
