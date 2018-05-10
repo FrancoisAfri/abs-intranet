@@ -1137,6 +1137,14 @@ class JobcardController extends Controller
         return response()->json(); 
    }
    
+   
+   public function printcards(Request $request, jobcard_maintanance $jobcardparts ){
+        $SysData = $request->all();
+        unset($SysData['_token']);
+        
+        return $SysData;
+   }
+
    public function canceljobcardnotes(jobcard_maintanance $card){
          
        //  return $card;

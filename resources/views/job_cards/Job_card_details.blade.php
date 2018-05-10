@@ -185,21 +185,21 @@
                            <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"> Job Cards <input type="checkbox"
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name=""
+                                                                                                  name="job_cards"
                                                                                                   value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
                                 </td>
                                 
                       <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"> Job Cards + notes <input type="checkbox"
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name=""
+                                                                                                  name="cards_notes"
                                                                                                   value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
                                 </td>
                                 
                       <td style="vertical-align: middle; text-align: center;">
                             <label class="radio-inline" style="padding-left: 0px;"> Audit <input type="checkbox"
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name=""
+                                                                                                  name="audit"
                                                                                                   value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
                                 </td>
                                 
