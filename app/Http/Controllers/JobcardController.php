@@ -784,7 +784,7 @@ class JobcardController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->get();  
         
-        $jobcards = DB::table('jobcard_maintanance')
+        $vehiclemaintenance = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*','vehicle_details.*',
                     'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
@@ -804,11 +804,12 @@ class JobcardController extends Controller
 		$configuration = jobcards_config::first(); 
 		$data['configuration'] = $configuration;
         $data['users'] = $users;
+        $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['ContactCompany'] = $ContactCompany;
         //$data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['servicetype'] = $servicetype;
         $data['vehicledetails'] = $vehicledetails;
-        $data['jobcards'] = $jobcards;
+       // $data['jobcards'] = $jobcards;
         $data['card'] =$card;
         $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";

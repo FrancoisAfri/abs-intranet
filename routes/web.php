@@ -868,6 +868,8 @@ Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 Route::post('users/recoverpw', 'UsersController@recoverPassword');
 
+//Route
+
 //Survey (Guest)
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
