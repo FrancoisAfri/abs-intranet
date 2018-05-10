@@ -164,13 +164,49 @@
                    <a href="{{ '/jobcard/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Parts</a>
-
+                    
+                 
+                    
+<!--                 <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"data-target="#add-safe-modal"> Print  </button>-->
+                    
                     <a href="{{ '/jobcards/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $card->id }}">Print</a>
 		    <a href="{{ '/vehicle_management/notes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $card->id }}">Conclude Jobcard</a>
+                   
+                   <button class="btn btn-sm btn-default btn-flat"  id="print" name="print" onclick="myFunction()">Print </button>  
+                     
+                  <div id="myDIV">
+                      <br>
+                     <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
+                      
+                           <td style="vertical-align: middle; text-align: center;">
+                                    <label class="radio-inline" style="padding-left: 0px;"> Job Cards <input type="checkbox"
+                                                                                                  id="{{ $card->id . '_rdo_none' }}"
+                                                                                                  name=""
+                                                                                                  value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
+                                </td>
+                                
+                      <td style="vertical-align: middle; text-align: center;">
+                                    <label class="radio-inline" style="padding-left: 0px;"> Job Cards + notes <input type="checkbox"
+                                                                                                  id="{{ $card->id . '_rdo_none' }}"
+                                                                                                  name=""
+                                                                                                  value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
+                                </td>
+                                
+                      <td style="vertical-align: middle; text-align: center;">
+                            <label class="radio-inline" style="padding-left: 0px;"> Audit <input type="checkbox"
+                                                                                                  id="{{ $card->id . '_rdo_none' }}"
+                                                                                                  name=""
+                                                                                                  value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
+                                </td>
+                                
+                      <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-sm btn-default btn-flat" value="Submit">           
+                      
+                  </form>
+                  </div>
 
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
@@ -181,8 +217,8 @@
                
             </div>
         </div>
-        @include('Vehicles.partials.add_safe_modal')
-		
+        @include('job_cards.partials.print_modal')	
+       
     </div>
 @endsection
 @section('page_script')
@@ -219,13 +255,21 @@
         $('#cancel').click(function () {
             location.href = '/jobcards/search';
         });
+        
+         $('.print').hide();
 
+         function myFunction() {
+                   
+             
+                    var x = document.getElementById("myDIV");
+                    if (x.style.display === "none") {
+                        x.style.display = "block";
+                    } else {
+                        x.style.display = "none";
+                    }
+                }
+    
 	$(function () {
-	
-	
-//        if($maintenance->metre_reading_type == 1)
-//            $('.odometer-field').show();
-//        }else  $('.odometer-field').show();
 		$(".select2").select2();
 		$('.hours-field').hide();
 		$('.comp-field').hide();
@@ -244,6 +288,7 @@
 			// or four works better for larger screens.
 			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 		}
+
 
 		// Reposition when a modal is shown
 		$('.modal').on('show.bs.modal', reposition);
@@ -275,6 +320,8 @@
 			});
 
 		});
+                
+                
 
 		$('#rdo_package, #rdo_product').on('ifChecked', function () {
 			var allType = hideFields();
@@ -303,7 +350,9 @@
 			}
 			return allType;
 		}
-
+                
+                
+                
 		//
 		function hidenFields() {
 			var allType = $("input[name='title_type']:checked").val();
@@ -328,6 +377,8 @@
 				var successMsg = 'The Record  has been updated successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
+                        
+                        
 
 	});
 </script>

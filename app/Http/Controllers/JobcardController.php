@@ -273,7 +273,8 @@ class JobcardController extends Controller
 								  
       }
       
-     public function myjobcards(){         
+     public function myjobcards(){   
+
        $hrID = Auth::user()->person->user_id;
        $hrjobtile = Auth::user()->person->position;
        $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
@@ -291,8 +292,9 @@ class JobcardController extends Controller
         $servicetype = servicetype::where('status',1)->get();
 		$position = DB::table('hr_positions')->where('status',1)->where('name', 'Mechanic')->first();
 		if (!empty($position))
-			$users = HRPerson::where('status',1)->where('position',$position->id)->orderBy('id', 'asc')->get(); 
-		else 
+			$users  = HRPerson::where('status',1)->where('position', $position->id)->orderBy('id', 'asc')->get(); 
+           
+		else
 			$users = $position; 
         $Status = array(-1=>'Rejected',1 => 'Job Card created',
 				 3=>'Completed',6=>'Procurement ',7=>'At Service',
@@ -300,6 +302,8 @@ class JobcardController extends Controller
                  11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
                  
         $currentUser = Auth::user()->person->id;
+
+       //return  $users = !empty($user) ? $user : 1 ;
 
 		$jobcardmaintanance = DB::table('jobcard_maintanance')
 		->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
@@ -466,10 +470,7 @@ class JobcardController extends Controller
         return view('job_cards.search')->with($data); 
      }
      public function jobcardsearch(Request $request){
-         
-        $this->validate($request, [
-
-       ]);
+    
        $SysData = $request->all();
        unset($SysData['_token']);
        
@@ -801,8 +802,8 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();
 		
-		$configuration = jobcards_config::first(); 
-		$data['configuration'] = $configuration;
+        $configuration = jobcards_config::first(); 
+	$data['configuration'] = $configuration;
         $data['users'] = $users;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['ContactCompany'] = $ContactCompany;
@@ -854,8 +855,9 @@ class JobcardController extends Controller
 
      public function addjobcardnotes(Request $request){
         $this->validate($request, [
-//              'step_name' => 'required',
-//              'job_title' => 'required',
+              'notes' => 'required',
+              'vehicle_id' => 'required',
+              'jobcard_id' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -995,6 +997,7 @@ class JobcardController extends Controller
       $this->validate($request, [
              'name' => 'required',
              'description' => 'required',
+             'no_of_parts_available' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1081,16 +1084,31 @@ class JobcardController extends Controller
    }
    
    public function addjobparts(Request $request){
-    $this->validate($request, [
-            // 'name' => 'required',
-            // 'description' => 'required',
-        ]);
+        
         $SysData = $request->all();
         unset($SysData['_token']);
         
         $jobcartparts = jobcart_parts::where('id', $SysData['category_id'])->where('category_id' , $SysData['jobcard_parts_id'])->first();
-        $availblebalance =  $jobcartparts->no_of_parts_available;
-        
+        $availblebalance = !empty($jobcartparts->no_of_parts_available) ? $jobcartparts->no_of_parts_available : 0 ;
+         
+        $validator = Validator::make($request->all(), [
+            'category_id' => 'required',
+            'jobcard_parts_id' => 'required',
+            'no_of_parts_used' => 'bail|required|integer|min:0',
+           
+        ]);
+        $validator->after(function ($validator) use($request) {
+            
+         if ($availblebalance < $SysData['no_of_parts_used']) {
+               $validator->errors()->add('no_of_parts_used', 'this field can be less than the required ');
+            }   
+        });
+       
+        if ($validator->fails()) {
+            return redirect('/education/registration')
+                ->withErrors($validator)
+                ->withInput();
+        }
         $transactionbalance = $availblebalance - $SysData['no_of_parts_used'];
                 
         $currentparts = new jobcard_order_parts();
