@@ -1146,12 +1146,35 @@ class JobcardController extends Controller
    
    
    public function printcards(Request $request, jobcard_maintanance $jobcardparts ){
-        $SysData = $request->all();
-        unset($SysData['_token']);
+           $this->validate($request, [
+            // 'date_uploaded' => 'required',
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+        //return $results;
+
+        foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
         
-        return $SysData;
-        
-        
+             foreach ($results as $key => $sValue) {
+            if (strlen(strstr($key, 'cards'))) {
+                $aValue = explode("_", $key);
+                $name = $aValue[0];
+                $cardID = $aValue[1];
+                return $cardID === 2;
+               
+                $jobcards =  !empty($cardID->jobcards) ? $cardID->jobcards : '';
+                $cardsjobcardsnotes =  !empty($cardID->cards_jobcards_notes) ? $cardID->cards_jobcards_notes : '';
+                $cardsaudit =  !empty($cardID->cards_audit) ? $cardID->cards_audit : '';
+              
+                return $cardID->jobcards;
+             }
+             
+        }
    }
 
    public function canceljobcardnotes(jobcard_maintanance $card){

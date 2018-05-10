@@ -182,7 +182,7 @@
                       <br>
                      <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
                       
-                           <td style="vertical-align: middle; text-align: center;">
+<!--                           <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"> Job Cards <input type="checkbox"
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
                                                                                                   name=""
@@ -194,12 +194,17 @@
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
                                                                                                   name=""
                                                                                                   value="print_jobcard_notes"></label>
-                                </td>
+                                </td>-->
                                 
                      
                                 
-                       <td style="vertical-align: middle; text-align: center;"> Audit<input type="checkbox" class="checkbox selectall"
-                                                   id="audit{{ $card->id }}" name="audit{{ $card->id }}" value="1" > </td>
+                       <td style="vertical-align: middle; text-align: center;"> Job Cards <input type="checkbox" class="checkbox selectall"
+                                                   id="jobcards{{ $card->id }}" name="cards_2" value="1" > </td>
+                       <td style="vertical-align: middle; text-align: center;"> Job Cards + notes <input type="checkbox" class="checkbox selectall"
+                                                   id="jobcards_notes{{ $card->id }}" name="cards_3" value="1" > </td>
+                       <td style="vertical-align: middle; text-align: center;"> Audit <input type="checkbox" class="checkbox selectall"
+                                                   id="audit{{ $card->id }}" name="cards_4" value="1" > </td>
+                       
                                                                       
                                 
                       <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-sm btn-default btn-flat" value="Submit">           
