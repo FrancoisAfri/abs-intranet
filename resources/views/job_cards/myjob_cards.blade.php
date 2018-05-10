@@ -227,13 +227,13 @@ $(function () {
 		});
 	});
 	
-	$('#add-jobcard-modal').on('show.bs.modal', function (e) {
-		
-		var btnEdit = $(e.relatedTarget);
-		var card_date = btnEdit.data('card_date');
-		var modal = $(this);
-		modal.find('#card_date').val(card_date);
-	});
+//	$('#add-jobcard-modal').on('show.bs.modal', function (e) {
+//		
+//		var btnEdit = $(e.relatedTarget);
+//		var card_date = btnEdit.data('card_date');
+//		var modal = $(this);
+//		modal.find('#card_date').val(card_date);
+//	});
 	
 	//Post perk form to server using ajax (add)
 	$('#add_jobcardtypes').on('click', function () {

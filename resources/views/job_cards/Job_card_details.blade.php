@@ -185,23 +185,22 @@
                            <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"> Job Cards <input type="checkbox"
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name="job_cards"
-                                                                                                  value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
+                                                                                                  name=""
+                                                                                                  value="print_jobcard"></label>
                                 </td>
                                 
                       <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"> Job Cards + notes <input type="checkbox"
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name="cards_notes"
-                                                                                                  value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
+                                                                                                  name=""
+                                                                                                  value="print_jobcard_notes"></label>
                                 </td>
                                 
-                      <td style="vertical-align: middle; text-align: center;">
-                            <label class="radio-inline" style="padding-left: 0px;"> Audit <input type="checkbox"
-                                                                                                  id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name="audit"
-                                                                                                  value="0" {{ $card->read_understood == 1 ? ' checked' : '' }}  ></label>
-                                </td>
+                     
+                                
+                       <td style="vertical-align: middle; text-align: center;"> Audit<input type="checkbox" class="checkbox selectall"
+                                                   id="audit{{ $card->id }}" name="audit{{ $card->id }}" value="1" > </td>
+                                                                      
                                 
                       <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-sm btn-default btn-flat" value="Submit">           
                       
