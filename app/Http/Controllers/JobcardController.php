@@ -273,7 +273,8 @@ class JobcardController extends Controller
 								  
       }
       
-     public function myjobcards(){         
+     public function myjobcards(){   
+
        $hrID = Auth::user()->person->user_id;
        $hrjobtile = Auth::user()->person->position;
        $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id') 
@@ -291,8 +292,9 @@ class JobcardController extends Controller
         $servicetype = servicetype::where('status',1)->get();
 		$position = DB::table('hr_positions')->where('status',1)->where('name', 'Mechanic')->first();
 		if (!empty($position))
-			$users = HRPerson::where('status',1)->where('position',$position->id)->orderBy('id', 'asc')->get(); 
-		else 
+			$users  = HRPerson::where('status',1)->where('position', $position->id)->orderBy('id', 'asc')->get(); 
+           
+		else
 			$users = $position; 
         $Status = array(-1=>'Rejected',1 => 'Job Card created',
 				 3=>'Completed',6=>'Procurement ',7=>'At Service',
@@ -301,11 +303,13 @@ class JobcardController extends Controller
                  
         $currentUser = Auth::user()->person->id;
 
+       //return  $users = !empty($user) ? $user : 1 ;
+
 		$jobcardmaintanance = DB::table('jobcard_maintanance')
 		->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
-				'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
-			'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
-				'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+			    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+                            'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+                            'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
 		->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
 		->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
 		->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
@@ -317,6 +321,8 @@ class JobcardController extends Controller
 		 ->where('jobcard_maintanance.user_id', $currentUser)   
 		->orderBy('jobcard_maintanance.id', 'asc')
 		->get(); 
+                
+            
         
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
@@ -385,7 +391,11 @@ class JobcardController extends Controller
         
         $flow = jobcard_maintanance::orderBy('id','desc')->latest()->first();
         $flowprocee = !empty($flow->jobcard_number) ? $flow->jobcard_number : 0  ; 
-       
+        
+        
+         $stadisplay = DB::table('jobcard_process_flow')->where('step_number', 1)->first();
+         $statusdisplay = !empty($stadisplay->step_name) ? $stadisplay->step_name : '' ;
+         
         $jobcardmaintanance = new jobcard_maintanance($SysData);
         $jobcardmaintanance->vehicle_id = !empty($SysData['vehicle_id']) ? $SysData['vehicle_id'] : 0;
         $jobcardmaintanance->card_date = !empty($carddate) ?$carddate : 0;
@@ -406,6 +416,7 @@ class JobcardController extends Controller
         $jobcardmaintanance->status = 1;
         $jobcardmaintanance->date_default =  time();
         $jobcardmaintanance->user_id = Auth::user()->person->id;
+        $jobcardmaintanance->status_display = $statusdisplay;
         $jobcardmaintanance->save();
         
         //Upload supporting document
@@ -531,10 +542,7 @@ class JobcardController extends Controller
         return view('job_cards.search')->with($data); 
      }
      public function jobcardsearch(Request $request){
-         
-        $this->validate($request, [
-
-       ]);
+    
        $SysData = $request->all();
        unset($SysData['_token']);
        
@@ -642,7 +650,7 @@ class JobcardController extends Controller
 				{
 					$status .= $process->step_number.',';
 				}
-				$status = rtrim($status, ",");;
+				$status = rtrim($status, ",");
 				$statuses = (explode(",",$status));						
 			}
 			$jobcardmaintanance = DB::table('jobcard_maintanance')
@@ -732,6 +740,12 @@ class JobcardController extends Controller
                 
                $jobcards->updateOrCreate(['id' => $cardsID], ['status' => $processflow->step_number]);
                
+               
+               $stadisplay = DB::table('jobcard_process_flow')->where('step_number', $processflow->step_number)->first();
+                $statusdisplay = !empty($stadisplay->step_name) ? $stadisplay->step_name : '' ;
+         
+               DB::table('jobcard_maintanance')->where('id', $cardsID)->update(['status_display' => $statusdisplay]);
+                   
                // send email to the next person the step
                $users = HRPerson::where('position', $processflow->job_title)->pluck('user_id');
                foreach ($users as $manID) {
@@ -867,7 +881,7 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();
 		
-		$configuration = jobcards_config::first(); 
+        $configuration = jobcards_config::first(); 
 		$data['configuration'] = $configuration;
         $data['users'] = $users;
         $data['jobcard'] = $jobcard;
@@ -920,8 +934,9 @@ class JobcardController extends Controller
 
      public function addjobcardnotes(Request $request){
         $this->validate($request, [
-//              'step_name' => 'required',
-//              'job_title' => 'required',
+              'notes' => 'required',
+              'vehicle_id' => 'required',
+              'jobcard_id' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -953,8 +968,6 @@ class JobcardController extends Controller
         return response()->json();
      }
      
-     
-   
    //jobcard parts
    
    public function jobcardparts(){
@@ -1061,6 +1074,7 @@ class JobcardController extends Controller
       $this->validate($request, [
              'name' => 'required',
              'description' => 'required',
+             'no_of_parts_available' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1147,16 +1161,31 @@ class JobcardController extends Controller
    }
    
    public function addjobparts(Request $request){
-    $this->validate($request, [
-            // 'name' => 'required',
-            // 'description' => 'required',
+                
+        $jobcartparts = jobcart_parts::where('id', $SysData['category_id'])->where('category_id' , $SysData['jobcard_parts_id'])->first();
+        $availblebalance = !empty($jobcartparts->no_of_parts_available) ? $jobcartparts->no_of_parts_available : 0 ;
+         
+        $validator = Validator::make($request->all(), [
+            'category_id' => 'required',
+            'jobcard_parts_id' => 'required',
+            'no_of_parts_used' => 'bail|required|integer|min:0',
+           
         ]);
+        $validator->after(function ($validator) use($request) {
+            
+         if ($availblebalance < $SysData['no_of_parts_used']) {
+               $validator->errors()->add('no_of_parts_used', 'this field can be less than the required ');
+            }   
+        });
+       
+        if ($validator->fails()) {
+            return redirect('/education/registration')
+                ->withErrors($validator)
+                ->withInput();
+        }
+		        
         $SysData = $request->all();
         unset($SysData['_token']);
-        
-        $jobcartparts = jobcart_parts::where('id', $SysData['category_id'])->where('category_id' , $SysData['jobcard_parts_id'])->first();
-        $availblebalance =  $jobcartparts->no_of_parts_available;
-        
         $transactionbalance = $availblebalance - $SysData['no_of_parts_used'];
                 
         $currentparts = new jobcard_order_parts();
@@ -1171,20 +1200,47 @@ class JobcardController extends Controller
         $currentparts->save();
         
         // have to try to limit the user from going beyond 0
-        DB::table('jobcard__order_parts')
-                    ->where('jobcard_card_id', $SysData['category_id'])
-                    ->where('category_id', $SysData['jobcard_parts_id'])
-                    ->update(['avalaible_transaction' => $transactionbalance]);
-        
-         DB::table('jobcard_parts')
-                    ->where('id', $SysData['category_id'])
-                    ->where('category_id', $SysData['jobcard_parts_id'])
-                    ->update(['no_of_parts_available' => $transactionbalance]);
-        
+        DB::table('jobcard__order_parts')->where('jobcard_card_id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['avalaible_transaction' => $transactionbalance]);
+                      
+        DB::table('jobcard_parts')->where('id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['no_of_parts_available' => $transactionbalance]);
+                    
          AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
         return response()->json(); 
    }
    
+   
+   public function printcards(Request $request, jobcard_maintanance $jobcardparts ){
+           $this->validate($request, [
+            // 'date_uploaded' => 'required',
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+        //return $results;
+
+        foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
+        
+             foreach ($results as $key => $sValue) {
+            if (strlen(strstr($key, 'cards'))) {
+                $aValue = explode("_", $key);
+                $name = $aValue[0];
+                $cardID = $aValue[1];
+                return $cardID === 2;
+               
+                $jobcards =  !empty($cardID->jobcards) ? $cardID->jobcards : '';
+                $cardsjobcardsnotes =  !empty($cardID->cards_jobcards_notes) ? $cardID->cards_jobcards_notes : '';
+                $cardsaudit =  !empty($cardID->cards_audit) ? $cardID->cards_audit : '';
+              
+                return $cardID->jobcards;
+             }
+             
+        }
+   }
+
    public function canceljobcardnotes(jobcard_maintanance $card){
          
        //  return $card;
@@ -1201,7 +1257,7 @@ class JobcardController extends Controller
 		$processflow = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','asc')->get();
 		$lastProcess = processflow::where('job_title',$hrjobtile)->where('status' , 1)->orderBy('id','desc')->first();
                 
-                return $userAccess;
+               // return $userAccess;
 		$statuses = array();
 		$status = '';
 		

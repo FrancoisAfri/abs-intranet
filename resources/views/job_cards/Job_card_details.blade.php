@@ -127,7 +127,6 @@
                             data-vehicle_id="{{$jobcard->vehicle_id}}"
                             data-instruction="{{$jobcard->instruction}}" ><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
-
                     <a href="{{ '/vehicle_management/viewImage/' . $jobcard->vehicle_id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Images</a>
@@ -146,18 +145,41 @@
 		    <a href="{{ '/vehicle_management/notes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $card->id }}">Conclude Jobcard</a>
-
+                   <button class="btn btn-sm btn-default btn-flat"  id="print" name="print" onclick="myFunction()">Print </button>
+                  <div id="myDIV">
+                      <br>
+                     <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
+                      
+<!--                           <td style="vertical-align: middle; text-align: center;">
+                                    <label class="radio-inline" style="padding-left: 0px;"> Job Cards <input type="checkbox"
+                                                                                                  id="{{ $card->id . '_rdo_none' }}"
+                                                                                                  name=""
+                                                                                                  value="print_jobcard"></label>
+                                </td>
+                                
+                      <td style="vertical-align: middle; text-align: center;">
+                                    <label class="radio-inline" style="padding-left: 0px;"> Job Cards + notes <input type="checkbox"
+                                                                                                  id="{{ $card->id . '_rdo_none' }}"
+                                                                                                  name=""
+                                                                                                  value="print_jobcard_notes"></label>
+                                </td>-->        
+						<td style="vertical-align: middle; text-align: center;"> Job Cards <input type="checkbox" class="checkbox selectall"
+                                                   id="jobcards{{ $card->id }}" name="cards_2" value="1" > </td>
+						<td style="vertical-align: middle; text-align: center;"> Job Cards + notes <input type="checkbox" class="checkbox selectall"
+                                                   id="jobcards_notes{{ $card->id }}" name="cards_3" value="1" > </td>
+						<td style="vertical-align: middle; text-align: center;"> Audit <input type="checkbox" class="checkbox selectall"
+                                                   id="audit{{ $card->id }}" name="cards_4" value="1" > </td>       
+						<input type="submit" id="load-allocation" name="load-allocation" class="btn btn-sm btn-default btn-flat" value="Submit">
+                  </form>
+                  </div>
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
-
                 </div>
                 @endforeach
-               
             </div>
         </div>
         @include('job_cards.partials.edit_jobcard_modal')
-		
     </div>
 @endsection
 @section('page_script')
@@ -194,7 +216,20 @@
         $('#cancel').click(function () {
             location.href = '/jobcards/search';
         });
+        
+         $('.print').hide();
 
+         function myFunction() {
+                   
+             
+                    var x = document.getElementById("myDIV");
+                    if (x.style.display === "none") {
+                        x.style.display = "block";
+                    } else {
+                        x.style.display = "none";
+                    }
+                }
+    
 	$(function () {
 	
 	
@@ -289,43 +324,43 @@
 				$('.comp-field').show();
 			}
 			return allType;
-		}		
-		//pass 
-		$('#edit-jobcard-modal').on('show.bs.modal', function (e) {
+		}
+		
+		//pass category data to the edit category modal
+        $('#edit-jobcard-modal').on('show.bs.modal', function (e) {
+			
 			var btnEdit = $(e.relatedTarget);
-			JobId = btnEdit.data('id');
+			kpiId = btnEdit.data('id');
 			var cardDate = btnEdit.data('card_date');
 			var scheduleDate = btnEdit.data('schedule_date');
-			var completionDate = btnEdit.data('completion_date');
 			var bookingDate = btnEdit.data('booking_date');
 			var supplierID = btnEdit.data('supplier_id');
-			var EstimatedHours = btnEdit.data('estimated_hours');
+			var serviceType = btnEdit.data('service_type');
+			var estimatedHours = btnEdit.data('estimated_hours');
 			var serviceTime = btnEdit.data('service_time');
 			var machineHourMetre = btnEdit.data('machine_hour_metre');
-			var serviceType = btnEdit.data('service_type');
-			var vehicleID = btnEdit.data('vehicle_id');
 			var machineOdometer = btnEdit.data('machine_odometer');
 			var lastDriverID = btnEdit.data('last_driver_id');
 			var inspectionInfo = btnEdit.data('inspection_info');
 			var mechanicID = btnEdit.data('mechanic_id');
+			var vehicleID = btnEdit.data('vehicle_id');
 			var Instruction = btnEdit.data('instruction');
 			var modal = $(this);
-			modal.find('#Instruction').val(Instruction);
-			modal.find('#inspection_info').val(inspectionInfo);
 			modal.find('#card_date').val(cardDate);
 			modal.find('#schedule_date').val(scheduleDate);
-			modal.find('#completion_date').val(completionDate);
 			modal.find('#booking_date').val(bookingDate);
-			modal.find('#estimated_hours').val(EstimatedHours);
+			modal.find('#estimated_hours').val(estimatedHours);
 			modal.find('#service_time').val(serviceTime);
 			modal.find('#machine_hour_metre').val(machineHourMetre);
+			modal.find('#instruction').val(Instruction);
 			modal.find('#machine_odometer').val(machineOdometer);
-			modal.find('select#vehicle_id').val(vehicleID);
-			modal.find('select#supplier_id').val(supplierID);
+			modal.find('#inspection_info').val(inspectionInfo);
 			modal.find('select#service_type').val(serviceType);
 			modal.find('select#last_driver_id').val(lastDriverID);
 			modal.find('select#mechanic_id').val(mechanicID);
-		});
+			modal.find('select#supplier_id').val(supplierID);
+			modal.find('select#vehicle_id').val(vehicleID);
+        });
 		$('#add_notes').on('click', function () {
 			
 			var strUrl = '/jobcards/addjobcardnotes';

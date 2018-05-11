@@ -48,7 +48,7 @@
                      <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Service by Agent</label>
                         <div class="col-sm-8">
-                            <input type="checkbox" id="external_service" value="1" $sServiceAgent name="external_service" onclick="showHide();">
+                            <input type="checkbox" id="external_service" value="1"  name="external_service" onclick="showHide();">
                         </div>
                     </div>
                      <div class="form-group agent_field">
@@ -122,7 +122,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Driver</label>
                         <div class="col-sm-8">
                                 <select id="last_driver_id" name="last_driver_id" class="form-control">
-                                    <option value=" ">*** Select a driver  ***</option>
+                                    <option value="0">*** Select a driver  ***</option>
                                     @foreach($users as $details)
                                     <option value="{{ $details->id }}">{{$details->first_name . ' ' .  $details->surname }}</option>
                                     @endforeach
@@ -153,7 +153,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Mechanic</label>
                         <div class="col-sm-8">
                                 <select id="mechanic_id" name="mechanic_id" class="form-control">
-                                    <option value=" ">*** Select a mechanic  ***</option>
+                                    <option value="0">*** Select a mechanic  ***</option>
                                     @foreach($users as $details)
                                     <option value="{{ $details->id }}">{{ $details->first_name . ' ' .  $details->surname}}</option>
                                     @endforeach
