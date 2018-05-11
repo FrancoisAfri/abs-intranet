@@ -852,7 +852,7 @@ class JobcardController extends Controller
 				 8=>'Spare Dispatch',9=>' At Mechanic',10=>'Spares Dispatch Paperwork',
                  11=>'Fleet Manager',12=>'Awaiting Closure',13=>'Closed',14 =>'Pending Cancellation',15=>'Cancelled');
 		
-		$vehicledetails =  DB::table('vehicle_details')
+        $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
                 'division_level_fives.name as company', 'division_level_fours.name as Department')
@@ -1209,7 +1209,7 @@ class JobcardController extends Controller
    }
    
    
-   public function printcards(Request $request, jobcard_maintanance $jobcardparts ){
+   public function printcards(Request $request, jobcard_maintanance $print ){
            $this->validate($request, [
             // 'date_uploaded' => 'required',
         ]);
@@ -1224,18 +1224,69 @@ class JobcardController extends Controller
             }
         }
         
-             foreach ($results as $key => $sValue) {
+        foreach ($results as $key => $sValue) {
             if (strlen(strstr($key, 'cards'))) {
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
                 $cardID = $aValue[1];
-                return $cardID === 2;
-               
-                $jobcards =  !empty($cardID->jobcards) ? $cardID->jobcards : '';
-                $cardsjobcardsnotes =  !empty($cardID->cards_jobcards_notes) ? $cardID->cards_jobcards_notes : '';
-                $cardsaudit =  !empty($cardID->cards_audit) ? $cardID->cards_audit : '';
-              
-                return $cardID->jobcards;
+                //$card = $aValue[2];
+              // return $cardID === 2;
+                
+                
+                 if($cardID == 2 ){ //jobcard
+                     
+                  $vehiclemaintenance = DB::table('jobcard_maintanance')
+                        ->select('jobcard_maintanance.*','vehicle_details.*',
+                                'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+                            'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+                                'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+                        ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+                        ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+                        ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+                        ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+                        ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+                        ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+                        ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+                        ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+                        ->where('jobcard_maintanance.id' ,$print->id )     
+                        ->orderBy('jobcard_maintanance.id', 'asc')
+                        ->get();   
+                  
+               // return $vehiclemaintenance ;
+                  
+                    $data['vehiclemaintenance'] = $vehiclemaintenance;
+                    $data['page_title'] = " Fleet Management ";
+                    $data['page_description'] = "Fleet Cards Report ";
+                    $data['breadcrumb'] = [
+                        ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                        ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+                    ];
+
+                    $data['active_mod'] = 'Fleet Management';
+                    $data['active_rib'] = 'Reports';
+
+                    $companyDetails = CompanyIdentity::systemSettings();
+                    $companyName = $companyDetails['company_name'];
+                    $user = Auth::user()->load('person');
+
+                    $data['support_email'] = $companyDetails['support_email'];
+                    $data['company_name'] = $companyName;
+                    $data['full_company_name'] = $companyDetails['full_company_name'];
+                    $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+                    $data['date'] = date("d-m-Y");
+                    $data['user'] = $user;
+
+                    AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+                    return view('job_cards.jobcard_report_print')->with($data);
+                    
+                }elseif($cardID == 3){ //cardsjobcardsnotes
+                    
+                     return 12;
+                }elseif($cardID == 4){ //cardsaudit
+                   
+                     return 13;
+                }
+
              }
              
         }
