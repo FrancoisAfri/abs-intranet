@@ -1160,18 +1160,26 @@ class JobcardController extends Controller
             }
         }
         
-             foreach ($results as $key => $sValue) {
+        foreach ($results as $key => $sValue) {
             if (strlen(strstr($key, 'cards'))) {
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
                 $cardID = $aValue[1];
-                return $cardID === 2;
+                //$card = $aValue[2];
+              // return $cardID === 2;
+                
+                $jobcards = $cardID == 2;
+                $jobcard =  !empty($jobcards) ? $jobcards : 0;
+                
+                $cardsjobcardsnotes = $cardID == 3;
+                $jobcardjobnotes =  !empty($cardsjobcardsnotes) ? $cardsjobcardsnotes : 0;
+                
+                $cardsaudit = $cardID === 4;
+                $cards_audit =  !empty($cardsaudit) ? $cardsaudit : 0;
                
-                $jobcards =  !empty($cardID->jobcards) ? $cardID->jobcards : '';
-                $cardsjobcardsnotes =  !empty($cardID->cards_jobcards_notes) ? $cardID->cards_jobcards_notes : '';
-                $cardsaudit =  !empty($cardID->cards_audit) ? $cardID->cards_audit : '';
+                return $jobcards;
               
-                return $cardID->jobcards;
+               // return !empty($jobcards) ? $jobcards : 0;
              }
              
         }
