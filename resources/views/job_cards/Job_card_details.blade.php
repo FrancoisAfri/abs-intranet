@@ -34,150 +34,118 @@
                 <div align="center" class="box box-default">
                     <div class="box-body">
                         <table class="table table-striped table-bordered">
-                             @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                             <!--  -->
+                            @foreach ($jobcard as $jobcard)
                                 <tr>
                                     <td class="caption">Fleet Number</td>
-                                    <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
+                                    <td>{{ !empty($jobcard->fleet_number) ? $jobcard->fleet_number : ''}}</td>
                                     <td class="caption">Job Card Number</td>
-                                    <td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
+                                    <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : ''}}</td>
                                 </tr>
                                 <tr>
-
                                     <td class="caption">vehicle registration Number</td>
-                                    <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+                                    <td>{{ !empty($jobcard->vehicle_registration) ? $jobcard->vehicle_registration : ''}}</td>
                                     <td class="caption">Job Card Date</td>
-                                    <td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
+                                    <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : ''}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="caption" width="25%">Make</td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
-                                    <td class="caption">Job Card Status</td>
-                                    <td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>
+									<td class="caption">Sechedule Date</td>
+                                    <td>{{ !empty($jobcard->schedule_date) ? date(' d M Y', $jobcard->schedule_date) : ''}}</td>
+									<td class="caption">Booking Date</td>
+                                    <td>{{ !empty($jobcard->booking_date) ? date(' d M Y', $jobcard->booking_date) : ''}}</td>
+                                </tr>
+								<tr>
+                                    <td class="caption">Completion Date</td>
+                                    <td>{{ !empty($jobcard->completion_date) ? date(' d M Y', $jobcard->completion_date) : ''}}</td>
+									 <td class="caption">Job Card Status</td>
+                                    <td>{{ !empty($jobcard->status_display) ? $jobcard->status_display : ''}}</td>
                                 </tr>
                                 <tr>
+									<td class="caption" width="25%">Make</td>
+                                    <td width="25%">{{ !empty($jobcard->vehicle_make) ? $jobcard->vehicle_make : ''}}</td>
                                     <td class="caption" width="25%">Model</td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
-                                    <td class="caption">Service File Attachment</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="caption">Vehicle Description </td>
-                                    <td>{{ !empty($vehiclemaintenance->instruction) ? $vehiclemaintenance->instruction : ''}}</td>
-                                    <td class="caption">Driver</td>
-                                    <td>{{ !empty($vehiclemaintenance->last_driver_id) ? $vehiclemaintenance->last_driver_id : ''}}</td>
+                                    <td width="25%">{{ !empty($jobcard->vehicle_model) ? $jobcard->vehicle_model : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Current Odometer </td>
-                                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
-                                    <td class="caption">Mechanic</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
+                                    <td>{{ !empty($jobcard->odometer_reading) ? $jobcard->odometer_reading : ''}}</td>
                                     <td class="caption">Current Hours </td>
-                                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
-                                    <td class="caption">Inspection List Number</td>
-                                    <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
+                                    <td>{{ !empty($jobcard->hours_reading) ? $jobcard->hours_reading : ''}}</td>
                                 </tr>
-                               
                                 <tr>
-                                    <td class="caption">Hours Allocated</td>
-                                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
-                                    <td class="caption">Completion Date</td>
-                                    <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
-                                </tr>
-                             
-                                <tr>
-                                    
-                                    <td class="caption">Service Time</td>
-                                    <td> </td>
-                                    <td class="caption"></td>
-                                    <td></td>
+                                    <td class="caption">Inspection Number</td>
+                                    <td>{{ !empty($jobcard->cell_number) ? $jobcard->cell_number : ''}}</td>
+									<td class="caption">Service Time</td>
+                                    <td>{{ !empty($jobcard->service_time) ? $jobcard->service_time : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Service Type</td>
-                                    <td></td>
+                                    <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : ''}}</td>
                                     <td class="caption">Servicing Agent</td>
-                                    <td></td>
+                                    <td>{{ !empty($jobcard->supplier) ? $jobcard->supplier : ''}}</td>
                                 </tr>
-                                 <tr>
-                                    <td class="caption">Purchase Order Number</td>
-                                    <td>{{ !empty($vehiclemaintenance->size_of_fuel_tank) ? $vehiclemaintenance->size_of_fuel_tank : ''}}</td>
-                                    <td class="caption">Service Date</td>
-                                    <td></td>
+								<tr>
+									<td class="caption">Mechanic</td>
+                                    <td>{{ !empty($jobcard->me_firstname)  && !empty($jobcard->me_surname) ? $jobcard->me_firstname." ".$jobcard->me_surname : ''}}</td>
+                                    <td class="caption">Driver</td>
+                                    <td>{{ !empty($jobcard->dr_firstname)  && !empty($jobcard->dr_surname) ? $jobcard->dr_firstname." ".$jobcard->dr_surname : ''}}</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="4" class="caption">Job Card Instructions</td></tr>
+                                    <td class="caption">Service File Attachment</td>
+                                    <td></td>
+                                </tr>
+								<tr>
+                                    <td class="caption">Instructions</td>
+                                    <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : ''}}</td>
+                                    <td class="caption">Instructions Info</td>
+                                    <td>{{ !empty($jobcard->inspection_info) ? $jobcard->inspection_info : ''}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="caption"></td></tr>
                                      <tr>
-				         <td colspan="4" style="text-align:left;" height="40" border="1"></td>
-				     </tr>
+							<td colspan="4" style="text-align:left;" height="40" border="1"></td>
+						</tr>
                                 <tr>
                         </table>
                     </div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
-                <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
-                            data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
-                            data-status="{{$vehiclemaintenance->status}}"
-                            data-division_level_5="{{$vehiclemaintenance->division_level_5 }}"
-                            data-division_level_4="{{ $vehiclemaintenance->division_level_4 }}"
-                            data-division_level_3="{{ $vehiclemaintenance->division_level_3 }}"
-                            data-division_level_2="{{ $vehiclemaintenance->division_level_2 }}"
-                            data-division_level_1="{{ $vehiclemaintenance->division_level_1 }}"
-                            data-responsible_for_maintenance="{{ $vehiclemaintenance->responsible_for_maintenance}}"
-                            data-vehicle_make="{{ $vehiclemaintenance->vehicle_make}}"
-                            data-responsible_for_maintenance="{{$vehiclemaintenance->responsible_for_maintenance}}"
-                            data-vehicle_model="{{$vehiclemaintenance->vehicle_model}}"
-                            data-vehicle_type="{{$vehiclemaintenance->vehicle_type}}"
-                            data-year="{{$vehiclemaintenance->year}}"
-                            data-vehicle_registration="{{$vehiclemaintenance->vehicle_registration}}"
-                            data-chassis_number="{{$vehiclemaintenance->chassis_number}}"
-                            data-engine_number="{{$vehiclemaintenance->engine_number}}"
-                            data-vehicle_color="{{$vehiclemaintenance->vehicle_color}}"
-                            data-metre_reading_type="{{$vehiclemaintenance->metre_reading_type}}"
-                            data-odometer_reading="{{$vehiclemaintenance->odometer_reading}}"
-                            data-hours_reading="{{$vehiclemaintenance->hours_reading}}"
-                            data-fuel_type="{{$vehiclemaintenance->fuel_type}}"
-                            data-size_of_fuel_tank="{{$vehiclemaintenance->size_of_fuel_tank}}"
-                            data-fleet_number="{{$vehiclemaintenance->fleet_number}}"
-                            data-cell_number="{{$vehiclemaintenance->cell_number}}"
-                            data-tracking_umber="{{$vehiclemaintenance->tracking_umber}}"
-                            data-vehicle_owner="{{$vehiclemaintenance->vehicle_owner}}"
-                            data-title_type="{{$vehiclemaintenance->title_type}}"
-                            data-financial_institution="{{$vehiclemaintenance->financial_institution}}"
-                            data-extras="{{ $vehiclemaintenance->extras }}"
-                            data-property_type="{{ $vehiclemaintenance->property_type }}"
-                            data-company="{{ $vehiclemaintenance->company }}"
-
-                    ><i class="fa fa-pencil-square-o"></i> Edit
+					<button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+                            data-target="#edit-jobcard-modal" data-id="{{ $jobcard->id }}"
+                            data-card_date="{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : ''}}"
+                            data-schedule_date="{{ !empty($jobcard->schedule_date) ? date(' d M Y', $jobcard->schedule_date) : ''}}"
+                            data-booking_date="{{ !empty($jobcard->booking_date) ? date(' d M Y', $jobcard->booking_date) : ''}}"
+                            data-supplier_id="{{$jobcard->supplier_id}}"
+                            data-service_type="{{$jobcard->service_type}}"
+                            data-estimated_hours="{{$jobcard->estimated_hours}}"
+                            data-service_time="{{$jobcard->service_time}}"
+                            data-machine_hour_metre="{{$jobcard->machine_hour_metre}}"
+                            data-machine_odometer="{{$jobcard->machine_odometer}}"
+                            data-last_driver_id="{{$jobcard->last_driver_id}}"
+                            data-inspection_info="{{$jobcard->inspection_info}}"
+                            data-mechanic_id="{{$jobcard->mechanic_id}}"
+                            data-vehicle_id="{{$jobcard->vehicle_id}}"
+                            data-instruction="{{$jobcard->instruction}}" ><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
-
-                    <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->vehicle_id }}"
+                    <a href="{{ '/vehicle_management/viewImage/' . $jobcard->vehicle_id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Images</a>
+                       data-id="{{ $jobcard->id }}">Images</a>
 
                        <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Job Card Notes</a>
+                       data-id="{{ $jobcard->id }}">Job Card Notes</a>
                    
                    <a href="{{ '/jobcard/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Parts</a>
-                    
-                 
-                    
-<!--                 <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"data-target="#add-safe-modal"> Print  </button>-->
-                    
+                       data-id="{{ $jobcard->id }}">Parts</a>
+
                     <a href="{{ '/jobcards/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $card->id }}">Print</a>
 		    <a href="{{ '/vehicle_management/notes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $card->id }}">Conclude Jobcard</a>
-                   
-                   <button class="btn btn-sm btn-default btn-flat"  id="print" name="print" onclick="myFunction()">Print </button>  
-                     
+                   <button class="btn btn-sm btn-default btn-flat"  id="print" name="print" onclick="myFunction()">Print </button>
                   <div id="myDIV">
                       <br>
                      <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
@@ -194,35 +162,24 @@
                                                                                                   id="{{ $card->id . '_rdo_none' }}"
                                                                                                   name=""
                                                                                                   value="print_jobcard_notes"></label>
-                                </td>-->
-                                
-                     
-                                
-                       <td style="vertical-align: middle; text-align: center;"> Job Cards <input type="checkbox" class="checkbox selectall"
+                                </td>-->        
+						<td style="vertical-align: middle; text-align: center;"> Job Cards <input type="checkbox" class="checkbox selectall"
                                                    id="jobcards{{ $card->id }}" name="cards_2" value="1" > </td>
-                       <td style="vertical-align: middle; text-align: center;"> Job Cards + notes <input type="checkbox" class="checkbox selectall"
+						<td style="vertical-align: middle; text-align: center;"> Job Cards + notes <input type="checkbox" class="checkbox selectall"
                                                    id="jobcards_notes{{ $card->id }}" name="cards_3" value="1" > </td>
-                       <td style="vertical-align: middle; text-align: center;"> Audit <input type="checkbox" class="checkbox selectall"
-                                                   id="audit{{ $card->id }}" name="cards_4" value="1" > </td>
-                       
-                                                                      
-                                
-                      <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-sm btn-default btn-flat" value="Submit">           
-                      
+						<td style="vertical-align: middle; text-align: center;"> Audit <input type="checkbox" class="checkbox selectall"
+                                                   id="audit{{ $card->id }}" name="cards_4" value="1" > </td>       
+						<input type="submit" id="load-allocation" name="load-allocation" class="btn btn-sm btn-default btn-flat" value="Submit">
                   </form>
                   </div>
-
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
-
                 </div>
                 @endforeach
-               
             </div>
         </div>
-        @include('job_cards.partials.print_modal')	
-       
+        @include('job_cards.partials.edit_jobcard_modal')
     </div>
 @endsection
 @section('page_script')
@@ -282,7 +239,8 @@
 		$(".select2").select2();
 		$('.hours-field').hide();
 		$('.comp-field').hide();
-		var moduleId;
+
+		var JobId;
 		//Tooltip
 		$('[data-toggle="tooltip"]').tooltip();
 		
@@ -297,7 +255,6 @@
 			// or four works better for larger screens.
 			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 		}
-
 
 		// Reposition when a modal is shown
 		$('.modal').on('show.bs.modal', reposition);
@@ -319,7 +276,6 @@
 			radioClass: 'iradio_square-blue',
 			increaseArea: '10%' // optional
 		});
-
 		$(document).ready(function () {
 
 			$('#year').datepicker({
@@ -329,8 +285,6 @@
 			});
 
 		});
-                
-                
 
 		$('#rdo_package, #rdo_product').on('ifChecked', function () {
 			var allType = hideFields();
@@ -345,8 +299,6 @@
 			if (allType == 1) $('#box-subtitle').html('Site Address');
 			else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
 		});
-
-
 		function hideFields() {
 			var allType = $("input[name='promotion_type']:checked").val();
 			if (allType == 1) {
@@ -373,20 +325,65 @@
 			}
 			return allType;
 		}
-
+		
+		//pass category data to the edit category modal
+        $('#edit-jobcard-modal').on('show.bs.modal', function (e) {
+			
+			var btnEdit = $(e.relatedTarget);
+			kpiId = btnEdit.data('id');
+			var cardDate = btnEdit.data('card_date');
+			var scheduleDate = btnEdit.data('schedule_date');
+			var bookingDate = btnEdit.data('booking_date');
+			var supplierID = btnEdit.data('supplier_id');
+			var serviceType = btnEdit.data('service_type');
+			var estimatedHours = btnEdit.data('estimated_hours');
+			var serviceTime = btnEdit.data('service_time');
+			var machineHourMetre = btnEdit.data('machine_hour_metre');
+			var machineOdometer = btnEdit.data('machine_odometer');
+			var lastDriverID = btnEdit.data('last_driver_id');
+			var inspectionInfo = btnEdit.data('inspection_info');
+			var mechanicID = btnEdit.data('mechanic_id');
+			var vehicleID = btnEdit.data('vehicle_id');
+			var Instruction = btnEdit.data('instruction');
+			var modal = $(this);
+			modal.find('#card_date').val(cardDate);
+			modal.find('#schedule_date').val(scheduleDate);
+			modal.find('#booking_date').val(bookingDate);
+			modal.find('#estimated_hours').val(estimatedHours);
+			modal.find('#service_time').val(serviceTime);
+			modal.find('#machine_hour_metre').val(machineHourMetre);
+			modal.find('#instruction').val(Instruction);
+			modal.find('#machine_odometer').val(machineOdometer);
+			modal.find('#inspection_info').val(inspectionInfo);
+			modal.find('select#service_type').val(serviceType);
+			modal.find('select#last_driver_id').val(lastDriverID);
+			modal.find('select#mechanic_id').val(mechanicID);
+			modal.find('select#supplier_id').val(supplierID);
+			modal.find('select#vehicle_id').val(vehicleID);
+        });
 		$('#add_notes').on('click', function () {
-				var strUrl = '/jobcards/addjobcardnotes';
-				var formName = 'add-note-form';
-				var modalID = 'add-note-modal';
-				var submitBtnID = 'add_notes';
-				var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
-				var successMsgTitle = 'New Record Added!';
-				var successMsg = 'The Record  has been updated successfully.';
-				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-			});
-                        
-                        
-
+			
+			var strUrl = '/jobcards/addjobcardnotes';
+			var formName = 'add-note-form';
+			var modalID = 'add-note-modal';
+			var submitBtnID = 'add_notes';
+			var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
+			var successMsgTitle = 'New Record Added!';
+			var successMsg = 'The Record  has been updated successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+		$('#update_jobcard').on('click', function () {
+			
+			var strUrl = '/jobcards/updatejobcard/' + JobId;
+			var formName = 'edit-jobcard-form';
+			var modalID = 'edit-jobcard-modal';
+			var submitBtnID = 'edit_warrantie';
+			var redirectUrl = '/jobcards/viewcard/'+ {{ $jobcard->id }};
+			var successMsgTitle = 'Record Updated!';
+			var successMsg = 'The Record  has been updated successfully.';
+			var Method = 'PATCH'
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
 	});
 </script>
 @endsection
