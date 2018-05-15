@@ -26,18 +26,18 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 class StockController extends Controller
 {
-     public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
     }
     
     public function mystock(){
-      $parts  =  stock::Orderby('id','asc')->get();  
-      //return $parts;
+		
+		$parts  =  stock::Orderby('id','asc')->get();  
+		//return $parts;
       
-       $jobCategories = product_category::orderBy('id', 'asc')->get();
-      
-     
+		$jobCategories = product_category::orderBy('id', 'asc')->get();
+    
         $data['jobCategories'] = $jobCategories;
         $data['parts'] = $parts;
         $data['page_title'] = "Stock Management";
@@ -50,12 +50,13 @@ class StockController extends Controller
         $data['active_mod'] = 'Stock Management';
         $data['active_rib'] = 'My Stock';
 
-        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", 0);
+        AuditReportsController::store('Stock Management', 'view Stock Add Page', "Accessed By User", 0);
         return view('stock.search_product')->with($data); 
     }
     
     public function stock(Request $request){
-        $this->validate($request, [
+        
+		$this->validate($request, [
             
         ]);
         $SysData = $request->all();
@@ -64,34 +65,33 @@ class StockController extends Controller
         $CategoryID = $SysData['product_id'];
         $ProductID = $SysData['category_id'];
         
-        
-        
-
-        $stock = DB::table('Product_products')
-            ->select('Product_products.*')
+        $stocks = DB::table('Product_products')
+            ->select('Product_products.*','stock.avalaible_stock')
+			->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
             ->where(function ($query) use ($CategoryID) {
                 if (!empty($CategoryID)) {
                     $query->where('Product_products.category_id', $CategoryID);
                 }
             })
+			->where(function ($query) use ($ProductID) {
+                if (!empty($ProductID)) {
+                    $query->where('Product_products.id', $ProductID);
+                }
+            })
             ->get();
-            
-            //return $stock;
-            
-        $data['stock'] = $stock;
+        $data['stocks'] = $stocks;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
         $data['breadcrumb'] = [
             ['title' => 'Stock Management', 'path' => 'stock/storckmanagement', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Add Stock', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['active_mod'] = 'Stock Management';
-        $data['active_rib'] = 'My Stock';
+        $data['active_rib'] = 'Add Stock';
 
-        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", 0);
+        AuditReportsController::store('Stock Management', 'Stock Search Page', "Accessed By User", 0);
         return view('stock.stock_results')->with($data); 
          
     }
-    
 }
