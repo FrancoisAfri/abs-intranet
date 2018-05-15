@@ -693,7 +693,8 @@ Route::post('jobcard/addjobparts', 'JobcardController@addjobparts');
 
 Route::get('jobcards/print/{print}', 'JobcardController@printcards');
 
-
+// stock
+Route::get('stock/storckmanagement', 'StockController@mystock');
 
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Job Card Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
+    <title>Job Card Audit Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -40,43 +40,40 @@
             <!-- /.col -->
         </div>
         <!-- info row -->
-        <div class="row invoice-info">
-            <div class="col-sm-8 invoice-col">
-                <address>
-                    <strong>{{ $company_name }}</strong><br>
-                </address>
-            </div>
-            <!-- /.col -->
-        </div>
+                <div class="row invoice-info">
+                    <div class="col-sm-8 invoice-col">
+                        <address>
+                            <strong>{{ $company_name }}</strong><br>
+                        </address>
+                    </div>
+                    <!-- /.col -->
+                </div>
         <!-- /.row -->
-                
                         <table class="table table-striped table-bordered">
-<!--                              <h5 class="box-title"> Job Card </h3>-->
                              @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                             <!--  -->
                                 <tr>
-                                    <td class="caption">Fleet Number</td>
+                                    <td class="caption">Joc Card # </td>
                                     <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
-                                    <td class="caption">Job Card Number</td>
+                                    <td class="caption">Summary</td>
                                     <td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
                                 </tr>
                                 <tr>
 
-                                    <td class="caption">vehicle registration Number</td>
+                                    <td class="caption">Dispatch Notes </td>
                                     <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
-                                    <td class="caption">Job Card Date</td>
+                                    <td class="caption">Status</td>
                                     <td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="caption" width="25%">Make</td>
+                                    <td class="caption" width="25%">Job Card Date</td>
                                     <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
-                                    <td class="caption">Job Card Status</td>
+                                    <td class="caption">Mechanic </td>
                                     <td>{{ !empty($vehiclemaintenance->aStatus) ? $vehiclemaintenance->aStatus : ''}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="caption" width="25%">Model</td>
+                                    <td class="caption" width="25%">Company </td>
                                     <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
-                                     <td class="caption" width="25%"></td>
+                                     <td class="caption" width="25%">Last driver</td>
                                      <td></td>
                                 </tr>
                                 <tr>
@@ -107,7 +104,6 @@
                              
                                 <tr>
                                     <td class="caption">Hours used </td>
-<!--                                    <td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>-->
                                     <td></td>
                                    <td class="caption">Service Time</td>
                                    <td>{{ !empty($vehiclemaintenance->service_time) ? $vehiclemaintenance->service_time : ''}}</td>
@@ -122,7 +118,7 @@
                                 
                                 <tr>
                                     <td class="caption">Purchase Order Number</td>
-<!--                                    <td>{{ !empty($vehiclemaintenance->size_of_fuel_tank) ? $vehiclemaintenance->size_of_fuel_tank : ''}}</td>-->
+
                                     <td></td>
                                     <td class="caption">Service Date</td>
                                     <td></td>
@@ -153,25 +149,7 @@
                                      <tr>
 				         <td colspan="8" style="text-align:left;" height="120" border="1"></td>
 				     </tr>
-                                <tr>
-                                
-                                <tr>
-				   <td colspan="2"style="text-align:left;">Completed (Y/N)</td>
-				   <td colspan="2"style="text-align:left;"></td>
-                                            </tr>
-                                            <tr><td colspan="4">&nbsp;</td></tr>
-                                            <tr><td colspan="4">&nbsp;</td></tr>
-                                            <tr><td colspan="4" style="text-align:left;">Workshop Comments:</td></tr>
-                                            <tr border="1">
-                                                    <td colspan="4" style="text-align:left;" height="170" border="1">&nbsp;</td>
-                                            </tr>
-                                            <tr><td colspan="4">&nbsp;</td></tr>
-                                            <tr><td colspan="4">&nbsp;</td></tr>
-                                            <tr height="50">
-                                         <td width="160">Signature - Worshop</td><td>____________________</td>
-                                         <td width="160">Signature - Fleet Manager</td><td>_____________________</td>
-                                 </tr>
-                                    
+                       
                         </table>
                          @endforeach
                     </div>

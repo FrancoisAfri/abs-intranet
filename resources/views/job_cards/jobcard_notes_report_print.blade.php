@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Job Card Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
+    <title>Job Card Notes Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -40,20 +40,17 @@
             <!-- /.col -->
         </div>
         <!-- info row -->
-        <div class="row invoice-info">
-            <div class="col-sm-8 invoice-col">
-                <address>
-                    <strong>{{ $company_name }}</strong><br>
-                </address>
-            </div>
-            <!-- /.col -->
-        </div>
+                <div class="row invoice-info">
+                    <div class="col-sm-8 invoice-col">
+                        <address>
+                            <strong>{{ $company_name }}</strong><br>
+                        </address>
+                    </div>
+                    <!-- /.col -->
+                </div>
         <!-- /.row -->
-                
                         <table class="table table-striped table-bordered">
-<!--                              <h5 class="box-title"> Job Card </h3>-->
                              @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                             <!--  -->
                                 <tr>
                                     <td class="caption">Fleet Number</td>
                                     <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
@@ -154,7 +151,6 @@
 				         <td colspan="8" style="text-align:left;" height="120" border="1"></td>
 				     </tr>
                                 <tr>
-                                
                                 <tr>
 				   <td colspan="2"style="text-align:left;">Completed (Y/N)</td>
 				   <td colspan="2"style="text-align:left;"></td>
@@ -166,12 +162,16 @@
                                                     <td colspan="4" style="text-align:left;" height="170" border="1">&nbsp;</td>
                                             </tr>
                                             <tr><td colspan="4">&nbsp;</td></tr>
+                                            <tr><td colspan="4">&nbsp;</td></tr>	
                                             <tr><td colspan="4">&nbsp;</td></tr>
-                                            <tr height="50">
-                                         <td width="160">Signature - Worshop</td><td>____________________</td>
-                                         <td width="160">Signature - Fleet Manager</td><td>_____________________</td>
-                                 </tr>
-                                    
+                                <tr><td colspan="4" style="text-align:left;">Notes:</td></tr> <!--For new display-->			   
+                                <tr ><td><b>Date Captured</b>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : '' }}</td>currentDate<td><b>By</b></td><td colspan="2"><b>Notes</b></td></tr>
+                                 <tr><td colspan="4">&nbsp;</td></tr>
+				   <tr><td colspan="4">&nbsp;</td></tr>
+				   <tr height="50">
+						<td width="160">Signature - Worshop</td><td>____________________</td>
+						<td width="160">Signature - Fleet Manager</td><td>_____________________</td>
+				   </tr>   
                         </table>
                          @endforeach
                     </div>

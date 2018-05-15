@@ -11,7 +11,7 @@ use App\vehicle;
 use App\vehicle_config;
 use App\jobcard_order_parts;
 use App\jobcart_parts;
-//use App\servicetype;
+use App\AuditTrail;
 use App\jobcard_category_parts;
 use App\jobcard_maintanance;
 use App\ContactCompany;
@@ -56,7 +56,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Settings Page Accessed', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'Job Card Settings Page Accessed', "Accessed By User", 0);
         return view('job_cards.setup')->with($data);
     }
     
@@ -74,7 +74,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
         
-        AuditReportsController::store('Job Card Management', 'Job Card Management Service Type', "Accessed By User",  Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'Job Card Management Service Type', "Accessed By User",  0);
         return view('job_cards.service_type')->with($data);  
     }
     
@@ -90,7 +90,7 @@ class JobcardController extends Controller
         $servicetype->status = 1;
         $servicetype->save();
         
-        AuditReportsController::store('Job Card Management', 'New service Type added', "Accessed By User",  Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'New service Type added', "Accessed By User",  $servicetype->id);
         return response()->json();
     }
     
@@ -105,7 +105,7 @@ class JobcardController extends Controller
         $service->name = $SysData['name'];
         $service->description = $SysData['description'];
         $service->update();
-        AuditReportsController::store('Fleet Management', ' service Type edited', "Accessed By User",  Auth::user()->person->position);
+        AuditReportsController::store('Fleet Management', ' service Type edited', "Accessed By User",  $service->id);
         return response()->json();
     }
     
@@ -124,7 +124,7 @@ class JobcardController extends Controller
     public function deleteservicetype(servicetype $service){
         $service->delete();
 
-        AuditReportsController::store('Job Card Management', ' service Type Deleted', "Accessed By User",  Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', ' service Type Deleted', "Accessed By User",  $service->id);
         return redirect('/jobcards/servicetype');
     
     }
@@ -154,7 +154,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'SetUp';
         
-        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Accessed By User",  Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Accessed By User",  0);
         return view('job_cards.configuration')->with($data); 
     }
     public function configurationSetings(Request $request, jobcards_config $config){
@@ -166,7 +166,7 @@ class JobcardController extends Controller
         $config->mechanic_sms = !empty($SysData['mechanic_sms']) ? $SysData['mechanic_sms'] : 0;
         $config->update();
 
-        AuditReportsController::store('Job Card Management', 'configurationSetings updated', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'configurationSetings updated', "Accessed By User", $config->id);
         return back();
     }
      
@@ -200,7 +200,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Process Flow';
         
-        AuditReportsController::store('Job Card Management', 'Job Card Management Process Flow Accessed', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'Job Card Management Process Flow Accessed', "Accessed By User", 0);
         return view('job_cards.processflow')->with($data);     
      }
      
@@ -222,7 +222,7 @@ class JobcardController extends Controller
          $processflow->status = 1;
          $processflow->save();
          
-         AuditReportsController::store('Job Card Management', 'New processflow has been added', "Accessed By User", Auth::user()->person->position);
+         AuditReportsController::store('Job Card Management', 'New processflow has been added', "Accessed By User", $processflow->id);
         return response()->json();
      }
      
@@ -239,7 +239,7 @@ class JobcardController extends Controller
          $steps->job_title = !empty($SysData['job_title']) ? $SysData['job_title'] : 0;
          $steps->update();
          
-         AuditReportsController::store('Job Card Management', ' process flow edited', "Accessed By User", Auth::user()->person->position);
+         AuditReportsController::store('Job Card Management', ' process flow edited', "Accessed By User", $steps->id);
         return response()->json();
      }
      
@@ -251,7 +251,7 @@ class JobcardController extends Controller
         $steps->status = $stastus;
         $steps->update();
 		
-		AuditReportsController::store('Job Card Management', ' process flow status Changed', "Accessed By User", Auth::user()->person->position);		
+		AuditReportsController::store('Job Card Management', ' process flow status Changed', "Accessed By User",  $steps->id);		
         return back();  
      }
  
@@ -355,7 +355,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'My Job Cards';
         
-        AuditReportsController::store('Job Card Management', 'Job Card Page Accessed', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'Job Card Page Accessed', "Accessed By User", 0);
        return view('job_cards.myjob_cards')->with($data); 
        
        }else  {
@@ -453,7 +453,7 @@ class JobcardController extends Controller
                }
         
         
-        AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User",$jobcardmaintanance->id);
         return response()->json();
 
      }
@@ -473,7 +473,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search';
 
-        AuditReportsController::store('Job Card Management', 'Job Card card search Page Accessed', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'Job Card card search Page Accessed', "Accessed By User", 0);
         return view('job_cards.search')->with($data); 
      }
      public function jobcardsearch(Request $request){
@@ -553,7 +553,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Accessed By User", 0);
         return view('job_cards.search_results')->with($data); 
      }
        
@@ -733,7 +733,7 @@ class JobcardController extends Controller
         $sReasonToReject = '';
         }
         
-       AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", Auth::user()->person->position);
+       AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", $jobcards->id);
         return back();
      }
     
@@ -769,7 +769,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search Job Cards';
 
-        AuditReportsController::store('Job Card Management', 'My Job Card Page Accessed', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'My Job Card Page Accessed', "Accessed By User", $card->id);
         return view('job_cards.Job_card_details')->with($data); 
      }
 
@@ -816,14 +816,12 @@ class JobcardController extends Controller
             ->get();
 		
         $configuration = jobcards_config::first(); 
-	$data['configuration'] = $configuration;
+	    $data['configuration'] = $configuration;
         $data['users'] = $users;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['ContactCompany'] = $ContactCompany;
-        //$data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['servicetype'] = $servicetype;
         $data['vehicledetails'] = $vehicledetails;
-       // $data['jobcards'] = $jobcards;
         $data['card'] =$card;
         $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";
@@ -835,7 +833,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search Job Cards';
 
-        AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User", $card->id);
         return view('job_cards.Job_card_details')->with($data);
      }
      public function viewjobcardnotes(jobcard_maintanance $card ){
@@ -862,7 +860,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search Job Cards';
 
-        AuditReportsController::store('Job Card Management', 'view Jobcardnotes', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'view Jobcardnotes', "Accessed By User", $card->id);
         return view('job_cards.add_jocard_notes')->with($data);
      }
 
@@ -898,7 +896,7 @@ class JobcardController extends Controller
         //foreach ($user as $manID) {
 
        // }
-        AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User",  Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User", $jobcardnote->id);
         return response()->json();
      }
      
@@ -921,7 +919,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Parts';
 
-        AuditReportsController::store('Job Card Management', 'view job card parts', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'view job card parts', "Accessed By User", 0);
         return view('job_cards.add_jobcard_category')->with($data);
    }
    
@@ -939,7 +937,7 @@ class JobcardController extends Controller
         $parts->status = 1;
         $parts->save(); 
 
-        AuditReportsController::store('Job Card Management', ' new parts catergory created', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', ' new parts catergory created', "Accessed By User",  $parts->id);
         return response()->json();
    }
    
@@ -956,7 +954,7 @@ class JobcardController extends Controller
         $parts->status = 1;
         $parts->update(); 
 
-        AuditReportsController::store('Job Card Management', 'parts catergory  edited', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'parts catergory  edited', "Accessed By User",  $parts->id);
         return response()->json();  
    }
 
@@ -968,7 +966,7 @@ class JobcardController extends Controller
         $parts->status = $stastus;
         $parts->update();
 		
-        AuditReportsController::store('Job Card Management', 'parts catergory  status Changed', "Accessed By User", Auth::user()->person->position);		
+        AuditReportsController::store('Job Card Management', 'parts catergory  status Changed', "Accessed By User",  $parts->id);		
         return back(); 
    }
    
@@ -980,7 +978,7 @@ class JobcardController extends Controller
                     ->where('category_id', $parts->id)
                     ->delete(); 
       
-        AuditReportsController::store('Job Card Management', ' parts catergory Deleted', "Accessed By User",  Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', ' parts catergory Deleted', "Accessed By User", $parts->id);
         return back();
        // return redirect('/jobcards/servicetype');
    }
@@ -1002,7 +1000,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Parts';
 
-        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User",  $parts->id);
         return view('job_cards.add_jobcard_parts')->with($data); 
    }
    
@@ -1023,7 +1021,7 @@ class JobcardController extends Controller
          $jobcartparts->category_id = !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
          $jobcartparts->save();
          
-          AuditReportsController::store('Job Card Management', 'new job card part created', "Accessed By User", 0);
+          AuditReportsController::store('Job Card Management', 'new job card part created', "Accessed By User", $jobcartparts->id);
         return response()->json();
    }
    
@@ -1040,7 +1038,7 @@ class JobcardController extends Controller
          $parts->no_of_parts_available = !empty($SysData['no_of_parts_available']) ? $SysData['no_of_parts_available'] : 0;;
          $parts->update();
          
-          AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
+          AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", $parts->id);
         return response()->json(); 
    }
    public function parts_act(jobcart_parts $parts){
@@ -1051,13 +1049,13 @@ class JobcardController extends Controller
         $parts->status = $stastus;
         $parts->update();
 		
-        AuditReportsController::store('Job Card Management', 'Job card parts status Changed', "Accessed By User", 0);		
+        AuditReportsController::store('Job Card Management', 'Job card parts status Changed', "Accessed By User", $parts->id);		
         return back(); 
    }
    
    public function deletejobcards(jobcart_parts $parts){
        $parts->delete();
-        AuditReportsController::store('Job Card Management', ' Job card parts deleted', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', ' Job card parts deleted', "Accessed By User",  $parts->id);
         return back();
    }
    
@@ -1092,7 +1090,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Parts';
 
-        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", Auth::user()->person->position);
+        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", $jobcardparts->id);
         return view('job_cards.add_parts')->with($data); 
    }
    
@@ -1117,11 +1115,11 @@ class JobcardController extends Controller
             }   
         });
        
-        if ($validator->fails()) {
-            return redirect('/education/registration')
-                ->withErrors($validator)
-                ->withInput();
-        }
+//        if ($validator->fails()) {
+//            return redirect('/education/registration')
+//                ->withErrors($validator)
+//                ->withInput();
+//        }
         $transactionbalance = $availblebalance - $SysData['no_of_parts_used'];
                 
         $currentparts = new jobcard_order_parts();
@@ -1140,7 +1138,7 @@ class JobcardController extends Controller
                       
         DB::table('jobcard_parts')->where('id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['no_of_parts_available' => $transactionbalance]);
                     
-         AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
+         AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", $currentparts->id);
         return response()->json(); 
    }
    
@@ -1171,7 +1169,7 @@ class JobcardController extends Controller
                 
                  if($cardID == 2 ){ //jobcard
                      
-                  $vehiclemaintenance = DB::table('jobcard_maintanance')
+                $vehiclemaintenance = DB::table('jobcard_maintanance')
                         ->select('jobcard_maintanance.*','vehicle_details.*',
                                 'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                             'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
@@ -1217,10 +1215,79 @@ class JobcardController extends Controller
                     
                 }elseif($cardID == 3){ //cardsjobcardsnotes
                     
-                     return 12;
+                     $vehiclemaintenance = DB::table('jobcard_maintanance')
+                        ->select('jobcard_maintanance.*','vehicle_details.*',
+                                'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
+                            'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+                                'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
+                        ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+                        ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+                        ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
+                        ->leftJoin('contact_companies', 'jobcard_maintanance.supplier_id', '=', 'contact_companies.id')
+                        ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+                        ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+                        ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+                        ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
+                        ->where('jobcard_maintanance.id' ,$print->id )     
+                        ->orderBy('jobcard_maintanance.id', 'asc')
+                        ->get();   
+                  
+               // return $vehiclemaintenance ;
+                  
+                    $data['vehiclemaintenance'] = $vehiclemaintenance;
+                    $data['page_title'] = " Fleet Management ";
+                    $data['page_description'] = "Fleet Cards Report ";
+                    $data['breadcrumb'] = [
+                        ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                        ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+                    ];
+
+                    $data['active_mod'] = 'Fleet Management';
+                    $data['active_rib'] = 'Reports';
+
+                    $companyDetails = CompanyIdentity::systemSettings();
+                    $companyName = $companyDetails['company_name'];
+                    $user = Auth::user()->load('person');
+
+                    $data['support_email'] = $companyDetails['support_email'];
+                    $data['company_name'] = $companyName;
+                    $data['full_company_name'] = $companyDetails['full_company_name'];
+                    $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+                    $data['date'] = date("d-m-Y");
+                    $data['user'] = $user;
+
+                    AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+                    return view('job_cards.jobcard_notes_report_print')->with($data);
+                    //
                 }elseif($cardID == 4){ //cardsaudit
                    
-                     return 13;
+                     $vehiclemaintenance = AuditTrail::Orderby('id','asc')->where('module_name' ,'Job Card Management')->get();
+                    // return $vehiclemaintenance;
+                     
+                    $data['vehiclemaintenance'] = $vehiclemaintenance;
+                    $data['page_title'] = " Fleet Management ";
+                    $data['page_description'] = "Fleet Cards Report ";
+                    $data['breadcrumb'] = [
+                        ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                        ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+                    ];
+
+                    $data['active_mod'] = 'Fleet Management';
+                    $data['active_rib'] = 'Reports';
+
+                    $companyDetails = CompanyIdentity::systemSettings();
+                    $companyName = $companyDetails['company_name'];
+                    $user = Auth::user()->load('person');
+
+                    $data['support_email'] = $companyDetails['support_email'];
+                    $data['company_name'] = $companyName;
+                    $data['full_company_name'] = $companyDetails['full_company_name'];
+                    $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+                    $data['date'] = date("d-m-Y");
+                    $data['user'] = $user;
+
+                    AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+                    return view('job_cards.jobcard_audit_report_print')->with($data);
                 }
 
              }
