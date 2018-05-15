@@ -39,30 +39,26 @@
                                    @endforeach
                                @else
                                <tr id="categories-list">
-                        <td colspan="5">
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No category to display, please start by adding a new category..
-                        </div>
-                        </td>
+                                <td colspan="5">
+                                <div class="alert alert-danger alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    No category to display, please start by adding a new category..
+                                </div>
+                                </td>
                         </tr>
                            @endif
                             </table>
-                        </div>
-                                   <!-- /.box-body -->
+                         </div>
+                     <!-- /.box-body -->
                     <div class="box-footer">
                      <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add new Category </button>
                     </div>
-             </div>
+            </div>
         </div>
    <!-- Include add new prime rate modal -->
         @include('hr.partials.add_category_modal')
         @include('hr.partials.edit_category_modal')
-
-
 </div>
-
-
 @endsection
 
 @section('page_script')

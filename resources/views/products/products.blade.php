@@ -17,7 +17,12 @@
 					 <tr><th style="width: 10px">#</th>
                      <th>Name</th>
                      <th>Description</th>
+                     <th>Product Code</th>
+                     @if (isset($userAccess) && $userAccess->access_level > 1)
                      <th>Price</th>
+                      @else
+                      <th></th>
+                      @endif
                      <th style="width: 40px"></th>
                      </tr>
                     @if (count($products->productCategory) > 0)
@@ -28,7 +33,12 @@
                                <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-description="{{$category->description}}"  ><i class="fa fa-money"></i> Prices</a></td>
 						  <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
 						  <td>{{ (!empty( $category->description)) ?  $category->description : ''}} </td>
+                          <td>{{ (!empty($category->product_code)) ?  $category->product_code : ''}} </td>
+                          @if (isset($userAccess) && $userAccess->access_level > 1)
                           <td>{{ (!empty( $category->price)) ?  'R' .number_format($category->price, 2) : ''}} </td>
+                           @else
+                           <td></td>
+                           @endif
 						   <td>
                             <!--   leave here  -->
                             <button type="button" id="view_ribbons" class="btn {{ (!empty($category->status) && $category->status == 1) ? " btn-danger " : "btn-success " }}
@@ -108,7 +118,8 @@
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
-                     price: $('#'+modalID).find('#price').val(),
+                    price: $('#'+modalID).find('#price').val(),
+                    product_code: $('#'+modalID).find('#product_code').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-product_title';

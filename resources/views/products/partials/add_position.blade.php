@@ -34,6 +34,12 @@
 								<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Product Code</label>
+                             <div class="col-sm-8">
+                                <input type="text" class="form-control" id="product_code" name="product_code" value="" placeholder="Enter Product Code" >
+                        </div>
+                    </div>
 
                  </div>  
                  <div class="modal-footer">
