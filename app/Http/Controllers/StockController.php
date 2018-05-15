@@ -8,8 +8,8 @@ use App\permits_licence;
 use App\servicetype;
 use App\HRPerson;
 use App\stock;
-use App\jobcards_config;
-use App\CompanyIdentity;
+use App\product_category;
+use App\product_products;
 use App\module_access;
 use App\module_ribbons;
 use App\modules;
@@ -35,7 +35,10 @@ class StockController extends Controller
       $parts  =  stock::Orderby('id','asc')->get();  
       //return $parts;
       
+       $jobCategories = product_category::orderBy('id', 'asc')->get();
+      
      
+        $data['jobCategories'] = $jobCategories;
         $data['parts'] = $parts;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
@@ -48,7 +51,47 @@ class StockController extends Controller
         $data['active_rib'] = 'My Stock';
 
         AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", 0);
-        return view('stock.add_stock')->with($data); 
+        return view('stock.search_product')->with($data); 
+    }
+    
+    public function stock(Request $request){
+        $this->validate($request, [
+            
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+        
+        $CategoryID = $SysData['product_id'];
+        $ProductID = $SysData['category_id'];
+        
+        
+        
+
+        $stock = DB::table('Product_products')
+            ->select('Product_products.*')
+            ->where(function ($query) use ($CategoryID) {
+                if (!empty($CategoryID)) {
+                    $query->where('Product_products.category_id', $CategoryID);
+                }
+            })
+            ->get();
+            
+            //return $stock;
+            
+        $data['stock'] = $stock;
+        $data['page_title'] = "Stock Management";
+        $data['page_description'] = " Stock Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Stock Management', 'path' => 'stock/storckmanagement', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'My Stock';
+
+        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", 0);
+        return view('stock.stock_results')->with($data); 
+         
     }
     
 }
