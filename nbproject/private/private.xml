@@ -4,9 +4,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Afrixcel/work_Space/abs-intranet/app/Http/Controllers/JobcardController.php</file>
+            <file>file:/C:/Users/Afrixcel/work_Space/abs-intranet/app/Http/Controllers/StockController.php</file>
             <file>file:/C:/Users/Afrixcel/work_Space/abs-intranet/resources/views/job_cards/Job_card_details.blade.php</file>
-            <file>file:/C:/Users/Afrixcel/work_Space/abs-intranet/resources/views/job_cards/partials/print_modal.blade.php</file>
+            <file>file:/C:/Users/Afrixcel/work_Space/abs-intranet/resources/views/job_cards/jobcard_audit_report_print.blade.php</file>
             <file>file:/C:/Users/Afrixcel/work_Space/abs-intranet/routes/web.php</file>
+            <file>file:/C:/Users/Afrixcel/work_Space/abs-intranet/resources/views/job_cards/jobcard_report_print.blade.php</file>
         </group>
     </open-files>
 </project-private>

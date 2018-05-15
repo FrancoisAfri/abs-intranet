@@ -723,6 +723,25 @@ class DatabaseSeeder extends Seeder
         // $ribbon->ribbon_path = 'leave/Leave_History_Audit';
         // $ribbon->access_level = 5;
         // $module->addRibbon($ribbon);
+        
+        //####
+        $module = new modules(); //Job card module
+        $module->active = 1;
+        $module->name = 'Stock Management';
+        $module->code_name = 'stock_management';
+        $module->path = 'stockmanagement';
+        $module->font_awesome = 'fa fa-linode';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'My Stock';
+        $ribbon->description = 'My Stock management';
+        $ribbon->ribbon_path = 'stock/storckmanagement';
+        $ribbon->access_level = 1;
+        $module->addRibbon($ribbon);
+        //####
 
         //Help Desk
         $module = new modules();
