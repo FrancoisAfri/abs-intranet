@@ -883,10 +883,7 @@ class JobcardController extends Controller
             ->get();
 		
         $configuration = jobcards_config::first(); 
-        
-        
-	$data['jobcard'] = $jobcard;
-	$data['configuration'] = $configuration;
+	    $data['configuration'] = $configuration;
         $data['users'] = $users;
        // $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['ContactCompany'] = $ContactCompany;
@@ -971,8 +968,7 @@ class JobcardController extends Controller
         AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User", $jobcardnote->id);
         return response()->json();
      }
-       
-   
+     
    //jobcard parts
    
    public function jobcardparts(){
@@ -1131,7 +1127,10 @@ class JobcardController extends Controller
    }
    
    public function viewparts(jobcard_maintanance $jobcardparts ){
-
+      
+      
+       // $parts = jobcard_order_parts::orderBy('id','asc')->get();
+        
         $parts = DB::table('jobcard__order_parts')
         ->select('jobcard__order_parts.*', 'jobcard_parts.*')
         ->leftJoin('jobcard_parts', 'jobcard__order_parts.jobcard_parts_id', '=', 'jobcard_parts.id')
@@ -1176,8 +1175,10 @@ class JobcardController extends Controller
            
         ]);
         $validator->after(function ($validator) use($request) {
-            
-         if ($availblebalance < $SysData['no_of_parts_used']) {
+        
+		$jobcartparts = jobcart_parts::where('id', $request->input('category_id'))->where('category_id' , $request->input('jobcard_parts_id'))->first();
+        $availblebalance = !empty($jobcartparts->no_of_parts_available) ? $jobcartparts->no_of_parts_available : 0 ;
+         if ($availblebalance < $request->input('no_of_parts_used')) {
                $validator->errors()->add('no_of_parts_used', 'this field can be less than the required ');
             }   
         });
@@ -1188,25 +1189,29 @@ class JobcardController extends Controller
 //                ->withInput();
 //        }
         $transactionbalance = $availblebalance - $SysData['no_of_parts_used'];
-                
-        $currentparts = new jobcard_order_parts();
-        $currentparts->jobcard_parts_id =  !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
-        $currentparts->category_id =  !empty($SysData['jobcard_parts_id']) ? $SysData['jobcard_parts_id'] : 0;
-        $currentparts->no_of_parts_used =  !empty($SysData['no_of_parts_used']) ? $SysData['no_of_parts_used'] : 0;
-        $currentparts->jobcard_card_id =  !empty($SysData['jobcard_card_id']) ? $SysData['jobcard_card_id'] : 0;
-        $currentparts->avalaible_transaction = $transactionbalance;
-        $currentparts->created_by = Auth::user()->person->position;
-        $currentparts->date_created = time();
-        $currentparts->status = 1;
-        $currentparts->save();
-        
-        // have to try to limit the user from going beyond 0
-        DB::table('jobcard__order_parts')->where('jobcard_card_id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['avalaible_transaction' => $transactionbalance]);
-                      
-        DB::table('jobcard_parts')->where('id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['no_of_parts_available' => $transactionbalance]);
-                    
-         AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", $currentparts->id);
-        return response()->json(); 
+        if ($transactionbalance > 0)
+		{
+			$currentparts = new jobcard_order_parts();
+			$currentparts->jobcard_parts_id =  !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
+			$currentparts->category_id =  !empty($SysData['jobcard_parts_id']) ? $SysData['jobcard_parts_id'] : 0;
+			$currentparts->no_of_parts_used =  !empty($SysData['no_of_parts_used']) ? $SysData['no_of_parts_used'] : 0;
+			$currentparts->jobcard_card_id =  !empty($SysData['jobcard_card_id']) ? $SysData['jobcard_card_id'] : 0;
+			$currentparts->avalaible_transaction = $transactionbalance;
+			$currentparts->created_by = Auth::user()->person->position;
+			$currentparts->date_created = time();
+			$currentparts->status = 1;
+			$currentparts->save();
+			
+			// have to try to limit the user from going beyond 0
+			DB::table('jobcard__order_parts')->where('jobcard_card_id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['avalaible_transaction' => $transactionbalance]);
+						  
+			DB::table('jobcard_parts')->where('id', $SysData['category_id'])->where('category_id', $SysData['jobcard_parts_id'])->update(['no_of_parts_available' => $transactionbalance]);
+						
+			AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", 0);
+			return response()->json();
+		}
+		else
+			return response()->json(); 
    }
    
    
