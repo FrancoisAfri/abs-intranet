@@ -307,8 +307,7 @@ class JobcardController extends Controller
 
 		$jobcardmaintanance = DB::table('jobcard_maintanance')
 		->select('jobcard_maintanance.*','vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
-			    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
-                            'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
+			    'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make','vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type','service_type.name as servicetype',
                             'hr_people.first_name as firstname', 'hr_people.surname as surname','jobcard_process_flow.step_name as aStatus')
 		->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
 		->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
@@ -841,7 +840,7 @@ class JobcardController extends Controller
 
      public function viewjobcard(jobcard_maintanance $card){
 			
-		$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $servicetype = servicetype::where('status',1)->get();
 		$position = DB::table('hr_positions')->where('status',1)->where('name', 'Mechanic')->first();
 		if (!empty($position))
@@ -877,16 +876,19 @@ class JobcardController extends Controller
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
+            //->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
             ->leftJoin('hr_people as hrp', 'jobcard_maintanance.last_driver_id', '=', 'hrp.id')
             ->where('jobcard_maintanance.id' ,$card->id )     
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();
 		
         $configuration = jobcards_config::first(); 
-	    $data['configuration'] = $configuration;
+        
+        
+	$data['jobcard'] = $jobcard;
+	$data['configuration'] = $configuration;
         $data['users'] = $users;
-        $data['vehiclemaintenance'] = $vehiclemaintenance;
+       // $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['ContactCompany'] = $ContactCompany;
         //$data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['servicetype'] = $servicetype;
@@ -969,8 +971,7 @@ class JobcardController extends Controller
         AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User", $jobcardnote->id);
         return response()->json();
      }
-     
-     
+       
    
    //jobcard parts
    
@@ -1130,10 +1131,7 @@ class JobcardController extends Controller
    }
    
    public function viewparts(jobcard_maintanance $jobcardparts ){
-      
-      
-       // $parts = jobcard_order_parts::orderBy('id','asc')->get();
-        
+
         $parts = DB::table('jobcard__order_parts')
         ->select('jobcard__order_parts.*', 'jobcard_parts.*')
         ->leftJoin('jobcard_parts', 'jobcard__order_parts.jobcard_parts_id', '=', 'jobcard_parts.id')
@@ -1141,7 +1139,6 @@ class JobcardController extends Controller
         ->get();
         
         $cardparts = jobcard_category_parts::orderBy('id','asc')->get();
-       // return $parts;
         $jobcard_category_parts = jobcard_category_parts::orderBy('id','asc')->get()->load(['jobcart_parts_model' => function($query) {
                 $query->orderBy('name', 'asc');
             }]);
