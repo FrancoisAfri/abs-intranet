@@ -17,4 +17,6 @@ class product_category extends Model
      public function addProducttype(product_products $producttype) {
             return $this->productCategory()->save($producttype);
     }
+
+  
 }

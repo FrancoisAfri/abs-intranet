@@ -60,4 +60,22 @@ class product_products extends Model
     {
         return $this->belongsToMany('App\Quotation');
     }
+
+      public static function movproductCategory($whereField, $whereValue, $incInactive) {
+        $model = product_products::where(function ($query) use ($whereValue, $whereField) {
+            if ($whereValue == 0) $query->whereNull($whereField);
+            else $query->where($whereField, $whereValue);
+            //$query->where();
+        })
+           ->where(function ($query) use($incInactive) {
+                if ($incInactive == -1) {
+                    $query->where('status', 1);
+                }
+            })
+
+            ->get()
+            ->sortBy('name')
+            ->pluck('id', 'name');
+        return $model;
+    }
 }

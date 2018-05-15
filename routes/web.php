@@ -696,6 +696,7 @@ Route::get('jobcards/print/{print}', 'JobcardController@printcards');
 
 // stock
 Route::get('stock/storckmanagement', 'StockController@mystock');
+Route::post('stock/stock_search', 'StockController@stock');
 
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
@@ -994,6 +995,7 @@ Route::get('cms/cms_newsrankings/{news}', 'CmsController@cms_Star_rankings');
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
 //General Use (API)
+Route::post('api/productCategorydropdown', 'DropDownAPIController@productCategoryDDID')->name('pcdropdown');
 Route::post('api/jobcategorymodeldropdown', 'DropDownAPIController@jobcategorymomdelDDID')->name('jcmdropdown');
 Route::post('api/vehiclemodeldropdown', 'DropDownAPIController@vehiclemomdeDDID')->name('Vmmdropdown');
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');

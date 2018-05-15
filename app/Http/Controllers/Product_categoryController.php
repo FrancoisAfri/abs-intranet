@@ -81,11 +81,9 @@ class Product_categoryController extends Controller
                    ->first();
 
 
-        $jobCategories = product_category::orderBy('name', 'asc')->get();
-        if (!empty($jobCategories)) {
-            $jobCategories = $jobCategories->load('productCategory');
-            }
-            return $jobCategories;
+           $jobCategories = product_category::orderBy('id', 'asc')->get();
+        
+           // return $jobCategories;
 
             $Category->load('productCategory');
             $data['page_title'] = 'Manage Products Product';
@@ -95,6 +93,8 @@ class Product_categoryController extends Controller
                 ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
             ];
 
+
+            $data['jobCategories'] = $jobCategories;
             $data['userAccess'] = $userAccess;
             $data['products'] = $Category;
             $data['active_mod'] = 'Products';
