@@ -824,6 +824,7 @@ class JobcardController extends Controller
          //return $vehiclemaintenance;
          
         $data['vehiclemaintenance'] = $vehiclemaintenance;
+        $data['jobcard'] = $jobcard;
         $data['page_title'] = "Job Card Search";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
@@ -883,9 +884,9 @@ class JobcardController extends Controller
             ->get();
 		
         $configuration = jobcards_config::first(); 
-	    $data['configuration'] = $configuration;
+	$data['configuration'] = $configuration;
         $data['users'] = $users;
-       // $data['vehiclemaintenance'] = $vehiclemaintenance;
+        $data['jobcard'] = $jobcard;
         $data['ContactCompany'] = $ContactCompany;
         //$data['jobcardmaintanance'] = $jobcardmaintanance;
         $data['servicetype'] = $servicetype;
