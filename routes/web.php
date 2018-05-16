@@ -697,6 +697,8 @@ Route::get('jobcards/print/{print}', 'JobcardController@printcards');
 // stock
 Route::get('stock/storckmanagement', 'StockController@mystock');
 Route::post('stock/stock_search', 'StockController@stock');
+Route::get('stock/stock_allocation', 'StockController@takeout');
+Route::post('stock/stock_out_search', 'StockController@stock');
 
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');

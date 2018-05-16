@@ -53,7 +53,6 @@ class StockController extends Controller
         AuditReportsController::store('Stock Management', 'view Stock Add Page', "Accessed By User", 0);
         return view('stock.search_product')->with($data); 
     }
-    
     public function stock(Request $request){
         
 		$this->validate($request, [
@@ -92,6 +91,27 @@ class StockController extends Controller
 
         AuditReportsController::store('Stock Management', 'Stock Search Page', "Accessed By User", 0);
         return view('stock.stock_results')->with($data); 
-         
     }
+	public function takeout(){
+		
+		$parts  =  stock::Orderby('id','asc')->get();  
+		//return $parts;
+      
+		$productCategories = product_category::orderBy('id', 'asc')->get();
+    
+        $data['productCategories'] = $productCategories;
+        $data['page_title'] = "Stock Management";
+        $data['page_description'] = " Stock Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Stock Management', 'path' => 'stock/storckmanagement', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'My Stock';
+
+        AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
+        return view('stock.search_product_out')->with($data); 
+    }
+ 
 }
