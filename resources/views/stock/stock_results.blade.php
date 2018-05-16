@@ -18,7 +18,7 @@
                 {{ csrf_field() }}
                 {{--<input type="hidden" name="module_id" value="{{ $moduleID }}">--}}
                 <div class="box-header with-border">
-                    <h3 class="box-title">Policy Users for </h3>
+                    <h3 class="box-title">Products Search Results</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -42,30 +42,26 @@
                     <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
-                            <th> Name</th>
+                            <th>Product Name</th>
                             <th style="vertical-align: middle; text-align: center;">Available Number</th>
-                            <th style="vertical-align: middle; text-align: center;">Enter number</th>
+                            <th style="vertical-align: middle; text-align: center;">Enter Number</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($stock as $policyUser)
+                        @foreach($stocks as $stock)
                             <tr>
-
                                 <td style="vertical-align: middle;"
-                                    nowrap>{{ (!empty( $policyUser->name)) ?  $policyUser->name : ''}}</td>
+                                    nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
                                 <td style="vertical-align: middle;"
-                                    nowrap>{{ (!empty( $policyUser->surname)) ?  $policyUser->surname : ''}}</td>
-                                <td style="vertical-align: middle;"
-                                    nowrap>{{ (!empty( $policyUser->Expiry)) ?  date(' d M Y', $policyUser->Expiry) : ''}}</td>
-
-                               
+                                    nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : ''}}</td>
+                                <td style="vertical-align: middle; text-align: center;"
+                                    nowrap><input type="number" class="form-control" name="new_stock" value="" placeholder="Enter Items Number"></td>
                                 @endforeach
                             </tr>
-
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th> Name</th>
+                            <th>Product Name</th>
                             <th style="vertical-align: middle; text-align: center;">Available Number</th>
                             <th style="vertical-align: middle; text-align: center;">Enter number</th>
                         </tr>
@@ -78,7 +74,7 @@
                         Back
                     </button>
                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal"
-                            data-target="#add-user-modal">Add Users
+                            data-target="#add-user-modal">Submit
                     </button>
                 </div>
                 </form>

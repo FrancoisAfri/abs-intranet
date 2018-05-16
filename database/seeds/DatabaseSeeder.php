@@ -736,10 +736,19 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'My Stock';
+        $ribbon->ribbon_name = 'Add Stock';
         $ribbon->description = 'My Stock management';
         $ribbon->ribbon_path = 'stock/storckmanagement';
-        $ribbon->access_level = 1;
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Add Stock';
+        $ribbon->description = 'My Stock management';
+        $ribbon->ribbon_path = 'stock/storckmanagement';
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
         //####
 
