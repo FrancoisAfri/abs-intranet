@@ -63,6 +63,7 @@ class StockController extends Controller
         
         $CategoryID = $SysData['product_id'];
         $ProductID = $SysData['category_id'];
+        
         $stocks = DB::table('Product_products')
                     ->select('Product_products.*','stock.avalaible_stock')
                     ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
@@ -97,7 +98,7 @@ class StockController extends Controller
     }
     
     public function add_stock(Request $request ,product_category $category){
-     $this->validate($request, [
+        $this->validate($request, [
            
         ]);
         $results = $request->all();
@@ -134,5 +135,80 @@ class StockController extends Controller
          }
         AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", 0);
         return back();
+    }
+	public function takeout(){
+		
+	$parts  =  stock::Orderby('id','asc')->get();  
+        $productCategories = product_category::orderBy('id', 'asc')->get();
+    
+        $data['productCategories'] = $productCategories;
+        $data['page_title'] = "Stock Management";
+        $data['page_description'] = " Stock Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Stock Management', 'path' => 'stock/storckmanagement', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'My Stock';
+
+        AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
+        return view('stock.search_product_out')->with($data); 
+    }
+ 
+    public function stockout(Request $request){
+       
+        $this->validate($request, [
+           
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+        
+      //  return $results;
+        
+        $categoryID = $results['product_id'];
+        $productID = $results['category_id'];
+        
+        foreach ($productID as $prodID){
+            
+            
+            $stocks = DB::table('stock')
+                    ->select('stock.*','Product_products.*')
+                    ->leftJoin('Product_products', 'stock.product_id', '=', 'Product_products.id')
+                    ->where(function ($query) use ($categoryID) {
+                        if (!empty($categoryID)) {
+                            $query->where('stock.category_id', $categoryID);
+                        }
+                    })
+                   ->where(function ($query) use ($prodID) {
+                        if (!empty($prodID)) {
+                            $query->where('stock.product_id', $prodID);
+                        }
+                    })
+                    ->get();
+                    
+                  //  return $stocks;
+            
+        }
+        
+        
+       // $stocks   =  stock::Orderby('id','asc')->get();  
+        $Category  = product_category::orderBy('id', 'asc')->get();
+    
+        $data['stocks'] = $stocks ;
+        $data['Category'] = $Category;
+        $data['page_title'] = "Stock Management";
+        $data['page_description'] = " Stock Management";
+        $data['breadcrumb'] = [
+            ['title' => 'Stock Management', 'path' => 'stock/storckmanagement', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'My Stock';
+
+        AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
+        return view('stock.stock_out')->with($data);
     }
 }
