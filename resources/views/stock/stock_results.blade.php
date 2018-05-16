@@ -127,7 +127,7 @@
         }
 
         $('#cancel').click(function () {
-            location.href = '/System/policy/create';
+            location.href = '/stock/storckmanagement';
         });
 
         $(function () {
