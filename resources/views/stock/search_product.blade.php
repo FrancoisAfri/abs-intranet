@@ -46,7 +46,7 @@
                         <div class="col-md-8 col-md-offset-2">
                             <div>
                                 <div class="box-header with-border" align="center">
-                                    <h3 class="box-title">Search for a Vehicle</h3>
+                                    <h3 class="box-title">Search Product</h3>
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 

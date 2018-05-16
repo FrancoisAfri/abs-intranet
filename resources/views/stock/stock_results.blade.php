@@ -14,9 +14,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                {{--<form class="form-horizontal" method="POST" action="/users/update-users-access">--}}
+               <form class="form-horizontal" method="POST" action="/stock/add_stock/{{$Category}}">
                 {{ csrf_field() }}
-                {{--<input type="hidden" name="module_id" value="{{ $moduleID }}">--}}
                 <div class="box-header with-border">
                     <h3 class="box-title">Products Search Results</h3>
                     <div class="box-tools pull-right">
@@ -50,12 +49,14 @@
                         <tbody>
                         @foreach($stocks as $stock)
                             <tr>
-                                <td style="vertical-align: middle;"
+                                <td style="vertical-align: center;"
                                     nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
-                                <td style="vertical-align: middle;"
-                                    nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : ''}}</td>
                                 <td style="vertical-align: middle; text-align: center;"
-                                    nowrap><input type="number" class="form-control" name="new_stock" value="" placeholder="Enter Items Number"></td>
+                                    nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
+                                <td style="vertical-align: middle; text-align: center;"
+                                    nowrap>
+                                    <input type="hidden" class="checkbox selectall"id="newstock{{ $stock->id }}" name="newstock_{{ $stock->id }}" value="0">                                    
+                                    <input type="number" class="form-control" id="newstocks" name="newstocks" value="" placeholder="Enter Items Number"></td>
                                 @endforeach
                             </tr>
                         </tbody>
@@ -73,9 +74,7 @@
                     <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i>
                         Back
                     </button>
-                    <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal"
-                            data-target="#add-user-modal">Submit
-                    </button>
+                    <button type="submit" class="btn btn-warning pull-right"> Submit</button>  
                 </div>
                 </form>
             </div>

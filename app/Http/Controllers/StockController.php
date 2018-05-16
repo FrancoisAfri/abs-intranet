@@ -56,7 +56,7 @@ class StockController extends Controller
     
     public function stock(Request $request){
         
-		$this->validate($request, [
+        $this->validate($request, [
             
         ]);
         $SysData = $request->all();
@@ -65,21 +65,30 @@ class StockController extends Controller
         $CategoryID = $SysData['product_id'];
         $ProductID = $SysData['category_id'];
         
+       // $stok = DB::table('stock')->get();
+        //return $SysData;
+        
         $stocks = DB::table('Product_products')
-            ->select('Product_products.*','stock.avalaible_stock')
-			->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
-            ->where(function ($query) use ($CategoryID) {
-                if (!empty($CategoryID)) {
-                    $query->where('Product_products.category_id', $CategoryID);
-                }
-            })
-			->where(function ($query) use ($ProductID) {
-                if (!empty($ProductID)) {
-                    $query->where('Product_products.id', $ProductID);
-                }
-            })
-            ->get();
+                    ->select('Product_products.*','stock.avalaible_stock')
+                    ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
+                    ->where(function ($query) use ($CategoryID) {
+                        if (!empty($CategoryID)) {
+                            $query->where('Product_products.category_id', $CategoryID);
+                        }
+                    })
+                   ->where(function ($query) use ($ProductID) {
+                        if (!empty($ProductID)) {
+                            $query->where('Product_products.id', $ProductID);
+                        }
+                    })
+                    ->get();
+                    
+                  //  return $stocks;
+                    
+        $Category = $stocks->first()->category_id;
+                    
         $data['stocks'] = $stocks;
+        $data['Category'] = $Category;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
         $data['breadcrumb'] = [
@@ -92,6 +101,46 @@ class StockController extends Controller
 
         AuditReportsController::store('Stock Management', 'Stock Search Page', "Accessed By User", 0);
         return view('stock.stock_results')->with($data); 
+    }
+    
+    public function add_stock(Request $request ,product_category $category){
+     $this->validate($request, [
+           
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+        $newStock = $results['newstocks'];
+        $CategoryID =  $category->id;
+
+         foreach ($results as $key => $sValue) {
+         if (strlen(strstr($key, 'newstock'))) {
+           
+             $aValue = explode("_", $key);
+             $name = $aValue[0];
+             $productID = $aValue[1];
+             //return $productID;
+             $row = stock::count();
+            
+           if ($row > 0 ) {
+              DB::table('stock')->where('product_id', $productID)->update(['avalaible_stock' => $newStock]); 
+             //  return 7;
+             
+           }else{
+             // return $name;
+             $storck = new stock();
+             $storck->avalaible_stock = $newStock;
+             $storck->category_id = $CategoryID;
+             $storck->product_id = $productID;
+             $storck->status = 1;
+             $storck->date_added = time();
+             $storck->save();
+           }
+             				
+         }
          
+         }
+        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", 0);
+        return back();
     }
 }
