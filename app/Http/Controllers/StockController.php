@@ -33,11 +33,10 @@ class StockController extends Controller
     
     public function mystock(){
 		
-		$parts  =  stock::Orderby('id','asc')->get();  
-		//return $parts;
-      
-		$jobCategories = product_category::orderBy('id', 'asc')->get();
-    
+	$parts  =  stock::Orderby('id','asc')->get();  
+		//return $parts   
+	$jobCategories = product_category::orderBy('id', 'asc')->get();
+   
         $data['jobCategories'] = $jobCategories;
         $data['parts'] = $parts;
         $data['page_title'] = "Stock Management";
@@ -64,10 +63,6 @@ class StockController extends Controller
         
         $CategoryID = $SysData['product_id'];
         $ProductID = $SysData['category_id'];
-        
-       // $stok = DB::table('stock')->get();
-        //return $SysData;
-        
         $stocks = DB::table('Product_products')
                     ->select('Product_products.*','stock.avalaible_stock')
                     ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
@@ -82,8 +77,6 @@ class StockController extends Controller
                         }
                     })
                     ->get();
-                    
-                  //  return $stocks;
                     
         $Category = $stocks->first()->category_id;
                     
@@ -123,8 +116,7 @@ class StockController extends Controller
              $row = stock::count();
             
            if ($row > 0 ) {
-              DB::table('stock')->where('product_id', $productID)->update(['avalaible_stock' => $newStock]); 
-             //  return 7;
+              DB::table('stock')->where('product_id', $productID)->where('category_id' , $CategoryID)->update(['avalaible_stock' => $newStock]); 
              
            }else{
              // return $name;
