@@ -47,7 +47,7 @@
                                 @foreach ($jobcardmaintanance as $filling)
                                     <tr style="text-align:center">
                                         <td>
-					  <a href="{{ '/jobcards/viewcard/' . $filling->id }}" id="edit_compan" class="btn btn-warning  btn-xs">View</a></td>
+					                      <a href="{{ '/jobcards/viewcard/' . $filling->id }}" id="edit_compan" class="btn btn-warning  btn-xs">View</a></td>
                                         <td>{{ !empty($filling->jobcard_number ) ? $filling->jobcard_number : '' }}</td>
                                        <td>{{ (!empty( $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model)) 
                                     ?  $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model : ''}} </td>

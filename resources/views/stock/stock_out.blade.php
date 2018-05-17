@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-               <form class="form-horizontal" method="POST" action="/stock/add_stock}">
+               <form class="form-horizontal" method="POST" action="/stock/takestock/{{$Category}}">
                 {{ csrf_field() }}
                 <div class="box-header with-border">
                     <h3 class="box-title">Products Stock Out</h3>
@@ -55,8 +55,7 @@
                                     nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
                                 <td style="vertical-align: middle; text-align: center;"
                                     nowrap>
-                                    <input type="hidden" class="checkbox selectall"id="newstock{{ $stock->id }}" name="newstock_{{ $stock->id }}" value="0">                                    
-                                    <input type="number" class="form-control" id="newstocks" name="newstocks" value="" placeholder="Enter Items Number"></td>
+                                   <input type="number" min="0" class="form-control" id="stock_{{ $stock->id }}" name="stock_{{$stock->id}}" value="" placeholder="Enter Items Number"></td>
                                 @endforeach
                             </tr>
                         </tbody>

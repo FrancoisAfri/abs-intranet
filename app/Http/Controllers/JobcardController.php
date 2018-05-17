@@ -701,7 +701,7 @@ class JobcardController extends Controller
 		}
 		else  {
 //           return redirect('/');
-			return back();
+			//return back();
 			return back()->with('success_edit', "The are not permitted to view this page.");
 		}
 

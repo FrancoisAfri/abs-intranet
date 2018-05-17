@@ -104,23 +104,35 @@ class StockController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-        $newStock = $results['newstocks'];
+        unset($results['emp-list-table_length']);
         $CategoryID =  $category->id;
 
-         foreach ($results as $key => $sValue) {
-         if (strlen(strstr($key, 'newstock'))) {
-           
-             $aValue = explode("_", $key);
-             $name = $aValue[0];
-             $productID = $aValue[1];
-             //return $productID;
-             $row = stock::count();
-            
-           if ($row > 0 ) {
-              DB::table('stock')->where('product_id', $productID)->where('category_id' , $CategoryID)->update(['avalaible_stock' => $newStock]); 
-             
-           }else{
-             // return $name;
+         foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
+
+        foreach ($results as $sKey => $sValue) {
+         if (strlen(strstr($sKey, 'newstock_'))) {
+                list($sUnit, $iID) = explode("_", $sKey);
+              
+                 $productID =  $iID;
+                 $newStock = $sValue;
+               // if (empty($sValue)) $sValue = $sReasonToReject;
+                 
+          $row = stock::where('product_id', $productID)->count();
+         
+          if ($row > 0 ) {
+              
+              // return 1;
+              $currentstock = stock::where('product_id', $productID)->first();
+              $available =  !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0 ;       
+              DB::table('stock')->where('product_id', $productID)->where('category_id' , $CategoryID)->update(['avalaible_stock' => $available + $newStock]);  
+              
+              return redirect('stock/storckmanagement');
+           }else
+
              $storck = new stock();
              $storck->avalaible_stock = $newStock;
              $storck->category_id = $CategoryID;
@@ -128,13 +140,10 @@ class StockController extends Controller
              $storck->status = 1;
              $storck->date_added = time();
              $storck->save();
-           }
-             				
          }
-         
-         }
+        }
         AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", 0);
-        return back();
+      return redirect('stock/storckmanagement');
     }
 	public function takeout(){
 		
@@ -188,13 +197,10 @@ class StockController extends Controller
                     })
                     ->get();
                     
-                  //  return $stocks;
+              $Category = $stocks->first()->category_id;
             
         }
-        
-        
-       // $stocks   =  stock::Orderby('id','asc')->get();  
-        $Category  = product_category::orderBy('id', 'asc')->get();
+ 
     
         $data['stocks'] = $stocks ;
         $data['Category'] = $Category;
@@ -211,4 +217,42 @@ class StockController extends Controller
         AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
         return view('stock.stock_out')->with($data);
     }
+    
+    public function takestockout(Request $request , product_category $category){
+          $this->validate($request, [
+           
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+        unset($results['emp-list-table_length']);
+        $CategoryID =  $category->id;
+
+         foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
+        
+       foreach ($results as $sKey => $sValue) {
+         if (strlen(strstr($sKey, 'stock_'))) {
+                list($sUnit, $iID) = explode("_", $sKey);
+                
+               // return $iID;
+                
+                 $productID =  $iID;
+                 $newStock = $sValue;
+
+              $currentstock = stock::where('product_id', $productID)->first();
+              $available =  !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0 ;       
+              DB::table('stock')->where('product_id', $productID)->where('category_id' , $CategoryID)->update(['avalaible_stock' => $available - $newStock]);  
+                
+            }
+        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", 0);
+         return redirect('stock/storckmanagement');
+                
+       }  
+     }
 }
+ 
+

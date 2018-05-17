@@ -55,8 +55,7 @@
                                     nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
                                 <td style="vertical-align: middle; text-align: center;"
                                     nowrap>
-                                    <input type="hidden" class="checkbox selectall"id="newstock{{ $stock->id }}" name="newstock_{{ $stock->id }}" value="0">                                    
-                                    <input type="number" class="form-control" id="newstocks" name="newstocks" value="" placeholder="Enter Items Number"></td>
+                                    <input type="number" min="0" class="form-control" id="newstock_{{ $stock->id }}" name="newstock_{{$stock->id}}" value="" placeholder="Enter Items Number"></td>
                                 @endforeach
                             </tr>
                         </tbody>
