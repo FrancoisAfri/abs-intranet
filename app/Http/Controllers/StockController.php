@@ -386,9 +386,10 @@ class StockController extends Controller
             $product .= $productArray[$i] . ',';
         }
 
+        $productsID =   rtrim($product, ",");
         $data['product_id'] = rtrim($product, ",");
         $data['CategoryID'] =  $CategoryID;
-        $data['productID'] =  $productID;
+        $data['productsID'] =  $productsID;
         $data['action_date'] = $actionDate;
         $data['stock'] = $stock;
         $data['page_title'] = "Stock Management";
@@ -412,17 +413,16 @@ class StockController extends Controller
         $actionFrom = $actionTo = 0;
 
         
-        return $search;
-       $product = isset($search['category_id']) ? $search['category_id'] : array();
+    //    return $search;
+       $product = isset($search['product_id']) ? $search['product_id'] : array();
 		$productArray = (explode(",",$product));
         $actionFrom = $actionTo = 0;
         $product = '';
 //        $productArray = isset($search['category_id']) ? $search['category_id'] : array();
         $actionDate = $request['action_date'];
-        $CategoryID = $search['CategoryID'];
-        $productID = $search['productID'];
+        $CategoryID = $search['category_id'];
         
-        return $actionDate;
+       // return $actionDate;
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
@@ -453,22 +453,22 @@ class StockController extends Controller
             ->orderBy('id', 'desc')
             ->get();
         
-        //return $stock;
+        return $stock;
 
 //        for ($i = 0; $i < count($productArray); $i++) {
 //            $product .= $productArray[$i] . ',';
 //        }
 
 
-        $data['vehiclebookings'] = $vehiclebookings;
-        $data['page_title'] = " Fleet Management ";
-        $data['page_description'] = "Fleet Cards Report ";
+        $data['stock'] = $stock;
+        $data['page_title'] = "Stock Management";
+        $data['page_description'] = " Stock Management";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Stock Management', 'path' => 'stock/storckmanagement', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Fleet Management';
+        $data['active_mod'] = 'Stock Management';
         $data['active_rib'] = 'Reports';
 
         $companyDetails = CompanyIdentity::systemSettings();
@@ -482,7 +482,7 @@ class StockController extends Controller
         $data['date'] = date("d-m-Y");
         $data['user'] = $user;
 
-        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+         AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
         return view('Vehicles.Reports.booking_report_print')->with($data);
      }
 }

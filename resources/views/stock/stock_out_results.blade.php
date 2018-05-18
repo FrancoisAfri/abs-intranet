@@ -18,10 +18,10 @@
 			<div class="box-body">
 				<div style="overflow-X:auto;">
 				<form class="form-horizontal" method="POST" action="/stock/stock_history/print">
-<!--					<input type="hidden" name="category_id" value="{{!empty($CategoryID) ? $CategoryID : 0}}">-->
-					<input type="hidden" name="product_id" value="{{!empty($product) ? $product : ''}}">
+					<input type="hidden" name="category_id" value="{{!empty($CategoryID) ? $CategoryID : 0}}">
+					<input type="hidden" name="product_id" value="{{!empty($productsID) ? $productsID : ''}}">
 					<input type="hidden" name="action_date" value="{{!empty($actionDate) ? $actionDate : ''}}">				
-					<input type="hidden" name="productID" value="{{!empty($productID) ? $productID : ''}}">				
+								
 					<table id="example2" class="table table-bordered table-hover">
 						<thead>
 						<tr>
