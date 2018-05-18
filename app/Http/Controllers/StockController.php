@@ -8,7 +8,7 @@ use App\permits_licence;
 use App\stockhistory;
 use App\HRPerson;
 use App\stock;
-use App\product_category;
+use App\CompanyIdentity;
 use App\product_products;
 use App\module_access;
 use App\module_ribbons;
@@ -453,7 +453,7 @@ class StockController extends Controller
             ->orderBy('id', 'desc')
             ->get();
         
-        return $stock;
+       // return $stock;
 
 //        for ($i = 0; $i < count($productArray); $i++) {
 //            $product .= $productArray[$i] . ',';
@@ -483,7 +483,7 @@ class StockController extends Controller
         $data['user'] = $user;
 
          AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
-        return view('Vehicles.Reports.booking_report_print')->with($data);
+        return view('stock.stock_report_print')->with($data);
      }
 }
  
