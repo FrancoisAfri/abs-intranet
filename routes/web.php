@@ -696,11 +696,11 @@ Route::get('jobcards/print/{print}', 'JobcardController@printcards');
 
 // stock
 Route::get('stock/storckmanagement', 'StockController@mystock');
-Route::post('stock/stock_search', 'StockController@stockout');
+Route::post('stock/stock_search', 'StockController@stock');
 Route::get('stock/stock_allocation', 'StockController@takeout');
-Route::post('stock/stock_out_search', 'StockController@stockout');
+Route::post('stock/stock_outsearch', 'StockController@stockout');
 Route::post('stock/add_stock/{category}' ,'StockController@add_stock');
-Route::post('stock/takestock/{category}' ,'StockController@takestockout');
+Route::post('stock/takestock' ,'StockController@takestockout');
 
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');

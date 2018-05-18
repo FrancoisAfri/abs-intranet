@@ -142,7 +142,7 @@ class StockController extends Controller
              $storck->save();
          }
         }
-        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", 0);
+        AuditReportsController::store('Stock Management', 'new Stock Added ', "Accessed By User", 0);
       return redirect('stock/storckmanagement');
     }
 	public function takeout(){
@@ -175,13 +175,18 @@ class StockController extends Controller
         unset($results['_token']);
         
       //  return $results;
-        
+        $product = '';
         $categoryID = $results['product_id'];
-        $productID = $results['category_id'];
         
-        foreach ($productID as $prodID){
-            
-            
+        $productID = isset($results['category_id']) ? $results['category_id'] : array();
+        $user = HRPerson::where('status',1)->get();
+        
+        for ($i = 0; $i < count($productID); $i++) {
+                        $product .= $productID[$i] . ',';
+                    }
+            $val = rtrim($product, ",");
+          //  return $val;    
+                
             $stocks = DB::table('stock')
                     ->select('stock.*','Product_products.*')
                     ->leftJoin('Product_products', 'stock.product_id', '=', 'Product_products.id')
@@ -190,20 +195,20 @@ class StockController extends Controller
                             $query->where('stock.category_id', $categoryID);
                         }
                     })
-                   ->where(function ($query) use ($prodID) {
-                        if (!empty($prodID)) {
-                            $query->where('stock.product_id', $prodID);
+                    ->Where(function ($query) use ($val) {
+                        for ($i = 0; $i < count($val); $i++) {
+                            $query->whereOr('stock.product_id', '=', $val);
                         }
                     })
                     ->get();
+                                   
+                   // return $stocks;
                     
-              $Category = $stocks->first()->category_id;
-            
-        }
+     
  
-    
+       // $data['stocks'] = rtrim($product, ",");
         $data['stocks'] = $stocks ;
-        $data['Category'] = $Category;
+        $data['user'] = $user;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
         $data['breadcrumb'] = [
@@ -233,26 +238,33 @@ class StockController extends Controller
                 unset($results[$key]);
             }
         }
+
+        return $results;
         
+         $UserID = $results['user_id'];
+     //foreach ($user  as $UserID){  
+         
        foreach ($results as $sKey => $sValue) {
          if (strlen(strstr($sKey, 'stock_'))) {
                 list($sUnit, $iID) = explode("_", $sKey);
-                
-               // return $iID;
-                
+                  
+                 // return $UserID;  
                  $productID =  $iID;
                  $newStock = $sValue;
 
               $currentstock = stock::where('product_id', $productID)->first();
               $available =  !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0 ;       
-              DB::table('stock')->where('product_id', $productID)->where('category_id' , $CategoryID)->update(['avalaible_stock' => $available - $newStock]);  
+              DB::table('stock')->where('product_id', $productID)->update(['avalaible_stock' => $available - $newStock]);  
                 
-            }
-        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", 0);
+              DB::table('stock')->where('product_id', $productID)->update(['user_id' => $UserID]);  
+                 }
+             }
+          //}
+         AuditReportsController::store('Stock Management', 'Stock taken out', "Accessed By User", 0);
          return redirect('stock/storckmanagement');
                 
        }  
      }
-}
+
  
 

@@ -9,6 +9,7 @@ class stock extends Model
 
     protected $table = 'stock';
 
-    protected $fillable = ['name', 'description', 'status', 'product_id', 'category_id','avalaible_stock','date_added'];
+    protected $fillable = ['name', 'description', 'status', 'product_id',
+    						'category_id','avalaible_stock','date_added','user_id','vehicle_id'];
 
 }

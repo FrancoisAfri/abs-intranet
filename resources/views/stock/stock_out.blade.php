@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-               <form class="form-horizontal" method="POST" action="/stock/takestock/{{$Category}}">
+               <form class="form-horizontal" method="POST" action="/stock/takestock">
                 {{ csrf_field() }}
                 <div class="box-header with-border">
                     <h3 class="box-title">Products Stock Out</h3>
@@ -42,6 +42,7 @@
                         <thead>
                         <tr>
                             <th>Product Name</th>
+                             <th>Employee</th>
                             <th style="vertical-align: middle; text-align: center;">Available Number</th>
                             <th style="vertical-align: middle; text-align: center;">Enter Number</th>
                         </tr>
@@ -51,6 +52,20 @@
                             <tr>
                                 <td style="vertical-align: center;"
                                     nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
+                               <td style="vertical-align: middle; text-align: center;"
+                                    nowrap>
+                                  <div class="form-group">
+                                        <label for="path" class="col-sm-3 control-label">  </label>
+                                        <div class="col-sm-18">
+                                            <select class="form-control select2" style="width: 100%;" id="userid_{{ $stock->id }}" name="userid_{{$stock->id}}">
+                                                <option value="0">*** Select User ***</option>
+                                                @foreach($user as $employee)
+                                                    <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                               </td>
                                 <td style="vertical-align: middle; text-align: center;"
                                     nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
                                 <td style="vertical-align: middle; text-align: center;"
@@ -62,6 +77,7 @@
                         <tfoot>
                         <tr>
                             <th>Product Name</th>
+                            <th style="vertical-align: middle; text-align: center;">Employee</th>
                             <th style="vertical-align: middle; text-align: center;">Available Number</th>
                             <th style="vertical-align: middle; text-align: center;">Enter number</th>
                         </tr>
