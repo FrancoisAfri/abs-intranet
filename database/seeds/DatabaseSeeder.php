@@ -750,6 +750,15 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'stock/stock_allocation';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Stock Reports';
+        $ribbon->ribbon_path = 'stock/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
         //####
 
         //Help Desk

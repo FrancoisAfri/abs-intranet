@@ -27,7 +27,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/stock/stock_outsearch">
+                <form class="form-horizontal" method="POST" action="/stock/search_report">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -46,7 +46,7 @@
                         <div class="col-md-8 col-md-offset-2">
                             <div>
                                 <div class="box-header with-border" align="center">
-                                    <h3 class="box-title">Products Search</h3>
+                                    <h3 class="box-title">Report Search</h3>
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
@@ -73,8 +73,8 @@
                                             </select>
                                         </div>
                                     </div>
-                                   
-<!--                                     <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
+                                    
+                                     <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
                                         <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
@@ -86,7 +86,7 @@
 
                                             </div>
                                         </div>
-                                    </div>-->
+                                    </div>
 
                                 </div>
 
@@ -109,7 +109,9 @@
    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-
+     <!-- Bootstrap date picker -->
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
@@ -166,7 +168,12 @@
             $('#success-action-modal').modal('show');
         });
 
-        
+         //Date Range picker
+            $('.daterangepicker').daterangepicker({
+                format: 'DD/MM/YYYY',
+                endDate: '-1d',
+                autoclose: true
+            });
 
     
     </script>

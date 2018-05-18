@@ -702,6 +702,10 @@ Route::post('stock/stock_outsearch', 'StockController@stockout');
 Route::post('stock/add_stock/{category}' ,'StockController@add_stock');
 Route::post('stock/takestock' ,'StockController@takestockout');
 
+Route::get('stock/reports', 'StockController@viewreports');
+Route::post('stock/stock_history/print', 'StockController@printreport');
+
+Route::post('stock/search_report' ,'StockController@searchreport');
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
