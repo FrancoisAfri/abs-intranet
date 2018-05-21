@@ -110,7 +110,7 @@ class StockController extends Controller
         unset($results['emp-list-table_length']);
         $CategoryID =  $category->id;
         
-        return $results ;
+      //  return $results ;
         
          foreach ($results as $key => $value) {
             if (empty($results[$key])) {
@@ -154,9 +154,12 @@ class StockController extends Controller
               $history->vehicle_id = 0 ;
               $history->save();
               
-              return redirect('stock/storckmanagement');
+              //return redirect('stock/storckmanagement');
            }else
 
+             $newStock = $sValue;
+           
+           return $newStock;
              $storck = new stock();
              $storck->avalaible_stock = $newStock;
              $storck->category_id = $CategoryID;
