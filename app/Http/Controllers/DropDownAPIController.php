@@ -10,6 +10,8 @@ use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
 use App\HRPerson;
 use App\vehiclemodel;
+use App\jobcart_parts;
+use App\product_products;
 use App\appraisalKpas;
 use Illuminate\Http\Request;
 
@@ -167,22 +169,60 @@ class DropDownAPIController extends Controller
         return $contactPeople;
     }
 
-  public function vehiclemomdeDDID(Request $request) {
-    $companyID = (int) $request->input('vehiclemake_id');
-    $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
-    $loadAll = $request->input('load_all');
-    $model = [];
-    if ($loadAll == -1) $model = vehiclemodel::movhedels('vehiclemake_id', $companyID, $incInactive);
-    elseif ($loadAll == 1) {
-        $model = vehiclemodel::where(function ($query) use($incInactive) {
-            if ($incInactive == -1) {
-                $query->where('status', 1);
-            }
-        })->get()
-            ->sortBy('id')
-            ->pluck('id', 'name');
-    }
+        public function vehiclemomdeDDID(Request $request) {
+          $companyID = (int) $request->input('vehiclemake_id');
+          $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
+          $loadAll = $request->input('load_all');
+          $model = [];
+          if ($loadAll == -1) $model = vehiclemodel::movhedels('vehiclemake_id', $companyID, $incInactive);
+          elseif ($loadAll == 1) {
+              $model = vehiclemodel::where(function ($query) use($incInactive) {
+                  if ($incInactive == -1) {
+                      $query->where('status', 1);
+                  }
+              })->get()
+                  ->sortBy('id')
+                  ->pluck('id', 'name');
+          }
 
-    return $model;
-}
+          return $model;
+      }
+
+      public function jobcategorymomdelDDID(Request $request) {
+          $jobcategoryID = (int) $request->input('category_id');
+          $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
+          $loadAll = $request->input('load_all');
+          $model = [];
+          if ($loadAll == -1) $model = jobcart_parts::jobcardmodels('category_id', $jobcategoryID, $incInactive);
+          elseif ($loadAll == 1) {
+              $model = jobcart_parts::where(function ($query) use($incInactive) {
+                  if ($incInactive == -1) {
+                      $query->where('status', 1);
+                  }
+              })->get()
+                  ->sortBy('id')
+                  ->pluck('id', 'name' ,'no_of_parts_available');
+          }
+
+          return $model;
+      }
+      
+      public function productCategoryDDID(Request $request){
+          
+          $jobcategoryID = (int) $request->input('category_id');
+          $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
+          $loadAll = $request->input('load_all');
+          $model = [];
+          if ($loadAll == -1) $model = product_products::movproductCategory('category_id', $jobcategoryID, $incInactive);
+          elseif ($loadAll == 1) {
+              $model = product_products::where(function ($query) use($incInactive) {
+                  if ($incInactive == -1) {
+                      $query->where('status', 1);
+                  }
+              })->get()
+                  ->sortBy('id')
+                  ->pluck('id', 'name');
+          }
+          return $model;
+      }
 }

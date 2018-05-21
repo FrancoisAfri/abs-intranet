@@ -16,7 +16,7 @@
                     <table class="table table-bordered">
                         <tr>
                             {{--<th style="width: 10px"></th>--}}
-                            <th>Name</th>
+                            <th>Nameffffff</th>
                             <th>Description</th>
                             <th>Price</th>
                             <th style="width: 40px"></th>
@@ -24,8 +24,6 @@
                         @if (count($products) > 0)
                             @foreach($products as $product)
                                 <tr id="jobtitles-list">
-                                    {{--<td nowrap>--}}
-                                    {{--</td>--}}
                                     <td>{{ (!empty($product->Prodname)) ?  $product->Prodname : ''}} </td>
                                     <td>{{ (!empty( $product->Proddescription)) ?  $product->Proddescription : ''}} </td>
                                     <td>{{ (!empty( $product->price)) ?  'R' .number_format($product->price, 2) : ''}} </td>

@@ -167,7 +167,6 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
                                     <input type="text" class="form-control daterangepicker" id="action_date"
                                            name="action_date" value="" placeholder="Select Action Date...">
 

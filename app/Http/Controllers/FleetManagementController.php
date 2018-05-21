@@ -41,8 +41,6 @@ class FleetManagementController extends Controller
         $this->middleware('auth');
     }
 
-    
-   
     public function fleetManagent()
     {
         $vehicle = vehicle::orderBy('id', 'asc')->get();

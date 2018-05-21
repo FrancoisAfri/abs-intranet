@@ -656,6 +656,7 @@ Route::patch('jobcards/edit_step/{steps}', 'JobcardController@editprocessflow');
 Route::get('jobcards/process_act/{steps}', 'JobcardController@steps_act');
 
 Route::post('jobcards/addjobcard', 'JobcardController@addjobcardmanagement');
+Route::patch('jobcards/updatejobcard/{jobCard}', 'JobcardController@updateJobCard');
 
 Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
 //Route::get('jobcards/search', 'JobcardController@jobcardsApprovals');
@@ -687,6 +688,24 @@ Route::patch('jobcards/edit_cardparts/{parts}', 'JobcardController@editcardparts
 Route::post('jobcards/delete_jobcards/{parts}', 'JobcardController@deletejobcards');
 
 
+Route::get('jobcard/parts/{jobcardparts}', 'JobcardController@viewparts');
+Route::post('jobcard/addjobparts', 'JobcardController@addjobparts');
+
+
+Route::get('jobcards/print/{print}', 'JobcardController@printcards');
+
+// stock
+Route::get('stock/storckmanagement', 'StockController@mystock');
+Route::post('stock/stock_search', 'StockController@stock');
+Route::get('stock/stock_allocation', 'StockController@takeout');
+Route::post('stock/stock_outsearch', 'StockController@stockout');
+Route::post('stock/add_stock/{category}' ,'StockController@add_stock');
+Route::post('stock/takestock' ,'StockController@takestockout');
+
+Route::get('stock/reports', 'StockController@viewreports');
+Route::post('stock/stock_history/print', 'StockController@printreport');
+
+Route::post('stock/search_report' ,'StockController@searchreport');
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
@@ -864,6 +883,8 @@ Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 Route::post('users/recoverpw', 'UsersController@recoverPassword');
 
+//Route
+
 //Survey (Guest)
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
@@ -982,6 +1003,8 @@ Route::get('cms/cms_newsrankings/{news}', 'CmsController@cms_Star_rankings');
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
 //General Use (API)
+Route::post('api/productCategorydropdown', 'DropDownAPIController@productCategoryDDID')->name('pcdropdown');
+Route::post('api/jobcategorymodeldropdown', 'DropDownAPIController@jobcategorymomdelDDID')->name('jcmdropdown');
 Route::post('api/vehiclemodeldropdown', 'DropDownAPIController@vehiclemomdeDDID')->name('Vmmdropdown');
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');

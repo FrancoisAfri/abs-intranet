@@ -334,14 +334,7 @@
 //
         $(function () {
         
-        
-//        if($maintenance->metre_reading_type == 1)
-//            $('.odometer-field').show();
-//        }else  $('.odometer-field').show();
-       
-           
-            
-            
+ 
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();

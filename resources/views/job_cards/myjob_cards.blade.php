@@ -20,62 +20,61 @@
                     <i class="fa fa-truck pull-right"></i>
                     <h3 class="box-title"> Job Cards </h3>
                 </div>
-                    <div style="overflow-X:auto;">
-                        <table id="example2" class="table table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                    <th style="width: 5px; text-align: center;"></th>
-                                    <th>Job Card #</th>
-                                    <th>Vehicle Name</th>
-                                    <th>Registration</th>
-                                    <th>Job Card Date </th>
-                                    <th>Completion Date</th>
-				    <th style="width: 5px; text-align: center;">Instruction</th>
-                                    <th>Mechanic</th>
-                                    <th>Service Type</th>
-                                    <th>Supplier</th>
-                                    <th>Status</th>
-                                    </tr>
-                            </thead>
-                            <tbody>
-                            @if (count($jobcardmaintanance) > 0)
-                                <ul class="products-list product-list-in-box">
-                                    @foreach ($jobcardmaintanance as $jobcard)
-                                    <tr id="configuration-list">
-                                <td>
-                                  <a href="{{ '/jobcards/viewcard/' . $jobcard->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View</a></td>
-                                </td>  
-			        <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
-                                <td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model)) 
-                                    ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
-                                <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
-                                <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
-                                <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
-                                <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
-                                <td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname . '' . $jobcard->surname : '' }}</td>
-                                <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
-                                <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
-                                <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>									
-                               </tr>
-				@endforeach
-                            @endif
-                            </tbody>
-                            <tfoot>
-                             <tr>
-                                   <th style="width: 5px; text-align: center;"></th>
-                                    <th>Job Card #</th>
-                                    <th>Vehicle Name</th>
-                                    <th>Registration</th>
-                                    <th>Job Card Date </th>
-                                    <th>Completion Date</th>
-				    <th style="width: 5px; text-align: center;">Instruction</th>
-                                    <th>Mechanic</th>
-                                    <th>Service Type</th>
-                                    <th>Supplier</th>
-                                    <th>Status</th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                <div style="overflow-X:auto;">
+					<table id="example2" class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th style="width: 5px; text-align: center;"></th>
+								<th>Job Card #</th>
+								<th>Vehicle Name</th>
+								<th>Registration</th>
+								<th>Job Card Date </th>
+								<th>Completion Date</th>
+								<th style="width: 5px; text-align: center;">Instruction</th>
+								<th>Mechanic</th>
+								<th>Service Type</th>
+								<th>Supplier</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							@if (count($jobcardmaintanance) > 0)
+								<ul class="products-list product-list-in-box">
+								@foreach ($jobcardmaintanance as $jobcard)
+									<tr id="configuration-list">
+										<td>
+										  <a href="{{ '/jobcards/viewcard/' . $jobcard->id }}" id="edit_compan" class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View</a></td> 
+										<td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
+										<td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model)) 
+											?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
+										<td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
+										<td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
+										<td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
+										<td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
+										<td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname . '' . $jobcard->surname : '' }}</td>
+										<td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
+										<td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
+										<td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>									
+									</tr>
+								@endforeach
+							@endif
+						</tbody>
+						<tfoot>
+							<tr>
+							   <th style="width: 5px; text-align: center;"></th>
+								<th>Job Card #</th>
+								<th>Vehicle Name</th>
+								<th>Registration</th>
+								<th>Job Card Date </th>
+								<th>Completion Date</th>
+								<th style="width: 5px; text-align: center;">Instruction</th>
+								<th>Mechanic</th>
+								<th>Service Type</th>
+								<th>Supplier</th>
+								<th>Status</th>
+							</tr>
+						</tfoot>
+					</table>
 					<!-- /.box-body -->
 					<div class="box-footer">
 						<button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-jobcard-modal"
@@ -235,7 +234,7 @@ $(function () {
 		modal.find('#card_date').val(card_date);
 	});
 	
-	//Post perk form to server using ajax (add)
+	//Post form to server using ajax (add)
 	$('#add_jobcardtypes').on('click', function () {
 		var strUrl = '/jobcards/addjobcard';
 		var formName = 'add-jobcard-form';

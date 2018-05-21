@@ -723,6 +723,43 @@ class DatabaseSeeder extends Seeder
         // $ribbon->ribbon_path = 'leave/Leave_History_Audit';
         // $ribbon->access_level = 5;
         // $module->addRibbon($ribbon);
+        
+        //####
+        $module = new modules(); //Job card module
+        $module->active = 1;
+        $module->name = 'Stock Management';
+        $module->code_name = 'stock_management';
+        $module->path = 'stockmanagement';
+        $module->font_awesome = 'fa fa-linode';
+        $module->save();
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Add Stock';
+        $ribbon->description = 'My Stock management';
+        $ribbon->ribbon_path = 'stock/storckmanagement';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+	$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Allocate Stock';
+        $ribbon->description = 'Stock Allocation';
+        $ribbon->ribbon_path = 'stock/stock_allocation';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Stock Reports';
+        $ribbon->ribbon_path = 'stock/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+        //####
 
         //Help Desk
         $module = new modules();
@@ -1191,17 +1228,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'jobcards/search';
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
-        
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 5;
-        $ribbon->ribbon_name = 'Reports';
-        $ribbon->description = 'reports';
-        $ribbon->ribbon_path = 'jobcards/reports';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-        
-        
+		
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 5;
@@ -1211,10 +1238,18 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
         
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 6;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'reports';
+        $ribbon->ribbon_path = 'jobcards/reports';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
         
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 6;
+        $ribbon->sort_order = 7;
         $ribbon->ribbon_name = 'SetUp';
         $ribbon->description = 'setUp';
         $ribbon->ribbon_path = 'jobcards/set_up';

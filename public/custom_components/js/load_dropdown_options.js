@@ -372,19 +372,19 @@ function loadContactPeopleOptions(ddID, selectedOption, companyID, incInactive, 
 // 
 // // **********************************************
 
-/* function to load contact people drop down options */
-function vehiclemakeDDOnChange(dropDownObj, vehiclemomdeDDID, selectedOption) {
-   // console.log('gets here');
-    vehiclemomdeDDID = vehiclemomdeDDID || 'vehiclemake_id';
-    selectedOption = selectedOption || '';
+/* function to load vehicle make  drop down options */
+    function vehiclemakeDDOnChange(dropDownObj, vehiclemomdeDDID, selectedOption) {
+        console.log('gets here');
+        vehiclemomdeDDID = vehiclemomdeDDID || 'vehiclemake_id';
+        selectedOption = selectedOption || '';
 
-    var postTo = '';
-    //var ddID = dropDownObj.id;
-    var makeID = dropDownObj.value;
-    var incInactive = -1;
-    var loadAll = -1;
-    loadVehicleModelOptions(vehiclemomdeDDID, selectedOption, makeID);
-}
+        var postTo = '';
+        //var ddID = dropDownObj.id;
+        var makeID = dropDownObj.value;
+        var incInactive = -1;
+        var loadAll = -1;
+        loadVehicleModelOptions(vehiclemomdeDDID, selectedOption, makeID);
+    }
 
 /* function to load Contact People drop down options */
 function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, loadAll, postTo) {
@@ -416,6 +416,109 @@ function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, load
                 });
             }
         });
+        
+        
 }
 
-//   
+//
+// 
+// // **********************************************
+
+    /* function to load job card categories drop down options */
+    function categorypartDDOnChange(dropDownObj, jobcategorymomdelDDID, selectedOption) {
+        console.log('gets here');
+        jobcategorymomdelDDID = jobcategorymomdelDDID || 'category_id';
+        selectedOption = selectedOption || '';
+
+        var postTo = '';
+        //var ddID = dropDownObj.id;
+        var categoryID = dropDownObj.value;
+        var incInactive = -1;
+        var loadAll = -1;
+        loadjobcardpartsModelOptions(jobcategorymomdelDDID, selectedOption, categoryID);
+    }
+
+
+    /* function to load Contact People drop down options */
+    function loadjobcardpartsModelOptions(ddID, selectedOption, categoryID, incInactive, loadAll, postTo) {
+        loadAll = loadAll || -1;
+        incInactive = incInactive || -1;
+        postTo = postTo || '/api/jobcategorymodeldropdown';
+
+        //var parentDDVal = $('#'+parentDDID).val();
+        //var ddLabel = 'a Company';
+        //var divLvl = parseInt(parentDDID.substr(parentDDID.lastIndexOf("_") + 1));
+        $.post(postTo, { category_id: categoryID, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
+            function(data) {
+                var dropdown = $('#'+ddID);
+                var firstDDOption = "*** Select a Part ***";
+                if (categoryID == '') firstDDOption = "*** Select a Catergory First ***";
+                dropdown.empty();
+                dropdown
+                    .append($("<option></option>")
+                        .attr("value",'')
+                        .text(firstDDOption));
+                if (categoryID != '') {
+                    $.each(data, function(key, value) {
+                        var ddOption = $("<option></option>")
+                            .attr("value",value)
+                            .text(key);
+                        if (selectedOption == value) ddOption.attr("selected", "selected");
+                        dropdown
+                            .append(ddOption);
+                    });
+                }
+            });    
+
+    }
+
+//
+// 
+// // **********************************************
+
+    /* function to load job card categories drop down options */
+    function productcategoryDDOnChange(dropDownObj, productCategoryDDID, selectedOption) {
+        console.log('gets here');
+        productCategoryDDID = productCategoryDDID || 'category_id';
+        selectedOption = selectedOption || '';
+
+        var postTo = '';
+        //var ddID = dropDownObj.id;
+        var procategoryID = dropDownObj.value;
+        var incInactive = -1;
+        var loadAll = -1;
+        loadproductcategoryModelOptions(productCategoryDDID, selectedOption, procategoryID);
+    }
+
+
+    /* function to load Contact People drop down options */
+    function loadproductcategoryModelOptions(ddID, selectedOption, procategoryID, incInactive, loadAll, postTo) {
+        loadAll = loadAll || -1;
+        incInactive = incInactive || -1;
+        postTo = postTo || '/api/productCategorydropdown';
+        //var parentDDVal = $('#'+parentDDID).val();
+        //var ddLabel = 'a Company';
+        //var divLvl = parseInt(parentDDID.substr(parentDDID.lastIndexOf("_") + 1));
+        $.post(postTo, { category_id: procategoryID, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
+            function(data) {
+                var dropdown = $('#'+ddID);
+                var firstDDOption = "*** Select a Category ***";
+                if (procategoryID == '') firstDDOption = "*** Select a Catergory First ***";
+                dropdown.empty();
+                dropdown
+                    .append($("<option></option>")
+                        .attr("value",'')
+                        .text(firstDDOption));
+                if (procategoryID != '') {
+                    $.each(data, function(key, value) {
+                        var ddOption = $("<option></option>")
+                            .attr("value",value)
+                            .text(key);
+                        if (selectedOption == value) ddOption.attr("selected", "selected");
+                        dropdown
+                            .append(ddOption);
+                    });
+                }
+            });    
+
+    }

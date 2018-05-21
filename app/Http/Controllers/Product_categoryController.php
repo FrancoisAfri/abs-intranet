@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\HRPerson;
 use App\User;
+use App\modules;
 use App\JobCategory;
 use App\doc_type;
 use App\product_category;
@@ -16,7 +17,13 @@ use App\packages_product_table;
 // use App\product_category;
 use Illuminate\Support\Facades\DB;
 use App\ProductServiceSettings;
-
+use App\Mail\confirm_collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 class Product_categoryController extends Controller
 {
 	
@@ -64,7 +71,20 @@ class Product_categoryController extends Controller
 
     public function productView(Product_category $Category)
     {
+      
         if ($Category->status == 1) {
+
+         $userAccess = DB::table('security_modules_access')
+                   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                   ->where('code_name', 'quote')
+                   ->where('user_id', Auth::user()->person->user_id)
+                   ->first();
+
+
+           $jobCategories = product_category::orderBy('id', 'asc')->get();
+        
+           // return $jobCategories;
+
             $Category->load('productCategory');
             $data['page_title'] = 'Manage Products Product';
             $data['page_description'] = 'Products page';
@@ -72,6 +92,10 @@ class Product_categoryController extends Controller
                 ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
             ];
+
+
+            $data['jobCategories'] = $jobCategories;
+            $data['userAccess'] = $userAccess;
             $data['products'] = $Category;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
@@ -357,13 +381,15 @@ class Product_categoryController extends Controller
         $documentType->name = $docData['name'];
         $documentType->description = $docData['description'];
         $documentType->price = $docData['price'];
+         $documentType->product_code = $docData['product_code'];
         $documentType->save();
 
         $newName = $docData['name'];
         $newDescription = $docData['description'];
         $newPrice = $docData['price'];
+        $newProductcode = $docData['product_code'];
         AuditReportsController::store('Products', 'product created', 'Edited by User', 0);
-        return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice], 200);
+        return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice , 'product_code' => $newProductcode], 200);
     }
 
     public function editProduct(Request $request, product_products $product)
