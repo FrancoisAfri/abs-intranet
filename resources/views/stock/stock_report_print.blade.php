@@ -66,7 +66,7 @@
                     </thead>
                     <tbody>
                     @if (count($stock) > 0)
-                        @foreach($stock as $fine)
+                        @foreach($stock as $booking)
                             <tr>
                                 <td>{{ (!empty($booking->product_name)) ? $booking->product_name : ''}} </td>
 			        <td>{{ (!empty($booking->action_date)) ? date(' d M Y', $booking->action_date) : ''}} </td>

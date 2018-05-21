@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Users;
-use App\permits_licence;
+use App\product_category;
 use App\stockhistory;
 use App\HRPerson;
 use App\stock;
