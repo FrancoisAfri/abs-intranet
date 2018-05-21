@@ -110,7 +110,7 @@ class StockController extends Controller
         unset($results['emp-list-table_length']);
         $CategoryID =  $category->id;
         
-        return $results;
+        return $results ;
         
          foreach ($results as $key => $value) {
             if (empty($results[$key])) {
@@ -127,9 +127,11 @@ class StockController extends Controller
                  $newStock = $sValue;
                // if return $request; (empty($sValue)) $sValue = $sReasonToReject;
                $proID = isset($iID) ? $iID : array();
-                 return $proID;
+               $productID =  $proID;
+               
+              // return $proID;
                  
-        foreach ($proID as $productID){
+       // foreach ($proID as $productID){
             $row = stock::where('product_id', $productID)->count();
          
           if ($row > 0 ) {
@@ -144,7 +146,11 @@ class StockController extends Controller
               $history->category_id = $CategoryID;
               $history->avalaible_stock =  $available + $newStock ;
               $history->action_date = time();
+              $history->balance_before = $available;
+              $history->balance_after = $available + $newStock;
+              $history->action = 'new storck added';
               $history->user_id = Auth::user()->person->id;
+              $history->user_allocated_id = 0;
               $history->vehicle_id = 0 ;
               $history->save();
               
@@ -166,12 +172,15 @@ class StockController extends Controller
               $history->product_id = $productID;
               $history->category_id = $CategoryID;
               $history->avalaible_stock =  $available + $newStock ;
+              $history->balance_before = $available;
+              $history->balance_after = $available + $newStock;
               $history->action_date = time();
               $history->user_id = Auth::user()->person->id;
               $history->action = 'new storck added';
+              $history->user_allocated_id = 0;
               $history->vehicle_id = 0 ;
               $history->save();
-                 }
+                // }
                  
          }
         }
@@ -305,6 +314,10 @@ class StockController extends Controller
               $history->avalaible_stock =  $available - $newStock ;
               $history->action_date = time();
               $history->user_id = Auth::user()->person->id;
+              $history->user_allocated_id = $UserID;
+              $history->balance_before = $available;
+              $history->balance_after = $available - $newStock;
+              $history->action = 'stock taken out';
               $history->vehicle_id = 0 ;
               $history->save();
                  }
@@ -453,7 +466,8 @@ class StockController extends Controller
             ->orderBy('id', 'desc')
             ->get();
         
-       // return $stock;
+       //
+       //  return $stock;
 
 //        for ($i = 0; $i < count($productArray); $i++) {
 //            $product .= $productArray[$i] . ',';

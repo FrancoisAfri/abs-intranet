@@ -55,37 +55,39 @@
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                       <th>Product name</th>
+                        <th>Product name</th>
 			<th>Date </th>
 			<th>Action Performed</th>
 			<th>Performed By</th>
-			<th>Available balance Before </th>
-			<th>Available balance After </th>
-
+			<th>Allocated to </th>
+			<th>Available Balance Before </th>
+			<th>Available Balance After </th>
                     </tr>
                     </thead>
                     <tbody>
                     @if (count($stock) > 0)
-                        @foreach($stock as $booking)
+                        @foreach($stock as $stocktake)
                             <tr>
-                                <td>{{ (!empty($booking->product_name)) ? $booking->product_name : ''}} </td>
-			        <td>{{ (!empty($booking->action_date)) ? date(' d M Y', $booking->action_date) : ''}} </td>
-				<td>{{ (!empty($booking->action)) ? $booking->action : ''}} </td>
-				<td>{{ (!empty($booking->name)&& !empty($booking->surname)) ? $booking->name." ".$booking->surname: ''}} </td>
-				<td>{{ (!empty($booking->apr_firstname)&& !empty($booking->apr_surname)) ? $booking->apr_firstname." ".$booking->apr_surname: ''}} </td>
-				<td style="text-align: center">{{ (!empty( $booking->start_mileage_id)) ?  $booking->start_mileage_id : ''}} </td>
+                                <td>{{ (!empty($stocktake->product_name)) ? $stocktake->product_name : ''}} </td>
+				<td>{{ (!empty($stocktake->action_date)) ? date(' d M Y', $stocktake->action_date) : ''}} </td>
+				<td>{{ (!empty($stocktake->action)) ? $stocktake->action : ''}} </td>
+				<td>{{ (!empty($stocktake->name)&& !empty($stocktake->surname)) ? $stocktake->name." ".$stocktake->surname: ''}} </td>
+                                <td></td>
+			        <td>{{ (!empty($stocktake->balance_before)) ? $stocktake->balance_before : 0}} </td>
+                                <td>{{ (!empty($stocktake->balance_after)) ? $stocktake->balance_after : 0}} </td>
                             </tr>
                         @endforeach
                     @endif
                     </tbody>
                     <tfoot>
                     <tr>
-                       <th>Product name</th>
+                        <th>Product name</th>
 			<th>Date </th>
 			<th>Action Performed</th>
 			<th>Performed By</th>
-			<th>Available balance Before </th>
-			<th>Available balance After </th>
+			<th>Allocated to </th>
+			<th>Available Balance Before </th>
+			<th>Available Balance After </th>
                     </tr>
                     </tfoot>
                     <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
