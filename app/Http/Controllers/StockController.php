@@ -103,9 +103,7 @@ class StockController extends Controller
         ]);
         $results = $request->all();
         //Exclude empty fields from query
-        
-         
-         
+          
         unset($results['_token']);
         unset($results['emp-list-table_length']);
         $CategoryID =  $category->id;
@@ -129,14 +127,14 @@ class StockController extends Controller
                $proID = isset($iID) ? $iID : array();
                $productID =  $proID;
                
-              // return $proID;
+             //  return $results;
                  
        // foreach ($proID as $productID){
             $row = stock::where('product_id', $productID)->count();
          
           if ($row > 0 ) {
               
-              // return 1;
+             // return 1;
               $currentstock = stock::where('product_id', $productID)->first();
               $available =  !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0 ;       
               DB::table('stock')->where('product_id', $productID)->where('category_id' , $CategoryID)->update(['avalaible_stock' => $available + $newStock]);  
@@ -157,9 +155,9 @@ class StockController extends Controller
               //return redirect('stock/storckmanagement');
            }else
 
-             $newStock = $sValue;
+           //  $newStock = $sValue;
            
-           return $newStock;
+         //  return $newStock;
              $storck = new stock();
              $storck->avalaible_stock = $newStock;
              $storck->category_id = $CategoryID;
