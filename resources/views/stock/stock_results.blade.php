@@ -56,7 +56,7 @@
                                 <td style="vertical-align: middle; text-align: center;"
                                     nowrap>
                                     
-                                    <input type="number" min="0" class="form-control" id="newstock_{{ $stock->id }}" name="newstock_{{$stock->id}}" value="" placeholder="Enter Items Number"></td>
+                                    <input type="number" min="0" class="form-control" id="newstock_{{ $stock->id }}_{{$stock->category_id}}" name="newstock_{{$stock->id}}_{{$stock->category_id}}" value="" placeholder="Enter Items Number"></td>
                                    
                                 @endforeach
                             </tr>
