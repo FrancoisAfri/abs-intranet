@@ -204,7 +204,7 @@ class StockController extends Controller
         ];
 
         $data['active_mod'] = 'Stock Management';
-        $data['active_rib'] = 'My Stock';
+        $data['active_rib'] = 'Allocate Stock';
 
         AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
         return view('stock.search_product_out')->with($data); 
@@ -219,7 +219,7 @@ class StockController extends Controller
         //Exclude empty fields from query
         unset($results['_token']);
         
-      //  return $results;
+      // return $results;
         $product = '';
         $categoryID = $results['product_id'];
         
@@ -247,7 +247,7 @@ class StockController extends Controller
                     })
                     ->get();
                                    
-                   // return $stocks;
+              //    return $stocks;
                     
      
  
@@ -276,7 +276,7 @@ class StockController extends Controller
         //Exclude empty fields from query
         unset($results['_token']);
         unset($results['emp-list-table_length']);
-        $CategoryID =  $category->id;
+       
 
          foreach ($results as $key => $value) {
             if (empty($results[$key])) {
@@ -292,26 +292,25 @@ class StockController extends Controller
        foreach ($results as $sKey => $sValue) {
            
          if (strlen(strstr($sKey, 'stock_'))) {
-            list($sUnit, $iID) = explode("_", $sKey);
+            list($sUnit, $iID, $cID) = explode("_", $sKey);
                  
-                   
-               // $result = $results['userid'];
-                
+            
+              
                    $user =  'userid' . '_' . $iID;
                    $UserID = isset($request[$user]) ? $request[$user] : 0;
                  
                  $productID =  $iID;
                  $newStock = $sValue;
-
+                 $CategoryID = $cID;
+                    
               $currentstock = stock::where('product_id', $productID)->first();
               $available =  !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0 ;       
-              DB::table('stock')->where('product_id', $productID)->update(['avalaible_stock' => $available - $newStock]);  
-                
-              DB::table('stock')->where('product_id', $productID)->update(['user_id' => $UserID]);  
+              DB::table('stock')->where('product_id', $productID)->where('category_id' , $CategoryID)->update(['avalaible_stock' => $available - $newStock]);  
+              DB::table('stock')->where('product_id', $productID)->where('category_id',$CategoryID)->update(['user_id' => $UserID]);  
               
               $history = new stockhistory();
               $history->product_id = $productID;
-              $history->category_id = 0;
+              $history->category_id = $CategoryID;
               $history->avalaible_stock =  $available - $newStock ;
               $history->action_date = time();
               $history->user_id = Auth::user()->person->id;
@@ -373,8 +372,10 @@ class StockController extends Controller
         }
         
        
-        $stock = stockhistory::select('stock_history.*','Product_products.name as product_name','hr_people.first_name as name','hr_people.surname as surname')
+        $stock = stockhistory::select('stock_history.*','Product_products.name as product_name','hr_people.first_name as name',
+                'hr_people.surname as surname','hr.first_name as allocated_firstname','hr.surname as allocated_surname')
             ->leftJoin('hr_people', 'stock_history.user_id', '=', 'hr_people.id')
+            ->leftJoin('hr_people as hr', 'stock_history.user_allocated_id', '=', 'hr.id')
             ->leftJoin('Product_products', 'stock_history.product_id', '=', 'Product_products.id')
             ->where(function ($query) use ($CategoryID) {
                 if (!empty($CategoryID)) {
@@ -394,7 +395,7 @@ class StockController extends Controller
             ->orderBy('id', 'desc')
             ->get();
         
-        //return $stock;
+       // return $stock;
 
         for ($i = 0; $i < count($productArray); $i++) {
             $product .= $productArray[$i] . ',';

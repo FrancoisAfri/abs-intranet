@@ -696,7 +696,7 @@ Route::get('jobcards/print/{print}', 'JobcardController@printcards');
 
 // stock
 Route::get('stock/storckmanagement', 'StockController@mystock');
-Route::post('stock/stock_search', 'StockController@stock');
+Route::post('stock/stock_search', 'StockController@stockout');
 Route::get('stock/stock_allocation', 'StockController@takeout');
 Route::post('stock/stock_outsearch', 'StockController@stockout');
 Route::post('stock/add_stock/{category}' ,'StockController@add_stock');
