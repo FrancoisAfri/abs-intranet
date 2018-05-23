@@ -19,6 +19,7 @@ use App\processflow;
 use App\jobcardnote;
 use App\jobcards_config;
 use App\CompanyIdentity;
+use App\stock;
 use App\module_access;
 use App\module_ribbons;
 use App\modules;
@@ -1131,6 +1132,15 @@ class JobcardController extends Controller
       
       
        // $parts = jobcard_order_parts::orderBy('id','asc')->get();
+       
+       $parts =   DB::table('Product_products')
+            ->select('Product_products.*', 'stock.avalaible_stock')
+            ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
+         //   ->where('Product_products.stock_type' ,1, 3)   
+            ->where('Product_products.stock_type' ,3)   
+            ->get();
+       
+       return $parts;
         
         $parts = DB::table('jobcard__order_parts')
         ->select('jobcard__order_parts.*', 'jobcard_parts.*')

@@ -16,7 +16,7 @@
                     <table class="table table-bordered">
                         <tr>
                             {{--<th style="width: 10px"></th>--}}
-                            <th>Nameffffff</th>
+                            <th>Name</th>
                             <th>Description</th>
                             <th>Price</th>
                             <th style="width: 40px"></th>

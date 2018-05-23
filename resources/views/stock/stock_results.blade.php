@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-               <form class="form-horizontal" method="POST" action="/stock/add_stock/{{$Category}}">
+               <form class="form-horizontal" method="POST" action="/stock/add_stock">
                 {{ csrf_field() }}
                 <div class="box-header with-border">
                     <h3 class="box-title">Products Search Results</h3>

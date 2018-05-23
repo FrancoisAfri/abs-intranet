@@ -59,13 +59,15 @@ class StockController extends Controller
     {
 
         $this->validate($request, [
-
+            'product_id' => 'bail|required',
+            'category_id' => 'bail|required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
+       
         $CategoryID = $SysData['product_id'];
         $ProductID = $SysData['category_id'];
+        $stockID = $SysData['stock_type'];
 
         $stocks = DB::table('Product_products')
             ->select('Product_products.*', 'stock.avalaible_stock')
@@ -80,15 +82,21 @@ class StockController extends Controller
                     $query->where('Product_products.id', $ProductID);
                 }
             })
+            ->where(function ($query) use ($stockID) {
+                if (!empty($stockID)) {
+                    $query->where('Product_products.stock_type', $stockID);
+                }
+            })
+          //  ->whereIn('Product_products', 1,3)
             ->orderBy('Product_products','asc')
             ->get();
             
-           // return $stocks;
+         // return $stocks;
 
-        $Category = $stocks->first()->category_id;
+       // $Category = $stocks->first()->category_id;
 
         $data['stocks'] = $stocks;
-        $data['Category'] = $Category;
+       // $data['Category'] = $Category;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
         $data['breadcrumb'] = [
