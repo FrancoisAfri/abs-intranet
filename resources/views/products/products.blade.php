@@ -12,12 +12,11 @@
                     {{ method_field('PATCH') }}
                 <!-- /.box-header -->
                 <div class="box-body">
-
-				<table class="table table-bordered">
-					 <tr><th style="width: 10px">#</th>
-                     <th>Name</th>
-                     <th>Description</th>
-                     <th>Product Code</th>
+                            <table class="table table-bordered">
+                            <tr><th style="width: 10px">#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Product Code</th>
                      @if (isset($userAccess) && $userAccess->access_level > 1)
                      <th>Price</th>
                       @else
@@ -120,6 +119,7 @@
                     description: $('#'+modalID).find('#description').val(),
                     price: $('#'+modalID).find('#price').val(),
                     product_code: $('#'+modalID).find('#product_code').val(),
+                    stock_type: $('#'+modalID).find('#stock_type').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-product_title';

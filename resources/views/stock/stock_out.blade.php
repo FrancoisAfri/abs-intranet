@@ -70,7 +70,7 @@
                                     nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
                                 <td style="vertical-align: middle; text-align: center;"
                                     nowrap>
-                                   <input type="number" min="0" class="form-control" id="stock_{{ $stock->id }}" name="stock_{{$stock->id}}" value="" placeholder="Enter Items Number"></td>
+                                   <input type="number" min="0" class="form-control" id="stock_{{ $stock->id }}_{{$stock->category_id}}}" name="stock_{{$stock->id}}_{{$stock->category_id}}" value="" placeholder="Enter Items Number"></td>
                                 @endforeach
                             </tr>
                         </tbody>

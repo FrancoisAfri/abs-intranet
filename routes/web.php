@@ -699,7 +699,7 @@ Route::get('stock/storckmanagement', 'StockController@mystock');
 Route::post('stock/stock_search', 'StockController@stock');
 Route::get('stock/stock_allocation', 'StockController@takeout');
 Route::post('stock/stock_outsearch', 'StockController@stockout');
-Route::post('stock/add_stock/{category}' ,'StockController@add_stock');
+Route::post('stock/add_stock' ,'StockController@add_stock');
 Route::post('stock/takestock' ,'StockController@takestockout');
 
 Route::get('stock/reports', 'StockController@viewreports');

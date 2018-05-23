@@ -31,13 +31,29 @@
 					<div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Product Price</label>
                              <div class="col-sm-8">
-								<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
+				<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Product Code</label>
                              <div class="col-sm-8">
                                 <input type="text" class="form-control" id="product_code" name="product_code" value="" placeholder="Enter Product Code" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fuel_type" class="col-sm-2 control-label">Stock Type</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-filter"></i>
+                                </div>
+                                <select id="stock_type" name="stock_type" class="form-control">
+                                    <option value="0">*** Select product Type ***</option>
+                                    <option value="1"> Stock Item</option>
+                                    <option value="2"> non Stock Item </option>
+                                    <option value="3"> Bought </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
