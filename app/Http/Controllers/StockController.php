@@ -159,7 +159,7 @@ class StockController extends Controller
 
              $newStock = $sValue;
            
-           return $newStock;
+           //return $newStock;
              $storck = new stock();
              $storck->avalaible_stock = $newStock;
              $storck->category_id = $CategoryID;
