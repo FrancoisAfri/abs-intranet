@@ -72,7 +72,7 @@ class product_products extends Model
                     $query->where('status', 1);
                 }
             })
-
+            ->whereBetween('Product_products.stock_type' ,[1,3] )   
             ->get()
             ->sortBy('name')
             ->pluck('id', 'name');

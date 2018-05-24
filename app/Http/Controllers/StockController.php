@@ -144,7 +144,7 @@ class StockController extends Controller
 
                  $CategoryID = $cID;
                 $row = stock::where('product_id', $productID)->where('category_id' ,$CategoryID )->count();
-            $storck = new stock();
+                $storck = new stock();
                 if ($row > 0) {
 
                    // return 1;

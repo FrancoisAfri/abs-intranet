@@ -8,7 +8,7 @@ use App\permits_licence;
 use App\servicetype;
 use App\HRPerson;
 use App\vehicle;
-use App\vehicle_config;
+use App\product_category;
 use App\jobcard_order_parts;
 use App\jobcart_parts;
 use App\AuditTrail;
@@ -1132,21 +1132,22 @@ class JobcardController extends Controller
       
       
        // $parts = jobcard_order_parts::orderBy('id','asc')->get();
+        $parts = stock::Orderby('id', 'asc')->get();
+        $jobCategories = product_category::orderBy('id', 'asc')->get();
+       // return $jobCategories;
        
-       $parts =   DB::table('Product_products')
+        $parts =   DB::table('Product_products')
             ->select('Product_products.*', 'stock.avalaible_stock')
             ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
-         //   ->where('Product_products.stock_type' ,1, 3)   
-            ->where('Product_products.stock_type' ,3)   
+            ->whereBetween('Product_products.stock_type' ,[1,3] )     
             ->get();
        
-       return $parts;
         
-        $parts = DB::table('jobcard__order_parts')
-        ->select('jobcard__order_parts.*', 'jobcard_parts.*')
-        ->leftJoin('jobcard_parts', 'jobcard__order_parts.jobcard_parts_id', '=', 'jobcard_parts.id')
-        ->where('jobcard__order_parts.jobcard_card_id' , $jobcardparts->id)
-        ->get();
+//        $parts = DB::table('jobcard__order_parts')
+//        ->select('jobcard__order_parts.*', 'jobcard_parts.*')
+//        ->leftJoin('jobcard_parts', 'jobcard__order_parts.jobcard_parts_id', '=', 'jobcard_parts.id')
+//        ->where('jobcard__order_parts.jobcard_card_id' , $jobcardparts->id)
+//        ->get();
         
         $cardparts = jobcard_category_parts::orderBy('id','asc')->get();
         $jobcard_category_parts = jobcard_category_parts::orderBy('id','asc')->get()->load(['jobcart_parts_model' => function($query) {
@@ -1154,6 +1155,7 @@ class JobcardController extends Controller
             }]);
        
             
+        $data['jobCategories'] = $jobCategories;
         $data['parts'] = $parts;
         $data['cardparts'] = $cardparts;
         $data['jobcardparts'] = $jobcardparts;
@@ -1187,7 +1189,7 @@ class JobcardController extends Controller
         ]);
         $validator->after(function ($validator) use($request) {
         
-		$jobcartparts = jobcart_parts::where('id', $request->input('category_id'))->where('category_id' , $request->input('jobcard_parts_id'))->first();
+        $jobcartparts = jobcart_parts::where('id', $request->input('category_id'))->where('category_id' , $request->input('jobcard_parts_id'))->first();
         $availblebalance = !empty($jobcartparts->no_of_parts_available) ? $jobcartparts->no_of_parts_available : 0 ;
          if ($availblebalance < $request->input('no_of_parts_used')) {
                $validator->errors()->add('no_of_parts_used', 'this field can be less than the required ');
