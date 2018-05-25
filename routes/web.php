@@ -694,6 +694,15 @@ Route::post('jobcard/addjobparts', 'JobcardController@addjobparts');
 
 Route::get('jobcards/print/{print}', 'JobcardController@printcards');
 
+Route::get('jobcards/reports', 'JobcardController@viewreport');
+
+Route::post('jobcards/reports/cards', 'JobcardController@cards');
+
+Route::get('jobcards/printcards/{card}', 'JobcardController@printscard');
+
+Route::post('jobcards/reports/parts', 'JobcardController@parts');
+Route::post('jobcards/reports/notes', 'JobcardController@notes');
+
 // stock
 Route::get('stock/storckmanagement', 'StockController@mystock');
 Route::post('stock/stock_search', 'StockController@stock');

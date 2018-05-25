@@ -27,7 +27,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/stock/search_report">
+                <form class="form-horizontal" method="POST" action="/jobcards/jobcardsearch">
                     {{ csrf_field() }}
 
                     <div class="box-body">
