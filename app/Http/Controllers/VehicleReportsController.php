@@ -113,7 +113,7 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
         $vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
-        $reportID = $reportData['report_id'];
+       // $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
         //$licenceType = $reportData['licence_type'];
@@ -127,6 +127,7 @@ class VehicleReportsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
+
         $vehiclebookings = vehicle_booking::select('vehicle_booking.*', 'vehicle_make.name as vehicle_make',
             'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
             'vehicle_details.vehicle_registration as v_registration',
@@ -173,6 +174,8 @@ class VehicleReportsController extends Controller
             ->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
             ->get();
+
+         
 
         for ($i = 0; $i < count($vehicleArray); $i++) {
             $vehicle .= $vehicleArray[$i] . ',';
