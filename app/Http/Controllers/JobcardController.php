@@ -1753,7 +1753,7 @@ class JobcardController extends Controller
               //return $SysData;
               $noteDetails = $SysData['note_details'];
               $userID = $SysData['user_id'];
-              $userID = $SysData['user_id'];
+              
               $vehicleID = $SysData['vehicle'];
               
 
@@ -1772,7 +1772,7 @@ class JobcardController extends Controller
                         
                          ->leftJoin('hr_people', 'jobcard_notes.user_id', '=', 'hr_people.id')
                          ->leftJoin('vehicle_details', 'jobcard_notes.vehicle_id', '=', 'vehicle_details.id')
-                           ->where(function ($query) use ($userID) {
+                         ->where(function ($query) use ($userID) {
                                   if (!empty($userID)) {
                                      $query->where('jobcard_notes.user_id', $userID);
                                       }
