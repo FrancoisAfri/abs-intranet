@@ -83,7 +83,8 @@ class Product_categoryController extends Controller
 
            $jobCategories = product_category::orderBy('id', 'asc')->get();
         
-           // return $jobCategories;
+           $products = product_products::orderBy('id', 'asc')->get();
+            //return $products;
 
             $Category->load('productCategory');
             $data['page_title'] = 'Manage Products Product';
@@ -382,6 +383,7 @@ class Product_categoryController extends Controller
         $documentType->description = $docData['description'];
         $documentType->price = $docData['price'];
          $documentType->product_code = $docData['product_code'];
+         $documentType->stock_type = $docData['stock_type'];
         $documentType->save();
 
         $newName = $docData['name'];

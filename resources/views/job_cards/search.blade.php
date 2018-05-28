@@ -11,11 +11,12 @@
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
     <!--Time Charger-->
-   <!-- Include Date Range Picker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!-- iCheck -->
+    <!--  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 @endsection
 
 @section('content')
@@ -49,6 +50,7 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
+
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Job Card # </label>
                                         <div class="col-sm-8">
@@ -56,10 +58,17 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label"> Date </label>
+                                     <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
+                                        <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control pull-left" name="date" value=""  />
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control daterangepicker" id="action_date"
+                                                       name="action_date" value="" placeholder="Select Action Date...">
+
+                                            </div>
                                         </div>
                                     </div>
 
@@ -108,9 +117,10 @@
                                                 </select>
                                             </div>
                                     </div>
-                                   
-                                    </div>
-                                    <div class="box-footer">
+
+                                </div>
+
+                                <div class="box-footer">
                                     <button type="submit" class="btn btn-primary pull-right"><i
                                                 class="fa fa-search"></i> Search
                                     </button>
@@ -126,44 +136,32 @@
 @endsection
 
 @section('page_script')
-   <!-- Select2 -->
-<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-<!-- bootstrap datepicker -->
-<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+   <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- bootstrap datepicker -->
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+     <!-- Bootstrap date picker -->
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 
-<!-- InputMask -->
-<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+            type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
 
-<script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
-<!-- the main fileinput plugin file -->
-<!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
-<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
-<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
-<!-- the main fileinput plugin file -->
-<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
 
+    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-<!-- Date rane picker -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-<script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
-
-<!-- iCheck -->
-<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
-<!-- Ajax dropdown options load -->
-<script src="/custom_components/js/load_dropdown_options.js"></script>
-<!-- Date picker -->
-<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
-<!-- Ajax form submit -->
-<script src="/custom_components/js/modal_ajax_submit.js"></script>
-
-<!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
-<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script type="text/javascript">
         $(function () {
             $(".select2").select2();
@@ -200,38 +198,13 @@
             $('#success-action-modal').modal('show');
         });
 
-        $('input[name="date"]').daterangepicker({
-
-            defaultDate: null
-               // timePicker: false,
-                //timePickerIncrement: 30,
-               
+         //Date Range picker
+            $('.daterangepicker').daterangepicker({
+                format: 'DD/MM/YYYY',
+                endDate: '-1d',
+                autoclose: true
             });
 
-        $('.required_from').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-           // todayHighlight: true
-        });
-
-        //Initialize iCheck/iRadio Elements
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '10%' // optional
-        });
-
-       
-        $(document).ready(function () {
-
-            $(function () {
-                $('#required_from').datetimepicker();
-            });
-
-            $('#required_to').datetimepicker({});
-
-        });
-
-        
+    
     </script>
 @endsection

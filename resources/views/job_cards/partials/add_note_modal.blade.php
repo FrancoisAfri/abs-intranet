@@ -23,12 +23,12 @@
                         </div>
                      </div>
                     
-                           <input type="hidden" id="vehicle_id" name="vehicle_id"
-                           value="{{ !empty($vehiclemaintenance->vehicle_id) ? $vehiclemaintenance->vehicle_id : ''}}">
+                        <input type="hidden" id="vehicle_id" name="vehicle_id"
+                           value="{{$card->vehicle_id}}">
 
-
-                            <input type="hidden" id="jobcard_id" name="jobcard_id"
-                           value="{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}">
+							
+                        <input type="hidden" id="jobcard_id" name="jobcard_id"
+                           value="{{ $card->jobcard_number }}">
 
                 </div>
                 <div class="modal-footer">

@@ -38,7 +38,7 @@
                                     </td>-->
                                      <td>{{ (!empty( $service_type->name)) ?  $service_type->name : ''}} </td>
                                      <td>{{ (!empty( $service_type->description)) ?  $service_type->description : ''}} </td>
-                                     <td>{{ (!empty( $service_type->avalaible_transaction)) ?  $service_type->avalaible_transaction : 0}} </td>
+                                     <td>{{ (!empty( $service_type->avalaible_stock)) ?  $service_type->avalaible_stock : 0}} </td>
 <!--                                  <td>
                                        leave here  
                                     <button vehice="button" id="view_ribbons" class="btn {{ (!empty($service_type->status) && $service_type->status == 1) ? " btn-danger " : "btn-success " }}
