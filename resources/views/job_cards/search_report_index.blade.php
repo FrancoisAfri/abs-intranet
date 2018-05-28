@@ -26,7 +26,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-anchor pull-right"></i>
-                    <h3 class="box-title">Product Reports Search criteria</h3>
+                    <h3 class="box-title">Job Card Reports Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                          <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
@@ -51,7 +51,7 @@
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Job cards</label>
                                     <!-- <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">Rejected Job cards</label> -->
                                     <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="2"> Parts</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="3">Notes</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">Notes</label>
                                 </div>
                             </div>
 
@@ -70,7 +70,7 @@
                             </div>
  -->
                           <div class="form-group levAction-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
-                            <label for="process_id" class="col-sm-2 control-label">Process Flow</label>
+                            <label for="process_id" class="col-sm-2 control-label">Status </label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -173,7 +173,65 @@
                                 </div>
                             </div>
                         </div>
+                        
+                            <div class="form-group notedate-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
+                                        <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Note Details</label>
 
+                                        <div class="col-sm-8">
+                                           <input type="text" class="form-control " id="note_details"
+                                                       name="note_details" value="" placeholder="">
+                                        </div>
+                            </div>
+ 
+                       
+ 
+                        <div class="form-group notedate-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
+                                        <label for="action_date" class="col-sm-2 control-label">Action Date</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control daterangepicker" id="note_date"
+                                                       name="note_date" value="" placeholder="Select Action Date...">
+
+                                            </div>
+                                        </div>
+                           </div>
+ 
+                           <div class="form-group user-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
+                            <label for="process_id" class="col-sm-2 control-label">Users</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id">
+                                        <option value="">*** Select an process Flow ***</option>
+                                        @foreach($users as $flow)
+                                            <option value="{{ $flow->first_name . ' ' . $flow->surname }}">{{ $flow->first_name . ' ' . $flow->surname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+ 
+                       <div class="form-group user-field {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
+                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle Type</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="vehicle" name="vehicle">
+                                        <option value="">*** Select a Vehicle***</option>
+                                        @foreach($vehicledetails as $flow)
+                                            <option value="{{ $flow->id }}">{{ $flow->vehicle_make . ' ' .  $flow->vehicle_model . ' ' . $flow->vehicle_type }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                   
                      <div class="box-footer">
                        
@@ -324,55 +382,33 @@
                  $('.day-field').hide();
                  $('.levAction-field').show();
                  $('.date-field').hide();
+                 $('.user-field').hide();
+                 $('.notedate-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/jobcards/reports/cards');
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
                  $('.day-field').show();
                  $('.from-field').hide();
-                 $('.manual-field').hide();
+                 $('.notes-field').hide();
                 $('.levAction-field').hide();
-                 $('.date-field').hide();
+                 $('.user-field').hide();
+                 $('.notedate-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/jobcards/reports/parts');
                  //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
                  $('#gen-report').val("Submit"); 
             }
-            else if(allType == 3){
-                $('.to-field').show();
-                 $('.from-field').show();
-                 $('.levAction-field').hide();
-                 $('.date-field').hide();
-                  $('form[name="leave-application-form"]').attr('action', '/jobcards/reports/notes');
-                   $('#gen-report').val("Submit"); 
-            }
+            
             else if(allType == 4){
-                 $('.to-field').hide();
+                  $('.day-field').hide();
                  $('.from-field').hide();
+                 $('.notes-field').hide();
                  $('.levAction-field').hide();
-                  $('.manual-field').show();
-                 $('.lev-field').show();
-                 $('.date-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
+                 $('.user-field').show();
+                 $('.notedate-field').show();
+                 $('form[name="leave-application-form"]').attr('action', '/jobcards/reports/notes');
                  $('#gen-report').val("Submit"); 
-            } else if(allType == 5){
-                  $('.to-field').hide();
-                 $('.from-field').hide();
-                 $('.lev-field-field').hide();
-                 $('.manual-field').hide();
-                 $('.levAction-field').hide();
-                 $('.date-field').show();
-                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/history/');    
-                 $('#gen-report').val("Submit"); 
-            } else if (allType == 6) {
-                $('.to-field').show();
-                $('.from-field').show();
-                $('.lev-field-field').hide();
-                $('.manual-field').hide();
-                $('.levAction-field').hide();
-                $('.date-field').hide();
-                $('form[name="leave-application-form"]').attr('action', '/leave/reports/cancelled-leaves');
-                $('#gen-report').val("Submit");
-            }
+            } 
             return allType;      
             }
           //Load divisions drop down

@@ -21,7 +21,7 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-                                <th> Date Captured</th>
+                                <th>Date Captured</th>
                                 <th>JobCard Note</th>
                                 <th>Captured By</th>
                             </tr>
@@ -117,7 +117,7 @@
                     var formName = 'add-note-form';
                     var modalID = 'add-note-modal';
                     var submitBtnID = 'add_notes';
-                    var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
+                    var redirectUrl = '/jobcards/jobcardnotes/{{$card->id}}';
                     var successMsgTitle = 'New Record Added!';
                     var successMsg = 'The Record  has been updated successfully.';
                     modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

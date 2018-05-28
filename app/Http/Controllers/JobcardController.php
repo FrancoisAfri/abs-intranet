@@ -911,14 +911,15 @@ class JobcardController extends Controller
         return view('job_cards.Job_card_details')->with($data);
      }
      public function viewjobcardnotes(jobcard_maintanance $card ){
-
+         
+        //return $card;
         $jobcardnote = DB::table('jobcard_notes')
         ->select('jobcard_notes.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
         ->leftJoin('hr_people', 'jobcard_notes.user_id', '=', 'hr_people.id')
         ->where('jobcard_id', $card->jobcard_number)
         ->Orderby('jobcard_notes.id','asc')
         ->get();
-      // return $jobcardnote;
+       // return $jobcardnote;
 
                                 
 
@@ -941,8 +942,7 @@ class JobcardController extends Controller
      public function addjobcardnotes(Request $request){
         $this->validate($request, [
               'notes' => 'required',
-              'vehicle_id' => 'required',
-              'jobcard_id' => 'required',
+              
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -956,14 +956,14 @@ class JobcardController extends Controller
         $jobcardnote->save(); 
 
 
-        $jobcard_number = $SysData['vehicle_id'];
-           // emils
-        $users = DB::table('jobcard_maintanance')
-        ->select('jobcard_maintanance.*', 'jobcard_notes.user_id as user')
-        ->leftJoin('jobcard_notes', 'jobcard_maintanance.jobcard_number', '=', 'jobcard_notes.id')
-        ->where('jobcard_number', $jobcard_number)
-        ->where('jobcard_notes.jobcard_id', $jobcard_number)
-         ->pluck('user_id');
+//        $jobcard_number = $SysData['vehicle_id'];
+//           // emils
+//        $users = DB::table('jobcard_maintanance')
+//        ->select('jobcard_maintanance.*', 'jobcard_notes.user_id as user')
+//        ->leftJoin('jobcard_notes', 'jobcard_maintanance.jobcard_number', '=', 'jobcard_notes.id')
+//        ->where('jobcard_number', $jobcard_number)
+//        ->where('jobcard_notes.jobcard_id', $jobcard_number)
+//         ->pluck('user_id');
        // ->get();
         //give me the person who created the card
 
@@ -1210,7 +1210,6 @@ class JobcardController extends Controller
         if ($transactionbalance > 0)
 		{
 			$currentparts = new jobcard_order_parts();
-			$currentparts->jobcard_parts_id =  !empty($SysData['jobcard_card_id']) ? $SysData['jobcard_card_id'] : 0;
 			$currentparts->category_id =  !empty($SysData['product_id']) ? $SysData['product_id'] : 0;
 			$currentparts->product_id =  !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
 			$currentparts->no_of_parts_used =  !empty($SysData['no_of_parts_used']) ? $SysData['no_of_parts_used'] : 0;
@@ -1487,7 +1486,8 @@ class JobcardController extends Controller
         ->orderBy('jobcard_maintanance.id', 'asc')
         ->get(); 
         
-        
+        $users = HRPerson::OrderBy('id','asc')->get();
+       
 
         $vehicledetails =  DB::table('vehicle_details')
             ->select('vehicle_details.id as id','vehicle_make.name as vehicle_make',
@@ -1505,6 +1505,7 @@ class JobcardController extends Controller
         $data['jobCategories'] = $jobCategories;
         $data['vehicledetails'] = $vehicledetails;
         $data['processflow'] = $processflow;
+        $data['users'] = $users;
         $data['page_title'] = "Job Card Catergory";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
@@ -1665,10 +1666,8 @@ class JobcardController extends Controller
          
        //  return $SysData;
          
-         $applicationType = $SysData['application_type'];
-         $processID = $SysData['process_id'];
-         $vehicleID = $SysData['vehicle_id'];
-         $application_type = $SysData['application_type'];
+         $categoryID = $SysData['product_id'];
+         $productID = $SysData['category_id'];
          $actionDate = $SysData['action_date'];
                     
            $actionFrom = $actionTo = 0;
@@ -1680,6 +1679,68 @@ class JobcardController extends Controller
               
            }
            
+           //jobcard__order_parts
+           
+            
+                            
+                            $parts =  DB::table('jobcard_maintanance')
+                                        ->select('jobcard_maintanance.*','jobcard__order_parts.*','Product_products.name as product_name',
+                                                'hr_people.first_name as firstname', 'hr_people.surname as surname' ,'vehicle_details.fleet_number as fleet_no',
+                                                 'vehicle_details.vehicle_registration as vehicleregistration','service_type.name as servicetype')
+                                     ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+                                     ->leftJoin('hr_people', 'jobcard_maintanance.user_id', '=', 'hr_people.id')
+                                     ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id') 
+                                     ->leftJoin('jobcard__order_parts', 'jobcard__order_parts.jobcard_card_id', '=', 'jobcard_maintanance.id')
+                                     ->leftJoin('Product_products', 'jobcard__order_parts.product_id', '=', 'Product_products.id')
+                                    ->where(function ($query) use ($categoryID) {
+                                 if (!empty($categoryID)) {
+                                     $query->where('jobcard__order_parts.category_id', $categoryID);
+                                     
+                                 }
+                             })
+                                ->where(function ($query) use ($productID) {
+                                               if (!empty($productID)) {
+                                                   $query->where('jobcard__order_parts.product_id', $productID);
+
+                                               }
+                                           })
+
+                                ->where(function ($query) use ($actionFrom, $actionTo) {
+                                      if ($actionFrom > 0 && $actionTo > 0) {
+                                                  $query->whereBetween('jobcard_maintanance.date_created', [$actionFrom, $actionTo]);
+                                              }
+                                          })    
+                                 ->where('jobcard__order_parts.jobcard_card_id','>',0)
+                                 ->where('jobcard__order_parts.product_id','>',0)
+                                 ->get();
+                                          
+                                           
+                     //  return $parts;
+                           
+                    $data['parts'] = $parts;
+                    $data['page_title'] = "Job Card Processes";
+                    $data['page_description'] = "Job Card Management";
+                    $data['breadcrumb'] = [
+                        ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                        ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
+                    ];
+
+                    $data['active_mod'] = 'Job Card Management';
+                    $data['active_rib'] = 'Reports';
+
+                    $companyDetails = CompanyIdentity::systemSettings();
+                    $companyName = $companyDetails['company_name'];
+                    $user = Auth::user()->load('person');
+
+                    $data['support_email'] = $companyDetails['support_email'];
+                    $data['company_name'] = $companyName;
+                    $data['full_company_name'] = $companyDetails['full_company_name'];
+                    $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+                    $data['date'] = date("d-m-Y");
+                    $data['user'] = $user;
+
+                    AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+                    return view('job_cards.Jobcard_parts')->with($data); 
            
         }
             
@@ -1688,25 +1749,65 @@ class JobcardController extends Controller
                     // 'date_uploaded' => 'required',
                 ]);
 
-                $SysData = $request->all();
-                 unset($SysData['_token']);
+                    $SysData = $request->all();
+              unset($SysData['_token']);
 
-              // return $SysData;
+              //return $SysData;
+              $noteDetails = $SysData['note_details'];
+              $userID = $SysData['user_id'];
+              $userID = $SysData['user_id'];
+              $vehicleID = $SysData['vehicle'];
+              
 
-                 $applicationType = $SysData['application_type'];
-                 $processID = $SysData['process_id'];
-                 $vehicleID = $SysData['vehicle_id'];
-                 $application_type = $SysData['application_type'];
-                 $actionDate = $SysData['action_date'];
+                $actionFrom = $actionTo = 0;
+                $actionDate = $request['datenote_date'];
+                if (!empty($actionDate)) {
+                    $startExplode = explode('-', $actionDate);
+                    $actionFrom = strtotime($startExplode[0]);
+                    $actionTo = strtotime($startExplode[1]);
 
-                   $actionFrom = $actionTo = 0;
-                   $actionDate = $request['date'];
-                   if (!empty($actionDate)) {
-                       $startExplode = explode('-', $actionDate);
-                       $actionFrom = strtotime($startExplode[0]);
-                       $actionTo = strtotime($startExplode[1]);
+                }
+                
+                 $notes =  DB::table('jobcard_notes')
+                         ->select('jobcard_notes.*','hr_people.first_name as firstname', 'hr_people.surname as surname' ,'vehicle_details.fleet_number as fleet_no',
+                                 'vehicle_details.vehicle_registration as vehicleregistration')
+                        
+                         ->leftJoin('hr_people', 'jobcard_notes.user_id', '=', 'hr_people.id')
+                         ->leftJoin('vehicle_details', 'jobcard_notes.vehicle_id', '=', 'vehicle_details.id')
+                           ->where(function ($query) use ($userID) {
+                                  if (!empty($userID)) {
+                                     $query->where('jobcard_notes.user_id', $userID);
+                                      }
+                             })
+                           ->where(function ($query) use ($noteDetails) {
+                                  if (!empty($noteDetails)) {
+                                     $query->where('jobcard_notes.note_details', 'ILIKE', "%$noteDetails%");
+                                      }
+                             })               
+                           ->where(function ($query) use ($vehicleID) {
+                                  if (!empty($vehicleID)) {
+                                     $query->where('jobcard_notes.vehicle_id', "$vehicleID");
+                                      }
+                             })               
+                         ->get();
+                           
+                             return $notes;
+                             
+                    $data['notes'] = $notes;
+                    $data['page_title'] = "Job Card Processes";
+                    $data['page_description'] = "Job Card Management";
+                    $data['breadcrumb'] = [
+                        ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                        ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
+                    ];
 
-                   }
-            }
+                    $data['active_mod'] = 'Job Card Management';
+                    $data['active_rib'] = 'Reports';
+
+                   
+                    AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+                    return view('job_cards.Jobcard_notes')->with($data); 
+                    
+                 }
 }
 
