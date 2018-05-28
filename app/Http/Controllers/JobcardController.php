@@ -981,7 +981,7 @@ class JobcardController extends Controller
         $parts =  jobcard_category_parts::OrderBy('id','asc')->get();
       //  return $parts;
         $data['parts'] = $parts;
-        $data['page_title'] = "Job Card Catergory";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1062,7 +1062,7 @@ class JobcardController extends Controller
         
         $data['parts'] = $parts;
         $data['jobcartparts'] = $jobcartparts;
-        $data['page_title'] = "Job Card Catergory";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1164,7 +1164,7 @@ class JobcardController extends Controller
         $data['parts'] = $parts;
         $data['cardparts'] = $cardparts;
         $data['jobcardparts'] = $jobcardparts;
-        $data['page_title'] = "Job Card Catergory";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1506,7 +1506,7 @@ class JobcardController extends Controller
         $data['vehicledetails'] = $vehicledetails;
         $data['processflow'] = $processflow;
         $data['users'] = $users;
-        $data['page_title'] = "Job Card Catergory";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1630,7 +1630,7 @@ class JobcardController extends Controller
                 
                 
                     $data['vehiclemaintenance'] = $vehiclemaintenance;
-                    $data['page_title'] = "Job Card Processes";
+                    $data['page_title'] = "Job Card Reports";
                     $data['page_description'] = "Job Card Management";
                     $data['breadcrumb'] = [
                         ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1679,10 +1679,7 @@ class JobcardController extends Controller
               
            }
            
-           //jobcard__order_parts
-           
-            
-                            
+           //jobcard__order_parts  
                             $parts =  DB::table('jobcard_maintanance')
                                         ->select('jobcard_maintanance.*','jobcard__order_parts.*','Product_products.name as product_name',
                                                 'hr_people.first_name as firstname', 'hr_people.surname as surname' ,'vehicle_details.fleet_number as fleet_no',
@@ -1712,6 +1709,7 @@ class JobcardController extends Controller
                                           })    
                                  ->where('jobcard__order_parts.jobcard_card_id','>',0)
                                  ->where('jobcard__order_parts.product_id','>',0)
+                                 ->OrderBy('jobcard__order_parts.id' ,'asc')
                                  ->get();
                                           
                                            
@@ -1755,7 +1753,7 @@ class JobcardController extends Controller
               //return $SysData;
               $noteDetails = $SysData['note_details'];
               $userID = $SysData['user_id'];
-              $userID = $SysData['user_id'];
+              
               $vehicleID = $SysData['vehicle'];
               
 
@@ -1774,7 +1772,7 @@ class JobcardController extends Controller
                         
                          ->leftJoin('hr_people', 'jobcard_notes.user_id', '=', 'hr_people.id')
                          ->leftJoin('vehicle_details', 'jobcard_notes.vehicle_id', '=', 'vehicle_details.id')
-                           ->where(function ($query) use ($userID) {
+                         ->where(function ($query) use ($userID) {
                                   if (!empty($userID)) {
                                      $query->where('jobcard_notes.user_id', $userID);
                                       }
@@ -1791,7 +1789,7 @@ class JobcardController extends Controller
                              })               
                          ->get();
                            
-                             return $notes;
+                  
                              
                     $data['notes'] = $notes;
                     $data['page_title'] = "Job Card Processes";

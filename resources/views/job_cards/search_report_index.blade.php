@@ -55,20 +55,6 @@
                                 </div>
                             </div>
 
-                              <!-- <div class="form-group  {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                                <label for="leave_types_id" class="col-sm-2 control-label">Job Card Number</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                        
-                                             <input type="text" class="form-control" id="action" name="action" placeholder="Enter an Action...">
-                                      
-                                    </div>
-                                </div>
-                            </div>
- -->
                           <div class="form-group levAction-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
                             <label for="process_id" class="col-sm-2 control-label">Status </label>
                             <div class="col-sm-8">
@@ -166,8 +152,8 @@
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="vehicle_id" name="vehicle_id">
                                         <option value="">*** Select a Vehicle***</option>
-                                        @foreach($vehicledetails as $flow)
-                                            <option value="{{ $flow->id }}">{{ $flow->vehicle_make . ' ' .  $flow->vehicle_model . ' ' . $flow->vehicle_type }}</option>
+                                        @foreach($vehicledetails as $car)
+                                            <option value="{{ $car->id }}">{{ $car->vehicle_make . ' ' .  $car->vehicle_model . ' ' . $car->vehicle_type }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -207,9 +193,9 @@
                                         <i class="fa fa-user-circle"></i>
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id">
-                                        <option value="">*** Select an process Flow ***</option>
-                                        @foreach($users as $flow)
-                                            <option value="{{ $flow->first_name . ' ' . $flow->surname }}">{{ $flow->first_name . ' ' . $flow->surname }}</option>
+                                        <option value="">*** Select an User  ***</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -225,8 +211,8 @@
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="vehicle" name="vehicle">
                                         <option value="">*** Select a Vehicle***</option>
-                                        @foreach($vehicledetails as $flow)
-                                            <option value="{{ $flow->id }}">{{ $flow->vehicle_make . ' ' .  $flow->vehicle_model . ' ' . $flow->vehicle_type }}</option>
+                                        @foreach($vehicledetails as $vehicle)
+                                            <option value="{{ $vehicle->id }}">{{ $vehicle->vehicle_make . ' ' .  $vehicle->vehicle_model . ' ' . $vehicle->vehicle_type }}</option>
                                         @endforeach
                                     </select>
                                 </div>
