@@ -1630,7 +1630,7 @@ class JobcardController extends Controller
                 
                 
                     $data['vehiclemaintenance'] = $vehiclemaintenance;
-                    $data['page_title'] = "Job Card Processes";
+                    $data['page_title'] = "Job Card Reports";
                     $data['page_description'] = "Job Card Management";
                     $data['breadcrumb'] = [
                         ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1679,10 +1679,7 @@ class JobcardController extends Controller
               
            }
            
-           //jobcard__order_parts
-           
-            
-                            
+           //jobcard__order_parts  
                             $parts =  DB::table('jobcard_maintanance')
                                         ->select('jobcard_maintanance.*','jobcard__order_parts.*','Product_products.name as product_name',
                                                 'hr_people.first_name as firstname', 'hr_people.surname as surname' ,'vehicle_details.fleet_number as fleet_no',
@@ -1712,6 +1709,7 @@ class JobcardController extends Controller
                                           })    
                                  ->where('jobcard__order_parts.jobcard_card_id','>',0)
                                  ->where('jobcard__order_parts.product_id','>',0)
+                                 ->OrderBy('jobcard__order_parts.id' ,'asc')
                                  ->get();
                                           
                                            
@@ -1791,7 +1789,7 @@ class JobcardController extends Controller
                              })               
                          ->get();
                            
-                             return $notes;
+                  
                              
                     $data['notes'] = $notes;
                     $data['page_title'] = "Job Card Processes";
