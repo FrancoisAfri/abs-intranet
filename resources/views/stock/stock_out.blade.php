@@ -14,88 +14,95 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-               <form class="form-horizontal" method="POST" action="/stock/takestock">
-                {{ csrf_field() }}
-                <div class="box-header with-border">
-                    <h3 class="box-title">Products Stock Out</h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
-                        </button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    @if (count($errors) > 0)
-                        <div class="alert alert-danger alert-dismissible fade in">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                <form class="form-horizontal" method="POST" action="/stock/takestock">
+                    {{ csrf_field() }}
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Products Stock Out</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-remove"></i>
+                            </button>
                         </div>
-                    @endif
-                    <table id="emp-list-table" class="table table-bordered table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th>Product Name</th>
-                             <th>Employee</th>
-                            <th style="vertical-align: middle; text-align: center;">Available Number</th>
-                            <th style="vertical-align: middle; text-align: center;">Enter Number</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($stocks as $stock)
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+                                </button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <table id="emp-list-table" class="table table-bordered table-striped table-hover">
+                            <thead>
                             <tr>
-                                <td style="vertical-align: center;"
-                                    nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
-                               <td style="vertical-align: middle; text-align: center;"
-                                    nowrap>
-                                  <div class="form-group">
-                                        <label for="path" class="col-sm-3 control-label">  </label>
-                                        <div class="col-sm-18">
-                                            <select class="form-control select2" style="width: 100%;" id="userid_{{ $stock->id }}" name="userid_{{$stock->id}}">
-                                                <option value="0">*** Select User ***</option>
-                                                @foreach($user as $employee)
-                                                    <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                               </td>
-                                <td style="vertical-align: middle; text-align: center;"
-                                    nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
-                                <td style="vertical-align: middle; text-align: center;"
-                                    nowrap>
-                                   <input type="number" min="0" class="form-control" id="stock_{{ $stock->id }}_{{$stock->category_id}}}" name="stock_{{$stock->id}}_{{$stock->category_id}}" value="" placeholder="Enter Items Number"></td>
-                                @endforeach
+                                <th>Product Name</th>
+                                <th>Employee</th>
+                                <th style="vertical-align: middle; text-align: center;">Available Number</th>
+                                <th style="vertical-align: middle; text-align: center;">Enter Number</th>
                             </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>Product Name</th>
-                            <th style="vertical-align: middle; text-align: center;">Employee</th>
-                            <th style="vertical-align: middle; text-align: center;">Available Number</th>
-                            <th style="vertical-align: middle; text-align: center;">Enter number</th>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer">
-                    <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i>
-                        Back
-                    </button>
-                    <button type="submit" class="btn btn-warning pull-right"> Submit</button>  
-                </div>
+                            </thead>
+                            <tbody>
+                            @foreach($stocks as $stock)
+                                <tr>
+                                    <td style="vertical-align: center;"
+                                        nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
+                                    <td style="vertical-align: middle; text-align: center;"
+                                        nowrap>
+                                        <div class="form-group">
+                                            <label for="path" class="col-sm-3 control-label"> </label>
+                                            <div class="col-sm-18">
+                                                <select class="form-control select2" style="width: 100%;"
+                                                        id="userid_{{ $stock->id }}" name="userid_{{$stock->id}}">
+                                                    <option value="0">*** Select User ***</option>
+                                                    @foreach($user as $employee)
+                                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;"
+                                        nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
+                                    <td style="vertical-align: middle; text-align: center;"
+                                        nowrap>
+                                        <input type="number" min="0" class="form-control"
+                                               id="stock_{{ $stock->id }}_{{$stock->category_id}}}"
+                                               name="stock_{{$stock->id}}_{{$stock->category_id}}" value=""
+                                               placeholder="Enter Items Number"></td>
+                                    @endforeach
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th>Product Name</th>
+                                <th style="vertical-align: middle; text-align: center;">Employee</th>
+                                <th style="vertical-align: middle; text-align: center;">Available Number</th>
+                                <th style="vertical-align: middle; text-align: center;">Enter number</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                    class="fa fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <button type="submit" class="btn btn-warning pull-right"> Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
-   
-    <!-- Include modal -->
+
+        <!-- Include modal -->
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Company Identity Updated!", 'modal_content' => session('changes_saved')])
         @endif
@@ -209,7 +216,7 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-           
+
         });
     </script>
 @endsection

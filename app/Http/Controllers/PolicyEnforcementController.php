@@ -2,35 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\LeaveType;
-use App\Mail\createPolicy;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests;
-use App\Users;
-use App\Policy_users;
-use App\Policy;
 use App\CompanyIdentity;
-use App\DivisionLevelFive;
-use App\DivisionLevelFour;
-use App\DivisionLevelThree;
-use App\DivisionLevelTwo;
-use App\DivisionLevelOne;
-use App\DivisionLevel;
 use App\ContactCompany;
+use App\DivisionLevel;
+use App\DivisionLevelFive;
 use App\HRPerson;
+use App\Http\Requests;
+use App\Mail\createPolicy;
 use App\modules;
-use App\FleetType;
-use App\module_access;
-use App\module_ribbons;
-use App\ribbons_access;
+use App\Policy;
+use App\Policy_users;
+use App\Users;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use App\Http\Controllers\AuditReportsController;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
 class PolicyEnforcementController extends Controller
 {
@@ -43,7 +29,7 @@ class PolicyEnforcementController extends Controller
     {
         $Policy = Policy::all();
         $employees = HRPerson::where('status', 1)->get();
-       // return $employees;
+        // return $employees;
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
@@ -51,9 +37,9 @@ class PolicyEnforcementController extends Controller
 
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
 
-        $users =  HRPerson::where('status', 1)->get();
+        $users = HRPerson::where('status', 1)->get();
         // $DivFive = DivisionLevel::where('level', 5)->orderBy('id', 'desc')->get();
-         //return $users;
+        //return $users;
 
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -112,7 +98,7 @@ class PolicyEnforcementController extends Controller
                 $policy->update();
             }
         }
-		AuditReportsController::store('Policy Enforcement', "New Policy Created Policy Name: $policy->name", "Added By User", 0);
+        AuditReportsController::store('Policy Enforcement', "New Policy Created Policy Name: $policy->name", "Added By User", 0);
 //        // get users
         $DivOne = DivisionLevel::where('level', 1)->orderBy('id', 'desc')->first();
         $DivTwo = DivisionLevel::where('level', 2)->orderBy('id', 'desc')->first();
@@ -148,7 +134,7 @@ class PolicyEnforcementController extends Controller
             $firstname = $hrID->first_name;
             $surname = $hrID->surname;
             $email = $hrID->email;
-			AuditReportsController::store('Policy Enforcement', "New User Added: $hrID->first_name $hrID->surname To Policy: $policy->name", "Added By User", 0);
+            AuditReportsController::store('Policy Enforcement', "New User Added: $hrID->first_name $hrID->surname To Policy: $policy->name", "Added By User", 0);
             #mail to user
             Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
         }
@@ -157,16 +143,13 @@ class PolicyEnforcementController extends Controller
 
     public function policyAct(Policy $pol)
     {
-        if ($pol->status == 1)
-		{
-			$label = "De-Activated";
+        if ($pol->status == 1) {
+            $label = "De-Activated";
             $stastus = 0;
-		}
-        else
-		{
+        } else {
             $stastus = 1;
-			$label = "Activated";
-		}
+            $label = "Activated";
+        }
         $pol->status = $stastus;
         $pol->update();
         AuditReportsController::store('Policy Enforcement', 'Policy Status Changed', "Changed  to $label For Policy: $pol->name", 0);
@@ -245,18 +228,15 @@ class PolicyEnforcementController extends Controller
 
     public function policyUserAct(Request $request, Policy_users $policyUser)
     {
-        if ($policyUser->status == 1)
-		{
-			$label = "De-Activated";
+        if ($policyUser->status == 1) {
+            $label = "De-Activated";
             $stastus = 0;
-		}
-        else
-		{
+        } else {
             $stastus = 1;
-			$label = "Activated";
-		}
-		
-		$user = HRPerson::where('id', $policyUser->user_id)->first();
+            $label = "Activated";
+        }
+
+        $user = HRPerson::where('id', $policyUser->user_id)->first();
         $policyUser->status = $stastus;
         $policyUser->update();
         AuditReportsController::store('Policy Enforcement', "Policy User Status Changed", "Changed  to $label For User: $user->first_name $user->surname", 0);
@@ -298,26 +278,25 @@ class PolicyEnforcementController extends Controller
             $users = HRPerson::where('division_level_5', ($policyData['division_level_5']))->orderBy('id', 'desc')->get();
         }
 
-		foreach ($users as $hrID) {
-			$OldUser = Policy_users::where('user_id', $hrID->id)->where('policy_id', $policyData['policyID'])->first();
+        foreach ($users as $hrID) {
+            $OldUser = Policy_users::where('user_id', $hrID->id)->where('policy_id', $policyData['policyID'])->first();
             # create record in policy users
-            if (empty($OldUser->id))
-			{
-				$policyUsers = new Policy_users();
-				$policyUsers->user_id = $hrID->id;
-				$policyUsers->policy_id = $policyData['policyID'];
-				$policyUsers->date_added = time();
-				$policyUsers->status = 1;
-				$policyUsers->save();
+            if (empty($OldUser->id)) {
+                $policyUsers = new Policy_users();
+                $policyUsers->user_id = $hrID->id;
+                $policyUsers->policy_id = $policyData['policyID'];
+                $policyUsers->date_added = time();
+                $policyUsers->status = 1;
+                $policyUsers->save();
 
-				// get user details
-				$firstname = $hrID->first_name;
-				$surname = $hrID->surname;
-				$email = $hrID->email;
+                // get user details
+                $firstname = $hrID->first_name;
+                $surname = $hrID->surname;
+                $email = $hrID->email;
 
-				#mail to user
-				Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
-			}
+                #mail to user
+                Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
+            }
         }
         AuditReportsController::store('Policy Enforcement', 'New Policy Added', "Added By User", 0);
         return response()->json();
@@ -383,18 +362,18 @@ class PolicyEnforcementController extends Controller
                 $Acess = explode('-', $levels);
                 $accessLevel = $Acess[0];
                 $user = $Acess[1];
-				if ($accessLevel == 1)	$accessLevelLabel = 'Read Understood';
-				elseif ($accessLevel == 2)	$accessLevelLabel = 'Read Not Understood'; 
-				elseif ($accessLevel == 3)	$accessLevelLabel = 'Read Not Sure';
-				else $accessLevelLabel = ''; 
+                if ($accessLevel == 1) $accessLevelLabel = 'Read Understood';
+                elseif ($accessLevel == 2) $accessLevelLabel = 'Read Not Understood';
+                elseif ($accessLevel == 3) $accessLevelLabel = 'Read Not Sure';
+                else $accessLevelLabel = '';
                 $policyUsers = Policy_users::where('policy_id', $policyID)->where('user_id', $user)->first();
                 $policyUsers->read_understood = ($accessLevel == 1) ? 1 : 0;
                 $policyUsers->read_not_understood = ($accessLevel == 2) ? 1 : 0;
                 $policyUsers->read_not_sure = ($accessLevel == 3) ? 1 : 0;
                 $policyUsers->date_read = time();
                 $policyUsers->update();
-				$policyName = Policy::where('id', $policyID)->first();
-				AuditReportsController::store('Policy Enforcement', 'Policy Status Updated', "Status Changed to: $accessLevelLabel on Policy: $policyName->name", 0);
+                $policyName = Policy::where('id', $policyID)->first();
+                AuditReportsController::store('Policy Enforcement', 'Policy Status Updated', "Status Changed to: $accessLevelLabel on Policy: $policyName->name", 0);
             }
         }
         return back();
@@ -508,10 +487,10 @@ class PolicyEnforcementController extends Controller
             $actionTo = strtotime($startExplode[1]);
         }
         $Policiereports = Policy::where(function ($query) use ($actionFrom, $actionTo) {
-                if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('policy.date', [$actionFrom, $actionTo]);
-                }
-            })
+            if ($actionFrom > 0 && $actionTo > 0) {
+                $query->whereBetween('policy.date', [$actionFrom, $actionTo]);
+            }
+        })
             ->where(function ($query) use ($name) {
                 if (!empty($name)) {
                     $query->where('policy.id', $name);
@@ -519,8 +498,8 @@ class PolicyEnforcementController extends Controller
             })
             ->orderBy('policy.name')
             ->get();
-		if (!empty($Policiereports))
-			$Policiereports = $Policiereports->load('policyUsers');
+        if (!empty($Policiereports))
+            $Policiereports = $Policiereports->load('policyUsers');
 
         $data['Policies'] = $Policiereports;
         $data['page_title'] = "Policy Enforcement System";
@@ -553,7 +532,7 @@ class PolicyEnforcementController extends Controller
             ->orderBy('policy_users.id')
             ->get();
 
-           
+
         $PolicyID = $Policies->first()->policy_id;
         $Policy = Policy::where('id', $PolicyID)->first();
 
@@ -656,7 +635,7 @@ class PolicyEnforcementController extends Controller
 
     public function viewpolicyUsers(Request $request)
     {
-		
+
         $results = $request->all();
         unset($results['_token']);
         unset($results['emp-list-table_length']);

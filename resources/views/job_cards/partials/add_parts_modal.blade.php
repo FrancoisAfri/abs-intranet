@@ -20,26 +20,27 @@
                                    placeholder="Enter name" required>
                         </div>
                     </div>
-                    
 
                     <div class="form-group{{ $errors->has('vehiclemodel_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
+                        <label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
 
-                            <div class="col-sm-8">
-                                <select id="vehiclemodel_id" name="vehiclemodel_id" class="form-control select2" style="width: 100%;" onchange="catergoryDDOnChange(this)">
-                                    <option value="">*** Please Select a Vehicle Make ***</option>
-                                    <option value="0"></option>
-                                    @foreach($parts as $vehiclemodel)
-                                        <option value="{{ $vehiclemodel->id }}" >{{ $vehiclemodel->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-sm-8">
+                            <select id="vehiclemodel_id" name="vehiclemodel_id" class="form-control select2"
+                                    style="width: 100%;" onchange="catergoryDDOnChange(this)">
+                                <option value="">*** Please Select a Vehicle Make ***</option>
+                                <option value="0"></option>
+                                @foreach($parts as $vehiclemodel)
+                                    <option value="{{ $vehiclemodel->id }}">{{ $vehiclemodel->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                    </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-servicetype" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
+                    <button type="button" id="add-servicetype" class="btn btn-warning"><i
+                                class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>
             </form>

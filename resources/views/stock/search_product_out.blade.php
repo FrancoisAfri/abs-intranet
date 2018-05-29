@@ -50,31 +50,35 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                   <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
-                                        <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Product Category </label>
+                                    <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                                        <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Product
+                                            Category </label>
 
                                         <div class="col-sm-8">
-                                            <select id="product_id" name="product_id" class="form-control select2" style="width: 100%;" onchange="productcategoryDDOnChange(this)">
+                                            <select id="product_id" name="product_id" class="form-control select2"
+                                                    style="width: 100%;" onchange="productcategoryDDOnChange(this)">
                                                 <option value="">*** Please Select a Product Category ***</option>
                                                 <option value="0"></option>
                                                 @foreach($productCategories as $product)
-                                                    <option value="{{ $product->id }}" >{{ $product->name }}</option>
+                                                    <option value="{{ $product->id }}">{{ $product->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
-                                        <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Products </label>
+                                        <label for="{{ 'category_id' }}"
+                                               class="col-sm-2 control-label">Products </label>
 
                                         <div class="col-sm-8">
-                                            <select id="category_id" name="category_id[]" class="form-control select2"  multiple="multiple"style="width: 100%;">
+                                            <select id="category_id" name="category_id[]" class="form-control select2"
+                                                    multiple="multiple" style="width: 100%;">
                                                 <option value="">*** Please Select a Category First ***</option>
                                             </select>
                                         </div>
                                     </div>
-                                   
-<!--                                     <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
+
+                                <!--                                     <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
                                         <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
@@ -106,7 +110,7 @@
 @endsection
 
 @section('page_script')
-   <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 
@@ -166,8 +170,6 @@
             $('#success-action-modal').modal('show');
         });
 
-        
 
-    
     </script>
 @endsection
