@@ -981,7 +981,7 @@ class JobcardController extends Controller
         $parts =  jobcard_category_parts::OrderBy('id','asc')->get();
       //  return $parts;
         $data['parts'] = $parts;
-        $data['page_title'] = "Job Card Catergory";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1062,7 +1062,7 @@ class JobcardController extends Controller
         
         $data['parts'] = $parts;
         $data['jobcartparts'] = $jobcartparts;
-        $data['page_title'] = "Job Card Catergory";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1164,7 +1164,7 @@ class JobcardController extends Controller
         $data['parts'] = $parts;
         $data['cardparts'] = $cardparts;
         $data['jobcardparts'] = $jobcardparts;
-        $data['page_title'] = "Job Card Catergory";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -1506,7 +1506,7 @@ class JobcardController extends Controller
         $data['vehicledetails'] = $vehicledetails;
         $data['processflow'] = $processflow;
         $data['users'] = $users;
-        $data['page_title'] = "Job Card Reports";
+        $data['page_title'] = "Job Cards";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
