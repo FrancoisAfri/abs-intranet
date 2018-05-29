@@ -139,30 +139,15 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Parts</a>
 
-                    <a href="{{ '/jobcards/parts/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $card->id }}">Print</a>
-		    <a href="{{ '/vehicle_management/notes/' . $card->id }}"
+                    
+		    <a href="{{ '/vehicle_management/conclude/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $card->id }}">Conclude Jobcard</a>
                    <button class="btn btn-sm btn-default btn-flat"  id="print" name="print" onclick="myFunction()">Print </button>
                   <div id="myDIV">
                       <br>
                      <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
-                      
-<!--                           <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"> Job Cards <input type="checkbox"
-                                                                                                  id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name=""
-                                                                                                  value="print_jobcard"></label>
-                                </td>
-                                
-                      <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"> Job Cards + notes <input type="checkbox"
-                                                                                                  id="{{ $card->id . '_rdo_none' }}"
-                                                                                                  name=""
-                                                                                                  value="print_jobcard_notes"></label>
-                                </td>-->        
+
 						<td style="vertical-align: middle; text-align: center;"> Job Cards <input type="checkbox" class="checkbox selectall"
                                                    id="jobcards{{ $card->id }}" name="cards_2" value="1" > </td>
 						<td style="vertical-align: middle; text-align: center;"> Job Cards + notes <input type="checkbox" class="checkbox selectall"

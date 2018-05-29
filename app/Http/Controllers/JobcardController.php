@@ -888,7 +888,7 @@ class JobcardController extends Controller
             ->get();
 		
         $configuration = jobcards_config::first(); 
-	$data['configuration'] = $configuration;
+	    $data['configuration'] = $configuration;
         $data['users'] = $users;
         $data['jobcard'] = $jobcard;
         $data['ContactCompany'] = $ContactCompany;
