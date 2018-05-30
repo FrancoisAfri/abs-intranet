@@ -3,7 +3,7 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-jobcardparts-form">
                 {{ csrf_field() }}
-               
+
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -27,21 +27,23 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Number Available</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="no_of_parts_available" name="no_of_parts_available" value=""
+                            <input type="number" class="form-control" id="no_of_parts_available"
+                                   name="no_of_parts_available" value=""
                                    placeholder="Enter no of parts available" required>
                         </div>
                     </div>
-                    
-                     <input type="hidden" id="category_id" name="category_id"
+
+                    <input type="hidden" id="category_id" name="category_id"
                            value="{{ !empty($parts->id) ? $parts->id : ''}}">
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-jobcardparts" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
+                    <button type="button" id="add-jobcardparts" class="btn btn-warning"><i
+                                class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>
             </form>

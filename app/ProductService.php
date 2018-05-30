@@ -13,7 +13,7 @@ class ProductService extends Model
     protected $fillable = [
         'description', 'quantity', 'rate'
     ];
-    
+
     /**
      * Relationship between Services and Quotations
      *

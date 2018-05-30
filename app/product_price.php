@@ -15,7 +15,8 @@ class product_price extends Model
      *
      * @return  \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function product() {
+    public function product()
+    {
         return $this->belongsTo(product_products::class, 'product_product_id');
     }
 }

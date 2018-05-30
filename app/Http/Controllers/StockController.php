@@ -2,28 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Users;
-use App\product_category;
-use App\stockhistory;
-use App\HRPerson;
-use App\stock;
 use App\CompanyIdentity;
-use App\product_products;
-use App\module_access;
-use App\module_ribbons;
-use App\modules;
-use App\Mail\NextjobstepNotification;
-use App\Mail\DeclinejobstepNotification;
-use Illuminate\Http\Request;
+use App\HRPerson;
+use App\Http\Requests;
 use App\Mail\confirm_collection;
+use App\product_category;
+use App\stock;
+use App\stockhistory;
+use App\Users;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
 class StockController extends Controller
 {
@@ -64,7 +53,7 @@ class StockController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-       
+
         $CategoryID = $SysData['product_id'];
         $ProductID = $SysData['category_id'];
         $stockID = $SysData['stock_type'];
@@ -87,16 +76,16 @@ class StockController extends Controller
                     $query->where('Product_products.stock_type', $stockID);
                 }
             })
-          //  ->whereIn('Product_products', 1,3)
-            ->orderBy('Product_products','asc')
+            //  ->whereIn('Product_products', 1,3)
+            ->orderBy('Product_products', 'asc')
             ->get();
-            
-         // return $stocks;
 
-       // $Category = $stocks->first()->category_id;
+        // return $stocks;
+
+        // $Category = $stocks->first()->category_id;
 
         $data['stocks'] = $stocks;
-       // $data['Category'] = $Category;
+        // $data['Category'] = $Category;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
         $data['breadcrumb'] = [
@@ -121,9 +110,6 @@ class StockController extends Controller
 
         unset($results['_token']);
         unset($results['emp-list-table_length']);
-      //  $CategoryID = $category->id;
-
-        //  return $results ;
 
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
@@ -134,20 +120,20 @@ class StockController extends Controller
 
         foreach ($results as $sKey => $sValue) {
             if (strlen(strstr($sKey, 'newstock_'))) {
-                list($sUnit, $iID , $cID) = explode("_", $sKey);
+                list($sUnit, $iID, $cID) = explode("_", $sKey);
 
-                
+
                 $proID = $iID;
                 $newStock = $sValue;
                 $proID = isset($iID) ? $iID : array();
                 $productID = $proID;
 
-                 $CategoryID = $cID;
-                $row = stock::where('product_id', $productID)->where('category_id' ,$CategoryID )->count();
+                $CategoryID = $cID;
+                $row = stock::where('product_id', $productID)->where('category_id', $CategoryID)->count();
                 $storck = new stock();
                 if ($row > 0) {
 
-                   // return 1;
+                    // return 1;
                     $currentstock = stock::where('product_id', $productID)->first();
                     $available = !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0;
                     DB::table('stock')->where('product_id', $productID)->where('category_id', $CategoryID)->update(['avalaible_stock' => $available + $newStock]);
@@ -168,8 +154,7 @@ class StockController extends Controller
                     //return redirect('stock/storckmanagement');
                 } else
 
-                //return 2;
-                $storck->avalaible_stock = $newStock;
+                    $storck->avalaible_stock = $newStock;
                 $storck->category_id = $CategoryID;
                 $storck->product_id = $productID;
                 $storck->status = 1;
@@ -302,7 +287,6 @@ class StockController extends Controller
                 $available = !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0;
                 DB::table('stock')->where('product_id', $productID)->where('category_id', $CategoryID)->update(['avalaible_stock' => $available - $newStock]);
                 DB::table('stock')->where('product_id', $productID)->where('category_id', $CategoryID)->update(['user_id' => $UserID]);
-
                 $history = new stockhistory();
                 $history->product_id = $productID;
                 $history->category_id = $CategoryID;

@@ -38,16 +38,16 @@
                                     <input type="hidden" name="use_procurement" value="0">
                                     <td colspan="3"><input type="checkbox" name="use_procurement"
                                                            value="1" {{(!empty($configuration->use_procurement) && $configuration->use_procurement === 1) ? 'checked ="checked"' : 0 }}>
-                                  
+
                                     </td>
                                 </tr>
-                                
+
                                 <tr>
                                     <td class="caption" colspan="2">Send mechanic to sms</td>
                                     <input type="hidden" name="mechanic_sms" value="0">
                                     <td colspan="3"><input type="checkbox" name="mechanic_sms"
                                                            value="1" {{(!empty($configuration->mechanic_sms) && $configuration->mechanic_sms === 1) ? 'checked ="checked"' : 0 }}>
-                                  
+
                                     </td>
                                 </tr>
 
@@ -55,9 +55,9 @@
                         </div>
                         <br>
                         <div class="box-footer">
-						<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
+                            <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                         class="fa fa-arrow-left"></i> Back
-                        </button>
+                            </button>
                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-cog"></i> Save
                             </button>
                         </div>
@@ -94,10 +94,10 @@
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script type="text/javascript">
-	//Cancel button click event
-		document.getElementById("cancel").onclick = function () {
-			location.href = '/jobcards/set_up';
-		};
+        //Cancel button click event
+        document.getElementById("cancel").onclick = function () {
+            location.href = '/jobcards/set_up';
+        };
         $(function () {
             $(".select2").select2();
             $('.hours-field').hide();

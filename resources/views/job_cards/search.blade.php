@@ -54,11 +54,11 @@
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Job Card # </label>
                                         <div class="col-sm-8">
-                                            <input type='text' class="form-control" id='jobcard_id' name="jobcard_id"/>  
+                                            <input type='text' class="form-control" id='jobcard_id' name="jobcard_id"/>
                                         </div>
                                     </div>
 
-                                     <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
+                                    <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
                                         <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
@@ -75,47 +75,52 @@
                                     <div class="form-group">
                                         <label for="path" class="col-sm-2 control-label">Fleet Number </label>
                                         <div class="col-sm-8">
-                                             <input type='text' class="form-control" id='fleet_number'name="fleet_number"/>
-                                        </div>
-                                    </div>
-
-                                     <div class="form-group">
-                                        <label for="path" class="col-sm-2 control-label">Registration Number </label>
-                                        <div class="col-sm-8">
-                                                <input type='text' class="form-control" id='registration_no' name="registration_no"/> 
+                                            <input type='text' class="form-control" id='fleet_number'
+                                                   name="fleet_number"/>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                            <label for="kpa_id" class="col-sm-2 control-label"> Status</label>
-                                           <div class="col-sm-8">
-                                                <select id="status" name="status" class="form-control select2" style="width: 100%;" required>
-                                             <option value="0">*** Select Status  ***</option>
+                                        <label for="path" class="col-sm-2 control-label">Registration Number </label>
+                                        <div class="col-sm-8">
+                                            <input type='text' class="form-control" id='registration_no'
+                                                   name="registration_no"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="kpa_id" class="col-sm-2 control-label"> Status</label>
+                                        <div class="col-sm-8">
+                                            <select id="status" name="status" class="form-control select2"
+                                                    style="width: 100%;" required>
+                                                <option value="0">*** Select Status ***</option>
                                                 @foreach($processflow as $Fleet)
                                                     <option value="{{ $Fleet->id }}">{{ $Fleet->step_name }}</option>
                                                 @endforeach
-                                                </select>
-                                            </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                            <label for="kpa_id" class="col-sm-2 control-label"> Service Type</label>
-                                           <div class="col-sm-8">
-                                                <select id="service_type_id" name="service_type_id" class="form-control select2" style="width: 100%;" required>
-                                             <option value="0">*** Select Job Title ***</option>
-                                              
-                                                </select>
-                                            </div>
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
-                                            <label for="kpa_id" class="col-sm-2 control-label"> Mechanic</label>
-                                           <div class="col-sm-8">
-                                                <select id="mechanic_id" name="mechanic_id" class="form-control select2" style="width: 100%;" required>
-                                             <option value="0">*** Select Job Title ***</option>
-                                              
-                                                </select>
-                                            </div>
+                                        <label for="kpa_id" class="col-sm-2 control-label"> Service Type</label>
+                                        <div class="col-sm-8">
+                                            <select id="service_type_id" name="service_type_id"
+                                                    class="form-control select2" style="width: 100%;" required>
+                                                <option value="0">*** Select Job Title ***</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="kpa_id" class="col-sm-2 control-label"> Mechanic</label>
+                                        <div class="col-sm-8">
+                                            <select id="mechanic_id" name="mechanic_id" class="form-control select2"
+                                                    style="width: 100%;" required>
+                                                <option value="0">*** Select Job Title ***</option>
+
+                                            </select>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -136,10 +141,10 @@
 @endsection
 
 @section('page_script')
-   <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- bootstrap datepicker -->
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-     <!-- Bootstrap date picker -->
+    <!-- Bootstrap date picker -->
     <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
     <!-- InputMask -->
@@ -198,13 +203,13 @@
             $('#success-action-modal').modal('show');
         });
 
-         //Date Range picker
-            $('.daterangepicker').daterangepicker({
-                format: 'DD/MM/YYYY',
-                endDate: '-1d',
-                autoclose: true
-            });
+        //Date Range picker
+        $('.daterangepicker').daterangepicker({
+            format: 'DD/MM/YYYY',
+            endDate: '-1d',
+            autoclose: true
+        });
 
-    
+
     </script>
 @endsection

@@ -50,7 +50,9 @@
                                     <td>{{ ($type->package) ? $type->package->package : '' }}</td>
                                     <td nowrap>{{ !empty($type->start_date) ? date('d M Y ', $type->start_date) : '' }}</td>
                                     <td nowrap>{{ !empty($type->end_date) ? date(' d M Y', $type->end_date) : '' }}</td>
-                                    <td style="text-align: center;" nowrap>{{ !empty($type->discount) ?  number_format($type->discount, 2): '' }} %</td>
+                                    <td style="text-align: center;"
+                                        nowrap>{{ !empty($type->discount) ?  number_format($type->discount, 2): '' }} %
+                                    </td>
 
                                     <td style="width: 10px; text-align: center;">
                                         <button class="btn btn-danger btn-xs" data-toggle="modal"

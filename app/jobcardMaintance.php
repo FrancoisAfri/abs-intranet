@@ -8,5 +8,5 @@ class jobcardMaintance extends Model
 {
     protected $table = 'jobcardMaintance';
 
-    protected $fillable = [ 'name', 'description','status'];
+    protected $fillable = ['name', 'description', 'status'];
 }
