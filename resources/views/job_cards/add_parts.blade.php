@@ -21,32 +21,17 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-<!--                                <th style="width: 10px; text-align: center;"></th>-->
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Available Parts</th>
-<!--                                <th style="width: 5px; text-align: center;"></th>-->
-<!--                                <th style="width: 5px; text-align: center;"></th>-->
                             </tr>
                             @if (count($parts) > 0)
                               @foreach ($parts as $service_type)
                                <tr id="categories-list">
-<!--                               <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-servicetype-modal"
-                                                data-id="{{ $service_type->id }}" data-name="{{ $service_type->name }}" data-description="{{$service_type->description}}" >
-                                            <i class="fa fa-pencil-square-o"></i> Edit</button>
-                                    </td>-->
                                      <td>{{ (!empty( $service_type->name)) ?  $service_type->name : ''}} </td>
                                      <td>{{ (!empty( $service_type->description)) ?  $service_type->description : ''}} </td>
-                                     <td>{{ (!empty( $service_type->avalaible_stock)) ?  $service_type->avalaible_stock : 0}} </td>
-<!--                                  <td>
-                                       leave here  
-                                    <button vehice="button" id="view_ribbons" class="btn {{ (!empty($service_type->status) && $service_type->status == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$service_type->id}}, 'actdeac');"><i class="fa {{ (!empty($service_type->status) && $service_type->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($service_type->status) && $service_type->status == 1) ? "De-Activate" : "Activate"}}</button>
-                                 </td>-->
-<!--                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>-->
-                                </tr>
+                                     <td>{{ (!empty( $service_type->avalaible_transaction)) ?  $service_type->avalaible_transaction : ''}} </td>
+							</tr>
                                    @endforeach
                                @else
                                <tr id="categories-list">

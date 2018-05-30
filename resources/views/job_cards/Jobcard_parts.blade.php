@@ -33,15 +33,15 @@
                         </thead>
                         <tbody>
                         @if (count($parts) > 0)
-                            @foreach ($parts as $jobcard)
+                            @foreach ($parts as $part)
                                 <tr>
-                                        <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
-                                         <td>{{ !empty($jobcard->fleet_no . '' . $jobcard->vehicleregistration) ? $jobcard->fleet_no. '' . $jobcard->vehicleregistration : '' }}</td>
-                                         <td>{{ !empty($jobcard->date_created) ? date(' d M Y', $jobcard->date_created) : '' }}</td>
-                                         <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
-                                         <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
-                                         <td>{{ !empty($jobcard->product_name) ? $jobcard->product_name : '' }}</td>    
-                                         <td>{{ !empty($jobcard->no_of_parts_used) ? $jobcard->no_of_parts_used : 0 }}</td>
+                                        <td>{{ !empty($part->jobcard_number) ? $part->jobcard_number : '' }}</td>
+                                         <td>{{ !empty($part->fleet_no . '' . $part->vehicleregistration) ? $part->fleet_no. '' . $part->vehicleregistration : '' }}</td>
+                                         <td>{{ !empty($part->date_created) ? date(' d M Y', $part->date_created) : '' }}</td>
+                                         <td>{{ !empty($part->instruction) ? $part->instruction : '' }}</td>
+                                         <td>{{ !empty($part->servicetype) ? $part->servicetype : '' }}</td>
+                                         <td>{{ !empty($part->product_name) ? $part->product_name : '' }}</td>    
+                                         <td>{{ !empty($part->no_of_parts_used) ? $part->no_of_parts_used : '' }}</td>
                                 </tr>
                             @endforeach
                         @endif

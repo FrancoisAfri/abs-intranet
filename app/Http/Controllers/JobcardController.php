@@ -1139,27 +1139,25 @@ class JobcardController extends Controller
         $jobCategories = product_category::orderBy('id', 'asc')->get();
        // return $jobCategories;
        
-        $parts =   DB::table('Product_products')
+        /*$parts =   DB::table('Product_products')
             ->select('Product_products.*', 'stock.avalaible_stock')
             ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
             ->whereBetween('Product_products.stock_type' ,[1,3] )     
             ->get();
        
-        
-//        $parts = DB::table('jobcard__order_parts')
-//        ->select('jobcard__order_parts.*', 'jobcard_parts.*')
-//        ->leftJoin('jobcard_parts', 'jobcard__order_parts.jobcard_parts_id', '=', 'jobcard_parts.id')
-//        ->where('jobcard__order_parts.jobcard_card_id' , $jobcardparts->id)
-//        ->get();
-        
-
-        
+        */
+        $parts = DB::table('jobcard__order_parts')
+        ->select('jobcard__order_parts.*', 'Product_products.*')
+        ->leftJoin('Product_products', 'jobcard__order_parts.product_id', '=', 'Product_products.id')
+        ->where('jobcard__order_parts.jobcard_card_id' , $jobcardparts->id)
+        ->where('jobcard__order_parts.product_id' , '>',0)
+        ->get();
+       
         $cardparts = jobcard_category_parts::orderBy('id','asc')->get();
         $jobcard_category_parts = jobcard_category_parts::orderBy('id','asc')->get()->load(['jobcart_parts_model' => function($query) {
                 $query->orderBy('name', 'asc');
             }]);
-       
-            
+
         $data['jobCategories'] = $jobCategories;
         $data['parts'] = $parts;
         $data['cardparts'] = $cardparts;
@@ -1544,7 +1542,6 @@ class JobcardController extends Controller
                $startExplode = explode('-', $actionDate);
                $actionFrom = strtotime($startExplode[0]);
                $actionTo = strtotime($startExplode[1]);
-              
            }
        
        $vehiclemaintenance = DB::table('jobcard_maintanance')
@@ -1607,7 +1604,7 @@ class JobcardController extends Controller
                     return view('job_cards.Jobcard_card')->with($data);    
    }
    
-            public function printscard( jobcard_maintanance $card){
+   public function printscard( jobcard_maintanance $card){
                    
 //                return $card;
                 
@@ -1656,89 +1653,87 @@ class JobcardController extends Controller
                         
             }
             
-      public function parts(Request $request){
+   public function parts(Request $request){
                 $this->validate($request, [
             // 'date_uploaded' => 'required',
         ]);
 
         $SysData = $request->all();
-         unset($SysData['_token']);
-         
-       //  return $SysData;
-         
-         $categoryID = $SysData['product_id'];
-         $productID = $SysData['category_id'];
-         $actionDate = $SysData['action_date'];
+        unset($SysData['_token']);
+
+        $categoryID = $SysData['product_id'];
+        $productID = $SysData['category_id'];
+        $actionDate = $SysData['action_date'];
                     
-           $actionFrom = $actionTo = 0;
-           $actionDate = $request['date'];
-           if (!empty($actionDate)) {
-               $startExplode = explode('-', $actionDate);
-               $actionFrom = strtotime($startExplode[0]);
-               $actionTo = strtotime($startExplode[1]);
-              
-           }
+		$actionFrom = $actionTo = 0;
+		$actionDate = $request['date'];
+		if (!empty($actionDate)) {
+			
+			$startExplode = explode('-', $actionDate);
+			$actionFrom = strtotime($startExplode[0]);
+			$actionTo = strtotime($startExplode[1]);  
+		}
            
-           //jobcard__order_parts  
-                            $parts =  DB::table('jobcard_maintanance')
-                                        ->select('jobcard_maintanance.*','jobcard__order_parts.*','Product_products.name as product_name',
-                                                'hr_people.first_name as firstname', 'hr_people.surname as surname' ,'vehicle_details.fleet_number as fleet_no',
-                                                 'vehicle_details.vehicle_registration as vehicleregistration','service_type.name as servicetype')
-                                     ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
-                                     ->leftJoin('hr_people', 'jobcard_maintanance.user_id', '=', 'hr_people.id')
-                                     ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id') 
-                                     ->leftJoin('jobcard__order_parts', 'jobcard__order_parts.jobcard_card_id', '=', 'jobcard_maintanance.id')
-                                     ->leftJoin('Product_products', 'jobcard__order_parts.product_id', '=', 'Product_products.id')
-                                    ->where(function ($query) use ($categoryID) {
-                                 if (!empty($categoryID)) {
-                                     $query->where('jobcard__order_parts.category_id', $categoryID);
-                                     
-                                 }
-                             })
-                                ->where(function ($query) use ($productID) {
-                                               if (!empty($productID)) {
-                                                   $query->where('jobcard__order_parts.product_id', $productID);
+        //jobcard__order_parts  
+		$parts =  DB::table('jobcard_maintanance')
+					->select('jobcard_maintanance.*','jobcard__order_parts.*','Product_products.name as product_name',
+							'hr_people.first_name as firstname', 'hr_people.surname as surname' ,'vehicle_details.fleet_number as fleet_no',
+							 'vehicle_details.vehicle_registration as vehicleregistration','service_type.name as servicetype')
+				 ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
+				 ->leftJoin('hr_people', 'jobcard_maintanance.user_id', '=', 'hr_people.id')
+				 ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id') 
+				 ->leftJoin('jobcard__order_parts', 'jobcard__order_parts.jobcard_card_id', '=', 'jobcard_maintanance.id')
+				 ->leftJoin('Product_products', 'jobcard__order_parts.product_id', '=', 'Product_products.id')
+				->where(function ($query) use ($categoryID) {
+		if (!empty($categoryID)) {
+			 $query->where('jobcard__order_parts.category_id', $categoryID);
+			 
+		 }
+		})
+		->where(function ($query) use ($productID) {
+			if (!empty($productID)) {
+			   $query->where('jobcard__order_parts.product_id', $productID);
 
-                                               }
-                                           })
+			}
+		})
 
-                                ->where(function ($query) use ($actionFrom, $actionTo) {
-                                      if ($actionFrom > 0 && $actionTo > 0) {
-                                                  $query->whereBetween('jobcard_maintanance.date_created', [$actionFrom, $actionTo]);
-                                              }
-                                          })    
-                                 ->where('jobcard__order_parts.jobcard_card_id','>',0)
-                                 ->where('jobcard__order_parts.product_id','>',0)
-                                 ->OrderBy('jobcard__order_parts.id' ,'asc')
-                                 ->get();
+		->where(function ($query) use ($actionFrom, $actionTo) {
+			if ($actionFrom > 0 && $actionTo > 0) {
+						  $query->whereBetween('jobcard_maintanance.date_created', [$actionFrom, $actionTo]);
+			}
+		})    
+		->where('jobcard__order_parts.jobcard_card_id','>',0)
+		->where('jobcard__order_parts.product_id','>',0)
+		->OrderBy('jobcard__order_parts.id' ,'asc')
+		->get();
                                           
                                            
-                     //  return $parts;
-                           
-                    $data['parts'] = $parts;
-                    $data['page_title'] = "Job Card Processes";
-                    $data['page_description'] = "Job Card Management";
-                    $data['breadcrumb'] = [
-                        ['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-                        ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
-                    ];
+		 //  return $parts;
+			   
+		$data['parts'] = $parts;
+		$data['page_title'] = "Job Card Processes";
+		$data['page_description'] = "Job Card Management";
+		$data['breadcrumb'] = [
+			['title' => 'Job Card Management', 'path' => 'jobcards/set_up', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+			['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
+		];
 
-                    $data['active_mod'] = 'Job Card Management';
-                    $data['active_rib'] = 'Reports';
+		$data['active_mod'] = 'Job Card Management';
+		$data['active_rib'] = 'Reports';
 
-                    $companyDetails = CompanyIdentity::systemSettings();
-                    $companyName = $companyDetails['company_name'];
-                    $user = Auth::user()->load('person');
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
 
-                    $data['support_email'] = $companyDetails['support_email'];
-                    $data['company_name'] = $companyName;
-                    $data['full_company_name'] = $companyDetails['full_company_name'];
-                    $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-                    $data['date'] = date("d-m-Y");
-                    $data['user'] = $user;
+		$data['support_email'] = $companyDetails['support_email'];
+		$data['company_name'] = $companyName;
+		$data['full_company_name'] = $companyDetails['full_company_name'];
+		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
 
-                    AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-                    return view('job_cards.Jobcard_parts')->with($data); 
+		AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+		return view('job_cards.Jobcard_parts')->with($data); 
            
         }
             
