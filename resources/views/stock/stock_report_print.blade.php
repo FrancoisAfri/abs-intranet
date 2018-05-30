@@ -21,9 +21,11 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<style type="text/css" media="print">
-  @page { size: landscape; }
-</style>
+    <style type="text/css" media="print">
+        @page {
+            size: landscape;
+        }
+    </style>
 </head>
 <body onload="window.print();">
 <div class="wrapper">
@@ -56,12 +58,12 @@
                     <thead>
                     <tr>
                         <th>Product name</th>
-			<th>Date </th>
-			<th>Action Performed</th>
-			<th>Performed By</th>
-			<th>Allocated to </th>
-			<th>Available Balance Before </th>
-			<th>Available Balance After </th>
+                        <th>Date</th>
+                        <th>Action Performed</th>
+                        <th>Performed By</th>
+                        <th>Allocated to</th>
+                        <th>Available Balance Before</th>
+                        <th>Available Balance After</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -69,11 +71,11 @@
                         @foreach($stock as $stocktake)
                             <tr>
                                 <td>{{ (!empty($stocktake->product_name)) ? $stocktake->product_name : ''}} </td>
-				<td>{{ (!empty($stocktake->action_date)) ? date(' d M Y', $stocktake->action_date) : ''}} </td>
-				<td>{{ (!empty($stocktake->action)) ? $stocktake->action : ''}} </td>
-				<td>{{ (!empty($stocktake->name)&& !empty($stocktake->surname)) ? $stocktake->name." ".$stocktake->surname: ''}} </td>
+                                <td>{{ (!empty($stocktake->action_date)) ? date(' d M Y', $stocktake->action_date) : ''}} </td>
+                                <td>{{ (!empty($stocktake->action)) ? $stocktake->action : ''}} </td>
+                                <td>{{ (!empty($stocktake->name)&& !empty($stocktake->surname)) ? $stocktake->name." ".$stocktake->surname: ''}} </td>
                                 <td></td>
-			        <td>{{ (!empty($stocktake->balance_before)) ? $stocktake->balance_before : 0}} </td>
+                                <td>{{ (!empty($stocktake->balance_before)) ? $stocktake->balance_before : 0}} </td>
                                 <td>{{ (!empty($stocktake->balance_after)) ? $stocktake->balance_after : 0}} </td>
                             </tr>
                         @endforeach
@@ -82,17 +84,17 @@
                     <tfoot>
                     <tr>
                         <th>Product name</th>
-			<th>Date </th>
-			<th>Action Performed</th>
-			<th>Performed By</th>
-			<th>Allocated to </th>
-			<th>Available Balance Before </th>
-			<th>Available Balance After </th>
+                        <th>Date</th>
+                        <th>Action Performed</th>
+                        <th>Performed By</th>
+                        <th>Allocated to</th>
+                        <th>Available Balance Before</th>
+                        <th>Available Balance After</th>
                     </tr>
                     </tfoot>
                     <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
                     <class
-                
+
                 </table>
             </div>
         </div>

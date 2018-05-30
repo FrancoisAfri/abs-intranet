@@ -2,36 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\HRPerson;
-use App\User;
-use App\modules;
-use App\JobCategory;
 use App\doc_type;
+use App\HRPerson;
+use App\JobCategory;
+use App\Mail\confirm_collection;
+use App\packages_product_table;
 use App\product_category;
-use App\product_products;
 use App\product_packages;
 use App\product_price;
+use App\product_products;
 use App\product_promotions;
-use App\packages_product_table;
-// use App\product_category;
-use Illuminate\Support\Facades\DB;
 use App\ProductServiceSettings;
-use App\Mail\confirm_collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
+use Illuminate\Support\Facades\DB;
+
+// use App\product_category;
 class Product_categoryController extends Controller
 {
-	
-	public function __construct()
+
+    public function __construct()
     {
         $this->middleware('auth');
     }
-	
+
     public function index()
     {
         $jobCategories = JobCategory::orderBy('name', 'asc')->get();
@@ -71,19 +65,19 @@ class Product_categoryController extends Controller
 
     public function productView(Product_category $Category)
     {
-      
+
         if ($Category->status == 1) {
 
-         $userAccess = DB::table('security_modules_access')
-                   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-                   ->where('code_name', 'quote')
-                   ->where('user_id', Auth::user()->person->user_id)
-                   ->first();
+            $userAccess = DB::table('security_modules_access')
+                ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                ->where('code_name', 'quote')
+                ->where('user_id', Auth::user()->person->user_id)
+                ->first();
 
 
-           $jobCategories = product_category::orderBy('id', 'asc')->get();
-        
-           $products = product_products::orderBy('id', 'asc')->get();
+            $jobCategories = product_category::orderBy('id', 'asc')->get();
+
+            $products = product_products::orderBy('id', 'asc')->get();
             //return $products;
 
             $Category->load('productCategory');
@@ -382,8 +376,8 @@ class Product_categoryController extends Controller
         $documentType->name = $docData['name'];
         $documentType->description = $docData['description'];
         $documentType->price = $docData['price'];
-         $documentType->product_code = $docData['product_code'];
-         $documentType->stock_type = $docData['stock_type'];
+        $documentType->product_code = $docData['product_code'];
+        $documentType->stock_type = $docData['stock_type'];
         $documentType->save();
 
         $newName = $docData['name'];
@@ -391,7 +385,7 @@ class Product_categoryController extends Controller
         $newPrice = $docData['price'];
         $newProductcode = $docData['product_code'];
         AuditReportsController::store('Products', 'product created', 'Edited by User', 0);
-        return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice , 'product_code' => $newProductcode], 200);
+        return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice, 'product_code' => $newProductcode], 200);
     }
 
     public function editProduct(Request $request, product_products $product)

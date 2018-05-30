@@ -2,27 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use App\Users;
+use App\ContactCompany;
 use App\DivisionLevel;
-use App\vehicle_maintenance;
-use App\Vehicle_managemnt;
-use App\HRPerson;
-use App\vehicle_detail;
-use App\vehicle_fleet_cards;
 use App\fleetcard_type;
 use App\FleetType;
-use App\ContactCompany;
-use Illuminate\Http\Request;
+use App\HRPerson;
+use App\Http\Requests;
 use App\Mail\confirm_collection;
-//use App\Mail\confirm_collection;
+use App\Users;
+use App\vehicle_detail;
+use App\vehicle_fleet_cards;
+use App\vehicle_maintenance;
+use App\Vehicle_managemnt;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
+
+//use App\Mail\confirm_collection;
 
 class fleetcardController extends Controller
 {
@@ -134,9 +130,9 @@ class fleetcardController extends Controller
                 }
             })
             ->where(function ($query) use ($status) {
-                 if (!empty($status)) {
-                     $query->where('vehicle_fleet_cards.status', $status);
-                 }
+                if (!empty($status)) {
+                    $query->where('vehicle_fleet_cards.status', $status);
+                }
             })
             ->orderBy('vehicle_fleet_cards.id', 'asc')
             ->get();
@@ -176,9 +172,9 @@ class fleetcardController extends Controller
     public function Addfleetcard(Request $request)
     {
         $this->validate($request, [
-         'cvs_number' => 'bail|required|max:3',
-         'issued_date' => 'required',
-         'expiry_date' => 'required',
+            'cvs_number' => 'bail|required|max:3',
+            'issued_date' => 'required',
+            'expiry_date' => 'required',
         ]);
         $docData = $request->all();
         unset($docData['_token']);
@@ -193,8 +189,8 @@ class fleetcardController extends Controller
         }
 
         $vehiclefleetcards = new vehicle_fleet_cards();
-        $vehiclefleetcards->card_type_id = !empty($docData['card_type_id']) ? $docData['card_type_id'] : 0; 
-        $vehiclefleetcards->fleet_number = !empty($docData['fleet_number']) ? $docData['fleet_number'] : 0;  
+        $vehiclefleetcards->card_type_id = !empty($docData['card_type_id']) ? $docData['card_type_id'] : 0;
+        $vehiclefleetcards->fleet_number = !empty($docData['fleet_number']) ? $docData['fleet_number'] : 0;
         $vehiclefleetcards->company_id = !empty($docData['company_id']) ? $docData['company_id'] : 0;
         $vehiclefleetcards->holder_id = !empty($docData['holder_id']) ? $docData['holder_id'] : 0;
         $vehiclefleetcards->card_number = $docData['card_number'];
@@ -231,20 +227,20 @@ class fleetcardController extends Controller
             $docData['expiry_date'] = strtotime($docData['expiry_date']);
         }
 
-        $vehiclefleetcards->card_type_id = !empty($docData['card_type_id']) ? $docData['card_type_id'] : 0; 
-        $vehiclefleetcards->fleet_number = !empty($docData['fleet_number']) ? $docData['fleet_number'] : 0;  
+        $vehiclefleetcards->card_type_id = !empty($docData['card_type_id']) ? $docData['card_type_id'] : 0;
+        $vehiclefleetcards->fleet_number = !empty($docData['fleet_number']) ? $docData['fleet_number'] : 0;
         $vehiclefleetcards->company_id = !empty($docData['company_id']) ? $docData['company_id'] : 0;
         $vehiclefleetcards->holder_id = !empty($docData['holder_id']) ? $docData['holder_id'] : 0;
         $vehiclefleetcards->card_number = $docData['card_number'];
         $vehiclefleetcards->cvs_number = $docData['cvs_number'];
         $vehiclefleetcards->issued_date = $docData['issued_date'];
-       // $vehiclefleetcards->expiry_date = $docData['expiry_date'];
+        // $vehiclefleetcards->expiry_date = $docData['expiry_date'];
         $vehiclefleetcards->status = $docData['status'];
         $vehiclefleetcards->update();
 
         AuditReportsController::store('Fleet Management', 'Update Vehicle Fleet Card', "Update Vehicle Fleet Card", 0);
         return response()->json();
-       // return redirect()->to('/vehicle_management/fleet_card_search');
+        // return redirect()->to('/vehicle_management/fleet_card_search');
 
     }
 
@@ -350,7 +346,7 @@ class fleetcardController extends Controller
 
         $status = array(1 => ' Active', 2 => ' InActive');
 
-      
+
         $data['status'] = $status;
         $data['drverdetails'] = $drverdetails;
         $data['page_title'] = " Fleet Management ";
@@ -388,10 +384,10 @@ class fleetcardController extends Controller
             ->get();
 
         //return $Vehiclemanagemnt;
-        
-         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
-         $vehicleConfig = $vehicleConfigs->first();
-        
+
+        $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = $vehicleConfigs->first();
+
 
         $data['page_title'] = "Vehicle Approval";
         $data['page_description'] = "Vehicle Approvals";
@@ -421,7 +417,7 @@ class fleetcardController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-      // return $vehicle_maintenance;
+        // return $vehicle_maintenance;
 
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {

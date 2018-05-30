@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class product_packages extends Model
 {
-     protected $table = 'product_packages';
-     protected $fillable = ['name','description','products_id','discount','status'];
+    protected $table = 'product_packages';
+    protected $fillable = ['name', 'description', 'products_id', 'discount', 'status'];
 
     //  public function Product_Packages() {
     //     return $this->belongsTo(product_products::class, 'products_id');
@@ -15,8 +15,8 @@ class product_packages extends Model
     public function products_type()
     {
         #Many to many Relationship Between product_packages and product_products
-        return $this->belongsToMany('App\product_products', 'packages_product_table' ,'product_packages_id','product_product_id')->withPivot('description');
-            
+        return $this->belongsToMany('App\product_products', 'packages_product_table', 'product_packages_id', 'product_product_id')->withPivot('description');
+
     }
 
     /**

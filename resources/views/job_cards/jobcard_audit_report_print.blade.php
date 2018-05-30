@@ -21,9 +21,11 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<style type="text/css" media="print">
-  @page { size: landscape; }
-</style>
+    <style type="text/css" media="print">
+        @page {
+            size: landscape;
+        }
+    </style>
 </head>
 <body onload="window.print();">
 <div class="wrapper">
@@ -40,123 +42,127 @@
             <!-- /.col -->
         </div>
         <!-- info row -->
-                <div class="row invoice-info">
-                    <div class="col-sm-8 invoice-col">
-                        <address>
-                            <strong>{{ $company_name }}</strong><br>
-                        </address>
-                    </div>
-                    <!-- /.col -->
-                </div>
+        <div class="row invoice-info">
+            <div class="col-sm-8 invoice-col">
+                <address>
+                    <strong>{{ $company_name }}</strong><br>
+                </address>
+            </div>
+            <!-- /.col -->
+        </div>
         <!-- /.row -->
-                        <table class="table table-striped table-bordered">
-                             @foreach ($vehiclemaintenance as $vehiclemaintenance)
-                                <tr>
-                                    <td class="caption">Joc Card # </td>
-                                    <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
-                                    <td class="caption">Summary</td>
-                                    <td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
-                                </tr>
-                                <tr>
+        <table class="table table-striped table-bordered">
+            @foreach ($vehiclemaintenance as $vehiclemaintenance)
+                <tr>
+                    <td class="caption">Joc Card #</td>
+                    <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
+                    <td class="caption">Summary</td>
+                    <td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
+                </tr>
+                <tr>
 
-                                    <td class="caption">Dispatch Notes </td>
-                                    <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
-                                    <td class="caption">Status</td>
-                                    <td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="caption" width="25%">Job Card Date</td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
-                                    <td class="caption">Mechanic </td>
-                                    <td>{{ !empty($vehiclemaintenance->aStatus) ? $vehiclemaintenance->aStatus : ''}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="caption" width="25%">Company </td>
-                                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
-                                     <td class="caption" width="25%">Last driver</td>
-                                     <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="caption">Vehicle Description </td>
-                                    <td>{{ !empty($vehiclemaintenance->instruction) ? $vehiclemaintenance->instruction : ''}}</td>
-                                    <td class="caption">Driver</td>
-                                    <td>{{ !empty($vehiclemaintenance->last_driver_id) ? $vehiclemaintenance->last_driver_id : ''}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="caption">Current Odometer </td>
-                                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
-                                    <td class="caption">Mechanic</td>
-                                     <td>{{ !empty($vehiclemaintenance->mechanic_id) ? $vehiclemaintenance->mechanic_id : ''}}</td>
-                                </tr>
-                                <tr>
-                                    <td class="caption">Current Hours </td>
-                                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
-                                    <td class="caption">Inspection List Number</td>
-                                    <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
-                                </tr>
-                               
-                                <tr>
-                                    <td class="caption">Hours Allocated</td>
-                                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
-                                    <td class="caption">Completion Date</td>
-                                    <td>{{ !empty($vehiclemaintenance->completion_date) ? date(' d M Y', $vehiclemaintenance->completion_date) : ''}}</td>
-                                </tr>
-                             
-                                <tr>
-                                    <td class="caption">Hours used </td>
-                                    <td></td>
-                                   <td class="caption">Service Time</td>
-                                   <td>{{ !empty($vehiclemaintenance->service_time) ? $vehiclemaintenance->service_time : ''}}</td>
-                                </tr>
-                                
-                                <tr>
-                                    <td class="caption">Service Type</td>
-                                     <td>{{ !empty($vehiclemaintenance->servicetype) ? $vehiclemaintenance->servicetype : ''}}</td>
-                                    <td class="caption">Servicing Agent</td>
-                                    <td>  N/A </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td class="caption">Purchase Order Number</td>
+                    <td class="caption">Dispatch Notes</td>
+                    <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+                    <td class="caption">Status</td>
+                    <td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
+                </tr>
+                <tr>
+                    <td class="caption" width="25%">Job Card Date</td>
+                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
+                    <td class="caption">Mechanic</td>
+                    <td>{{ !empty($vehiclemaintenance->aStatus) ? $vehiclemaintenance->aStatus : ''}}</td>
+                </tr>
+                <tr>
+                    <td class="caption" width="25%">Company</td>
+                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
+                    <td class="caption" width="25%">Last driver</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="caption">Vehicle Description</td>
+                    <td>{{ !empty($vehiclemaintenance->instruction) ? $vehiclemaintenance->instruction : ''}}</td>
+                    <td class="caption">Driver</td>
+                    <td>{{ !empty($vehiclemaintenance->last_driver_id) ? $vehiclemaintenance->last_driver_id : ''}}</td>
+                </tr>
+                <tr>
+                    <td class="caption">Current Odometer</td>
+                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
+                    <td class="caption">Mechanic</td>
+                    <td>{{ !empty($vehiclemaintenance->mechanic_id) ? $vehiclemaintenance->mechanic_id : ''}}</td>
+                </tr>
+                <tr>
+                    <td class="caption">Current Hours</td>
+                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
+                    <td class="caption">Inspection List Number</td>
+                    <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
+                </tr>
 
-                                    <td></td>
-                                    <td class="caption">Service Date</td>
-                                    <td></td>
-                                </tr>
-                                 
-                                <br>
-                                 
-                                <tr>
-                                    <td colspan="4" class="caption">Job Card Instructions</td></tr>
-                                     <tr>
-				         <td colspan="4" style="text-align:left;" height="40" border="1"> -- {{ !empty($vehiclemaintenance->instruction) ? $vehiclemaintenance->instruction : ''}}</td>
-				     </tr>
-                                <tr>
-                                    
-                                 <br>
-                                 
-                                <tr>
-                                    <td colspan="4" class="caption"> Stock Items Despatched</td></tr>
-                                     <tr>
-				         <td colspan="4" style="text-align:left;" height="40" border="1"></td>
-				     </tr>
-                                <tr>
-                                    
-                                    <br>
-                                    
-                                    <tr>
-                                    <td colspan="8" class="caption"> Stock Items Despatched</td></tr>
-                                     <tr>
-				         <td colspan="8" style="text-align:left;" height="120" border="1"></td>
-				     </tr>
-                       
-                        </table>
-                         @endforeach
-                    </div>
-                </div>
-        <!-- /.row -->
-    </section>
-    <!-- /.content -->
+                <tr>
+                    <td class="caption">Hours Allocated</td>
+                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
+                    <td class="caption">Completion Date</td>
+                    <td>{{ !empty($vehiclemaintenance->completion_date) ? date(' d M Y', $vehiclemaintenance->completion_date) : ''}}</td>
+                </tr>
+
+                <tr>
+                    <td class="caption">Hours used</td>
+                    <td></td>
+                    <td class="caption">Service Time</td>
+                    <td>{{ !empty($vehiclemaintenance->service_time) ? $vehiclemaintenance->service_time : ''}}</td>
+                </tr>
+
+                <tr>
+                    <td class="caption">Service Type</td>
+                    <td>{{ !empty($vehiclemaintenance->servicetype) ? $vehiclemaintenance->servicetype : ''}}</td>
+                    <td class="caption">Servicing Agent</td>
+                    <td> N/A</td>
+                </tr>
+
+                <tr>
+                    <td class="caption">Purchase Order Number</td>
+
+                    <td></td>
+                    <td class="caption">Service Date</td>
+                    <td></td>
+                </tr>
+
+                <br>
+
+                <tr>
+                    <td colspan="4" class="caption">Job Card Instructions</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:left;" height="40" border="1">
+                        -- {{ !empty($vehiclemaintenance->instruction) ? $vehiclemaintenance->instruction : ''}}</td>
+                </tr>
+                <tr>
+
+                    <br>
+
+                <tr>
+                    <td colspan="4" class="caption"> Stock Items Despatched</td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:left;" height="40" border="1"></td>
+                </tr>
+                <tr>
+
+                    <br>
+
+                <tr>
+                    <td colspan="8" class="caption"> Stock Items Despatched</td>
+                </tr>
+                <tr>
+                    <td colspan="8" style="text-align:left;" height="120" border="1"></td>
+                </tr>
+
+        </table>
+    @endforeach
+</div>
+</div>
+<!-- /.row -->
+</section>
+<!-- /.content -->
 </div>
 <!-- ./wrapper -->
 </body>

@@ -7,52 +7,54 @@
                     <h3 class="box-title">Product Search Results</h3>
                 </div>
                 <!-- /.box-header -->
-				<!--<form class="form-horizontal" method="POST" action="/audits/print">-->
-					{{ csrf_field() }}
+                <!--<form class="form-horizontal" method="POST" action="/audits/print">-->
+                {{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">
                         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
                         <div class="panel box box-primary">
                             <div class="box-body">
-								<table class="table table-striped">
-									<tr>
-										
-										<th>Product Type</th>
-										<th>Category Type</th>
-										<th>Description</th>
-										<th>Product Price</th>
-									</tr>
-									@if(count($tickets) > 0)
-										@foreach($tickets as $product)
-											<tr>
-											    <td>{{ (!empty($product->name)) ?  $product->name : ''}} </td>
-											 	<td>{{ (!empty($product->catName)) ?  $product->catName : ''}} </td>
-						                        <td>{{ (!empty($product->description)) ?  $product->description : ''}} </td>
-						                        <td>R {{ (!empty($product->price)) ?  'R' .number_format($product->price, 2) : ''}} </td>
-											</tr>
-										@endforeach
-									<tr>
-									
-										<th>Product Type</th>
-										<th>Category Type</th>
-										<th>Description</th>
-										<th>Product Price</th>
-									</tr>
-									@endif
-								</table>
-								<div class="row no-print">
-									<div class="col-xs-12">
-									<button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-									</div>
-								</div>
-								<!-- End amortization /table -->
-							</div>
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>Product Type</th>
+                                        <th>Category Type</th>
+                                        <th>Description</th>
+                                        <th>Product Price</th>
+                                    </tr>
+                                    @if(count($tickets) > 0)
+                                        @foreach($tickets as $product)
+                                            <tr>
+                                                <td>{{ (!empty($product->name)) ?  $product->name : ''}} </td>
+                                                <td>{{ (!empty($product->catName)) ?  $product->catName : ''}} </td>
+                                                <td>{{ (!empty($product->description)) ?  $product->description : ''}} </td>
+                                                <td>
+                                                    R {{ (!empty($product->price)) ?  'R' .number_format($product->price, 2) : ''}} </td>
+                                            </tr>
+                                        @endforeach
+                                        <tr>
+
+                                            <th>Product Type</th>
+                                            <th>Category Type</th>
+                                            <th>Description</th>
+                                            <th>Product Price</th>
+                                        </tr>
+                                    @endif
+                                </table>
+                                <div class="row no-print">
+                                    <div class="col-xs-12">
+                                        <button type="button" class="btn btn-default pull-left" id="back_button"><i
+                                                    class="fa fa-arrow-left"></i> Back
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- End amortization /table -->
+                            </div>
                         </div>
                     </div>
                     <!-- /. End Collapsible section containing the amortization schedule -->
                 </div>
-				</form>
+                </form>
             </div>
         </div>
     </div>

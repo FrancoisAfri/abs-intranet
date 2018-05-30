@@ -12,115 +12,117 @@
                     <i class="fa fa-truck pull-right"></i>
                     <h3 class="box-title">Job Card Report</h3>
                 </div>
-    <div class="box-body">
-        <div class="box">
-            <!-- /.box-header -->
-            <div class="box-body">
-                <div style="overflow-X:auto;">
-                <form class="form-horizontal" method="POST" action="/fleet/reports/booking/print">
-                                 
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th style="width: 5px; text-align: center;"> Job Card #</th>
-                                    <th>Vehicleb Name</th>
-                                    <th>Registration Number</th>
-                                    <th>Job Card Date</th>
-                                    <th>Completion Date</th>
-                                    <th>Instruction Mechanic</th>
-                                    <th>Service Type</th>
-                                    <th>Supplier</th>
-                                    <th>Status</th>
-                                    <th style="width: 5px; text-align: center;"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @if (count($vehiclemaintenance) > 0)
-                                    @foreach ($vehiclemaintenance as $jobcard)
-                                        <tr id="categories-list">
-                                         <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
-                                         <td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model)) 
-                                             ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
-                                         <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
-                                         <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
-                                         <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
-                                         <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
-                                         <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
-                                         <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>    
-                                         <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>
-                                         <td><a href="{{ '/jobcards/printcards/' . $jobcard->id }}" id="edit_compan" class="btn btn-default  btn-xs"><i class="fa fa-print"></i> Print</a></td>
-                                         </td> 
+                <div class="box-body">
+                    <div class="box">
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div style="overflow-X:auto;">
+                                <form class="form-horizontal" method="POST" action="/fleet/reports/booking/print">
+
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 5px; text-align: center;"> Job Card #</th>
+                                            <th>Vehicleb Name</th>
+                                            <th>Registration Number</th>
+                                            <th>Job Card Date</th>
+                                            <th>Completion Date</th>
+                                            <th>Instruction Mechanic</th>
+                                            <th>Service Type</th>
+                                            <th>Supplier</th>
+                                            <th>Status</th>
+                                            <th style="width: 5px; text-align: center;"></th>
                                         </tr>
-                                    @endforeach
-                                @endif
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th style="width: 5px; text-align: center;"></th>
-                                    <th style="width: 5px; text-align: center;"></th>
-                                    <th>Vehicle</th>
-                                    <th>Type</th>
-                                    <th>Fleet Number</th>
-                                    <th>Registration Number</th>
-                                    <th>Company</th>
-                                    <th>Department</th>
-                                    <th>Odometer Reading</th>
-                                    <th>Notices</th>
-                        </tr>
-                        </tfoot>
-                    </table>
-            <div class="box-footer">
-                
-                <div class="row no-print">
-                   <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                            class="fa fa-arrow-left"></i> Back
-                                </button>
-                        <!-- <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+                                        </thead>
+                                        <tbody>
+                                        @if (count($vehiclemaintenance) > 0)
+                                            @foreach ($vehiclemaintenance as $jobcard)
+                                                <tr id="categories-list">
+                                                    <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
+                                                    <td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model))
+                                             ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
+                                                    <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
+                                                    <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
+                                                    <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
+                                                    <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
+                                                    <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
+                                                    <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
+                                                    <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>
+                                                    <td><a href="{{ '/jobcards/printcards/' . $jobcard->id }}"
+                                                           id="edit_compan" class="btn btn-default  btn-xs"><i
+                                                                    class="fa fa-print"></i> Print</a></td>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th style="width: 5px; text-align: center;"></th>
+                                            <th style="width: 5px; text-align: center;"></th>
+                                            <th>Vehicle</th>
+                                            <th>Type</th>
+                                            <th>Fleet Number</th>
+                                            <th>Registration Number</th>
+                                            <th>Company</th>
+                                            <th>Department</th>
+                                            <th>Odometer Reading</th>
+                                            <th>Notices</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
+                                    <div class="box-footer">
 
-@section('page_script')
-    <!-- DataTables -->
-        <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-        <!-- End Bootstrap File input -->
-        <script>
-            function postData(id, data) {
-                if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
-            }
+                                        <div class="row no-print">
+                                            <button type="button" id="cancel" class="btn btn-default pull-left"><i
+                                                        class="fa fa-arrow-left"></i> Back
+                                            </button>
+                                            <!-- <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> -->
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                @endsection
 
-            //Cancel button click event
-            //Cancel button click event
-                        document.getElementById("cancel").onclick = function () {
-                            location.href = "/jobcards/reports";
-                        };
-           
-            $(function () {
-                $('#example2').DataTable({
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": true,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        'copy', 'csv', 'excel'
-                    ]
-                });
-            });
-        </script>
+                @section('page_script')
+                    <!-- DataTables -->
+                        <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+                        <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+                        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+                        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+                        <!-- End Bootstrap File input -->
+                        <script>
+                            function postData(id, data) {
+                                if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
+                            }
+
+                            //Cancel button click event
+                            //Cancel button click event
+                            document.getElementById("cancel").onclick = function () {
+                                location.href = "/jobcards/reports";
+                            };
+
+                            $(function () {
+                                $('#example2').DataTable({
+                                    "paging": true,
+                                    "lengthChange": true,
+                                    "searching": true,
+                                    "ordering": true,
+                                    "info": true,
+                                    "autoWidth": true,
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'copy', 'csv', 'excel'
+                                    ]
+                                });
+                            });
+                        </script>
 @endsection

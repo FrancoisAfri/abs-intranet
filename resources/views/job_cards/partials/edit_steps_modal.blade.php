@@ -14,7 +14,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 
-                        <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Step number</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="step_number" name="step_number" value=""
@@ -28,17 +28,18 @@
                                    placeholder="Enter step name" required>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
-			<label for="kpa_id" class="col-sm-2 control-label">Job Title</label>
-			   <div class="col-sm-8">
-			        <select id="job_title" name="job_title" class="form-control select2" style="width: 100%;" required>
-				 <option value="0">*** Select Job Title ***</option>
-				    @foreach($positions as $position)
-	                                <option value="{{ $position->id }}">{{ $position->name }}</option>
-	                            @endforeach
-			        </select>
-			    </div>
+                        <label for="kpa_id" class="col-sm-2 control-label">Job Title</label>
+                        <div class="col-sm-8">
+                            <select id="job_title" name="job_title" class="form-control select2" style="width: 100%;"
+                                    required>
+                                <option value="0">*** Select Job Title ***</option>
+                                @foreach($positions as $position)
+                                    <option value="{{ $position->id }}">{{ $position->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                 </div>
