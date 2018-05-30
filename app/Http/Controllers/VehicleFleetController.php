@@ -39,6 +39,7 @@ use App\ContactPerson;
 use App\vehicle;
 use App\FueltankTopUp;
 use App\vehicle_detail;
+use App\DivisionLevelFour;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;

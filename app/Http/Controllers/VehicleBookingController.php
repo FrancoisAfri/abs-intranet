@@ -465,8 +465,8 @@ class VehicleBookingController extends Controller
 
         foreach ($managersID as $manID) {
             $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
-
-            Mail::to($usedetails->email)->send(new vehiclebooking_manager_notification($usedetails->first_name, $usedetails->surname, $usedetails->email, $request['required_from'], $request['required_to'], $request['Usage_type'], $driver, $request['destination'], $request['purpose'], $vehicle_model));
+			if (!empty($usedetails->email))
+				Mail::to($usedetails->email)->send(new vehiclebooking_manager_notification($usedetails->first_name, $usedetails->surname, $usedetails->email, $request['required_from'], $request['required_to'], $request['Usage_type'], $driver, $request['destination'], $request['purpose'], $vehicle_model));
         }
 
         #mail to user
