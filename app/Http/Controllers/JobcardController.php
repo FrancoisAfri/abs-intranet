@@ -926,8 +926,6 @@ class JobcardController extends Controller
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();
 
-       
-
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['jobcard'] = $jobcard;
         $data['page_title'] = "Job Card Search";
@@ -1493,7 +1491,7 @@ class JobcardController extends Controller
                 } elseif ($cardID == 4) { //cardsaudit
 
                     $vehiclemaintenance = AuditTrail::Orderby('id', 'asc')->where('module_name', 'Job Card Management')->get();
-                    // return $vehiclemaintenance;
+                     return $vehiclemaintenance;
 
                     $data['vehiclemaintenance'] = $vehiclemaintenance;
                     $data['page_title'] = " Fleet Management ";
