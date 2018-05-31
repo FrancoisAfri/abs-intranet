@@ -50,8 +50,8 @@
                                 <select id="stock_type" name="stock_type" class="form-control">
                                     <option value="0">*** Select product Type ***</option>
                                     <option value="1"> Stock Item</option>
-                                    <option value="2"> non Stock Item </option>
-                                    <option value="3"> Bought </option>
+                                    <option value="2"> Non Stock Item </option>
+                                    <option value="3"> Both </option>
                                 </select>
                             </div>
                         </div>

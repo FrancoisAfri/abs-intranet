@@ -176,7 +176,7 @@ class QuotesController extends Controller
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
        // return $contactPeople;
-		$products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
+		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
 
@@ -728,7 +728,7 @@ class QuotesController extends Controller
             }]);
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-        $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
+        $products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
 
@@ -941,7 +941,7 @@ class QuotesController extends Controller
         //return $quote;
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-        $products = product_products::where('status', 1)->orderBy('name', 'asc')->get();
+        $products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
 

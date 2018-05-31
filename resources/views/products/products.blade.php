@@ -23,6 +23,7 @@
                             @else
                                 <th></th>
                             @endif
+                            <th>Stock Type</th>
                             <th style="width: 40px"></th>
                         </tr>
                         @if (count($products->productCategory) > 0)
@@ -33,7 +34,8 @@
                                                 data-toggle="modal" data-target="#edit-product_title-modal"
                                                 data-id="{{ $category->id }}" data-name="{{ $category->name }}"
                                                 data-description="{{ $category->description }}"
-                                                data-price="{{ $category->price }}"><i
+                                                data-price="{{ $category->price }}"
+												data-stock_type="{{ $category->stock_type }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                         <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan"
@@ -49,6 +51,7 @@
                                     @else
                                         <td></td>
                                     @endif
+									<td>{{ (!empty($category->stock_type)) ?  $stockTypeArray[$category->stock_type] : ''}} </td>
                                     <td>
                                         <!--   leave here  -->
                                         <button type="button" id="view_ribbons"
@@ -85,8 +88,8 @@
         </div>
 
         <!-- Include add new prime rate modal -->
-        @include('products.partials.add_position')
-        @include('products.partials.edit_position')
+        @include('products.partials.add_product')
+        @include('products.partials.edit_product')
     </div>
 @endsection
 
@@ -158,12 +161,14 @@
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
                 var price = btnEdit.data('price');
+                var stockType = btnEdit.data('stock_type');
 
                 //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
                 modal.find('#price').val(price);
+				modal.find('select#stock_type').val(stockType);
 
             });
             $('#update-product_title').on('click', function () {
@@ -174,6 +179,7 @@
                     name: $('#' + modalID).find('#name').val(),
                     description: $('#' + modalID).find('#description').val(),
                     price: $('#' + modalID).find('#price').val(),
+                    stock_type: $('#' + modalID).find('#stock_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'update-product_title';

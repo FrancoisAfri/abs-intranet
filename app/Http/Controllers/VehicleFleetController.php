@@ -39,6 +39,8 @@ use App\ContactPerson;
 use App\vehicle;
 use App\FueltankTopUp;
 use App\vehicle_detail;
+use App\DivisionLevelFour;
+use App\DivisionLevelFive;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
@@ -1480,18 +1482,25 @@ class VehicleFleetController extends Controller
             }
         } elseif ($approvals->fuel_require_ceo_approval == 1 && $status < 10) {
 
-            $Dept = DivisionLevelFour::where('manager_id', $hrDetails->division_level_4)->get()->first();
+            $Dept = DivisionLevelFive::where('manager_id', $hrDetails->division_level_5)->get()->first();
+			if (!empty($Dept->manager_id))
+			{
+				$hodmamgerDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)->select('first_name', 'surname', 'email')->first();
 
-            $hodmamgerDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)->select('first_name', 'surname', 'email')->first();
+				if ($hodmamgerDetails == null) {
+					$details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
+					return $details;
+				} else {
 
-            if ($hodmamgerDetails == null) {
-                $details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
-                return $details;
-            } else {
+					$details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
+					return $details;
+				}
+			}
+			else {
 
-                $details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
-                return $details;
-            }
+					$details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
+					return $details;
+				}
         } 
 		else 
 		{

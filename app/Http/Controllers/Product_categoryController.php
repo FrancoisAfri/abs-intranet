@@ -65,7 +65,7 @@ class Product_categoryController extends Controller
 
     public function productView(Product_category $Category)
     {
-
+	
         if ($Category->status == 1) {
 
             $userAccess = DB::table('security_modules_access')
@@ -88,10 +88,11 @@ class Product_categoryController extends Controller
                 ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
             ];
 
-
+			$stockTypeArray = array(1 => 'Stock Item', 2 => 'Non Stock Item', 3 => 'Both');
             $data['jobCategories'] = $jobCategories;
             $data['userAccess'] = $userAccess;
             $data['products'] = $Category;
+            $data['stockTypeArray'] = $stockTypeArray;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
             AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', 'Accessed by User', 0);
@@ -399,6 +400,7 @@ class Product_categoryController extends Controller
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->price = $request->input('price');
+		$product->stock_type = $request->input('stock_type');
         $product->update();
 
         $newName = $request->input('name');
