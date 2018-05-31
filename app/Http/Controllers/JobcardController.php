@@ -1180,22 +1180,15 @@ class JobcardController extends Controller
         // $parts = jobcard_order_parts::orderBy('id','asc')->get();
         $parts = stock::Orderby('id', 'asc')->get();
         $jobCategories = product_category::orderBy('id', 'asc')->get();
-        // return $jobCategories;
+       // return $jobCategories;
 
         $parts = DB::table('Product_products')
             ->select('Product_products.*', 'stock.avalaible_stock')
             ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
-            ->whereBetween('Product_products.stock_type', [1, 3])
+            ->whereBetween('Product_products.stock_type', [1, 3]) 
+            ->where('stock.avalaible_stock', '>', 0)
             ->get();
-
-
-//        $parts = DB::table('jobcard__order_parts')
-//        ->select('jobcard__order_parts.*', 'jobcard_parts.*')
-//        ->leftJoin('jobcard_parts', 'jobcard__order_parts.jobcard_parts_id', '=', 'jobcard_parts.id')
-//        ->where('jobcard__order_parts.jobcard_card_id' , $jobcardparts->id)
-//        ->get();
-
-
+        
         $cardparts = jobcard_category_parts::orderBy('id', 'asc')->get();
         $jobcard_category_parts = jobcard_category_parts::orderBy('id', 'asc')->get()->load(['jobcart_parts_model' => function ($query) {
             $query->orderBy('name', 'asc');
