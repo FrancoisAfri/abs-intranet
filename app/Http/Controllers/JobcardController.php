@@ -59,7 +59,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Settings Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card Settings Page Accessed', "view Jobcard Settings", 0);
         return view('job_cards.setup')->with($data);
     }
 
@@ -78,7 +78,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Management Service Type', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card Management Service Type', "view Service Type", 0);
         return view('job_cards.service_type')->with($data);
     }
 
@@ -95,7 +95,7 @@ class JobcardController extends Controller
         $servicetype->status = 1;
         $servicetype->save();
 
-        AuditReportsController::store('Job Card Management', 'New service Type added', "Accessed By User", $servicetype->id);
+        AuditReportsController::store('Job Card Management', 'New service Type added', "Add Service Type", $servicetype->id);
         return response()->json();
     }
 
@@ -111,7 +111,7 @@ class JobcardController extends Controller
         $service->name = $SysData['name'];
         $service->description = $SysData['description'];
         $service->update();
-        AuditReportsController::store('Job Card Management', 'Service Type edited', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Service Type edited', "Edit Service Type", 0);
         return response()->json();
     }
 
@@ -132,7 +132,7 @@ class JobcardController extends Controller
     {
         $service->delete();
 
-        AuditReportsController::store('Job Card Management', ' service Type Deleted', "Accessed By User", $service->id);
+        AuditReportsController::store('Job Card Management', ' service Type Deleted', "Deleted Service Type", $service->id);
         return redirect('/jobcards/servicetype');
 
     }
@@ -161,7 +161,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'SetUp';
 
-        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Job Card Image Page Accessed", 0);
         return view('job_cards.jobcardImage')->with($data);
 
     }
@@ -208,7 +208,8 @@ class JobcardController extends Controller
 			}
 			$image = '';
 		}
-
+                
+         AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Job Card Image added", 0);        
         return response()->json();
     }
 
@@ -238,7 +239,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'SetUp';
 
-        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed',"Job Card configuration Page Accessed", 0);
         return view('job_cards.configuration')->with($data);
     }
 
@@ -252,7 +253,7 @@ class JobcardController extends Controller
         $config->mechanic_sms = !empty($SysData['mechanic_sms']) ? $SysData['mechanic_sms'] : 0;
         $config->update();
 
-        AuditReportsController::store('Job Card Management', 'configurationSetings updated', "Accessed By User", $config->id);
+        AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed',"Job Card configuration Page Accessed", 0);
         return back();
     }
 
@@ -287,7 +288,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Process Flow';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Management Process Flow Accessed', "Accessed By User", 0);
+       AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed',"Job Card Proces Flow Page Accessed", 0);
         return view('job_cards.processflow')->with($data);
     }
 
@@ -310,7 +311,7 @@ class JobcardController extends Controller
         $processflow->status = 1;
         $processflow->save();
 
-        AuditReportsController::store('Job Card Management', 'New processflow has been added', "Accessed By User", $processflow->id);
+        AuditReportsController::store('Job Card Management', 'New processflow has been added', "New proces flow Added", $processflow->id);
         return response()->json();
     }
 
@@ -328,7 +329,7 @@ class JobcardController extends Controller
         $steps->job_title = !empty($SysData['job_title']) ? $SysData['job_title'] : 0;
         $steps->update();
 
-        AuditReportsController::store('Job Card Management', ' process flow edited', "Accessed By User", $steps->id);
+        AuditReportsController::store('Job Card Management', ' process flow edited', "Proces flow Edited", $steps->id);
         return response()->json();
     }
 
@@ -341,7 +342,7 @@ class JobcardController extends Controller
         $steps->status = $stastus;
         $steps->update();
 
-        AuditReportsController::store('Job Card Management', ' process flow status Changed', "Accessed By User", $steps->id);
+        AuditReportsController::store('Job Card Management', ' process flow status Changed', "Proces flow Status changed", $steps->id);
         return back();
     }
 
@@ -448,6 +449,7 @@ class JobcardController extends Controller
             $data['active_rib'] = 'My Job Cards';
 
             AuditReportsController::store('Job Card Management', 'Job Card Page Accessed', "Accessed By User", 0);
+             AuditReportsController::store('Job Card Management', ' process flow status Changed', "Job Card page Accessed", $steps->id);
             return view('job_cards.myjob_cards')->with($data);
 
         } else {
@@ -544,7 +546,7 @@ class JobcardController extends Controller
             Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
         }
 
-        AuditReportsController::store('Job Card Management', ' Job card created', "Accessed By User", $jobcardmaintanance->id);
+        AuditReportsController::store('Job Card Management', ' Job card created', "New Job Card Created", $jobcardmaintanance->id);
         return response()->json();
     }
 
@@ -612,7 +614,7 @@ class JobcardController extends Controller
             }
         }
 
-        AuditReportsController::store('Job Card Management', ' Job card Updated', "Accessed By User", $jobCard->id);
+        AuditReportsController::store('Job Card Management', ' Job card Updated', "Job Card Edited", $jobCard->id);
         return response()->json();
 
     }
@@ -633,7 +635,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search';
 
-        AuditReportsController::store('Job Card Management', 'Job Card card search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card card search Page Accessed', "Job Card card search Page Accessed", 0);
         return view('job_cards.search')->with($data);
     }
 
@@ -716,7 +718,7 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Search';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Job Card card search Page Accessed", 0);
         return view('job_cards.search_results')->with($data);
     }
 
@@ -1490,10 +1492,19 @@ class JobcardController extends Controller
                     //
                 } elseif ($cardID == 4) { //cardsaudit
 
-                    $vehiclemaintenance = AuditTrail::Orderby('id', 'asc')->where('module_name', 'Job Card Management')->get();
-                     return $vehiclemaintenance;
-
-                    $data['vehiclemaintenance'] = $vehiclemaintenance;
+                    $audits = DB::table('audit_trail')
+                              ->select('audit_trail.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                              ->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.id')
+                              ->where('reference_id' ,$print->id)
+                              ->where('module_name', 'Job Card Management')
+                              ->Orderby('audit_trail.id', 'asc')
+                              ->get();              
+                                
+                 //  return $audits;
+                    $card_id = $print->id;
+                    
+                    $data['card_id'] = $card_id;
+                    $data['audits'] = $audits;
                     $data['page_title'] = " Fleet Management ";
                     $data['page_description'] = "Fleet Cards Report ";
                     $data['breadcrumb'] = [
@@ -1516,12 +1527,58 @@ class JobcardController extends Controller
                     $data['user'] = $user;
 
                     AuditReportsController::store('Job Card Management', 'Job Card print Audit Page Accessed', "Accessed By User", 0);
-                    return view('job_cards.jobcard_audit_report_print')->with($data);
+                    return view('job_cards.audit_results')->with($data);
                 }
 
             }
 
         }
+    }
+    
+    public function printAudit(Request $request){
+        $this->validate($request, [
+            // 'date_uploaded' => 'required',
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+        unset($results['_token']);
+       
+        
+        $cardID = $results['card_id'];
+        
+        $audits = DB::table('audit_trail')
+                              ->select('audit_trail.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+                              ->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.id')
+                              ->where('reference_id' ,$cardID)
+                              ->where('module_name', 'Job Card Management')
+                              ->Orderby('audit_trail.id', 'asc')
+                              ->get();              
+                                
+                   
+                    $data['audits'] = $audits;
+                    $data['page_title'] = " Fleet Management ";
+                    $data['page_description'] = "Fleet Cards Report ";
+                    $data['breadcrumb'] = [
+                        ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                        ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+                    ];
+
+                    $data['active_mod'] = 'Fleet Management';
+                    $data['active_rib'] = 'Reports';
+
+                    $companyDetails = CompanyIdentity::systemSettings();
+                    $companyName = $companyDetails['company_name'];
+                    $user = Auth::user()->load('person');
+
+                    $data['support_email'] = $companyDetails['support_email'];
+                    $data['company_name'] = $companyName;
+                    $data['full_company_name'] = $companyDetails['full_company_name'];
+                    $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+                    $data['date'] = date("d-m-Y");
+                    $data['user'] = $user;
+
+                    AuditReportsController::store('Job Card Management', 'Job Card print Audit Page Accessed', "Accessed By User", 0);
+                    return view('job_cards.audit_print')->with($data);
     }
 
     public function canceljobcardnotes(jobcard_maintanance $card)
