@@ -17,8 +17,13 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div style="overflow-X:auto;">
-                                <form class="form-horizontal" method="POST" action="/fleet/reports/booking/print">
-
+                                <form class="form-horizontal" method="POST" action="/jobcards/printcards">
+                                         <input type="hidden" name="applicationType" value="{{!empty($applicationType) ? $applicationType : ''}}">
+                                         <input type="hidden" name=" process_id" value="{{!empty( $processID) ?  $processID : ''}}">
+                                         <input type="hidden" name="vehicle_id" value="{{!empty($vehicleID) ? $vehicleID : ''}}">
+                                         <input type="hidden" name="application_type" value="{{!empty($application_type) ? $application_type : ''}}">
+                                         
+                                         
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                         <tr>
@@ -31,7 +36,7 @@
                                             <th>Service Type</th>
                                             <th>Supplier</th>
                                             <th>Status</th>
-                                            <th style="width: 5px; text-align: center;"></th>
+<!--                                            <th style="width: 5px; text-align: center;"></th>-->
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -48,9 +53,9 @@
                                                     <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
                                                     <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
                                                     <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>
-                                                    <td><a href="{{ '/jobcards/printcards/' . $jobcard->id }}"
+<!--                                                    <td><a href="{{ '/jobcards/printcards/' . $jobcard->id }}"
                                                            id="edit_compan" class="btn btn-default  btn-xs"><i
-                                                                    class="fa fa-print"></i> Print</a></td>
+                                                                    class="fa fa-print"></i> Print</a></td>-->
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -77,7 +82,7 @@
                                             <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                         class="fa fa-arrow-left"></i> Back
                                             </button>
-                                            <!-- <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> -->
+                                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> 
                                         </div>
                                     </div>
                             </div>

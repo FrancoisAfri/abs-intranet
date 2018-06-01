@@ -449,7 +449,7 @@ class JobcardController extends Controller
             $data['active_rib'] = 'My Job Cards';
 
             AuditReportsController::store('Job Card Management', 'Job Card Page Accessed', "Accessed By User", 0);
-             AuditReportsController::store('Job Card Management', ' process flow status Changed', "Job Card page Accessed", $steps->id);
+             AuditReportsController::store('Job Card Management', ' process flow status Changed', "Job Card page Accessed", 0);
             return view('job_cards.myjob_cards')->with($data);
 
         } else {
@@ -1709,10 +1709,11 @@ class JobcardController extends Controller
         $SysData = $request->all();
          unset($SysData['_token']);
          
-       //  return $SysData;
+       // return $SysData;
          
          $applicationType = $SysData['application_type'];
          $processID = $SysData['process_id'];
+         return $processID;
          $vehicleID = $SysData['vehicle_id'];
          $application_type = $SysData['application_type'];
          $actionDate = $SysData['action_date'];
@@ -1759,7 +1760,7 @@ class JobcardController extends Controller
                      ->orderBy('jobcard_maintanance.id', 'asc')
                      ->get();   
 
-        //  return $SysData;
+         // return $vehiclemaintenance;
 
         $applicationType = $SysData['application_type'];
         $processID = $SysData['process_id'];
@@ -1769,24 +1770,33 @@ class JobcardController extends Controller
 
         $actionFrom = $actionTo = 0;
         $actionDate = $request['date'];
-        if (!empty($actionDate)) {
-            $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+        //if (!empty($actionDate)) {
+//            $startExplode = explode('-', $actionDate);
+//            $actionFrom = strtotime($startExplode[0]);
+//            $actionTo = strtotime($startExplode[1]);
 
-	$data['support_email'] = $companyDetails['support_email'];
-	$data['company_name'] = $companyName;
-	$data['full_company_name'] = $companyDetails['full_company_name'];
-	$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-	$data['date'] = date("d-m-Y");
-	$data['user'] = $user;
+	//return $processID;
+	 $data['applicationType'] = $applicationType;
+	 $data['processID'] = $processID;
+	 $data['vehicleID'] = $vehicleID;
+	 $data['application_type'] = $application_type;
+       
+	$data['vehiclemaintenance'] = $vehiclemaintenance;
 
-                    AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-                    return view('job_cards.Jobcard_card')->with($data);    
-        }
+       AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+         return view('job_cards.Jobcard_card')->with($data);    
+        //}
    }
-   public function printscard( jobcard_maintanance $card){
-                   
+   
+   public function printscard( Request $request ){
+             $this->validate($request, [
+            // 'date_uploaded' => 'required',
+        ]);
+
+        $SysData = $request->all();
+         unset($SysData['_token']);
+         
+       return $SysData;       
 
         $vehiclemaintenance = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*', 'vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
