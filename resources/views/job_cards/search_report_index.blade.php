@@ -107,8 +107,8 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control daterangepicker" id="action_date"
-                                           name="action_date" value="" placeholder="Select Action Date...">
+                                    <input type="text" class="form-control daterangepicker" id="actions_date"
+                                           name="actions_date" value="" placeholder="Select Action Date...">
 
                                 </div>
                             </div>

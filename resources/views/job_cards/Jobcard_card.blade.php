@@ -22,6 +22,8 @@
                                          <input type="hidden" name=" process_id" value="{{!empty( $processID) ?  $processID : ''}}">
                                          <input type="hidden" name="vehicle_id" value="{{!empty($vehicleID) ? $vehicleID : ''}}">
                                          <input type="hidden" name="application_type" value="{{!empty($application_type) ? $application_type : ''}}">
+                                         <input type="hidden" name="action_from" value="{{!empty($actionFrom) ? $actionFrom : ''}}">
+                                         <input type="hidden" name="action_to" value="{{!empty($actionTo) ? $actionTo : ''}}">
                                          
                                          
                                     <table id="example2" class="table table-bordered table-hover">

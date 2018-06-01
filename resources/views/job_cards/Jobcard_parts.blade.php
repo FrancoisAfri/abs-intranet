@@ -17,8 +17,13 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div style="overflow-X:auto;">
-                                <form class="form-horizontal" method="POST" action="/fleet/reports/booking/print">
-
+                                <form class="form-horizontal" method="POST" action="/jobcards/reports/printparts">
+                                    
+                                         <input type="hidden" name="action_from" value="{{!empty($actionFrom) ? $actionFrom : ''}}">
+                                         <input type="hidden" name="action_to" value="{{!empty($actionTo) ? $actionTo : ''}}">
+                                         <input type="hidden" name="category_id" value="{{!empty($categoryID) ? $categoryID : ''}}">
+                                         <input type="hidden" name="product_id" value="{{!empty($productID) ? $productID : ''}}">
+                                         
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                         <tr>
@@ -64,7 +69,7 @@
                                             <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                         class="fa fa-arrow-left"></i> Back
                                             </button>
-                                            <!--  <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> -->
+                                              <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> 
                                         </div>
                                     </div>
                             </div>

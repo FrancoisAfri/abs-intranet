@@ -704,6 +704,8 @@ Route::get('jobcards/reports', 'JobcardController@viewreport');
 Route::post('jobcards/reports/cards', 'JobcardController@cards');
 
 Route::post('jobcards/printcards', 'JobcardController@printscard');
+Route::post('jobcards/reports/printparts', 'JobcardController@printsparts');
+Route::post('jobcards/reports/notesprint', 'JobcardController@printnotes');
 
 Route::post('jobcards/reports/parts', 'JobcardController@parts');
 Route::post('jobcards/reports/notes', 'JobcardController@notes');
