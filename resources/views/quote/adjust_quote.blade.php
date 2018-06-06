@@ -366,7 +366,7 @@
             var formattedVAT = '&mdash;';
             var vatCheckValue = $('#rdo_add_vat').iCheck('update')[0].checked;
             if (vatCheckValue) {
-                var vatAmount = (total * 0.14);
+                var vatAmount = (total * 0.15);
                 formattedVAT = 'R ' + vatAmount.formatMoney(2);
                 total += vatAmount;
             }
