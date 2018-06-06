@@ -2,12 +2,20 @@
 
 @section('page_dependencies')
     <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
-    <!-- DataTables -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/yellow.css">
+   <!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+<!-- bootstrap file input -->
+<link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
+
+<!-- Include Date Range Picker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+<!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+<!-- Select 2-->
 @endsection
 
 @section('content')
@@ -44,10 +52,23 @@
                             <thead>
                             <tr>
                                 <th>Product Name</th>
-                                <th style="vertical-align: middle; text-align: center;">Employee </th>
-                                <th style="vertical-align: middle; text-align: center;">Vehicle </th>
+                                <th style="vertical-align: middle; text-align: center;"> <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+                                                                                                          id="rdo_levTkn"
+                                                                                                          name="application_type"
+                                                                                                          value="1" checked> User
+                                                </label> </th>
+                                <th style="vertical-align: middle; text-align: center;"> <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                                       
+                                        <div class="col-sm-9">
+                                           
+                                            <!-- <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">Rejected Job cards</label> -->
+                                            <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type"
+                                                                               value="2"> Vehicle</label>
+
+                                        </div>
+                                    </div> </th>
                                 <th style="vertical-align: middle; text-align: center;">Available Number</th>
-                                <th style="vertical-align: middle; text-align: center;">Enter Number</th>
+                                <th style="vertical-align: middle; text-align: center;">Enter Number</th>       
                             </tr>
                             </thead>
                             <tbody>
@@ -57,7 +78,7 @@
                                         nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
                                     <td style="vertical-align: middle; text-align: center;"
                                         nowrap>
-                                        <div class="form-group">
+                                        <div class="form-group user-field">
                                             <label for="path" class="col-sm-3 control-label"> </label>
                                             <div class="col-sm-18">
                                                 <select class="form-control select2" style="width: 100%;"
@@ -72,11 +93,11 @@
                                     </td>
                                     <td style="vertical-align: middle; text-align: center;"
                                         nowrap>
-                                        <div class="form-group">
+                                        <div class="form-group vehicle-field">
                                             <label for="path" class="col-sm-3 control-label"> </label>
                                             <div class="col-sm-18">
                                                 <select class="form-control select2" style="width: 100%;"
-                                                        id="vehicle_id{{ $stock->id }}" name="vehicle_id{{$stock->id}}">
+                                                        id="vehicle_{{ $stock->id }}" name="vehicle_{{$stock->id}}">
                                                     <option value="0">*** Select Vehicle ***</option>
                                                     @foreach($vehicle as $vehicles)
                                                         <option value="{{ $vehicles->id }}">{{ $vehicles->vehicle_model . ' ' . $vehicles->vehicle_type 
@@ -86,6 +107,7 @@
                                             </div>
                                         </div>
                                     </td>
+                                   
                                     <td style="vertical-align: middle; text-align: center;"
                                         nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
                                     <td style="vertical-align: middle; text-align: center;"
@@ -150,6 +172,53 @@
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    
+      <!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <!-- Date rane picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Date Picker -->
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+    <!--  -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
+    <!-- Bootstrap date picker -->
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Start Bootstrap File input -->
+    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js"
+            type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+    <!--Time Charger-->
+
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
+    <!-- Date picker -->
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+
+    <!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+    <!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Ajax form submit -->
@@ -168,7 +237,7 @@
             var moduleId;
             //Initialize Select2 Elements
             $(".select2").select2();
-            $('.zip-field').hide();
+            $('.vehicle-field').hide();
 
 
             //Tooltip
@@ -214,14 +283,33 @@
 
             $(".js-example-basic-multiple").select2();
 
-            //Initialize iCheck/iRadio Elements
-//            $('input').iCheck({
-//                checkboxClass: 'icheckbox_square-yellow',
-//                radioClass: 'iradio_square-blue',
-//                increaseArea: '10%' // optional
-//            });
+           // Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-yellow',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '10%' // optional
+            });
 
 
+            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH, #rdo_cancelled_leaves').on('ifChecked', function () {
+                           var allType = hideFields();
+                           
+                       });
+                       
+                       
+         function hideFields() {
+            var allType = $("input[name='application_type']:checked").val();
+            if (allType == 1) { //adjsut leave
+                $('.vehicle-field').hide();
+                $('.user-field').show();
+            }
+            else if (allType == 2) { //resert leave
+                $('.vehicle-field').show();
+                $('.user-field').hide();
+            }
+            return allType;
+        }
+        
             $('#add-user').on('click', function () {
                 var strUrl = '/System/policy/add_policyUsers';
                 var formName = 'add-user-form';

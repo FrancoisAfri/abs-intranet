@@ -287,12 +287,16 @@ class StockController extends Controller
             }
         }
 
+       // return $results;
         foreach ($results as $sKey => $sValue) {
 
-            if (strlen(strstr($sKey, 'stock_'))) {
-                list($sUnit, $iID, $cID) = explode("_", $sKey);
-
+            if (strlen(strstr($sKey, 'stock_' ))) {
+                list($sUnit, $iID,$cID  ) = explode("_", $sKey);
+   
                 $user = 'userid' . '_' . $iID;
+                
+                return $sKey;
+                
                 $UserID = isset($request[$user]) ? $request[$user] : 0;
 
                 $productID = $iID;
@@ -301,8 +305,10 @@ class StockController extends Controller
 
                 $currentstock = stock::where('product_id', $productID)->first();
                 $available = !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0;
+                
                 DB::table('stock')->where('product_id', $productID)->where('category_id', $CategoryID)->update(['avalaible_stock' => $available - $newStock]);
                 DB::table('stock')->where('product_id', $productID)->where('category_id', $CategoryID)->update(['user_id' => $UserID]);
+                
                 $history = new stockhistory();
                 $history->product_id = $productID;
                 $history->category_id = $CategoryID;
@@ -315,7 +321,11 @@ class StockController extends Controller
                 $history->action = 'stock taken out';
                 $history->vehicle_id = 0;
                 $history->save();
-            }
+                
+              
+           }
+           
+           
         }
         AuditReportsController::store('Stock Management', 'Stock taken out', "Accessed By User", 0);
         return redirect('stock/storckmanagement');
