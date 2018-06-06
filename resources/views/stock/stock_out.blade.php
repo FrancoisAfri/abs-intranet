@@ -44,7 +44,8 @@
                             <thead>
                             <tr>
                                 <th>Product Name</th>
-                                <th>Employee</th>
+                                <th style="vertical-align: middle; text-align: center;">Employee </th>
+                                <th style="vertical-align: middle; text-align: center;">Vehicle </th>
                                 <th style="vertical-align: middle; text-align: center;">Available Number</th>
                                 <th style="vertical-align: middle; text-align: center;">Enter Number</th>
                             </tr>
@@ -64,6 +65,22 @@
                                                     <option value="0">*** Select User ***</option>
                                                     @foreach($user as $employee)
                                                         <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="vertical-align: middle; text-align: center;"
+                                        nowrap>
+                                        <div class="form-group">
+                                            <label for="path" class="col-sm-3 control-label"> </label>
+                                            <div class="col-sm-18">
+                                                <select class="form-control select2" style="width: 100%;"
+                                                        id="vehicle_id{{ $stock->id }}" name="vehicle_id{{$stock->id}}">
+                                                    <option value="0">*** Select Vehicle ***</option>
+                                                    @foreach($vehicle as $vehicles)
+                                                        <option value="{{ $vehicles->id }}">{{ $vehicles->vehicle_model . ' ' . $vehicles->vehicle_type 
+                                                            . ' ' . $vehicles->year}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

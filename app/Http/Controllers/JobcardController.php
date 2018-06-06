@@ -1273,12 +1273,6 @@ class JobcardController extends Controller
         }]);
 
 
-//        $parts = DB::table('jobcard__order_parts')
-//        ->select('jobcard__order_parts.*', 'Product_products.*')
-//        ->leftJoin('Product_products', 'jobcard__order_parts.product_id', '=', 'Product_products.id')
-//        ->where('jobcard__order_parts.jobcard_card_id' , $jobcardparts->id)
-//        ->where('jobcard__order_parts.product_id' , '>',0)
-//        ->get();
        
         $cardparts = jobcard_category_parts::orderBy('id','asc')->get();
         $jobcard_category_parts = jobcard_category_parts::orderBy('id','asc')->get()->load(['jobcart_parts_model' => function($query) {
@@ -1870,11 +1864,13 @@ class JobcardController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-       // return $SysData;
+      // return $SysData;
 
         $categoryID = $SysData['product_id'];
         $productID = $SysData['category_id'];
         $actionDate = $SysData['action_date'];
+        $vehicleID = $SysData['vehicle_part_id'];
+        $userID = $SysData['user_part_id'];
 
         $actionFrom = $actionTo = 0;
         $actionDate = $request['action_date'];
@@ -1885,6 +1881,8 @@ class JobcardController extends Controller
 
         }
 
+     //   stock_history
+        
             $parts = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*', 'jobcard__order_parts.*', 'Product_products.name as product_name',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'vehicle_details.fleet_number as fleet_no',
@@ -1906,6 +1904,19 @@ class JobcardController extends Controller
 
                 }
             })
+            
+            ->where(function ($query) use ($vehicleID) {
+                if (!empty($vehicleID)) {
+                    $query->where('jobcard__order_parts.user_id', $vehicleID);
+
+                }
+            })
+            ->where(function ($query) use ($userID) {
+                if (!empty($userID)) {
+                    $query->where('jobcard__order_parts.product_id', $userID);
+
+                }
+            })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('jobcard_maintanance.card_date', [$actionFrom, $actionTo]);
@@ -1916,9 +1927,9 @@ class JobcardController extends Controller
             ->OrderBy('jobcard__order_parts.id', 'asc')
             ->get();
 
-
+             //return $parts;
          
-          
+        
         $data['actionFrom'] = $actionFrom;
 	$data['actionTo'] = $actionTo;
         $data['categoryID'] = $categoryID;
@@ -1958,8 +1969,6 @@ class JobcardController extends Controller
 
         $SysData = $request->all();
         unset($SysData['_token']);
-
-       
 
         $categoryID = $SysData['product_id'];
         $productID = $SysData['category_id'];

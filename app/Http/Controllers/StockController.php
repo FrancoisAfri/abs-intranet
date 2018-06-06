@@ -80,7 +80,7 @@ class StockController extends Controller
             ->orderBy('Product_products', 'asc')
             ->get();
 
-        // return $stocks;
+       // return $stocks;
 
         // $Category = $stocks->first()->category_id;
 
@@ -111,6 +111,7 @@ class StockController extends Controller
         unset($results['_token']);
         unset($results['emp-list-table_length']);
 
+        //
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
                 unset($results[$key]);
@@ -218,6 +219,20 @@ class StockController extends Controller
 
         $productID = isset($results['category_id']) ? $results['category_id'] : array();
         $user = HRPerson::where('status', 1)->get();
+        
+           $vehicle = DB::table('vehicle_details')
+            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
+                'vehicle_model.name as vehicle_model', 'vehicle_image.image as vehicle_images',
+                'vehicle_managemnet.name as vehicle_type', 'contact_companies.name as Vehicle_Owner ')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_image', 'vehicle_details.id', '=', 'vehicle_image.vehicle_maintanace')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
+            ->orderBy('vehicle_details.id')
+            ->get();
+           
+        //return $vehicle;
 
         for ($i = 0; $i < count($productID); $i++) {
             $product .= $productID[$i] . ',';
@@ -239,6 +254,7 @@ class StockController extends Controller
             })
             ->get();
 
+        $data['vehicle'] = $vehicle;
         $data['stocks'] = $stocks;
         $data['user'] = $user;
         $data['page_title'] = "Stock Management";
