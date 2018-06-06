@@ -17,8 +17,13 @@
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div style="overflow-X:auto;">
-                                <form class="form-horizontal" method="POST" action="/fleet/reports/booking/print">
-
+                                <form class="form-horizontal" method="POST" action="/jobcards/reports/notesprint">
+                                         <input type="hidden" name="action_from" value="{{!empty($actionFrom) ? $actionFrom : ''}}">
+                                         <input type="hidden" name="action_to" value="{{!empty($actionTo) ? $actionTo : ''}}">
+                                         <input type="hidden" name="note_details" value="{{!empty($noteDetails) ? $noteDetails : ''}}">
+                                         <input type="hidden" name="user_id" value="{{!empty($userID) ? $userID : ''}}">
+                                         <input type="hidden" name="user_id" value="{{!empty($userID) ? $userID : ''}}">
+                                         <input type="hidden" name="vehicle_id" value="{{!empty($vehicleID) ? $vehicleID : ''}}">
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                         <tr>
@@ -59,7 +64,7 @@
                                             <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                                         class="fa fa-arrow-left"></i> Back
                                             </button>
-                                            <!-- <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> -->
+                                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> 
                                         </div>
                                     </div>
                             </div>
