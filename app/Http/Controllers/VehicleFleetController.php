@@ -1496,11 +1496,6 @@ class VehicleFleetController extends Controller
 					return $details;
 				}
 			}
-			else {
-
-					$details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
-					return $details;
-				}
         } 
 		else 
 		{
