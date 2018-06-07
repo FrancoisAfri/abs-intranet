@@ -675,6 +675,11 @@ Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes')
 
 Route::get('jobcards/parts','JobcardController@jobcardparts');
 
+Route::get('jobcards/jobcardimages/{images}','JobcardController@jobcardimages');
+Route::post('jobcard/addimages','JobcardController@addcardimages');
+
+Route::post('jobcards/audits/print','JobcardController@printAudit');
+
 Route::post('jobcards/addcatergory','JobcardController@addpartscatergory');
 
 Route::get('jobcards/addparts/{parts}','JobcardController@viewjobcardparts');
@@ -698,7 +703,9 @@ Route::get('jobcards/reports', 'JobcardController@viewreport');
 
 Route::post('jobcards/reports/cards', 'JobcardController@cards');
 
-Route::get('jobcards/printcards/{card}', 'JobcardController@printscard');
+Route::post('jobcards/printcards', 'JobcardController@printscard');
+Route::post('jobcards/reports/printparts', 'JobcardController@printsparts');
+Route::post('jobcards/reports/notesprint', 'JobcardController@printnotes');
 
 Route::post('jobcards/reports/parts', 'JobcardController@parts');
 Route::post('jobcards/reports/notes', 'JobcardController@notes');

@@ -80,7 +80,7 @@ class StockController extends Controller
             ->orderBy('Product_products', 'asc')
             ->get();
 
-        // return $stocks;
+       // return $stocks;
 
         // $Category = $stocks->first()->category_id;
 
@@ -111,6 +111,7 @@ class StockController extends Controller
         unset($results['_token']);
         unset($results['emp-list-table_length']);
 
+        //
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
                 unset($results[$key]);
@@ -218,6 +219,17 @@ class StockController extends Controller
 
         $productID = isset($results['category_id']) ? $results['category_id'] : array();
         $user = HRPerson::where('status', 1)->get();
+        
+           $vehicle = DB::table('vehicle_details')
+            ->select('vehicle_details.*', 'vehicle_make.name as vehicleMake',
+                'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType')
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+            ->orderBy('vehicle_details.id', 'asc')
+            ->get();
+           
+    
 
         for ($i = 0; $i < count($productID); $i++) {
             $product .= $productID[$i] . ',';
@@ -239,6 +251,7 @@ class StockController extends Controller
             })
             ->get();
 
+        $data['vehicle'] = $vehicle;
         $data['stocks'] = $stocks;
         $data['user'] = $user;
         $data['page_title'] = "Stock Management";
@@ -271,13 +284,23 @@ class StockController extends Controller
             }
         }
 
+       // return $results;
+        
         foreach ($results as $sKey => $sValue) {
 
-            if (strlen(strstr($sKey, 'stock_'))) {
-                list($sUnit, $iID, $cID) = explode("_", $sKey);
-
+            if (strlen(strstr($sKey, 'stock_' ))) {
+                list($sUnit, $iID,$cID  ) = explode("_", $sKey);
+   
+                
                 $user = 'userid' . '_' . $iID;
+                $veh = 'vehicle' . '_' . $iID;
+                
+               
+     
                 $UserID = isset($request[$user]) ? $request[$user] : 0;
+                $vehicleID = isset($request[$veh]) ? $request[$veh] : 0;
+                
+                 //return $vehicleID;
 
                 $productID = $iID;
                 $newStock = $sValue;
@@ -285,8 +308,10 @@ class StockController extends Controller
 
                 $currentstock = stock::where('product_id', $productID)->first();
                 $available = !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0;
+                
                 DB::table('stock')->where('product_id', $productID)->where('category_id', $CategoryID)->update(['avalaible_stock' => $available - $newStock]);
                 DB::table('stock')->where('product_id', $productID)->where('category_id', $CategoryID)->update(['user_id' => $UserID]);
+                
                 $history = new stockhistory();
                 $history->product_id = $productID;
                 $history->category_id = $CategoryID;
@@ -297,9 +322,10 @@ class StockController extends Controller
                 $history->balance_before = $available;
                 $history->balance_after = $available - $newStock;
                 $history->action = 'stock taken out';
-                $history->vehicle_id = 0;
+                $history->vehicle_id = $vehicleID;
                 $history->save();
-            }
+                            
+           } 
         }
         AuditReportsController::store('Stock Management', 'Stock taken out', "Accessed By User", 0);
         return redirect('stock/storckmanagement');
@@ -347,11 +373,20 @@ class StockController extends Controller
             $actionTo = strtotime($startExplode[1]);
         }
 
-        $stock = stockhistory::select('stock_history.*', 'Product_products.name as product_name', 'hr_people.first_name as name',
-            'hr_people.surname as surname', 'hr.first_name as allocated_firstname', 'hr.surname as allocated_surname')
+                
+       
+         
+        $stock = stockhistory::select('stock_history.*','vehicle_details.id as id','vehicle_details.year as year' ,'Product_products.name as product_name', 'hr_people.first_name as name',
+            'hr_people.surname as surname', 'hr.first_name as allocated_firstname', 'hr.surname as allocated_surname',
+                'vehicle_make.name as vehicleMake',
+                'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType')
             ->leftJoin('hr_people', 'stock_history.user_id', '=', 'hr_people.id')
             ->leftJoin('hr_people as hr', 'stock_history.user_allocated_id', '=', 'hr.id')
             ->leftJoin('Product_products', 'stock_history.product_id', '=', 'Product_products.id')
+            ->leftJoin('vehicle_details', 'stock_history.vehicle_id', '=', 'vehicle_details.id')   
+            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->where(function ($query) use ($CategoryID) {
                 if (!empty($CategoryID)) {
                     $query->where('stock_history.category_id', $CategoryID);
@@ -367,8 +402,10 @@ class StockController extends Controller
                     $query->whereBetween('stock_history.action_date', [$actionFrom, $actionTo]);
                 }
             })
-            ->orderBy('id', 'desc')
+            ->orderBy('stock_history.id', 'desc')
             ->get();
+            
+          //  return $stock;
 
         for ($i = 0; $i < count($productArray); $i++) {
             $product .= $productArray[$i] . ',';

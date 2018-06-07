@@ -107,8 +107,8 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" class="form-control daterangepicker" id="action_date"
-                                           name="action_date" value="" placeholder="Select Action Date...">
+                                    <input type="text" class="form-control daterangepicker" id="actions_date"
+                                           name="actions_date" value="" placeholder="Select Action Date...">
 
                                 </div>
                             </div>
@@ -127,7 +127,43 @@
                                 </div>
                             </div>
                         </div>
-
+                        
+                        <div class="form-group day-field {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
+                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle Type</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="vehicle_part_id"
+                                            name="vehicle_part_id">
+                                        <option value="">*** Select a Vehicle***</option>
+                                        @foreach($vehicledetails as $flow)
+                                            <option value="{{ $flow->id }}">{{ $flow->vehicle_make . ' ' .  $flow->vehicle_model . ' ' . $flow->vehicle_type }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                          <div class="form-group day-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
+                            <label for="process_id" class="col-sm-2 control-label">Users</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+                                    <select class="form-control select2" style="width: 100%;" id="user_part_id"
+                                            name="user_part_id">
+                                        <option value="">*** Select an User ***</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="form-group day-field{{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Product Category </label>
 

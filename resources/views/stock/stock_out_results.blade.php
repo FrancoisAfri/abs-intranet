@@ -45,7 +45,7 @@
                                                     <td>{{ (!empty($stocktake->action_date)) ? date(' d M Y', $stocktake->action_date) : ''}} </td>
                                                     <td>{{ (!empty($stocktake->action)) ? $stocktake->action : ''}} </td>
                                                     <td>{{ (!empty($stocktake->name)&& !empty($stocktake->surname)) ? $stocktake->name." ".$stocktake->surname: ''}} </td>
-                                                    <td>{{ (!empty($stocktake->allocated_firstname)&& !empty($stocktake->allocated_surname)) ? $stocktake->allocated_firstname." ".$stocktake->allocated_surname: ''}} </td>
+                                                    <td>{{ (!empty($stocktake->allocated_firstname)&& !empty($stocktake->allocated_surname)) ? $stocktake->allocated_firstname." ".$stocktake->allocated_surname:''}}{{(!empty($stocktake->vehicleMake." ".$stocktake->vehicleModel." " .$stocktake->year)) ? $stocktake->vehicleMake." ".$stocktake->vehicleModel." ".$stocktake->year:''}} </td>
                                                     <td>{{ (!empty($stocktake->balance_before)) ? $stocktake->balance_before : 0}} </td>
                                                     <td>{{ (!empty($stocktake->balance_after)) ? $stocktake->balance_after : 0}} </td>
                                                 </tr>

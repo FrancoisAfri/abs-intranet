@@ -57,7 +57,7 @@
                                     <td class="caption">Completion Date</td>
                                     <td>{{ !empty($jobcard->completion_date) ? date(' d M Y', $jobcard->completion_date) : ''}}</td>
                                     <td class="caption">Job Card Status</td>
-                                    <td>{{ !empty($jobcard->status_display) ? $jobcard->status_display : ''}}</td>
+                                    <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption" width="25%">Make</td>
@@ -85,13 +85,24 @@
                                 </tr>
                                 <tr>
                                     <td class="caption">Mechanic</td>
-                                    <td>{{ !empty($jobcard->me_firstname)  && !empty($jobcard->me_surname) ? $jobcard->me_firstname." ".$jobcard->me_surname : ''}}</td>
+                                    <td>{{ !empty($jobcard->me_firstname)  && !empty($jobcard->me_surname) ? $jobcard->me_firstname." ".$jobcard->me_surname : 'N/A'}}</td>
                                     <td class="caption">Driver</td>
-                                    <td>{{ !empty($jobcard->dr_firstname)  && !empty($jobcard->dr_surname) ? $jobcard->dr_firstname." ".$jobcard->dr_surname : ''}}</td>
+                                    <td>{{ !empty($jobcard->dr_firstname)  && !empty($jobcard->dr_surname) ? $jobcard->dr_firstname." ".$jobcard->dr_surname : 'N/A'}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Service File Attachment</td>
-                                    <td></td>
+                                    <td>
+                                        <div class="form-group{{ $errors->has('inspection_file_upload') ? ' has-error' : '' }}">
+                                            <label for="document" class="control-label"></label>
+                                            @if(!empty($jobcard->service_file_upload))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("Jobcard/servicefileupload/$jobcard->service_file_upload") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Instructions</td>
@@ -128,7 +139,7 @@
                             data-vehicle_id="{{$jobcard->vehicle_id}}"
                             data-instruction="{{$jobcard->instruction}}"><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
-                    <a href="{{ '/vehicle_management/viewImage/' . $jobcard->vehicle_id }}"
+                    <a href="{{ '/jobcards/jobcardimages/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Images</a>
 
