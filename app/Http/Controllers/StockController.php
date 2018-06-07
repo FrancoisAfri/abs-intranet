@@ -221,18 +221,15 @@ class StockController extends Controller
         $user = HRPerson::where('status', 1)->get();
         
            $vehicle = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_image.image as vehicle_images',
-                'vehicle_managemnet.name as vehicle_type', 'contact_companies.name as Vehicle_Owner ')
+            ->select('vehicle_details.*', 'vehicle_make.name as vehicleMake',
+                'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_image', 'vehicle_details.id', '=', 'vehicle_image.vehicle_maintanace')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
-            ->orderBy('vehicle_details.id')
+            ->orderBy('vehicle_details.id', 'asc')
             ->get();
            
-        //return $vehicle;
+    
 
         for ($i = 0; $i < count($productID); $i++) {
             $product .= $productID[$i] . ',';
@@ -288,16 +285,22 @@ class StockController extends Controller
         }
 
        // return $results;
+        
         foreach ($results as $sKey => $sValue) {
 
             if (strlen(strstr($sKey, 'stock_' ))) {
                 list($sUnit, $iID,$cID  ) = explode("_", $sKey);
    
+                
                 $user = 'userid' . '_' . $iID;
+                $veh = 'vehicle' . '_' . $iID;
                 
-                return $sKey;
-                
+               
+     
                 $UserID = isset($request[$user]) ? $request[$user] : 0;
+                $vehicleID = isset($request[$veh]) ? $request[$veh] : 0;
+                
+                 //return $vehicleID;
 
                 $productID = $iID;
                 $newStock = $sValue;
@@ -319,13 +322,10 @@ class StockController extends Controller
                 $history->balance_before = $available;
                 $history->balance_after = $available - $newStock;
                 $history->action = 'stock taken out';
-                $history->vehicle_id = 0;
+                $history->vehicle_id = $vehicleID;
                 $history->save();
-                
-              
-           }
-           
-           
+                            
+           } 
         }
         AuditReportsController::store('Stock Management', 'Stock taken out', "Accessed By User", 0);
         return redirect('stock/storckmanagement');

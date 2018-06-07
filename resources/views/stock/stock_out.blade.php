@@ -95,12 +95,12 @@
                                         nowrap>
                                         <div class="form-group vehicle-field">
                                             <label for="path" class="col-sm-3 control-label"> </label>
-                                            <div class="col-sm-18">
+                                            <div class="col-sm-15">
                                                 <select class="form-control select2" style="width: 100%;"
                                                         id="vehicle_{{ $stock->id }}" name="vehicle_{{$stock->id}}">
                                                     <option value="0">*** Select Vehicle ***</option>
                                                     @foreach($vehicle as $vehicles)
-                                                        <option value="{{ $vehicles->id }}">{{ $vehicles->vehicle_model . ' ' . $vehicles->vehicle_type 
+                                                        <option value="{{ $vehicles->id }}">{{ $vehicles->vehicleModel . ' ' . $vehicles->vehicleType 
                                                             . ' ' . $vehicles->year}}</option>
                                                     @endforeach
                                                 </select>
