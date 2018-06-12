@@ -965,6 +965,12 @@ Route::post('quote/search', 'QuotesController@searchResults');
 Route::get('quote/email_quote/{quote}', 'QuotesController@emailQuote');
 Route::get('quote/cancel_quote/{quote}', 'QuotesController@cancelQuote');
 Route::post('newquote/save', 'QuotesController@newQuote');
+
+//quotes reports
+Route::get('quote/reports', 'QuotesController@Quotereports');
+Route::post('quote/searchreports', 'QuotesController@reportsinndex');
+
+
 // Quote term Categories
 Route::get('quote/categories-terms', 'QuotesTermConditionsController@index');
 Route::get('quote/term-conditions/{cat}', 'QuotesTermConditionsController@viewTerm');

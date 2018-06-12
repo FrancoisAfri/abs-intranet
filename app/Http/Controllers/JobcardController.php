@@ -144,8 +144,8 @@ class JobcardController extends Controller
          $viewimage = DB::table('vehicle_image')   
                 ->select('vehicle_image.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
                 ->leftJoin('hr_people', 'vehicle_image.user_name', '=', 'hr_people.id')
-            ->where('jobcard_id', $images->id)
-            ->get();
+                ->where('jobcard_id', $images->id)
+                ->get();
          
         //return $viewimage;
           

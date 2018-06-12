@@ -14,8 +14,8 @@ class AddColumnToStockTable extends Migration
     public function up()
     {
        Schema::table('stock', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned()->index()->nullable();
-            $table->integer('vehicle_id')->unsigned()->index()->nullable();
+            $table->integer('product_code')->unsigned()->index()->nullable();
+            $table->string('stock_type')->unsigned()->index()->nullable();
         });
     }
 

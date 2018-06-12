@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DropColoumnVehicleFireExtinguishers extends Migration
+class AddColumnToProduct extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class DropColoumnVehicleFireExtinguishers extends Migration
      */
     public function up()
     {
-        //
-            Schema::dropIfExists('fire_extinguishers');
+		Schema::table('Product_products', function (Blueprint $table) {
+           
+            $table->integer('stock_type')->unsigned()->index()->nullable();
+        });
     }
 
     /**
@@ -24,6 +26,9 @@ class DropColoumnVehicleFireExtinguishers extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('Product_products', function (Blueprint $table) {
+
+            $table->dropColumn('stock_type');
+        });
     }
 }
