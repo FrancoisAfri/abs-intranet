@@ -6,6 +6,12 @@ use App\CRMAccount;
 use App\CRMInvoice;
 use App\CRMPayment;
 use App\Quotation;
+use App\DivisionLevel;
+use App\ContactCompany;
+use App\ContactPerson;
+use App\product_products;
+use App\product_packages;
+use App\QuotesTermAndConditions;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -192,5 +198,38 @@ class CRMAccountController extends Controller
         });
 
         return response()->json(['payment_captured' => ($payment) ? $payment->id : 0], 200);
+    }
+    
+    public function crmreportIndex(){
+        $highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first()
+            ->load(['divisionLevelGroup' => function ($query) {
+                $query->has('quoteProfile');
+            }]);
+            
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+       // return $contactPeople;
+		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
+        $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
+        $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
+
+        $data['page_title'] = 'Quotes';
+        $data['page_description'] = 'Search Create';
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Reports';
+        $data['highestLvl'] = $highestLvl;
+        $data['companies'] = $companies;
+        $data['contactPeople'] = $contactPeople;
+        $data['products'] = $products;
+        $data['packages'] = $packages;
+        $data['termsAndConditions'] = $termsAndConditions;
+        AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
+        
+        return view('quote.report_search')->with($data); 
     }
 }

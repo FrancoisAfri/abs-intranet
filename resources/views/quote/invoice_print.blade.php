@@ -10,7 +10,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-file-text pull-right"></i>
-                    <h3 class="box-title">Quote Report</h3>
+                    <h3 class="box-title">Not Converted into Invoices Repor</h3>
                 </div>
     <div class="box-body">
         <div class="box">

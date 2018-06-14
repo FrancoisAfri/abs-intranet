@@ -994,6 +994,9 @@ Route::get('crm/invoice/mail/{quotation}/{invoice}', 'CRMInvoiceController@email
 Route::post('crm/capture-payment/{quotation}/{invoice}', 'CRMAccountController@capturePayment');
 Route::post('crm/accounts/search', 'CRMSetupController@searchResults');
 
+// CRM Reports
+Route::get('crm/reports', 'CRMAccountController@crmreportIndex');
+
 // CMS
 Route::get('cms/viewnews', 'CmsController@addnews');
 Route::post('cms/crm_news', 'CmsController@addcmsnews');

@@ -461,6 +461,15 @@ class DatabaseSeeder extends Seeder
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'crm/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+        
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'CRM Settings';
         $ribbon->ribbon_path = 'crm/setup';
         $ribbon->access_level = 4;

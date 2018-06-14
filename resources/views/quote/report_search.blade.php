@@ -109,7 +109,21 @@
                             </div>
                         </div>
 
-                        <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
+                        <hr class="hr-text -field" data-content="">
+
+                        <div class="form-group services-field{{ $errors->has('status') ? ' has-error' : '' }}">
+                            <label for="{{ 'status' }}" class="col-sm-2 control-label">Quote Statuses</label>
+                            <div class="col-sm-10">
+                                <select id="status" name="status" class="form-control select2" style="width: 100%;">
+                                    <!-- <option value="1">*** Select Status ***</option> -->
+                                    <option value="1"> *** converted into invoices  *** </option>
+                                    <option value="2"> *** Not converted into invoices *** </option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
 
                         <div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>
@@ -138,7 +152,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right">Genarate Report<i class="fa fa-arrow-right"></i></button>
@@ -179,7 +193,7 @@
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
-
+            $('.services-field').hide();
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
