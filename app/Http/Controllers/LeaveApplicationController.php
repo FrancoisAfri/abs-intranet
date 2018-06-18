@@ -77,6 +77,7 @@ class LeaveApplicationController extends Controller
 
     public function show()
     {
+		
         $data['page_title'] = "leave Management";
         $data['page_description'] = "Leave Approvals";
         $data['breadcrumb'] = [
@@ -142,13 +143,21 @@ class LeaveApplicationController extends Controller
 
     public function ApplicationDetails($status = 0, $hrID = 0)
     {
-
+		//UserAccess
+		$userAccess = DB::table('security_modules_access')
+                ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                ->where('code_name', 'leave')
+                ->where('user_id', Auth::user()->person->user_id)
+                ->first();
+				
         // query the leave congif table and bring back the values
         $approvals = DB::table('leave_configuration')
             ->select('require_managers_approval', 'require_department_head_approval', 'require_hr_approval', 'require_payroll_approval')
             ->first();
         // query the hrperon  model and bring back the values of the managerg
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
+		
+		//return $hrDetails;
 
         if ($approvals->require_managers_approval == 1) {
             # code...
@@ -181,11 +190,23 @@ class LeaveApplicationController extends Controller
                 return $details;
             }
         } #code here .. Require Hr
-        else {
-
+        elseif($userAccess->access_level == 5 && $userAccess->access_level == 4) {
             $details = array('status' => 1, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
             return $details;
-        }
+        }else{
+				$managerDetails = HRPerson::where('id', $hrDetails->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+            if ($managerDetails == null) {
+                $details = array('status' => 2, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
+                return $details;
+            } else {
+                // array to store manager details
+                 $details = array('status' => 2, 'first_name' => $managerDetails->firstname, 'surname' => $managerDetails->surname, 'email' => $managerDetails->email);
+                return $details;
+			}
+		
+		}
     }
 
     #function to get available days for user based on userID and LeaveID
@@ -441,7 +462,13 @@ class LeaveApplicationController extends Controller
     //Function to accept leave applications
     public function AcceptLeave(Request $request, leave_application $id, leave_history $levHist, leave_credit $credit, leave_configuration $leave_conf)
     {
-
+		$userAccess = DB::table('security_modules_access')
+                ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+                ->where('code_name', 'leave')
+                ->where('user_id', Auth::user()->person->user_id)
+                ->first();
+		//return 	$userAccess;	
+				
         $loggedInEmplID = Auth::user()->person->id;
         $status = $id->status;
         $iD = $id->id;
@@ -466,7 +493,7 @@ class LeaveApplicationController extends Controller
             ->where('leave_type_id', $typID)
             ->first();
         $leave_balance = $Details['leave_balance'];
-        # check whose in the list of approving an application b4 writing into the db
+        # check whose in the list of approving an application before writing into the db
 
         $managerApproval = $negDays['require_managers_approval'];
         $managerApproval = $negDays['require_department_head_approval'];
@@ -507,7 +534,8 @@ class LeaveApplicationController extends Controller
         $levHist->save();
         $approvals = leave_configuration::where('id', 1)
             ->select('require_managers_approval', 'require_department_head_approval')
-            ->get()->first();
+            ->get()
+			->first();
 
         $ManHed = $approvals->first()->require_managers_approval;
         $DepHead = $approvals->first()->require_department_head_approval;
@@ -520,6 +548,7 @@ class LeaveApplicationController extends Controller
                 ->where('id', $iD)
                 ->update(['status' => 3]);
         } else {
+			
             DB::table('leave_application')
                 ->where('id', $iD)
                 ->update(['status' => 1]);

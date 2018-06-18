@@ -206,10 +206,12 @@ class CRMAccountController extends Controller
             ->load(['divisionLevelGroup' => function ($query) {
                 $query->has('quoteProfile');
             }]);
+           
             
+        $CRMAccount = CRMAccount::orderBy('id', 'asc')->get();
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-       // return $contactPeople;
+      //  return $CRMAccount;
 		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
@@ -230,6 +232,6 @@ class CRMAccountController extends Controller
         $data['termsAndConditions'] = $termsAndConditions;
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
         
-        return view('quote.report_search')->with($data); 
+        return view('crm.report_search')->with($data); 
     }
 }
