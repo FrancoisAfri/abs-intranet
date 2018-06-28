@@ -51,7 +51,7 @@
                             <tr>
                                 <td><button type="button" class="btn btn-primary" id="view_quote" onclick="postData({{$quoteApplication->id}}, 'view_quote');">View Quote</button></td>
                                 <td>{{$quoteApplication->company->name}}</td>
-                                <td>{{$quoteApplication->client->first_name." ".$quoteApplication->client->surname}}</td>
+                                <td>{{!empty($quoteApplication->client->first_name) ? $quoteApplication->client->first_name." ".$quoteApplication->client->surname : ''}}</td>
                                 <td>{{$quoteApplication->person->first_name." ".$quoteApplication->person->surname}}</td>
                                 <td>{{$quoteApplication->created_at}}</td>
                                 <td>{{$quoteApplication->quote_status}}</td>

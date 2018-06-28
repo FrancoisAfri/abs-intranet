@@ -272,8 +272,7 @@ class QuotesController extends Controller
         } elseif ($quote->status == 2) {
             $stastus = 5;
         }
-        
-        
+           
        // return $stastus;
         $quote->status = $stastus;
         $changedStatus = 'Status Changed To: ' . $quote->quote_status;
@@ -627,9 +626,8 @@ class QuotesController extends Controller
             $quote->update();
 
             if ($quoteType == 1) {
-
                 //save quote's products
-                $prices = $request->input('price');
+                $prices = $request->input('current_price');
                 $quantities = $request->input('quantity');
                 if ($prices) {
                     foreach ($prices as $productID => $price) {
@@ -683,7 +681,7 @@ class QuotesController extends Controller
             $QuoteApprovalHistory->comment = 'New Quote Created, Manager Approval';
             $QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
             $QuoteApprovalHistory->save();
-        } 
+        }
 		else 
 		{
             $status = 2;
@@ -755,6 +753,7 @@ class QuotesController extends Controller
 
     public function searchResults(Request $request)
     {
+		//die;
         $companyID = trim($request->company_id);
         $contactPersonID = $request->contact_person_id;
         $personPassportNum = $request->passport_number;
@@ -769,7 +768,7 @@ class QuotesController extends Controller
         })
         ->whereIn('status', [1, 2])
         ->with('products', 'packages', 'person', 'company', 'client', 'divisionName')
-        ->orderBy('id')
+        ->orderBy('id', 'desc')
         ->get();
         $data['highestLvl'] = $highestLvl;
         $data['page_title'] = 'Quotes';
@@ -877,8 +876,8 @@ class QuotesController extends Controller
         if ($isPDF === true) {
             $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first()->level;
             $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $quotation->division_id)
-                ->first()->load('divisionLevelGroup');
-
+                ->first();
+			if (!empty($quoteProfile )) $quoteProfile  = $quoteProfile->load('divisionLevelGroup'); 
             $data['file_name'] = 'Quotation';
             $data['user'] = Auth::user()->load('person');
             $data['quoteProfile'] = $quoteProfile;
@@ -975,12 +974,13 @@ class QuotesController extends Controller
     public function adjustQuoteModification(Request $request, Quotation $quote)
     {
         $quote->load('products', 'packages');
-        //return $quote;
+		//$quote->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services');
         $validator = Validator::make($request->all(), [
             'quote_type' => 'bail|required|integer|min:1',
             'division_id' => 'bail|required|integer|min:1',
             'contact_person_id' => 'bail|required|integer|min:1',
         ]);
+		//return $quote;
         $quoteType = $request->input('quote_type');
 
         $validator->after(function ($validator) use ($request, $quoteType) {
@@ -1038,12 +1038,11 @@ class QuotesController extends Controller
                 $package->price = $packageCost - (($packageCost * $package->discount) / 100);
             }
         }
-        //return $packages;
 
         $servicesSettings = ProductServiceSettings::first();
 
         $data['page_title'] = 'Quotes';
-        $data['page_description'] = 'Create a quotation';
+        $data['page_description'] = 'Modify quotation';
         $data['breadcrumb'] = [
             ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
             ['title' => 'Create', 'active' => 1, 'is_module' => 0]
@@ -1115,7 +1114,7 @@ class QuotesController extends Controller
             if ($quoteType == 1) {
 
                 //save quote's products
-                $prices = $request->input('price');
+                $prices = $request->input('current_price');
                 $quantities = $request->input('quantity');
                 $quote->products()->detach();
                 if ($prices) {
@@ -1299,7 +1298,7 @@ class QuotesController extends Controller
 
         if ($quoteType == 1){
 
-         $quotationsAudit = DB::table('quotations')
+			$quotationsAudit = DB::table('quotations')
                             ->select('quotations.*','contact_companies.name as companyname','contacts_contacts.first_name as firstname' ,
                                     'contacts_contacts.surname as surname' , 'hr_people.first_name as quotefirstname','hr_people.surname as quotesurname',
                                     'hr.first_name as approverfirstname','hr.surname as approversurname' ,'quote_approval_history.status as quoteStatus',

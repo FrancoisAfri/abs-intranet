@@ -16,7 +16,7 @@
                 <form class="form-horizontal" method="POST" action="/quote/adjust_modification/{{ $quote->id }}">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
-                        <h3 class="box-title">New Quote</h3>
+                        <h3 class="box-title">Edit Quote</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -147,6 +147,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
+					<button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
                         <button type="submit" class="btn btn-primary pull-right">Next <i class="fa fa-arrow-right"></i></button>
                     </div>
                     <!-- /.box-footer -->
@@ -175,6 +176,10 @@
 
     <script>
         $(function () {
+			//Cancel button click event
+            $('#back_button').click(function () {
+                location.href = '/quote/view/{{$quote->id}}';
+            });
             //Initialize Select2 Elements
             $(".select2").select2();
 
