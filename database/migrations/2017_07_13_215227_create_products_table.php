@@ -19,8 +19,9 @@ class CreateProductsTable extends Migration
             $table->string('description')->nullable();
             $table->double('price')->nullable();
             $table->smallInteger('status')->nullable();
-            $table->Integer('category_id')->index()->nullable();;
-            $table->Integer('productPrice_id')->index()->nullable();;
+            $table->integer('category_id')->index()->nullable();;
+            $table->integer('productPrice_id')->index()->nullable();;
+            $table->integer('stock_type')->index()->nullable();;
             $table->timestamps();
         });
     }

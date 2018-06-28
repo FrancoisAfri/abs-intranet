@@ -173,6 +173,7 @@ class QuotesController extends Controller
             ->load(['divisionLevelGroup' => function ($query) {
                 $query->has('quoteProfile');
             }]);
+            
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
        // return $contactPeople;
@@ -271,7 +272,8 @@ class QuotesController extends Controller
         } elseif ($quote->status == 2) {
             $stastus = 5;
         }
-
+           
+       // return $stastus;
         $quote->status = $stastus;
         $changedStatus = 'Status Changed To: ' . $quote->quote_status;
         //$quote->update();
@@ -472,7 +474,7 @@ class QuotesController extends Controller
         });
 
         $validator->validate();
-        //return $request->all();
+       // return $request->all();
 
         $currentTime = time();
 
@@ -562,7 +564,6 @@ class QuotesController extends Controller
         $data['servicesSettings'] = $servicesSettings;
         //return $data;
         AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
-
         return view('quote.adjust_quote')->with($data);
     }
 
@@ -625,9 +626,8 @@ class QuotesController extends Controller
             $quote->update();
 
             if ($quoteType == 1) {
-
                 //save quote's products
-                $prices = $request->input('price');
+                $prices = $request->input('current_price');
                 $quantities = $request->input('quantity');
                 if ($prices) {
                     foreach ($prices as $productID => $price) {
@@ -681,7 +681,7 @@ class QuotesController extends Controller
             $QuoteApprovalHistory->comment = 'New Quote Created, Manager Approval';
             $QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
             $QuoteApprovalHistory->save();
-        } 
+        }
 		else 
 		{
             $status = 2;
@@ -753,6 +753,7 @@ class QuotesController extends Controller
 
     public function searchResults(Request $request)
     {
+		//die;
         $companyID = trim($request->company_id);
         $contactPersonID = $request->contact_person_id;
         $personPassportNum = $request->passport_number;
@@ -767,7 +768,7 @@ class QuotesController extends Controller
         })
         ->whereIn('status', [1, 2])
         ->with('products', 'packages', 'person', 'company', 'client', 'divisionName')
-        ->orderBy('id')
+        ->orderBy('id', 'desc')
         ->get();
         $data['highestLvl'] = $highestLvl;
         $data['page_title'] = 'Quotes';
@@ -875,8 +876,8 @@ class QuotesController extends Controller
         if ($isPDF === true) {
             $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first()->level;
             $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $quotation->division_id)
-                ->first()->load('divisionLevelGroup');
-
+                ->first();
+			if (!empty($quoteProfile )) $quoteProfile  = $quoteProfile->load('divisionLevelGroup'); 
             $data['file_name'] = 'Quotation';
             $data['user'] = Auth::user()->load('person');
             $data['quoteProfile'] = $quoteProfile;
@@ -973,12 +974,13 @@ class QuotesController extends Controller
     public function adjustQuoteModification(Request $request, Quotation $quote)
     {
         $quote->load('products', 'packages');
-        //return $quote;
+		//$quote->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services');
         $validator = Validator::make($request->all(), [
             'quote_type' => 'bail|required|integer|min:1',
             'division_id' => 'bail|required|integer|min:1',
             'contact_person_id' => 'bail|required|integer|min:1',
         ]);
+		//return $quote;
         $quoteType = $request->input('quote_type');
 
         $validator->after(function ($validator) use ($request, $quoteType) {
@@ -1036,12 +1038,11 @@ class QuotesController extends Controller
                 $package->price = $packageCost - (($packageCost * $package->discount) / 100);
             }
         }
-        //return $packages;
 
         $servicesSettings = ProductServiceSettings::first();
 
         $data['page_title'] = 'Quotes';
-        $data['page_description'] = 'Create a quotation';
+        $data['page_description'] = 'Modify quotation';
         $data['breadcrumb'] = [
             ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
             ['title' => 'Create', 'active' => 1, 'is_module' => 0]
@@ -1113,7 +1114,7 @@ class QuotesController extends Controller
             if ($quoteType == 1) {
 
                 //save quote's products
-                $prices = $request->input('price');
+                $prices = $request->input('current_price');
                 $quantities = $request->input('quantity');
                 $quote->products()->detach();
                 if ($prices) {
@@ -1234,5 +1235,191 @@ class QuotesController extends Controller
         //$data['Ribbon_module'] = $Ribbon_module;
         return back();
         // return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
+    }
+    
+    public function Quotereports(){
+      
+        $highestLvl = DivisionLevel::where('active', 1)
+            ->orderBy('level', 'desc')->limit(1)->get()->first()
+            ->load(['divisionLevelGroup' => function ($query) {
+                $query->has('quoteProfile');
+            }]);
+            
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+       // return $contactPeople;
+		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
+        $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
+        $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
+
+        $data['page_title'] = 'Quotes';
+        $data['page_description'] = 'Search Create';
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Reports';
+        $data['highestLvl'] = $highestLvl;
+        $data['companies'] = $companies;
+        $data['contactPeople'] = $contactPeople;
+        $data['products'] = $products;
+        $data['packages'] = $packages;
+        $data['termsAndConditions'] = $termsAndConditions;
+        AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
+        
+        return view('quote.report_search')->with($data);
+    }
+    
+    public function reportsinndex(Request $request){
+       $this->validate($request, [
+            
+        ]);
+        $QuoteData = $request->all();
+        unset($QuoteData['_token']);  
+       
+        $actionFrom = $actionTo = 0;
+        $actionDate = $QuoteData['action_date'];
+        $DivisionID = $QuoteData['division_id'];
+        $CompanyID = $QuoteData['company_id'];
+        $quoteType = $QuoteData['quote_type'];
+        $status = $QuoteData['status'];
+        $contactpersonID = $QuoteData['contact_person_id'];
+        $productID = !empty($QuoteData['product_id']) ? $QuoteData['product_id'] : 0; 
+        $packageID = !empty($QuoteData['package_id']) ? $QuoteData['package_id'] : 0; 
+          
+         if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+       
+        $quotation = Quotation::all();
+
+        if ($quoteType == 1){
+
+			$quotationsAudit = DB::table('quotations')
+                            ->select('quotations.*','contact_companies.name as companyname','contacts_contacts.first_name as firstname' ,
+                                    'contacts_contacts.surname as surname' , 'hr_people.first_name as quotefirstname','hr_people.surname as quotesurname',
+                                    'hr.first_name as approverfirstname','hr.surname as approversurname' ,'quote_approval_history.status as quoteStatus',
+                                    'quote_approval_history.comment as Comment','quote_approval_history.approval_date as approvaldate',
+                                    'quote_approval_history.user_id as approvalID' ) 
+                            ->leftJoin('contact_companies', 'quotations.company_id', '=', 'contact_companies.id')        
+                            ->leftJoin('contacts_contacts', 'quotations.client_id', '=', 'contacts_contacts.id') 
+                            ->leftJoin('hr_people', 'quotations.hr_person_id', '=', 'hr_people.id')
+                            ->leftJoin('quote_approval_history', 'quotations.id', '=', 'quote_approval_history.quotation_id')                 
+                            ->leftJoin('hr_people as hr', 'quote_approval_history.user_id', '=', 'hr.id')   
+                            ->where(function ($query) use ($actionFrom, $actionTo) {
+                                if ($actionFrom > 0 && $actionTo > 0) {
+                                    $query->whereBetween('quote_approval_history.approval_date', [$actionFrom, $actionTo]);
+                                }
+                            })
+                            ->where(function ($query) use ($DivisionID) {
+                                if (!empty($DivisionID)) {
+                                    $query->where('quotations.division_id', $driverID);
+                                }
+                            })
+                            ->where(function ($query) use ($CompanyID) {
+                                if (!empty($CompanyID)) {
+                                    $query->where('quotations.division_level', $CompanyID);
+                                }
+                            })
+                            ->where(function ($query) use ($contactpersonID) {
+                                if (!empty($contactpersonID)) {
+                                    $query->where('quotations.hr_person_id', $contactpersonID);
+                                }
+                            })
+                            ->where(function ($query) use ($contactpersonID) {
+                                if (!empty($contactpersonID)) {
+                                    $query->where('quotations.hr_person_id', $contactpersonID);
+                                }
+                            })
+//                            ->where(function ($query) use ($status) {
+//                                if (!empty($status)) {
+//                                    $query->where('quote_approval_history.status', $status);
+//                                }
+//                            })
+                            ->orderBy('quotations.id')
+                            ->get();    
+         
+
+          
+        $data['page_title'] = 'Quotes';
+        $data['page_description'] = 'Quotes Report';
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Reports';
+        $data['quotationsAudit'] = $quotationsAudit;
+        AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
+        
+        return view('quote.quoute_print')->with($data);
+        
+        }elseif($quoteType == 2 && $status == 1 ){ // converted into invoice
+            
+             $quotationsAudit = DB::table('quotations')
+                            ->select('quotations.*','contact_companies.name as companyname','contacts_contacts.first_name as firstname' ,
+                                    'contacts_contacts.surname as surname' , 'hr_people.first_name as quotefirstname','hr_people.surname as quotesurname',
+                                    'hr.first_name as approverfirstname','hr.surname as approversurname' ,'quote_approval_history.status as quoteStatus',
+                                    'quote_approval_history.comment as Comment','quote_approval_history.approval_date as approvaldate',
+                                    'quote_approval_history.user_id as approvalID' ) 
+                            ->leftJoin('contact_companies', 'quotations.company_id', '=', 'contact_companies.id')        
+                            ->leftJoin('contacts_contacts', 'quotations.client_id', '=', 'contacts_contacts.id') 
+                            ->leftJoin('hr_people', 'quotations.hr_person_id', '=', 'hr_people.id')
+                            ->leftJoin('quote_approval_history', 'quotations.id', '=', 'quote_approval_history.quotation_id')                 
+                            ->leftJoin('hr_people as hr', 'quote_approval_history.user_id', '=', 'hr.id')    
+                            ->whereIn('quote_approval_history.status', [ 3, 4 , 5 , 6 , 7 , 8])//check if the booking is not approved
+                            ->orderBy('quotations.id')
+                            ->get();  
+             
+            // return $quotationsAudit;
+
+        $data['page_title'] = 'Quotes';
+        $data['page_description'] = 'Quotes Report';
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Reports';
+        $data['quotationsAudit'] = $quotationsAudit;
+        AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
+        return view('quote.convertedinvoice_print')->with($data);
+
+        }elseif($quoteType == 2 && $status == 2 ){ // Not converted invoice
+           $quotationsAudit = DB::table('quotations')
+                            ->select('quotations.*','contact_companies.name as companyname','contacts_contacts.first_name as firstname' ,
+                                    'contacts_contacts.surname as surname' , 'hr_people.first_name as quotefirstname','hr_people.surname as quotesurname',
+                                    'hr.first_name as approverfirstname','hr.surname as approversurname' ,'quote_approval_history.status as quoteStatus',
+                                    'quote_approval_history.comment as Comment','quote_approval_history.approval_date as approvaldate',
+                                    'quote_approval_history.user_id as approvalID' ) 
+                            ->leftJoin('contact_companies', 'quotations.company_id', '=', 'contact_companies.id')        
+                            ->leftJoin('contacts_contacts', 'quotations.client_id', '=', 'contacts_contacts.id') 
+                            ->leftJoin('hr_people', 'quotations.hr_person_id', '=', 'hr_people.id')
+                            ->leftJoin('quote_approval_history', 'quotations.id', '=', 'quote_approval_history.quotation_id')                 
+                            ->leftJoin('hr_people as hr', 'quote_approval_history.user_id', '=', 'hr.id')    
+                            ->whereNotIn('quote_approval_history.status', [ 3, 4 , 5 , 6 , 7 , 8])//check if the booking is not approved
+                            ->orderBy('quotations.id')
+                            ->get();  
+             
+            // return $quotationsAudit;
+
+        $data['page_title'] = 'Quotes';
+        $data['page_description'] = 'Quotes Report';
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        
+        $data['quotationsAudit'] = $quotationsAudit;
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'Reports';
+        
+        AuditReportsController::store('Quote', 'Create Quote Page Accessed', 'Accessed By User', 0);
+        return view('quote.invoice_print')->with($data); 
+       
+        }
     }
 }

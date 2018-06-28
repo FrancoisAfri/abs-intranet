@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class DropColoumnVehicleFireExtinguishers extends Migration
+class AddActualPrinceToQuotationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class DropColoumnVehicleFireExtinguishers extends Migration
      */
     public function up()
     {
-        //
-            Schema::dropIfExists('fire_extinguishers');
+        Schema::table('quotations', function (Blueprint $table) {
+            $table->double('actual_price')->nullable();
+        });
     }
 
     /**
@@ -24,6 +25,8 @@ class DropColoumnVehicleFireExtinguishers extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('quotations', function (Blueprint $table) {
+            $table->dropColumn('quote_number');
+        });
     }
 }

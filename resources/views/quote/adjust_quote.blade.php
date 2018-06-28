@@ -77,8 +77,9 @@
                                                 <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
                                                        value="1" data-price="{{ $product->current_price }}" onchange="subtotal()" required>
                                             </td>
-                                            <td style="vertical-align: middle; text-align: right;">
-                                                {{ $product->current_price ? 'R ' . number_format($product->current_price, 2) : '' }}
+                                            <td style="vertical-align: middle; width: 100px;">
+											<input type="text" class="form-control input-sm item-price" name="current_price[{{ $product->id }}]"
+                                                       value="{{$product->current_price}} " data-price="{{ $product->current_price }}" onchange="subtotal()" required>
                                             </td>
                                         </tr>
                                         <input type="hidden" name="price[{{ $product->id }}]"

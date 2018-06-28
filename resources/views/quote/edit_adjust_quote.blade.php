@@ -22,7 +22,7 @@
                         <input type="hidden" name="tc_id[]" value="{{ $tcID }}">
                     @endforeach
                     <div class="box-header with-border">
-                        <h3 class="box-title">New Quote</h3>
+                        <h3 class="box-title">Modify Quote</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -61,10 +61,12 @@
                                             <td style="vertical-align: middle;">{{ $product->name }}</td>
                                             <td style="vertical-align: middle; width: 80px;">
                                                 <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
-                                                       value="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->quantity : 1 }}" data-price="{{ $product->current_price }}" onchange="subtotal()" required>
+                                                       value="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->quantity : 1 }}" data-price="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->price : 1 }}" onchange="subtotal()" required>
                                             </td>
-                                            <td style="vertical-align: middle; text-align: right;">
-                                                {{ $product->current_price ? 'R ' . number_format($product->current_price, 2) : '' }}
+                                            <td style="vertical-align: middle; width: 100px;">
+											<input type="text" class="form-control input-sm item-price" name="current_price[{{ $product->id }}]"
+                                                       value="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->price : 1 }}" data-price="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->price : 1 }}" onchange="subtotal()" required>
+                                               
                                             </td>
                                         </tr>
                                         <input type="hidden" name="price[{{ $product->id }}]"
@@ -113,7 +115,6 @@
                                                 <th style="width: 10px" nowrap class="text-center"></th>
                                             </tr>
                                         </thead>
-
                                         <tbody class="input-fields-wrap">
                                             @foreach($quote->services as $service)
                                                 <tr>
@@ -160,7 +161,7 @@
                             <!-- Total cost section -->
                             <div class="col-sm-6 col-sm-offset-6 no-padding">
                                 <table class="table">
-                                    @if($servicesSettings)
+                                    @if($servicesSettings && $quote->quote_type == 2)
                                         <tr>
                                             <td></td>
                                             <th style="text-align: left;">Rate Per {{ ucfirst($servicesSettings->service_unit_name) }}:</th>
@@ -215,6 +216,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
+					<button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
                         <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
                     </div>
                     <!-- /.box-footer -->
@@ -252,7 +254,10 @@
 
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-
+			//Cancel button click event
+            $('#back_button').click(function () {
+                location.href = '/quote/modify_quote/{{$quote->id}}';
+            });
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -350,7 +355,7 @@
             var formattedVAT = '&mdash;';
             var vatCheckValue = $('#rdo_add_vat').iCheck('update')[0].checked;
             if (vatCheckValue) {
-                var vatAmount = (total * 0.14);
+                var vatAmount = (total * 0.15);
                 formattedVAT = 'R ' + vatAmount.formatMoney(2);
                 total += vatAmount;
             }

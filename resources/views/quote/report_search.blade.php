@@ -7,16 +7,27 @@
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
     <!-- DataTables -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    
+    <!-- Include Date Range Picker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
+          rel="stylesheet">
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/quote/adjust_modification/{{ $quote->id }}">
+                <form class="form-horizontal" method="POST" action="/quote/searchreports">
                     {{ csrf_field() }}
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Edit Quote</h3>
+                    <div class="box-header with-border" align="center">
+                        <h3 class="box-title">Search Quote</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -36,20 +47,36 @@
                             <label for="Leave_type" class="col-sm-2 control-label"> Quote Type</label>
 
                             <div class="col-sm-9">
-                                <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" {{ ($quote->quote_type == 1) ? 'checked' : '' }}> Products/Packages</label>
-                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2" {{ ($quote->quote_type == 2) ? 'checked' : '' }}>  Services</label>
+                                <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Quotation </label>
+                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2"> Invoices </label>
                             </div>
                         </div>
+                        
+                       <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
+                                        <label for="action_date" class="col-sm-2 control-label">Action Date</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group">
+                                                <div class="input-group-addon">
+                                                    <i class="fa fa-calendar"></i>
+                                                </div>
+                                                <input type="text" class="form-control daterangepicker" id="action_date"
+                                                       name="action_date" value="" placeholder="Select Action Date...">
 
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                         <hr class="hr-text" data-content="SELECT A DIVISION ">
+                         
                         <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
-                            <label for="division_id" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
+                            <label for="{{ 'division_id' }}" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
 
                             <div class="col-sm-10">
                                 <select id="division_id" name="division_id" class="form-control select2" style="width: 100%;">
                                     <option value="">*** Please Select a {{ $highestLvl->name }} ***</option>
                                     @if($highestLvl->divisionLevelGroup)
                                         @foreach($highestLvl->divisionLevelGroup as $division)
-                                            <option value="{{ $division->id }}"{{ ($division->id == $quote->division_id && $highestLvl->level == $quote->division_level) ? ' selected' : '' }}>{{ $division->name }}</option>
+                                            <option value="{{ $division->id }}" {{ ($division->id == old('division_id')) ? 'selected' : '' }}>{{ $division->name }}</option>
                                         @endforeach
                                     @endif
                                 </select>
@@ -59,21 +86,21 @@
                         <hr class="hr-text" data-content="SELECT A CLIENT">
 
                         <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
-                            <label for="company_id" class="col-sm-2 control-label">Client Company</label>
+                            <label for="{{ 'company_id' }}" class="col-sm-2 control-label">Client Company</label>
 
                             <div class="col-sm-10">
-                                <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;" onchange="contactCompanyDDOnChange(this, null, parseInt('{{ $quote->client_id }}'))">
+                                <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;" onchange="contactCompanyDDOnChange(this)">
                                     <option value="">*** Please Select a Company ***</option>
                                     <option value="0">[Individual Clients]</option>
                                     @foreach($companies as $company)
-                                        <option value="{{ $company->id }}" {{ ($company->id == $quote->company_id) ? ' selected' : '' }}>{{ $company->name }}</option>
+                                        <option value="{{ $company->id }}" {{ ($company->id == old('company_id')) ? 'selected' : '' }}>{{ $company->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
-                            <label for="contact_person_id" class="col-sm-2 control-label">Contact Person</label>
+                            <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
 
                             <div class="col-sm-10">
                                 <select id="contact_person_id" name="contact_person_id" class="form-control select2" style="width: 100%;">
@@ -82,16 +109,30 @@
                             </div>
                         </div>
 
-                        <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
+                        <hr class="hr-text -field" data-content="">
 
-                        <div class="form-group products-field{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                        <div class="form-group services-field{{ $errors->has('status') ? ' has-error' : '' }}">
+                            <label for="{{ 'status' }}" class="col-sm-2 control-label">Quote Statuses</label>
+                            <div class="col-sm-10">
+                                <select id="status" name="status" class="form-control select2" style="width: 100%;">
+                                    <!-- <option value="1">*** Select Status ***</option> -->
+                                    <option value="1"> *** converted into invoices  *** </option>
+                                    <option value="2"> *** Not converted into invoices *** </option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
+
+                        <div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>
 
                             <div class="col-sm-10">
                                 <select id="product_id" name="product_id[]" class="form-control select2" style="width: 100%;" multiple>
                                     <option value="">*** Please Select Some Products ***</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" {{ ($quote->products && $quote->products->contains('id', $product->id)) ? ' selected' : '' }}>{{ $product->name }}</option>
+                                        <option value="{{ $product->id }}" {{ ($product->id == old('product_id[]')) ? 'selected' : '' }}>{{ $product->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -106,49 +147,15 @@
                                 <select id="package_id" name="package_id[]" class="form-control select2" style="width: 100%;" multiple>
                                     <option value="">*** Please Select a Package ***</option>
                                     @foreach($packages as $package)
-                                        <option value="{{ $package->id }}" {{ ($quote->packages && $quote->packages->contains('id', $package->id)) ? ' selected' : '' }}>{{ $package->name }}</option>
+                                        <option value="{{ $package->id }}" {{ ($package->id == old('package_id[]')) ? 'selected' : '' }}>{{ $package->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-
-                        <hr class="hr-text" data-content="SELECT TERMS AND CONDITIONS">
-
-                        <table id="terms-conditions-table" class="table table-bordered table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th width="5px" class="col-xs-2"></th>
-                                <th class="col-xs-10">Terms And Conditions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($termsAndConditions as $condition)
-                                <tr>
-                                    <td class="col-xs-2">
-                                        <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
-                                            <span hidden>
-                                                {{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? '1' : '2' }}
-                                            </span>
-                                            <input class="rdo-iCheck" type="checkbox" id="" name="tc_id[]" value="{{ $condition->id }}"{{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? ' checked' : '' }}>
-                                        </label>
-                                    </td>
-                                    <td class="col-xs-10">{!! $condition->term_name !!}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th></th>
-                                <th>Terms And Conditions</th>
-                            </tr>
-                            </tfoot>
-                        </table>
-
-                    </div>
+                    </div> -->
                     <!-- /.box-body -->
                     <div class="box-footer">
-					<button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <button type="submit" class="btn btn-primary pull-right">Next <i class="fa fa-arrow-right"></i></button>
+                        <button type="submit" class="btn btn-primary pull-right">Genarate Report<i class="fa fa-arrow-right"></i></button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -171,18 +178,22 @@
     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <!-- Bootstrap date picker -->
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
         $(function () {
-			//Cancel button click event
-            $('#back_button').click(function () {
-                location.href = '/quote/view/{{$quote->id}}';
-            });
             //Initialize Select2 Elements
             $(".select2").select2();
-
+            $('.services-field').hide();
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -220,9 +231,6 @@
                 $('.modal:visible').each(reposition);
             });
 
-            //select the contact person
-            $('#company_id').trigger('change');
-
             //show / hide fields
             hideFields();
 
@@ -234,6 +242,14 @@
             @if(Session('changes_saved'))
                 $('#success-action-modal').modal('show');
             @endif
+        });
+        
+        
+        //Date Range picker
+        $('.daterangepicker').daterangepicker({
+            format: 'DD/MM/YYYY',
+            endDate: '-1d',
+            autoclose: true
         });
 
         //function to hide/show fields depending on the quote  type
