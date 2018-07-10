@@ -105,7 +105,7 @@
 
                             <div class="col-sm-10">
                                 <select id="product_id" name="product_id[]" class="form-control select2" style="width: 100%;" multiple>
-                                    <option value="">*** Please Select Some Products ***</option>
+                                    <option value="0">*** Please Select Some Products ***</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}" {{ ($product->id == old('product_id[]')) ? 'selected' : '' }}>{{ $product->name }}</option>
                                     @endforeach
@@ -120,7 +120,7 @@
 
                             <div class="col-sm-10">
                                 <select id="package_id" name="package_id[]" class="form-control select2" style="width: 100%;" multiple>
-                                    <option value="">*** Please Select a Package ***</option>
+                                    <option value="0">*** Please Select a Package ***</option>
                                     @foreach($packages as $package)
                                         <option value="{{ $package->id }}" {{ ($package->id == old('package_id[]')) ? 'selected' : '' }}>{{ $package->name }}</option>
                                     @endforeach
