@@ -80,7 +80,7 @@
                                             <td style="vertical-align: middle; width: 100px;">
 											<input type="text" class="form-control input-sm item-price" name="current_price[{{ $product->id }}]"
 											id="current_price_{{$product->id }}"
-                                                       value="{{$product->current_price}}" data-price="{{ $product->current_price }}" onchange="subtotalother()" required>
+                                                       value="{{$product->current_price}}" data-price="{{ $product->current_price }}" required>
                                             </td>
                                         </tr>
                                         <input type="hidden" name="price[{{ $product->id }}]"
@@ -342,47 +342,6 @@
             if (quoteType == 1) { //products
                 $( ".item-quantity" ).each(function( index ) {
                     //console.log( index + ": " + $( this ).data('price') );
-                    var qty = $( this ).val();
-                    var price = $( this ).data('price');
-                    subtotal += (qty * price);
-                    $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
-                });
-            } else if (quoteType == 2) { //services
-                var serviceRate = parseInt($('#service_rate').val());
-                var totalServiceUnits = 0;
-                $( ".item-quantity" ).each(function( index ) {
-                    var qty = parseInt($( this ).val()) || 0;
-                    totalServiceUnits += qty;
-                    subtotal += (qty * serviceRate);
-                    $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
-                });
-                $('#total_service_units').html(totalServiceUnits);
-            }
-
-            var discountPercent = $('#discount_percent').val();
-            discountAmount = (subtotal * discountPercent) / 100;
-            $( "#discount-amount" ).html('R ' + discountAmount.formatMoney(2));
-
-            var total = (subtotal - discountAmount);
-
-            var formattedVAT = '&mdash;';
-            var vatCheckValue = $('#rdo_add_vat').iCheck('update')[0].checked;
-            if (vatCheckValue) {
-                var vatAmount = (total * 0.15);
-                formattedVAT = 'R ' + vatAmount.formatMoney(2);
-                total += vatAmount;
-            }
-            $( "#vat-amount" ).html(formattedVAT);
-
-            $( "#total-amount" ).html('R ' + total.formatMoney(2));
-        }
-		function subtotalother() {
-            var quoteType = parseInt($('#quote_type').val());
-            var subtotal = 0;
-            var discountAmount = 0;
-            if (quoteType == 1) { //products
-                $( ".item-quantity" ).each(function( index ) {
-                    console.log( index + ": " );
                     var qty = $( this ).val();
                     var price = $( this ).data('price');
                     subtotal += (qty * price);
