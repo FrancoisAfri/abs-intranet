@@ -928,7 +928,7 @@ class QuotesController extends Controller
 			$messageContent = $messageContent->template_content;
 			$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
 			$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email, $messageContent);
-			die ($messageContent);
+			//die ($messageContent);
 			$quoteAttachment = $this->viewQuote($quote, true, false, true);
 			Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 		}
