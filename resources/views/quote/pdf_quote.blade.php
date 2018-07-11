@@ -3,7 +3,7 @@
 @endsection
 @section('content')
     <div class="row invoice-info">
-        <div class="col-xs-4 invoice-col no-padding">
+        <div class="col-md-4 invoice-col">
             From
             <address>
                 <strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
@@ -14,7 +14,7 @@
             </address>
         </div>
         <!-- /.col -->
-        <div class="col-xs-4 invoice-col no-padding">
+        <div class="col-md-4 invoice-col">
             To
             <address>
                 <strong>{{ $quotation->client->full_name }}</strong><br>
@@ -25,7 +25,7 @@
             </address>
         </div>
         <!-- /.col -->
-        <div class="col-xs-4 invoice-col no-padding">
+        <div class="col-md-4 invoice-col">
             <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
             <b>Quote #:</b> {{ $quotation->quote_number }}<br>
             <b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}

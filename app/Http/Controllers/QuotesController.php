@@ -18,6 +18,7 @@ use App\ProductService;
 use App\CompanyIdentity;
 use Barryvdh\DomPDF\PDF;
 use App\product_packages;
+use App\product_category;
 use App\product_products;
 use App\Mail\ApproveQuote;
 use App\QuoteCompanyProfile;
@@ -176,7 +177,8 @@ class QuotesController extends Controller
             
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-       // return $contactPeople;
+		$productsCategories = product_category::orderBy('id', 'asc')->get();
+
 		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
@@ -192,6 +194,7 @@ class QuotesController extends Controller
         $data['highestLvl'] = $highestLvl;
         $data['companies'] = $companies;
         $data['contactPeople'] = $contactPeople;
+		$data['productsCategories'] = $productsCategories;
         $data['products'] = $products;
         $data['packages'] = $packages;
         $data['termsAndConditions'] = $termsAndConditions;
@@ -915,13 +918,13 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
     */
-    public function emailQuote(Quotation $quotation)
+    public function emailQuote(Quotation $quote)
     {
-        $quotation->load('client');
+        //$quote->load('client');
         $messageContent = EmailTemplate::where('template_key', 'send_quote')->first()->template_content;
-        $messageContent = str_replace('[client name]', $quotation->client->full_name, $messageContent);
-        $quoteAttachment = $this->viewQuote($quotation, true, false, true);
-        Mail::to($quotation->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+        $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+        $quoteAttachment = $this->viewQuote($quote, true, false, true);
+		Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 
         return back()->with(['quote_emailed' => 'The quotation has been successfully emailed to the client!']);
     }

@@ -209,11 +209,11 @@ class DropDownAPIController extends Controller
       
       public function productCategoryDDID(Request $request){
           
-          $jobcategoryID = (int) $request->input('category_id');
+          $productbcategoryID = (int) $request->input('category_id');
           $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
           $loadAll = $request->input('load_all');
           $model = [];
-          if ($loadAll == -1) $model = product_products::movproductCategory('category_id', $jobcategoryID, $incInactive);
+          if ($loadAll == -1) $model = product_products::movproductCategory('category_id', $productbcategoryID, $incInactive);
           elseif ($loadAll == 1) {
               $model = product_products::where(function ($query) use($incInactive) {
                   if ($incInactive == -1) {

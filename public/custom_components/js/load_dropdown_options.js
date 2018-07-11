@@ -478,7 +478,6 @@ function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, load
 
     /* function to load job card categories drop down options */
     function productcategoryDDOnChange(dropDownObj, productCategoryDDID, selectedOption) {
-        console.log('gets here');
         productCategoryDDID = productCategoryDDID || 'category_id';
         selectedOption = selectedOption || '';
 
@@ -502,7 +501,7 @@ function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, load
         $.post(postTo, { category_id: procategoryID, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
             function(data) {
                 var dropdown = $('#'+ddID);
-                var firstDDOption = "*** Select a Category ***";
+                var firstDDOption = "*** Select a Product ***";
                 if (procategoryID == '') firstDDOption = "*** Select a Catergory First ***";
                 dropdown.empty();
                 dropdown
