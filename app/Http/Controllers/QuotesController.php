@@ -921,10 +921,14 @@ class QuotesController extends Controller
     public function emailQuote(Quotation $quote)
     {
         //$quote->load('client');
-        $messageContent = EmailTemplate::where('template_key', 'send_quote')->first()->template_content;
-        $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-        $quoteAttachment = $this->viewQuote($quote, true, false, true);
-		Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+        $messageContent = EmailTemplate::where('template_key', 'send_quote')->first();
+		if (!empty($messageContent))
+		{
+			$messageContent = $messageContent->template_content;
+			$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+			$quoteAttachment = $this->viewQuote($quote, true, false, true);
+			Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+		}
 
         return back()->with(['quote_emailed' => 'The quotation has been successfully emailed to the client!']);
     }
