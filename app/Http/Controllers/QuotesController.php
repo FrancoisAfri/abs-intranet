@@ -920,12 +920,15 @@ class QuotesController extends Controller
     */
     public function emailQuote(Quotation $quote)
     {
-        //$quote->load('client');
+        $quote->load('client','person');
+		
         $messageContent = EmailTemplate::where('template_key', 'send_quote')->first();
 		if (!empty($messageContent))
 		{
 			$messageContent = $messageContent->template_content;
 			$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+			$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email, $messageContent);
+			die ($messageContent);
 			$quoteAttachment = $this->viewQuote($quote, true, false, true);
 			Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 		}
