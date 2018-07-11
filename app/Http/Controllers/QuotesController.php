@@ -285,14 +285,14 @@ class QuotesController extends Controller
             $quote->load('client');
             $messageContents = EmailTemplate::where('template_key', 'approved_quote')->first();
             if (!empty($messageContents)) {
+				
                 $messageContent = $messageContents->template_content;
-            } else {
-                $messageContent = '';
+				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+				$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
+				$quoteAttachment = $this->viewQuote($quote, true, false, true);
+				if (!empty($quote->client->email))
+					Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             }
-            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-            $quoteAttachment = $this->viewQuote($quote, true, false, true);
-			if (!empty($quote->client->email))
-				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             $quote->status = 5;
 
             //Create an account for the client or add quote to his existing account
@@ -383,13 +383,12 @@ class QuotesController extends Controller
             $messageContents = EmailTemplate::where('template_key', 'send_quote')->first();
             if (!empty($messageContents)) {
                 $messageContent = $messageContents->template_content;
-            } else {
-                $messageContent = '';
+				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
+				$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
+				$quoteAttachment = $this->viewQuote($quote, true, false, true);
+				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             }
-            $messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-            $quoteAttachment = $this->viewQuote($quote, true, false, true);
-            Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
-            $quote->status = $stastus;
+			$quote->status = $stastus;
             $quote->update();
             $changedStatus .= ', Email sent to client, to notify them';
         }
@@ -689,7 +688,7 @@ class QuotesController extends Controller
 		{
             $status = 2;
             //if authorization not required: email quote to client and update status to awaiting client approval
-            $quote->load('client');
+			$quote->load('client','person');
             $messageContent = EmailTemplate::where('template_key', 'send_quote')->first();
             if (!empty($messageContent)) {
                 $messageContent = $messageContent->template_content;
@@ -921,14 +920,12 @@ class QuotesController extends Controller
     public function emailQuote(Quotation $quote)
     {
         $quote->load('client','person');
-		
         $messageContent = EmailTemplate::where('template_key', 'send_quote')->first();
 		if (!empty($messageContent))
 		{
 			$messageContent = $messageContent->template_content;
 			$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-			$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email, $messageContent);
-			//die ($messageContent);
+			$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
 			$quoteAttachment = $this->viewQuote($quote, true, false, true);
 			Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 		}

@@ -54,7 +54,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         @if($quotation->quote_type == 1)
                             <table class="table table-striped table-bordered">
                                 <tr>
@@ -137,7 +136,6 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-
                                     <tfoot>
                                         <tr>
                                             <th colspan="3" class="text-right">Total</th>
@@ -153,11 +151,9 @@
                                 </div>
                             @endif
                         @endif
-
                         <div class="row">
                             <div class="col-xs-12"><p>&nbsp;</p></div>
                         </div>
-
                         <div class="row no-margin">
                             <!-- banking details section -->
                             <div class="col-xs-5 no-padding">
@@ -169,7 +165,6 @@
                                     Account Number: {{ $quoteProfile->bank_account_number }}
                                 </p>
                             </div>
-
                             <!-- Total cost section -->
                             <div class="col-xs-2 no-padding"></div>
                             <div class="col-xs-5 no-padding">
@@ -201,14 +196,11 @@
                                 </table>
                             </div>
                         </div>
-
                         <div class="col-xs-12">&nbsp;</div>
-
                     </div>
                     <!-- /.box-body -->
                 </form>
             </div>
-
             <!-- T&C's box -->
             <div class="box box-default no-padding">
                 <div class="box-header with-border" style="text-align: center;">
@@ -229,10 +221,4 @@
             </div>
         </div>
     </div>
-@endsection
-@section('page_script')
-    <script>
-        $(function () {
-        });
-    </script>
 @endsection
