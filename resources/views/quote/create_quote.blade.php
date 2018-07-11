@@ -100,7 +100,7 @@
 
                         <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
 
-                        <div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
+                        <!--<div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>
 
                             <div class="col-sm-10">
@@ -111,8 +111,19 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div>-->
+						<div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
+                            <label for="product_id" class="col-sm-2 control-label">Products</label>
 
+                            <div class="col-sm-10">
+                                <select id="product_id" name="product_id[]" class="form-control select2" style="width: 100%;" multiple>
+                                    <option value="0">*** Please Select Some Products ***</option>
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}" {{ ($product->id == old('product_id[]')) ? 'selected' : '' }}>{{ $product->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div
                         <hr class="hr-text packages-field" data-content="OR SELECT PACKAGES">
 
                         <div class="form-group packages-field{{ $errors->has('package_id') ? ' has-error' : '' }}">
