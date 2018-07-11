@@ -140,8 +140,8 @@
                         </div>
 
                         <hr class="hr-text" data-content="SELECT TERMS AND CONDITIONS">
-						<div style="overflow-y: scroll;">
-							<table class="table table-bordered table-striped table-hover" style="max-height: 250px;">
+						<div style="max-height: 200px; overflow-y: scroll;">
+							<table class="table table-bordered table-striped table-hover">
 								<thead>
 								<tr>
 									<th width="5px" class="col-xs-2"></th>
