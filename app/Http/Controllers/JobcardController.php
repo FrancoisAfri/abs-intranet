@@ -366,18 +366,24 @@ class JobcardController extends Controller
     public function myjobcards()
     {
 
-        $hrID = Auth::user()->person->user_id;
-        $hrjobtile = Auth::user()->person->position;
+        $hrID = Auth::user()->person->id;
+		$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
+		, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
+		 ->leftjoin("hr_users_roles",function($join) use ($hrID) {
+                $join->on("hr_roles.id","=","hr_users_roles.role_id")
+                    ->on("hr_users_roles.hr_id","=",DB::raw($hrID));
+            })
+		->where('hr_roles.description', '=','Jobcard Capturer')
+		->where('hr_roles.status', 1)
+		->orderBy('hr_roles.description', 'asc')
+		->first();
+		
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
             ->where('security_modules.code_name', 'job_cards')->where('security_modules_access.access_level', '>=', 4)
             ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
 
-        $processflow = processflow::where('job_title', $hrjobtile)->where('status', 1)->orderBy('id', 'asc')->get();
-        $processss = processflow::take(1);
-        $rowcolumn = $processflow->count();
-
-        if (($rowcolumn > 0 || !empty($userAccess))) {
+        if ((!empty($roles->role_id)) || !empty($userAccess)) {
 
             $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
             $servicetype = servicetype::where('status', 1)->get();
