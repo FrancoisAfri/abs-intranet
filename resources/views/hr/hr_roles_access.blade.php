@@ -51,7 +51,7 @@
                                 <td style="vertical-align: middle; text-align: center;">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $role->role_id . '_rdo_role' }}" name="{{ "role_users[" . $role->role_id . "]" }}" value="1" {{ !empty($role->user_role) ? ' checked' : '' }}></label>
                                 </td>
-								<td style="vertical-align: middle;" nowrap>{{ ($role->date_allocated) ? date('d/m/Y',$role->date_allocated) : '' }}</td>
+								<td style="vertical-align: middle;text-align: center;">{{ ($role->date_allocated) ? date('d/m/Y',$role->date_allocated) : '' }}</td>
                             </tr>
                         @endforeach
                         </tbody>
