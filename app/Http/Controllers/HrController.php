@@ -11,7 +11,10 @@ use App\Qualification_type;
 use App\hr_people;
 use App\employee_documents;
 use App\doc_type;
+use App\User;
+use App\HRUserRoles;
 use App\Categories;
+use App\HRRoles;
 use App\doc_type_category;
 use App\DivisionLevelTwo;
 
@@ -22,13 +25,10 @@ class HrController extends Controller {
         $this->middleware('auth');
     }
 
-    public function showSetup(JobCategory $jobCategory) {
+    public function showSetup() {
 
-        if ($jobCategory->status == 1) {
-            $jobCategory->load('catJobTitle');
-        }
         $doc_type = DB::table('doc_type')->orderBy('name', 'description')->get();
-        $cat_type = DB::table('Categories')->orderBy('name', 'description')->get();
+        $hrRoles = DB::table('hr_roles')->orderBy('description')->get();
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $Qualif_type = DB::table('Qualification_type')->orderBy('status', 1)->get();
         $Doc_type = DB::table('doc_type')->orderBy('active', 1)->get();
@@ -38,8 +38,7 @@ class HrController extends Controller {
             $jobCategories = $jobCategories->load('catJobTitle');
 
         $data['doc_type'] = $doc_type;
-        $data['cat_type'] = $cat_type;
-        $data['jobTitles'] = $jobCategory;
+        $data['hrRoles'] = $hrRoles;
         $data['jobCategories'] = $jobCategories;
         $data['Qualif_type'] = $Qualif_type;
         $data['Doc_type'] = $Doc_type;
@@ -123,7 +122,95 @@ class HrController extends Controller {
     }
 
     //}
-    public function addqualType(Request $request, Qualification_type $qultyp) {
+    public function addRole(Request $request) {
+
+        $this->validate($request, [
+            'description' => 'required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+        $HRRoles = new HRRoles($docData);
+        $HRRoles->status = 1;
+        $HRRoles->save();
+
+        AuditReportsController::store('Employee Records', 'Role added', "Added by User", 0);
+        return response()->json();
+    }
+
+    public function editRole(Request $request, HRRoles $role) {
+        //$user = Auth::user()->load('person');
+        $this->validate($request, [
+            'description' => 'required',
+        ]);
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $role->description = $request->input('description');
+        $role->update();
+        AuditReportsController::store('Employee Records', 'Role Updated', "Edited by User", 0);
+        return response()->json();
+    }
+	
+	public function assignRole(User $user) {
+		
+        $user->load('person');
+		$userID = $user->person->id;
+        $roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
+		, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
+		 ->leftjoin("hr_users_roles",function($join) use ($userID) {
+                $join->on("hr_roles.id","=","hr_users_roles.role_id")
+                    ->on("hr_users_roles.hr_id","=",DB::raw($userID));
+            })
+		->where('hr_roles.status', 1)
+		->orderBy('hr_roles.description', 'asc')
+		->get();
+		$data['page_title'] = "HR Role";
+		$data['page_description'] = "Give user role";
+		$data['breadcrumb'] = [
+			['title' => 'employee Records', 'path' => '/users', 'icon' => 'fa fa-money', 'active' => 0, 'is_module' => 1],
+			['title' => 'Module Access', 'active' => 1, 'is_module' => 0]
+		];
+		$data['roles'] = $roles;
+		$data['user'] = $user;
+		$data['userID'] = $userID;
+		AuditReportsController::store('Employee Records', 'Employees Roles Page Accessed', "Accessed By User", 0);
+        return view('hr.hr_roles_access')->with($data);
+    }
+	
+	public function userRoleSave(Request $request, User $user) {
+		
+		
+		$this->validate($request, [
+            'hr_id' => 'required',
+        ]);
+
+        $hrID = $request->input('hr_id');
+        $roleUsers = $request->input('role_users');
+        if (count($roleUsers) > 0) {
+            foreach ($roleUsers as $roleID => $accessLevel) {
+                HRUserRoles::where('hr_id', $hrID)->where('role_id', $roleID)->delete();
+                $HRUserRoles = new HRUserRoles();
+                $HRUserRoles->hr_id = $hrID;
+                $HRUserRoles->role_id = $roleID;
+                $HRUserRoles->status = 1;
+                $HRUserRoles->date_allocated = time();
+                $HRUserRoles->save();
+            }
+        }
+		AuditReportsController::store('Employee Records', 'Employees Roles Saved', "Saved By User", 0);
+		return redirect("/hr/role_users/$user->id")->with('changes_saved', "Your changes have been saved successfully.");
+    }
+	public function roleAct(HRRoles $role) {
+        if ($role->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $role->status = $stastus;
+        $role->update();
+        return back();
+    }
+	public function addqualType(Request $request, Qualification_type $qultyp) {
 
         $this->validate($request, [
             'name' => 'required',

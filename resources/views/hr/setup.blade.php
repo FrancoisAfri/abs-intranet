@@ -106,7 +106,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">List Product Type Catagories</h3>
+                    <h3 class="box-title">Roles Management</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -121,22 +121,19 @@
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Name</th>
-                                <th>Description</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($cat_type) > 0)
-                              @foreach ($cat_type as $type)
+                            @if (count($hrRoles) > 0)
+                              @foreach ($hrRoles as $hrRole)
                                <tr id="categories-list">
                                <td nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                            <a href="{{ '/hr/category/' . $type->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-description="{{$type->description}}"  ><i class="fa fa-eye"></i> Product Type</a>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-role-modal" data-id="{{ $hrRole->id }}" data-description="{{$hrRole->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
-                                    <td>{{ $type->name }}</td>
-                                    <td>{{ $type->description }}</td>
+                                    <td>{{ $hrRole->description }}</td>
                                     <td>
-                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($hrRole->status) && $hrRole->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$hrRole->id}}, 'ractive');"><i class="fa {{ (!empty($hrRole->status) && $hrRole->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($hrRole->status) && $hrRole->status == 1) ? "De-Activate" : "Activate"}}</button>
                                     </td>
                                 </tr>
                                    @endforeach
@@ -145,7 +142,7 @@
                         <td colspan="5">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No category to display, please start by adding a new category.
+                            No role to display, please start by adding a new role.
                         </div>
                         </td>
                         </tr>
@@ -154,13 +151,13 @@
                         </div>
                                    <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-category-modal">Add new Category </button>
+                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-role-modal">Add new Role </button>
                     </div>
              </div>
         </div>
    <!-- Include add new prime rate modal -->
-        @include('hr.partials.add_category_modal')
-        @include('hr.partials.edit_category_modal')
+        @include('hr.partials.add_role_modal')
+        @include('hr.partials.edit_role_modal')
 
 
 </div>
@@ -177,6 +174,7 @@
             else if (data == 'doc') location.href = "/hr/adddoc/" + id;
             else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
             else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
+            else if (data == 'ractive') location.href = '/hr/role/activate/' + id;
 		}
         $(function () {
             var moduleId;
@@ -301,48 +299,45 @@
             //
 
             //Post module form to server using ajax (ADD)
-            $('#save_category').on('click', function() {
+            $('#save_role').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/hr/document/add/' +  'doc_type';
-                var modalID = 'add-category-modal';
+                var strUrl = '/hr/role/add/';
+                var modalID = 'add-role-modal';
                 var objData = {
-                    name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'cat_module';
+                var submitBtnID = 'save_role';
                 var redirectUrl = '/hr/setup';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The group has been updated successfully.';
+                var successMsgTitle = 'Role Saved!';
+                var successMsg = 'The role has been added successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-              var doc_typeID;
-            $('#edit-category-modal').on('show.bs.modal', function (e) {
+              var roleID;
+            $('#edit-role-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
-                doc_typeID = btnEdit.data('id');
+                roleID = btnEdit.data('id');
                 var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
+                var Description = btnEdit.data('description');
                 //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
-                modal.find('#name').val(name);
-                modal.find('#description').val(description);
+                modal.find('#description').val(Description);
 
              });
-            $('#edit_category').on('click', function () {
-                var strUrl = '/hr/document/' + doc_typeID;
-                var modalID = 'edit-category-modal';
+            $('#edit_role').on('click', function () {
+                var strUrl = '/hr/role/edit/' + roleID;
+                var modalID = 'edit-role-modal';
                 var objData = {
-                    name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'save_category';
+                var submitBtnID = 'edit_role';
                 var redirectUrl = '/hr/setup';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'Category modal has been updated successfully.';
+                var successMsg = 'Role modal has been updated successfully.';
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });

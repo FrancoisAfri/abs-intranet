@@ -371,6 +371,7 @@
                         <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
 						@if (isset($view_by_admin) && $view_by_admin === 1)
+						<button type="button" class="btn btn-primary" id="role_button" onclick="postData({{$user->id}}, 'roles');">Roles</button>
 						<button type="button" class="btn btn-primary" id="access_button" onclick="postData({{$user->id}}, 'access');">Modules Access</button>
 						@endif
                           
@@ -541,6 +542,8 @@
 		{
 			if (data == 'access')
 				location.href = "/users/module_access/" + id;
+			else if (data == 'roles')
+				location.href = "/hr/role_users/" + id;
 		}
 		function deleteRecord() {
 			location.href = "/user/delete/{{ $user->id }}";

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatestockTable extends Migration
+class CreateHrUsersRoles extends Migration
 {
     /**
      * Run the migrations.
@@ -13,30 +13,24 @@ class CreatestockTable extends Migration
      */
     public function up()
     {
-    Schema::create('stock', function (Blueprint $table) {
+        Schema::create('hr_users_roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->String('name')->nullable();
-            $table->String('description')->nullable();       
+            $table->integer('hr_id')->nullable();
+            $table->integer('role_id')->nullable();       
             $table->smallInteger('status')->nullable();
+            $table->bigInteger('date_allocated')->nullable();
             $table->timestamps();
 
         });
-
     }
 
     /**
-
      * Reverse the migrations.
-
      *
-
      * @return void
-
      */
-
     public function down()
     {
-        Schema::dropIfExists('stock');
+        Schema::dropIfExists('hr_users_roles');
     }
-
 }

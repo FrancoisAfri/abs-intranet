@@ -249,7 +249,11 @@ Route::get('/hr/category_active/{jobCategory}', 'EmployeeJobTitleController@cate
 Route::get('/hr/job_title_active/{jobTitle}', 'EmployeeJobTitleController@jobtitleAct');
 Route::post('hr/add_jobtitle/{jobCategory}', 'EmployeeJobTitleController@addJobTitle');
 Route::patch('job_title/{jobTitle}', 'EmployeeJobTitleController@editJobTitle');
-
+Route::post('hr/role/add/', 'HrController@addRole');
+Route::patch('hr/role/edit/{role}', 'HrController@editRole');
+Route::get('/hr/role_users/{user}', 'HrController@assignRole');
+Route::get('/hr/role/activate/{role}', 'HrController@roleAct');
+Route::post('hr/roles-access/{user}', 'HrController@userRoleSave');
 // Audit Module
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');
