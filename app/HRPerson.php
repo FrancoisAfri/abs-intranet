@@ -16,7 +16,7 @@ class HRPerson extends Model
         'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code',
         'proof_drive_permit', 'proof_drive_permit_exp_date', 'drivers_licence_exp_date', 'gender', 'own_transport', 'marital_status',
         'ethnicity', 'profile_pic', 'status','division_level_1', 'division_level_2', 'division_level_3',
-        'division_level_4', 'division_level_5', 'leave_profile', 'manager_id','date_joined','date_left',
+        'division_level_4', 'division_level_5', 'leave_profile', 'manager_id','date_joined','date_left','role_id',
         
     ];
 
@@ -69,6 +69,10 @@ class HRPerson extends Model
     //Relationship hr person and job title
     public function jobTitle() {
         return $this->belongsTo(JobTitle::class, 'position');
+    }
+	//Relationship hr person and Roles
+    public function hrRoles() {
+        return $this->belongsTo(HRRoles::class, 'role_id');
     }
 
     //Relationship hr person and 360 person
