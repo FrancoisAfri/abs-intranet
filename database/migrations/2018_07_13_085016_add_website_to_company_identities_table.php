@@ -14,7 +14,7 @@ class AddWebsiteToCompanyIdentitiesTable extends Migration
     public function up()
     {
         Schema::table('company_identities', function ($table) {
-            $table->string('company_website')->unsigned()->index()->nullable();
+            //$table->string('company_website')->unsigned()->index()->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddWebsiteToCompanyIdentitiesTable extends Migration
     public function down()
     {
         Schema::table('company_identities', function ($table) {
-            $table->dropColumn('company_website');
+            //$table->dropColumn('company_website');
         });
     }
 }
