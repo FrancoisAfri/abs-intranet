@@ -14,7 +14,7 @@ class AddTankcapacityToFueltanks extends Migration
     public function up()
     {
         Schema::table('fuel_tanks', function (Blueprint $table) {
-            $table->double('tank_capacity')->nullable();
+            //$table->double('tank_capacity')->nullable();
             //$table->double('current_fuel_litres')->nullable();
         });
     }
@@ -27,7 +27,7 @@ class AddTankcapacityToFueltanks extends Migration
     public function down()
     {
         Schema::table('fuel_tanks', function (Blueprint $table) {
-            $table->dropColumn('tank_capacity');
+           // $table->dropColumn('tank_capacity');
             //$table->dropColumn('current_fuel_litres');
         });
     }
