@@ -11,5 +11,5 @@ class ContactsCommunication extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'communication_type', 'message', 'contact_id', 'status', 'sent_by', 'communication_date'];
+        'communication_type', 'message', 'contact_id', 'status', 'sent_by', 'communication_date', 'company_id'];
 }

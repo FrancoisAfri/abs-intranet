@@ -41,13 +41,13 @@
                                 </ul>
                             </div>
                         @endif
-                          <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                          <div class="form-group{{ $errors->has('report_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
 
                                 <div class="col-sm-9">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Client Note </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Meetings </label>
-                                     <!-- <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Follow Up Action</label> -->
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="report_type" value="1" checked> Client Note </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="2">  Meetings </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="3">  Communications </label>
                                       
                                 </div>
                             </div>
@@ -229,7 +229,7 @@
     
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
-            var allType = $("input[name='application_type']:checked").val();
+            var allType = $("input[name='report_type']:checked").val();
             if (allType == 1) { //adjsut leave
                  //$('.hours-field').hide();
                  $('.employee-field').show();
@@ -244,12 +244,10 @@
                  $('#gen-report').val("Submit"); 
             }
             else if(allType == 3){
-                $('.to-field').show();
-                 $('.from-field').show();
-                 $('.levAction-field').hide();
-                 $('.date-field').hide();
-                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
-                   $('#gen-report').val("Submit"); 
+                $('.meetings-field').show();
+                 $('.employee-field').hide();
+                 $('form[name="leave-application-form"]').attr('action', '/contacts/reports/communication');
+                 $('#gen-report').val("Submit"); 
             }
            
             return allType;      
