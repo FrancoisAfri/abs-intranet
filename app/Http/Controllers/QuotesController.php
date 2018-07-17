@@ -62,6 +62,7 @@ class QuotesController extends Controller
             }]);
         $highestLvlWithAllDivs = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup');
         $validityPeriods = [7, 14, 30, 60, 90, 120];
+		//category_id
         $quoteProfiles = QuoteCompanyProfile::where('status', 1)->where('division_level', $highestLvl->level)->get()->load('divisionLevelGroup');
         $termConditions = QuotesTermAndConditions::where('status', 1)->get();
         $sendQuoteTemplate = EmailTemplate::where('template_key', 'send_quote')->get()->first();
@@ -181,8 +182,13 @@ class QuotesController extends Controller
 
 		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
-        $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
-
+		$termsAndConditions = DB::table('quotes_terns_conditions')
+            ->select('quotes_terns_conditions.*', 'quote_terms_categories.name as cat_name')
+            ->leftJoin('quote_terms_categories', 'quote_terms_categories.id', '=', 'quotes_terns_conditions.category_id')
+            ->where('quotes_terns_conditions.status', 1)
+            ->orderBy('quotes_terns_conditions.category_id','quotes_terns_conditions.term_name')
+            ->get();
+			
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Create a quotation';
         $data['breadcrumb'] = [
@@ -755,7 +761,6 @@ class QuotesController extends Controller
 
     public function searchResults(Request $request)
     {
-		//die;
         $companyID = trim($request->company_id);
         $contactPersonID = $request->contact_person_id;
         $personPassportNum = $request->passport_number;
