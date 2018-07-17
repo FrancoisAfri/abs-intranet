@@ -113,37 +113,37 @@
                         </div>
 
                         <hr class="hr-text" data-content="SELECT TERMS AND CONDITIONS">
-
-                        <table id="terms-conditions-table" class="table table-bordered table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th width="5px" class="col-xs-2"></th>
-                                <th class="col-xs-10">Terms And Conditions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($termsAndConditions as $condition)
-                                <tr>
-                                    <td class="col-xs-2">
-                                        <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
-                                            <span hidden>
-                                                {{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? '1' : '2' }}
-                                            </span>
-                                            <input class="rdo-iCheck" type="checkbox" id="" name="tc_id[]" value="{{ $condition->id }}"{{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? ' checked' : '' }}>
-                                        </label>
-                                    </td>
-                                    <td class="col-xs-10">{!! $condition->term_name !!}</td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th></th>
-                                <th>Terms And Conditions</th>
-                            </tr>
-                            </tfoot>
-                        </table>
-
+						<div style="max-height: 550px; overflow-y: scroll;">
+							<table class="table table-bordered table-striped table-hover">
+								<thead>
+									<tr>
+										<th width="5px" class="col-xs-2"></th>
+										<th class="col-xs-10">Terms And Conditions</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach($termsAndConditions as $condition)
+										<tr>
+											<td class="col-xs-2">
+												<label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
+													<span hidden>
+														{{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? '1' : '2' }}
+													</span>
+													<input class="rdo-iCheck" type="checkbox" id="" name="tc_id[]" value="{{ $condition->id }}"{{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? ' checked' : '' }}>
+												</label>
+											</td>
+											<td class="col-xs-10">{!! $condition->term_name !!}</td>
+										</tr>
+									@endforeach
+								</tbody>
+								<tfoot>
+									<tr>
+										<th></th>
+										<th>Terms And Conditions</th>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
@@ -185,16 +185,6 @@
 
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-
-            //Initialize the data table
-            $('#terms-conditions-table').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": true
-            });
 
             //Initialize iCheck/iRadio Elements
             $('.rdo-iCheck').iCheck({
