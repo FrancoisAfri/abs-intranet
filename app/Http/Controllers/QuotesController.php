@@ -889,7 +889,8 @@ class QuotesController extends Controller
             $pdf->getDomPDF()->set_option('enable_html5_parser', true);
             $pdf->loadHTML($view);
             if ($printQuote) {
-                return $pdf->stream('quotation_' . $quotation->id . '.pdf');
+				if ($isInvoice) return $pdf->stream('invoice' . $quotation->id . '.pdf');
+				else return $pdf->stream('quotation_' . $quotation->id . '.pdf');
             } elseif ($emailQuote) {
                 return $pdf->output();
             }

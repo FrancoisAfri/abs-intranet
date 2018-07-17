@@ -648,31 +648,32 @@ class ContactsController extends Controller
             'email_content' => 'bail|required_if:message_type,1',
             'sms_content' => 'bail|required_if:message_type,2|max:180',
         ]);
-
+		$mobileArray = array();
         $CommunicationData = $request->all();
         unset($CommunicationData['_token']);
         //return $CommunicationData;
         # Save email
-        $user = Auth::user();
+        $user = Auth::user()->load('person');;
 
         foreach ($CommunicationData['clients'] as $clientID) {
+            $client = ContactPerson::where('id', $clientID)->first();
+			$companyID = !empty($client->company_id) ? $client->company_id :0 ;
             $ContactsCommunication = new ContactsCommunication;
             $ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
             $ContactsCommunication->communication_type = $CommunicationData['message_type'];
             $ContactsCommunication->contact_id = $clientID;
+            $ContactsCommunication->company_id = $companyID;
             $ContactsCommunication->status = 1;
-            $ContactsCommunication->sent_by = $user->id;
+            $ContactsCommunication->sent_by = $user->person->id;
             $ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
             $ContactsCommunication->save();
-            $client = ContactPerson::where('id', $clientID)->first();
             if ($CommunicationData['message_type'] == 1 && !empty($client->email))
                 # Send Email to Client
                 Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication));
+			elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
+					$mobileArray[] = $this->formatCellNo($client->cell_number);
         }
-        if ($CommunicationData['message_type'] == 2 && !empty($client->cell_number)) {
-            foreach ($CommunicationData['clients'] as $clientID) {
-                $mobileArray[] = $this->formatCellNo($client->cell_number);;
-            }
+        if ($CommunicationData['message_type'] == 2) {
             #format cell numbers
             # send out the message
             $CommunicationData['sms_content'] = str_replace("<br>", "", $CommunicationData['sms_content']);

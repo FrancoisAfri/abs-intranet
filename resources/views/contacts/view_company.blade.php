@@ -297,6 +297,44 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
+            </div> 
+			<!-- Company's contacts box -->
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i>Company Communications</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding no-margin">
+                <div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
+                   <table class="table table-striped" >
+					<tr>
+						<th>Company Name</th>
+						<th>Contact person</th>
+						<th>Communication Date</th>
+						<th>Communication Type</th>
+						<th>Message</th>
+						<th>Sent By</th>
+					</tr>
+					@if (count($contactsCommunications) > 0)
+						@foreach($contactsCommunications as $contactsCommunication)
+						   <tr>
+								<td>{{ (!empty($contactsCommunication->companyname)) ?  $contactsCommunication->companyname : ''}} </td>
+								<td>{{ !empty($contactsCommunication->first_name) && !empty($contactsCommunication->surname) ?  $contactsCommunication->first_name." ".$contactsCommunication->surname : '' }}</td>
+								<td>{{ !empty($contactsCommunication->communication_date) ? date('d M Y ', $contactsCommunication->communication_date) : '' }}</td>
+								<td>{{ (!empty($contactsCommunication->communication_type)) ?  $communicationStatus[$contactsCommunication->communication_type] : ''}} </td>
+								<td>{{ (!empty($contactsCommunication->message)) ?  $contactsCommunication->message : ''}} </td> 
+								<td>{{ (!empty($contactsCommunication->hr_firstname) && !empty($contactsCommunication->hr_surname)) ?  $contactsCommunication->hr_firstname." ".$contactsCommunication->hr_surname : ''}} </td> 
+							</tr>
+						@endforeach
+					@endif
+				</table>
+                </div>
+                <!-- /.box-body -->
+            </div>
             </div>
             <!-- /.box -->
         </div>
