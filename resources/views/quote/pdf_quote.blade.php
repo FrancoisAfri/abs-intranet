@@ -27,7 +27,7 @@
             </address>
         </div>
         <!-- /.col -->
-        <div class="col-md-4 invoice-col">
+        <div class="col-md-4 invoice-col no-padding"">
             <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
             <b>Quote #:</b> {{ $quotation->quote_number }}<br>
             <b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}
