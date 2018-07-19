@@ -975,6 +975,8 @@ Route::post('newquote/save', 'QuotesController@newQuote');
 //quotes reports
 Route::get('quote/reports', 'QuotesController@Quotereports');
 Route::post('quote/searchreports', 'QuotesController@reportsinndex');
+Route::post('quote/report-history', 'QuotesController@historyReports');
+Route::post('quote-history/reports/print', 'QuotesController@historyReportsPrint');
 
 
 // Quote term Categories

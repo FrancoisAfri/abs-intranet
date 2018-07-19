@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/quote/searchreports">
+                <form class="form-horizontal" name="quote-report-form" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border" align="center">
                         <h3 class="box-title">Search Quote</h3>
@@ -49,6 +49,7 @@
                             <div class="col-sm-9">
                                 <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Quotation </label>
                                 <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2"> Invoices </label>
+                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="3"> History </label>
                             </div>
                         </div>
                         
@@ -122,37 +123,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        <!-- <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
-
-                        <div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
-                            <label for="product_id" class="col-sm-2 control-label">Products</label>
-
-                            <div class="col-sm-10">
-                                <select id="product_id" name="product_id[]" class="form-control select2" style="width: 100%;" multiple>
-                                    <option value="">*** Please Select Some Products ***</option>
-                                    @foreach($products as $product)
-                                        <option value="{{ $product->id }}" {{ ($product->id == old('product_id[]')) ? 'selected' : '' }}>{{ $product->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <hr class="hr-text packages-field" data-content="OR SELECT PACKAGES">
-
-                        <div class="form-group packages-field{{ $errors->has('package_id') ? ' has-error' : '' }}">
-                            <label for="package_id" class="col-sm-2 control-label">Package</label>
-
-                            <div class="col-sm-10">
-                                <select id="package_id" name="package_id[]" class="form-control select2" style="width: 100%;" multiple>
-                                    <option value="">*** Please Select a Package ***</option>
-                                    @foreach($packages as $package)
-                                        <option value="{{ $package->id }}" {{ ($package->id == old('package_id[]')) ? 'selected' : '' }}>{{ $package->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div> -->
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right">Genarate Report<i class="fa fa-arrow-right"></i></button>
@@ -255,15 +225,26 @@
         //function to hide/show fields depending on the quote  type
         function hideFields() {
             var quoteType = $("input[name='quote_type']:checked").val();
-            if (quoteType == 1) { //products and packages
+            if (quoteType == 1) {
                 $('.products-field').show();
                 $('.packages-field').show();
                 $('.services-field').hide();
+				$('form[name="quote-report-form"]').attr('action', '/quote/searchreports');
+                 $('#gen-report').val("Submit"); 
             }
-            else if (quoteType == 2) { //services
+            else if (quoteType == 2) {
                 $('.products-field').hide();
                 $('.packages-field').hide();
                 $('.services-field').show();
+				$('form[name="quote-report-form"]').attr('action', '/quote/searchreports');
+                 $('#gen-report').val("Submit"); 
+            }
+			else if (quoteType == 3) {
+                $('.products-field').show();
+                $('.packages-field').show();
+                $('.services-field').hide();
+				$('form[name="quote-report-form"]').attr('action', '/quote/report-history');
+                 $('#gen-report').val("Submit"); 
             }
             return quoteType;
         }

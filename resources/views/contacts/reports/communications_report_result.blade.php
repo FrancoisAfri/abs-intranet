@@ -54,7 +54,7 @@
 							<th>Communication Date</th>
 							<th>Communication Type</th>
 							<th>Message</th>
-							 <th>Sent By</th>
+							<th>Sent By</th>
 						</tr>
 						</tfoot>
 					</table>
