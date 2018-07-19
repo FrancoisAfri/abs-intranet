@@ -38,7 +38,7 @@
             <div class="col-xs-12 no-padding">
                 @if($quoteProfile->letterhead_url)
 					<h2 class="page-header">
-					  <img width="400" height="110" src="{{ $company_logo }}" alt="logo">
+					  <img width="270" height="110" src="{{ $company_logo }}" alt="logo">
 					  <small class="pull-right">Date: {{$date}}</small>
 					</h2>
                 @else
