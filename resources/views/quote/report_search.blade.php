@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" name="quote-report-form" method="POST" action="">
+                <form class="form-horizontal" name="quote-report-form" method="POST" action="/quote/report-history">
                     {{ csrf_field() }}
                     <div class="box-header with-border" align="center">
                         <h3 class="box-title">Search Quote</h3>
@@ -47,9 +47,9 @@
                             <label for="Leave_type" class="col-sm-2 control-label"> Quote Type</label>
 
                             <div class="col-sm-9">
-                                <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Quotation </label>
+                                <!--<label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_products" name="quote_type" value="1" checked> Quotation </label>
                                 <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2"> Invoices </label>
-                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="3"> History </label>
+                                --><label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="3" checked> History </label>
                             </div>
                         </div>
                         
@@ -112,17 +112,17 @@
 
                         <hr class="hr-text -field" data-content="">
 
-                        <div class="form-group services-field{{ $errors->has('status') ? ' has-error' : '' }}">
+                        <!--<div class="form-group services-field{{ $errors->has('status') ? ' has-error' : '' }}">
                             <label for="{{ 'status' }}" class="col-sm-2 control-label">Quote Statuses</label>
                             <div class="col-sm-10">
                                 <select id="status" name="status" class="form-control select2" style="width: 100%;">
-                                    <!-- <option value="1">*** Select Status ***</option> -->
+                                  
                                     <option value="1"> *** converted into invoices  *** </option>
                                     <option value="2"> *** Not converted into invoices *** </option>
                                     
                                 </select>
                             </div>
-                        </div>
+                        </div>-->
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary pull-right">Genarate Report<i class="fa fa-arrow-right"></i></button>
