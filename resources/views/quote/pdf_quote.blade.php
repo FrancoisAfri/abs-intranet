@@ -3,7 +3,7 @@
 @endsection
 @section('content')
     <div class="row invoice-info">
-        <div class="col-md-4 invoice-col">
+        <div class="col-md-6 invoice-col">
             From
             <address>
                 <strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
@@ -16,7 +16,7 @@
             </address>
         </div>
         <!-- /.col -->
-        <div class="col-md-4 invoice-col">
+        <div class="col-md-6 invoice-col">
             To
             <address>
                 <strong>{{ $quotation->client->full_name }}</strong><br>
@@ -25,13 +25,13 @@
                 Phone: {{ ($quotation->company) ? $quotation->company->phone_number : $quotation->client->cell_number }}<br>
                 Email: {{ ($quotation->company) ? $quotation->company->email : $quotation->client->email }}
             </address>
+			<address>
+               <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
+				<b>Quote #:</b> {{ $quotation->quote_number }}<br>
+				<b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}
+            </address>
         </div>
         <!-- /.col -->
-        <div class="col-md-4 invoice-col no-padding"">
-            <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
-            <b>Quote #:</b> {{ $quotation->quote_number }}<br>
-            <b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}
-        </div>
         <!-- /.col -->
     </div>
 
