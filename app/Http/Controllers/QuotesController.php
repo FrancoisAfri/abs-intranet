@@ -765,7 +765,7 @@ class QuotesController extends Controller
         $highestLvl = DivisionLevel::where('active', 1)
             ->orderBy('level', 'desc')->limit(1)->get()->first();
         $quoteApplications = Quotation::where(function ($query) use ($companyID) {
-            if ($companyID) {
+            if ($companyID && $companyID != "01") {
                 $query->where('company_id', $companyID);
             }
         })
@@ -794,11 +794,11 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function viewQuote(Quotation $quotation, $companyID, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false, CRMInvoice $paramInvoice = null)
+    public function viewQuote(Quotation $quotation, $companyID=false , $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false, CRMInvoice $paramInvoice = null)
     {
-
         $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services');
-        $invoice = null;
+        //return $quotation;
+		$invoice = null;
         $totalPaid = 0;
         $paymentTerm = null;
         $remainingTerm = null;
@@ -868,7 +868,7 @@ class QuotesController extends Controller
         $data['invoice'] = $invoice;
         $data['totalPaid'] = $totalPaid;
         $data['subtotal'] = $subtotal;
-        $data['companyID'] = $companyID != "01" ? $companyID : '';
+        $data['companyID'] = $companyID ;
         $data['discountPercent'] = $discountPercent;
         $data['discountAmount'] = $discountAmount;
         $data['vatAmount'] = $vatAmount;
@@ -879,7 +879,8 @@ class QuotesController extends Controller
 		
         AuditReportsController::store('Quote', 'View Quote Page Accessed', 'Accessed By User', 0);
 
-        if ($isPDF === true) {
+        if ($isPDF === true || $companyID === 'pdf') {
+
             $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first()->level;
             $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $quotation->division_id)
                 ->first();
@@ -892,7 +893,7 @@ class QuotesController extends Controller
             $pdf = resolve('dompdf.wrapper');
             $pdf->getDomPDF()->set_option('enable_html5_parser', true);
             $pdf->loadHTML($view);
-            if ($printQuote) {
+            if ($printQuote || $companyID === 'pdf') {
 				if ($isInvoice) return $pdf->stream('invoice' . $quotation->id . '.pdf');
 				else return $pdf->stream('quotation_' . $quotation->id . '.pdf');
             } elseif ($emailQuote) {
