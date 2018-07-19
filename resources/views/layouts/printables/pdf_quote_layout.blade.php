@@ -39,7 +39,7 @@
                 @if($quoteProfile->letterhead_url)
 					<h2 class="page-header">
 					  <img width="270" height="110" src="{{ $company_logo }}" alt="logo">
-					  <small class="pull-right">Date: {{$date}}</small>
+					  <small class="pull-right">Date:{{$date}}</small>
 					</h2>
                 @else
 					<!--<h2 class="page-header">
