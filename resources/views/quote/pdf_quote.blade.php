@@ -84,7 +84,7 @@
                                     @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
                                         <?php $prevCategory = 0; ?>
                                         <tr>
-                                            <th style="background-color: blue;" colspan="4" style="text-align: center;">
+                                            <th class="success" colspan="4" style="text-align: center;">
                                                 <i>{{ $product->ProductPackages->name }}</i>
                                             </th>
                                         </tr>
