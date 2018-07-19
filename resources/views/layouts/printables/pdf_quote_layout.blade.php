@@ -37,10 +37,18 @@
         <div class="row">
             <div class="col-xs-12 no-padding">
                 @if($quoteProfile->letterhead_url)
-					<h2 class="page-header">
-					  <img width="270" height="110" src="{{ $company_logo }}" alt="logo">
-					  <small class="pull-right">Date:{{$date}}</small>
-					</h2>
+			<table class="table table-bordered table-hover">
+				<tbody>
+					<tr>
+						<td class="col-md-4 invoice-col">
+							<img width="270" height="110" src="{{ $company_logo }}" alt="logo">
+						</td>
+						<td class="col-md-4 invoice-col">
+							 <small class="pull-right">Date:{{$date}}</small>
+						</td>
+					</tr>
+				</tbody>
+            </table>
                 @else
 					<!--<h2 class="page-header">
 					  <img width="196" height="60" src="{{ $company_logo }}" alt="logo">
