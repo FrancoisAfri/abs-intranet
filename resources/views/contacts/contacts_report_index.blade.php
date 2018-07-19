@@ -26,7 +26,7 @@
                     <h3 class="box-title">Contacts Reports Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
-                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
+                         <form name="contact-report-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -234,19 +234,19 @@
                  //$('.hours-field').hide();
                  $('.employee-field').show();
                  $('.meetings-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/contacts/reports/contact_note');
+                 $('form[name="contact-report-form"]').attr('action', '/contacts/reports/contact_note');
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
                  $('.meetings-field').show();
                  $('.employee-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/contacts/reports/meetings');
+                 $('form[name="contact-report-form"]').attr('action', '/contacts/reports/meetings');
                  $('#gen-report').val("Submit"); 
             }
             else if(allType == 3){
                 $('.meetings-field').show();
                  $('.employee-field').hide();
-                 $('form[name="leave-application-form"]').attr('action', '/contacts/reports/communication');
+                 $('form[name="contact-report-form"]').attr('action', '/contacts/reports/communication');
                  $('#gen-report').val("Submit"); 
             }
            
