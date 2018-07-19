@@ -9,6 +9,8 @@
                 <strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
                 {{ $quoteProfile->phys_address }}<br>
                 {{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
+                {{ $quoteProfile->registration_number }}<br>
+                {{ $quoteProfile->vat_number }}}<br>
                 Phone: {{ $quoteProfile->phone_number }}<br>
                 Email: {{ $quoteProfile->email }}
             </address>
