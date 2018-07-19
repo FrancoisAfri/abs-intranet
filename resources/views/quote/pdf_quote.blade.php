@@ -16,7 +16,7 @@
             </address>
         </div>
         <!-- /.col -->
-        <div class="col-md-6 invoice-col">
+        <div class="col-md-6 invoice-col pull-right">
             To
             <address>
                 <strong>{{ $quotation->client->full_name }}</strong><br>
