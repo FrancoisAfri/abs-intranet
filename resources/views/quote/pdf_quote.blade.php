@@ -3,32 +3,50 @@
 @endsection
 @section('content')
     <div class="row invoice-info">
-        <div class="col-md-6 invoice-col">
+        <div class="col-md-12 invoice-col">
             From
-            <address>
-                <strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
-                {{ $quoteProfile->phys_address }}<br>
-                {{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
-                {{ $quoteProfile->registration_number }}<br>
-                {{ $quoteProfile->vat_number }}}<br>
-                Phone: {{ $quoteProfile->phone_number }}<br>
-                Email: {{ $quoteProfile->email }}
-            </address>
+            
 			<div class="pull-right">
             To
-            <address>
-                <strong>{{ $quotation->client->full_name }}</strong><br>
-                {{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
-                {{ ($quotation->company) ? $quotation->company->phys_city . ', ' . $quotation->company->phys_postal_code : $quotation->client->res_city . ', ' . $quotation->client->res_postal_code }}<br>
-                Phone: {{ ($quotation->company) ? $quotation->company->phone_number : $quotation->client->cell_number }}<br>
-                Email: {{ ($quotation->company) ? $quotation->company->email : $quotation->client->email }}
-            </address>
-			<address>
-               <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
-				<b>Quote #:</b> {{ $quotation->quote_number }}<br>
-				<b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}
-            </address>
-        </div>
+            
+			</div>
+			<table class="table table-bordered table-hover">
+				<thead>
+				<tr>
+					<th class="col-md-6 invoice-col">From</th>
+					<th class="col-md-6 invoice-col">To</th>
+				</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="col-md-6 invoice-col">
+							<address>
+								<strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
+								{{ $quoteProfile->phys_address }}<br>
+								{{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
+								{{ $quoteProfile->registration_number }}<br>
+								{{ $quoteProfile->vat_number }}}<br>
+								Phone: {{ $quoteProfile->phone_number }}<br>
+								Email: {{ $quoteProfile->email }}
+							</address>
+						</td>
+						<td class="col-md-6 invoice-col">
+							<address>
+								<strong>{{ $quotation->client->full_name }}</strong><br>
+								{{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
+								{{ ($quotation->company) ? $quotation->company->phys_city . ', ' . $quotation->company->phys_postal_code : $quotation->client->res_city . ', ' . $quotation->client->res_postal_code }}<br>
+								Phone: {{ ($quotation->company) ? $quotation->company->phone_number : $quotation->client->cell_number }}<br>
+								Email: {{ ($quotation->company) ? $quotation->company->email : $quotation->client->email }}
+							</address>
+							<address>
+							   <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
+								<b>Quote #:</b> {{ $quotation->quote_number }}<br>
+								<b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}
+							</address>
+						</td>
+					</tr>
+				</tbody>
+            </table>
         </div>
         <!-- /.col -->
         
