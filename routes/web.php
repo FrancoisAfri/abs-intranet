@@ -959,7 +959,7 @@ Route::get('quote/create', 'QuotesController@createIndex');
 Route::post('quote/adjust', 'QuotesController@adjustQuote');
 Route::post('quote/save', 'QuotesController@saveQuote');
 Route::post('quote/update/{quote}', 'QuotesController@updateQuote');
-Route::get('quote/view/{quotation}', 'QuotesController@viewQuote');
+Route::get('quote/view/{quotation}/{companyID}', 'QuotesController@viewQuote');
 Route::get('quote/search', 'QuotesController@searchQuote');
 Route::get('quote/view/{quotation}/pdf', 'QuotesController@viewPDFQuote');
 Route::get('quote/approve_quote/{quote}', 'QuotesController@approveQuote');

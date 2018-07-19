@@ -28,7 +28,7 @@ class CRMInvoiceController extends Controller
         if ($quotation->payment_option == 1) {
             if (count($quotation->invoices) > 0) {
                 //view invoice
-                return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, $isPDF, $printQuote, $emailQuote, $isInvoice);
+                return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, false,$isPDF, $printQuote, $emailQuote, $isInvoice);
             } else {
                 //create invoice
                 DB::transaction(function () use ($quotation) {
@@ -67,11 +67,11 @@ class CRMInvoiceController extends Controller
                 });
 
                 //view invoice
-                return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, $isPDF, $printQuote, $emailQuote, $isInvoice);
+                return app('App\Http\Controllers\QuotesController')->viewQuote($quotation,false, $isPDF, $printQuote, $emailQuote, $isInvoice);
             }
         } elseif ($quotation->payment_option == 2) { //monthly payment
             //view monthly invoice
-            return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, $isPDF, $printQuote, $emailQuote, $isInvoice, $paramInvoice);
+            return app('App\Http\Controllers\QuotesController')->viewQuote($quotation, false,$isPDF, $printQuote, $emailQuote, $isInvoice, $paramInvoice);
         }
     }
 

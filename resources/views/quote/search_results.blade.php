@@ -167,7 +167,9 @@
 	function postData(id, data)
 	{
 		if (data == 'view_quote')
-			location.href = "/quote/view/" + id;
+		{
+			location.href = "/quote/view/" + id + "/"  + "{{$companyID}}";
+		}
 	}
 </script>
 @endsection
