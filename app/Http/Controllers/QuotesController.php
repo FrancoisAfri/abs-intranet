@@ -290,7 +290,7 @@ class QuotesController extends Controller
                 $messageContent = $messageContents->template_content;
 				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
 				$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
-				$quoteAttachment = $this->viewQuote($quote, true, false, true);
+				$quoteAttachment = $this->viewQuote($quote, false,true, false, true);
 				if (!empty($quote->client->email))
 					Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             }
@@ -386,7 +386,7 @@ class QuotesController extends Controller
                 $messageContent = $messageContents->template_content;
 				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
 				$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
-				$quoteAttachment = $this->viewQuote($quote, true, false, true);
+				$quoteAttachment = $this->viewQuote($quote, false,true, false, true);
 				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             }
 			$quote->status = $stastus;
@@ -698,7 +698,7 @@ class QuotesController extends Controller
 			if (!empty($quote->client->full_name) && !empty($quote->client->email))
 			{
 				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
-				$quoteAttachment = $this->viewQuote($quote, true, false, true);
+				$quoteAttachment = $this->viewQuote($quote, false ,true, false, true);
 				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
             }
 			$quote->status = 2;
@@ -757,6 +757,7 @@ class QuotesController extends Controller
     public function searchResults(Request $request)
     {
         $companyID = trim($request->company_id);
+		
         $contactPersonID = $request->contact_person_id;
         $personPassportNum = $request->passport_number;
         $divisionID = $request->division_id;
@@ -773,6 +774,7 @@ class QuotesController extends Controller
         ->orderBy('id', 'desc')
         ->get();
         $data['highestLvl'] = $highestLvl;
+        $data['companyID'] = !empty($companyID) ? $companyID : '01';
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Quotes Search Results';
         $data['breadcrumb'] = [
@@ -792,9 +794,9 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function viewQuote(Quotation $quotation, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false, CRMInvoice $paramInvoice = null)
+    public function viewQuote(Quotation $quotation, $companyID, $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false, CRMInvoice $paramInvoice = null)
     {
-		
+
         $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services');
         $invoice = null;
         $totalPaid = 0;
@@ -866,6 +868,7 @@ class QuotesController extends Controller
         $data['invoice'] = $invoice;
         $data['totalPaid'] = $totalPaid;
         $data['subtotal'] = $subtotal;
+        $data['companyID'] = $companyID != "01" ? $companyID : '';
         $data['discountPercent'] = $discountPercent;
         $data['discountAmount'] = $discountAmount;
         $data['vatAmount'] = $vatAmount;
@@ -873,6 +876,7 @@ class QuotesController extends Controller
         $data['balanceDue'] = $total - $totalPaid;
         $data['paymentTerm'] = $paymentTerm;
         $data['remainingTerm'] = $remainingTerm;
+		
         AuditReportsController::store('Quote', 'View Quote Page Accessed', 'Accessed By User', 0);
 
         if ($isPDF === true) {
@@ -910,7 +914,7 @@ class QuotesController extends Controller
     */
     public function viewPDFQuote(Quotation $quotation)
     {
-        return $this->viewQuote($quotation, true, true);
+        return $this->viewQuote($quotation, false ,true, true);
     }
 
     /**
@@ -927,7 +931,7 @@ class QuotesController extends Controller
 			$messageContent = $messageContent->template_content;
 			$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
 			$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
-			$quoteAttachment = $this->viewQuote($quote, true, false, true);
+			$quoteAttachment = $this->viewQuote($quote,false, true, false, true);
 			Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
 		}
 

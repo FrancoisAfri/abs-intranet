@@ -13,7 +13,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="">
+                <form class="form-horizontal" method="POST" action="/quote/search">
+				<input type="hidden" name="company_id" value="{{$companyID}}">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
                         <h3 class="box-title">Quote Details</h3>
@@ -210,6 +211,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer text-center">
+					<button type="submit" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
                         @if($quotation->status == 1)<!-- TODO: Only managers or superusers should do this -->
                             <button type="button" class="btn btn-primary btn-success" id="approve_quote" onclick="postData({{$quotation->id}}, 'approve_quote');"><i class="fa fa-check"></i> Approve Quote</button>
                             <button type="button" class="btn btn-primary btn-danger" id="decline_quote" onclick="postData({{$quotation->id}}, 'decline_quote');"><i class="fa fa-times"></i> Decline Quote</button>
