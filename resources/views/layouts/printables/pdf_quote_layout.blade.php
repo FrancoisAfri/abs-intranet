@@ -37,18 +37,31 @@
         <div class="row">
             <div class="col-xs-12 no-padding">
                 @if($quoteProfile->letterhead_url)
-                    <h2 class="page-header">
-                        <img width="85%" src="{{ public_path() . $quoteProfile->letterhead_url }}" alt="letterhead">
+                    
+					 <div class="col-xs-4 invoice-col no-padding">
+					<h2 class="page-header">
+					  <img width="196" height="60" src="{{ $company_logo }}" alt="logo">
+					</h2>
+					</div>
+					<div class="col-xs-4 invoice-col no-padding">
+						<address>
+							<strong>{{ $quoteProfile->registration_number }}</strong><br>
+							<strong>{{ $quoteProfile->vat_number }}</strong>
+						</address>
+					</div>
+					<div class="col-xs-4 invoice-col no-padding">
+					  <small class="pull-right">Date: {{$date}}</small>
+					</div>
+                @else
+					<!--<h2 class="page-header">
+					  <img width="196" height="60" src="{{ $company_logo }}" alt="logo">
+					  <small class="pull-right">Date: {{$date}}</small>
+					</h2>-->
+					<h2 class="page-header">
+                        <img width="100%" height="100" src="{{ public_path() . $quoteProfile->letterhead_url }}" alt="letterhead">
                         <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->
                     </h2>
-                @else
-                    <table class="table table-bordered">
-                        <tr>
-                            <td class="text-center">
-                                <h1>Please Upload a Letterhead</h1>
-                            </td>
-                        </tr>
-                    </table>
+ 
                 @endif
             </div>
             <!-- /.col -->

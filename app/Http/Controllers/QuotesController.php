@@ -885,7 +885,13 @@ class QuotesController extends Controller
             $quoteProfile = QuoteCompanyProfile::where('division_level', $highestLvl)->where('division_id', $quotation->division_id)
                 ->first();
 			if (!empty($quoteProfile )) $quoteProfile  = $quoteProfile->load('divisionLevelGroup'); 
-            $data['file_name'] = 'Quotation';
+           
+			$companyDetails = CompanyIdentity::systemSettings();
+
+			$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+			$data['date'] = date("d-m-Y");
+
+			$data['file_name'] = 'Quotation';
             $data['user'] = Auth::user()->load('person');
             $data['quoteProfile'] = $quoteProfile;
 
