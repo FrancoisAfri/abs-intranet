@@ -14,7 +14,7 @@
                 Phone: {{ $quoteProfile->phone_number }}<br>
                 Email: {{ $quoteProfile->email }}
             </address>
-			<div class="col-md-6 invoice-col pull-right">
+			<div class="pull-right">
             To
             <address>
                 <strong>{{ $quotation->client->full_name }}</strong><br>
