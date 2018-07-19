@@ -9,7 +9,7 @@
 				<tr>
 					<th class="col-md-4 invoice-col">From</th>
 					<th class="col-md-4 invoice-col">To</th>
-					<th class="col-md-4 invoice-col">To</th>
+					<th class="col-md-4 invoice-col">#</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -84,7 +84,7 @@
                                     @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
                                         <?php $prevCategory = 0; ?>
                                         <tr>
-                                            <th class="success" colspan="4" style="text-align: center;">
+                                            <th style="background-color: coral;" colspan="4" style="text-align: center;">
                                                 <i>{{ $product->ProductPackages->name }}</i>
                                             </th>
                                         </tr>
