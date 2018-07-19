@@ -14,9 +14,7 @@
                 Phone: {{ $quoteProfile->phone_number }}<br>
                 Email: {{ $quoteProfile->email }}
             </address>
-        </div>
-        <!-- /.col -->
-        <div class="col-md-6 invoice-col pull-right">
+			<div class="col-md-6 invoice-col pull-right">
             To
             <address>
                 <strong>{{ $quotation->client->full_name }}</strong><br>
@@ -31,6 +29,9 @@
 				<b>Valid Until:</b> {{ $quotation->created_at->addDays($quoteProfile->validity_period)->format('d/m/Y') }}
             </address>
         </div>
+        </div>
+        <!-- /.col -->
+        
         <!-- /.col -->
         <!-- /.col -->
     </div>
