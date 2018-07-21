@@ -42,7 +42,6 @@
                         <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->
                     </h2>
                 @else
-					<h2 class="page-header">
 					  <table class="table table-bordered table-hover">
 						<thead>
 							<tr>
@@ -63,7 +62,6 @@
 							</tr>
 						</thead>
 					</table>
-					</h2>
                 @endif
             </div>
             <!-- /.col -->

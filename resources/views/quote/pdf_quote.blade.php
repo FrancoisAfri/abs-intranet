@@ -7,25 +7,13 @@
 			<table class="table table-bordered table-hover">
 				<thead>
 				<tr>
-					<th class="col-md-4 invoice-col">From</th>
-					<th class="col-md-4 invoice-col">To</th>
-					<th class="col-md-4 invoice-col">#</th>
+					<th class="col-md-6 invoice-col">To</th>
+					<th class="col-md-6 invoice-col">#</th>
 				</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td class="col-md-4 invoice-col">
-							<address>
-								<strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
-								{{ $quoteProfile->phys_address }}<br>
-								{{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
-								Reg.: {{ $quoteProfile->registration_number }}<br>
-								VAT: {{ $quoteProfile->vat_number }}<br>
-								Phone: {{ $quoteProfile->phone_number }}<br>
-								Email: {{ $quoteProfile->email }}
-							</address>
-						</td>
-						<td class="col-md-4 invoice-col">
+						<td class="col-md-6 invoice-col">
 							<address>
 								<strong>{{ $quotation->client->full_name }}</strong><br>
 								physical Address: {{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
@@ -34,7 +22,7 @@
 								Email: {{ ($quotation->company) ? $quotation->company->email : $quotation->client->email }}
 							</address>
 						</td>
-						<td class="col-md-4 invoice-col">
+						<td class="col-md-6 invoice-col">
 							<address>
 							   <b>Date: </b> {{ $quotation->created_at->format('d/m/Y') }}<br>
 								<b>Quote #:</b> {{ $quotation->quote_number }}<br>
