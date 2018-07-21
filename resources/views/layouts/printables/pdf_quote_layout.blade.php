@@ -43,18 +43,26 @@
                     </h2>
                 @else
 					<h2 class="page-header">
-					  <img width="270" height="110" src="{{ $company_logo }}" alt="logo">
-					  <div class="invoice-col">
-							<address>
-								<strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
-								{{ $quoteProfile->phys_address }}<br>
-								{{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
-								Reg.: {{ $quoteProfile->registration_number }}<br>
-								VAT: {{ $quoteProfile->vat_number }}<br>
-								Phone: {{ $quoteProfile->phone_number }}<br>
-								Email: {{ $quoteProfile->email }}
-							</address>
-						</div>
+					  <table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<td class="col-md-6 invoice-col">
+									<img width="270" height="110" src="{{ $company_logo }}" alt="logo">
+								</td>
+								<td class="col-md-4 invoice-col">
+									<address>
+										<strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
+										{{ $quoteProfile->phys_address }}<br>
+										{{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
+										Reg.: {{ $quoteProfile->registration_number }}<br>
+										VAT: {{ $quoteProfile->vat_number }}<br>
+										Phone: {{ $quoteProfile->phone_number }}<br>
+										Email: {{ $quoteProfile->email }}
+									</address>
+								</td>
+							</tr>
+						</thead>
+					</table>
 					</h2>
                 @endif
             </div>
