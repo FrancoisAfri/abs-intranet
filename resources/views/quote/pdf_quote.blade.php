@@ -4,7 +4,7 @@
 @section('content')
     <div class="row invoice-info">
         <div class="col-md-12 invoice-col">
-			<table class="table table-bordered table-hover">
+			<table class="table table-hover">
 				<thead>
 				<tr>
 					<th class="col-md-6 invoice-col">To</th>

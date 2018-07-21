@@ -42,7 +42,7 @@
                         <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->
                     </h2>
                 @else
-					  <table class="table table-bordered table-hover">
+					  <table class="table table-hover" >
 						<thead>
 							<tr style="border: 0;">
 								<td class="col-md-6 invoice-col"  style="border: 0;">
