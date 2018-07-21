@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Model(s) for - {{ $vehiclemodels}}</h3>
+                    <h3 class="box-title"> Vehicle Model(s) for - {{ $make->name}}</h3>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -30,21 +30,21 @@
                                 <th style="width: 5px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($vehiclemodel) > 0)
-                              @foreach ($vehiclemodel as $vehice)
+                            @if (count($vehiclemodels) > 0)
+                              @foreach ($vehiclemodels as $vehiclemodel)
                                <tr id="categories-list">
                                <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehice->id }}" data-name="{{ $vehice->name }}" data-description="{{$vehice->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button type="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-package-modal" data-id="{{ $vehiclemodel->id }}" data-name="{{ $vehiclemodel->name }}" data-description="{{$vehiclemodel->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
                                     </td>
-                                     <td>{{ (!empty( $vehice->name)) ?  $vehice->name : ''}} </td>
-                                     <td>{{ (!empty( $vehice->description)) ?  $vehice->description : ''}} </td>
+                                     <td>{{ (!empty( $vehiclemodel->name)) ?  $vehiclemodel->name : ''}} </td>
+                                     <td>{{ (!empty( $vehiclemodel->description)) ?  $vehiclemodel->description : ''}} </td>
                                   <td>
                                     <!--   leave here  -->
-                                    <button vehice="button" id="view_ribbons" class="btn {{ (!empty($vehice->status) && $vehice->status == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$vehice->id}}, 'actdeac');"><i class="fa {{ (!empty($vehice->status) && $vehice->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($vehice->status) && $vehice->status == 1) ? "De-Activate" : "Activate"}}</button>
+                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($vehiclemodel->status) && $vehiclemodel->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$vehiclemodel->id}}, 'actdeac');"><i class="fa {{ (!empty($vehiclemodel->status) && $vehiclemodel->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($vehiclemodel->status) && $vehiclemodel->status == 1) ? "De-Activate" : "Activate"}}</button>
                                  </td>
-                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-model-warning-modal" data-id="{{ $vehice->id }}"><i class="fa fa-trash"></i> Delete</button></td>
+                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-model-warning-modal" data-id="{{ $vehiclemodel->id }}"><i class="fa fa-trash"></i> Delete</button></td>
                                 </tr>
                                    @endforeach
                                @else
@@ -70,7 +70,7 @@
         @include('Vehicles.partials.add_vehiclemodel_modal')
         @include('Vehicles.partials.edit_model_modal')
           <!-- Include delete warning Modal form-->
-     @if (count($vehiclemodel) > 0)
+     @if (count($vehiclemodels) > 0)
          @include('Vehicles.warnings.vehiclemodel_warning_action', ['modal_title' => 'Delete Vehicle model', 'modal_content' => 'Are you sure you want to delete this vehicle model ? This action cannot be undone.'])
     @endif
 </div>
@@ -126,7 +126,7 @@
             //Post module form to server using ajax (ADD)
             $('#add-vehicle_model').on('click', function() {
                 //console.log('strUrl');
-                var strUrl = '/vehice/addvehicle_model/{{$vehicleID}}';
+                var strUrl = '/vehice/addvehicle_model/{{$make->id}}';
                 var modalID = 'add-vehicle_model-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
@@ -134,7 +134,7 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-vehicle_model';
-                var redirectUrl = '/vehicle_management/vehice_model/{{$vehicleID}}';
+                var redirectUrl = '/vehicle_management/vehice_model/{{$make->id}}';
                 var successMsgTitle = 'Vehicles Model Added!';
                 var successMsg = 'The vehice Model has been updated successfully.';
                 //var formMethod = 'PATCH';
@@ -164,7 +164,7 @@
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_vehicle_model';
-                var redirectUrl = '/vehicle_management/vehice_model/{{$vehicleID}}';
+                var redirectUrl = '/vehicle_management/vehice_model/{{$make->id}}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The vehice model has been updated successfully.';
                 var Method = 'PATCH';
@@ -185,7 +185,7 @@
                             _token: $('#' + modalID).find('input[name=_token]').val()
                         };
                         var submitBtnID = 'delete_model';
-                        var redirectUrl = '/vehicle_management/vehice_model/{{$vehicleID}}';
+                        var redirectUrl = '/vehicle_management/vehice_model/{{$make->id}}';
                        //var Method = 'PATCH';
                         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
                     });
