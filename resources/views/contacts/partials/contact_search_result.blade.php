@@ -47,7 +47,7 @@
                 <!-- /.box-body -->
 
                 <div class="box-footer">
-                    <button id="back_to_contact_search" class="btn btn-default no-print"><i class="fa fa-arrow-left"></i> Back To Search</button>
+                    <button type="button" id="back_to_contact_search" class="btn btn-default no-print"><i class="fa fa-arrow-left"></i> Back To Search</button>
                     <button type="submit" class="btn btn-primary pull-right no-print"><i class="fa fa-print"></i> Print Result</button>
                 </div>
                 <!-- /.box-footer -->
