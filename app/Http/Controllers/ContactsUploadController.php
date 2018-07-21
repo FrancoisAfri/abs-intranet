@@ -63,14 +63,20 @@ class ContactsUploadController extends Controller
 			{
 				$path = $request->file('input_file')->getRealPath();
 				$data = Excel::load($path, function($reader) {})->get();
+				//print_r($data);
+				
 				if(!empty($data) && $data->count())
 				{
+					
 					foreach ($data->toArray() as $key => $value) 
 					{
+						
+						
 						if(!empty($value))
 						{
 							if (!empty($value['name']))
 							{
+								
 								$company = new ContactCompany();
 								$company->email = !empty($value['email']) ? $value['email'] : '';
 								$company->name = !empty($value['name']) ? $value['name'] : '';
