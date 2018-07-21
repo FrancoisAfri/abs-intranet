@@ -225,8 +225,10 @@
                         @if($quotation->status < 2)
                             <button type="button" class="btn btn-primary btn-warning" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');"><i class="fa fa-pencil-square-o"></i> Modify Quote</button>
                         @endif
+						@if($quotation->status == 5)
                         <a href="/quote/email_quote/{{ $quotation->id }}" class="btn btn-primary"><i class="fa fa-send"></i> Email Quote</a>
-                        <a href="/quote/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Quote</a>
+                        @endif
+						<a href="/quote/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Quote</a>
                     </div>
                     <!-- /.box-footer -->
                 </form>
