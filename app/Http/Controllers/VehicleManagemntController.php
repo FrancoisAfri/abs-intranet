@@ -670,13 +670,10 @@ class VehicleManagemntController extends Controller
         return redirect('/vehicle_management/vehice_make');
     }
 
-    public function vehicemodel(vehiclemake $model)
+    public function vehicemodel(vehiclemake $make)
     {
-        $modelID = $model->id;
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->where('vehiclemake_id', $modelID)->get();
-        $vehiclemodelz = vehiclemake::orderBy('id', 'asc')->where('id', $modelID)->first();
-        $vehiclemodels = $vehiclemodelz->name;
-        $vehicleID = $modelID;
+        $makeID = $make->id;
+        $vehiclemodels = vehiclemodel::orderBy('name', 'asc')->where('vehiclemake_id', $make->id)->get();
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Management";
         $data['breadcrumb'] = [
@@ -684,10 +681,8 @@ class VehicleManagemntController extends Controller
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
         ];
 
-
-        $data['vehicleID'] = $vehicleID;
+        $data['make'] = $make;
         $data['vehiclemodels'] = $vehiclemodels;
-        $data['vehiclemodel'] = $vehiclemodel;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Setup';
 
