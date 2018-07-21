@@ -183,11 +183,8 @@ class QuotesController extends Controller
 
 		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
-        $termsAndConditions = QuotesTermAndConditions::where('status',1)->orderBy('term_name')->get();
-		
-		if (!empty($termsAndConditions)) $termsAndConditions->load('termCategory');
-		
-		 $termsAndConditions = DB::table('quotes_terns_conditions')
+
+		$termsAndConditions = DB::table('quotes_terns_conditions')
             ->select('quotes_terns_conditions.id as term_id', 'quotes_terns_conditions.term_name',
 			'quote_terms_categories.name as cat_name','quotes_terns_conditions.category_id')
             ->leftJoin('quote_terms_categories', 'quote_terms_categories.id', '=', 'quotes_terns_conditions.category_id')
@@ -1003,7 +1000,15 @@ class QuotesController extends Controller
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
-        $termsAndConditions = QuotesTermAndConditions::where('status', 1)->get();
+        $termsAndConditions = DB::table('quotes_terns_conditions')
+            ->select('quotes_terns_conditions.id as term_id', 'quotes_terns_conditions.term_name',
+			'quote_terms_categories.name as cat_name','quotes_terns_conditions.category_id')
+            ->leftJoin('quote_terms_categories', 'quote_terms_categories.id', '=', 'quotes_terns_conditions.category_id')
+			->where('quotes_terns_conditions.status',1)
+			->where('quotes_terns_conditions.category_id','>',0)
+			->orderBy('cat_name')
+			->orderBy('term_name')
+			->get();
 
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Modify a quotation';
@@ -1245,7 +1250,7 @@ class QuotesController extends Controller
         */
         AuditReportsController::store('Quote', 'Quote Modified', 'Modified by user', 0);
 
-        return redirect("/quote/view/$quote->id")->with(['success_add' => 'The quotation has been successfully added!']);
+        return redirect("/quote/view/$quote->id/01")->with(['success_add' => 'The quotation has been successfully added!']);
     }
 
     //

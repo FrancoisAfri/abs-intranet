@@ -123,17 +123,26 @@
 								</thead>
 								<tbody>
 									@foreach($termsAndConditions as $condition)
+										@if($loop->first || (isset($prevCategory) && $prevCategory != $condition->category_id))
+											<?php $prevCategory = 0; ?>
+											<tr>
+												<th class="success" colspan="4" style="text-align: center;">
+													<i>{{$condition->cat_name}}</i>
+												</th>
+											</tr>
+										@endif
 										<tr>
 											<td class="col-xs-2">
 												<label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
 													<span hidden>
-														{{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? '1' : '2' }}
+														{{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->term_id)) ? '1' : '2' }}
 													</span>
-													<input class="rdo-iCheck" type="checkbox" id="" name="tc_id[]" value="{{ $condition->id }}"{{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->id)) ? ' checked' : '' }}>
+													<input class="rdo-iCheck" type="checkbox" id="" name="tc_id[]" value="{{ $condition->term_id }}" {{ ($quote->termsAndConditions && $quote->termsAndConditions->contains('id', $condition->term_id)) ? ' checked' : '' }}>
 												</label>
 											</td>
 											<td class="col-xs-10">{!! $condition->term_name !!}</td>
 										</tr>
+										<?php $prevCategory = $condition->category_id; ?>
 									@endforeach
 								</tbody>
 								<tfoot>
@@ -178,8 +187,8 @@
         $(function () {
 			//Cancel button click event
             $('#back_button').click(function () {
-                location.href = '/quote/view/{{$quote->id}}';
-            });
+                location.href = '/quote/view/{{$quote->id}}/01';
+            });	
             //Initialize Select2 Elements
             $(".select2").select2();
 
