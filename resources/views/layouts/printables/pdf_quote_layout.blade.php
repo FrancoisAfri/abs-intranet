@@ -44,11 +44,11 @@
                 @else
 					  <table class="table table-bordered table-hover">
 						<thead>
-							<tr>
-								<td class="col-md-6 invoice-col">
+							<tr style="border: 0;">
+								<td class="col-md-6 invoice-col"  style="border: 0;">
 									<img width="270" height="110" src="{{ $company_logo }}" alt="logo">
 								</td>
-								<td class="col-md-4 invoice-col">
+								<td class="col-md-4 invoice-col"  style="border: 0;">
 									<address>
 										<strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
 										{{ $quoteProfile->phys_address }}<br>
