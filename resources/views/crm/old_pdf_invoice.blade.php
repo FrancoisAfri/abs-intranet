@@ -3,39 +3,41 @@
 @endsection
 @section('content')
     <div class="row invoice-info">
-		<table class="table table-bordered table-hover">
-				<thead>
-				<tr>
-					<th class="col-md-6 invoice-col">To</th>
-					<th class="col-md-6 invoice-col">#</th>
-				</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="col-md-6 invoice-col">
-							<address>
-								<strong>{{ $quotation->client->full_name }}</strong><br>
-								{{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
-								{{ ($quotation->company) ? $quotation->company->phys_city . ', ' . $quotation->company->phys_postal_code : $quotation->client->res_city . ', ' . $quotation->client->res_postal_code }}<br>
-								Phone: {{ ($quotation->company) ? $quotation->company->phone_number : $quotation->client->cell_number }}<br>
-								Email: {{ ($quotation->company) ? $quotation->company->email : $quotation->client->email }}
-							</address>
-						</td>
-						<td class="col-md-6 invoice-col">
-							 <b>Invoice #: </b> {{ ($invoice) ? $invoice->invoice_number : '' }}<br>
-							<b>Order Date: </b> {{ ($invoice && $invoice->invoice_date) ? date('d/m/Y', $invoice->invoice_date) : '' }}<br>
-							<b>Order #:</b> {{ $quotation->quote_number }}<br>
-							@if($quotation->payment_option == 2)
-								<b>Pmt Term:</b> {{ $paymentTerm . ' (' . $remainingTerm . ' remaining)' }}<br>
-							@endif
-							@if($invoice->payment_due_date)
-								<b>Pmt Due:</b> {{ ($invoice && $invoice->payment_due_date) ? date('d/m/Y', $invoice->payment_due_date) : '' }}<br>
-							@endif
-							<b>Account:</b> {{ ($quotation->account) ? $quotation->account->account_number : '' }}
-						</td>
-					</tr>
-				</tbody>
-            </table>
+        <div class="col-xs-4 invoice-col no-padding">
+            From
+            <address>
+                <strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
+                {{ $quoteProfile->phys_address }}<br>
+                {{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
+                Phone: {{ $quoteProfile->phone_number }}<br>
+                Email: {{ $quoteProfile->email }}
+            </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4 invoice-col no-padding">
+            To
+            <address>
+                <strong>{{ $quotation->client->full_name }}</strong><br>
+                {{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
+                {{ ($quotation->company) ? $quotation->company->phys_city . ', ' . $quotation->company->phys_postal_code : $quotation->client->res_city . ', ' . $quotation->client->res_postal_code }}<br>
+                Phone: {{ ($quotation->company) ? $quotation->company->phone_number : $quotation->client->cell_number }}<br>
+                Email: {{ ($quotation->company) ? $quotation->company->email : $quotation->client->email }}
+            </address>
+        </div>
+        <!-- /.col -->
+        <div class="col-xs-4 invoice-col no-padding">
+            <b>Invoice #: </b> {{ ($invoice) ? $invoice->invoice_number : '' }}<br>
+            <b>Order Date: </b> {{ ($invoice && $invoice->invoice_date) ? date('d/m/Y', $invoice->invoice_date) : '' }}<br>
+            <b>Order #:</b> {{ $quotation->quote_number }}<br>
+            @if($quotation->payment_option == 2)
+                <b>Pmt Term:</b> {{ $paymentTerm . ' (' . $remainingTerm . ' remaining)' }}<br>
+            @endif
+            @if($invoice->payment_due_date)
+                <b>Pmt Due:</b> {{ ($invoice && $invoice->payment_due_date) ? date('d/m/Y', $invoice->payment_due_date) : '' }}<br>
+            @endif
+            <b>Account:</b> {{ ($quotation->account) ? $quotation->account->account_number : '' }}
+        </div>
+        <!-- /.col -->
     </div>
 
     <div class="row">
