@@ -16,8 +16,8 @@
 						<td class="col-md-6 invoice-col">
 							<address>
 								<strong>{{ $quotation->client->full_name }}</strong><br>
-								physical Address: {{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
-								Postal Address: {{ ($quotation->company) ? $quotation->company->phys_city . ', ' . $quotation->company->phys_postal_code : $quotation->client->res_city . ', ' . $quotation->client->res_postal_code }}<br>
+								{{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
+								{{ ($quotation->company) ? $quotation->company->phys_city . ', ' . $quotation->company->phys_postal_code : $quotation->client->res_city . ', ' . $quotation->client->res_postal_code }}<br>
 								Phone: {{ ($quotation->company) ? $quotation->company->phone_number : $quotation->client->cell_number }}<br>
 								Email: {{ ($quotation->company) ? $quotation->company->email : $quotation->client->email }}
 							</address>
