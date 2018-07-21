@@ -42,13 +42,19 @@
                         <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->
                     </h2>
                 @else
-					  <table class="table table-hover" >
+					<h2 class="page-header">
+					  <table class="table table-bordered table-hover">
 						<thead>
-							<tr style="border: 0;">
-								<td class="col-md-6 invoice-col"  style="border: 0;">
+						<tr>
+							<th class="col-md-12 invoice-col"></th>
+						</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="col-md-6 invoice-col">
 									<img width="270" height="110" src="{{ $company_logo }}" alt="logo">
 								</td>
-								<td class="col-md-6 invoice-col"  style="border: 0;">
+								<td class="col-md-4 invoice-col">
 									<address>
 										<strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
 										{{ $quoteProfile->phys_address }}<br>
@@ -60,8 +66,9 @@
 									</address>
 								</td>
 							</tr>
-						</thead>
+						</tbody>
 					</table>
+					</h2>
                 @endif
             </div>
             <!-- /.col -->

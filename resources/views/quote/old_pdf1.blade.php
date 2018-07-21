@@ -42,26 +42,10 @@
                         <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->
                     </h2>
                 @else
-					  <table class="table table-hover" >
-						<thead>
-							<tr style="border: 0;">
-								<td class="col-md-6 invoice-col"  style="border: 0;">
-									<img width="270" height="110" src="{{ $company_logo }}" alt="logo">
-								</td>
-								<td class="col-md-6 invoice-col"  style="border: 0;">
-									<address>
-										<strong>{{ $quoteProfile->divisionLevelGroup->name }}</strong><br>
-										{{ $quoteProfile->phys_address }}<br>
-										{{ $quoteProfile->phys_city }}, {{ $quoteProfile->phys_postal_code }}<br>
-										Reg.: {{ $quoteProfile->registration_number }}<br>
-										VAT: {{ $quoteProfile->vat_number }}<br>
-										Phone: {{ $quoteProfile->phone_number }}<br>
-										Email: {{ $quoteProfile->email }}
-									</address>
-								</td>
-							</tr>
-						</thead>
-					</table>
+					<h2 class="page-header">
+					  <img width="270" height="110" src="{{ $company_logo }}" alt="logo">
+					  <small class="pull-right">Date:{{$date}}</small>
+					</h2>
                 @endif
             </div>
             <!-- /.col -->
