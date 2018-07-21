@@ -76,7 +76,7 @@
                             <label for="{{ 'status' }}" class="col-sm-2 control-label">Quote Statuses</label>
                             <div class="col-sm-10">
                                 <select id="status" name="status" class="form-control select2" style="width: 100%;">
-                                    <option value="1">*** Select Status ***</option>
+                                    <option value="0">*** Select Status ***</option>
                                     <option value="1">Awaiting Manager Approval</option>
                                     <option value="2">Awaiting Client Approval</option>
                                     <option value="3">Approved by Manager</option>

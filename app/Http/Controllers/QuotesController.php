@@ -769,7 +769,6 @@ class QuotesController extends Controller
                 $query->where('company_id', $companyID);
             }
         })
-        ///->whereIn('status', [1, 2])
 		->where(function ($query) use ($status) {
 				if ($status) {
                 $query->where('status', $status);
