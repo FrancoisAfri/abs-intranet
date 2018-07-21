@@ -23,4 +23,9 @@ class QuotesTermAndConditions extends Model
     {
         return $this->belongsToMany('App\Quotation');
     }
+	// terms & category
+    public function termCategory()
+    {
+        return $this->belongsTo(termsConditionsCategories::class, 'category_id');
+    }
 }

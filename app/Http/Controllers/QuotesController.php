@@ -20,6 +20,7 @@ use Barryvdh\DomPDF\PDF;
 use App\product_packages;
 use App\product_category;
 use App\product_products;
+use App\termsConditionsCategories;
 use App\Mail\ApproveQuote;
 use App\QuoteCompanyProfile;
 use Illuminate\Http\Request;
@@ -184,6 +185,17 @@ class QuotesController extends Controller
         $packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
         $termsAndConditions = QuotesTermAndConditions::where('status',1)->orderBy('term_name')->get();
 		
+		if (!empty($termsAndConditions)) $termsAndConditions->load('termCategory');
+		
+		 $termsAndConditions = DB::table('quotes_terns_conditions')
+            ->select('quotes_terns_conditions.id as term_id', 'quotes_terns_conditions.term_name',
+			'quote_terms_categories.name as cat_name','quotes_terns_conditions.category_id')
+            ->leftJoin('quote_terms_categories', 'quote_terms_categories.id', '=', 'quotes_terns_conditions.category_id')
+			->where('quotes_terns_conditions.status',1)
+			->where('quotes_terns_conditions.category_id','>',0)
+			->orderBy('cat_name')
+			->orderBy('term_name')
+			->get();
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Create a quotation';
         $data['breadcrumb'] = [
