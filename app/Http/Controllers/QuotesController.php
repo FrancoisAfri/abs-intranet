@@ -714,7 +714,7 @@ class QuotesController extends Controller
         }
         AuditReportsController::store('Quote', 'New Quote Created', 'Create by user', 0);
 
-        return redirect("/quote/view/$quote->id")->with(['success_add' => 'The quotation has been successfully added!']);
+        return redirect("/quote/view/$quote->id/01")->with(['success_add' => 'The quotation has been successfully added!']);
     }
 
     /**
