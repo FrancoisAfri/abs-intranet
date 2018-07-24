@@ -61,7 +61,7 @@
 								<th>Product</th>
 								<th class="text-center">Quantity</th>
 								<th style="text-align: right;">Unit Price</th>
-								<th>Total</th>
+								<th style="text-align: right;">Total</th>
 							</tr>
 							@foreach ($quotation->products as $product)
 								@if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
