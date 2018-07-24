@@ -50,8 +50,16 @@
                                        placeholder="Enter Description" required>
                             </div>
                         </div>
-
-
+						<div class="form-group zip-field">
+							<label for="image" class="col-sm-2 control-label">Upload a Picture</label>
+							<div class="col-sm-8">
+								@if(!empty($Cmsnews->image))
+									<img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}" width="200" height="170">
+								@endif
+								<input type="file" id="image" name="image" class="file file-loading"
+									   data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+							</div>
+						</div>
                         <div class="box-body">
                             <textarea id="send_invoice_message" name="summary" rows="10"
                                       cols="60">{{$Cmsnews->summary}}</textarea>
