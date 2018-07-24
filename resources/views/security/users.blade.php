@@ -53,7 +53,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
+                        <button id="back_to_user_search" type="button" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button>
                         <button type="submit" id="save_changes" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
                     </div>
                     <!-- /.box-footer -->
