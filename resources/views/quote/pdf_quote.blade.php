@@ -8,13 +8,14 @@
 				<thead>
 				<tr>
 					<th class="col-md-6 invoice-col">To</th>
-					<th class="col-md-6 invoice-col">#</th>
+					<th class="col-md-6 invoice-col"></th>
 				</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td class="col-md-6 invoice-col">
 							<address>
+								<strong>{{ $quotation->company->name }}</strong><br>
 								<strong>{{ $quotation->client->full_name }}</strong><br>
 								{{ ($quotation->company) ? $quotation->company->phys_address : $quotation->client->res_address }}<br>
 								{{ ($quotation->company) ? $quotation->company->phys_city . ', ' . $quotation->company->phys_postal_code : $quotation->client->res_city . ', ' . $quotation->client->res_postal_code }}<br>
@@ -60,12 +61,13 @@
 								<th>Product</th>
 								<th class="text-center">Quantity</th>
 								<th style="text-align: right;">Unit Price</th>
+								<th>Total</th>
 							</tr>
 							@foreach ($quotation->products as $product)
 								@if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
 									<?php $prevCategory = 0; ?>
 									<tr>
-										<th class="success" colspan="4" style="text-align: center;">
+										<th class="success" colspan="5" style="text-align: left;">
 											<i>{{ $product->ProductPackages->name }}</i>
 										</th>
 									</tr>
@@ -78,6 +80,9 @@
 									</td>
 									<td style="vertical-align: middle; text-align: right;">
 										{{ $product->pivot->price ? 'R ' . number_format($product->pivot->price, 2) : '' }}
+									</td>
+									<td style="vertical-align: middle; text-align: right;">
+										{{ $product->pivot->price ? 'R ' . number_format($product->pivot->price * $product->pivot->quantity , 2) : '' }}
 									</td>
 								</tr>
 								<?php $prevCategory = $product->category_id; ?>
@@ -93,6 +98,9 @@
 									</td>
 									<td class="success" style="vertical-align: middle; text-align: right;">
 										{{ ($package->pivot->price) ? 'R ' . number_format($package->pivot->price, 2) : '' }}
+									</td>
+									<td style="vertical-align: middle; text-align: right;">
+										{{ $package->pivot->price ? 'R ' . number_format($package->pivot->price * $package->pivot->quantity , 2) : '' }}
 									</td>
 								</tr>
 								@foreach($package->products_type as $product)
@@ -118,7 +126,7 @@
 										<th>Description</th>
 										<th style="width: 10px" nowrap class="text-center">Unit</th>
 										<th class="text-center" nowrap>Quantity</th>
-										<!--<th style="width: 10px" nowrap class="text-center"></th>-->
+										<th style="width: 10px" nowrap>Total</th>
 									</tr>
 								</thead>
 
@@ -198,6 +206,21 @@
 					<div class="col-xs-12">&nbsp;</div>
 				</div>
                     <!-- /.box-body -->
+            </div>
+			<!-- Remarks box -->
+            <div class="box box-default no-padding">
+                <div class="box-header with-border" style="text-align: center;">
+                    <p class="text-muted text-center">Comment</p>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+                    <div class="col-xs-5 no-padding">
+							<p class="no-shadow" style="margin-top: 10px;">
+								{{$quotation->quote_remarks}}
+							</p>
+						</div>
+                </div>
+                <!-- /.box-body -->
             </div>
             <!-- T&C's box -->
             <div class="box box-default no-padding">
