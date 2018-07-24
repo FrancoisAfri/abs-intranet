@@ -171,6 +171,9 @@ class QuotesController extends Controller
     */
     public function createIndex()
     {
+		$date = time();
+		echo date('Y m d, H i s', $date);
+		die;
         $highestLvl = DivisionLevel::where('active', 1)
             ->orderBy('level', 'desc')->limit(1)->get()->first()
             ->load(['divisionLevelGroup' => function ($query) {
@@ -614,12 +617,14 @@ class QuotesController extends Controller
         $user = Auth::user()->load('person');
         $status = 1;
         //save quote
+		
         $quote = new Quotation();
         DB::transaction(function () use ($quote, $request, $highestLvl, $user) {
             $quoteType = $request->input('quote_type');
             $quote->quote_type = ($quoteType > 0) ? $quoteType : null;
             $quote->company_id = ($request->input('company_id') > 0) ? $request->input('company_id') : null;
             $quote->client_id = $request->input('contact_person_id');
+            $quote->quote_date = time();
             $quote->division_id = $request->input('division_id');
             $quote->quote_title = $request->input('quote_title');
             $quote->quote_remarks = $request->input('quote_remarks');
