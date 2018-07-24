@@ -64,7 +64,7 @@
                     @endforeach
 
                     <div class="form-group zip-field">
-                        <label for="image" class="col-sm-2 control-label">Upload Zip File</label>
+                        <label for="image" class="col-sm-2 control-label">Upload a Picture</label>
 
                         <div class="col-sm-8">
 

@@ -70,11 +70,12 @@
                             <ul class="timeline">
                                 <li>
                                     <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
-                                    <div class="timeline-panel" style="max-height: 300px; overflow-y: scroll;">
+                                    <div class="timeline-panel" style="max-height: 300px; max-width: 450px; overflow-y: scroll; overflow-x: scroll;">
                                         {{--<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">--}}
                                         <div class="timeline-heading">
                                             <h4 class="timeline-title">
-                                                <N>{{!empty($ceonews->name) ? $ceonews->name : ''}}</N>
+												<p style="padding:0 15 px; float: left"><img src="{{ Storage::disk('local')->url("CMS/images/$ceonews->image") }}" width="250" height="220"></p>
+                                                <p style="margin-top:20px;"><N>{{!empty($ceonews->name) ? $ceonews->name : ''}}</N></p>
                                             </h4>
                                             <p>
                                                 <small class="text-muted"><i
