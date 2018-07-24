@@ -36,7 +36,7 @@
         <!-- title row -->
         <div class="row">
             <div class="col-xs-12 no-padding">
-                @if(!empty($quoteProfile->letterhead))
+                @if(!empty($quoteProfile->letterhead_url))
 					<h2 class="page-header">
                         <img width="85%" height="100" src="{{ public_path() . $quoteProfile->letterhead_url }}" alt="letterhead">
                         <!--<img width="196" height="60" src="{{ $quoteProfile->letterhead_url }}" alt="letterhead">-->

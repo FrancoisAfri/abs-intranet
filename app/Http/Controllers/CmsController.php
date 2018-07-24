@@ -291,7 +291,17 @@ class CmsController extends Controller
         $news->summary = html_entity_decode($NewsData['summary']);
         $news->date = time();
         $news->update();
-
+		//Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = $news->id . "image." . $fileExt;
+                $request->file('image')->storeAs('CMS/images', $fileName);
+                //Update file name in the database
+                $news->image = $fileName;
+                $news->update();
+            }
+        }
         AuditReportsController::store('Content Management', 'Company News Content  Updated', "Company News Content  Updated", 0);
         return back()->with('success_application', "Content Update successfully.");
 
