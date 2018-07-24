@@ -41,7 +41,7 @@ class EmployeeCompanySetupController extends Controller
         $Qualif_type = DB::table('Qualification_type')->orderBy('id')->get();
         #Qualification_type::where('status', 1)->get();
         $employees = HRPerson::where('status', 1)->get();
-        $highestLvl = DivisionLevel::where('active', 1)->orderBy('name', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
+        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
         $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
         if ($highestLvl->level > $lowestactiveLvl) {
             $childLevelname = DivisionLevel::where('level', $highestLvl->level - 1)->get()->first()->plural_name;
