@@ -26,7 +26,6 @@ class CmsController extends Controller
 
     public function addnews()
     {
-
         $Cmsnews = Cmsnews::all();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
@@ -218,6 +217,17 @@ class CmsController extends Controller
         $crmNews->date = time();
         $crmNews->status = 1;
         $crmNews->save();
+		//Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = $crmNews->id . "image." . $fileExt;
+                $request->file('image')->storeAs('CMS/images', $fileName);
+                //Update file name in the database
+                $crmNews->image = $fileName;
+                $crmNews->update();
+            }
+        }
 
 
         AuditReportsController::store('Content Management', 'Company Ceo News Added', "Company News Content Management Accessed", 0);
