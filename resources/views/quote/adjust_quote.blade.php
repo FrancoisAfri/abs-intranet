@@ -215,7 +215,7 @@
                                             <div class="form-group no-margin">
                                                 <label for="" class="col-sm-4 control-label"></label>
                                                 <div class="col-sm-8">
-                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1"></label>
+                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1" checked></label>
                                                 </div>
                                             </div>
                                         </td>
