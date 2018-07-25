@@ -816,6 +816,12 @@ class QuotesController extends Controller
         $paymentTerm = null;
         $remainingTerm = null;
 		//return $quotation;
+		$hrID = Auth::user()->person->id;
+		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'quote')->where('security_modules_access.access_level', '>=', 3)
+            ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
+			
         if ($isInvoice) {
             $quotation->load('invoices', 'account');
 
@@ -889,6 +895,7 @@ class QuotesController extends Controller
         $data['balanceDue'] = $total - $totalPaid;
         $data['paymentTerm'] = $paymentTerm;
         $data['remainingTerm'] = $remainingTerm;
+        $data['userAccess'] = $userAccess;
 		
         AuditReportsController::store('Quote', 'View Quote Page Accessed', 'Accessed By User', 0);
 		

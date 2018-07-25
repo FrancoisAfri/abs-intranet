@@ -176,7 +176,7 @@ class CmsController extends Controller
         }
 
         AuditReportsController::store('Content Management', 'Company News Updated', "Company News Content Management Accessed", 0);
-        return back()->with('success_application', "Content Update successfully.");
+        return redirect('/cms/editCeonews/' . $news->id)->with('success_application', "Content Update successfully.");
 
     }
 
