@@ -212,7 +212,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer text-center">
 					<button type="submit" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        @if($quotation->status == 1)<!-- TODO: Only managers or superusers should do this -->
+                        @if($quotation->status == 1 && !empty($userAccess))<!-- TODO: Only managers or superusers should do this -->
                             <button type="button" class="btn btn-primary btn-success" id="approve_quote" onclick="postData({{$quotation->id}}, 'approve_quote');"><i class="fa fa-check"></i> Approve Quote</button>
                             <button type="button" class="btn btn-primary btn-danger" id="decline_quote" onclick="postData({{$quotation->id}}, 'decline_quote');"><i class="fa fa-times"></i> Decline Quote</button>
                             <button type="button" class="btn btn-primary btn-warning" id="cancel_quote" onclick="postData({{$quotation->id}}, 'cancel_quote');"><i class="fa fa-trash"></i> Cancel Quote</button>

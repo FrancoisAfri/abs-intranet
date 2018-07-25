@@ -84,9 +84,9 @@
                                             </p>
                                         </div>
                                         <div class="timeline-body">
-                                            <p>{!!$ceonews->summary!!}.</p>
+                                            <p><font size="3">{!!$ceonews->summary!!}.</font></p>
                                             <div>
-                                                <div class="pull-right">
+                                                <!--<div class="pull-right">
                                                     <span class="label label-info">{{$surname . ' ' . $names}}</span>
                                                     <span class="label label-primary">story</span>
                                                     {{--<span class="label label-success">blog</span>--}}
@@ -94,7 +94,7 @@
                                                     {{--<span class="label label-warning">Warning</span>--}}
                                                     {{--<span class="label label-danger">Danger</span>--}}
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <hr>
                                     </div>
