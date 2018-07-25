@@ -419,7 +419,7 @@ class QuotesController extends Controller
     }
 
     // Decline Quote
-    public function declineQuote(Quotation $quote)
+    public function declineQuote(Quotation $quote, $isClientApproval = false, $rejectionReason= '')
     {
         if ($quote->status == 1) {
             $stastus = -3;
@@ -429,7 +429,7 @@ class QuotesController extends Controller
         $quote->status = $stastus;
         $quote->update();
         $changedStatus = $this->quoteStatuses[$stastus];
-
+		if (!empty($rejectionReason)) $changedStatus = $changedStatus." "."Rejection Reason: ".$rejectionReason;
         // Add to quote history
         $QuoteApprovalHistory = new QuoteApprovalHistory();
         $QuoteApprovalHistory->quotation_id = $quote->id;
@@ -442,7 +442,19 @@ class QuotesController extends Controller
         AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", 'Edited by User', 0);
         return back();
     }
+	
+	// Decline Quote
+    public function clientDeclineQuote(Request $request,Quotation $quote)
+    {
+        $this->validate($request, [
+            'rejection_reason' => 'bail|required',
+        ]);
 
+        $rejectionReason = $request->input('rejection_reason');
+
+        return $this->declineQuote($quote, true, $rejectionReason);
+    }
+	
     // Cancel quote
     public function cancelQuote(Quotation $quote)
     {

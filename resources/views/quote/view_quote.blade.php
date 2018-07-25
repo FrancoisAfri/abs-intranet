@@ -190,23 +190,6 @@
                                     </tr>
                                 </table>
                             </div>
-							<!--<div>
-                                <table class="table">
-                                    <tr>
-                                        <th style="text-align: center;" colspan="4">Quote History</th>
-									</tr>
-									<tr>
-                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
-                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
-                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
-                                        <td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align: left; vertical-align: middle;">Discount{{ $discountPercent ? $discountPercent . '%' : '' }}:</th>
-                                        <td style="text-align: right; vertical-align: middle;" id="discount-amount" nowrap>{{ 'R ' . number_format($discountAmount, 2) }}</td>
-                                    </tr>
-                                </table>
-                            </div>-->
                         </div>
                     </div>
                     <!-- /.box-body -->
@@ -220,7 +203,8 @@
                         @if($quotation->status == 2)
                             <!--<button type="button" class="btn btn-primary btn-success" id="client_approve" onclick="postData({{$quotation->id}}, 'client_approve');"><i class="fa fa-check"></i> Client Approved</button>-->
                             <button type="button" class="btn btn-primary btn-success" id="client_approve" data-toggle="modal" data-target="#purchase-type-modal"><i class="fa fa-check"></i> Client Approved</button>
-                            <button type="button" class="btn btn-primary btn-danger" id="client_declined" onclick="postData({{$quotation->id}}, 'client_declined');"><i class="fa fa-times"></i> Client Rejected</button>
+							<button type="button" class="btn btn-primary btn-danger" id="client_declined" data-toggle="modal" data-target="#client-response-modal"><i class="fa fa-times"></i> Client Rejected</button>
+                           <!-- <button type="button" class="" id="" onclick="postData({{$quotation->id}}, 'client_declined');"><i class=""></i> </button>-->
                         @endif
                         @if($quotation->status < 2)
                             <button type="button" class="btn btn-primary btn-warning" id="modify_quote" onclick="postData({{$quotation->id}}, 'modify_quote');"><i class="fa fa-pencil-square-o"></i> Modify Quote</button>
@@ -317,6 +301,22 @@
                 var successMsg = 'The quotation has been successfully approved.';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+			
+			//Post Reason  for rejectionusing ajax
+            $('#save-rejection-reason').on('click', function() {
+                var strUrl = '/quote/client-decline-quote/' + {{ $quotation->id }};
+                var modalID = 'client-response-modal';
+                var objData = {
+                    rejection_reason: $('#'+modalID).find('#rejection_reason').val(),
+                    _token: $('#'+modalID).find('input[name=_token]').val()
+                };
+                var submitBtnID = 'save-rejection-reason';
+                var redirectUrl = '/quote/view/' + {{ $quotation->id }} + '/01';
+                //var redirectUrl = null;
+                var successMsgTitle = 'Quote Rejected!';
+                var successMsg = 'Rejection Reason Saved successfully.';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
         });
         function postData(id, data)
         {
@@ -326,8 +326,8 @@
                 location.href = "/quote/decline_quote/" + id;
             else if (data == 'client_approve')
                 location.href = "/quote/approve_quote/" + id;
-            else if(data == 'client_declined')
-                location.href = "/quote/decline_quote/" + id;
+            /*else if(data == 'client_declined')
+                location.href = "/quote/decline_quote/" + id;*/
             else if(data == 'cancel_quote')
                 location.href = "/quote/cancel_quote/" + id;
             else if(data == 'modify_quote')

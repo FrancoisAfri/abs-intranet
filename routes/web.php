@@ -965,6 +965,8 @@ Route::get('quote/view/{quotation}/pdf', 'QuotesController@viewPDFQuote');
 Route::get('quote/approve_quote/{quote}', 'QuotesController@approveQuote');
 Route::post('quote/client-approve/{quote}', 'QuotesController@clientApproveQuote');
 Route::get('quote/decline_quote/{quote}', 'QuotesController@declineQuote');
+Route::post('quote/client-decline-quote/{quote}', 'QuotesController@clientDeclineQuote');
+//Route::get('quote/decline_quote/{quote}', 'QuotesController@');
 Route::get('quote/modify_quote/{quote}', 'QuotesController@updateQuoteIndex');
 Route::post('quote/adjust_modification/{quote}', 'QuotesController@adjustQuoteModification');
 Route::post('quote/search', 'QuotesController@searchResults');
