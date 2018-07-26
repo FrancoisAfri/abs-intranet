@@ -71,7 +71,7 @@ class Quotation extends Model
      */
     public function products()
     {
-        return $this->belongsToMany('App\product_products', 'quoted_products', 'quotation_id', 'product_id')->orderBy('category_id')->withPivot('price', 'quantity')->withTimestamps();
+        return $this->belongsToMany('App\product_products', 'quoted_products', 'quotation_id', 'product_id')->orderBy('category_id')->withPivot('price', 'quantity', 'comment')->withTimestamps();
     }
 
     /**
