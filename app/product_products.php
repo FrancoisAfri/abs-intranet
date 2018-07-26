@@ -12,7 +12,7 @@ class product_products extends Model
     // Product & category
     public function ProductPackages()
     {
-        return $this->belongsTo(product_category::class, 'category_id')->orderBy('category_id');
+        return $this->belongsTo(product_category::class, 'category_id')->orderBy('id');
     }
 
     public function PackadgesTypes()
