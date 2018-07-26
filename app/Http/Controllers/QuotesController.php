@@ -777,10 +777,11 @@ class QuotesController extends Controller
     public function searchResults(Request $request)
     {
         $companyID = trim($request->company_id);
-		
+
         $contactPersonID = $request->contact_person_id;
         $personPassportNum = $request->passport_number;
         $divisionID = $request->division_id;
+
         $status = $request->status;
         $highestLvl = DivisionLevel::where('active', 1)
             ->orderBy('level', 'desc')->limit(1)->get()->first();
@@ -792,6 +793,11 @@ class QuotesController extends Controller
 		->where(function ($query) use ($status) {
 				if ($status) {
                 $query->where('status', $status);
+				}
+            })
+		->where(function ($query) use ($divisionID) {
+				if ($divisionID) {
+                $query->where('division_id', $divisionID);
 				}
             })
         ->with('products', 'packages', 'person', 'company', 'client', 'divisionName')
@@ -827,7 +833,7 @@ class QuotesController extends Controller
         $paymentTerm = null;
         $remainingTerm = null;
 		//return $quotation;
-		$hrID = Auth::user()->person->id;
+		$hrID = Auth::user()->id;
 		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
             ->where('security_modules.code_name', 'quote')->where('security_modules_access.access_level', '>=', 3)

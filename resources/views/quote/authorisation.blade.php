@@ -167,7 +167,7 @@
 	function postData(id, data)
 	{
 		if (data == 'view_quote')
-			location.href = "/quote/view/" + id;
+			location.href = "/quote/view/" + id + "/01";
 	}
 </script>
 @endsection
