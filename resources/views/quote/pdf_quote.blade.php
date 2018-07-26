@@ -59,6 +59,7 @@
 							<tr>
 								<th style="width: 10px">#</th>
 								<th>Product</th>
+								<th>Comment</th>
 								<th class="text-center">Quantity</th>
 								<th style="text-align: right;">Unit Price</th>
 								<th style="text-align: right;">Total</th>
@@ -67,7 +68,7 @@
 								@if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
 									<?php $prevCategory = 0; ?>
 									<tr>
-										<th class="success" colspan="5" style="text-align: left;">
+										<th class="success" colspan="6" style="text-align: left;">
 											<i>{{ $product->ProductPackages->name }}</i>
 										</th>
 									</tr>
@@ -75,6 +76,7 @@
 								<tr>
 									<td style="vertical-align: middle;">{{ $loop->iteration }}</td>
 									<td style="vertical-align: middle;">{{ $product->name }}</td>
+									<td style="vertical-align: middle;  width: 200px">{{ $product->pivot->comment }}</td>
 									<td style="vertical-align: middle; width: 80px; text-align: center;">
 										{{ $product->pivot->quantity }}
 									</td>
