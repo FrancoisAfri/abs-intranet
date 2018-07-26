@@ -685,7 +685,6 @@ class QuotesController extends Controller
                     }
                 }
             }
-
             //save quote's T&C's
             $tcIDs = ($request->input('tc_id')) ? $request->input('tc_id') : [];
             $quote->termsAndConditions()->sync($tcIDs);
