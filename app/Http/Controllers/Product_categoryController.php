@@ -61,8 +61,6 @@ class Product_categoryController extends Controller
         return view('products.product_categories')->with($data);
     }
 
-    //
-
     public function productView(Product_category $Category)
     {
 	
@@ -73,13 +71,8 @@ class Product_categoryController extends Controller
                 ->where('code_name', 'quote')
                 ->where('user_id', Auth::user()->person->user_id)
                 ->first();
-
-
-            $jobCategories = product_category::orderBy('id', 'asc')->get();
-
-            $products = product_products::orderBy('id', 'asc')->get();
-            //return $products;
-
+            $jobCategories = product_category::orderBy('name', 'asc')->get();
+            $products = product_products::orderBy('name', 'asc')->get();
             $Category->load('productCategory');
             $data['page_title'] = 'Manage Products Product';
             $data['page_description'] = 'Products page';

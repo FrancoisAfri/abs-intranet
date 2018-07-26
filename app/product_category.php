@@ -11,7 +11,7 @@ class product_category extends Model
 
     public function productCategory()
     {
-        return $this->hasMany(product_products::class, 'category_id');
+        return $this->hasMany(product_products::class, 'category_id')->orderBy('name');
     }
 
     // add a function to add a document type from the relationship
