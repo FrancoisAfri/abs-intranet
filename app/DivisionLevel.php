@@ -17,19 +17,19 @@ class DivisionLevel extends Model
     //relationship division level details and each specific division level(one to many)
     public function divisionLevelGroup() {
         if ($this->level === 5) {
-            return $this->hasMany(DivisionLevelFive::class, 'division_level_id');
+            return $this->hasMany(DivisionLevelFive::class, 'division_level_id')->orderBy('name');
         }
         elseif ($this->level === 4) {
-            return $this->hasMany(DivisionLevelFour::class, 'division_level_id');
+            return $this->hasMany(DivisionLevelFour::class, 'division_level_id')->orderBy('name');
         }
         if ($this->level === 3) {
-            return $this->hasMany(DivisionLevelThree::class, 'division_level_id');
+            return $this->hasMany(DivisionLevelThree::class, 'division_level_id')->orderBy('name');
         }
         if ($this->level === 2) {
-            return $this->hasMany(DivisionLevelTwo::class, 'division_level_id');
+            return $this->hasMany(DivisionLevelTwo::class, 'division_level_id')->orderBy('name');
         }
         if ($this->level === 1) {
-            return $this->hasMany(DivisionLevelOne::class, 'division_level_id');
+            return $this->hasMany(DivisionLevelOne::class, 'division_level_id')->orderBy('name');
         }
     }
     
