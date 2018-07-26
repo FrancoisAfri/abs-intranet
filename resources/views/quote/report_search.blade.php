@@ -125,7 +125,7 @@
                         </div>-->
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right">Genarate Report<i class="fa fa-arrow-right"></i></button>
+                        <button type="submit" class="btn btn-primary pull-right">Genarate Report <i class="fa fa-arrow-right"></i></button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
