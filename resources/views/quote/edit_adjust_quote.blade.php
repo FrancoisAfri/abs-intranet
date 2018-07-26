@@ -59,10 +59,10 @@
                                         @endif
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                            <td style="vertical-align: middle;">{{ $product->name }}</td>
+                                            <td style="vertical-align: middle;">testing the comment per items and see</td>
 											<td style="vertical-align: middle; width: 200px;">
                                                 <input type="text" class="form-control input-sm" name="comment[{{ $product->id }}]"
-                                                       value="">
+                                                       value="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->comment : '' }}">
                                             </td>
                                             <td style="vertical-align: middle; width: 80px;">
                                                 <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
