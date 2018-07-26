@@ -1205,10 +1205,11 @@ class QuotesController extends Controller
                 //save quote's products
                 $prices = $request->input('current_price');
                 $quantities = $request->input('quantity');
+				$comments = $request->input('comment');
                 $quote->products()->detach();
                 if ($prices) {
                     foreach ($prices as $productID => $price) {
-                        $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID]]);
+                        $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID], 'comment' => $comments[$productID]]);
                     }
                 }
 

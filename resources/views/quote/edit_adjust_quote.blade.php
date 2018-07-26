@@ -44,6 +44,7 @@
                                     <tr>
                                         <th style="width: 10px">#</th>
                                         <th>Product</th>
+										<th>Comment</th>
                                         <th>Quantity</th>
                                         <th style="text-align: right;">Unit Price</th>
                                     </tr>
@@ -51,7 +52,7 @@
                                         @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
                                             <?php $prevCategory = 0; ?>
                                             <tr>
-                                                <th class="success" colspan="4" style="text-align: center;">
+                                                <th class="success" colspan="5" style="text-align: center;">
                                                     <i>{{ $product->ProductPackages->name }}</i>
                                                 </th>
                                             </tr>
@@ -59,6 +60,10 @@
                                         <tr>
                                             <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
                                             <td style="vertical-align: middle;">{{ $product->name }}</td>
+											<td style="vertical-align: middle; width: 200px;">
+                                                <input type="text" class="form-control input-sm" name="comment[{{ $product->id }}]"
+                                                       value="">
+                                            </td>
                                             <td style="vertical-align: middle; width: 80px;">
                                                 <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
                                                        value="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->quantity : 1 }}" data-price="{{ ($quote->products && $quote->products->contains('id', $product->id)) ? $quote->products->find($product->id)->pivot->price : 1 }}" onchange="subtotal()" required>
