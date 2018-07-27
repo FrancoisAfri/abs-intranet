@@ -202,7 +202,8 @@
 									<input type="text" class="form-control" id="company_website" name="company_website" value="{{ ($companyDetails) ? $companyDetails->company_website : '' }}" placeholder="Company Website ">
 								</div>
 							</div>
-						</div><div class="form-group{{ $errors->has('password_expiring_month') ? ' has-error' : '' }}">
+						</div>
+						<div class="form-group{{ $errors->has('password_expiring_month') ? ' has-error' : '' }}">
 							<label for="company_website" class="col-sm-2 control-label">Password Duration (Months)</label>
 
 							<div class="col-sm-10">
@@ -214,6 +215,30 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group{{ $errors->has('login_background_image') ? ' has-error' : '' }}">
+                            <label for="login_background_image" class="col-sm-2 control-label">Login Background Image</label>
+
+                            @if( $companyDetails && !empty($companyDetails->login_background_image_url) )
+                                <div class="col-sm-5" style="margin-bottom: 10px;">
+                                    <img src="{{ $companyDetails->login_background_image_url }}" class="img-responsive img-thumbnail" style="max-height: 200px;">
+                                </div>
+                            @endif
+                            <div class="{{ ($companyDetails && !empty($companyDetails->login_background_image_url)) ? 'col-sm-5' : 'col-sm-10' }}">
+                                <input type="file" id="login_background_image" name="login_background_image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            </div>
+                        </div>
+						<div class="form-group{{ $errors->has('system_background_image') ? ' has-error' : '' }}">
+                            <label for="system_background_image" class="col-sm-2 control-label">System Background Image</label>
+
+                            @if( $companyDetails && !empty($companyDetails->system_background_image_url) )
+                                <div class="col-sm-5" style="margin-bottom: 10px;">
+                                    <img src="{{ $companyDetails->system_background_image_url }}" class="img-responsive img-thumbnail" style="max-height: 200px;">
+                                </div>
+                            @endif
+                            <div class="{{ ($companyDetails && !empty($companyDetails->system_background_image_url)) ? 'col-sm-5' : 'col-sm-10' }}">
+                                <input type="file" id="system_background_image" name="system_background_image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

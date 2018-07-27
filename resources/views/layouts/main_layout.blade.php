@@ -5,6 +5,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
 <head>
+	<style type="text/css">
+            body { background-image: url(<?php echo \App\CompanyIdentity::systemSettings('system_background_image_url'); ?>); background-repeat: no-repeat; background-position: center; background-size: cover; height: 100%;}
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- CSRF Token -->

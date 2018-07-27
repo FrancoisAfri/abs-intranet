@@ -20,7 +20,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-envelope"></i>
                                 </div>
-                                <input type="text" class="form-control" id="reset_email" name="reset_email" value="{{ old('reset_email') }}" placeholder="Email Address">
+                                <input type="text" class="form-control" id="reset_email" name="reset_email" value="{{ old('reset_email') }}" placeholder="Email Address" required>
                             </div>
                         </div>
                     </div>
