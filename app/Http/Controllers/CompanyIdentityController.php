@@ -36,12 +36,16 @@ class CompanyIdentityController extends Controller
 
             //Upload company logo if any
             $this->uploadLogo($request, $compDetails);
+            $this->uploadLoginImage($request, $compDetails);
+            $this->uploadSystemImage($request, $compDetails);
         } else { //insert
             $compDetails = new CompanyIdentity($request->all());
             $compDetails->save();
 
             //Upload company logo if any
             $this->uploadLogo($request, $compDetails);
+            $this->uploadLoginImage($request, $compDetails);
+            $this->uploadSystemImage($request, $compDetails);
         }
 
         return back()->with('changes_saved', 'Your changes have been saved successfully.');
@@ -61,6 +65,30 @@ class CompanyIdentityController extends Controller
                 $request->file('company_logo')->storeAs('logos', $fileName);
                 //Update file name in the database
                 $compDetails->company_logo = $fileName;
+                $compDetails->update();
+            }
+        }
+    } 
+	private function uploadLoginImage(Request $request, CompanyIdentity $compDetails) {
+        if ($request->hasFile('login_background_image')) {
+            $fileExt = $request->file('login_background_image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('login_background_image')->isValid()) {
+                $fileName = "login_background_image_" . time() . '.' . $fileExt;
+                $request->file('login_background_image')->storeAs('logos', $fileName);
+                //Update file name in the database
+                $compDetails->login_background_image = $fileName;
+                $compDetails->update();
+            }
+        }
+    }
+	private function uploadSystemImage(Request $request, CompanyIdentity $compDetails) {
+        if ($request->hasFile('system_background_image')) {
+            $fileExt = $request->file('system_background_image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('system_background_image')->isValid()) {
+                $fileName = "system_background_image_" . time() . '.' . $fileExt;
+                $request->file('system_background_image')->storeAs('logos', $fileName);
+                //Update file name in the database
+                $compDetails->system_background_image = $fileName;
                 $compDetails->update();
             }
         }

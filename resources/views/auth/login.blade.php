@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<style type="text/css">
+            body { background-image: url(<?php echo \App\CompanyIdentity::systemSettings('login_background_image_url'); ?>); background-repeat: no-repeat; background-position: center; background-size: cover; height: 100%;}
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ \App\CompanyIdentity::systemSettings('company_name') . 'online system'  }}</title>
@@ -22,15 +25,17 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <![endif]
+	login-page-->
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition">
 <div class="login-box">
     <div class="login-logo">
         <img src="{{ \App\CompanyIdentity::systemSettings('company_logo_url') }}" width="100%" class="img-responsive" alt="Company Logo">
         <!-- <a href="/"><b>NU-LAXMI</b> LEASING</a> -->
     </div>
     <!-- /.login-logo -->
+	
     <div class="login-box-body">
         <p class="login-box-msg">Please sign in with your email and password</p>
 

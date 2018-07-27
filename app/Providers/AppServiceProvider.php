@@ -88,6 +88,8 @@ class AppServiceProvider extends ServiceProvider
             $skinColor = $companyDetails['sys_theme_color'];
 
             $data['skinColor'] = $skinColor;
+            $data['system_background_image_url'] = $companyDetails['system_background_image_url'];
+            $data['login_background_image_url'] = $companyDetails['login_background_image_url'];
 
             $view->with($data);
         });

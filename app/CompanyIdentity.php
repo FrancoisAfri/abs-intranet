@@ -16,7 +16,7 @@ class CompanyIdentity extends Model
         'company_name', 'full_company_name', 'header_name_bold', 'header_name_regular'
 		, 'header_acronym_bold','header_acronym_regular', 'company_logo'
 		, 'sys_theme_color', 'mailing_name', 'mailing_address', 'support_email'
-		,'company_website','password_expiring_month'
+		,'company_website','password_expiring_month','system_background_image','login_background_image'
     ];
 
     /**
@@ -27,6 +27,16 @@ class CompanyIdentity extends Model
     public function getCompanyLogoUrlAttribute()
     {
         if (! empty($this->company_logo)) return Storage::disk('local')->url("logos/$this->company_logo");
+        else return '';
+    } 
+	public function getSystemBackgroundImageUrlAttribute()
+    {
+        if (! empty($this->system_background_image)) return Storage::disk('local')->url("logos/$this->system_background_image");
+        else return '';
+    } 
+	public function getLoginbackgroundImageUrlAttribute()
+    {
+        if (! empty($this->login_background_image)) return Storage::disk('local')->url("logos/$this->login_background_image");
         else return '';
     }
 
@@ -53,6 +63,8 @@ class CompanyIdentity extends Model
         $settings['full_company_name'] = ($companyDetails && $companyDetails->full_company_name) ? $companyDetails->full_company_name : 'Afrixcel Business Solutions (PTY) LTD';
         $settings['support_email'] = ($companyDetails && $companyDetails->support_email) ? $companyDetails->support_email : 'support@afrixcel.co.za';
         $settings['company_logo_url'] = ($companyDetails && $companyDetails->company_logo_url) ? $companyDetails->company_logo_url : Storage::disk('local')->url('logos/logo.jpg');
+        $settings['system_background_image_url'] = ($companyDetails && $companyDetails->system_background_image_url) ? $companyDetails->system_background_image_url : '';
+        $settings['login_background_image_url'] = ($companyDetails && $companyDetails->login_background_image_url) ? $companyDetails->login_background_image_url : '';
         if ($settingName != null) {
             if (array_key_exists($settingName, $settings)) return $settings[$settingName];
             else return null;

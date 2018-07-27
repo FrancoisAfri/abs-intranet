@@ -88,6 +88,7 @@ class UsersController extends Controller
             ['title' => 'Security', 'path' => '/users/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
+		//return $companyDetails;
         $data['active_mod'] = 'Security';
         $data['active_rib'] = 'Setup';
         $data['companyDetails'] = $companyDetails;
@@ -537,13 +538,12 @@ class UsersController extends Controller
     }
 	// Reset Password
 	public function recoverPassword(Request $request) {
-        //return response()->json(['message' => $request['current_password']]);
 
-        $validator = Validator::make($request->all(),[
-            'reset_email' => 'bail|required|exists:users,email',
-        ]);
+        /*$validator = Validator::make($request->all(),[
+            'reset_email' => 'required',
+        ]);*/
 
-        $validator->validate();
+        //$validator->validate();
 
         //find the user
         $user = User::where('email', $request['reset_email'])->first();
@@ -555,7 +555,7 @@ class UsersController extends Controller
 
         //email new password to user
         Mail::to("$user->email")->send(new ResetPassword($user, $randomPass));
-		AuditReportsController::store('Security', 'User Password Recoverd', "User Password Recoverd", 0);
+		AuditReportsController::store('Security', 'User Password Recoverd', "User Password Recoverd; ".$request['reset_email'], 0);
         return response()->json(['success' => 'Password successfully reset.'], 200);
     }
 
