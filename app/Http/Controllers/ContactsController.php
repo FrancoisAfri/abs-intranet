@@ -653,7 +653,7 @@ class ContactsController extends Controller
         //return $CommunicationData;
         # Save email
         $user = Auth::user()->load('person');;
-
+		$email = !empty($user->person->email) ? $user->person->email : '';
         foreach ($CommunicationData['clients'] as $clientID) {
             $client = ContactPerson::where('id', $clientID)->first();
 			$companyID = !empty($client->company_id) ? $client->company_id :0 ;
@@ -668,7 +668,7 @@ class ContactsController extends Controller
             $ContactsCommunication->save();
             if ($CommunicationData['message_type'] == 1 && !empty($client->email))
                 # Send Email to Client
-                Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication, $user));
+                Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication, $email));
 			elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
 					$mobileArray[] = $this->formatCellNo($client->cell_number);
         }

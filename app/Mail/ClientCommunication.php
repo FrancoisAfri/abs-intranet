@@ -17,7 +17,7 @@ class ClientCommunication extends Mailable
     use Queueable, SerializesModels;
 	public $client;
 	public $ContactsCommunication;
-	public $user;
+	public $email;
 	public $urls = '/';
 	
     /**
@@ -25,11 +25,11 @@ class ClientCommunication extends Mailable
      *
      * @return void
      */
-    public function __construct(ContactPerson $client, ContactsCommunication $ContactsCommunication, User $user)
+    public function __construct(ContactPerson $client, ContactsCommunication $ContactsCommunication, $email)
 	{
 		$this->client = $client;
 		$this->ContactsCommunication = $ContactsCommunication;
-		$this->user = $user;
+		$this->email = $email;
 	}
 
     /**
@@ -50,7 +50,7 @@ class ClientCommunication extends Mailable
 		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 
 		return $this->view('mails.client_communication')
-			->from($user->person->email, $companyDetails['mailing_name'])
+			->from(!empty($this->email) ? $this->email : $companyDetails['mailing_address'], $companyDetails['mailing_name'])
 			->subject($subject)
 			->with($data);
 	}
