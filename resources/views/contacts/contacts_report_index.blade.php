@@ -123,9 +123,7 @@
                                 </div>
                             </div>
                         </div>
-                   
-
-                        </div> 
+                    </div> 
                      <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
                        <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
@@ -245,7 +243,7 @@
             }
             else if(allType == 3){
                 $('.meetings-field').show();
-                 $('.employee-field').hide();
+                 $('.employee-field').show();
                  $('form[name="contact-report-form"]').attr('action', '/contacts/reports/communication');
                  $('#gen-report').val("Submit"); 
             }

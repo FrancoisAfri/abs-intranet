@@ -366,7 +366,7 @@ class JobcardController extends Controller
     public function myjobcards()
     {
 
-        $hrID = Auth::user()->person->id;
+		$hrID = Auth::user()->id;
 		$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
 		, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
 		 ->leftjoin("hr_users_roles",function($join) use ($hrID) {
