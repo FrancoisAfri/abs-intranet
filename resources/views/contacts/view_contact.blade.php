@@ -47,7 +47,7 @@
                                     | &nbsp; &nbsp; <strong>Telephone:</strong> <em>{{ $contactPerson->company->phone_number }}</em> &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($contactPerson->company->email))
-                                    | &nbsp; &nbsp; <strong>Email:</strong> <em>{{ $contactPerson->company->email }}</em> &nbsp; &nbsp;
+                                    | &nbsp; &nbsp; <strong>Email:</strong> <em> <a href="mailto:{{ $contactPerson->company->email }}">{{ $contactPerson->company->email }}</a></em> &nbsp; &nbsp;
                                 @endif
                                 @if(!empty($contactPerson->company->full_phys_address))
                                     | &nbsp; &nbsp; <strong>Physical Address:</strong> <em>{{ $contactPerson->company->full_phys_address }}</em> &nbsp; &nbsp;
@@ -128,6 +128,7 @@
                                         <i class="fa fa-envelope"></i>
                                     </div>
                                     <input type="email" class="form-control" id="email" name="email" value="{{ $contactPerson->email }}" placeholder="Email" required>
+									<a href="mailto:{{ $contactPerson->email }}">{{ $contactPerson->email }}</a>
                                 </div>
                             </div>
                         </div>
