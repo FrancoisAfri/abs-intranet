@@ -71,7 +71,8 @@
         }
         $(function () {
             document.getElementById("back_button").onclick = function () {
-                location.href = "/users/{{$user->id}}/edit";
+                if ({{$user->type}} == 2)	location.href = "/contacts/{{$user->person->id}}/edit";
+				else location.href = "/users/{{$user->id}}/edit";;
             };
         });
     </script>

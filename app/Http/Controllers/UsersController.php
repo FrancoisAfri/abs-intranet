@@ -98,8 +98,8 @@ class UsersController extends Controller
 	public function moduleAccess(User $user) 
 	{
 		$userID = $user->id;
-		//die;
-     
+		$user->load('person');
+		//return $user;
         $modules = DB::table('security_modules')->select('security_modules.id as mod_id', 'security_modules.name as mod_name', 'security_modules_access.access_level')
 		 ->leftjoin("security_modules_access",function($join) use ($userID) {
                 $join->on("security_modules.id","=","security_modules_access.module_id")
