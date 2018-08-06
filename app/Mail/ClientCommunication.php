@@ -48,7 +48,7 @@ class ClientCommunication extends Mailable
 		$data['support_email'] = $companyDetails['support_email'];
 		$data['company_name'] = $companyDetails['full_company_name'] ;
 		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-		$email = !empty($this->email) ? $this->email : $companyDetails['mailing_address']
+		$email = !empty($this->email) ? $this->email : $companyDetails['mailing_address'];
 		return $this->view('mails.client_communication')
 			->from($email, $companyDetails['mailing_name'])
 			->subject($subject)
