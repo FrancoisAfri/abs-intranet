@@ -57,8 +57,16 @@ class ContactsController extends Controller
     public function reports()
     {
         //$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
+		$hrID = Auth::user()->person->id;
         $employees = HRPerson::where('status', 1)->get();
         // return $employees;
+		$hrID = Auth::user()->id;
+		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'job_cards')->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
+		if (!empty($userAccess))
+			$employees = HRPerson::where('status', 1)->where('id',$hrID)->get();
 
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
 
@@ -650,29 +658,33 @@ class ContactsController extends Controller
 		$mobileArray = array();
         $CommunicationData = $request->all();
         unset($CommunicationData['_token']);
-        //return $CommunicationData;
+
         # Save email
         $user = Auth::user()->load('person');;
 		$email = !empty($user->person->email) ? $user->person->email : '';
         foreach ($CommunicationData['clients'] as $clientID) {
             $client = ContactPerson::where('id', $clientID)->first();
 			$companyID = !empty($client->company_id) ? $client->company_id :0 ;
-            $ContactsCommunication = new ContactsCommunication;
-            $ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
-            $ContactsCommunication->communication_type = $CommunicationData['message_type'];
-            $ContactsCommunication->contact_id = $clientID;
-            $ContactsCommunication->company_id = $companyID;
-            $ContactsCommunication->status = 1;
-            $ContactsCommunication->sent_by = $user->person->id;
-            $ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
-            $ContactsCommunication->save();
-            if ($CommunicationData['message_type'] == 1 && !empty($client->email))
-                # Send Email to Client
-                Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication, $email));
-			elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
-					$mobileArray[] = $this->formatCellNo($client->cell_number);
+			if (!empty($companyID))
+			{
+				$ContactsCommunication = new ContactsCommunication;
+				$ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
+				$ContactsCommunication->communication_type = $CommunicationData['message_type'];
+				$ContactsCommunication->contact_id = $clientID;
+				$ContactsCommunication->company_id = $companyID;
+				$ContactsCommunication->status = 1;
+				$ContactsCommunication->sent_by = $user->person->id;
+				$ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
+				$ContactsCommunication->time_sent = date("h:i:sa");
+				$ContactsCommunication->save();
+				if ($CommunicationData['message_type'] == 1 && !empty($client->email))
+					# Send Email to Client
+					Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication, $email));
+				elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
+						$mobileArray[] = $this->formatCellNo($client->cell_number);
+			}
         }
-        if ($CommunicationData['message_type'] == 2) {
+        if ($CommunicationData['message_type'] == 2 && !empty($mobileArray)) {
             #format cell numbers
             # send out the message
             $CommunicationData['sms_content'] = str_replace("<br>", "", $CommunicationData['sms_content']);

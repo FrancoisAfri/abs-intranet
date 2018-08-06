@@ -33,6 +33,6 @@ class CreateContactsCompanydocsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table');
+        Schema::dropIfExists('company_documents');
     }
 }
