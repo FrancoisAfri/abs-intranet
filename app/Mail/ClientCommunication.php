@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\ContactPerson;
 use App\CompanyIdentity;
 use App\ContactsCommunication;
+use App\User;
 use Illuminate\Support\Facades\Storage;
 
 class ClientCommunication extends Mailable
