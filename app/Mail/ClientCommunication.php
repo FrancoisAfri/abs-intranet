@@ -24,7 +24,7 @@ class ClientCommunication extends Mailable
      *
      * @return void
      */
-    public function __construct(ContactPerson $client, ContactsCommunication $ContactsCommunication)
+    public function __construct(ContactPerson $client, ContactsCommunication $ContactsCommunication, User $user)
 	{
 		$this->client = $client;
 		$this->ContactsCommunication = $ContactsCommunication;
