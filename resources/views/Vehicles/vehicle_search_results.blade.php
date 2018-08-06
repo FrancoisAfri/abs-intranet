@@ -28,8 +28,8 @@
                                     <tr>
                                         <th></th>
                                         <th style="width: 5px; text-align: center;">Image</th>
-                                        <th>Vehicle Model/Year</th>
                                         <th>Fleet Number</th>
+                                        <th>Vehicle Model/Year</th>
                                         <th>Vehicle Registration</th>
                                         <th>VIN Numberr</th>
                                         <th>Engine Number</th>
@@ -102,8 +102,8 @@
                                                     </div>
                             </div>
                             </td>
-                            <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
                             <td>{{ !empty($card->fleet_number) ? $card->fleet_number : ''}}</td>
+                            <td>{{ !empty($card->vehicle_model . ' ' . $card->year ) ? $card->vehicle_model  . ' ' . $card->year: ''}}</td>
                             <td>{{ !empty($card->vehicle_registration) ? $card->vehicle_registration : ''}}</td>
                             <td>{{ !empty($card->chassis_number) ? $card->chassis_number : ''}}</td>
                             <td>{{ !empty($card->engine_number) ? $card->engine_number : ''}}</td>
