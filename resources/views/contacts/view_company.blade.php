@@ -76,6 +76,7 @@
                                         <i class="fa fa-envelope"></i>
                                     </div>
                                     <input type="email" class="form-control" id="email" name="email" value="{{ !empty($company->email) ? $company->email : '' }}" placeholder="Email Address" readonly>
+									<a href="mailto:{{ $company->email }}">{{ $company->email }}</a>
                                 </div>
                             </div>
                         </div>
@@ -315,6 +316,7 @@
 						<th>Company Name</th>
 						<th>Contact person</th>
 						<th>Communication Date</th>
+						<th>Communication Time</th>
 						<th>Communication Type</th>
 						<th>Message</th>
 						<th>Sent By</th>
@@ -325,6 +327,7 @@
 								<td>{{ (!empty($contactsCommunication->companyname)) ?  $contactsCommunication->companyname : ''}} </td>
 								<td>{{ !empty($contactsCommunication->first_name) && !empty($contactsCommunication->surname) ?  $contactsCommunication->first_name." ".$contactsCommunication->surname : '' }}</td>
 								<td>{{ !empty($contactsCommunication->communication_date) ? date('d M Y ', $contactsCommunication->communication_date) : '' }}</td>
+								<td>{{ !empty($contactsCommunication->time_sent) ? $contactsCommunication->time_sent : '' }}</td>
 								<td>{{ (!empty($contactsCommunication->communication_type)) ?  $communicationStatus[$contactsCommunication->communication_type] : ''}} </td>
 								<td>{{ (!empty($contactsCommunication->message)) ?  $contactsCommunication->message : ''}} </td> 
 								<td>{{ (!empty($contactsCommunication->hr_firstname) && !empty($contactsCommunication->hr_surname)) ?  $contactsCommunication->hr_firstname." ".$contactsCommunication->hr_surname : ''}} </td> 

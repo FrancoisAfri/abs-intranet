@@ -154,13 +154,11 @@
                 }
 
                 $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails';
+                    location.href = '/contacts/company/' + {{ $company->id}} +'/view';
                 });
 
                 $(function () {
-                    $('#back_button').click(function () {
-                        location.href = '/vehicle_management/viewdetails';
-                    });
+                  
                     var moduleId;
                     //Initialize Select2 Elements
                     $(".select2").select2();
