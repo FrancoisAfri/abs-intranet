@@ -282,24 +282,7 @@
                                 </div>
                             </div>
                         </div>
-                          <!--  <div class="form-group">
-                            <label for="ethnicity" class="col-sm-2 control-label">Office Created</label>
-
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-bar-chart"></i>
-                                    </div>
-                                    <select name="ethnicity" class="form-control select2">
-                                        <option value="">*** Select office client belongs too ***</option>
-                                        @foreach($ethnicities as $ethnicity)
-                                            <option value="{{ $ethnicity->id }}" {{ ($contactPerson->ethnicity == $ethnicity->id) ? ' selected' : '' }}>{{ $ethnicity->value }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div> -->
-                          <div class="form-group">
+                        <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
                             <div class="col-sm-10">
@@ -321,10 +304,6 @@
                                     <button type="button" id="change_password" class="btn btn-default btn-block btn-flat" data-toggle="modal" data-target="#myPasswordModal"><font data-toggle="tooltip" title="Click here to change password."><i class="fa fa-unlock-alt"></i> Change Password</font></button>
                                 </div>
                             </div>
-                            <!--<p class="text-muted well well-sm no-shadow lead">
-                                <a href="/contacts/{{ $contactPerson->user_id }}/reset-random-pw" class="btn btn-default btn-block btn-flat"><i class="fa fa-shield"></i> Reset Client's Password</a><br>
-                                <i>This will generate a new random password for this person. The new password will be emailed to the client.</i>
-                            </p>-->
                         @else
                             {{--create login details with the person's email--}}
                             <div class="callout callout-info">
@@ -349,10 +328,8 @@
                         @endif
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Update</button>
                         <a href="/contacts/{{ $contactPerson->id }}/viewdocuments" class="btn btn-primary " ><i class="fa fa-clipboard"> </i> Client Document(s)</a>
+						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$contactPerson->user_id}}, 'access');">Modules Access</button>
                     </div>
-                    <!-- 
-					
-						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$contactPerson->user_id}}, 'access');">Modules Access</button>/.box-footer -->
                 </form>
             </div>
             <!-- /.box -->

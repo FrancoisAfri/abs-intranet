@@ -56,7 +56,6 @@ class ContactsController extends Controller
 
     public function reports()
     {
-
         //$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->get();
         // return $employees;
@@ -85,7 +84,6 @@ class ContactsController extends Controller
 
     public function create($companyID = null)
     {
-
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
         $orgTypes = [1 => 'Private Company', 2 => 'Parastatal', 3 => 'School', 4 => 'Government', 5 => 'Other'];
         $companies = ContactCompany::where('status', 1)
@@ -233,6 +231,7 @@ class ContactsController extends Controller
     }*/
     public function edit(ContactPerson $person)
     {
+		
         $loggedInUser = Auth::user();
         $person->load('user', 'company');
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
@@ -669,7 +668,7 @@ class ContactsController extends Controller
             $ContactsCommunication->save();
             if ($CommunicationData['message_type'] == 1 && !empty($client->email))
                 # Send Email to Client
-                Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication));
+                Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication, $user));
 			elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
 					$mobileArray[] = $this->formatCellNo($client->cell_number);
         }

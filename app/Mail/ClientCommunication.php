@@ -16,6 +16,7 @@ class ClientCommunication extends Mailable
     use Queueable, SerializesModels;
 	public $client;
 	public $ContactsCommunication;
+	public $user;
 	public $urls = '/';
 	
     /**
@@ -27,6 +28,7 @@ class ClientCommunication extends Mailable
 	{
 		$this->client = $client;
 		$this->ContactsCommunication = $ContactsCommunication;
+		$this->user = $user;
 	}
 
     /**
@@ -47,7 +49,7 @@ class ClientCommunication extends Mailable
 		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 
 		return $this->view('mails.client_communication')
-			->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
+			->from($user->person->email, $companyDetails['mailing_name'])
 			->subject($subject)
 			->with($data);
 	}
