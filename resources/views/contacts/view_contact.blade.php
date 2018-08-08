@@ -329,7 +329,9 @@
                         @endif
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Update</button>
                         <a href="/contacts/{{ $contactPerson->id }}/viewdocuments" class="btn btn-primary " ><i class="fa fa-clipboard"> </i> Client Document(s)</a>
+						@if($contactPerson->user)
 						<button type="button" class="btn btn-primary pull-right" id="access_button" onclick="postData({{$contactPerson->user_id}}, 'access');">Modules Access</button>
+						@endif
                     </div>
                 </form>
             </div>
