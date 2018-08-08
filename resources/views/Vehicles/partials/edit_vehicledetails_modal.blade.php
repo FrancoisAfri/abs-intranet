@@ -351,12 +351,13 @@
             <label for="image" class="col-sm-2 control-label">Image</label>
 
             <div class="col-sm-8">
-                @if(!empty($avatar))
+                @if(!empty($fleetImage))
                 <div style="margin-bottom: 10px;">
-                    <img src="{{ $avatar }}" class="img-responsive img-thumbnail" width="200"
+                    <img src="{{ $fleetImage }}" class="img-responsive img-thumbnail" width="200"
                     height="200">
                 </div>
                 @endif
+				
                 <input type="file" id="image" name="image" class="file file-loading"
                 data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
             </div>
@@ -374,6 +375,15 @@
                     data-allowed-file-extensions='["pdf", "docx", "doc"]'
                     data-show-upload="false">
                 </div>
+				@if(!empty($registration_papers))
+					<br><a class="btn btn-default btn-flat btn-block btn-xs"
+						   href="{{ $registration_papers }}"
+						   target="_blank"><i class="fa fa-file-pdf-o"></i> View
+						Document</a>
+				@else
+					<br><a class="btn btn-default btn-flat btn-block"><i
+								class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>
+				@endif
             </div>
         </div>
 
