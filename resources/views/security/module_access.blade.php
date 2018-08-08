@@ -11,13 +11,11 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-                                <th style="text-align: center; width: 5px;">ID</th>
                                 <th>Name</th>
                                 <th style="width: 400px">Access Level</th>
                             </tr>
                             @foreach($modules as $module)
                                 <tr id="modules-list">
-                                    <td style="vertical-align: middle; text-align: center;">{{ $module->mod_id }}</td>
                                     <td style="vertical-align: middle;">{{ $module->mod_name }}</td>
                                     <td>
                                         <select class="form-control" name="module_access[{{$module->mod_id}}]"

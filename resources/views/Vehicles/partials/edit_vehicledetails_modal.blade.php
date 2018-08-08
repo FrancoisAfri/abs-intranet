@@ -55,8 +55,6 @@
                             </div>
                         </div>
                         @endforeach
-
-
                         <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
