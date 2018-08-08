@@ -820,7 +820,8 @@ class VehicleManagemntController extends Controller
             })
             ->orderBy('vehicle_details.id', 'asc')
             //->where('vehicle_details.status','=', 1)//check if the booking is not approved
-            ->get();	
+            ->get();
+	
         $data['hrDetails'] = $hrDetails;
         $data['division_levels'] = $divisionLevels;
         $data['companyID'] = $companyID;

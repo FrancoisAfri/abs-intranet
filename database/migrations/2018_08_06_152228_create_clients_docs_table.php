@@ -13,17 +13,17 @@ class CreateClientsDocsTable extends Migration
      */
     public function up()
     {
-        Schema::create('client_documents', function (Blueprint $table) {
-           // $table->increments('id');
-           // $table->integer('name')->nullable();
-           // $table->string('description')->nullable();
-           // $table->bigInteger('date_from')->nullable();
-           // $table->bigInteger('expirydate')->nullable();
-           // $table->string('supporting_docs')->nullable();
-           // $table->integer('client_id')->index()->unsigned()->nullable();
-			//$table->integer('status')->nullable();
-			//$table->string('document_name')->index()->unsigned()->nullable();
-           // $table->timestamps();
+		Schema::create('client_documents', function (Blueprint $table) {
+			$table->increments('id');
+			$table->integer('name')->nullable();
+			$table->string('description')->nullable();
+			$table->bigInteger('date_from')->nullable();
+			$table->bigInteger('expirydate')->nullable();
+			$table->string('supporting_docs')->nullable();
+			$table->integer('client_id')->index()->unsigned()->nullable();
+			$table->integer('status')->nullable();
+			$table->string('document_name')->index()->unsigned()->nullable();
+           $table->timestamps();
        });
     }
 

@@ -108,7 +108,7 @@ class FleetManagementController extends Controller
     }
 
     public function addvehicle()
-    {
+    {	   
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -201,6 +201,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->currentDate = $currentDate;
         $vehicle_maintenance->title_type = !empty($SysData['title_type']) ? $SysData['title_type'] : 0;
         $vehicle_maintenance->name = $Username;
+        $vehicle_maintenance->author_id = $userLogged->person->id;
         $vehicle_maintenance->booking_status = !empty($SysData['booking_status']) ? $SysData['booking_status'] : 0;
          if ($vehicleConfig == 1) {
              $vehicle_maintenance->status = 2;
@@ -232,12 +233,8 @@ class FleetManagementController extends Controller
                 $vehicle_maintenance->update();
             }
         }
-
         // add Details into vehicle Milege table
-        //types
-        //1 =  vehicle creation
-       // 2 =  vehicle collected
-        //3 = vehicle returned
+        //types //1 =  vehicle creation // 2 =  vehicle collected //3 = vehicle returned
 
         $Vehiclemilege = new vehicle_milege();
         $Vehiclemilege->date_created = time();
@@ -248,18 +245,7 @@ class FleetManagementController extends Controller
         $Vehiclemilege->booking_id = 0;
         $Vehiclemilege->save();
         
-        
-        
-         if ($vehicleConfig == 1) {
-             
-//              $manager = HRPerson::pluck('manager_id');
-//                foreach ($manager as $managerID) {
-//                  $managerid = !empty($managerID) ? $managerID : 1; 
-//                   Mail::to($manager->email)->send(new approve_vehiclemail($manager ,$SysData['vehicle_registration']));
-//                   
-//                }
-              #mail to manager
-               
+        if ($vehicleConfig == 1) {
 			$managerIDs = DB::table('security_modules_access')
 			   ->select('security_modules_access.*','security_modules.*') 
 			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
@@ -268,7 +254,7 @@ class FleetManagementController extends Controller
 			   ->pluck('user_id');
          
            foreach ($managerIDs as $manID) {
-                    $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+                    $usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
                     $email = !empty($usedetails->email) ? $usedetails->email : ''; 
                     $firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
                     $surname = !empty($usedetails->surname) ? $usedetails->surname : '';
@@ -277,7 +263,7 @@ class FleetManagementController extends Controller
 
                 }
               
-            }
+        }
 
         AuditReportsController::store('Fleet Management', 'New Vehicle Added', "Accessed By User", 0);;
         return response()->json();
