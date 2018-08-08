@@ -1,14 +1,13 @@
 <?php
 
 namespace App\Mail;
-use App\CompanyIdentity;
-use App\User;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class vehiclemanagerApproval extends Mailable
+class FleetRejection extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -20,12 +19,14 @@ class vehiclemanagerApproval extends Mailable
 	 public $firstname;
 	 public $surname;
 	 public $email;
-	
-	public function __construct($firstname, $surname , $email)
+	 public $iID;
+	 
+    public function __construct($firstname, $surname , $email, $iID)
     {
-        $this->firstname = $firstname;
+       `$this->firstname = $firstname;
 		$this->surname = $surname;
 		$this->email = $email;
+		$this->iID = $iID;
     }
 
     /**
@@ -44,9 +45,9 @@ class vehiclemanagerApproval extends Mailable
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['dashboard_url'] = url('/');
-		$data['vehicleapproval_url'] = url("/vehicle_management/vehicle_approval");
+		$data['fleetreject_url'] = url("/vehicle_management/viewdetails/$this->iID");
 
-        return $this->view('mails.approve_new_vehicledetails')
+        return $this->view('mails.reject_new_vehicle')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);

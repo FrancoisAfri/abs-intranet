@@ -43,39 +43,39 @@
                             </tr>
 
                             @if (count($Vehiclemanagemnt) > 0)
-                                @foreach ($Vehiclemanagemnt as $filling)
+                                @foreach ($Vehiclemanagemnt as $fleet)
                                     <tr style="text-align:center">
 
                                         <td nowrap>
                                             <div class="product-img">
-                                                <img src="{{ (!empty($filling->image)) ? Storage::disk('local')->url("Vehicle/images/$filling->image") : 'http://placehold.it/60x50' }}"
+                                                <img src="{{ (!empty($fleet->image)) ? Storage::disk('local')->url("Vehicle/images/$fleet->image") : 'http://placehold.it/60x50' }}"
                                                      alt="Product Image" width="75" height="50">
                                             </div>
                                         </td>
-                                        <td>{{ (!empty( $filling->vehiclemodel . ' ' . $filling->year )) ?   $filling->vehiclemodel . ' ' . $filling->year : ''}} </td>
-                                        <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
-                                        <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
-                                        <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading.''.'Kms' : '' }} </br>
-                                            {{ !empty($filling->hours_reading) ? $filling->hours_reading.''.'Hrs' : '' }}</td>
-                                        <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
-                                        <td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
+                                        <td>{{ (!empty( $fleet->vehiclemodel . ' ' . $fleet->year )) ?   $fleet->vehiclemodel . ' ' . $fleet->year : ''}} </td>
+                                        <td>{{ (!empty( $fleet->fleet_number)) ?  $fleet->fleet_number : ''}} </td>
+                                        <td>{{ (!empty( $fleet->vehicle_registration)) ?  $fleet->vehicle_registration : ''}} </td>
+                                        <td>{{ (!empty( $fleet->odometer_reading)) ?  $fleet->odometer_reading.''.'Kms' : '' }} </br>
+                                            {{ !empty($fleet->hours_reading) ? $fleet->hours_reading.''.'Hrs' : '' }}</td>
+                                        <td>{{ (!empty( $fleet->Department)) ?  $fleet->Department : ''}} </td>
+                                        <td>{{ (!empty( $fleet->company)) ?  $fleet->company : ''}} </td>
                                         <td style='text-align:center'>
                                             <input type="hidden" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}" value="0">
+                                                   id="vehicleappprove_{{ $fleet->id }}"
+                                                   name="vehicleappprove_{{ $fleet->id }}" value="0">
                                             <input type="checkbox" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $filling->id }}"
-                                                   name="vehicleappprove_{{ $filling->id }}"
-                                                   value="1" {{$filling->status === 1 ? 'checked ="checked"' : 0 }}>
+                                                   id="vehicleappprove_{{ $fleet->id }}"
+                                                   name="vehicleappprove_{{ $fleet->id }}"
+                                                   value="1" {{$fleet->status === 1 ? 'checked ="checked"' : 0 }}>
                                         </td>
                                         <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
                                                                              id="decline_$aVehicles[id]"
-                                                                             onclick="$('#comment_id_{{$filling->id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
+                                                                             onclick="$('#comment_id_{{$fleet->id}}').toggle(); uncheckCheckBoxes({{$fleet->id}}, 0);">
                                         </td>
                                         <td>
-                                            {{--  <input type="text" size="30" id="comment_id_{{$filling->id}}" name="declined_{{$filling->id}}" style="display:none">         --}}
-                                            <textarea class="form-control" id="comment_id_{{$filling->id}}"
-                                                      name="declined_{{$filling->id}}"
+                                            {{--  <input type="text" size="30" id="comment_id_{{$fleet->id}}" name="declined_{{$fleet->id}}" style="display:none">         --}}
+                                            <textarea class="form-control" id="comment_id_{{$fleet->id}}"
+                                                      name="declined_{{$fleet->id}}"
                                                       placeholder="Enter rejection reason ..." rows="2"
                                                       style="display:none"></textarea>
                                         </td>

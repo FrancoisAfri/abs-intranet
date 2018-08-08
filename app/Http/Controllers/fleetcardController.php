@@ -9,6 +9,7 @@ use App\FleetType;
 use App\HRPerson;
 use App\Http\Requests;
 use App\Mail\confirm_collection;
+use App\Mail\FleetRejection;
 use App\Users;
 use App\vehicle_detail;
 use App\vehicle_fleet_cards;
@@ -17,8 +18,6 @@ use App\Vehicle_managemnt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
-//use App\Mail\confirm_collection;
 
 class fleetcardController extends Controller
 {
@@ -371,7 +370,6 @@ class fleetcardController extends Controller
         $hrDetails = HRPerson::where('status', 1)->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_maintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
-        // return $vehicle_maintenance;
 
         $Vehiclemanagemnt = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department'
@@ -382,8 +380,6 @@ class fleetcardController extends Controller
             ->orderBy('vehicle_details.id')
             ->where('vehicle_details.status', 2)
             ->get();
-
-        //return $Vehiclemanagemnt;
 
         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
         $vehicleConfig = $vehicleConfigs->first();
@@ -414,6 +410,8 @@ class fleetcardController extends Controller
         $this->validate($request, [
             // 'date_uploaded' => 'required',
         ]);
+		$vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = $vehicleConfigs->first();
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
@@ -436,7 +434,7 @@ class fleetcardController extends Controller
                 $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
             }
         }
-// Reject Reason
+		// Reject Code
         foreach ($results as $sKey => $sValue) {
             if (strlen(strstr($sKey, 'declined_'))) {
                 list($sUnit, $iID) = explode("_", $sKey);
@@ -447,7 +445,36 @@ class fleetcardController extends Controller
                     $vehicle_maintenance->updateOrCreate(['id' => $iID], ['reject_reason' => $sValue]);
                     $vehicle_maintenance->updateOrCreate(['id' => $iID], ['reject_timestamp' => time()]);
                     $vehicle_maintenance->updateOrCreate(['id' => $iID], ['rejector_id' => Auth::user()->person->id]);
-                    // $vehicle_maintenance->where('id',$iID)->update(['status' => 3],['reject_reason' => $sValue],['reject_timestamp' => time()]);
+                    # Send email to admin and person who added the vehicle
+					if ($vehicleConfig == 1) {
+					$managerIDs = DB::table('security_modules_access')
+					   ->select('security_modules_access.*','security_modules.*') 
+					   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+					   ->where('code_name', 'vehicle')
+					   ->where('access_level','>=', 4)
+					   ->pluck('user_id');
+				 
+				   foreach ($managerIDs as $manID) {
+							$usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
+							$email = !empty($usedetails->email) ? $usedetails->email : ''; 
+							$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+							$surname = !empty($usedetails->surname) ? $usedetails->surname : '';
+							if (!empty($email))
+								Mail::to($email)->send(new FleetRejection($firstname, $surname, $email, $iID));
+
+					}
+					$vehicle_maintenance = vehicle_maintenance::where('id', $iID)->first();
+					if (!empty($vehicle_maintenance->author_id))
+					{
+						$authoretails = HRPerson::where('id', $vehicle_maintenance->author_id)->select('first_name', 'surname', 'email')->first();
+						$email = !empty($authoretails->email) ? $authoretails->email : ''; 
+						$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
+						$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
+						if (!empty($authoretails->email))
+									Mail::to($email)->send(new FleetRejection($firstname, $surname, $email, $iID));
+					}
+        }
+					
                 }
             }
         }
