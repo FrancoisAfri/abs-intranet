@@ -389,11 +389,11 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_details.id')
             ->get();
         
-       //return $vehiclemaintenance;
-
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
+        $fleetImage = $vehiclemaintenance->first()->image;
 
         $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("Vehicle/registration_papers/$registrationPapers") : '';
+        $data['fleetImage'] = (!empty($fleetImage)) ? Storage::disk('local')->url("Vehicle/images/$fleetImage") : '';
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
