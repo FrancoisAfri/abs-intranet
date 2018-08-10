@@ -656,6 +656,8 @@ class QuotesController extends Controller
 				$comments = $request->input('comment');
                 if ($prices) {
                     foreach ($prices as $productID => $price) {
+						$price = preg_replace('/(?<=\d)\s+(?=\d)/', '', $price);
+						$price = (double) $price;
                         $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID], 'comment' => $comments[$productID]]);
                     }
                 }
