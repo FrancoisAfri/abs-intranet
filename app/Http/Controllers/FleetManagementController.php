@@ -375,8 +375,9 @@ class FleetManagementController extends Controller
             ->select('vehicle_details.*', 'vehicle_make.name as vehiclemake'
 			,'vehicle_model.name as vehiclemodel', 'vehicle_managemnet.name as vehicletype'
 			,'division_level_fives.name as company','div_fives.name as company_owner'
-			, 'division_level_fours.name as Department', 'hr_people.first_name as first_name'
-			, 'hr_people.surname as surname','contact_companies.name as Vehicle_Owner ')
+			,'div_owner.name as owner_vehicle', 'division_level_fours.name as Department'
+			, 'hr_people.first_name as first_name', 'hr_people.surname as surname'
+			,'contact_companies.name as Vehicle_Owner ')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
@@ -385,6 +386,7 @@ class FleetManagementController extends Controller
             ->leftJoin('hr_people', 'vehicle_details.responsible_for_maintenance', '=', 'hr_people.id')
             ->leftJoin('contact_companies', 'vehicle_details.financial_institution', '=', 'contact_companies.id')
             ->leftJoin('division_level_fives as div_fives', 'vehicle_details.company', '=', 'div_fives.id')
+            ->leftJoin('division_level_fives as div_owner', 'vehicle_details.vehicle_owner', '=', 'div_fives.id')
             ->where('vehicle_details.id', $ID)
             ->orderBy('vehicle_details.id')
             ->get();
