@@ -103,8 +103,8 @@
                             <label for="create_login" class="col-sm-2 control-label">Create login details</label>
 
                             <div class="col-sm-10">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_create_login_yes" name="create_login" value="1"{{ !old('create_login') ? ' checked' : '' }}{{ old('create_login') == 1 ? ' checked' : '' }}> Yes</label>
-                                <label class="radio-inline"><input type="radio" id="rdo_create_login_no" name="create_login" value="0" {{ old('create_login') == 2 ? ' checked' : '' }}> No</label>
+                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_create_login_yes" name="create_login" value="1"{{ old('create_login') == 1 ? ' checked' : '' }}> Yes</label>
+                                <label class="radio-inline"><input type="radio" id="rdo_create_login_no" name="create_login" value="0" {{ !old('create_login') ? ' checked' : '' }} {{ old('create_login') == 2 ? ' checked' : '' }}> No</label>
                             </div>
                         </div>
                         <div class="form-group security-field">
