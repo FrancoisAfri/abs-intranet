@@ -176,14 +176,14 @@
                                     <td class="caption">Division</td>
                                     <td>{{ !empty($vehiclemaintenance->company) ? $vehiclemaintenance->company : ''}}</td>
                                     <td class="caption">Vehicle Owner Name</td>
-                                    <td>{{ !empty($vehiclemaintenance->title_type) && ($vehiclemaintenance->title_type == 1) 
-									? $vehiclemaintenance->Vehicle_Owner : $vehiclemaintenance->company_owner}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->company_owner) ? $vehiclemaintenance->company_owner : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Department</td>
                                     <td>{{ !empty($vehiclemaintenance->Department) ? $vehiclemaintenance->Department : ''}}</td>
                                     <td class="caption">Title Holder Name</td>
-                                    <td>{{ !empty($vehiclemaintenance->title_type) && ($vehiclemaintenance->title_type == 1)   ? 'Financial Institution' : ' Company'}}</td>
+                                    <td> {{ !empty($vehiclemaintenance->title_type) && ($vehiclemaintenance->title_type == 1) 
+									? $vehiclemaintenance->Vehicle_Owner : $vehiclemaintenance->company_owner}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Responsible Person</td>
