@@ -13,7 +13,7 @@ class vehicle_detail extends Model
         'metre_reading_type', 'odometer_reading', 'hours_reading', 'fuel_type', 'size_of_fuel_tank', 'fleet_number',
         'cell_number', 'tracking_umber', 'vehicle_owner', 'title_type', 'financial_institution', 'company', 'extras',
         'image', 'registration_papers', 'property_type','rejector_id',
-        'division_level_1', 'division_level_2', 'division_level_3', 'division_level_4', 'division_level_5','reject_reason','reject_timestamp'];
+        'division_level_1', 'division_level_2', 'division_level_3', 'division_level_4', 'division_level_5','reject_reason','reject_timestamp','author_id'];
 
     public function vehiclebooking() {
         return $this->hasMany(vehicle_booking::class, 'vehicle_id');
@@ -23,16 +23,19 @@ class vehicle_detail extends Model
         return $this->hasMany(vehicle_fines::class, 'vehicleID');
     }
 	
-	 public function vehiclefuelLog() {
+	public function vehiclefuelLog() {
         return $this->hasMany(fuellogVehicle::class, 'vehicle_id');
     }
 
-     public function vehicleDocs() {
+    public function vehicleDocs() {
         return $this->hasMany(vehicle_documets::class, 'vehicleID');
     }
 
-     public function vehicleLicences() {
+    public function vehicleLicences() {
         return $this->hasMany(permits_licence::class, 'vehicleID');
     }
-
+	public function vehicleOwnerName() {
+		
+		return $this->belongsTo(DivisionLevelFive::class, 'vehicle_owner');
+    }
 }
