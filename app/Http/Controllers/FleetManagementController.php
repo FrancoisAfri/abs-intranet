@@ -377,7 +377,7 @@ class FleetManagementController extends Controller
 			,'division_level_fives.name as company','div_fives.name as company_owner'
 			,'div_owner.name as owner_vehicle', 'division_level_fours.name as Department'
 			, 'hr_people.first_name as first_name', 'hr_people.surname as surname'
-			,'contact_companies.name as Vehicle_Owner ')
+			,'contact_companies.name as contact_owner ')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')

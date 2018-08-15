@@ -183,7 +183,7 @@
                                     <td>{{ !empty($vehiclemaintenance->Department) ? $vehiclemaintenance->Department : ''}}</td>
                                     <td class="caption">Title Holder Name</td>
                                     <td> {{ !empty($vehiclemaintenance->title_type) && ($vehiclemaintenance->title_type == 1) 
-									? $vehiclemaintenance->Vehicle_Owner : $vehiclemaintenance->company_owner}}</td>
+									? $vehiclemaintenance->contact_owner : $vehiclemaintenance->company_owner}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Responsible Person</td>
