@@ -176,7 +176,7 @@
                                     <td class="caption">Division</td>
                                     <td>{{ !empty($vehiclemaintenance->company) ? $vehiclemaintenance->company : ''}}</td>
                                     <td class="caption">Vehicle Owner Name</td>
-                                    <td>{{ !empty($vehiclemaintenance->owner_vehicle) ? $vehiclemaintenance->owner_vehicle : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->vehicle_owner) ? $vehiclemaintenance->vehicle_owner : ''}}</td>
                                 </tr>
                                 <tr>
                                     <td class="caption">Department</td>
