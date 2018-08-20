@@ -125,10 +125,9 @@
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
-                                        <i class="fa fa-envelope"></i>
+                                        <a href="mailto:{{ $contactPerson->email }}">Send </br><i class="fa fa-envelope"></i></a>
                                     </div>
                                     <input type="email" class="form-control" id="email" name="email" value="{{ $contactPerson->email }}" placeholder="Email" required>
-									<a href="mailto:{{ $contactPerson->email }}">{{ $contactPerson->email }}</a>
                                 </div>
                             </div>
                         </div>
