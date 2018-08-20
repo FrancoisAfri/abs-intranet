@@ -12,13 +12,12 @@
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
                 <div class="box-body">
-
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px"></th>
                             <th>Name</th>
                             <th>Description</th>
-
+							<th>Stock Type</th>
                             <th style="width: 40px"></th>
                         </tr>
                         @if (count($ProductCategory) > 0)
@@ -28,7 +27,9 @@
                                         <button type="button" id="edit_compan" class="btn btn-primary  btn-xs"
                                                 data-toggle="modal" data-target="#edit-category-modal"
                                                 data-id="{{ $category->id }}" data-name="{{ $category->name }}"
-                                                data-description="{{$category->description}}"><i
+                                                data-description="{{$category->description}}"
+                                                data-stock_type="{{$category->stock_type}}"
+												><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                         <a href="{{ '/Product/Product/' . $category->id }}" id="edit_compan"
@@ -38,7 +39,7 @@
                                             Products</a></td>
                                     <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
                                     <td>{{ (!empty( $category->description)) ?  $category->description : ''}} </td>
-
+									<td>{{ (!empty($category->stock_type)) ?  $stockTypeArray[$category->stock_type] : ''}} </td>
                                     <td>
                                         <!--   leave here  -->
                                         <button type="button" id="view_ribbons"
@@ -52,7 +53,7 @@
                             @endforeach
                         @else
                             <tr id="categories-list">
-                                <td colspan="5">
+                                <td colspan="6">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
@@ -73,8 +74,8 @@
             </div>
         </div>
         <!-- Include add new prime rate modal -->
-        @include('hr.partials.add_category_modal')
-        @include('hr.partials.edit_category_modal')
+        @include('products.partials.add_new_productCategory')
+        @include('products.partials.edit_category_modal')
     </div>
 @endsection
 
@@ -116,6 +117,7 @@
                 var objData = {
                     name: $('#' + modalID).find('#name').val(),
                     description: $('#' + modalID).find('#description').val(),
+                    stock_type: $('#' + modalID).find('#stock_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'save_category';
@@ -133,10 +135,13 @@
                 doc_typeID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
+				var stockType = btnEdit.data('stock_type');
                 //var employeeName = btnEdit.data('employeename');
+				console.log(stockType);
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
+				modal.find('select#stock_type').val(stockType);
 
             });
             $('#edit_category').on('click', function () {
@@ -146,6 +151,7 @@
                 var objData = {
                     name: $('#' + modalID).find('#name').val(),
                     description: $('#' + modalID).find('#description').val(),
+                    stock_type: $('#' + modalID).find('#stock_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_category';
