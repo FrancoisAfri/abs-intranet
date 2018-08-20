@@ -44,7 +44,7 @@ class Product_categoryController extends Controller
             $products = $ProductCategory->first()->id;
         }
         // $names->first()->first_name ;
-
+		$stockTypeArray = array(1 => 'Stock Item', 2 => 'Non Stock Item', 3 => 'Both');
         $data['products'] = $products;
         $data['page_title'] = 'Product Categories';
         $data['page_description'] = 'Manage Product Categories';
@@ -54,6 +54,7 @@ class Product_categoryController extends Controller
         ];
         $data['active_mod'] = 'Products';
         $data['active_rib'] = 'Categories';
+		$data['stockTypeArray'] = $stockTypeArray;
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
 
@@ -317,6 +318,7 @@ class Product_categoryController extends Controller
         // $doc_type = new doc_type($docData);
         $cat->name = $request->input('name');
         $cat->description = $request->input('description');
+        $cat->stock_type = $request->input('stock_type');
         $cat->status = 1;
         $cat->save();
         AuditReportsController::store('Products', 'Category Added', 'Actioned By User', 0);
@@ -332,6 +334,7 @@ class Product_categoryController extends Controller
 
         $Category->name = $request->input('name');
         $Category->description = $request->input('description');
+		$Category->stock_type = $request->input('stock_type');
         $Category->update();
         AuditReportsController::store('Products', 'Category Informations Edited', 'Edited by User', 0);
         return response()->json(['new_name' => $Category->name, 'new_description' => $Category->description], 200);
