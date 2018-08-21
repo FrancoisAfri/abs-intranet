@@ -60,7 +60,6 @@ class StoreManagement extends Controller
         if ($highestLvl->level > $lowestactiveLvl) {
            $childLevelname = stockLevel::where('level', $highestLvl->level - 1)->get()->first()->plural_name;
         }
-//return $highestLvl;
         $data['employees'] = $employees;
         $data['stock_types'] = $stock_types;
         $data['highestLvl'] = $highestLvl;
@@ -237,7 +236,6 @@ class StoreManagement extends Controller
     public function addChild(Request $request, $parentLevel, $parent_id)
     {
         $this->validate($request, [
-            'manager_id' => 'required',
             'name' => 'required',
         ]);
         $childData = $request->all();
@@ -245,19 +243,23 @@ class StoreManagement extends Controller
         if ($parentLevel == 5) {
             $parentDiv = stockLevelFive::find($parent_id);
             $childDiv = new stockLevelFour($childData);
+			$childDiv->manager_id = !empty($childData['manager_id']) ? $childData['manager_id'] : 0;
             $childDiv->division_level_id = 4;
 
         } elseif ($parentLevel == 4) {
             $parentDiv = stockLevelFour::find($parent_id);
             $childDiv = new stockLevelThree($childData);
+			$childDiv->manager_id = !empty($childData['manager_id']) ? $childData['manager_id'] : 0;
             $childDiv->division_level_id = 3;
         } elseif ($parentLevel == 3) {
             $parentDiv = stockLevelThree::find($parent_id);
             $childDiv = new stockLevelTwo($childData);
+			$childDiv->manager_id = !empty($childData['manager_id']) ? $childData['manager_id'] : 0;
             $childDiv->division_level_id = 2;
         } elseif ($parentLevel == 2) {
             $parentDiv = stockLevelTwo::find($parent_id);
             $childDiv = new stockLevelOne($childData);
+            $childDiv->manager_id = !empty($childData['manager_id']) ? $childData['manager_id'] : 0;
             $childDiv->division_level_id = 1;
         } elseif ($parentLevel == 1) {
             $parentDiv = stockLevelOne::find($parent_id);
