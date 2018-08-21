@@ -249,6 +249,32 @@ class DatabaseSeeder extends Seeder
         $groupLevel->name = 'Division';
         $groupLevel->plural_name = 'Divisions';
         $groupLevel->active = 1;
+        $groupLevel->save(); 
+		
+		//insert the stock group levels
+        $groupLevel = new stockLevel();
+        $groupLevel->level = 1;
+        $groupLevel->active = 0;
+        $groupLevel->save();
+
+        $groupLevel = new stockLevel();
+        $groupLevel->level = 2;
+        $groupLevel->active = 0;
+        $groupLevel->save();
+
+        $groupLevel = new stockLevel();
+        $groupLevel->level = 3;
+        $groupLevel->active = 0;
+        $groupLevel->save();
+
+        $groupLevel = new stockLevel();
+        $groupLevel->level = 4;
+        $groupLevel->active = 1;
+        $groupLevel->save();
+
+        $groupLevel = new stockLevel();
+        $groupLevel->level = 5;
+        $groupLevel->active = 1;
         $groupLevel->save();
 
         $module = new modules(); //polivy
@@ -760,7 +786,7 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 		
-	$ribbon = new module_ribbons();
+		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Allocate Stock';
@@ -771,10 +797,28 @@ class DatabaseSeeder extends Seeder
         
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 3;
+        $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Stock Reports';
         $ribbon->ribbon_path = 'stock/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Store Management';
+        $ribbon->description = 'Stock Management';
+        $ribbon->ribbon_path = 'stock/store_management';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Stock Setup';
+        $ribbon->ribbon_path = 'stock/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
         //####
@@ -1428,3 +1472,6 @@ class DatabaseSeeder extends Seeder
         $profile->save();
     }
 }
+/*INSERT INTO public.stock_levels(
+	 level, active)
+	VALUES (1, 0);*/

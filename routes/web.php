@@ -717,6 +717,19 @@ Route::post('jobcards/reports/parts', 'JobcardController@parts');
 Route::post('jobcards/reports/notes', 'JobcardController@notes');
 
 // stock
+Route::get('/stock/store_management', 'StoreManagement@viewLevel');
+Route::post('/stock/firstlevelstock/add/{stockLevel}', 'StoreManagement@addLevel');
+Route::patch('/stock/level_edit/{stockLevel}/{childID}', 'StoreManagement@updateLevel');
+////
+Route::get('/stock/setup', 'StoreManagement@showSetup');
+Route::patch('/stock/grouplevel/{groupLevel}', 'StoreManagement@updateGroupLevel');
+Route::get('/stock/grouplevel/activate/{groupLevel}', 'StoreManagement@activateGroupLevel');
+/////
+Route::get('/stock/child_setup/{parentLevel}/{parent_id}', 'StoreManagement@viewchildLevel');
+Route::patch('/stock/firstchild/{parentLevel}/{childID}', 'StoreManagement@updateChild');
+Route::post('/stock/firstchild/add/{parentLevel}/{parent_id}', 'StoreManagement@addChild');
+Route::get('/stock/store_edit/{parentLevel}/{childID}/activate', 'StoreManagement@activateChild');
+////
 Route::get('stock/storckmanagement', 'StockController@mystock');
 Route::post('stock/stock_search', 'StockController@stock');
 Route::get('stock/stock_allocation', 'StockController@takeout');
