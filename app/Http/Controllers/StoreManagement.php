@@ -27,13 +27,13 @@ class StoreManagement extends Controller
 	
 	public function showSetup()
     {
-		/*DB::table('stock_levels')->insert([
+		DB::table('stock_levels')->insert([
 			['level' => 1, 'active' => 0],
 			['level' => 2, 'active' => 0],
 			['level' => 3, 'active' => 0],
 			['level' => 4, 'active' => 1],
 			['level' => 5, 'active' => 1],
-		]);*/
+		]);
         $stock_types = DB::table('stock_levels')->orderBy('level', 'desc')->get();
 
         $data['stock_types'] = $stock_types;
