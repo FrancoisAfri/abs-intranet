@@ -49,7 +49,7 @@ class Product_categoryController extends Controller
         $data['page_title'] = 'Product Categories';
         $data['page_description'] = 'Manage Product Categories';
         $data['breadcrumb'] = [
-            ['title' => 'Employee Records', 'path' => '/Product/Categories', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Products', 'path' => '/Product/Categories', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Products';
@@ -58,13 +58,12 @@ class Product_categoryController extends Controller
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
 
-        AuditReportsController::store('Employee Records', 'Job titles Page Accessed', 'Actioned By User', 0);
+        AuditReportsController::store('Products', 'Job titles Page Accessed', 'Actioned By User', 0);
         return view('products.product_categories')->with($data);
     }
 
     public function productView(Product_category $Category)
     {
-	
         if ($Category->status == 1) {
 
             $userAccess = DB::table('security_modules_access')
@@ -78,7 +77,7 @@ class Product_categoryController extends Controller
             $data['page_title'] = 'Manage Products Product';
             $data['page_description'] = 'Products page';
             $data['breadcrumb'] = [
-                ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Products', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Manage Product Categories', 'active' => 1, 'is_module' => 0]
             ];
 
@@ -89,7 +88,7 @@ class Product_categoryController extends Controller
             $data['stockTypeArray'] = $stockTypeArray;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
-            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', 'Accessed by User', 0);
+            AuditReportsController::store('Products', 'Job Titles Page Accessed', 'Accessed by User', 0);
             return view('products.products')->with($data);
         } else {
             return back();
@@ -133,7 +132,7 @@ class Product_categoryController extends Controller
         $data['page_title'] = 'Product Packages';
         $data['page_description'] = 'Manage Product Packages';
         $data['breadcrumb'] = [
-            ['title' => 'Employee Records', 'path' => '/Product/Packages', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Products', 'path' => '/Product/Packages', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Packages', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Products';
@@ -141,7 +140,7 @@ class Product_categoryController extends Controller
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
 
-        AuditReportsController::store('Employee Records', 'Job titles Page Accessed', 'Actioned By User', 0);
+        AuditReportsController::store('Products', 'Job titles Page Accessed', 'Actioned By User', 0);
         return view('products.product_packages')->with($data);
     }
 
@@ -173,7 +172,7 @@ class Product_categoryController extends Controller
         $data['page_title'] = 'Product Promotions';
         $data['page_description'] = 'Manage Product Promotions';
         $data['breadcrumb'] = [
-            ['title' => 'Employee Records', 'path' => '/Product/Promotions', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Products', 'path' => '/Product/Promotions', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Product Promotions', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -186,7 +185,6 @@ class Product_categoryController extends Controller
     }
 
     //
-
     public function view_prices(product_products $price)
     {
         if ($price->status == 1) {
@@ -196,7 +194,7 @@ class Product_categoryController extends Controller
             $data['page_title'] = 'Manage Package_Products Price';
             $data['page_description'] = 'Products page';
             $data['breadcrumb'] = [
-                ['title' => 'Employee Records', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Products', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Manage Product Prices', 'active' => 1, 'is_module' => 0]
             ];
 
@@ -204,13 +202,66 @@ class Product_categoryController extends Controller
             $data['Productprice'] = $Productprice;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
-            AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', 'Accessed by User', 0);
+            AuditReportsController::store('Products', 'Job Titles Page Accessed', 'Accessed by User', 0);
             return view('products.prices')->with($data);
         } else {
             return back();
         }
     }
+	
+	public function stockInfos(product_products $product)
+    {
+        if ($product->status == 1) {
+			$product = $product->load('infosProduct');
+			
+            $data['page_title'] = 'Manage Package_Products Stock Info';
+            $data['page_description'] = 'Stock Informations';
+            $data['breadcrumb'] = [
+                ['title' => 'Products', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Product', 'active' => 1, 'is_module' => 0]
+            ];
 
+            $data['products'] = $product;
+            $data['active_mod'] = 'Products';
+            $data['active_rib'] = 'Categories';
+            AuditReportsController::store('Products', 'Job Titles Page Accessed', 'Accessed by User', 0);
+            return view('products.stock_info')->with($data);
+        } else {
+            return back();
+        }
+    }
+	
+	public function addStockInfo(Request $request, product_products $product)
+    {
+        $this->validate($request, [
+            'location' => 'required',
+            'description' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $stock = new stockInfo();
+        $stock->location = $request->input('location');
+        $stock->description = $request->input('description');
+        $stock->product_id = $request->input('stock_type');
+        $stock->save();
+		
+		//Upload Image picture
+        if ($request->hasFile('picture')) {
+            $fileExt = $request->file('picture')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = $stock->id . "picture." . $fileExt;
+                $request->file('picture')->storeAs('Producrs/images', $fileName);
+                //Update file name in the database
+                $stock->picture = $fileName;
+                $stock->update();
+            }
+        }
+		
+        AuditReportsController::store('Products', 'Stock Info Added', 'Actioned By User', 0);
+        return response()->json();
+    }
 //
     //add product to packages
 
@@ -264,7 +315,7 @@ class Product_categoryController extends Controller
             $package->products_type()->attach(['product_product_id' => $product], ['product_packages_id' => $package->id]);
         }
 
-        AuditReportsController::store('Employee Records', 'Category Informations Edited', 'Edited by User', 0);
+        AuditReportsController::store('Products', 'Category Informations Edited', 'Edited by User', 0);
         return response()->json();
     }
 
@@ -536,7 +587,7 @@ class Product_categoryController extends Controller
         }
         $product->addNewPrice($price);
 
-        AuditReportsController::store('Employee Records', 'Job Title Category Added', "price: $priceData[price]", 0);
+        AuditReportsController::store('Products', 'Job Title Category Added', "price: $priceData[price]", 0);
         return response()->json();
     }
 
@@ -557,7 +608,7 @@ class Product_categoryController extends Controller
         $price->start_date = $currentDate;
         $price->update();
 
-        AuditReportsController::store('Employee Records', 'Job Title Category Added', "price: $priceData[price]", 0);
+        AuditReportsController::store('Products', 'Job Title Category Added', "price: $priceData[price]", 0);
         return response()->json();
     }
 

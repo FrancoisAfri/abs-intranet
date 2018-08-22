@@ -25,6 +25,7 @@
                             @endif
                             <th>Stock Type</th>
                             <th style="width: 40px"></th>
+                            <th style="width: 40px"></th>
                         </tr>
                         @if (count($products->productCategory) > 0)
                             @foreach($products->productCategory as $category)
@@ -52,7 +53,12 @@
                                         <td></td>
                                     @endif
 									<td>{{ (!empty($category->stock_type)) ?  $stockTypeArray[$category->stock_type] : ''}} </td>
-                                    <td>
+                                    @if ((!empty($category->stock_type))  && $category->stock_type == 1)
+                                        <td><a href="/stock/stockinfo/{{$category->id}}" id="srock_info" class="btn btn-primary  btn-xs"><i class="fa fa-eye"></i> Stock Info</a> </td>
+                                    @else
+                                        <td></td>
+									@endif
+									<td>
                                         <!--   leave here  -->
                                         <button type="button" id="view_ribbons"
                                                 class="btn {{ (!empty($category->status) && $category->status == 1) ? " btn-danger " : "btn-success " }}

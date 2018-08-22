@@ -298,7 +298,10 @@ Route::post('product/product/Search', 'Product_categoryController@productSearch'
 Route::post('product/category/Search', 'Product_categoryController@categorySearch');
 Route::post('product/package/Search', 'Product_categoryController@packageSearch');
 Route::post('product/promotion/Search', 'Product_categoryController@promotionSearch');
-
+//
+Route::get('/stock/stockinfo/{product}', 'Product_categoryController@stockInfos');
+Route::post('/stock/stock_info/add/{product}', 'Product_categoryController@addStockInfo');
+Route::patch('stock/stock_info/edit/{stock}', 'Product_categoryController@updateStockInfo');
 //Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
 Route::post('help_desk/system/add', 'HelpdeskController@systemAdd');
