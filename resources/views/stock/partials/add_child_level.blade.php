@@ -35,12 +35,9 @@
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <button type="button" id="save_childlevel" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
-            </form>
+			</form>
 
-            </div>
-         
-            </div>
-            </div>
-           
-    
-                      
+		</div>
+	 
+	</div>
+</div>                
