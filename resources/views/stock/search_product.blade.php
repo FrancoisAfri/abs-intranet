@@ -70,7 +70,7 @@
                                         <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Product </label>
 
                                         <div class="col-sm-8">
-                                            <select id="category_id" name="category_id" class="form-control select2"
+                                            <select id="category_id" name="category_id[]" class="form-control select2" multiple="multiple" 
                                                     style="width: 100%;">
                                                 <option value="">*** Please Select a Category First ***</option>
                                             </select>
@@ -84,7 +84,7 @@
                                                     <option value="0">*** Select Stock Type ***</option>
                                                     <option value="1"> Stock Item</option>
                                             <!--     <option value="2"> non Stock Item </option>-->
-                                                    <option value="3"> Bought </option>
+                                                    <option value="3"> Both </option>
                                                 </select>
                                             </div>
                                     </div>
@@ -103,6 +103,10 @@
             </div>
             <!-- /.box -->
         </div>
+		<!-- Confirmation Modal -->
+        @if(Session('success_stock'))
+            @include('contacts.partials.success_action', ['modal_title' => "Stock's Item(s) Updated!", 'modal_content' => session('success_stock')])
+        @endif
     </div>
 @endsection
 

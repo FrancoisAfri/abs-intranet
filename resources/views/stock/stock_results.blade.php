@@ -43,6 +43,7 @@
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Product Name</th>
                                 <th style="vertical-align: middle; text-align: center;">Available Number</th>
                                 <th style="vertical-align: middle; text-align: center;">Enter Number</th>
@@ -51,27 +52,27 @@
                             <tbody>
                             @foreach($stocks as $stock)
                                 <tr>
+									<td style="vertical-align: middle;">{{ $loop->iteration }}</td>
                                     <td style="vertical-align: center;"
                                         nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
                                     <td style="vertical-align: middle; text-align: center;"
                                         nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
                                     <td style="vertical-align: middle; text-align: center;"
                                         nowrap>
-
                                         <input type="number" min="0" class="form-control"
                                                id="newstock_{{ $stock->id }}_{{$stock->category_id}}"
                                                name="newstock_{{$stock->id}}_{{$stock->category_id}}" value=""
                                                placeholder="Enter Items Number"></td>
-
                                     @endforeach
                                 </tr>
                             </tbody>
                             <tfoot>
-                            <tr>
-                                <th>Product Name</th>
-                                <th style="vertical-align: middle; text-align: center;">Available Number</th>
-                                <th style="vertical-align: middle; text-align: center;">Enter number</th>
-                            </tr>
+								<tr>
+									<th>#</th>
+									<th>Product Name</th>
+									<th style="vertical-align: middle; text-align: center;">Available Number</th>
+									<th style="vertical-align: middle; text-align: center;">Enter number</th>
+								</tr>
                             </tfoot>
                         </table>
                     </div>

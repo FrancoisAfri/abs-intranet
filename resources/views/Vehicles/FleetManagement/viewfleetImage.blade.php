@@ -93,16 +93,16 @@
 										</td>
 										<td>
 											<div class="product-img">
-												<img alt="Vehicle Image" class="img-responsive" src='{{ (!empty($vehiclemaintenance->image)) ? "/Vehicle/images/$vehiclemaintenance->image" : "http://placehold.it/60x50" }}'>
+												<!--<img alt="Vehicle Image" class="img-responsive" src='{{ (!empty($vehiclemaintenance->image)) ? "/Vehicle/images/$vehiclemaintenance->image" : "http://placehold.it/60x50" }}'>-->
+												<img alt="Vehicle Image" class="img-responsive" src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("Vehicle/images/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}">
 											</div>
 											<div class="modal fade" id="enlargeImageModal" tabindex="-1"
 													 role="dialog" align="center"
 													 aria-labelledby="enlargeImageModal" aria-hidden="true">
-													<!--  <div class="modal-dialog modal" role="document"> -->
 												<div class="modal-dialog modal-sm" >
 													<div class="modal-body" align="center">
-														<img src="" class="enlargeImageModalSource"  class="img-responsive"
-															 >
+														<img src="" class="enlargeImageModalSource"  style="width:300;"
+															height="300" >
 													</div>
 												</div> 
 											</div>

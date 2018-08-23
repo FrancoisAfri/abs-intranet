@@ -440,8 +440,6 @@ class FleetManagementController extends Controller
 
         $ID = $maintenance->id;
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-		//echo public_path();
-		//die;
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -494,6 +492,8 @@ class FleetManagementController extends Controller
 		$count = 0;
 		foreach ($images as $image)
 		{
+			//Upload Image picture
+			
 			$count ++;
 			$imageArray = explode(".",$image);
 			$vehicleImages = new images();
@@ -509,10 +509,8 @@ class FleetManagementController extends Controller
 			if ($request->hasFile('images')) {
 				$fileExt = $image->extension();
 				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
-					$fileName = $vehicleImages->id ."image" .$count. '.' . $fileExt;
-					$image_resize = Image::make($image->getRealPath());              
-					$image_resize->resize(500, 500);
-					$image_resize->save('Vehicle/images/' .$fileName);
+					$fileName = "image" .$count. '.' . $fileExt;
+					$image->storeAs('Vehicle/images', $fileName);
 					//Update file name in the database
 					$vehicleImages->image = $fileName;
 					$vehicleImages->update();

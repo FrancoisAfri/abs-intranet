@@ -50,35 +50,42 @@
                         @endif
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
-                            <tr>
-                                <th>Product Name</th>
-                                <th style="vertical-align: middle; text-align: center;"> <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                                          id="rdo_levTkn"
-                                                                                                          name="application_type"
-                                                                                                          value="1" checked> User
-                                                </label> </th>
-                                <th style="vertical-align: middle; text-align: center;"> <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-                                       
-                                        <div class="col-sm-9">
-                                           
-                                            <!-- <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">Rejected Job cards</label> -->
-                                            <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type"
-                                                                               value="2"> Vehicle</label>
-
-                                        </div>
-                                    </div> </th>
-                                <th style="vertical-align: middle; text-align: center;">Available Number</th>
-                                <th style="vertical-align: middle; text-align: center;">Enter Number</th>       
-                            </tr>
+								<tr>
+									<th>#</th>
+									<th>Product Name</th>
+									<th style="vertical-align: middle; text-align: center;"> 
+									<!--<label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+																											  id="rdo_levTkn"
+																											  name="application_type"
+												 user-field															  value="1" checked> Employee
+									</label> -->
+									Employee
+									</th>
+									<th style="vertical-align: middle; text-align: center;"> 
+									
+									<!--<div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+										   
+											<div class="col-sm-9">
+												<label class="radio-inline"><input type="radio" id="rdo_po" name="application_type"
+																				   value="2"> Vehicle</label>
+											</div>
+											 vehicle-field
+										</div> -->
+										Vehicle
+									</th>
+									<th style="vertical-align: middle; text-align: center;">Available Number</th>
+									<th style="vertical-align: middle; text-align: center;">Enter Number</th>       
+								</tr>
                             </thead>
                             <tbody>
                             @foreach($stocks as $stock)
                                 <tr>
-                                    <td style="vertical-align: center;"
-                                        nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
+									<td style="vertical-align: middle;">{{ $loop->iteration }}</td>
+                                    <td style="vertical-align: center; width=70px;"
+                                        >{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
                                     <td style="vertical-align: middle; text-align: center;"
-                                        nowrap>
-                                        <div class="form-group user-field">
+                                        >
+                                        <div class="form-group">
                                             <label for="path" class="col-sm-3 control-label"> </label>
                                             <div class="col-sm-18">
                                                 <select class="form-control select2" style="width: 100%;"
@@ -92,16 +99,15 @@
                                         </div>
                                     </td>
                                     <td style="vertical-align: middle; text-align: center;"
-                                        nowrap>
-                                        <div class="form-group vehicle-field">
+                                        >
+                                        <div class="form-group">
                                             <label for="path" class="col-sm-3 control-label"> </label>
                                             <div class="col-sm-15">
                                                 <select class="form-control select2" style="width: 100%;"
                                                         id="vehicle_{{ $stock->id }}" name="vehicle_{{$stock->id}}">
                                                     <option value="0">*** Select Vehicle ***</option>
                                                     @foreach($vehicle as $vehicles)
-                                                        <option value="{{ $vehicles->id }}">{{ $vehicles->vehicleModel . ' ' . $vehicles->vehicleType 
-                                                            . ' ' . $vehicles->year}}</option>
+                                                        <option value="{{ $vehicles->id }}">{{ $vehicles->fleet_number . ' ' . $vehicles->vehicle_registration}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -116,13 +122,16 @@
                                                id="stock_{{ $stock->id }}_{{$stock->category_id}}}"
                                                name="stock_{{$stock->id}}_{{$stock->category_id}}" value=""
                                                placeholder="Enter Items Number"></td>
-                                    @endforeach
                                 </tr>
+							@endforeach
+                                
                             </tbody>
                             <tfoot>
                             <tr>
+								<th>Product Name</th>
                                 <th>Product Name</th>
                                 <th style="vertical-align: middle; text-align: center;">Employee</th>
+                                <th style="vertical-align: middle; text-align: center;">Vehicle</th>
                                 <th style="vertical-align: middle; text-align: center;">Available Number</th>
                                 <th style="vertical-align: middle; text-align: center;">Enter number</th>
                             </tr>
@@ -290,25 +299,22 @@
                 increaseArea: '10%' // optional
             });
 
-
             $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH, #rdo_cancelled_leaves').on('ifChecked', function () {
-                           var allType = hideFields();
-                           
-                       });
-                       
-                       
-         function hideFields() {
-            var allType = $("input[name='application_type']:checked").val();
-            if (allType == 1) { //adjsut leave
-                $('.vehicle-field').hide();
-                $('.user-field').show();
-            }
-            else if (allType == 2) { //resert leave
-                $('.vehicle-field').show();
-                $('.user-field').hide();
-            }
-            return allType;
-        }
+                var allType = hideFields();           
+            });
+                      
+			function hideFields() {
+				var allType = $("input[name='application_type']:checked").val();
+				if (allType == 1) { //adjsut leave
+					$('.vehicle-field').hide();
+					$('.user-field').show();
+				}
+				else if (allType == 2) { //resert leave
+					$('.vehicle-field').show();
+					$('.user-field').hide();
+				}
+				return allType;
+			}
         
             $('#add-user').on('click', function () {
                 var strUrl = '/System/policy/add_policyUsers';
