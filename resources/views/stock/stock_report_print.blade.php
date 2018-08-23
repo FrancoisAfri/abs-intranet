@@ -54,48 +54,48 @@
         <div class="row">
             <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
             <div class="box-body">
-                <table id="example2" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th>Product name</th>
-                        <th>Date</th>
-                        <th>Action Performed</th>
-                        <th>Performed By</th>
-                        <th>Allocated to</th>
-                        <th>Available Balance Before</th>
-                        <th>Available Balance After</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @if (count($stock) > 0)
-                        @foreach($stock as $stocktake)
-                            <tr>
-                                <td>{{ (!empty($stocktake->product_name)) ? $stocktake->product_name : ''}} </td>
-                                <td>{{ (!empty($stocktake->action_date)) ? date(' d M Y', $stocktake->action_date) : ''}} </td>
-                                <td>{{ (!empty($stocktake->action)) ? $stocktake->action : ''}} </td>
-                                <td>{{ (!empty($stocktake->name)&& !empty($stocktake->surname)) ? $stocktake->name." ".$stocktake->surname: ''}} </td>
-                                <td></td>
-                                <td>{{ (!empty($stocktake->balance_before)) ? $stocktake->balance_before : 0}} </td>
-                                <td>{{ (!empty($stocktake->balance_after)) ? $stocktake->balance_after : 0}} </td>
-                            </tr>
-                        @endforeach
-                    @endif
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>Product name</th>
-                        <th>Date</th>
-                        <th>Action Performed</th>
-                        <th>Performed By</th>
-                        <th>Allocated to</th>
-                        <th>Available Balance Before</th>
-                        <th>Available Balance After</th>
-                    </tr>
-                    </tfoot>
-                    <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                    <class
-
-                </table>
+                 <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Product name</th>
+                                            <th>Date</th>
+                                            <th>Action Performed</th>
+                                            <th>Performed By</th>
+                                            <th>Allocated to</th>
+                                            <th style="text-align: center;">Balance Before</th>
+                                            <th style="text-align: center;">Balance After</th>
+                                            <th style="text-align: center;">Available Balance</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @if (count($stock) > 0)
+                                            @foreach ($stock as $stocktake)
+                                                <tr>
+                                                    <td>{{ (!empty($stocktake->product_name)) ? $stocktake->product_name : ''}} </td>
+                                                    <td>{{ (!empty($stocktake->action_date)) ? date(' d M Y', $stocktake->action_date) : ''}} </td>
+                                                    <td>{{ (!empty($stocktake->action)) ? $stocktake->action : ''}} </td>
+                                                    <td>{{ (!empty($stocktake->name)&& !empty($stocktake->surname)) ? $stocktake->name." ".$stocktake->surname: ''}} </td>
+                                                    <td>{{ (!empty($stocktake->allocated_firstname) && !empty($stocktake->allocated_surname)) ? $stocktake->allocated_firstname." ".$stocktake->allocated_surname: $stocktake->fleet_number." ".$stocktake->vehicle_registration }} </td>
+                                                    <td style="text-align: center;">{{ (!empty($stocktake->balance_before)) ? $stocktake->balance_before : 0}} </td>
+                                                    <td style="text-align: center;">{{ (!empty($stocktake->balance_after)) ? $stocktake->balance_after : 0}} </td>
+                                                    <td style="text-align: center;">{{ (!empty($stocktake->avalaible_stock)) ? $stocktake->avalaible_stock : 0}} </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>Product name</th>
+                                            <th>Date</th>
+                                            <th>Action Performed</th>
+                                            <th>Performed By</th>
+                                            <th>Allocated to</th>
+                                            <th style="text-align: center;">Balance Before</th>
+                                            <th style="text-align: center;">Balance After</th>
+                                            <th style="text-align: center;">Available Balance</th>
+                                        </tr>
+                                        </tfoot>
+                                    </table>
             </div>
         </div>
         <!-- /.row -->
