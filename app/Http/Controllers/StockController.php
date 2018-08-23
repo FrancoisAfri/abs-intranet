@@ -23,7 +23,7 @@ class StockController extends Controller
 
     public function mystock()
     {
-        $jobCategories = product_category::orderBy('id', 'asc')->get();
+        $jobCategories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('id', 'asc')->get();
         $data['jobCategories'] = $jobCategories;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
@@ -161,7 +161,7 @@ class StockController extends Controller
 
     public function takeout()
     {
-        $productCategories = product_category::orderBy('id', 'asc')->get();
+		$productCategories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('id', 'asc')->get();
         $data['productCategories'] = $productCategories;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
