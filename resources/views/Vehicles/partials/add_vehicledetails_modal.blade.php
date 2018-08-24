@@ -213,7 +213,7 @@
                         <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="tracking_umber" name="tracking_umber" 
-                                value="" data-inputmask='"mask": "(999) 999-9999"'  placeholder="Enter Tracking Cell Number" data-mask>
+                                value="" data-inputmask='"mask": "(999) 999-9999999999"'  placeholder="Enter Tracking Cell Number" data-mask>
                         </div>
 
                     </div>

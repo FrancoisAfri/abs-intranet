@@ -11,7 +11,8 @@ class stockInfo extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'picture', 'location', 'description', 'product_id'
+        'picture', 'location', 'description', 'product_id', 'allow_vat', 'mass_net'
+		, 'minimum_level', 'maximum_level', 'bar_code', 'unit', 'commodity_code'
     ];
 
     //relationship stock level details and each specific stock level(one to many)
