@@ -5,8 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Products({{$products->name}}) </h3>
-
+                    <h3 class="box-title">Products({{$products->name}})</h3>
                 </div>
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
@@ -16,8 +15,7 @@
                         <tr>
                             <th style="width: 10px">#</th>
                             <th>Name</th>
-                            <th>Description</th>
-                            <th>Product Code</th>
+                            <th>Code</th>
                             @if (isset($userAccess) && $userAccess->access_level > 1)
                                 <th>Price</th>
                             @else
@@ -34,7 +32,7 @@
                                         <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs"
                                                 data-toggle="modal" data-target="#edit-product_title-modal"
                                                 data-id="{{ $category->id }}" data-name="{{ $category->name }}"
-                                                data-description="{{ $category->description }}"
+                                                data-product_code="{{ $category->product_code }}"
                                                 data-price="{{ $category->price }}"
 												data-stock_type="{{ $category->stock_type }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
@@ -42,10 +40,9 @@
                                         <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan"
                                            class="btn btn-primary  btn-xs" data-id="{{ $category->id }}"
                                            data-name="{{ $category->name }}"
-                                           data-description="{{$category->description}}"><i class="fa fa-money"></i>
+                                           data-product_code="{{$category->product_code}}"><i class="fa fa-money"></i>
                                             Prices</a></td>
                                     <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
-                                    <td>{{ (!empty( $category->description)) ?  $category->description : ''}} </td>
                                     <td>{{ (!empty($category->product_code)) ?  $category->product_code : ''}} </td>
                                     @if (isset($userAccess) && $userAccess->access_level > 1)
                                         <td>{{ (!empty( $category->price)) ?  'R' .number_format($category->price, 2) : ''}} </td>
@@ -92,13 +89,11 @@
                 </div>
             </div>
         </div>
-
         <!-- Include add new prime rate modal -->
         @include('products.partials.add_product')
         @include('products.partials.edit_product')
     </div>
 @endsection
-
 @section('page_script')
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
@@ -128,7 +123,6 @@
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
-
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
@@ -145,10 +139,8 @@
                 var modalID = 'add-new-product_title-modal';
                 var objData = {
                     name: $('#' + modalID).find('#name').val(),
-                    description: $('#' + modalID).find('#description').val(),
                     price: $('#' + modalID).find('#price').val(),
                     product_code: $('#' + modalID).find('#product_code').val(),
-                    stock_type: $('#' + modalID).find('#stock_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-product_title';
@@ -165,17 +157,12 @@
                 var btnEdit = $(e.relatedTarget);
                 Product_ID = btnEdit.data('id');
                 var name = btnEdit.data('name');
-                var description = btnEdit.data('description');
                 var price = btnEdit.data('price');
-                var stockType = btnEdit.data('stock_type');
-
-                //var employeeName = btnEdit.data('employeename');
+                var productCode = btnEdit.data('product_code');
                 var modal = $(this);
                 modal.find('#name').val(name);
-                modal.find('#description').val(description);
                 modal.find('#price').val(price);
-				modal.find('select#stock_type').val(stockType);
-
+                modal.find('#product_code').val(productCode);
             });
             $('#update-product_title').on('click', function () {
                 var strUrl = '/Product/product_edit/' + Product_ID;
@@ -183,9 +170,8 @@
                 var modalID = 'edit-product_title-modal';
                 var objData = {
                     name: $('#' + modalID).find('#name').val(),
-                    description: $('#' + modalID).find('#description').val(),
                     price: $('#' + modalID).find('#price').val(),
-                    stock_type: $('#' + modalID).find('#stock_type').val(),
+					product_code: $('#' + modalID).find('#product_code').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'update-product_title';
@@ -195,8 +181,6 @@
                 var Method = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-
-
         });
     </script>
 @endsection

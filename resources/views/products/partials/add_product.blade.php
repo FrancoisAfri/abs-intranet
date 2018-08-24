@@ -21,43 +21,19 @@
                             <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Product Name">
                         </div>
                     </div>
-					
 					<div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Description</label>
+                        <label for="path" class="col-sm-2 control-label">Price</label>
                              <div class="col-sm-8">
-                            <input type="text" class="form-control" id="description" name="description" value="" placeholder="Enter Product Description">
-                        </div>
-                    </div>
-					<div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Product Price</label>
-                             <div class="col-sm-8">
-				<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
+								<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Product Code</label>
+                        <label for="path" class="col-sm-2 control-label">Code</label>
                              <div class="col-sm-8">
                                 <input type="text" class="form-control" id="product_code" name="product_code" value="" placeholder="Enter Product Code" >
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="fuel_type" class="col-sm-2 control-label">Stock Type</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-filter"></i>
-                                </div>
-                                <select id="stock_type" name="stock_type" class="form-control">
-                                    <option value="0">*** Select product Type ***</option>
-                                    <option value="1"> Stock Item</option>
-                                    <option value="2"> Non Stock Item </option>
-                                    <option value="3"> Both </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                 </div>  
+                </div>  
                  <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <button type="button" id="add-product_title" class="btn btn-primary">Save</button>

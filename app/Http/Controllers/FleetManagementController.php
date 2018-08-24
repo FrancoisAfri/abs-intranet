@@ -504,12 +504,12 @@ class FleetManagementController extends Controller
 			$vehicleImages->user_name = $userLogged->id;
 			$vehicleImages->default_image = 1;
 			$vehicleImages->save();
-
+			
 			//Upload Image picture
 			if ($request->hasFile('images')) {
 				$fileExt = $image->extension();
 				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
-					$fileName = "image" .$count. '.' . $fileExt;
+					$fileName = "image" . time() . '.' . $fileExt;
 					$image->storeAs('Vehicle/images', $fileName);
 					//Update file name in the database
 					$vehicleImages->image = $fileName;
