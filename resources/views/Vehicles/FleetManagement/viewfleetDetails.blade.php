@@ -333,15 +333,12 @@
         });
 //
         $(function () {
-        
- 
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-            
 
             //Vertically center modals on page
             function reposition() {

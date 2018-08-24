@@ -220,7 +220,22 @@ class Product_categoryController extends Controller
                 ['title' => 'Products', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Manage Product', 'active' => 1, 'is_module' => 0]
             ];
-
+			// Products Activities
+			
+			$stock = stockhistory::select('stock_history.*','vehicle_details.id as id'
+					,'vehicle_details.fleet_number as fleet_number'
+					,'vehicle_details.vehicle_registration as vehicle_registration' 
+					,'Product_products.name as product_name', 'hr_people.first_name as name',
+					'hr_people.surname as surname', 'hr.first_name as allocated_firstname'
+					, 'hr.surname as allocated_surname')
+            ->leftJoin('hr_people', 'stock_history.user_id', '=', 'hr_people.id')
+            ->leftJoin('hr_people as hr', 'stock_history.user_allocated_id', '=', 'hr.id')
+            ->leftJoin('Product_products', 'stock_history.product_id', '=', 'Product_products.id')
+            ->leftJoin('vehicle_details', 'stock_history.vehicle_id', '=', 'vehicle_details.id')
+             ->orderBy('product_name', 'asc')
+            ->orderBy('stock_history.id', 'asc')
+			->limit(100)
+            ->get();
             $data['products'] = $product;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
@@ -417,14 +432,12 @@ class Product_categoryController extends Controller
         unset($docData['_token']);
 
         $documentType = new product_products($docData);
-
         $documentType->status = 1;
         $documentType->category_id = $products->id;
-
         $documentType->name = $docData['name'];
         $documentType->price = $docData['price'];
         $documentType->product_code = $docData['product_code'];
-        $documentType->stock_type = $docData['stock_type'];
+        $documentType->stock_type = !empty($products->stock_type) ? $products->stock_type : 0;
         $documentType->save();
 
         $newName = $docData['name'];

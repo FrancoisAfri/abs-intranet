@@ -15,7 +15,7 @@
                         <tr>
                             <th style="width: 10px">#</th>
                             <th>Name</th>
-                            <th>Code</th>
+                            <th>Product Code</th>
                             @if (isset($userAccess) && $userAccess->access_level > 1)
                                 <th>Price</th>
                             @else
@@ -32,7 +32,7 @@
                                         <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs"
                                                 data-toggle="modal" data-target="#edit-product_title-modal"
                                                 data-id="{{ $category->id }}" data-name="{{ $category->name }}"
-                                                data-product_code="{{ $category->product_code }}"
+                                                data-description="{{ $category->description }}"
                                                 data-price="{{ $category->price }}"
 												data-stock_type="{{ $category->stock_type }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
@@ -40,7 +40,7 @@
                                         <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan"
                                            class="btn btn-primary  btn-xs" data-id="{{ $category->id }}"
                                            data-name="{{ $category->name }}"
-                                           data-product_code="{{$category->product_code}}"><i class="fa fa-money"></i>
+                                           data-description="{{$category->description}}"><i class="fa fa-money"></i>
                                             Prices</a></td>
                                     <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
                                     <td>{{ (!empty($category->product_code)) ?  $category->product_code : ''}} </td>
@@ -123,6 +123,7 @@
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
+
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
@@ -139,8 +140,10 @@
                 var modalID = 'add-new-product_title-modal';
                 var objData = {
                     name: $('#' + modalID).find('#name').val(),
+                    description: $('#' + modalID).find('#description').val(),
                     price: $('#' + modalID).find('#price').val(),
                     product_code: $('#' + modalID).find('#product_code').val(),
+                    stock_type: $('#' + modalID).find('#stock_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-product_title';
@@ -157,12 +160,17 @@
                 var btnEdit = $(e.relatedTarget);
                 Product_ID = btnEdit.data('id');
                 var name = btnEdit.data('name');
+                var description = btnEdit.data('description');
                 var price = btnEdit.data('price');
-                var productCode = btnEdit.data('product_code');
+                var stockType = btnEdit.data('stock_type');
+
+                //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
                 modal.find('#name').val(name);
+                modal.find('#description').val(description);
                 modal.find('#price').val(price);
-                modal.find('#product_code').val(productCode);
+				modal.find('select#stock_type').val(stockType);
+
             });
             $('#update-product_title').on('click', function () {
                 var strUrl = '/Product/product_edit/' + Product_ID;
@@ -170,8 +178,9 @@
                 var modalID = 'edit-product_title-modal';
                 var objData = {
                     name: $('#' + modalID).find('#name').val(),
+                    description: $('#' + modalID).find('#description').val(),
                     price: $('#' + modalID).find('#price').val(),
-					product_code: $('#' + modalID).find('#product_code').val(),
+                    stock_type: $('#' + modalID).find('#stock_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'update-product_title';

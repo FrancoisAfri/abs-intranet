@@ -34,6 +34,11 @@ class product_products extends Model
     {
         return $this->hasMany(stockInfo::class, 'product_id');
     }
+	
+	public function preferredProduct()
+    {
+        return $this->hasMany(productsPreferredSupplier::class, 'product_id');
+    }
 
     /**
      * The relationships between product and price.
