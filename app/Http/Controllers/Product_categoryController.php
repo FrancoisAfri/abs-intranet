@@ -409,7 +409,7 @@ class Product_categoryController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'description' => 'required',
+            'product_code' => 'required',
             'price' => 'required',
         ]);
 
@@ -422,39 +422,37 @@ class Product_categoryController extends Controller
         $documentType->category_id = $products->id;
 
         $documentType->name = $docData['name'];
-        $documentType->description = $docData['description'];
         $documentType->price = $docData['price'];
         $documentType->product_code = $docData['product_code'];
         $documentType->stock_type = $docData['stock_type'];
         $documentType->save();
 
         $newName = $docData['name'];
-        $newDescription = $docData['description'];
         $newPrice = $docData['price'];
         $newProductcode = $docData['product_code'];
         AuditReportsController::store('Products', 'product created', 'Edited by User', 0);
-        return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice, 'product_code' => $newProductcode], 200);
+        return response()->json(['new_name' => $newName, 'price' => $newPrice, 'product_code' => $newProductcode], 200);
     }
 
     public function editProduct(Request $request, product_products $product)
     {
         $this->validate($request, [
             'name' => 'required',
-            'description' => 'required',
+            'product_code' => 'required',
             'price' => 'required',
         ]);
 
         $product->name = $request->input('name');
-        $product->description = $request->input('description');
+        $product->product_code = $request->input('product_code');
         $product->price = $request->input('price');
 		$product->stock_type = $request->input('stock_type');
         $product->update();
 
         $newName = $request->input('name');
-        $newDescription = $request->input('description');
+        $newproductCode = $request->input('product_code');
         $newPrice = $request->input('price');
         AuditReportsController::store('Products', 'Product Edited', 'Edited by User', 0);
-        return response()->json(['new_name' => $newName, 'new_description' => $newDescription, 'price' => $newPrice], 200);
+        return response()->json(['new_name' => $newName, 'new_product_code' => $newproductCode, 'price' => $newPrice], 200);
     }
 
     //
