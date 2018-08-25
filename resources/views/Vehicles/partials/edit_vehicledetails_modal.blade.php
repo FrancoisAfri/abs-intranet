@@ -305,7 +305,7 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-university"></i>
                             </div>
-                            <select class="form-control " style="width: 100%;" id="financial_institution"
+                            <select class="form-control select2" style="width: 100%;" id="financial_institution"
                             name="financial_institution">
                             <option value="0">*** Select Financial Institution ***</option>
                             @foreach($ContactCompany as $ContactCompan)
