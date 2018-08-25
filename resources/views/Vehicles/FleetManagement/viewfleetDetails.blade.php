@@ -289,12 +289,16 @@
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
-
+					@if(!empty($vehiclemaintenance->status) && $vehiclemaintenance->status == 2)
+						<button type="button" class="btn btn-primary btn-danger" id="client_declined" data-toggle="modal" data-target="#fleet-reject-single-modal"><i class="fa fa-times"></i> Reject Fleet</button>
+						<button type="button" class="btn btn-primary btn-success" id="fleet_approval" onclick="postData({{$vehiclemaintenance->id}}, 'fleet_approval');"><i class="fa fa-check"></i> Approve Fleet</button>
+					@endif
                 </div>
                 @endforeach
             </div>
         </div>
         @include('Vehicles.partials.edit_vehicledetails_modal')
+        @include('Vehicles.partials.fleet_single_approval')
     </div>
 @endsection
 @section('page_script')
@@ -558,9 +562,24 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
+			$('#save-rejection-reason').on('click', function () {
+				
+				var strUrl = '/vehicle_management/reject-single/{{$vehiclemaintenance->id}}';
+				var modalID = 'fleet-reject-single-modal';
+				var objData = {
+					rejection_reason: $('#' + modalID).find('#rejection_reason').val(),
+					_token: $('#' + modalID).find('input[name=_token]').val()
+				};
 
+				var submitBtnID = 'save-rejection-reason';
+				var redirectUrl = '/vehicle_management/viewdetails/{{$vehiclemaintenance->id}}';
+				var successMsgTitle = 'Reason Saved!';
+				var successMsg = 'The reject reason has been updated successfully.';
+				var Method = 'PATCH';
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+			});
         });
-
+		
         //Load divisions drop down
         var parentDDID = '';
         var loadAllDivs = 1;
@@ -576,6 +595,12 @@
         parentDDID = ddID;
         loadAllDivs = -1;
         @endforeach
+		
+		function postData(id, data)
+        {
+            if (data == 'fleet_approval')
+                location.href = "/vehicle_management/approve-single/" + id;
+        }
 
     </script>
 @endsection

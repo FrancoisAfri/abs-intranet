@@ -389,6 +389,7 @@ class FleetManagementController extends Controller
             ->where('vehicle_details.id', $ID)
             ->orderBy('vehicle_details.id')
             ->get(); 
+
         $vehiclemaintenance = $vehiclemaintenance->load('vehicleOwnerName');
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
         $fleetImage = $vehiclemaintenance->first()->image;
