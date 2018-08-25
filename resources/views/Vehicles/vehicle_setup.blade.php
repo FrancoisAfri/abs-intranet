@@ -360,7 +360,7 @@
                                     <td class="caption" colspan="2">Alerts Days</td>
 
                                     <td colspan="6"><input type="text" name="alert_days"
-                                                           value="{{ $configuration->alert_days }}" 
+                                                           value="{{ !empty($configuration->alert_days) ? $configuration->alert_days : 0}}" 
                                                            placeholder="Days">
                                 </tr>
                             </table>
