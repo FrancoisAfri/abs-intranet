@@ -1060,8 +1060,6 @@ class VehicleFleetController extends Controller
         $ID = $maintenance->id;
 
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-        //return $ContactCompany;
-
         $incidentType = incident_type::orderBy('id', 'asc')->get();
        
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
@@ -1089,11 +1087,9 @@ class VehicleFleetController extends Controller
             ->where('vehicleID', $ID)
             ->orderBy('vehicle_incidents.id')
             ->get();
-       if (!empty($vehicleincidents))  $vehicleincidents = $vehicleincidents->load('incidentDoc');
-	  // return $vehicleincidents;
-	$vehicleCong = vehicle_config::orderBy('id', 'asc')->first();  
-        
-       // return $vehicleincidents;
+		if (!empty($vehicleincidents))  $vehicleincidents = $vehicleincidents->load('incidentDoc');
+
+		$vehicleCong = vehicle_config::orderBy('id', 'asc')->first();  
         
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1123,7 +1119,7 @@ class VehicleFleetController extends Controller
     public function fixVehicle(vehicle_incidents $vehicle){
        // return $vehicle;
         
-        // vehicle_fixed value is one wen the the vehicle has been fixed
+        // vehicle_fixed value is one wen the the vehicle has been fixed 2 still need to be fixed
         $vehicle->vehicle_fixed = 1;	
 		$vehicle->update();
 		AuditReportsController::store('Fleet Management', "Vehicle Fixed", "Edited by User", 0);
@@ -1135,7 +1131,6 @@ class VehicleFleetController extends Controller
         $this->validate($request, [
             // 'issued_to' => 'required_if:key,1',
             'claim_number' => 'required|unique:vehicle_incidents,claim_number',
-
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1155,7 +1150,7 @@ class VehicleFleetController extends Controller
         $vehicleincidents->vehiclebookingID = !empty($SysData['vehiclebookingID']) ? $SysData['vehiclebookingID'] : 0;
         $vehicleincidents->odometer_reading = !empty($SysData['odometer_reading']) ? $SysData['odometer_reading'] : 0;
         $vehicleincidents->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : 0;
-        $vehicleincidents->vehicle_fixed =  0; 
+        $vehicleincidents->vehicle_fixed =  2; 
         $vehicleincidents->save();
 
         # document
@@ -1212,7 +1207,6 @@ class VehicleFleetController extends Controller
         $incident->odometer_reading = !empty($SysData['odometer_reading']) ? $SysData['odometer_reading'] : 0;
         $incident->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : 0;
         $incident->Update();
-
 
        // Upload supporting document
         if ($request->hasFile('documents')) {
