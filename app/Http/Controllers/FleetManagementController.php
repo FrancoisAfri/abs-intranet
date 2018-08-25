@@ -278,13 +278,20 @@ class FleetManagementController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
+		
+        $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = $vehicleConfigs->first();
+		
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
 		if (!empty($SysData['financial_institution'])) $SysData['company'] = 0;
 		if (!empty($SysData['company'])) $SysData['financial_institution'] = 0;
-        $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
+		 if ($vehicleConfig == 1) {
+             $vehicle_maintenance->status = 2;
+        } 
+		else
+            $vehicle_maintenance->status = 1;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
         $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
         $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
@@ -339,6 +346,24 @@ class FleetManagementController extends Controller
                 $vehicle_maintenance->registration_papers = $fileName;
                 $vehicle_maintenance->update();
             }
+        }
+		if ($vehicleConfig == 1) {
+			$managerIDs = DB::table('security_modules_access')
+			   ->select('security_modules_access.*','security_modules.*') 
+			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+			   ->where('code_name', 'vehicle')
+			   ->where('access_level','>=', 4)
+			   ->pluck('user_id');
+         
+           foreach ($managerIDs as $manID) {
+                    $usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
+                    $email = !empty($usedetails->email) ? $usedetails->email : ''; 
+                    $firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+                    $surname = !empty($usedetails->surname) ? $usedetails->surname : '';
+					if (!empty($email))
+						Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
+                }
+              
         }
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
