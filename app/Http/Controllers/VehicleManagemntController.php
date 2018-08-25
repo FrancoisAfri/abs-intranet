@@ -40,7 +40,7 @@ class VehicleManagemntController extends Controller
         //$incidentType = incident_type::orderBy('id', 'asc')->get();
 
         $data['page_title'] = " Vehicle Configuration Settings";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_description'] = "Fleet Settings Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
@@ -56,9 +56,7 @@ class VehicleManagemntController extends Controller
 
     public function index()
     {
-
         $Vehiclemanagemnt = Vehicle_managemnt::orderBy('name', 'asc')->get();
-
         $data['page_title'] = "Fleet Types";
         $data['page_description'] = "Fleet Types Management";
         $data['breadcrumb'] = [
@@ -595,6 +593,8 @@ class VehicleManagemntController extends Controller
         $config = $request->all();
         unset($config['_token']);
         //return $config;
+		
+        $configuration->alert_days = !empty($config['alert_days']) ? $config['alert_days'] : 0;
         $configuration->update(!empty($config) ? $config : 0);
         return back();
     }
