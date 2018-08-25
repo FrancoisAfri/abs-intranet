@@ -68,7 +68,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal"
-                            data-target="#add-category-modal">Add new Category
+                            data-target="#add-category-modal">Add New Category
                     </button>
                 </div>
             </div>

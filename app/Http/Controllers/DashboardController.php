@@ -316,12 +316,12 @@ class DashboardController extends Controller
                 ->get();
 
 
-          $cms_rating =   cms_rating::all();
-          //return $cms_rating;
+			$cms_rating =   cms_rating::all();
+			//return $cms_rating;
 
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
 
-            $ceonews = ceoNews::latest()->first();
+            $ceonews = ceoNews::where('status', 1)->latest()->first();
 
             $ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
