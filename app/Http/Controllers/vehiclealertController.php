@@ -59,8 +59,7 @@ class vehiclealertController extends Controller {
         $managerID = $user->person->manager_id;
        
         $manager = !empty($managerID) ? $managerID : $user->id;
-		
-		//Collection Overdue Alerts
+
 		$collectionOverdueAlerts = DB::table('vehicle_details')
 			->select('vehicle_details.*', 'vehicle_booking.require_datetime as require_date'
 			,'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model',
@@ -79,8 +78,7 @@ class vehiclealertController extends Controller {
 			->orderBy('division_level_fives.name', 'asc')
 			->orderBy('vehicle_details.id', 'asc')
 			->get();
-		
-		//Return Overdue Alerts
+
 		$returnOverdueAlerts = DB::table('vehicle_details')
 			->select('vehicle_details.*', 'vehicle_booking.return_datetime as return_date'
 			,'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model',
@@ -100,8 +98,7 @@ class vehiclealertController extends Controller {
 			->orderBy('division_level_fives.name', 'asc')
 			->orderBy('vehicle_details.id', 'asc')
 			->get();
-			
-		//Incidents Overdue Alerts
+
 		$incidentsAlerts = DB::table('vehicle_details')
 			->select('vehicle_details.*','vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model'
 					, 'vehicle_managemnet.name as vehicle_type', 'division_level_fives.name as company'
@@ -114,12 +111,11 @@ class vehiclealertController extends Controller {
 			->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
 			->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
 			->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-			->whereNull('vehicle_incidents.vehicle_fixed')
+			->where('vehicle_incidents.vehicle_fixed', 2)
 			->orderBy('division_level_fives.name', 'asc')
 			->orderBy('id', 'asc')
 			->get();
-		
-		//Service  Overdue Alerts
+
 		$servicesAlerts = DB::table('vehicle_details')
 			->select('vehicle_details.*','vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model'
 					,'vehicle_managemnet.name as vehicle_type', 'division_level_fives.name as company'
@@ -134,9 +130,7 @@ class vehiclealertController extends Controller {
 			->orderBy('division_level_fives.name', 'asc')
 			->orderBy('id', 'asc')
 			->get();
-			//return $servicesAlerts;
-			
-		//waranty Overdue Alerts
+
 		$warantyAlerts = DB::table('vehicle_details')
 			->select('vehicle_details.*','vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model'
 					,'vehicle_managemnet.name as vehicle_type', 'division_level_fives.name as company'
@@ -151,8 +145,7 @@ class vehiclealertController extends Controller {
 			->orderBy('division_level_fives.name', 'asc')
 			->orderBy('exp_date', 'desc')
 			->get();
-			
-		//permit Overdue Alerts
+
 		$expiredPermitAlerts = DB::table('vehicle_details')
 			->select('vehicle_details.*','vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model'
 					,'vehicle_managemnet.name as vehicle_type', 'division_level_fives.name as company'
@@ -169,9 +162,7 @@ class vehiclealertController extends Controller {
 			->orderBy('division_level_fives.name', 'asc')
 			->orderBy('exp_date', 'desc')
 			->get();
-			//return $servicesAlerts;
-		
-		//Documents Overdue Alerts
+
 		$expiredDocAlerts = DB::table('vehicle_details')
 			->select('vehicle_details.*','vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model'
 					,'vehicle_managemnet.name as vehicle_type', 'division_level_fives.name as company'
@@ -188,8 +179,7 @@ class vehiclealertController extends Controller {
 			->orderBy('division_level_fives.name', 'asc')
 			->orderBy('exp_date', 'desc')
 			->get();
-			
-		
+
         $data['page_title'] = " Fleet Management "; 
         $data['page_description'] = "Alerts";
         $data['breadcrumb'] = [
