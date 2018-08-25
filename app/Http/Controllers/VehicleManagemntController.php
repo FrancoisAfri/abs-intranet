@@ -818,7 +818,7 @@ class VehicleManagemntController extends Controller
                     $query->where('vehicle_details.status', $statusType);
                 }
             })
-            ->orderBy('vehicle_details.id', 'asc')
+            ->orderBy('vehicle_details.fleet_number', 'asc')
             //->where('vehicle_details.status','=', 1)//check if the booking is not approved
             ->get();
 	
