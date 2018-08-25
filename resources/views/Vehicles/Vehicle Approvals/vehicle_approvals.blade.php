@@ -22,11 +22,10 @@
                       action="/vehicle_management/vehicleApproval"
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
-
-
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
+                                <th style="width: 10px; text-align: center;"></th>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Vehicle Model/Year</th>
                                 <th>Fleet Number</th>
@@ -41,12 +40,15 @@
                                 <th style="width: 5px; text-align: center;">Decline</th>
                                 <td></td>
                             </tr>
-
                             @if (count($Vehiclemanagemnt) > 0)
                                 @foreach ($Vehiclemanagemnt as $fleet)
                                     <tr style="text-align:center">
-
-                                        <td nowrap>
+                                        <td>
+											<a href="{{ '/vehicle_management/viewdetails/' . $fleet->id }}"
+												   id="fleet_view" class="btn btn-sm btn-default btn-flat"
+												   target=”_blank”> View</a>
+                                        </td>
+										<td nowrap>
                                             <div class="product-img">
                                                 <img src="{{ (!empty($fleet->image)) ? Storage::disk('local')->url("Vehicle/images/$fleet->image") : 'http://placehold.it/60x50' }}"
                                                      alt="Product Image" width="75" height="50">
@@ -79,13 +81,11 @@
                                                       placeholder="Enter rejection reason ..." rows="2"
                                                       style="display:none"></textarea>
                                         </td>
-
-
                                     </tr>
                                 @endforeach
                             @else
                                 <tr id="categories-list">
-                                    <td colspan="9">
+                                    <td colspan="11">
                                         <div class="alert alert-danger alert-dismissable">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                                 &times;
@@ -100,19 +100,13 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary pull-right"> Submit</button>
-
-
                         </div>
                     </div>
             </div>
             <!-- Include add new prime rate modal -->
             {{--  @include('Vehicles.Vehicle Approvals.decline_vehicle_modal')  --}}
-
             </form>
-
         </div>
-
-
         @endsection
 
         @section('page_script')
@@ -123,11 +117,6 @@
             <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
             <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehice/station_act/" + id;
-
-                }
-
                 $('#back_button').click(function () {
                     location.href = '/vehicle_management/setup';
                 });

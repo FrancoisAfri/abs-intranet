@@ -383,6 +383,8 @@ Route::post('vehicle_management/driver_search', 'fleetcardController@driversearc
 Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 Route::post('vehicle_management/vehicleApproval', 'fleetcardController@vehicleApprovals');
 Route::patch('vehicle_management/reject_vehicle/{reason}','fleetcardController@rejectReason' );
+Route::patch('vehicle_management/reject-single/{fleet}','fleetcardController@vehicleRejectsSingle');
+Route::get('vehicle_management/approve-single/{fleet}','fleetcardController@vehicleApprovalsSingle' );
 //Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 
 //##----bookings

@@ -7,6 +7,7 @@ use App\DivisionLevel;
 use App\fleetcard_type;
 use App\FleetType;
 use App\HRPerson;
+use App\CompanyIdentity;
 use App\Http\Requests;
 use App\Mail\confirm_collection;
 use App\Mail\FleetRejection;
@@ -18,6 +19,8 @@ use App\Vehicle_managemnt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class fleetcardController extends Controller
 {
@@ -415,7 +418,6 @@ class fleetcardController extends Controller
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-        // return $vehicle_maintenance;
 
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
@@ -454,26 +456,26 @@ class fleetcardController extends Controller
 					   ->where('access_level','>=', 4)
 					   ->pluck('user_id');
 				 
-				   foreach ($managerIDs as $manID) {
-							$usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
-							$email = !empty($usedetails->email) ? $usedetails->email : ''; 
-							$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
-							$surname = !empty($usedetails->surname) ? $usedetails->surname : '';
-							if (!empty($email))
-								Mail::to($email)->send(new FleetRejection($firstname, $surname, $email, $iID));
-
-					}
-					$vehicle_maintenance = vehicle_maintenance::where('id', $iID)->first();
-					if (!empty($vehicle_maintenance->author_id))
-					{
-						$authoretails = HRPerson::where('id', $vehicle_maintenance->author_id)->select('first_name', 'surname', 'email')->first();
-						$email = !empty($authoretails->email) ? $authoretails->email : ''; 
-						$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
-						$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
-						if (!empty($authoretails->email))
+					   foreach ($managerIDs as $manID) {
+								$usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
+								$email = !empty($usedetails->email) ? $usedetails->email : ''; 
+								$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+								$surname = !empty($usedetails->surname) ? $usedetails->surname : '';
+								if (!empty($email))
 									Mail::to($email)->send(new FleetRejection($firstname, $surname, $email, $iID));
+
+						}
+						$vehicle_maintenance = vehicle_maintenance::where('id', $iID)->first();
+						if (!empty($vehicle_maintenance->author_id))
+						{
+							$authoretails = HRPerson::where('id', $vehicle_maintenance->author_id)->select('first_name', 'surname', 'email')->first();
+							$email = !empty($authoretails->email) ? $authoretails->email : ''; 
+							$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
+							$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
+							if (!empty($authoretails->email))
+										Mail::to($email)->send(new FleetRejection($firstname, $surname, $email, $iID));
+						}
 					}
-        }
 					
                 }
             }
@@ -482,6 +484,64 @@ class fleetcardController extends Controller
         AuditReportsController::store('Fleet Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
     }
+	/// Fleet approval / reject single
+	
+	public function vehicleApprovalsSingle(Request $request, vehicle_maintenance $fleet)
+    {
+		//return $fleet;
+		//die('do you come here');
+		// Approval Code
+		$fleet->status = 2;
+		$fleet->update();
+		
+		AuditReportsController::store('Fleet Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
+        return back();
+    }
+	public function vehicleRejectsSingle(Request $request, vehicle_maintenance $fleet)
+    {
+        $this->validate($request, [
+             'rejection_reason' => 'required',
+        ]);
+		$vehicleData = $request->all();
+        unset($vehicleData['_token']);
+
+		// Reject Code
+		$fleet->status = 3;	
+		$fleet->reject_timestamp = time();	
+		$fleet->reject_reason = $vehicleData['rejection_reason'];	
+		$fleet->rejector_id = Auth::user()->person->id;	
+		$fleet->update();
+		// Send Email to relevant people
+		$managerIDs = DB::table('security_modules_access')
+		   ->select('security_modules_access.*','security_modules.*') 
+		   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+		   ->where('code_name', 'vehicle')
+		   ->where('access_level','>=', 4)
+		   ->pluck('user_id');
+	 
+		foreach ($managerIDs as $manID) {
+				$usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
+				$email = !empty($usedetails->email) ? $usedetails->email : ''; 
+				$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+				$surname = !empty($usedetails->surname) ? $usedetails->surname : '';
+				if (!empty($email))
+					Mail::to($email)->send(new FleetRejection($firstname, $surname, $email, $fleet->id));
+
+		}
+		$vehicle_maintenance = vehicle_maintenance::where('id', $fleet->id)->first();
+		if (!empty($vehicle_maintenance->author_id))
+		{
+			$authoretails = HRPerson::where('id', $vehicle_maintenance->author_id)->select('first_name', 'surname', 'email')->first();
+			$email = !empty($authoretails->email) ? $authoretails->email : ''; 
+			$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
+			$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
+			if (!empty($authoretails->email))
+						Mail::to($email)->send(new FleetRejection($firstname, $surname, $email, $fleet->id));
+		}
+        AuditReportsController::store('Fleet Management', 'Reject Vehicle ', "Vehicle has been Rejected", 0);
+        return response()->json();
+    }
+	
 
     public function rejectReason(Request $request, vehicle_maintenance $reason)
     {
@@ -491,7 +551,7 @@ class fleetcardController extends Controller
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
-        $reason->rejector_id = $loggedInEmplID = Auth::user()->person->id;
+        $reason->rejector_id = Auth::user()->person->id;
         $reason->reject_reason = $vehicleData['description'];
         $reason->reject_timestamp = $currentDate = time();
         $reason->status = 3;
