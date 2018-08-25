@@ -380,8 +380,9 @@ class fleetcardController extends Controller
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->orderBy('vehicle_details.id')
             ->where('vehicle_details.status', 2)
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
             ->get();
 
         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
