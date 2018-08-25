@@ -47,7 +47,7 @@ class FleetRejection extends Mailable
 		$data['dashboard_url'] = url('/');
 		$data['fleetreject_url'] = url("/vehicle_management/viewdetails/$this->iID");
 		////
-        $subject = "New vehicle  Added $companyDetails[company_name] online system.";        
+        $subject = "Vehicle Rejected $companyDetails[company_name] online system.";        
         return $this->view('mails.reject_new_vehicle')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
