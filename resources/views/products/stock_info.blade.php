@@ -13,149 +13,11 @@
 @endsection
 
 @section('content')
-    <div class="row">
-        <!-- New Form -->
-        <div class="col-md-12">
-            <!-- Horizontal Form -->
-			<div class="box-body">
-				<div class="row">
-					<div class="col-md-6">
-					
-						<div class="box box-success">
-							<div class="box-header with-border">
-								<h3 class="box-title">Stock Details</h3>
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-												class="fa fa-minus"></i></button>
-									<button type="button" class="btn btn-box-tool" data-widget="remove"><i
-												class="fa fa-remove"></i></button>
-								</div>
-							</div>
-							<!-- /.box-header -->
-							<form class="form-horizontal" method="POST"  action="/stock/info_save/{{$meeting->id}}">
-							<input type="hidden" name="meeting_id" id="meeting_id" value="{{$meeting->id}}">
-							{{ csrf_field() }}
-							{{ method_field('PATCH') }}
-							<div class="box-body">
-								<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
-									<div class="form-group">
-										<label for="Meeting Name" class="col-sm-2 control-label">Title</label>
-										<div class="col-sm-10">
-											<div>
-												<input type="text" class="form-control" id="meeting_name" name="meeting_name" value="{{ $meeting->meeting_name }}">
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="Meeting Date" class="col-sm-2 control-label">Date</label>
-										<div class="col-sm-10">
-											<div>
-											<input type="text" class="form-control datepicker" name="meeting_date" placeholder="  dd/mm/yyyy" value="{{ date('d F Y', $meeting->meeting_date) }}">
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="Meeting Location" class="col-sm-2 control-label">Location</label>
-										<div class="col-sm-10">
-											<div>
-												<input type="text" class="form-control" id="meeting_location" name="meeting_location" value="{{$meeting->meeting_location}}">
-											</div>
-										</div>
-									</div>
-									<div class="form-group new-field {{ $errors->has('company_id') ? ' has-error' : '' }}">
-										<label for="company_id" class="col-sm-2 control-label">Client</label>
-										<div class="col-sm-10">
-											<select id="company_id" name="company_id" class="form-control select2" style="width: 100%;">
-												<option value="">*** Select a Client Company ***</option>
-												@foreach($companies as $company)
-													<option value="{{ $company->id }}" {{ ($company->id == $meeting->company_id) ? ' selected' : '' }}>{{ $company->name }}</option>
-												@endforeach
-											</select>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="Meeting Agenda" class="col-sm-2 control-label">Agenda</label>
-										<div class="col-sm-10">
-											<div>
-											<textarea rows="4" cols="50" class="form-control" id="meeting_agenda" name="meeting_agenda">{{$meeting->meeting_agenda}}</textarea>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							
-						<!-- /.box-body -->
-							<div class="box-footer">
-								<button type="submit"  class="btn btn-success pull-right"
-										>Update
-								</button>
-							</div>
-						</form>
-						</div>
-					</div>
-					<!-- /.col -->
-					<div class="col-md-6">
-						<div class="box box-success">
-							<div class="box-header with-border">
-								<h3 class="box-title">Meeting Minutes</h3>
-								<div class="box-tools pull-right">
-									<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-												class="fa fa-minus"></i></button>
-									<button type="button" class="btn btn-box-tool" data-widget="remove"><i
-												class="fa fa-remove"></i></button>
-								</div>
-							</div>
-							<!-- /.box-header -->
-							<div class="box-body">
-								<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
-									<table class="table table-striped">
-										<tbody>
-										<tr><th>Person</th><th>Minute</th></tr>
-										@if(!empty($meeting->MinutesMeet))
-											@foreach($meeting->MinutesMeet as $minute)
-												<tr>
-													<td>{{ ($minute->employee_id > 0) ? $minute->minutesPerson->first_name  .' '. $minute->minutesPerson->surname : '' }}
-														{{ ($minute->client_id > 0) ? $minute->client->full_name : '' }}
-													</td>
-													<td><textarea rows="2" cols="70" class="form-control" id="" name="" readonly>{{ $minute->minutes}}</textarea></td>
-												</tr>
-											@endforeach
-										@else
-												<tr>
-													<td colspan="2">
-														<div class="alert alert-danger alert-dismissable">
-															<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><textarea rows="8" cols="100" class="form-control" id="" name="" readonly>No minutes to display, please start by adding one.</textarea></div>
-													</td>
-												</tr>
-										@endif
-										</tbody>
-									</table>
-								</div>
-							</div>
-						<!-- /.box-body -->
-							<div class="box-footer">
-								<a href="{{ '/meeting/prnt_meeting/'.$meeting->id.''}}" class="btn btn-success pull-left" target="_blank">Print Minutes</a>
-								<button type="button" class="btn btn-success pull-left" onclick="postData({{$meeting->id}}, 'email_minutes');">Email To Attendees</button>
-								<button type="button" id="add-minutes" class="btn btn-success pull-right"
-								data-toggle="modal" data-target="#add-minutes-modal" data-meeting_id="{{ $meeting->id }}">Add Minutes
-								</button>
-							</div>
-						</div> 
-					<!-- /.form-group -->
-					</div>
-					<!-- /.col -->
-				</div>
-			</div>
-                    <!-- /.box-footer -->
-            <!-- /.box -->
-        </div>
-    </div>
-    <div class="row">
+	<div class="row">
 		<div class="col-sm-12">
 			<div class="box box-success">
 				<div class="box-header with-border">
-					<h3 class="box-title">Activities</h3>
-
+					<h3 class="box-title">Stock Details Products({{  $products->name}})</h3>
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
 									class="fa fa-minus"></i></button>
@@ -164,57 +26,232 @@
 					</div>
 				</div>
 				<!-- /.box-header -->
-				<div class="box-body">
-					<table id="emp-list-table" class="table table-bordered table-striped table-hover">
+				<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
+					<table id="example2" class="table table-bordered table-hover">
 						<thead>
-						<tr>
-							<th>#</th>
-							<th>Product Name</th>
-							<th style="vertical-align: middle; text-align: center;">Available Number</th>
-							<th style="vertical-align: middle; text-align: center;">Enter Number</th>
-						</tr>
+							<tr>
+								<th></th>
+								<th>Image</th>
+								<th>Location</th>
+								<th>Description</th>
+								<th>Allow Vat</th>
+								<th>Mass Net</th>
+								<th>minimum Level</th>
+								<th>Maximum Level</th>
+								<th>Bar Code</th>
+								<th>Unit</th>
+								<th>Commodity Code</th>
+							</tr>
 						</thead>
 						<tbody>
-						@foreach($stocks as $stock)
-							<tr>
-								<td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-								<td style="vertical-align: center;"
-									nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
-								<td style="vertical-align: middle; text-align: center;"
-									nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
-								<td style="vertical-align: middle; text-align: center;"
-									nowrap>
-									<input type="number" min="0" class="form-control"
-										   id="newstock_{{ $stock->id }}_{{$stock->category_id}}"
-										   name="newstock_{{$stock->id}}_{{$stock->category_id}}" value=""
-										   placeholder="Enter Items Number"></td>
+							@if (count($products->infosProduct) > 0)
+								@foreach ($products->infosProduct as $product)
+									<tr>
+										<td>
+											<button type="button" id="edit_info" class="btn btn-primary  btn-xs"
+                                                data-toggle="modal" data-target="#edit-stock-info-modal"
+                                                data-id="{{ $product->id }}" data-picture="{{ $product->picture }}"
+                                                data-description="{{ $product->description }}"
+												data-location="{{ $product->location }}"
+												data-allow_vat="{{ $product->allow_vat }}"
+												data-mass_net="{{ $product->mass_net }}"
+												data-minimum_level="{{ $product->minimum_level }}"
+												data-maximum_level="{{ $product->maximum_level }}"
+												data-bar_code="{{ $product->bar_code }}"
+												data-unit="{{ $product->unit }}"
+												data-commodity_code="{{ $product->commodity_code }}">
+												<i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										</td>
+										<td>
+											<div class="product-img">
+												<img alt="Vehicle Image" class="img-responsive" src="{{ (!empty($product->image)) ? Storage::disk('local')->url("Stock/images/$product->picture") : 'http://placehold.it/60x50' }}">
+											</div>
+											<div class="modal fade" id="enlargeImageModal" tabindex="-1"
+													 role="dialog" align="center"
+													 aria-labelledby="enlargeImageModal" aria-hidden="true">
+												<div class="modal-dialog modal-sm" >
+													<div class="modal-body" align="center">
+														<img src="" class="enlargeImageModalSource"  style="width:300;"
+															height="300" >
+													</div>
+												</div> 
+											</div>
+										</td>
+										<td>{{ (!empty($product->location)) ? $product->location : ''}} </td>
+										<td>{{ (!empty($product->description)) ? $product->description : ''}} </td>
+										<td>{{ (!empty($product->allow_vat)) ? $product->allow_vat: ''}} </td>
+										<td>{{ (!empty($product->mass_net)) ? $product->mass_net:'' }} </td>
+										<td>{{ (!empty($product->minimum_level)) ? $product->minimum_level : ''}} </td>
+										<td>{{ (!empty($product->maximum_level)) ? $product->maximum_level : ''}} </td>
+										<td>{{ (!empty($product->bar_code)) ? $product->bar_code : ''}} </td>
+										<td>{{ (!empty($product->unit)) ? $product->unit : ''}} </td>
+										<td>{{ (!empty($product->commodity_code)) ? $product->commodity_code : ''}} </td>
+									</tr>
 								@endforeach
-							</tr>
+							@endif
 						</tbody>
 						<tfoot>
 							<tr>
-								<th>#</th>
-								<th>Product Name</th>
-								<th style="vertical-align: middle; text-align: center;">Available Number</th>
-								<th style="vertical-align: middle; text-align: center;">Enter number</th>
+								<th></th>
+								<th>Image</th>
+								<th>Location</th>
+								<th>Description</th>
+								<th>Allow Vat</th>
+								<th>Mass Net</th>
+								<th>Minimum Level</th>
+								<th>Maximum Level</th>
+								<th>Bar Code</th>
+								<th>Unit</th>
+								<th>Commodity Code</th>
 							</tr>
 						</tfoot>
 					</table>
                 </div>
+				<div class="box-footer">
+                    <button type="button" id="add-price_titles" class="btn btn-primary pull-right" data-toggle="modal"
+                            data-target="#add-stock-info-modal">Add Details
+                    </button>
+				</div>
 			</div>
 		</div>
-        <!-- Include add expenditure and add income modals -->
+    </div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="box box-success">
+				<div class="box-header with-border">
+					<h3 class="box-title">Preferred Suppliers</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+									class="fa fa-minus"></i></button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i
+									class="fa fa-remove"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
+					<table id="example2" class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Order No</th>
+								<th>Supplier</th>
+								<th>Description</th>
+								<th>Inventory Code</th>
+								<th>Date Last Processed</th>
+							</tr>
+						</thead>
+						<tbody>
+							@if (count($productPreferreds) > 0)
+								@foreach ($productPreferreds as $productPreferred)
+									<tr>
+										<td>
+											<button type="button" id="edit_info" class="btn btn-primary  btn-xs"
+                                                data-toggle="modal" data-target="#edit-stock-info-modal"
+                                                data-id="{{ $productPreferred->id }}" 
+												data-order_no="{{ $productPreferred->order_no }}"
+												data-supplier_id="{{ $productPreferred->supplier_id }}"
+												data-description="{{ $productPreferred->description }}"
+												data-inventory_code="{{ $productPreferred->inventory_code }}"
+												<i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										</td>
+										<td>{{ (!empty($productPreferred->order_no)) ? $productPreferred->order_no : ''}} </td>
+										<td>{{ (!empty($productPreferred->com_name)) ? $productPreferred->com_name : ''}} </td>
+										<td>{{ (!empty($productPreferred->description)) ? $productPreferred->description : ''}} </td>
+										<td>{{ (!empty($productPreferred->inventory_code)) ? $productPreferred->inventory_code: ''}} </td>
+										<td>{{ (!empty($productPreferred->date_last_processed)) ? date(' d M Y', $productActivity->date_last_processed) : ''}} </td>
+									</tr>
+								@endforeach
+							@endif
+						</tbody>
+						<tfoot>
+							<tr>
+								<th></th>
+								<th>Order No</th>
+								<th>Supplier</th>
+								<th>Description</th>
+								<th>Inventory Code</th>
+								<th>Date Last Processed</th>
+							</tr>
+						</tfoot>
+					</table>
+                </div>
+				<div class="box-footer">
+                    <button type="button" id="add-price_titles" class="btn btn-primary pull-right" data-toggle="modal"
+                            data-target="#add-preferred-supplier-modal">Add Supplier
+                    </button>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="row">
+		<div class="col-sm-12">
+			<div class="box box-success">
+				<div class="box-header with-border">
+					<h3 class="box-title">Activities</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+									class="fa fa-minus"></i></button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i
+									class="fa fa-remove"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
+					<table id="example2" class="table table-bordered table-hover">
+						<thead>
+						<tr>
+							<th>Product name</th>
+							<th>Date</th>
+							<th>Action Performed</th>
+							<th>Performed By</th>
+							<th>Allocated to</th>
+							<th style="text-align: center;">Balance Before</th>
+							<th style="text-align: center;">Balance After</th>
+							<th style="text-align: center;">Available Balance</th>
+						</tr>
+						</thead>
+						<tbody>
+							@if (count($productActivities) > 0)
+								@foreach ($productActivities as $productActivity)
+									<tr>
+										<td>{{ (!empty($productActivity->product_name)) ? $productActivity->product_name : ''}} </td>
+										<td>{{ (!empty($productActivity->action_date)) ? date(' d M Y', $productActivity->action_date) : ''}} </td>
+										<td>{{ (!empty($productActivity->action)) ? $productActivity->action : ''}} </td>
+										<td>{{ (!empty($productActivity->name)&& !empty($productActivity->surname)) ? $productActivity->name." ".$productActivity->surname: ''}} </td>
+										<td>{{ (!empty($productActivity->allocated_firstname) && !empty($productActivity->allocated_surname)) ? $productActivity->allocated_firstname." ".$productActivity->allocated_surname: $productActivity->fleet_number." ".$productActivity->vehicle_registration }} </td>
+										<td style="text-align: center;">{{ (!empty($productActivity->balance_before)) ? $productActivity->balance_before : 0}} </td>
+										<td style="text-align: center;">{{ (!empty($productActivity->balance_after)) ? $productActivity->balance_after : 0}} </td>
+										<td style="text-align: center;">{{ (!empty($productActivity->avalaible_stock)) ? $productActivity->avalaible_stock : 0}} </td>
+									</tr>
+								@endforeach
+							@endif
+						</tbody>
+						<tfoot>
+							<tr>
+								<th>Product name</th>
+								<th>Date</th>
+								<th>Action Performed</th>
+								<th>Performed By</th>
+								<th>Allocated to</th>
+								<th style="text-align: center;">Balance Before</th>
+								<th style="text-align: center;">Balance After</th>
+								<th style="text-align: center;">Available Balance</th>
+							</tr>
+						</tfoot>
+					</table>
+                </div>
+				<div class="box-footer">
+                    <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                </div>
+			</div>
+		</div>
+    </div>
+	        <!-- Include add expenditure and add income modals -->
             @include('products.partials.add_new_stock_info_modal')
 			@include('products.partials.edit_stock_info_modal')
-			
-		<!-- Confirmation Modal -->
-        @if(Session('success_email'))
-            @include('contacts.partials.success_action', ['modal_title' => "Emails Sent!", 'modal_content' => session('success_email')])
-		        <!-- Confirmation Modal -->
-        @elseif(Session('success_error'))
-            @include('contacts.partials.warning_action', ['modal_title' => "Meeting Minutes Error!", 'modal_content' => session('success_error')])
-		@endif
-    </div>
+            @include('products.partials.add_prefered_suppliers_modal')
 @endsection
 
 @section('page_script')
@@ -258,6 +295,9 @@ function postData(id, data)
 	else if (data == 'email_minutes')
 		location.href = "/meeting/email_meeting/" + id;
 }
+$('#back_button').click(function () {
+            location.href = '/Product/Product/{{$products->category_id}}';
+        });
 $(function () {
 
 	 $(".select2").select2();
@@ -322,7 +362,7 @@ $(function () {
 		var formName = 'add-attendee-form';
 		var modalID = 'add-attendee-modal';
 		var submitBtnID = 'save-attendee';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$meeting->id}} + '/view';
+		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
 		var successMsgTitle = 'Attendee Saved!';
 		var successMsg = 'Attendee Has Been Successfully Saved!';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -340,7 +380,7 @@ $(function () {
 		var formName = 'add-minutes-form';
 		var modalID = 'add-minutes-modal';
 		var submitBtnID = 'save-attendee';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$meeting->id}} + '/view';
+		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
 		var successMsgTitle = 'Minute Saved!';
 		var successMsg = 'Minute Has Been Successfully Saved!';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -354,16 +394,16 @@ $(function () {
 	});
 	// Add minute Submit
 	$('#save-task').on('click', function() {
-		var strUrl = '/meeting/add_task/'+ {{$meeting->id}};
+		var strUrl = '/meeting/add_task/'+ {{$products->id}};
 		var formName = 'add-task-form';
 		var modalID = 'add-task-modal';
 		var submitBtnID = 'save-task';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$meeting->id}} + '/view';
+		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
 		var successMsgTitle = 'Task Saved!';
 		var successMsg = 'Task Has Been Successfully Saved!';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 	});
-	// Call Edit meeting modal/*data-meeting_id="{{ $meeting->id }}"
+	// Call Edit meeting modal/*data-meeting_id=""
 	$('#edit-meeting-modal').on('show.bs.modal', function (e) {
 		var btnEdit = $(e.relatedTarget);
 		minuteID = btnEdit.data('meeting_id');
@@ -384,7 +424,7 @@ $(function () {
 		var modalID = 'edit-meeting-modal';
 		var submitBtnID = 'update-meeting';
 		var successMsgTitle = 'Changes Saved!';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$meeting->id}} + '/view';
+		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
 		var successMsg = 'Meeting details has been updated successfully.';
 		var method = 'PATCH';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -402,7 +442,7 @@ $(function () {
 		var formName = 'comp-induction-form';
 		var modalID = 'comp-induction-modal';
 		var submitBtnID = 'complete-induction';
-		var redirectUrl = '/induction/' + {{$meeting->id}} + '/view';
+		var redirectUrl = '/induction/' + {{$products->id}} + '/view';
 		var successMsgTitle = 'Induction Completed!';
 		var successMsg = 'Induction has been Successfully Completed!';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -420,13 +460,13 @@ $(function () {
 	};
 	var modalID = 'edit-tasks-modal';
 	var submitBtnID = 'update-task';
-	var redirectUrl = '/induction/' + {{$meeting->id}} + '/view';
+	var redirectUrl = '/induction/' + {{$products->id}} + '/view';
 	var successMsgTitle = 'Changes Saved!';
 	var successMsg = 'Task details has been updated successfully.';
 	var method = 'PATCH';
 	modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
 	});
-	// Call Edit meeting modal/*data-meeting_id="{{ $meeting->id }}"
+	// Call Edit meeting modal/*data-meeting_id="}"
 	$('#edit-attendees-modal').on('show.bs.modal', function (e) {
 		var btnEdit = $(e.relatedTarget);
 		attendeeID = btnEdit.data('attendee_id');
@@ -466,7 +506,7 @@ $(function () {
 		var modalID = 'edit-attendees-modal';
 		var submitBtnID = 'update-attendees';
 		var successMsgTitle = 'Changes Saved!';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$meeting->id}} + '/view';
+		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
 		var successMsg = 'Meeting details has been updated successfully.';
 		var method = 'PATCH';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

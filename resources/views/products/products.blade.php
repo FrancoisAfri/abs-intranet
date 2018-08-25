@@ -16,6 +16,7 @@
                             <th style="width: 10px">#</th>
                             <th>Name</th>
                             <th>Product Code</th>
+                            <th>Quantity Available</th>
                             @if (isset($userAccess) && $userAccess->access_level > 1)
                                 <th>Price</th>
                             @else
@@ -43,6 +44,7 @@
                                            data-description="{{$category->description}}"><i class="fa fa-money"></i>
                                             Prices</a></td>
                                     <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
+                                    <td>{{ (!empty($category->product_code)) ?  $category->product_code : ''}} </td>
                                     <td>{{ (!empty($category->product_code)) ?  $category->product_code : ''}} </td>
                                     @if (isset($userAccess) && $userAccess->access_level > 1)
                                         <td>{{ (!empty( $category->price)) ?  'R' .number_format($category->price, 2) : ''}} </td>
@@ -180,6 +182,7 @@
                     name: $('#' + modalID).find('#name').val(),
                     description: $('#' + modalID).find('#description').val(),
                     price: $('#' + modalID).find('#price').val(),
+                    product_code: $('#' + modalID).find('#product_code').val(),
                     stock_type: $('#' + modalID).find('#stock_type').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };

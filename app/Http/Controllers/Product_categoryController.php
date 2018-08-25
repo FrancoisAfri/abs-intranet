@@ -11,7 +11,9 @@ use App\product_category;
 use App\product_packages;
 use App\product_price;
 use App\product_products;
+use App\productsPreferredSupplier;
 use App\product_promotions;
+use App\stockhistory;
 use App\ProductServiceSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -222,7 +224,7 @@ class Product_categoryController extends Controller
             ];
 			// Products Activities
 			
-			$stock = stockhistory::select('stock_history.*','vehicle_details.id as id'
+			$productActivities = stockhistory::select('stock_history.*','vehicle_details.id as id'
 					,'vehicle_details.fleet_number as fleet_number'
 					,'vehicle_details.vehicle_registration as vehicle_registration' 
 					,'Product_products.name as product_name', 'hr_people.first_name as name',
@@ -234,9 +236,23 @@ class Product_categoryController extends Controller
             ->leftJoin('vehicle_details', 'stock_history.vehicle_id', '=', 'vehicle_details.id')
              ->orderBy('product_name', 'asc')
             ->orderBy('stock_history.id', 'asc')
+			->where('product_id', $product->id)
 			->limit(100)
             ->get();
+			
+			// Preferred Suppliers
+			$productPreferreds = productsPreferredSupplier::select('products_preferred_suppliers.*'
+					,'Product_products.name as product_name', 'contact_companies.name as com_name')
+            ->leftJoin('contact_companies', 'products_preferred_suppliers.supplier_id', '=', 'contact_companies.id')
+            ->leftJoin('Product_products', 'products_preferred_suppliers.product_id', '=', 'Product_products.id')
+			->orderBy('products_preferred_suppliers.order_no', 'asc')
+			->where('product_id', $product->id)
+			->limit(100)
+            ->get();
+			
             $data['products'] = $product;
+            $data['productPreferreds'] = $productPreferreds;
+            $data['productActivities'] = $productActivities;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
             AuditReportsController::store('Products', 'Job Titles Page Accessed', 'Accessed by User', 0);
