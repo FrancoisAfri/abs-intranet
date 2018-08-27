@@ -250,7 +250,7 @@
 			$(".select2").select2();
 			
 			document.getElementById("back_button").onclick = function () {
-			location.href = '//vehicle_management/viewdetails/{{ $maintenance->id }}';	};
+			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';	};
 			
 			//Vertically center modals on page
 			function reposition() {
