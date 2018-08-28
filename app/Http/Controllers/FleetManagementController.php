@@ -372,6 +372,7 @@ class FleetManagementController extends Controller
 
     public function viewDetails(vehicle_maintenance $maintenance)
     {
+		//return $maintenance;
         $ID = $maintenance->id;
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();

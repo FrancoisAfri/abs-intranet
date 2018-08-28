@@ -4,7 +4,6 @@
             <form class="form-horizontal" name="edit-vehicledetails-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -13,10 +12,7 @@
                     <div class="modal-body">
                         <div id="invalid-input-alert"></div>
                         <div id="success-alert"></div>
-
                         <div class="box-body" id="vehicle_details">
-
-
                            <div class="form-group">
                             <label for="status" class="col-sm-2 control-label">Status</label>
                             <div class="col-sm-8">
@@ -24,7 +20,6 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-star-o"></i>
                                     </div>
-
                                     <select id="status" name="status" class="form-control">
                                         <option value="0">*** Select Fuel Type ***</option>
                                         <option value="1"> Active  </option>
@@ -35,7 +30,6 @@
                                 </div>
                             </div>
                         </div>
-
                         @foreach($division_levels as $division_level)
                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
@@ -72,7 +66,6 @@
                             </div>
                         </div>
                     </div>
-
                         <div class="form-group">
                             <label for="action" class="col-sm-2 control-label">Vehicle Make</label>
                             <div class="col-sm-8">
@@ -89,7 +82,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="action" class="col-sm-2 control-label">Vehicle Model</label>
                             <div class="col-sm-8">
@@ -122,7 +114,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="year" class="col-sm-2 control-label">Year</label>
                             <div class="col-sm-8">
@@ -133,20 +124,16 @@
                                     <input type="text" class="form-control" id="year" name="year"
                                     value="{{ old('year') }}"
                                     placeholder="Select  Year ...">
-
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Vehicle Registration</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="vehicle_registration"
                                 name="vehicle_registration" value="" placeholder="Enter vehicle registration">
                             </div>
-
                         </div>
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Chassis Number</label>
                             <div class="col-sm-8">
@@ -154,28 +141,21 @@
                                 value=""
                                 placeholder="Enter vehicle chassis number">
                             </div>
-
                         </div>
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Engine Number</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="engine_number" name="engine_number" value=""
                                 placeholder="Enter vehicle engine number">
                             </div>
-
                         </div>
-
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Vehicle Color</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="vehicle_color" name="vehicle_color" value=""
                                 placeholder="Enter vehicle color ">
                             </div>
-
                         </div>
-
                         <div class="form-group{{ $errors->has('metre_reading_type') ? ' has-error' : '' }}">
                             <label for="Leave_type" class="col-sm-2 control-label"> Metre Reading Type </label>
                             <div class="col-sm-9">
@@ -186,17 +166,13 @@
                                  value="2" {{ (old('$maintenance->metre_reading_type->') == 2) ? ' checked' : '' }}{{ ($maintenance->metre_reading_type === 2) ? ' checked' : '' }}> Hours </label>
                              </div>
                          </div>
-                        
-
                          <div class="form-group odometer-field">
                             <label for="path" class="col-sm-2 control-label">Odometer Reading</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="odometer_reading" name="odometer_reading"
                                 value="" placeholder="Enter Odometer Reading "> Km
                             </div>
-
                         </div>
-
                         <div class="form-group hours-field">
                             <label for="path" class="col-sm-2 control-label">Hours Reading</label>
                             <div class="col-sm-8">
@@ -204,9 +180,7 @@
                                 value="0"
                                 placeholder="Enter vehicle color ">
                             </div>
-
                         </div>
-
                         <div class="form-group">
                             <label for="fuel_type" class="col-sm-2 control-label">Fuel Type</label>
                             <div class="col-sm-8">
@@ -224,8 +198,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Size of Fuel Tank</label>
                             <div class="col-sm-8">
@@ -235,7 +207,6 @@
                             </div>
 
                         </div>
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Fleet Number</label>
                             <div class="col-sm-8">
@@ -244,7 +215,6 @@
                             </div>
 
                         </div>
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Vehicle Cell Number</label>
                             <div class="col-sm-8">
@@ -254,7 +224,6 @@
                             </div>
 
                         </div>
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label">Tracking Cell Number</label>
                             <div class="col-sm-8">
@@ -263,7 +232,6 @@
                             </div>
 
                         </div>
-
                         <div class="form-group">
                             <label for="action" class="col-sm-2 control-label">Vehicle Owner</label>
                             <div class="col-sm-8">
@@ -280,23 +248,16 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group{{ $errors->has('title_type') ? ' has-error' : '' }}">
                         <label for="Leave_type" class="col-sm-2 control-label"> Title Holder </label>
                         <div class="col-sm-9">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fin"
-                              name="title_type"
-                              value="1"
-                              checked> Financial
-                              Institution
-                          </label>
-                          <label class="radio-inline"><input type="radio" id="rdo_comp" name="title_type"
-                             value="2">
-                         Company </label>
+                         <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_fin"
+                              name="title_type" value="1" {{ ($maintenance->title_type === 1) ? ' checked' : '' }}> Financial Institution </label>
+                         <label class="radio-inline"><input type="radio" id="rdo_comp" name="title_type" value="2"
+						 {{ ($maintenance->title_type === 2) ? ' checked' : '' }}> Company </label>
 
                      </div>
                  </div>
-
                  <div class="form-group fin-field">
                     <label for="financial_institution" class="col-sm-2 control-label">Financial
                     Institution</label>
@@ -347,7 +308,6 @@
         </div>
         <div class="form-group">
             <label for="image" class="col-sm-2 control-label">Image</label>
-
             <div class="col-sm-8">
                 @if(!empty($fleetImage))
                 <div style="margin-bottom: 10px;">
@@ -360,7 +320,6 @@
                 data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
             </div>
         </div>
-
         <div class="form-group supDoc-field{{ $errors->has('registration_papers') ? ' has-error' : '' }}">
             <label for="registration_papers" class="col-sm-2 control-label">Registration Papers</label>
             <div class="col-sm-8">
@@ -384,8 +343,6 @@
 				@endif
             </div>
         </div>
-
-
         <div class="form-group">
             <label for="property_type" class="col-sm-2 control-label">Property Type</label>
             <div class="col-sm-8">
@@ -401,7 +358,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -414,5 +370,3 @@
     </div>
     </div>
 </div>
-
-
