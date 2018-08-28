@@ -216,7 +216,6 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
-                    {{--//<a href="/vehicle_management/group_admin" class="btn btn-sm btn-default btn-flat">Edit</a>--}}
                     <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
                             data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
                             data-status="{{$vehiclemaintenance->status}}"
@@ -444,7 +443,7 @@
                 var responsible_for_maintenance = btnEdit.data('responsible_for_maintenance');
 
                 var vehicle_make = btnEdit.data('vehicle_make');
-                console.log('gets here: ' + status);
+                //console.log('gets here: ' + status);
                 var vehicle_model = btnEdit.data('vehicle_model');
                 var vehicle_type = btnEdit.data('vehicle_type');
                 var year = btnEdit.data('year');
@@ -461,13 +460,13 @@
                 var cell_number = btnEdit.data('cell_number');
                 var tracking_umber = btnEdit.data('tracking_umber');
                 var vehicle_owner = btnEdit.data('vehicle_owner');
-                var title_type = btnEdit.data('title_type');
                 var financial_institution = btnEdit.data('financial_institution');
                 var extras = btnEdit.data('extras');
                 var property_type = btnEdit.data('property_type');
                 var company = btnEdit.data('company');
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
+                var title_type = btnEdit.data('title_type');
                 var promotion_type = btnEdit.data('promotion_type');
                 var modal = $(this);
                 modal.find('#status').val(status);
@@ -504,51 +503,6 @@
                 modal.find('#promotion_type').val(promotion_type);
 
             });
-
-            {{--$('#edit_vehicle').on('click', function () {--}}
-                {{--var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;--}}
-                {{--var modalID = 'edit-vehicledetails-modal';--}}
-                {{--var objData = {--}}
-                    {{--status: $('#' + modalID).find('#status').val(),--}}
-                    {{--division_level_5: $('#' + modalID).find('#division_level_5').val(),--}}
-                    {{--division_level_4: $('#' + modalID).find('#division_level_4').val(),--}}
-                    {{--division_level_3: $('#' + modalID).find('#division_level_3').val(),--}}
-                    {{--division_level_2: $('#' + modalID).find('#division_level_2').val(),--}}
-                    {{--division_level_1: $('#' + modalID).find('#division_level_1').val(),--}}
-                    {{--responsible_for_maintenance: $('#' + modalID).find('#responsible_for_maintenance').val(),--}}
-                    {{--vehicle_make: $('#' + modalID).find('#vehicle_make').val(),--}}
-                    {{--vehicle_model: $('#' + modalID).find('#vehicle_model').val(),--}}
-                    {{--vehicle_type: $('#' + modalID).find('#vehicle_type').val(),--}}
-                    {{--year: $('#' + modalID).find('#year').val(),--}}
-                    {{--vehicle_registration: $('#' + modalID).find('#vehicle_registration').val(),--}}
-                    {{--chassis_number: $('#' + modalID).find('#chassis_number').val(),--}}
-                    {{--engine_number: $('#' + modalID).find('#engine_number').val(),--}}
-                    {{--vehicle_color: $('#' + modalID).find('#vehicle_color').val(),--}}
-                    {{--odometer_reading: $('#' + modalID).find('#odometer_reading').val(),--}}
-                    {{--hours_reading: $('#' + modalID).find('#hours_reading').val(),--}}
-                    {{--fuel_type: $('#' + modalID).find('#fuel_type').val(),--}}
-                    {{--size_of_fuel_tank: $('#' + modalID).find('#size_of_fuel_tank').val(),--}}
-                    {{--fleet_number: $('#' + modalID).find('#fleet_number').val(),--}}
-                    {{--cell_number: $('#' + modalID).find('#cell_number').val(),--}}
-                    {{--tracking_umber: $('#' + modalID).find('#tracking_umber').val(),--}}
-                    {{--vehicle_owner: $('#' + modalID).find('#vehicle_owner').val(),--}}
-                    {{--financial_institution: $('#' + modalID).find('#financial_institution').val(),--}}
-                    {{--company: $('#' + modalID).find('#company').val(),--}}
-                    {{--property_type: $('#' + modalID).find('#property_type').val(),--}}
-                    {{--extras: $('#' + modalID).find('#extras').val(),--}}
-                    {{--image: $('#' + modalID).find('#image').val(),--}}
-                    {{--registration_papers: $('#' + modalID).find('#registration_papers').val(),--}}
-                    {{--promotion_type: $('#' + modalID).find('#promotion_type').val(),--}}
-                    {{--_token: $('#' + modalID).find('input[name=_token]').val()--}}
-                {{--};--}}
-                {{--var submitBtnID = 'edit_vehicle';--}}
-                {{--var redirectUrl = '/vehicle_management/viewdetails/{{ $maintenance->id }}';--}}
-                {{--var successMsgTitle = 'Changes Saved!';--}}
-                {{--var successMsg = 'The Vehicle details  has been updated successfully.';--}}
-                {{--var Method = 'PATCH';--}}
-                {{--modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);--}}
-            {{--});--}}
-
 
             $('#edit_vehicle').on('click', function () {
                 var strUrl = '/vehicle_management/edit_vehicleDetails/' + vehicleID;
