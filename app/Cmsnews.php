@@ -16,6 +16,6 @@ class Cmsnews extends Model
 
     public function cmsRankings()
     {
-        return $this->hasMany(cms_rating::class, 'cmsnewsID');
+        return $this->hasMany(cms_rating::class, 'cms_id');
     }
 }
