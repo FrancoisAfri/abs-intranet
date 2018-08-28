@@ -110,9 +110,7 @@ class CmsController extends Controller
         $data['Cmsnews'] = $Cmsnews;
         $data['division_levels'] = $divisionLevels;
         $data['hrDetails'] = $hrDetails;
-        AuditReportsController::store('CRM', 'CRM Setup Page Accessed', "Accessed By User", 0);
-
-
+       
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return view('cms.edit_crm_news')->with($data);
     }
@@ -176,7 +174,7 @@ class CmsController extends Controller
         }
 
         AuditReportsController::store('Content Management', 'Company News Updated', "Company News Content Management Accessed", 0);
-        return redirect('/cms/editCeonews/' . $news->id)->with('success_application', "Content Update successfully.");
+        return redirect('/cms/viewnews/' . $news->id)->with('success_application', "Content Update successfully.");
 
     }
 
