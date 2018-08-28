@@ -380,7 +380,7 @@ class fleetcardController extends Controller
             ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->where('vehicle_details.status', 2)
+			->whereIn('vehicle_details.status', [2, 3])
 			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 			->orderBy('vehicle_details.fleet_number', 'ASC')
             ->get();
@@ -403,7 +403,7 @@ class fleetcardController extends Controller
         $data['division_levels'] = $divisionLevels;
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Fleet Management';
-        $data['active_rib'] = 'Fleet Approval';
+        $data['active_rib'] = 'Fleet Approval/rejection';
 
         AuditReportsController::store('Vehicle Approvals', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Vehicle Approvals.vehicle_approvals')->with($data);
