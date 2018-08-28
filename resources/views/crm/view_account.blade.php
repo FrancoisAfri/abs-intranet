@@ -75,7 +75,7 @@
                                     <tr>
                                         <td width="5px"><i class="fa fa-caret-down"></i></td>
                                         <td>
-                                            <a href="/quote/view/{{ $quotation->id }}" target="_blank">
+                                            <a href="/quote/view/{{ $quotation->id }}/{{$account->company->id}}" target="_blank">
                                                 {{ ($quotation->quote_number) ? $quotation->quote_number : $quotation->id }}
                                             </a>
                                         </td>
