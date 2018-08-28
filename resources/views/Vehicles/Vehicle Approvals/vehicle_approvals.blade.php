@@ -23,84 +23,132 @@
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="box-body">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th style="width: 10px; text-align: center;"></th>
-                                <th style="width: 10px; text-align: center;"></th>
-                                <th>Vehicle Model/Year</th>
-                                <th>Fleet Number</th>
-                                <th>Vehicle Registration</th>
-                                <th>Odometer/Hours</th>
-                                <th>Company</th>
-                                <th>Department</th>
-                                <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
-                                                                                          id="checkallaccept"
-                                                                                          onclick="checkAllboxAccept()"/>
-                                </th>
-                                <th style="width: 5px; text-align: center;">Decline</th>
-                                <td></td>
-                            </tr>
-                            @if (count($Vehiclemanagemnt) > 0)
-                                @foreach ($Vehiclemanagemnt as $fleet)
-                                    <tr style="text-align:center">
-                                        <td>
-											<a href="{{ '/vehicle_management/viewdetails/' . $fleet->id }}"
-												   id="fleet_view" class="btn btn-sm btn-default btn-flat"
-												   target=”_blank”> View</a>
-                                        </td>
-										<td nowrap>
-                                            <div class="product-img">
-                                                <img src="{{ (!empty($fleet->image)) ? Storage::disk('local')->url("Vehicle/images/$fleet->image") : 'http://placehold.it/60x50' }}"
-                                                     alt="Product Image" width="75" height="50">
-                                            </div>
-                                        </td>
-                                        <td>{{ (!empty( $fleet->vehiclemodel . ' ' . $fleet->year )) ?   $fleet->vehiclemodel . ' ' . $fleet->year : ''}} </td>
-                                        <td>{{ (!empty( $fleet->fleet_number)) ?  $fleet->fleet_number : ''}} </td>
-                                        <td>{{ (!empty( $fleet->vehicle_registration)) ?  $fleet->vehicle_registration : ''}} </td>
-                                        <td>{{ (!empty( $fleet->odometer_reading)) ?  $fleet->odometer_reading.''.'Kms' : '' }} </br>
-                                            {{ !empty($fleet->hours_reading) ? $fleet->hours_reading.''.'Hrs' : '' }}</td>
-                                        <td>{{ (!empty( $fleet->Department)) ?  $fleet->Department : ''}} </td>
-                                        <td>{{ (!empty( $fleet->company)) ?  $fleet->company : ''}} </td>
-                                        <td style='text-align:center'>
-                                            <input type="hidden" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $fleet->id }}"
-                                                   name="vehicleappprove_{{ $fleet->id }}" value="0">
-                                            <input type="checkbox" class="checkbox selectall"
-                                                   id="vehicleappprove_{{ $fleet->id }}"
-                                                   name="vehicleappprove_{{ $fleet->id }}"
-                                                   value="1" {{$fleet->status === 1 ? 'checked ="checked"' : 0 }}>
-                                        </td>
-                                        <td style="text-align:center"><input type="checkbox" class="checkalldeclines "
-                                                                             id="decline_$aVehicles[id]"
-                                                                             onclick="$('#comment_id_{{$fleet->id}}').toggle(); uncheckCheckBoxes({{$fleet->id}}, 0);">
-                                        </td>
-                                        <td>
-                                            {{--  <input type="text" size="30" id="comment_id_{{$fleet->id}}" name="declined_{{$fleet->id}}" style="display:none">         --}}
-                                            <textarea class="form-control" id="comment_id_{{$fleet->id}}"
-                                                      name="declined_{{$fleet->id}}"
-                                                      placeholder="Enter rejection reason ..." rows="2"
-                                                      style="display:none"></textarea>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr id="categories-list">
-                                    <td colspan="11">
-                                        <div class="alert alert-danger alert-dismissable">
-                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                                &times;
-                                            </button>
-                                            No vehicles to display, please start by adding a new vehicles..
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endif
-                        </table>
-                        <!--   </div> -->
-                        <!-- /.box-body -->
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-primary pull-right"> Submit</button>
-                        </div>
+						<div style="overflow-X:auto;">
+							<table class="table table-bordered">
+								<tr>
+									<th style="width: 10px; text-align: center;"></th>
+									<th style="width: 10px; text-align: center;"></th>
+									<th>Vehicle Model/Year</th>
+									<th>Fleet Number</th>
+									<th>Vehicle Registration</th>
+									<th>Odometer/Hours</th>
+									<th>Company</th>
+									<th>Department</th>
+									<th style="width: 5px; text-align: center;">Accept <input type="checkbox"
+																							  id="checkallaccept"
+																							  onclick="checkAllboxAccept()"/>
+									</th>
+									<th style="width: 5px; text-align: center;">Decline</th>
+									<td></td>
+									<td>Rejection Reason</td>
+								</tr>
+								@if (count($Vehiclemanagemnt) > 0)
+									@foreach ($Vehiclemanagemnt as $fleet)
+										@if ($fleet->status == 3)
+											<tr bgcolor="#FF0000">
+												<td>
+													<a href="{{ '/vehicle_management/viewdetails/' . $fleet->id }}"
+														   id="fleet_view" class="btn btn-sm btn-default btn-flat"
+														   target=”_blank”> View</a>
+												</td>
+												<td>
+													<div class="product-img">
+														<img src="{{ (!empty($fleet->image)) ? Storage::disk('local')->url("Vehicle/images/$fleet->image") : 'http://placehold.it/60x50' }}"
+															 alt="Product Image" width="75" height="50">
+													</div>
+												</td>
+												<td>{{ (!empty( $fleet->vehiclemodel . ' ' . $fleet->year )) ?   $fleet->vehiclemodel . ' ' . $fleet->year : ''}} </td>
+												<td>{{ (!empty( $fleet->fleet_number)) ?  $fleet->fleet_number : ''}} </td>
+												<td>{{ (!empty( $fleet->vehicle_registration)) ?  $fleet->vehicle_registration : ''}} </td>
+												<td>{{ (!empty( $fleet->odometer_reading)) ?  $fleet->odometer_reading.''.'Kms' : '' }} </br>
+													{{ !empty($fleet->hours_reading) ? $fleet->hours_reading.''.'Hrs' : '' }}</td>
+												<td>{{ (!empty( $fleet->Department)) ?  $fleet->Department : ''}} </td>
+												<td>{{ (!empty( $fleet->company)) ?  $fleet->company : ''}} </td>
+												<td style='text-align:center'>
+													<input type="hidden" class="checkbox selectall"
+														   id="vehicleappprove_{{ $fleet->id }}"
+														   name="vehicleappprove_{{ $fleet->id }}" value="0">
+													<input type="checkbox" class="checkbox selectall"
+														   id="vehicleappprove_{{ $fleet->id }}"
+														   name="vehicleappprove_{{ $fleet->id }}"
+														   value="1" {{$fleet->status === 1 ? 'checked ="checked"' : 0 }}>
+												</td>
+												<td style="text-align:center"><input type="checkbox" class="checkalldeclines "
+																					 id="decline_$aVehicles[id]"
+																					 onclick="$('#comment_id_{{$fleet->id}}').toggle(); uncheckCheckBoxes({{$fleet->id}}, 0);">
+												</td>
+												<td>
+													{{--  <input type="text" size="30" id="comment_id_{{$fleet->id}}" name="declined_{{$fleet->id}}" style="display:none">         --}}
+													<textarea class="form-control" id="comment_id_{{$fleet->id}}"
+															  name="declined_{{$fleet->id}}"
+															  placeholder="Enter rejection reason ..." rows="2"
+															  style="display:none"></textarea>
+												</td>
+												<td>{{ (!empty( $fleet->reject_reason)) && $fleet->status == 3 ?  $fleet->reject_reason : ''}} </td>
+											</tr>
+										@else
+											<tr>
+												<td>
+													<a href="{{ '/vehicle_management/viewdetails/' . $fleet->id }}"
+														   id="fleet_view" class="btn btn-sm btn-default btn-flat"
+														   target=”_blank”> View</a>
+												</td>
+												<td>
+													<div class="product-img">
+														<img src="{{ (!empty($fleet->image)) ? Storage::disk('local')->url("Vehicle/images/$fleet->image") : 'http://placehold.it/60x50' }}"
+															 alt="Product Image" width="75" height="50">
+													</div>
+												</td>
+												<td>{{ (!empty( $fleet->vehiclemodel . ' ' . $fleet->year )) ?   $fleet->vehiclemodel . ' ' . $fleet->year : ''}} </td>
+												<td>{{ (!empty( $fleet->fleet_number)) ?  $fleet->fleet_number : ''}} </td>
+												<td>{{ (!empty( $fleet->vehicle_registration)) ?  $fleet->vehicle_registration : ''}} </td>
+												<td>{{ (!empty( $fleet->odometer_reading)) ?  $fleet->odometer_reading.''.'Kms' : '' }} </br>
+													{{ !empty($fleet->hours_reading) ? $fleet->hours_reading.''.'Hrs' : '' }}</td>
+												<td>{{ (!empty( $fleet->Department)) ?  $fleet->Department : ''}} </td>
+												<td>{{ (!empty( $fleet->company)) ?  $fleet->company : ''}} </td>
+												<td style='text-align:center'>
+													<input type="hidden" class="checkbox selectall"
+														   id="vehicleappprove_{{ $fleet->id }}"
+														   name="vehicleappprove_{{ $fleet->id }}" value="0">
+													<input type="checkbox" class="checkbox selectall"
+														   id="vehicleappprove_{{ $fleet->id }}"
+														   name="vehicleappprove_{{ $fleet->id }}"
+														   value="1" {{$fleet->status === 1 ? 'checked ="checked"' : 0 }}>
+												</td>
+												<td style="text-align:center"><input type="checkbox" class="checkalldeclines "
+																					 id="decline_$aVehicles[id]"
+																					 onclick="$('#comment_id_{{$fleet->id}}').toggle(); uncheckCheckBoxes({{$fleet->id}}, 0);">
+												</td>
+												<td>
+													{{--  <input type="text" size="30" id="comment_id_{{$fleet->id}}" name="declined_{{$fleet->id}}" style="display:none">         --}}
+													<textarea class="form-control" id="comment_id_{{$fleet->id}}"
+															  name="declined_{{$fleet->id}}"
+															  placeholder="Enter rejection reason ..." rows="2"
+															  style="display:none"></textarea>
+												</td>
+												<td>{{ (!empty( $fleet->reject_reason)) && $fleet->status == 3 ?  $fleet->reject_reason : ''}} </td>
+											</tr>
+										@endif
+									@endforeach
+								@else
+									<tr id="categories-list">
+										<td colspan="12">
+											<div class="alert alert-danger alert-dismissable">
+												<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+													&times;
+												</button>
+												No vehicles to display, please start by adding a new vehicles..
+											</div>
+										</td>
+									</tr>
+								@endif
+							</table>
+							<!--   </div> -->
+							<!-- /.box-body -->
+							<div class="box-footer">
+								<button type="submit" class="btn btn-primary pull-right"> Submit</button>
+							</div>
+						</div>
                     </div>
             </div>
             <!-- Include add new prime rate modal -->

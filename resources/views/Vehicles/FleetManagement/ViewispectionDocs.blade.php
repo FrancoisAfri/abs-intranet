@@ -64,14 +64,10 @@
                     <!--  -->
                     <table class="table table-striped table-bordered">
                         <tr>
-
                             <td class="caption">Inspection In</td>
-
                             <td class="caption">Inspection Out</td>
-
                         </tr>
                         <tr>
-
                             <td class="caption">
                                 <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                     <label for="end_mileage_id" class="col-sm-2 control-label">Inpection Documents
@@ -107,21 +103,13 @@
                             </td>
                         </tr>
                         <p>
-
                         <tr>
-
                             @foreach ($vehiclecollectimage as $booking)
- 
                             <td>
                                 <div class="product-img">
                                     <img src="{{ (!empty($booking->image)) ? Storage::disk('local')->url("collectionimage/$booking->image") : 'http://placehold.it/60x50' }}"
                                   alt="Product Image"width="250" height="120">
                                 </div>
-                               <!--  <br>
-                                <div class="product-img">
-                                    <img src="{{ (!empty($booking->image)) ? Storage::disk('local')->url("collectionimage/$booking->image") : 'http://placehold.it/60x50' }}"
-                                  alt="Product Image"width="250" height="120">
-                                </div> -->
                             </td>
                         </tr>
                             @endforeach
@@ -132,14 +120,9 @@
                                     <img src="{{ (!empty($bookings->image)) ? Storage::disk('local')->url("vehiclereturnImage/$bookings->image") : 'http://placehold.it/60x50' }}"
                                   alt="Product Image"width="250" height="120">
                                 </div>
-                               
                             </td>
                               @endforeach
-
-
                         </tr>
-
-
                     </table>
                     <!--   </div> -->
                     <!-- /.box-body -->
@@ -150,13 +133,8 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
-
-
         @endsection
-
         @section('page_script')
             <script src="/custom_components/js/modal_ajax_submit.js"></script>
             <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
