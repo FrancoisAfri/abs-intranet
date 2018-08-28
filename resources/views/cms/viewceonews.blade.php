@@ -129,6 +129,11 @@
             <!-- Ajax form submit -->
             <script src="/custom_components/js/modal_ajax_submit.js"></script>
             <script>
+			
+			//Cancel button click event
+			document.getElementById("back_button").onclick = function () {
+				location.href = "/";
+			};
                 function postData(id, data) {
                     if (data == 'actdeac') location.href = "/cms/ceo_cmsnews_act/" + id;
 

@@ -459,7 +459,7 @@ class CmsController extends Controller
     public function cmsratings($id, $cmsID)
     {
 
-        $cms_news_rating = cms_rating::where('cmsnewsID', $cmsID)->first();
+        $cms_news_rating = cms_rating::where('cms_id', $cmsID)->first();
         // return  $loggedInEmplID = Auth::user()->person->id;
 
         if (empty($cms_news_rating)) {
@@ -469,7 +469,7 @@ class CmsController extends Controller
             $cms_news_rating->rating_3 = 0;
             $cms_news_rating->rating_4 = 0;
             $cms_news_rating->rating_5 = 0;
-            $cms_news_rating->cmsnewsID = $cmsID;
+            $cms_news_rating->cms_id = $cmsID;
             $cms_news_rating->user_id = $loggedInEmplID = Auth::user()->person->id;
             $cms_news_rating->save();
         }
@@ -560,7 +560,7 @@ class CmsController extends Controller
 
         $ratings = cms_rating::select('cms_news_ratings.*', 'hr_people.id', 'hr_people.first_name', 'hr_people.surname')
             ->join('hr_people', 'cms_news_ratings.user_id', '=', 'hr_people.id')
-            ->where('cmsnewsID', $ID)
+            ->where('cms_id', $ID)
             ->get();
         // return $ratings;
 
