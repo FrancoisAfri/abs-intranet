@@ -10,7 +10,6 @@ use App\Mail\assignUsertoAdmin;
 use App\Mail\vehiclemanagerApproval;
 use App\ContactCompany;
 use App\DivisionLevel;
-Use App\vehicle_booking;
 Use App\permits_licence;
 use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
@@ -385,8 +384,7 @@ class FleetManagementController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-		$ordomerter = vehicle_booking::select('end_mileage_id')->where('vehicle_id', $ID)->orderBy('id', 'desc')->get()->first();
-		$ordomerter = !empty($ordomerter->end_mileage_id) ? $ordomerter->end_mileage_id : 0;
+
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -452,7 +450,6 @@ class FleetManagementController extends Controller
         $data['ContactCompany'] = $ContactCompany;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['maintenance'] = $maintenance;
-        $data['ordomerter'] = $ordomerter;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Fleet Management', 'Vehicle Details Accessed', "Accessed by User", 0);
