@@ -10,6 +10,7 @@ use App\Mail\assignUsertoAdmin;
 use App\Mail\vehiclemanagerApproval;
 use App\ContactCompany;
 use App\DivisionLevel;
+Use App\vehicle_booking;
 Use App\permits_licence;
 use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
@@ -372,7 +373,6 @@ class FleetManagementController extends Controller
 
     public function viewDetails(vehicle_maintenance $maintenance)
     {
-		//return $maintenance;
         $ID = $maintenance->id;
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();
@@ -385,7 +385,8 @@ class FleetManagementController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
-
+		$ordomerter = vehicle_booking::select('end_mileage_id')->where('vehicle_id', $ID)->orderBy('id', 'desc')->get()->first();
+		$ordomerter = !empty($ordomerter->end_mileage_id) ? $ordomerter->end_mileage_id : 0;
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -395,7 +396,6 @@ class FleetManagementController extends Controller
         $fueltype = array(1 => 'Unleaded', 2 => ' Lead replacement', 3 => ' Diesel');
         $status = array(1 => 'Active', 2 => 'Require Approval', 3 => 'Rejected', 4 => 'Inactive');
 
-        // if ($maintenance->status == 1) {
         $ID = $maintenance->id;
 		
         $vehiclemaintenance = vehicle_detail::select('vehicle_details.*', 'vehicle_make.name as vehiclemake'
@@ -419,7 +419,6 @@ class FleetManagementController extends Controller
         $vehiclemaintenance = $vehiclemaintenance->load('vehicleOwnerName');
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
         $fleetImage = $vehiclemaintenance->first()->image;
-		//return  $vehiclemaintenance;
         $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("Vehicle/registration_papers/$registrationPapers") : '';
         $data['fleetImage'] = (!empty($fleetImage)) ? Storage::disk('local')->url("Vehicle/images/$fleetImage") : '';
         $data['page_title'] = " View Fleet Details";
@@ -453,6 +452,7 @@ class FleetManagementController extends Controller
         $data['ContactCompany'] = $ContactCompany;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['maintenance'] = $maintenance;
+        $data['ordomerter'] = $ordomerter;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Fleet Management', 'Vehicle Details Accessed', "Accessed by User", 0);

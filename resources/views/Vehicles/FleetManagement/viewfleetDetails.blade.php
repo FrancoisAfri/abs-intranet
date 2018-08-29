@@ -143,7 +143,7 @@
                                  @if (isset($maintenance) && $maintenance->metre_reading_type === 1)
                                 <tr>
                                     <td class="caption">Odometer Reading</td>
-                                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
+                                    <td>{{ $ordomerter}}</td>
                                     <td class="caption">Vehicle Cell Number</td>
                                     <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
                                 </tr>
