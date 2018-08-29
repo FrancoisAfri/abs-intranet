@@ -31,7 +31,6 @@
                                     <input type="hidden" name="vehicle_type" value="{{!empty($vehicle_type) ? $vehicle_type : ''}}">
                                     <input type="hidden" name="driver_id" value="{{!empty($driver_id) ? $driver_id : ''}}">
                                     <input type="hidden" name="action_date" value="{{!empty($action_date) ? $action_date : ''}}">
-
                                     <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
@@ -99,13 +98,11 @@
 			<div class="box-body">
 				<div style="overflow-X:auto;">
 					<table id="example" class="table table-bordered table-hover">
-
 							<input type="hidden" name="vehicle_id" value="{{!empty($vehicle_id) ? $vehicle_id : 0}}">
 							<input type="hidden" name="report_type" value="{{!empty($report_type) ? $report_type : ''}}">
 							<input type="hidden" name="vehicle_type" value="{{!empty($vehicle_type) ? $vehicle_type : ''}}">
 							<input type="hidden" name="driver_id" value="{{!empty($driver_id) ? $driver_id : ''}}">
 							<input type="hidden" name="action_date" value="{{!empty($action_date) ? $action_date : ''}}">
-
 						<thead>
 						<tr>
 							<th>Fleet Number</th>
