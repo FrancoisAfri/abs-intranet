@@ -160,9 +160,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
@@ -253,10 +253,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                    // $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
@@ -299,7 +298,6 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -333,9 +331,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->get();
 
@@ -405,11 +403,10 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
-            //->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
             ->get();
 
@@ -485,16 +482,19 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->get();
 
         $total = $vehiclefines->sum('amount');
         $totalamount_paid = $vehiclefines->sum('amount_paid');
-
+		
+        for ($i = 0; $i < count($vehicleArray); $i++) {
+            $vehicle .= $vehicleArray[$i] . ',';
+        }
+		
         $fineType = array(1 => 'Speeding', 2 => 'Parking', 3 => 'Moving Violation', 4 => 'Expired Registration', 5 => 'No Drivers Licence', 6 => 'Other');
 
         $status = array(1 => 'Captured', 2 => 'Fine Queried', 3 => 'Fine Revoked', 4 => 'Fine Paid');
@@ -535,9 +535,6 @@ class VehicleReportsController extends Controller
         $vehicleType = $reportData['vehicle_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
-        //$Destination = $request['destination'];
-        //$Purpose = $request['purpose'];
-
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
@@ -569,9 +566,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->orderBy('id', 'desc')
             ->get();
@@ -662,15 +659,16 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->get();
 
         $serviceDetails = $serviceDetail->unique('id');;
-
+		for ($i = 0; $i < count($vehicleArray); $i++) {
+            $vehicle .= $vehicleArray[$i] . ',';
+        }
 
         $totalamount_paid = $serviceDetails->sum('total_cost');
 
@@ -707,7 +705,6 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -744,15 +741,16 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->get();
 
         $serviceDetails = $serviceDetail->unique('id');;
-
-
+		for ($i = 0; $i < count($vehicleArray); $i++) {
+            $vehicle .= $vehicleArray[$i] . ',';
+        }
         $totalamount_paid = $serviceDetails->sum('total_cost');
 
 
@@ -794,7 +792,6 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -833,10 +830,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->get();
 
@@ -844,7 +840,9 @@ class VehicleReportsController extends Controller
 
         $severity = array(1 => ' Minor', 2 => ' Major ', 3 => 'Critical ');
         $status = array(1 => '  Reported', 2 => '  Scheduled for Repair  ', 3 => ' Resolved  ');
-
+		for ($i = 0; $i < count($vehicleArray); $i++) {
+			$vehicle .= $vehicleArray[$i] . ',';
+		}
         $data['vehicle_id'] = rtrim($vehicle, ",");
         $data['report_type'] = $reportType;
         $data['vehicle_type'] = $vehicleType;
@@ -919,19 +917,16 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
-            //  ->where('vehicle_incidents.id','desc')
             ->get();
 
         $vehicleincidents = $vehicleincident->unique('id');
 
         $severity = array(1 => ' Minor', 2 => ' Major ', 3 => 'Critical ');
         $status = array(1 => '  Reported', 2 => '  Scheduled for Repair  ', 3 => ' Resolved  ');
-
-        // return $vehicleincidents;
 
         $data['status'] = $status;
         $data['severity'] = $severity;
@@ -973,7 +968,6 @@ class VehicleReportsController extends Controller
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
         $vehicleMake = $reportData['vehicle_make'];
-        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -1010,10 +1004,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->get();
 
@@ -1052,7 +1045,6 @@ class VehicleReportsController extends Controller
         $reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        //$licenceType = $reportData['licence_type'];
         $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
         $Destination = $request['destination'];
@@ -1063,8 +1055,6 @@ class VehicleReportsController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
-
         $vehicledetails = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
@@ -1085,17 +1075,13 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->get();
 
-        //return $vehicledetails;
-
         $status = array(1 => '   Unleaded', 2 => 'Lead replacement', 3 => 'Diesel');
-
-        // return $vehicledetails;
 
         $data['status'] = $status;
         $data['vehicledetails'] = $vehicledetails;
@@ -1165,14 +1151,13 @@ class VehicleReportsController extends Controller
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('currentdate', [$actionFrom, $actionTo]);
+                    $query->whereBetween('vehicle_documets.currentdate', [$actionFrom, $actionTo]);
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where('vehicle_documets.exp_date', '<', $currentTime)
             ->orderby('vehicle_documets.id', 'desc')
@@ -1196,18 +1181,21 @@ class VehicleReportsController extends Controller
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('currentdate', [$actionFrom, $actionTo]);
+                    $query->whereBetween('permits_licence.date_captured', [$actionFrom, $actionTo]);
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+                if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where('permits_licence.exp_date', '<', $currentTime)
             ->orderby('permits_licence.id', 'desc')
             ->get();
-
+			
+		for ($i = 0; $i < count($vehicleArray); $i++) {
+			$vehicle .= $vehicleArray[$i] . ',';
+		}
         $data['vehicle_id'] = rtrim($vehicle, ",");
         $data['report_type'] = $reportType;
         $data['vehicle_type'] = $vehicleType;
@@ -1237,7 +1225,6 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
         $vehicle = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
         $vehicleArray = (explode(",", $vehicle));
-        //$reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
         $driverID = $reportData['driver_id'];
@@ -1275,9 +1262,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where('vehicle_documets.exp_date', '<', $currentTime)
             ->orderby('vehicle_documets.id', 'desc')
@@ -1357,9 +1344,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where('permits_licence.exp_date', '<', $currentTime)
             ->orderby('permits_licence.id', 'desc')
@@ -1400,7 +1387,6 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
         $vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
-        //$reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
         $driverID = $reportData['driver_id'];
@@ -1440,15 +1426,17 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where('vehicle_fuel_log.tank_and_other', '=', 2)
             ->orderby('vehicle_fuel_log.service_station', 'desc')
             ->get();
-
+		
+		for ($i = 0; $i < count($vehicleArray); $i++) {
+			$vehicle .= $vehicleArray[$i] . ',';
+		}
         $totalKms = $externalFuelLog->sum('Odometer_reading');
         $totalHours = $externalFuelLog->sum('Hoursreading');
         $totalLitres = $externalFuelLog->sum('litres');
@@ -1530,15 +1518,13 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where('vehicle_fuel_log.tank_and_other', '=', 2)
             ->orderby('vehicle_fuel_log.service_station', 'desc')
             ->get();
-
         $totalKms = $externalFuelLog->sum('Odometer_reading');
         $totalHours = $externalFuelLog->sum('Hoursreading');
         $totalLitres = $externalFuelLog->sum('litres');
@@ -1591,7 +1577,6 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
         $vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
-        //$reportID = $reportData['report_id'];
         $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
         $driverID = $reportData['driver_id'];
@@ -1632,17 +1617,14 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_id', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where('fuel_tank_topUp.status', '=', 1)
             ->orderby('fuel_tanks.id', 'desc')
             ->get();
-
-        // return $fuelTankTopUp;
-
+		
         $data['fuelTankTopUp'] = $fuelTankTopUp;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Internal Fuel Report ";
@@ -1660,7 +1642,6 @@ class VehicleReportsController extends Controller
 
     public function fleetCardReport(Request $request)
     {
-
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
@@ -1699,10 +1680,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $vehicle .= $vehicleArray[$i] . ',';
-                    $query->whereOr('vehicle_fleet_cards.fleet_number', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where(function ($query) use ($company) {
                 if (!empty($company)) {
@@ -1722,7 +1702,9 @@ class VehicleReportsController extends Controller
             ->orderBy('vehicle_fleet_cards.fleet_number', 'asc')
             ->get();
 
-        //return $fleetcards;
+		for ($i = 0; $i < count($vehicleArray); $i++) {
+			$vehicle .= $vehicleArray[$i] . ',';
+		}
         $data['status'] = $status;
         $data['vehicle_id'] = rtrim($vehicle, ",");
         $data['vehicle_type'] = $vehicleType;
@@ -1786,9 +1768,9 @@ class VehicleReportsController extends Controller
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
-                for ($i = 0; $i < count($vehicleArray); $i++) {
-                    $query->whereOr('vehicle_fleet_cards.fleet_number', '=', $vehicleArray[$i]);
-                }
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
             })
             ->where(function ($query) use ($company) {
                 if (!empty($company)) {

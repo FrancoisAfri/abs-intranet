@@ -36,6 +36,7 @@
                                         <th>Odometer/Hours</th>
                                         <th>Company</th>
                                         <th>Department</th>
+                                        <th>Rejection Reason</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -86,13 +87,6 @@
                                                          aria-labelledby="enlargeImageModal" aria-hidden="true">
                                                         <!--  <div class="modal-dialog modal" role="document"> -->
                                                         <div class="modal-dialog modal-sm">
-                                                            {{--<div class="modal-content">--}}
-                                                            {{--<div class="modal-header">--}}
-                                                            {{--<button type="button" class="close"--}}
-                                                            {{--data-dismiss="modal"--}}
-                                                            {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
-                                                            {{--</button>--}}
-                                                            {{--</div>--}}
                                                             <div class="modal-body">
                                                                 <img src="" class="enlargeImageModalSource"
                                                                      style="width: 200%;">
@@ -111,13 +105,7 @@
                             {{ !empty($card->odometer_reading) ? $card->odometer_reading.'Kms' : ''}}</td>
                             <td>{{ !empty($card->company) ? $card->company : ''}}</td>
                             <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
-                        <!--  <td>
-                                            
-                                        <button card="button" id="view_ribbons" class="btn {{ (!empty($card->status) && $card->status == 1) ? " btn-danger " : "btn-success " }}
-                                btn-xs" onclick="postData({{$card->id}}, 'actdeac');"><i class="fa {{ (!empty($card->status) && $card->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($card->status) && $card->status == 1) ? "De-Activate" : "Activate"}}</button>
-                                                
-                                            </td> -->
+                            <td>{{ !empty($card->reject_reason) ? $card->reject_reason : ''}}</td>
                             </tr>
                             @endforeach
                             @endif
@@ -134,7 +122,7 @@
                                 <th>Odometer/Hours</th>
                                 <th>Company</th>
                                 <th>Department</th>
-
+								<th>Rejection Reason</th>
                             </tr>
                             </tfoot>
                             </table>
