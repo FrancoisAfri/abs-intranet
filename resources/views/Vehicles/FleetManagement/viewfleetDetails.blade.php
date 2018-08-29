@@ -77,6 +77,7 @@
                                    class="btn btn-app">
                                     <i class="fa fa-book"></i> Booking Log
                                 </a>
+
                                 <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                                     <i class="fa fa-tint"></i> Fuel Log
                                 </a>
@@ -143,7 +144,7 @@
                                  @if (isset($maintenance) && $maintenance->metre_reading_type === 1)
                                 <tr>
                                     <td class="caption">Odometer Reading</td>
-                                    <td>{{ $ordomerter}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
                                     <td class="caption">Vehicle Cell Number</td>
                                     <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
                                 </tr>
