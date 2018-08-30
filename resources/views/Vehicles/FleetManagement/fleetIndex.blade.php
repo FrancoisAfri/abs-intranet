@@ -335,6 +335,5 @@
         parentDDID = ddID;
         loadAllDivs = -1;
         @endforeach
-
     </script>
 @endsection
