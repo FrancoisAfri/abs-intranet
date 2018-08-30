@@ -219,7 +219,7 @@
 										<td>{{ (!empty($productActivity->product_name)) ? $productActivity->product_name : ''}} </td>
 										<td>{{ (!empty($productActivity->action_date)) ? date(' d M Y', $productActivity->action_date) : ''}} </td>
 										<td>{{ (!empty($productActivity->action)) ? $productActivity->action : ''}} </td>
-										<td>{{ (!empty($productActivity->name)&& !empty($productActivity->surname)) ? $productActivity->name." ".$productActivity->surname: ''}} </td>
+										<td>{{ (!empty($productActivity->name)&& !empty($productActivity->surname)) ? $productActivity->name." ".$productActivity->surname: ''}}</td>
 										<td>{{ (!empty($productActivity->allocated_firstname) && !empty($productActivity->allocated_surname)) ? $productActivity->allocated_firstname." ".$productActivity->allocated_surname: $productActivity->fleet_number." ".$productActivity->vehicle_registration }} </td>
 										<td style="text-align: center;">{{ (!empty($productActivity->balance_before)) ? $productActivity->balance_before : 0}} </td>
 										<td style="text-align: center;">{{ (!empty($productActivity->balance_after)) ? $productActivity->balance_after : 0}} </td>

@@ -280,6 +280,8 @@
                    <a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
+					   <a href="{{ '/vehicle_management/vehicle_history/' . $vehiclemaintenance->id }}"
+                       class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
 
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back

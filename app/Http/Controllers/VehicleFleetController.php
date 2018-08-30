@@ -132,8 +132,6 @@ class VehicleFleetController extends Controller
 
     public function viewnotes(vehicle_maintenance $maintenance)
     {
-
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
         ################## WELL DETAILS ###############
@@ -289,10 +287,7 @@ class VehicleFleetController extends Controller
 
     public function viewGeneralCost(vehicle_maintenance $maintenance)
     {
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -368,7 +363,6 @@ class VehicleFleetController extends Controller
 
     public function editcosts(Request $request, general_cost $costs)
     {
-
         $this->validate($request, [
             'date' => 'required',
             'document_number' => 'required|unique:general_cost,document_number',
@@ -395,25 +389,20 @@ class VehicleFleetController extends Controller
 
     public function deletecosts(general_cost $costs)
     {
-
         $costs->delete();
 
         AuditReportsController::store('Fleet Management', 'document  Deleted', "document has been deleted", 0);
         return back();
-
     }
 
     public function viewWarranties(vehicle_maintenance $maintenance)
     {
-
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         //return $ContactCompany;
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-
-
         $currentDate = time();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -463,8 +452,7 @@ class VehicleFleetController extends Controller
     public function addwarranty(Request $request)
     {
         $this->validate($request, [
-            'policy_no' => 'required|unique:vehicle_warranties,policy_no',
-            
+            'policy_no' => 'required|unique:vehicle_warranties,policy_no',     
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -515,7 +503,6 @@ class VehicleFleetController extends Controller
 
     public function editwarranty(Request $request, vehicle_warranties $warranties)
     {
-
         $this->validate($request, [
 
             'policy_no' => 'required|unique:vehicle_warranties,policy_no',
@@ -528,8 +515,6 @@ class VehicleFleetController extends Controller
 
         $Expdate = $SysData['exp_date'] = str_replace('/', '-', $SysData['exp_date']);
         $Expdate = $SysData['exp_date'] = strtotime($SysData['exp_date']);
-
-
         $warranties->exp_date = $Expdate;
         $warranties->inception_date = $inceptiondate;
         $warranties->status = 1;
@@ -875,7 +860,6 @@ class VehicleFleetController extends Controller
 
     public function viewFines(vehicle_maintenance $maintenance)
     {
-
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
 
@@ -994,7 +978,6 @@ class VehicleFleetController extends Controller
 
     public function edit_finesdetails(Request $request, vehicle_fines $fines)
     {
-
         $this->validate($request, [
             //'date' => 'required',
             'fine_ref' => 'required|unique:vehicle_fines,fine_ref',
