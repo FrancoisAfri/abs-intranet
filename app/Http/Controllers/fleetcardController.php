@@ -8,6 +8,7 @@ use App\fleetcard_type;
 use App\FleetType;
 use App\HRPerson;
 use App\CompanyIdentity;
+use App\VehicleHistory;
 use App\Http\Requests;
 use App\Mail\confirm_collection;
 use App\Mail\FleetRejection;
@@ -45,7 +46,6 @@ class fleetcardController extends Controller
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
-
         $data['page_title'] = "Fleet Cards";
         $data['page_description'] = "Fleet Cards Search";
         $data['breadcrumb'] = [
@@ -82,7 +82,6 @@ class fleetcardController extends Controller
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
 
-        //return $vehicleData;
         $cardtype = $request['card_type_id'];
         $fleetnumber = $request['fleet_number'];
         $company = $request['company_id'];
@@ -99,9 +98,6 @@ class fleetcardController extends Controller
         $vehicle_detail = vehicle_detail::orderBy('id', 'desc')->get();
 
         $vehiclefleetcards = vehicle_fleet_cards::orderBy('id', 'asc')->get();
-        // return $fleetcardtype;
-
-        //return $vehiclefleetcards;
 
         $fleetcards = DB::table('vehicle_fleet_cards')
             ->select('vehicle_fleet_cards.*', 'contact_companies.name as Vehicle_Owner'
@@ -150,7 +146,7 @@ class fleetcardController extends Controller
         $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['status'] = $status;
         $data['fleetcards'] = $fleetcards;
-        $data['page_title'] = " Fleet Management ";
+        $data['page_title'] = "Fleet Management";
         $data['page_description'] = "Fleet Cards Report ";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/fleet_cards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -236,7 +232,6 @@ class fleetcardController extends Controller
         $vehiclefleetcards->card_number = $docData['card_number'];
         $vehiclefleetcards->cvs_number = $docData['cvs_number'];
         $vehiclefleetcards->issued_date = $docData['issued_date'];
-        // $vehiclefleetcards->expiry_date = $docData['expiry_date'];
         $vehiclefleetcards->status = $docData['status'];
         $vehiclefleetcards->update();
 
@@ -272,7 +267,6 @@ class fleetcardController extends Controller
             ['title' => 'Manage Fleet Cards Report ', 'active' => 1, 'is_module' => 0]
         ];
 
-
         $data['vehicle_detail'] = $vehicle_detail;
         $data['fleetcardtype'] = $fleetcardtype;
         $data['hrDetails'] = $hrDetails;
@@ -300,7 +294,6 @@ class fleetcardController extends Controller
         ]);
         $docData = $request->all();
         unset($docData['_token']);
-        // return $docData;
 
         $Company = !empty($docData['division_level_5']) ? $docData['division_level_5'] : 0;
         $Department = !empty($docData['division_level_4']) ? $docData['division_level_4'] : 0;
@@ -309,33 +302,12 @@ class fleetcardController extends Controller
 
         $users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
 
-        //
         $drverdetails = DB::table('drver_details')
             ->select('drver_details.*', 'division_level_fives.name as company', 'division_level_fours.name as Department',
                 'hr_people.first_name as first_name', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'drver_details.hr_person_id', '=', 'hr_people.id')
             ->leftJoin('division_level_fives', 'drver_details.division_level_5', '=', 'division_level_fives.id')
             ->leftJoin('division_level_fours', 'drver_details.division_level_4', '=', 'division_level_fours.id')
-            // ->where(function ($query) use ($cardtype) {
-            //     if (!empty($cardtype)) {
-            //         $query->where('vehicle_fleet_cards.card_type_id', $cardtype);
-            //     }
-            // })
-            // ->where(function ($query) use ($Company) {
-            //     if (!empty($Company)) {
-            //         $query->where('drver_details.division_level_5', $Company);
-            //     }
-            // })
-            // ->where(function ($query) use ($Department) {
-            //     if (!empty($Department)) {
-            //         $query->where('drver_details.division_level_4', $Department);
-            //     }
-            // })
-            // ->where(function ($query) use ($employee) {
-            //     if (!empty($employee)) {
-            //         $query->where('vehicle_fleet_cards.holder_id', $employee);
-            //     }
-            // })
             ->where(function ($query) use ($status) {
                 if (!empty($status)) {
                     $query->where('drver_details.status', $status);
@@ -344,11 +316,7 @@ class fleetcardController extends Controller
             ->orderBy('drver_details.id')
             ->get();
 
-        //return $drverdetails;
-
         $status = array(1 => ' Active', 2 => ' InActive');
-
-
         $data['status'] = $status;
         $data['drverdetails'] = $drverdetails;
         $data['page_title'] = " Fleet Management ";
@@ -363,7 +331,6 @@ class fleetcardController extends Controller
         AuditReportsController::store('Fleet Management', 'View Vehicle Search Results', "view Audit Results", 0);
 
         return view('Vehicles.Driver Admin.drivers_results')->with($data);
-
     }
 
     public function vehicle_approval(Request $request)
@@ -396,7 +363,6 @@ class fleetcardController extends Controller
             ['title' => 'Manage Vehicle Approvals ', 'active' => 1, 'is_module' => 0]
         ];
 
-        // $data['fleetcardtype'] = $fleetcardtype;
         $data['hrDetails'] = $hrDetails;
         $data['contactcompanies'] = $contactcompanies;
         $data['Vehicle_types'] = $Vehicle_types;
@@ -435,6 +401,14 @@ class fleetcardController extends Controller
                 } else $status = $sValue[0];
                 $vehID = $vehicleID;
                 $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
+				// add to vehicle history 
+				$VehicleHistory = new VehicleHistory();
+				$VehicleHistory->vehicle_id = $vehID;
+				$VehicleHistory->user_id = Auth::user()->person->id;
+				$VehicleHistory->status = 1;
+				$VehicleHistory->comment = "New Vehicle Approved";
+				$VehicleHistory->action_date = time();
+				$VehicleHistory->save();
             }
         }
 		// Reject Code
@@ -448,6 +422,14 @@ class fleetcardController extends Controller
                     $vehicle_maintenance->updateOrCreate(['id' => $iID], ['reject_reason' => $sValue]);
                     $vehicle_maintenance->updateOrCreate(['id' => $iID], ['reject_timestamp' => time()]);
                     $vehicle_maintenance->updateOrCreate(['id' => $iID], ['rejector_id' => Auth::user()->person->id]);
+					// add to vehicle history 
+					$VehicleHistory = new VehicleHistory();
+					$VehicleHistory->vehicle_id = $iID;
+					$VehicleHistory->user_id = Auth::user()->person->id;
+					$VehicleHistory->status = 3;
+					$VehicleHistory->comment = "New Vehicle Rejected, Reason:".$sValue;
+					$VehicleHistory->action_date = time();
+					$VehicleHistory->save();
                     # Send email to admin and person who added the vehicle
 					if ($vehicleConfig == 1) {
 					$managerIDs = DB::table('security_modules_access')
@@ -489,11 +471,16 @@ class fleetcardController extends Controller
 	
 	public function vehicleApprovalsSingle(Request $request, vehicle_maintenance $fleet)
     {
-		//return $fleet;
-		//die('do you come here');
-		// Approval Code
-		$fleet->status = 2;
+		$fleet->status = 1;
 		$fleet->update();
+		// add to vehicle history 
+		$VehicleHistory = new VehicleHistory();
+		$VehicleHistory->vehicle_id = $fleet->id;
+		$VehicleHistory->user_id = Auth::user()->person->id;
+		$VehicleHistory->status = 1;
+		$VehicleHistory->comment = "New Vehicle Approved";
+		$VehicleHistory->action_date = time();
+		$VehicleHistory->save();
 		
 		AuditReportsController::store('Fleet Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
@@ -519,7 +506,15 @@ class fleetcardController extends Controller
 		   ->where('code_name', 'vehicle')
 		   ->where('access_level','>=', 4)
 		   ->pluck('user_id');
-	 
+		// add to vehicle history 
+		$VehicleHistory = new VehicleHistory();
+		$VehicleHistory->vehicle_id = $fleet->id;
+		$VehicleHistory->user_id = Auth::user()->person->id;
+		$VehicleHistory->status = 3;
+		$VehicleHistory->comment = "New Vehicle Rejected Reason:".$vehicleData['rejection_reason'];
+		$VehicleHistory->action_date = time();
+		$VehicleHistory->save();
+		
 		foreach ($managerIDs as $manID) {
 				$usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
 				$email = !empty($usedetails->email) ? $usedetails->email : ''; 
@@ -542,7 +537,6 @@ class fleetcardController extends Controller
         AuditReportsController::store('Fleet Management', 'Reject Vehicle ', "Vehicle has been Rejected", 0);
         return response()->json();
     }
-	
 
     public function rejectReason(Request $request, vehicle_maintenance $reason)
     {
@@ -559,5 +553,23 @@ class fleetcardController extends Controller
         $reason->update();
         AuditReportsController::store('Fleet Management', 'Reject Vehicle', "Vehicle has been Declined", 0);
         return response()->json();
+    }
+	
+	public function vehicleHistories(vehicle_detail $fleet)
+    {
+		$fleet = $fleet->load('vehicleHistory.userName');
+		
+		$data['page_title'] = 'View Vehicle History';
+		$data['page_description'] = 'Vehicle History';
+		$data['breadcrumb'] = [
+			['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+			['title' => 'Manage Fleet', 'active' => 1, 'is_module' => 0]
+		];
+		
+		$data['fleet'] = $fleet;
+		$data['active_mod'] = 'Fleet Management';
+		$data['active_rib'] = 'Manage Fleet';
+		AuditReportsController::store('Products', 'Job Titles Page Accessed', 'Accessed by User', 0);
+		return view('Vehicles.vehicle_history')->with($data);
     }
 }

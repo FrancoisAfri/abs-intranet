@@ -97,7 +97,6 @@ class Product_categoryController extends Controller
         }
     }
 
-//
     //packages view
 
     public function view_packages()
@@ -222,8 +221,7 @@ class Product_categoryController extends Controller
                 ['title' => 'Products', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Manage Product', 'active' => 1, 'is_module' => 0]
             ];
-			// Products Activities
-			
+			// Products Activities	
 			$productActivities = stockhistory::select('stock_history.*','vehicle_details.id as id'
 					,'vehicle_details.fleet_number as fleet_number'
 					,'vehicle_details.vehicle_registration as vehicle_registration' 
@@ -484,9 +482,7 @@ class Product_categoryController extends Controller
         return response()->json(['new_name' => $newName, 'new_product_code' => $newproductCode, 'price' => $newPrice], 200);
     }
 
-    //
     //packages
-
     public function packageSave(Request $request)
     {
         $this->validate($request, [

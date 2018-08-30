@@ -105,7 +105,7 @@
                             {{ !empty($card->odometer_reading) ? $card->odometer_reading.'Kms' : ''}}</td>
                             <td>{{ !empty($card->company) ? $card->company : ''}}</td>
                             <td>{{ !empty($card->Department) ? $card->Department : ''}}</td>
-                            <td>{{ !empty($card->reject_reason) ? $card->reject_reason : ''}}</td>
+                            <td>{{ !empty($card->reject_reason)  && $card->status == 3 ? $card->reject_reason : ''}}</td>
                             </tr>
                             @endforeach
                             @endif
@@ -183,17 +183,13 @@
                             // or four works better for larger screens.
                             dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
                         }
-
                         // Reposition when a modal is shown
                         $('.modal').on('show.bs.modal', reposition);
                         // Reposition when the window is resized
                         $(window).on('resize', function () {
                             $('.modal:visible').each(reposition);
                         });
-
                         //
-
-
                         $(function () {
                             $('img').on('click', function () {
                                 $('.enlargeImageModalSource').attr('src', $(this).attr('src'));

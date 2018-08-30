@@ -38,4 +38,8 @@ class vehicle_detail extends Model
 		
 		return $this->belongsTo(DivisionLevelFive::class, 'vehicle_owner');
     }
+	public function vehicleHistory() {
+		
+		return $this->hasMany(VehicleHistory::class, 'vehicle_id');
+    }
 }

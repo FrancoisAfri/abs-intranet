@@ -13,6 +13,7 @@ use App\DivisionLevel;
 Use App\permits_licence;
 use App\Vehicle_managemnt;
 use App\fleet_licence_permit;
+use App\VehicleHistory;
 use App\vehicle;
 use App\HRPerson;
 use App\vehicle_detail;
@@ -61,9 +62,6 @@ class FleetManagementController extends Controller
          $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
         $vehicleConfig = !empty($vehicleConfigs->first()) ? $vehicleConfigs->first() : 0;
 
-        //return $vehicleConfig; 
-
-        // $DivisionLevelFive = DivisionLevelFive::where('active', 1)->get();
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_image.image as vehicle_images',
@@ -75,11 +73,6 @@ class FleetManagementController extends Controller
             ->leftJoin('contact_companies', 'vehicle_details.vehicle_owner', '=', 'contact_companies.id')
             ->orderBy('vehicle_details.id')
             ->get();
-        
-        //return $vehiclemaintenance;
-//         $adminUser = DB::table('hr_people')->where('position', 2)->orderBy('id', 'asc')->get();
-//        return $adminUser;
-        
 
         $data['vehicleConfig'] = $vehicleConfig;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
@@ -126,8 +119,6 @@ class FleetManagementController extends Controller
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
             ->orderBy('vehicle_details.id')
             ->get();
-        
-        //return $vehiclemaintenance;
 
         $data['page_title'] = " Fleet Management";
         $data['page_description'] = "FleetManagement";
@@ -261,11 +252,18 @@ class FleetManagementController extends Controller
                     $surname = !empty($usedetails->surname) ? $usedetails->surname : '';
 					if (!empty($email))
 						Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
-
                 }
-              
         }
-
+		// add to vehicle history 
+        $VehicleHistory = new VehicleHistory();
+        $VehicleHistory->vehicle_id = $vehicle_maintenance->id;
+        $VehicleHistory->user_id = Auth::user()->person->id;
+		if ($vehicleConfig == 1)  $VehicleHistory->status = 2;
+        else $VehicleHistory->status = 1;
+        $VehicleHistory->comment = "New Vehicle Added";
+        $VehicleHistory->action_date = time();
+        $VehicleHistory->save();
+		
         AuditReportsController::store('Fleet Management', 'New Vehicle Added', "Accessed By User", 0);;
         return response()->json();
     }
@@ -278,10 +276,28 @@ class FleetManagementController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-		
+		$comment = 'Vehicle Details Changed: ';
         $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
         $vehicleConfig = $vehicleConfigs->first();
-		
+		// Comment on changes
+		if ($vehicle_maintenance->title_type != $SysData['title_type']) $comment .= "1.Vehicle Owner Changed, ";
+		if ($vehicle_maintenance->responsible_for_maintenance != $SysData['responsible_for_maintenance']) $comment .= "2.Person Responsible Changed, ";
+		if ($vehicle_maintenance->vehicle_make != $SysData['vehicle_make']) $comment .= "3.Make Changed, ";
+		if ($vehicle_maintenance->vehicle_model != $SysData['vehicle_model']) $comment .= "4.Model Changed, ";
+		if ($vehicle_maintenance->vehicle_type != $SysData['vehicle_type']) $comment .= "5.Type Changed, ";
+		if ($vehicle_maintenance->year != $SysData['year']) $comment .= "6.Year, ";
+		if ($vehicle_maintenance->vehicle_registration != $SysData['vehicle_registration']) $comment .= "7.Registration Number Changed, ";
+		if ($vehicle_maintenance->chassis_number != $SysData['chassis_number']) $comment .= "8.Chassis Number Changed, ";
+		if ($vehicle_maintenance->engine_number != $SysData['engine_number']) $comment .= "9.Engine Number Changed, ";
+		if ($vehicle_maintenance->vehicle_color != $SysData['vehicle_color']) $comment .= "10.Color Changed, ";
+		if ($vehicle_maintenance->metre_reading_type != $SysData['promotion_type']) $comment .= "11.Metre Reading Type Changed, ";
+		if ($vehicle_maintenance->odometer_reading != $SysData['odometer_reading']) $comment .= "12.Odometer Reading Changed, ";
+		if ($vehicle_maintenance->hours_reading != $SysData['hours_reading']) $comment .= "13.Hours Reading Changed, ";
+		if ($vehicle_maintenance->fuel_type != $SysData['fuel_type']) $comment .= "14.Fuel Type Changed, ";
+		if ($vehicle_maintenance->size_of_fuel_tank != $SysData['size_of_fuel_tank']) $comment .= "15.Size Of Fuel Tank Changed, ";
+		if ($vehicle_maintenance->fleet_number != $SysData['fleet_number']) $comment .= "16.Fleet Number Changed, ";
+		if ($vehicle_maintenance->cell_number != $SysData['cell_number']) $comment .= "17.Cell Number Changed, ";
+		if ($vehicle_maintenance->tracking_umber != $SysData['tracking_umber']) $comment .= "18.Tracking Nmber Changed, ";
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
@@ -292,7 +308,7 @@ class FleetManagementController extends Controller
         } 
 		else
             $vehicle_maintenance->status = 1;
-        $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
+        $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;;
         $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
         $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
@@ -335,7 +351,6 @@ class FleetManagementController extends Controller
                 $vehicle_maintenance->update();
             }
         }
-
         //Upload supporting document
         if ($request->hasFile('registration_papers')) {
             $fileExt = $request->file('registration_papers')->extension();
@@ -347,6 +362,16 @@ class FleetManagementController extends Controller
                 $vehicle_maintenance->update();
             }
         }
+		// add to vehicle history 
+        $VehicleHistory = new VehicleHistory();
+        $VehicleHistory->vehicle_id = $vehicle_maintenance->id;
+        $VehicleHistory->user_id = Auth::user()->person->id;
+		if ($vehicleConfig == 1)  $VehicleHistory->status = 2;
+        else $VehicleHistory->status = 1;
+        $VehicleHistory->comment = $comment;
+        $VehicleHistory->action_date = time();
+        $VehicleHistory->save();
+		
 		if ($vehicleConfig == 1) {
 			$managerIDs = DB::table('security_modules_access')
 			   ->select('security_modules_access.*','security_modules.*') 
@@ -355,15 +380,14 @@ class FleetManagementController extends Controller
 			   ->where('access_level','>=', 4)
 			   ->pluck('user_id');
          
-           foreach ($managerIDs as $manID) {
-                    $usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
-                    $email = !empty($usedetails->email) ? $usedetails->email : ''; 
-                    $firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
-                    $surname = !empty($usedetails->surname) ? $usedetails->surname : '';
-					if (!empty($email))
-						Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
-                }
-              
+			foreach ($managerIDs as $manID) {
+				$usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
+				$email = !empty($usedetails->email) ? $usedetails->email : ''; 
+				$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+				$surname = !empty($usedetails->surname) ? $usedetails->surname : '';
+				if (!empty($email))
+					Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
+            }
         }
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);

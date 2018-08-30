@@ -380,6 +380,7 @@ Route::get('vehicle_management/driver_admin', 'fleetcardController@driverAdmin')
 Route::post('vehicle_management/driver_search', 'fleetcardController@driversearch');
 
 #******************** Vehicle Approval *************************
+Route::get('vehicle_management/vehicle_history/{fleet}', 'fleetcardController@vehicleHistories');
 Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 Route::post('vehicle_management/vehicleApproval', 'fleetcardController@vehicleApprovals');
 Route::patch('vehicle_management/reject_vehicle/{reason}','fleetcardController@rejectReason' );
