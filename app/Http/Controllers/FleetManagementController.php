@@ -306,6 +306,7 @@ class FleetManagementController extends Controller
 		if (!empty($SysData['property_type']) && $vehicle_maintenance->property_type != $SysData['property_type']) $comment .= "24.Tracking Nmber Changed, ";
 		if (!empty($SysData['financial_institution']) && $vehicle_maintenance->financial_institution != $SysData['financial_institution']) $comment .= "25.Financial Institution Changed, ";
 		if (!empty($SysData['vehicle_owner']) && $vehicle_maintenance->vehicle_owner != $SysData['vehicle_owner']) $comment .= "26.Vehicle Owner Changed, ";
+		if (!empty($SysData['extras']) && $vehicle_maintenance->extras != $SysData['extras']) $comment .= "26.Extras Changed, ";
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
