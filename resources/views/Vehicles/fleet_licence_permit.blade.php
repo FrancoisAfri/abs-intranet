@@ -136,8 +136,8 @@
                 };
                 var submitBtnID = 'cat_module';
                 var redirectUrl = '/vehicle_management/Permit';
-                var successMsgTitle = 'Fleet Type Added!';
-                var successMsg = 'The Permit/licence Type has been updated successfully.';
+                var successMsgTitle = 'Permit/License Type Added!';
+                var successMsg = 'The Permit/licence Type has been added successfully.';
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
@@ -164,7 +164,7 @@
                 var submitBtnID = 'edit_license';
                 var redirectUrl = '/vehicle_management/Permit';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Fleet Type has been updated successfully.';
+                var successMsg = 'The Permit/License has been updated successfully.';
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });

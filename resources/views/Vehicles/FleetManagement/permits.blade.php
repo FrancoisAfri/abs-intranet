@@ -72,16 +72,19 @@
                             @if (count($permits) > 0)
 								@foreach ($permits as $permit)
 								<tr id="categories-list">
-                            
-                                    
+                            		<td>
+										<button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" 
+										data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" 
+										data-supplier_id ="{{ $permit->Supplier }}" 
+										data-permits_licence_no = "{{ $permit->permits_licence_no }}"
+										data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
+										data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"  
+										data-licence_id="{{ $permit->permit_licence }}"
+										data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
+										data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> 
+									</td>
                                     @if (isset($permit) && $permit->exp_date < $currentdate)
-										<td bgcolor="red" nowrap>
-                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
-                                            data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
-                                            data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"    
-                                            data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
-                                            data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
-										<td bgcolor="red">{{ !empty($permit->license_name) ? $permit->license_name : '' }}</td>
+										<td bgcolor="red">{{ !empty($permit->license_name) ? $permit->license_name : '' }} {{ $permit->permit_licence }}</td>
 										<td bgcolor="red">{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
 										<td bgcolor="red">{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
 										<td bgcolor="red">{{ !empty($permit->date_issued) ? date(' d M Y', $permit->date_issued) : '' }}</td>
@@ -103,12 +106,6 @@
 										</td>
 										<td bgcolor="red"> Expired </td>  
 									@else
-										<td nowrap>
-                                            <button type="button" id="edit_compan" class="btn btn-default  btn-xs" data-toggle="modal" data-target="#edit-permit-modal" data-id = "{{ $permit->id }}" data-Supplier ="{{ $permit->Supplier }}" data-permits_licence_no = "{{ $permit->permits_licence_no }}"
-                                            data-date_issued = "{{ date(' d M Y', $permit->date_issued)}}"
-                                            data-exp_date = "{{ date(' d M Y', $permit->exp_date)}}"    
-                                            data-permit_licence="{{ $permit->permit_licence }}" data-status="{{ $permit->status }}" data-captured_by ="{{ $permit->captured_by }}" 
-                                            data-date_captured ="{{ $permit->date_captured }}"><i class="fa fa-pencil-square-o"></i> Edit</button> </td>
 										<td>{{ !empty($permit->license_name) ? $permit->license_name : '' }}</td>
 										<td>{{ !empty($permit->comp_name) ? $permit->comp_name : ''}}</td>
 										<td>{{ !empty($permit->permits_licence_no) ? $permit->permits_licence_no : ''}}</td>
@@ -273,8 +270,8 @@
                      if (parseInt(btnEdit.data('id')) > 0) {
                       permitID = btnEdit.data('id');
                     }
-                    var permitLicence = btnEdit.data('permit_licence');
-                    var Supplier = btnEdit.data('Supplier');
+                    var licenceID = btnEdit.data('licence_id');
+                    var supplierID = btnEdit.data('supplier_id');
                     var permits_licence_no = btnEdit.data('permits_licence_no');
                     var date_issued = btnEdit.data('date_issued');
                     var exp_date = btnEdit.data('exp_date');
@@ -287,9 +284,9 @@
                     modal.find('#exp_date').val(exp_date);
                     modal.find('#status').val(status);
                     modal.find('#captured_by').val(captured_by);
-					modal.find('select#permit_licence').val(Supplier);
-					modal.find('select#Supplier').val(Supplier);
-                    //modal.find('#documents').val(documents);
+					modal.find('#supplier_id').val(supplierID);
+					modal.find('#permit_licence').val(licenceID);
+					console.log(supplierID);
                 });
             //Post perk form to server using ajax (edit)
             $('#edit_permit').on('click', function() {

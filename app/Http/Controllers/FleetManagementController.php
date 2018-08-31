@@ -772,7 +772,7 @@ class FleetManagementController extends Controller
     {
         $ID = $maintenance->id;
 
-        $companies = ContactCompany::orderBy('name', 'asc')->get();
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $permitlicence = fleet_licence_permit::orderBy('id', 'asc')->get();
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
@@ -804,7 +804,7 @@ class FleetManagementController extends Controller
             ->orderBy('permits_licence.id')
             ->where('vehicleID', $ID)
             ->get();
-
+	//return $permits;
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -835,7 +835,7 @@ class FleetManagementController extends Controller
     {
         $this->validate($request, [
             'permit_licence' => 'required',
-            'Supplier' => 'required',
+            'supplier_id' => 'required',
             'permits_licence_no' => 'required|unique:permits_licence,permits_licence_no',
         ]);
         $SysData = $request->all();
@@ -861,19 +861,16 @@ class FleetManagementController extends Controller
 		$oldPermit = permits_licence::
 					where('permit_licence', $SysData['permit_licence'])
 					->where('vehicleID', $SysData['valueID'])
-					->where('status', 1)
-					
+					->where('status', 1)		
 					->first();
-
 		if (!empty($oldPermit->permit_licence))
 		{
-			
 			$oldPermit->status = 2;
 			$oldPermit->update();
 			
 			$permits = new permits_licence();
 			$permits->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
-			$permits->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
+			$permits->Supplier = !empty($SysData['supplier_id']) ? $SysData['supplier_id'] : 0;
 			$permits->exp_date = $Expdate;
 			$permits->date_issued = $dates;
 			$permits->status = !empty($SysData['status']) ? $SysData['status'] : 1;
@@ -887,7 +884,7 @@ class FleetManagementController extends Controller
 		{
 			$permits = new permits_licence();
 			$permits->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
-			$permits->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
+			$permits->Supplier = !empty($SysData['supplier_id']) ? $SysData['supplier_id'] : 0;
 			$permits->exp_date = $Expdate;
 			$permits->date_issued = $dates;
 			$permits->status = !empty($SysData['status']) ? $SysData['status'] : 1;
@@ -918,7 +915,7 @@ class FleetManagementController extends Controller
     public function editPermit(Request $request, permits_licence $permit)
     {
         $this->validate($request, [
-           // 'Supplier' => 'required',
+            'supplier_id' => 'required',
             //'permits_licence_no' => 'required|unique:permits_licence,permits_licence_no',
         ]);
         $SysData = $request->all();
@@ -937,7 +934,7 @@ class FleetManagementController extends Controller
 
 
         $permit->permit_licence = !empty($SysData['permit_licence']) ? $SysData['permit_licence'] : 0;
-        $permit->Supplier = !empty($SysData['Supplier']) ? $SysData['Supplier'] : 0;
+        $permit->Supplier = !empty($SysData['supplier_id']) ? $SysData['supplier_id'] : 0;
         $permit->exp_date = $Expdate;
         $permit->date_issued = $dates;
         $permit->status = !empty($SysData['status']) ? $SysData['status'] : 1;
