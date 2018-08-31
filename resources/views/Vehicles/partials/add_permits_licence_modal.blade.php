@@ -27,9 +27,9 @@
                         </div>
                     </div>
                     <div class="form-group safe-field">
-                        <label for="Supplier" class="col-sm-3 control-label">Supplier </label>
+                        <label for="supplier_id" class="col-sm-3 control-label">Supplier </label>
                         <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;" id="Supplier" name="Supplier">
+                            <select class="form-control select2" style="width: 100%;" id="supplier_id" name="supplier_id">
                                 <option value="0">*** Select a Supplier ***</option>
                                 @foreach($companies as $company)
                                     <option value="{{ $company->id }}"> {{$company->name}}</option>

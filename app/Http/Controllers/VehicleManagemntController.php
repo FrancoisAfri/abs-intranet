@@ -43,7 +43,7 @@ class VehicleManagemntController extends Controller
         $data['page_description'] = "Fleet Settings Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Setup', 'active' => 1, 'is_module' => 0]
         ];
 
         // $data['incidentType'] = $incidentType;
@@ -133,11 +133,11 @@ class VehicleManagemntController extends Controller
 
         $FleetType = FleetType::orderBy('id', 'asc')->get();
 
-        $data['page_title'] = "Fleet Cards Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Fleet Card";
+        $data['page_description'] = "Fleet Card Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/fleet_card', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Fleet Card ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['FleetType'] = $FleetType;
@@ -205,11 +205,11 @@ class VehicleManagemntController extends Controller
     {
         $fleetfillingstation = fleet_fillingstation::orderBy('id', 'asc')->get();
 
-        $data['page_title'] = "Fleet Cards Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Fleet Filling Station";
+        $data['page_description'] = "Filling Station Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/fillingstaion', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Filling Station', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['fleetfillingstation'] = $fleetfillingstation;
@@ -276,11 +276,11 @@ class VehicleManagemntController extends Controller
     {
         $licence_permit = fleet_licence_permit::orderBy('id', 'asc')->get();
 
-        $data['page_title'] = "Fleet Cards Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Permit/Llicence Types";
+        $data['page_description'] = "Permit/Llicence Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/Permit', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Permit/Llicence ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['licence_permit'] = $licence_permit;
@@ -348,11 +348,11 @@ class VehicleManagemntController extends Controller
     {
         $fleetdocumentType = fleet_documentType::orderBy('id', 'asc')->get();
 
-        $data['page_title'] = "Fleet Document Type";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Document Type";
+        $data['page_description'] = "Document Type Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/Document_type', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Document Type ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['fleetdocumentType'] = $fleetdocumentType;
@@ -421,11 +421,11 @@ class VehicleManagemntController extends Controller
         $incidentType = incident_type::orderBy('id', 'asc')->get();
         // return $incidentType;
 
-        $data['page_title'] = " Manage Incidents Type ";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = " Manage Incidents Type";
+        $data['page_description'] = "Incidents Types Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/Incidents_type', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Incidents Types ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['incidentType'] = $incidentType;
@@ -575,10 +575,10 @@ class VehicleManagemntController extends Controller
 
         $configuration = DB::table('vehicle_configuration')->get()->first();
         $data['page_title'] = " Vehicle Configuration ";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_description'] = "Setup Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_configuration', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Setup', 'active' => 1, 'is_module' => 0]
         ];
         $data['configuration'] = $configuration;
         $data['active_mod'] = 'Fleet Management';
@@ -607,7 +607,7 @@ class VehicleManagemntController extends Controller
         $data['page_description'] = "Fleet Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehice_make', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Make', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['vehiclemake'] = $vehiclemake;
@@ -678,7 +678,7 @@ class VehicleManagemntController extends Controller
         $data['page_description'] = "Fleet Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehice_make', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Model', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['make'] = $make;
@@ -836,7 +836,7 @@ class VehicleManagemntController extends Controller
         $data['page_description'] = "Internal Fleet Management Search Results";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle/Search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Fleet Search ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['active_mod'] = 'Fleet Management';
@@ -850,11 +850,11 @@ class VehicleManagemntController extends Controller
 
         $safe = safe::orderBy('id', 'asc')->get();
 
-        $data['page_title'] = "Fleet Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Safe";
+        $data['page_description'] = "Safe Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/safe', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Safe', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['safe'] = $safe;
