@@ -244,45 +244,31 @@
                             data-extras="{{ $vehiclemaintenance->extras }}"
                             data-property_type="{{ $vehiclemaintenance->property_type }}"
                             data-company="{{ $vehiclemaintenance->company }}"
-
                     ><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
-
                     <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Images</a>
-
                     <a href="{{ '/vehicle_management/keys/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a>
-
                     <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>
-
                     <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Documents</a>
-<!--
-                    <a href="{{ '/vehicle_management/contracts/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Contracts</a>
--->
-
                     <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Notes</a>
-
                     <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
-
                    <a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
 					   <a href="{{ '/vehicle_management/vehicle_history/' . $vehiclemaintenance->id }}"
                        class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
-
                     <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                 class="fa fa-arrow-left"></i> Back
                     </button>
@@ -334,9 +320,29 @@
         });
 //
         $(function () {
+			if ({{$maintenance->title_type}}  === 1)
+			{
+				$('.comp-field').hide();
+                $('.fin-field').show();
+			}
+			else
+			{
+				$('.comp-field').show();
+                $('.fin-field').hide();
+			}
+			if ({{$maintenance->metre_reading_type}}  === 1)
+			{
+				$('.hours-field').hide();
+                $('.odometer-field').show();
+			}
+			else
+			{
+				$('.odometer-field').hide();
+                $('.hours-field').show();
+			}
             $(".select2").select2();
-            $('.hours-field').hide();
-            $('.comp-field').hide();
+            //$('.hours-field').hide();
+           // $('.comp-field').hide();
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
@@ -536,16 +542,16 @@
         var parentDDID = '';
         var loadAllDivs = 1;
         @foreach($division_levels as $division_level)
-        //Populate drop down on page load
-        var ddID = '{{ 'division_level_' . $division_level->level }}';
-        var postTo = '{!! route('divisionsdropdown') !!}';
-        var selectedOption = '';
-        var divLevel = parseInt('{{ $division_level->level }}');
-        var incInactive = -1;
-        var loadAll = loadAllDivs;
-        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-        parentDDID = ddID;
-        loadAllDivs = -1;
+			//Populate drop down on page load
+			var ddID = '{{ 'division_level_' . $division_level->level }}';
+			var postTo = '{!! route('divisionsdropdown') !!}';
+			var selectedOption = '';
+			var divLevel = parseInt('{{ $division_level->level }}');
+			var incInactive = -1;
+			var loadAll = loadAllDivs;
+			loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+			parentDDID = ddID;
+			loadAllDivs = 1;
         @endforeach
 		
 		function postData(id, data)
