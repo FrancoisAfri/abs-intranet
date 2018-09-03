@@ -47,8 +47,8 @@ class FleetManagementController extends Controller
     {
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('name', 'asc')->get();
+        $vehiclemodel = vehiclemodel::orderBy('name', 'asc')->get();
 		$divisionLevels  = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
@@ -56,7 +56,6 @@ class FleetManagementController extends Controller
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('name', 'asc')->get();
 
         $images = images::orderBy('id', 'asc')->get();
-
         //check  vehicle_configuration table if new_vehicle_approval is active
         
          $vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
@@ -102,11 +101,11 @@ class FleetManagementController extends Controller
     }
 
     public function addvehicle()
-    {	   
+    {		
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('name', 'asc')->get();
+        $vehiclemodel = vehiclemodel::orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
 
@@ -412,8 +411,8 @@ class FleetManagementController extends Controller
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
-        $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('id', 'asc')->get();
+        $vehiclemake = vehiclemake::orderBy('name', 'asc')->get();
+        $vehiclemodel = vehiclemodel::orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
