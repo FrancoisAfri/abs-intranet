@@ -170,7 +170,7 @@
                                 </tr>
                                 <tr>
                                     <td class="caption">Division</td>
-                                    <td>{{ !empty($vehiclemaintenance->company) ? $vehiclemaintenance->company : ''}}</td>
+                                    <td>{{ !empty($vehiclemaintenance->company_name) ? $vehiclemaintenance->company_name : ''}}</td>
                                     <td class="caption">Vehicle Owner Name</td>
                                     <td>{{ !empty($vehiclemaintenance->vehicleOwnerName->name) ? $vehiclemaintenance->vehicleOwnerName->name : ''}}</td>
                                 </tr>
@@ -464,10 +464,10 @@
                 var cell_number = btnEdit.data('cell_number');
                 var tracking_umber = btnEdit.data('tracking_umber');
                 var vehicle_owner = btnEdit.data('vehicle_owner');
-                var financial_institution = btnEdit.data('financial_institution');
+                //var financial_institution = btnEdit.data('financial_institution');
                 var extras = btnEdit.data('extras');
                 var property_type = btnEdit.data('property_type');
-                var company = btnEdit.data('company');
+                //var companyID = btnEdit.data('company');
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
                 var title_type = btnEdit.data('title_type');
@@ -498,10 +498,10 @@
                 modal.find('#tracking_umber').val(tracking_umber);
                 modal.find('#vehicle_owner').val(vehicle_owner);
                 modal.find('#title_type').val(title_type);
-                modal.find('#financial_institution').val(financial_institution);
+                //modal.find('#financial_institution').val(financial_institution);
                 modal.find('#extras').val(extras);
                 modal.find('#property_type').val(property_type);
-                modal.find('#company').val(company);
+				//modal.find('select#company').val(companyID);
                 modal.find('#image').val(image);
                 modal.find('#registration_papers').val(registration_papers);
                 modal.find('#promotion_type').val(promotion_type);
