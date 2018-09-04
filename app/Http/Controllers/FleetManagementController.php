@@ -309,8 +309,8 @@ class FleetManagementController extends Controller
         $currentDate = time();
         $userLogged = Auth::user()->load('person');
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
-		if (!empty($SysData['financial_institution'])) $SysData['company'] = 0;
-		if (!empty($SysData['company'])) $SysData['financial_institution'] = 0;
+		if (!empty($SysData['financial_institution']) && $SysData['title_type'] == 1) $SysData['company'] = 0;
+		if (!empty($SysData['company'])  && $SysData['title_type'] == 2) $SysData['financial_institution'] = 0;
 		 if ($vehicleConfig == 1) {
              $vehicle_maintenance->status = 2;
         } 
@@ -335,7 +335,7 @@ class FleetManagementController extends Controller
         $vehicle_maintenance->tracking_umber = $SysData['tracking_umber'];
         $vehicle_maintenance->vehicle_owner = !empty($SysData['vehicle_owner']) ? $SysData['vehicle_owner'] : 0;
         $vehicle_maintenance->financial_institution = !empty($SysData['financial_institution']) ? $SysData['financial_institution'] : 0;
-        $vehicle_maintenance->company = !empty($SysData['company']) ? $SysData['company'] : 0;
+        $vehicle_maintenance->company =  !empty($SysData['company']) ? $SysData['company'] : 0;
         $vehicle_maintenance->extras = $SysData['extras'];
         $vehicle_maintenance->property_type = !empty($SysData['property_type']) ? $SysData['property_type'] : 0;
         $vehicle_maintenance->division_level_5 = !empty($SysData['division_level_5']) ? $SysData['division_level_5'] : 0;
@@ -380,7 +380,7 @@ class FleetManagementController extends Controller
         $VehicleHistory->action_date = time();
         $VehicleHistory->save();
 		
-		if ($vehicleConfig == 1) {
+		/*if ($vehicleConfig == 1) {
 			$managerIDs = DB::table('security_modules_access')
 			   ->select('security_modules_access.*','security_modules.*') 
 			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
@@ -396,7 +396,7 @@ class FleetManagementController extends Controller
 				if (!empty($email))
 					Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
             }
-        }
+        }*/
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
@@ -430,7 +430,7 @@ class FleetManagementController extends Controller
 		
         $vehiclemaintenance = vehicle_detail::select('vehicle_details.*', 'vehicle_make.name as vehiclemake'
 			,'vehicle_model.name as vehiclemodel', 'vehicle_managemnet.name as vehicletype'
-			,'division_level_fives.name as company','div_fives.name as company_owner'
+			,'division_level_fives.name as company_name','div_fives.name as company_owner'
 			, 'division_level_fours.name as Department'
 			, 'hr_people.first_name as first_name', 'hr_people.surname as surname'
 			,'contact_companies.name as contact_owner ')
@@ -449,6 +449,7 @@ class FleetManagementController extends Controller
         $vehiclemaintenance = $vehiclemaintenance->load('vehicleOwnerName');
         $registrationPapers = $vehiclemaintenance->first()->registration_papers;
         $fleetImage = $vehiclemaintenance->first()->image;
+		//return $vehiclemaintenance;
         $data['registration_papers'] = (!empty($registrationPapers)) ? Storage::disk('local')->url("Vehicle/registration_papers/$registrationPapers") : '';
         $data['fleetImage'] = (!empty($fleetImage)) ? Storage::disk('local')->url("Vehicle/images/$fleetImage") : '';
         $data['page_title'] = " View Fleet Details";

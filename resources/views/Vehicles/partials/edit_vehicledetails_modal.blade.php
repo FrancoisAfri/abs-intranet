@@ -266,33 +266,31 @@
                             <div class="input-group-addon">
                                 <i class="fa fa-university"></i>
                             </div>
-                            <select class="form-control select2" style="width: 100%;" id="financial_institution"
-                            name="financial_institution">
-                            <option value="0">*** Select Financial Institution ***</option>
-                            @foreach($ContactCompany as $ContactCompan)
-                            <option value="{{ $ContactCompan->id }}">{{ (!empty( $ContactCompan->name)) ?  $ContactCompan->name : ''}}</option>
-
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group comp-field">
-                <label for="action" class="col-sm-2 control-label">Company </label>
-                <div class="col-sm-8">
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                         <i class="fa fa-building"></i>
-                     </div>
-                     <select id="company" name="company" class="form-control select2"  style="width: 100%;">
-                        <option selected="selected" value=" " >*** Select company   ***</option>
-                        @foreach($DivisionLevelFive as $company)
-                        <option value="{{ $company->id }}" {{ ($vehiclemaintenance->company == $company->id) ? ' selected' : '' }}>{{ $company->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
+                            <select class="form-control select2" style="width: 100%;" id="financial_institution" name="financial_institution">
+								<option value="0">*** Select Financial Institution ***</option>
+								@foreach($ContactCompany as $ContactCompan)
+								<option value="{{ $ContactCompan->id }}" {{ ($vehiclemaintenance->financial_institution == $ContactCompan->id && ($maintenance->title_type === 1)) ? ' selected' : '' }}>{{ (!empty( $ContactCompan->name)) ?  $ContactCompan->name : ''}}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="form-group comp-field">
+                    <label for="company" class="col-sm-2 control-label">Company</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-university"></i>
+                            </div>
+                            <select class="form-control select2" style="width: 100%;" id="company" name="company">
+								<option value="0">*** Select company ***</option>
+								@foreach($DivisionLevelFive as $division)
+									<option value="{{ $division->id }}" {{ ($vehiclemaintenance->company == $division->id) ? ' selected' : '' }}>{{ (!empty( $division->name)) ?  $division->name : ''}}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
+				</div>
         <div class="form-group notes-field{{ $errors->has('extras') ? ' has-error' : '' }}">
             <label for="extras" class="col-sm-2 control-label">Extras</label>
             <div class="col-sm-8">
