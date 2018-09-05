@@ -3,8 +3,6 @@
         <div class="modal-content">
             <form class="form-horizontal" name="add-new-vehicledetails-form" enctype="multipart/form-data">
                 {{ csrf_field() }}
-
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -34,7 +32,6 @@
                             </div>
                         </div>
                     @endforeach
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
@@ -53,30 +50,28 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="form-group{{ $errors->has('vehiclemodel_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
+                    <div class="form-group{{ $errors->has('vehiclemake_id') ? ' has-error' : '' }}">
+						<label for="{{ 'vehiclemake_id' }}" class="col-sm-2 control-label">Vehicle Make </label>
 
-                            <div class="col-sm-8">
-                                <select id="vehiclemodel_id" name="vehiclemodel_id" class="form-control select2" style="width: 100%;" onchange="vehiclemakeDDOnChange(this)">
-                                    <option value="">*** Please Select a Vehicle Make ***</option>
-                                    <option value="0"></option>
-                                    @foreach($vehiclemake as $vehiclemodel)
-                                        <option value="{{ $vehiclemodel->id }}" >{{ $vehiclemodel->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+						<div class="col-sm-8">
+							<select id="vehiclemake_id" name="vehiclemake_id" class="form-control select2" style="width: 100%;" onchange="vehiclemakeDDOnChange(this)">
+								<option value="">*** Please Select a Vehicle Make ***</option>
+								<option value="0"></option>
+								@foreach($vehiclemake as $make)
+									<option value="{{ $make->id }}" >{{ $make->name }}</option>
+								@endforeach
+							</select>
+						</div>
+                    </div>
+					<div class="form-group{{ $errors->has('vehiclemodel_id') ? ' has-error' : '' }}">
+						<label for="{{ 'vehiclemodel_id' }}" class="col-sm-2 control-label">Vehicle Model</label>
 
-                        <div class="form-group{{ $errors->has('vehiclemake_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'vehiclemake_id' }}" class="col-sm-2 control-label">Vehicle Model</label>
-
-                            <div class="col-sm-8">
-                                <select id="vehiclemake_id" name="vehiclemake_id" class="form-control select2" style="width: 100%;">
-                                    <option value="">*** Please Select a Vehicle Make First ***</option>
-                                </select>
-                            </div>
-                        </div>
+						<div class="col-sm-8">
+							<select id="vehiclemodel_id" name="vehiclemodel_id" class="form-control select2" style="width: 100%;">
+								<option value="">*** Please Select a Vehicle Make First ***</option>
+							</select>
+						</div>
+					</div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Vehicle Type</label>
                         <div class="col-sm-8">

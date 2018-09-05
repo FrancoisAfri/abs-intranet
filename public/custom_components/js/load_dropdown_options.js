@@ -374,8 +374,8 @@ function loadContactPeopleOptions(ddID, selectedOption, companyID, incInactive, 
 
 /* function to load vehicle make  drop down options */
     function vehiclemakeDDOnChange(dropDownObj, vehiclemomdeDDID, selectedOption) {
-        console.log('gets here');
-        vehiclemomdeDDID = vehiclemomdeDDID || 'vehiclemake_id';
+       // console.log('gets here');
+        vehiclemomdeDDID = vehiclemomdeDDID || 'vehiclemodel_id';
         selectedOption = selectedOption || '';
 
         var postTo = '';
@@ -426,7 +426,7 @@ function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, load
 
     /* function to load job card categories drop down options */
     function categorypartDDOnChange(dropDownObj, jobcategorymomdelDDID, selectedOption) {
-        console.log('gets here');
+       // console.log('gets here');
         jobcategorymomdelDDID = jobcategorymomdelDDID || 'category_id';
         selectedOption = selectedOption || '';
 

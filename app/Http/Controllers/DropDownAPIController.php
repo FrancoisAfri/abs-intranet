@@ -169,12 +169,12 @@ class DropDownAPIController extends Controller
         return $contactPeople;
     }
 
-        public function vehiclemomdeDDID(Request $request) {
-          $companyID = (int) $request->input('vehiclemake_id');
+     public function vehiclemomdeDDID(Request $request) {
+          $makeID = (int) $request->input('vehiclemake_id');
           $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
           $loadAll = $request->input('load_all');
           $model = [];
-          if ($loadAll == -1) $model = vehiclemodel::movhedels('vehiclemake_id', $companyID, $incInactive);
+          if ($loadAll == -1) $model = vehiclemodel::movhedels('vehiclemake_id', $makeID, $incInactive);
           elseif ($loadAll == 1) {
               $model = vehiclemodel::where(function ($query) use($incInactive) {
                   if ($incInactive == -1) {
@@ -184,7 +184,6 @@ class DropDownAPIController extends Controller
                   ->sortBy('id')
                   ->pluck('id', 'name');
           }
-
           return $model;
       }
 
