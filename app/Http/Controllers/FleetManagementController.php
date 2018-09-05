@@ -54,7 +54,7 @@ class FleetManagementController extends Controller
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('name', 'asc')->get();
-
+//return $vehiclemake;
         $images = images::orderBy('id', 'asc')->get();
         //check  vehicle_configuration table if new_vehicle_approval is active
         
@@ -163,8 +163,8 @@ class FleetManagementController extends Controller
 		if (!empty($SysData['company'])) $SysData['financial_institution'] = 0;
         $vehicle_maintenance = new vehicle_maintenance();
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;
-        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
-        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
+        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
+        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
@@ -281,8 +281,8 @@ class FleetManagementController extends Controller
 		// Comment on changes
 		if ($vehicle_maintenance->title_type != $SysData['title_type']) $comment .= "1.Vehicle Owner Changed, ";
 		if (!empty($SysData['responsible_for_maintenance']) && $vehicle_maintenance->responsible_for_maintenance != $SysData['responsible_for_maintenance']) $comment .= "2.Person Responsible Changed, ";
-		if (!empty($SysData['vehicle_make']) && $vehicle_maintenance->vehicle_make != $SysData['vehicle_make']) $comment .= "3.Make Changed, ";
-		if (!empty($SysData['vehicle_model']) && $vehicle_maintenance->vehicle_model != $SysData['vehicle_model']) $comment .= "4.Model Changed, ";
+		if (!empty($SysData['vehiclemake_id']) && $vehicle_maintenance->vehicle_make != $SysData['vehiclemake_id']) $comment .= "3.Make Changed, ";
+		if (!empty($SysData['vehiclemodel_id']) && $vehicle_maintenance->vehicle_model != $SysData['vehiclemodel_id']) $comment .= "4.Model Changed, ";
 		if (!empty($SysData['vehicle_type']) && $vehicle_maintenance->vehicle_type != $SysData['vehicle_type']) $comment .= "5.Type Changed, ";
 		if (!empty($SysData['year']) && $vehicle_maintenance->year != $SysData['year']) $comment .= "6.Year, ";
 		if (!empty($SysData['vehicle_registration']) && $vehicle_maintenance->vehicle_registration != $SysData['vehicle_registration']) $comment .= "7.Registration Number Changed, ";
@@ -317,8 +317,8 @@ class FleetManagementController extends Controller
 		else
             $vehicle_maintenance->status = 1;
         $vehicle_maintenance->responsible_for_maintenance = !empty($SysData['responsible_for_maintenance']) ? $SysData['responsible_for_maintenance'] : 0;;
-        $vehicle_maintenance->vehicle_make = !empty($SysData['vehicle_make']) ? $SysData['vehicle_make'] : 0;
-        $vehicle_maintenance->vehicle_model = !empty($SysData['vehicle_model']) ? $SysData['vehicle_model'] : 0;
+        $vehicle_maintenance->vehicle_make = !empty($SysData['vehiclemake_id']) ? $SysData['vehiclemake_id'] : 0;
+        $vehicle_maintenance->vehicle_model = !empty($SysData['vehiclemodel_id']) ? $SysData['vehiclemodel_id'] : 0;
         $vehicle_maintenance->vehicle_type = !empty($SysData['vehicle_type']) ? $SysData['vehicle_type'] : 0;
         $vehicle_maintenance->year = $SysData['year'];
         $vehicle_maintenance->vehicle_registration = $SysData['vehicle_registration'];
@@ -403,7 +403,7 @@ class FleetManagementController extends Controller
     }
 
     public function viewDetails(vehicle_maintenance $maintenance)
-    {
+    {		
         $ID = $maintenance->id;
         $hrDetails = HRPerson::where('status', 1)->get();
         $images = images::orderBy('id', 'asc')->get();
@@ -412,7 +412,7 @@ class FleetManagementController extends Controller
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('name', 'asc')->get();
-        $vehiclemodel = vehiclemodel::orderBy('name', 'asc')->get();
+        $vehiclemodel = vehiclemodel::where('status', 1)->orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();

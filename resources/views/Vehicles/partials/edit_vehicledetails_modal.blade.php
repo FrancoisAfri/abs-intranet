@@ -67,14 +67,14 @@
                         </div>
                     </div>
                         <div class="form-group">
-                            <label for="action" class="col-sm-2 control-label">Vehicle Make</label>
+                            <label for="vehiclemake_id" class="col-sm-2 control-label">Vehicle Make</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-modx"></i>
                                     </div>
-                                    <select id="vehicle_make" name="vehicle_make" class="form-control select2"  style="width: 100%;">
-                                        <option selected="selected" value=" " >*** Select a Vehicle Type  ***</option>
+                                    <select id="vehiclemake_id" name="vehiclemake_id" class="form-control select2"  style="width: 100%;"  onchange="vehiclemakeDDOnChange(this)">
+                                        <option selected="selected" value="0" >*** Select a Vehicle Make  ***</option>
                                         @foreach($vehiclemake as $make)
                                         <option value="{{ $make->id }}" {{ ($vehiclemaintenance->vehicle_make == $make->id) ? ' selected' : '' }}>{{ $make->name }}</option>
                                         @endforeach
@@ -83,14 +83,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="action" class="col-sm-2 control-label">Vehicle Model</label>
+                            <label for="vehiclemodel_id" class="col-sm-2 control-label">Vehicle Model</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-bullseye"></i>
                                     </div>
-                                    <select id="vehicle_model" name="vehicle_model" class="form-control select2"  style="width: 100%;">
-                                        <option selected="selected" value=" " >*** Select a Vehicle Model  ***</option>
+                                    <select id="vehiclemodel_id" name="vehiclemodel_id" class="form-control select2"  style="width: 100%;">
+                                        <option selected="selected" value="0" >*** Select a Vehicle Model  ***</option>
                                         @foreach($vehiclemodel as $model)
                                         <option value="{{ $model->id }}" {{ ($vehiclemaintenance->vehicle_model == $model->id) ? ' selected' : '' }}>{{ $model->name }}</option>
                                         @endforeach
@@ -99,7 +99,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="action" class="col-sm-2 control-label">Vehicle Type</label>
+                            <label for="vehicle_type" class="col-sm-2 control-label">Vehicle Type</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">

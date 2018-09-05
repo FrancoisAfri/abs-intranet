@@ -139,8 +139,7 @@
                                                 External </label>            -->
 
                                         </div>
-                                </div>
-                               
+									</div>
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-left"><i
                                                     class="fa fa-search"></i> Search
@@ -293,6 +292,7 @@
 
         //Post perk form to server using ajax (add)
         $('#add_vehicledetails').on('click', function () {
+			
             var strUrl = '/vehicle_management/add_vehicleDetails';
             var formName = 'add-new-vehicledetails-form';
             var modalID = 'add-vehicledetails-modal';
@@ -300,7 +300,11 @@
             var redirectUrl = '/vehicle_management/manage_fleet';
             var successMsgTitle = 'New Vehicle Details Added!';
             var successMsg = 'TheVehicle Details has been updated successfully.';
-            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			var vehiclemakeID =$('form[name=' + formName + ']').find('#vehiclemake_id').val();
+			var vehiclemodelID= $('form[name=' + formName + ']').find('#vehiclemodel_id').val();
+			console.log(vehiclemakeID);
+			console.log(vehiclemodelID);
+            //modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
         //Load divisions drop down
