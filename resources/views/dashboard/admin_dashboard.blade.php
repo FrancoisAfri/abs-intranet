@@ -34,7 +34,7 @@
                                         <a href="{{ '/view/' . $Cmsnews->id }}" id="edit_compan"
                                            class="btn btn-default  btn-xs" target="_blank"><i class=""></i> Read more
                                         </a>
-										{{$Cmsnews->description}}
+										<b>{{$Cmsnews->description}}</b>
                                         <img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}" width="400" height="400">
 
                                     </div>
