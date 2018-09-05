@@ -34,7 +34,7 @@
                                         <a href="{{ '/view/' . $Cmsnews->id }}" id="edit_compan"
                                            class="btn btn-default  btn-xs" target="_blank"><i class=""></i> Read more
                                         </a>
-                                        <img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}">
+                                        <img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}" width="400" height="400">
 
                                     </div>
                                 @endforeach
@@ -61,7 +61,6 @@
                         <i class="fa fa-comments-o"></i>
                         <h3 class="box-title"> Company CEO Message</h3>
                     </div>
-
                     <div class="container">
                         <!--  <div class="page-header">
                              <h1 id="timeline">Timeline</h1>
@@ -86,15 +85,6 @@
                                         <div class="timeline-body">
                                             <p><font size="3">{!!$ceonews->summary!!}.</font></p>
                                             <div>
-                                                <!--<div class="pull-right">
-                                                    <span class="label label-info">{{$surname . ' ' . $names}}</span>
-                                                    <span class="label label-primary">story</span>
-                                                    {{--<span class="label label-success">blog</span>--}}
-                                                    {{--<span class="label label-info">personal</span>--}}
-                                                    {{--<span class="label label-warning">Warning</span>--}}
-                                                    {{--<span class="label label-danger">Danger</span>--}}
-                                                </div>
-                                            </div>-->
                                         </div>
                                         <hr>
                                     </div>
