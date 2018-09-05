@@ -91,7 +91,6 @@
                     </div>
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>
-
                         <div class="col-sm-8">
                             @if(!empty($avatar))
                                 <div style="margin-bottom: 10px;">
@@ -101,9 +100,19 @@
                             @endif
                             <input type="file" id="image" name="image" class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+							<input src="" type="image" id="fire_image" width="300"
+                                         height="200" class="img-responsive img-thumbnail">
                         </div>
                     </div>
-                        
+                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
+                        <label for="documents" class="col-sm-3 control-label">Attachment </label>
+                        <div class="col-sm-8">
+
+                            <input type="file" id="documents" name="documents"
+                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
+                                   data-show-upload="false">
+                        </div>
+                    </div> 
                     <input type="hidden" id="vehicle_id" name="vehicle_id"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">    	
 				</div>

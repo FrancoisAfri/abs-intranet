@@ -4,7 +4,6 @@
           
             <form class="form-horizontal" method="POST" name="add-fireextinguishers-form">
                 {{ csrf_field() }}
-               
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -14,8 +13,6 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="box-body" id="vehicle_details">
-
-  
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Barcode</label>
                         <div class="col-sm-8">
@@ -51,7 +48,6 @@
                                    value="" placeholder="Enter Serial Number">
                         </div>
                     </div>
-                   
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Invoice Number</label>
                         <div class="col-sm-8">
@@ -93,7 +89,6 @@
                     </div>
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>
-
                         <div class="col-sm-8">
                             @if(!empty($avatar))
                                 <div style="margin-bottom: 10px;">
@@ -105,11 +100,17 @@
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>
-                        
+					<div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
+                        <label for="documents" class="col-sm-3 control-label">Document </label>
+                        <div class="col-sm-8">
+
+                            <input type="file" id="documents" name="documents"
+                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
+                                   data-show-upload="false">
+                        </div>
+                    </div>
                     <input type="hidden" id="valueID" name="valueID"
-                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">    
-                         
-                        
+                           value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">  
 					</div>
                 </div>
                 <div class="modal-footer">

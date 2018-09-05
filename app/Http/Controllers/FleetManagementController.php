@@ -380,7 +380,7 @@ class FleetManagementController extends Controller
         $VehicleHistory->action_date = time();
         $VehicleHistory->save();
 		
-		/*if ($vehicleConfig == 1) {
+		if ($vehicleConfig == 1) {
 			$managerIDs = DB::table('security_modules_access')
 			   ->select('security_modules_access.*','security_modules.*') 
 			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
@@ -396,7 +396,7 @@ class FleetManagementController extends Controller
 				if (!empty($email))
 					Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
             }
-        }*/
+        }
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
@@ -900,7 +900,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $permits->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/permits_licence', $fileName);
                 //Update file name in the table
                 $permits->document = $fileName;
@@ -948,7 +948,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $permit->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/permits_licence', $fileName);
                 //Update file name in the table
                 $permit->document = $fileName;
@@ -997,7 +997,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/documents', $fileName);
                 //Update file name in the table
                 $vehicledocumets->document = $fileName;
@@ -1041,7 +1041,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $vehicledocumets->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/documents', $fileName);
                 //Update file name in the table
                 $vehicledocumets->document = $fileName;
@@ -1088,7 +1088,7 @@ class FleetManagementController extends Controller
         unset($SysData['_token']);
 
         $currentDate = time();
-	$loggedInEmplID = Auth::user()->person->id;
+		$loggedInEmplID = Auth::user()->person->id;
 		
         $notes = new notes();
         $notes->date_captured = $currentDate;
@@ -1101,7 +1101,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $notes->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/note_documents', $fileName);
                 //Update file name in the table
                 $notes->documents = $fileName;
@@ -1111,7 +1111,6 @@ class FleetManagementController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
-
     }
 
     public function editNote(Request $request, notes $note)
@@ -1134,7 +1133,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $note->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/note_documents', $fileName);
                 //Update file name in the table
                 $note->documents = $fileName;
@@ -1223,15 +1222,12 @@ class FleetManagementController extends Controller
             'item_no' => 'required',
              'Weight' => 'required',
              'supplier_id' => 'required',
-            'image' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
         $currentDate = time();
-
         $userLogged = Auth::user()->load('person');
-  
         $datepurchased = $SysData['date_purchased'] = str_replace('/', '-', $SysData['date_purchased']);
         $datepurchased = $SysData['date_purchased'] = strtotime($SysData['date_purchased']);
 
@@ -1258,6 +1254,17 @@ class FleetManagementController extends Controller
                $vehiclefirextinguishers->update();
            }
        }
+	   //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = time() . "_fire_documents." . $fileExt;
+                $request->file('documents')->storeAs('Vehicle/fireextinguishers/document', $fileName);
+                //Update file name in the table
+                $vehiclefirextinguishers->attachement = $fileName;
+                $vehiclefirextinguishers->update();
+            }
+        }
         AuditReportsController::store('Fleet Management', 'Vehicle Fire Extinguishers Accessed', "Accessed by User", 0);
         return response()->json(); 
     }
@@ -1303,6 +1310,17 @@ class FleetManagementController extends Controller
                $extinguishers->update();
            }
        }
+      	   //Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
+                $fileName = time() . "_fire_documents." . $fileExt;
+                $request->file('documents')->storeAs('Vehicle/fireextinguishers/document', $fileName);
+                //Update file name in the table
+                $vehiclefirextinguishers->attachement = $fileName;
+                $vehiclefirextinguishers->update();
+            }
+        }
         AuditReportsController::store('Fleet Management', 'Vehicle Fire Extinguishers Updated', "Accessed by User", 0);
         return response()->json(); 
         
