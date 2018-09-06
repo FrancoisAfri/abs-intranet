@@ -557,7 +557,7 @@ class FleetManagementController extends Controller
 			// $vehicleImages->description = $SysData['description'];
 			$vehicleImages->vehicle_maintanace = $SysData['valueID'];
 			$vehicleImages->upload_date = $currentDate;
-			$vehicleImages->user_name = $userLogged->id;
+			$vehicleImages->user_name = $userLogged->person->id;
 			$vehicleImages->default_image = 1;
 			$vehicleImages->save();
 			
@@ -593,7 +593,7 @@ class FleetManagementController extends Controller
         $image->description = $SysData['description'];
         $image->vehicle_maintanace = $SysData['valueID'];
         $image->upload_date = $currentDate;
-        $image->user_name = $userLogged->id;
+        $image->user_name = $userLogged->person->id;
         $image->default_image = 1;
         //$image->image = $SysData['images'];
 
@@ -842,7 +842,6 @@ class FleetManagementController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
 
         $currentDate = time();
-        $loggedInEmplID = Auth::user()->person->id;
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
 
