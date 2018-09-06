@@ -1151,7 +1151,6 @@ class FleetManagementController extends Controller
 
         AuditReportsController::store('Fleet Management', 'note  Deleted', "document has been deleted", 0);
         return back();
-        //return redirect('/vehicle_management/document/$maintenance->id');
     }
     
     public function viewfireExtinguishers(vehicle_maintenance $maintenance)
@@ -1161,8 +1160,7 @@ class FleetManagementController extends Controller
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->get();
         $safe = safe::where('status', 1)->get();
-      
-         
+
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -1174,7 +1172,6 @@ class FleetManagementController extends Controller
         $statusArray= array(1 => 'Active', 2 => ' Allocate', 3 => 'In Use', 4 => 'Empty', 5=> 'Evacate', 6=> 'In Storage', 7=> 'Discarded', 8=> 'Rental' , 9=> 'Sold');
          
         $vehicle_details = DB::table('vehicle_details')->get();
-      //  return $vehicle_details;
         
         $fireextinguishers = DB::table('vehicle_fire_extinguisher')
             ->select('vehicle_fire_extinguisher.*'
@@ -1187,9 +1184,7 @@ class FleetManagementController extends Controller
             ->orderBy('vehicle_fire_extinguisher.id')
             ->where('vehicle_id', $ID)
             ->get();
-        
-        //return $fireextinguishers;
-               
+     
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
