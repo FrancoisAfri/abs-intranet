@@ -381,6 +381,7 @@ Route::post('vehicle_management/driver_search', 'fleetcardController@driversearc
 
 #******************** Vehicle Approval *************************
 Route::get('vehicle_management/vehicle_history/{fleet}', 'fleetcardController@vehicleHistories');
+Route::get('vehicle_management/vehicle_history_print/{fleet}', 'fleetcardController@vehicleHistoriesPrint');
 Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 Route::post('vehicle_management/vehicleApproval', 'fleetcardController@vehicleApprovals');
 Route::patch('vehicle_management/reject_vehicle/{reason}','fleetcardController@rejectReason' );

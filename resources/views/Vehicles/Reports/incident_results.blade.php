@@ -42,58 +42,54 @@
                         @endif
                         <table id="emp-list-table" class="table table-bordered table-striped table-hover">
                             <thead>
-                            <tr>
-                                <th style="width: 5px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;">Image</th>
-                                <th>Vehicle Model/Year</th>
-                                <th>Fleet Number</th>
-                                <th>Vehicle Registration</th>
-                                <th>VIN Numberr</th>
-                                <th>Engine Number</th>
-                            </tr>
+								<tr>
+									<th style="width: 5px; text-align: center;"></th>
+									<th style="width: 5px; text-align: center;">Image</th>
+									<th>Vehicle Model/Year</th>
+									<th>Fleet Number</th>
+									<th>Vehicle Registration</th>
+									<th>VIN Numberr</th>
+									<th>Engine Number</th>
+								</tr>
                             </thead>
                             <tbody>
-                            @foreach($vehicledetail as $service)
-                                <tr>
-                                    <td style="vertical-align: middle;"
-                                        nowrap>
-                                        <a href="{{ '/vehicle_management/vehicle_reports/Incidents_details/' . $service->id }}" id="edit_compan"
-                                           class="btn btn-primary  btn-xs" data-id="{{ $service->id }}"
-                                        ><i class="	fa fa-files-o"></i>
-                                            View Details</a></td>
-                                    <td>
-                                        <div class="product-img">
-                                            <img src="{{ (!empty($service->image)) ? Storage::disk('local')->url("Vehicle/images/$service->image") : 'http://placehold.it/60x50' }}"
-                                                 alt="Product Image" width="50" height="50">
-                                        </div>
+								@foreach($vehicledetail as $service)
+									<tr>
+										<td style="vertical-align: middle;"
+											nowrap>
+											<a href="{{ '/vehicle_management/vehicle_reports/Incidents_details/' . $service->id }}" id="edit_compan"
+											   class="btn btn-primary  btn-xs" data-id="{{ $service->id }}"
+											><i class="	fa fa-files-o"></i>
+												View Details</a></td>
+										<td>
+											<div class="product-img">
+												<img src="{{ (!empty($service->image)) ? Storage::disk('local')->url("Vehicle/images/$service->image") : 'http://placehold.it/60x50' }}"
+													 alt="Product Image" width="50" height="50">
+											</div>
 
-                                    </td>
-
-                                    <td>{{ !empty($service->vehicle_model . ' ' . $service->year ) ? $service->vehicle_model  . ' ' . $service->year: ''}}</td>
-                                    <td>{{ !empty($service->fleet_number) ? $service->fleet_number : ''}}</td>
-                                    <td>{{ !empty($service->vehicle_registration) ? $service->vehicle_registration : ''}}</td>
-                                    <td>{{ !empty($service->chassis_number) ? $service->chassis_number : ''}}</td>
-                                    <td>{{ !empty($service->engine_number) ? $service->engine_number : ''}}</td>
-
-                                    @endforeach
-                                </tr>
-
+										</td>
+										<td>{{ !empty($service->vehicle_model . ' ' . $service->year ) ? $service->vehicle_model  . ' ' . $service->year: ''}}</td>
+										<td>{{ !empty($service->fleet_number) ? $service->fleet_number : ''}}</td>
+										<td>{{ !empty($service->vehicle_registration) ? $service->vehicle_registration : ''}}</td>
+										<td>{{ !empty($service->chassis_number) ? $service->chassis_number : ''}}</td>
+										<td>{{ !empty($service->engine_number) ? $service->engine_number : ''}}</td>
+									</tr>
+								@endforeach
                             </tbody>
                             <tfoot>
-                            <tr>
-                                <th style="width: 5px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;">Image</th>
-                                <th>Vehicle Model/Year</th>
-                                <th>Fleet Number</th>
-                                <th>Vehicle Registration</th>
-                                <th>VIN Numberr</th>
-                                <th>Engine Number</th>
-                            </tr>
+								<tr>
+									<th style="width: 5px; text-align: center;"></th>
+									<th style="width: 5px; text-align: center;">Image</th>
+									<th>Vehicle Model/Year</th>
+									<th>Fleet Number</th>
+									<th>Vehicle Registration</th>
+									<th>VIN Numberr</th>
+									<th>Engine Number</th>
+								</tr>
                             </tfoot>
                         </table>
                     </div>
                     <!-- /.box-body -->
-
                 </form>
             </div>
         </div>

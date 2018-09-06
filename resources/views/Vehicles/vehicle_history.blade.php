@@ -17,7 +17,7 @@
 		<div class="col-sm-12">
 			<div class="box box-success">
 				<div class="box-header with-border">
-					<h3 class="box-title">Vehicle History Fleet Number: ({{  $fleet->fleet_number}})</h3>
+					<h3 class="box-title">Vehicle History Fleet Number: {{  $fleet->fleet_number}}</h3>
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
 									class="fa fa-minus"></i></button>
@@ -60,6 +60,7 @@
                 </div>
 				<div class="box-footer">
                     <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+					<a href="{{ '/vehicle_management/vehicle_history_print/'.$fleet->id.''}}" class="btn btn-success pull-right" target="_blank">Print History</a>
                 </div>
 			</div>
 		</div>
