@@ -751,7 +751,7 @@ class VehicleBookingController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $collection->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/collectiondocuments', $fileName);
                 //Update file name in the table
                 $collection->document = $fileName;
@@ -785,7 +785,7 @@ class VehicleBookingController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $collectionImage->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('Vehicle/collectionimages', $fileName);
                 //Update file name in the database
                 $collectionImage->image = $fileName;
@@ -948,7 +948,7 @@ class VehicleBookingController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $returnVehicle->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/returndocuments', $fileName);
                 //Update file name in the table
                 $returnVehicle->document = $fileName;
@@ -982,7 +982,7 @@ class VehicleBookingController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $returnImage->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('Vehicle/returnImages', $fileName);
                 //Update file name in the database
                 $returnImage->image = $fileName;

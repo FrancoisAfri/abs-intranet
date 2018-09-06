@@ -354,7 +354,7 @@ class LeaveApplicationController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $levApp->id . "_supporting_docs." . $fileExt;
+                $fileName = time() . "_supporting_docs." . $fileExt;
                 $request->file('supporting_docs')->storeAs('levApp', $fileName);
                 //Update file name in hr table
                 $levApp->supporting_docs = $fileName;
@@ -405,7 +405,7 @@ class LeaveApplicationController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $levApp->id . "_supporting_docs." . $fileExt;
+                $fileName = time() . "_supporting_docs." . $fileExt;
                 $request->file('supporting_docs')->storeAs('levApp', $fileName);
                 //Update file name in hr table
                 $levApp->supporting_docs = $fileName;

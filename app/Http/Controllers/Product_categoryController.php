@@ -280,7 +280,7 @@ class Product_categoryController extends Controller
         if ($request->hasFile('picture')) {
             $fileExt = $request->file('picture')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $stock->id . "picture." . $fileExt;
+                $fileName = time() . "picture." . $fileExt;
                 $request->file('picture')->storeAs('Producrs/images', $fileName);
                 //Update file name in the database
                 $stock->picture = $fileName;

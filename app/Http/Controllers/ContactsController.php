@@ -437,7 +437,7 @@ class ContactsController extends Controller
         if ($request->hasFile('profile_pic')) {
             $fileExt = $request->file('profile_pic')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('profile_pic')->isValid()) {
-                $fileName = $contactPerson->user->id . "_avatar." . $fileExt;
+                $fileName = time() . "_avatar." . $fileExt;
                 $request->file('profile_pic')->storeAs('avatars', $fileName);
                 //Update file name in hr table
                 $contactPerson->update(['profile_pic' => $fileName]);
@@ -815,7 +815,7 @@ class ContactsController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $clientDoc->id . "_client_documents." . $fileExt;
+                $fileName = time() . "_client_documents." . $fileExt;
                 $request->file('supporting_docs')->storeAs('ContactClient/client_documents', $fileName);
                 //Update file name in the table
                 $clientDoc->supporting_docs = $fileName;
@@ -855,7 +855,7 @@ class ContactsController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $document->id . "_client_documents." . $fileExt;
+                $fileName = time() . "_client_documents." . $fileExt;
                 $request->file('supporting_docs')->storeAs('ContactClient/client_documents', $fileName);
                 //Update file name in the table
                 $document->supporting_docs = $fileName;

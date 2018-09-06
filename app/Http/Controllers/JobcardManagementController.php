@@ -115,7 +115,7 @@ class JobcardManagementController extends Controller
         if ($request->hasFile('service_docs')) {
             $fileExt = $request->file('service_docs')->extension();
             if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('service_docs')->isValid()) {
-                $fileName = $jobData->id . "service_docs." . $fileExt;
+                $fileName = time() . "service_docs." . $fileExt;
                 $request->file('service_docs')->storeAs('jobData', $fileName);
                 $jobData->service_docs = $fileName;
                 $jobData->update();
@@ -126,7 +126,7 @@ class JobcardManagementController extends Controller
         if ($request->hasFile('inspection_docs')) {
             $fileExt = $request->file('inspection_docs')->extension();
             if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('inspection_docs')->isValid()) {
-                $fileName = $jobData->id . "_inspection_docs." . $fileExt;
+                $fileName = time() . "_inspection_docs." . $fileExt;
                 $request->file('inspection_docs')->storeAs('jobData', $fileName);
                 //Update file name in hr table
                 $jobData->supporting_docs = $fileName;

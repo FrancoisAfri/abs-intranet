@@ -76,7 +76,7 @@ class CmsController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $crmNews->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('CMS/images', $fileName);
                 //Update file name in the database
                 $crmNews->image = $fileName;
@@ -165,7 +165,7 @@ class CmsController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $news->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('CMS/images', $fileName);
                 //Update file name in the database
                 $news->image = $fileName;
@@ -219,7 +219,7 @@ class CmsController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $crmNews->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('CMS/images', $fileName);
                 //Update file name in the database
                 $crmNews->image = $fileName;
@@ -293,7 +293,7 @@ class CmsController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $news->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('CMS/images', $fileName);
                 //Update file name in the database
                 $news->image = $fileName;

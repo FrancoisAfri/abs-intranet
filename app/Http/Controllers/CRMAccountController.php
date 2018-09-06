@@ -179,7 +179,7 @@ class CRMAccountController extends Controller
             if ($request->hasFile('supporting_document')) {
                 $fileExt = $request->file('supporting_document')->extension();
                 if (in_array($fileExt, ['jpg', 'jpeg', 'png', 'pdf']) && $request->file('supporting_document')->isValid()) {
-                    $fileName = $payment->id . "_proof_of_payment_" . '.' . $fileExt;
+                    $fileName = time() . "_proof_of_payment_" . '.' . $fileExt;
                     $request->file('supporting_document')->storeAs('crm/proof_of_payments', $fileName);
                     //Update file name in hr table
                     $payment->proof_of_payment = $fileName;
