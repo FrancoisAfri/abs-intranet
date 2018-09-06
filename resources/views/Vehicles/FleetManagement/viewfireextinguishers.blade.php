@@ -99,7 +99,8 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <tr>
 								<th style="width: 10px; text-align: center;"></th>
-								<th style="width: 10px; text-align: center;"></th>
+								<th style="width: 10px; text-align: center;">Images</th>
+								<th style="width: 10px; text-align: center;">Documents</th>
 								<th>Barcode</th>
 								<th>Item</th>
 								<th>Service Provier</th>
@@ -126,8 +127,10 @@
                                                 data-purchase_order="{{ $extinguishers->purchase_order }}" data-invoice_number="{{$extinguishers->invoice_number}}"
                                                 data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{date(' d M Y', $extinguishers->date_purchased)}}"
                                                 data-cost="{{ $extinguishers->Cost }}"
-                                               
-                                        ><i class="fa fa-pencil-square-o"></i> Edit
+                                                data-fire_image="{{ (!empty($extinguishers->image)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/images/$extinguishers->image") : 'http://placehold.it/60x50' }}"
+												data-fire_document="{{ (!empty($extinguishers->attachement)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$extinguishers->attachement") : '<a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>' }}"		
+												>
+												<i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
                                     <td>
@@ -136,6 +139,15 @@
                                                              alt="Product Image" width="100" height="75">
                                        </div> 
                                     </td>                
+                                    <td>
+										@if(!empty($extinguishers->attachement))
+											<a class="btn btn-default btn-flat btn-block btn-xs"
+											   href="{{ Storage::disk('local')->url("Vehicle/fireextinguishers/document/$extinguishers->attachement")}}"
+											   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+										@else
+											<a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>
+										@endif
+									</td>
                                     <td>{{ (!empty( $extinguishers->bar_code)) ?  $extinguishers->bar_code : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->item_no)) ?  $extinguishers->item_no : ''}} </td>
                                     <td>{{ (!empty( $extinguishers->comp_name)) ?  $extinguishers->comp_name : ''}} </td>
@@ -162,7 +174,8 @@
                             <tfoot>
                             <tr>
 								<th style="width: 10px; text-align: center;"></th>
-								<th style="width: 10px; text-align: center;"></th>
+								<th style="width: 10px; text-align: center;">Images</th>
+								<th style="width: 10px; text-align: center;">Documents</th>
 								<th>Barcode</th>
 								<th>Item</th>
 								<th>Service Provier</th>
@@ -298,6 +311,8 @@
 				var supplierID = btnEdit.data('supplier_id');
 				var datePurchased = btnEdit.data('date_purchased');
 				var amount = btnEdit.data('cost');
+				var fireImage = btnEdit.data('fire_image');
+				var fireDocument = btnEdit.data('fire_document');
 
 				var modal = $(this);
 				modal.find('#bar_code').val(barCode);
@@ -310,7 +325,10 @@
 				modal.find('select#supplier_id').val(supplierID).trigger("change");
 				modal.find('#date_purchased').val(datePurchased);
 				modal.find('#Cost').val(amount);
-				//console.log(amount);
+				//modal.find('#fire_image').val(fireImage);
+				modal.find('#fire_image').attr("src", fireImage);
+				//$(".edit-fire-extinghuisher-modal #fire_image").attr("src", fireImage);
+				console.log(fireDocument);
 			});
 			
 			$('#update-fire-extinguishers').on('click', function() {

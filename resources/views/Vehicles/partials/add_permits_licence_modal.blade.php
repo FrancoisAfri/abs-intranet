@@ -77,20 +77,16 @@
                                    value="{{ !empty($name)  ? $name : ''}}" placeholder="Select  User ..." readonly="">
                         </div>
                     </div>
-                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
-                        <label for="documents" class="col-sm-3 control-label">Attachment </label>
+                    <div class="form-group supDoc-field{{ $errors->has('attachement') ? ' has-error' : '' }}">
+                        <label for="attachement" class="col-sm-3 control-label">Document </label>
                         <div class="col-sm-8">
-
-                            <input type="file" id="documents" name="documents"
+                            <input type="file" id="attachement" name="attachement"
                                    class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
                                    data-show-upload="false">
                         </div>
                     </div>
 					<input type="hidden" id="valueID" name="valueID"
                         value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
-					
-					
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
