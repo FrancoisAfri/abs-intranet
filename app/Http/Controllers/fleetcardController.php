@@ -12,6 +12,7 @@ use App\VehicleHistory;
 use App\Http\Requests;
 use App\Mail\confirm_collection;
 use App\Mail\FleetRejection;
+use App\Mail\VehicleApproved;
 use App\Users;
 use App\vehicle_detail;
 use App\vehicle_fleet_cards;
@@ -409,6 +410,21 @@ class fleetcardController extends Controller
 				$VehicleHistory->comment = "New Vehicle Approved";
 				$VehicleHistory->action_date = time();
 				$VehicleHistory->save();
+				
+				# Send email to admin and person who added the vehicle
+				if ($vehicleConfig == 1) {
+					
+					$vehicle_maintenance = vehicle_maintenance::where('id', $iID)->first();
+					if (!empty($vehicle_maintenance->author_id))
+					{
+						$authoretails = HRPerson::where('id', $vehicle_maintenance->author_id)->select('first_name', 'surname', 'email')->first();
+						$email = !empty($authoretails->email) ? $authoretails->email : ''; 
+						$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
+						$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
+						if (!empty($authoretails->email))
+									Mail::to($email)->send(new VehicleApproved($firstname, $surname, $email, $iID));
+					}
+				}
             }
         }
 		// Reject Code
