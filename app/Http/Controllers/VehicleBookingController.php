@@ -140,7 +140,6 @@ class VehicleBookingController extends Controller
         ]);
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
-
         $hrDetails = HRPerson::where('status', 1)->get();
         $vehicletype = $request['vehicle_type'];
         $Company = $request['division_level_5'];
@@ -177,6 +176,7 @@ class VehicleBookingController extends Controller
                     $query->where('vehicle_details.division_level_4', $Department);
                 }
             })
+            ->where('vehicle_details.status', 1)
             ->orderBy('vehicle_details.id', 'asc')
             ->get();
         $vehiclebooking = $vehiclebookings->unique('id');

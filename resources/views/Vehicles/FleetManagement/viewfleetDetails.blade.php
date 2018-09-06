@@ -69,6 +69,7 @@
                     <div class="box-body">
                         <table class="table table-striped table-bordered">
                             @foreach ($vehiclemaintenance as $vehiclemaintenance)
+							@if(!empty($vehiclemaintenance->status) && $vehiclemaintenance->status == 1)
                                 <a href="{{ '/vehicle_management/viewdetails/' . $maintenance->id }}"
                                    class="btn btn-app">
                                     <i class="fa fa-bars"></i> General Details
@@ -102,6 +103,7 @@
                                    class="btn btn-app">
                                     <i class="fa fa-money"></i> General Cost
                                 </a>
+							@endif
                                 <!--  -->
                                 <tr>
 
@@ -246,32 +248,34 @@
                             data-company="{{ $vehiclemaintenance->company }}"
                     ><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
-                    <a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Images</a>
-                    <a href="{{ '/vehicle_management/keys/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a>
-                    <a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>
-                    <a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Documents</a>
-                    <a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Notes</a>
-                    <a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
-                   <a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
-					   <a href="{{ '/vehicle_management/vehicle_history/' . $vehiclemaintenance->id }}"
-                       class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
-                    <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
-                                class="fa fa-arrow-left"></i> Back
-                    </button>
+					@if(!empty($vehiclemaintenance->status) && $vehiclemaintenance->status == 1)
+						<a href="{{ '/vehicle_management/viewImage/' . $vehiclemaintenance->id }}"
+						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
+						   data-id="{{ $vehiclemaintenance->id }}">Images</a>
+						<a href="{{ '/vehicle_management/keys/' . $vehiclemaintenance->id }}"
+						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
+						   data-id="{{ $vehiclemaintenance->id }}">Key Tracking</a>
+						<a href="{{ '/vehicle_management/permits_licences/' . $vehiclemaintenance->id }}"
+						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
+						   data-id="{{ $vehiclemaintenance->id }}">Permit/Licences</a>
+						<a href="{{ '/vehicle_management/document/' . $vehiclemaintenance->id }}"
+						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
+						   data-id="{{ $vehiclemaintenance->id }}">Documents</a>
+						<a href="{{ '/vehicle_management/notes/' . $vehiclemaintenance->id }}"
+						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
+						   data-id="{{ $vehiclemaintenance->id }}">Notes</a>
+						<a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
+						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
+						   data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
+					   <a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
+						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
+						   data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
+						   <a href="{{ '/vehicle_management/vehicle_history/' . $vehiclemaintenance->id }}"
+						   class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
+						<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
+									class="fa fa-arrow-left"></i> Back
+						</button>
+					@endif
 					@if(!empty($vehiclemaintenance->status) && $vehiclemaintenance->status == 2)
 						<button type="button" class="btn btn-primary btn-danger" id="client_declined" data-toggle="modal" data-target="#fleet-reject-single-modal"><i class="fa fa-times"></i> Reject Fleet</button>
 						<button type="button" class="btn btn-primary btn-success" id="fleet_approval" onclick="postData({{$vehiclemaintenance->id}}, 'fleet_approval');"><i class="fa fa-check"></i> Approve Fleet</button>
