@@ -148,7 +148,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('bee_certificate_doc')) {
             $fileExt = $request->file('bee_certificate_doc')->extension();
             if (in_array($fileExt, ['pdf']) && $request->file('bee_certificate_doc')->isValid()) {
-                $fileName = $company->id . "_bee_certificate." . $fileExt;
+                $fileName = time() . "_bee_certificate." . $fileExt;
                 $request->file('bee_certificate_doc')->storeAs('company_docs', $fileName);
                 //Update file name in the table
                 $company->bee_certificate_doc = $fileName;
@@ -160,7 +160,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('comp_reg_doc')) {
             $fileExt = $request->file('comp_reg_doc')->extension();
             if (in_array($fileExt, ['pdf']) && $request->file('comp_reg_doc')->isValid()) {
-                $fileName = $company->id . "_comp_reg_doc." . $fileExt;
+                $fileName = time() . "_comp_reg_doc." . $fileExt;
                 $request->file('comp_reg_doc')->storeAs('company_docs', $fileName);
                 //Update file name in the table
                 $company->comp_reg_doc = $fileName;
@@ -376,7 +376,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('bee_certificate_doc')) {
             $fileExt = $request->file('bee_certificate_doc')->extension();
             if (in_array($fileExt, ['pdf']) && $request->file('bee_certificate_doc')->isValid()) {
-                $fileName = $company->id . "_bee_certificate." . $fileExt;
+                $fileName = time() . "_bee_certificate." . $fileExt;
                 $request->file('bee_certificate_doc')->storeAs('company_docs', $fileName);
                 //Update file name in the table
                 $company->bee_certificate_doc = $fileName;
@@ -388,7 +388,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('comp_reg_doc')) {
             $fileExt = $request->file('comp_reg_doc')->extension();
             if (in_array($fileExt, ['pdf']) && $request->file('comp_reg_doc')->isValid()) {
-                $fileName = $company->id . "_comp_reg_doc." . $fileExt;
+                $fileName = time() . "_comp_reg_doc." . $fileExt;
                 $request->file('comp_reg_doc')->storeAs('company_docs', $fileName);
                 //Update file name in the table
                 $company->comp_reg_doc = $fileName;
@@ -441,7 +441,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('bee_certificate_doc')) {
             $fileExt = $request->file('bee_certificate_doc')->extension();
             if (in_array($fileExt, ['pdf']) && $request->file('bee_certificate_doc')->isValid()) {
-                $fileName = $company->id . "_bee_certificate." . $fileExt;
+                $fileName = time() . "_bee_certificate." . $fileExt;
                 $request->file('bee_certificate_doc')->storeAs('company_docs', $fileName);
                 //Update file name in the table
                 $company->bee_certificate_doc = $fileName;
@@ -453,7 +453,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('comp_reg_doc')) {
             $fileExt = $request->file('comp_reg_doc')->extension();
             if (in_array($fileExt, ['pdf']) && $request->file('comp_reg_doc')->isValid()) {
-                $fileName = $company->id . "_comp_reg_doc." . $fileExt;
+                $fileName = time() . "_comp_reg_doc." . $fileExt;
                 $request->file('comp_reg_doc')->storeAs('company_docs', $fileName);
                 //Update file name in the table
                 $company->comp_reg_doc = $fileName;
@@ -465,7 +465,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('supporting_doc')) {
             $fileExt = $request->file('supporting_doc')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_doc')->isValid()) {
-                $fileName = $company->id . "_supporting_doc." . $fileExt;
+                $fileName = time() . "_supporting_doc." . $fileExt;
                 $request->file('supporting_doc')->storeAs('activities', $fileName);
                 //Update file name in the table
                 $company->supporting_doc = $fileName;
@@ -704,7 +704,7 @@ class ContactCompaniesController extends Controller
             if ($request->hasFile('bee_certificate_doc')) {
                 $fileExt = $request->file('bee_certificate_doc')->extension();
                 if (in_array($fileExt, ['pdf']) && $request->file('bee_certificate_doc')->isValid()) {
-                    $fileName = $company->id . "_bee_certificate." . $fileExt;
+                    $fileName = time() . "_bee_certificate." . $fileExt;
                     $request->file('bee_certificate_doc')->storeAs('company_docs', $fileName);
                     //Update file name in the table
                     $company->bee_certificate_doc = $fileName;
@@ -716,7 +716,7 @@ class ContactCompaniesController extends Controller
             if ($request->hasFile('comp_reg_doc')) {
                 $fileExt = $request->file('comp_reg_doc')->extension();
                 if (in_array($fileExt, ['pdf']) && $request->file('comp_reg_doc')->isValid()) {
-                    $fileName = $company->id . "_comp_reg_doc." . $fileExt;
+                    $fileName = time() . "_comp_reg_doc." . $fileExt;
                     $request->file('comp_reg_doc')->storeAs('company_docs', $fileName);
                     //Update file name in the table
                     $company->comp_reg_doc = $fileName;
@@ -1148,7 +1148,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $contactsCompany->id . "_client_documents." . $fileExt;
+                $fileName = time(). "_client_documents." . $fileExt;
                 $request->file('supporting_docs')->storeAs('ContactCompany/company_documents', $fileName);
                 //Update file name in the table
                 $contactsCompany->supporting_docs = $fileName;
@@ -1219,7 +1219,7 @@ class ContactCompaniesController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = $company->id . "_client_documents." . $fileExt;
+                $fileName = time() . "_client_documents." . $fileExt;
                 $request->file('supporting_docs')->storeAs('ContactCompany/company_documents', $fileName);
                 //Update file name in the table
                 $company->supporting_docs = $fileName;

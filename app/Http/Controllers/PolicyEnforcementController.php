@@ -92,7 +92,7 @@ class PolicyEnforcementController extends Controller
         if ($request->hasFile('document')) {
             $fileExt = $request->file('document')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('document')->isValid()) {
-                $fileName = $policyID . "_policy_documet." . $fileExt;
+                $fileName = time() . "_policy_documet." . $fileExt;
                 $request->file('document')->storeAs('Policies/policy', $fileName);
                 $policy->document = $fileName;
                 $policy->update();
@@ -215,7 +215,7 @@ class PolicyEnforcementController extends Controller
         if ($request->hasFile('document')) {
             $fileExt = $request->file('document')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('document')->isValid()) {
-                $fileName = $policy->id . "_policy_documet." . $fileExt;
+                $fileName = time() . "_policy_documet." . $fileExt;
                 $request->file('document')->storeAs('Policies/policy', $fileName);
                 $policy->document = $fileName;
                 $policy->update();

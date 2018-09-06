@@ -414,7 +414,7 @@ class UsersController extends Controller
         if ($request->hasFile('profile_pic')) {
             $fileExt = $request->file('profile_pic')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('profile_pic')->isValid()) {
-                $fileName = $user->id . "_avatar_" . time() . '.' . $fileExt;
+                $fileName = time() . "_avatar_" . time() . '.' . $fileExt;
                 $request->file('profile_pic')->storeAs('avatars', $fileName);
                 //Update file name in hr table
                 $user->person->profile_pic = $fileName;

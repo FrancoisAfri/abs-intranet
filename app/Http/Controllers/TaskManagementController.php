@@ -139,7 +139,7 @@ class TaskManagementController extends Controller
         if ($request->hasFile('document')) {
             $fileExt = $request->file('document')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document')->isValid()) {
-                $fileName = $endData['employee_id'] . "_task_doc_" . '.' . $fileExt;
+                $fileName = time() . "_task_doc_" . '.' . $fileExt;
                 $request->file('document')->storeAs('tasks', $fileName);
                 //Update file name in the appraisal_perks table
                 $endtask = new EmployeeTasksDocuments();

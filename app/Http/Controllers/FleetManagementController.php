@@ -204,7 +204,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $vehicle_maintenance->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('Vehicle/images', $fileName);
                 //Update file name in the database
                 $vehicle_maintenance->image = $fileName;
@@ -216,7 +216,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('registration_papers')) {
             $fileExt = $request->file('registration_papers')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('registration_papers')->isValid()) {
-                $fileName = $vehicle_maintenance->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('registration_papers')->storeAs('Vehicle/registration_papers', $fileName);
                 //Update file name in the table
                 $vehicle_maintenance->registration_papers = $fileName;
@@ -243,14 +243,14 @@ class FleetManagementController extends Controller
 			   ->where('access_level','>=', 4)
 			   ->pluck('user_id');
          
-           foreach ($managerIDs as $manID) {
-                    $usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
-                    $email = !empty($usedetails->email) ? $usedetails->email : ''; 
-                    $firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
-                    $surname = !empty($usedetails->surname) ? $usedetails->surname : '';
-					if (!empty($email))
-						Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
-                }
+			foreach ($managerIDs as $manID) {
+				$usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
+				$email = !empty($usedetails->email) ? $usedetails->email : ''; 
+				$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+				$surname = !empty($usedetails->surname) ? $usedetails->surname : '';
+				if (!empty($email))
+					Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
+			}
         }
 		// add to vehicle history 
         $VehicleHistory = new VehicleHistory();
@@ -351,7 +351,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
-                $fileName = $vehicle_maintenance->id . "image." . $fileExt;
+                $fileName = time() . "image." . $fileExt;
                 $request->file('image')->storeAs('Vehicle/images', $fileName);
                 //Update file name in the database
                 $vehicle_maintenance->image = $fileName;
@@ -362,7 +362,7 @@ class FleetManagementController extends Controller
         if ($request->hasFile('registration_papers')) {
             $fileExt = $request->file('registration_papers')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('registration_papers')->isValid()) {
-                $fileName = $vehicle_maintenance->id . "_registration_papers." . $fileExt;
+                $fileName = time() . "_registration_papers." . $fileExt;
                 $request->file('registration_papers')->storeAs('Vehicle/registration_papers', $fileName);
                 //Update file name in the table
                 $vehicle_maintenance->registration_papers = $fileName;
@@ -379,7 +379,7 @@ class FleetManagementController extends Controller
         $VehicleHistory->action_date = time();
         $VehicleHistory->save();
 		
-		/*if ($vehicleConfig == 1) {
+		if ($vehicleConfig == 1) {
 			$managerIDs = DB::table('security_modules_access')
 			   ->select('security_modules_access.*','security_modules.*') 
 			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
@@ -395,7 +395,7 @@ class FleetManagementController extends Controller
 				if (!empty($email))
 					Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
             }
-        }*/
+        }
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();

@@ -197,7 +197,7 @@ class JobcardController extends Controller
 			if ($request->hasFile('images')) {
 				$fileExt = $image->extension();
 				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
-					$fileName = "image" .$count. '.' . $fileExt;
+					$fileName = "image" .time(). '.' . $fileExt;
 					$image->storeAs('Vehicle/images', $fileName);
 					//Update file name in the database
 					$vehicleImages->image = $fileName;
@@ -519,7 +519,7 @@ class JobcardController extends Controller
         if ($request->hasFile('inspection_file_upload')) {
             $fileExt = $request->file('inspection_file_upload')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('inspection_file_upload')->isValid()) {
-                $fileName = $jobcardmaintanance->id . "_inspection_file_upload." . $fileExt;
+                $fileName = time() . "_inspection_file_upload." . $fileExt;
                 $request->file('inspection_file_upload')->storeAs('Jobcard/inspectionfileupload', $fileName);
                 //Update file name in the table
                 $jobcardmaintanance->inspection_file_upload = $fileName;
@@ -531,7 +531,7 @@ class JobcardController extends Controller
         if ($request->hasFile('inspection_file_upload')) {
             $fileExt = $request->file('service_file_upload')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('service_file_upload')->isValid()) {
-                $fileName = $jobcardmaintanance->id . "_service_file_upload." . $fileExt;
+                $fileName = time() . "_service_file_upload." . $fileExt;
                 $request->file('service_file_upload')->storeAs('Jobcard/servicefileupload', $fileName);
                 //Update file name in the table
                 $jobcardmaintanance->service_file_upload = $fileName;
@@ -598,7 +598,7 @@ class JobcardController extends Controller
         if ($request->hasFile('inspection_file_upload')) {
             $fileExt = $request->file('inspection_file_upload')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('inspection_file_upload')->isValid()) {
-                $fileName = $jobCard->id . "_inspection_file_upload." . $fileExt;
+                $fileName = time() . "_inspection_file_upload." . $fileExt;
                 $request->file('inspection_file_upload')->storeAs('Jobcard/inspectionfileupload', $fileName);
                 //Update file name in the table
                 $jobCard->inspection_file_upload = $fileName;
@@ -610,7 +610,7 @@ class JobcardController extends Controller
         if ($request->hasFile('inspection_file_upload')) {
             $fileExt = $request->file('service_file_upload')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('service_file_upload')->isValid()) {
-                $fileName = $jobCard->id . "_service_file_upload." . $fileExt;
+                $fileName = time() . "_service_file_upload." . $fileExt;
                 $request->file('service_file_upload')->storeAs('Jobcard/servicefileupload', $fileName);
                 //Update file name in the table
                 $jobCard->service_file_upload = $fileName;

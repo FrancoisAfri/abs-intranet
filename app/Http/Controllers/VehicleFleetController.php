@@ -477,7 +477,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $Vehiclewarranties->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/warranty', $fileName);
                 //Update file name in the table
                 $Vehiclewarranties->document = $fileName;
@@ -528,7 +528,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $warranties->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/warranty', $fileName);
                 //Update file name in the table
                 $warranties->document = $fileName;
@@ -624,7 +624,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $insurance->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/Insurance', $fileName);
                 //Update file name in the table
                 $insurance->document = $fileName;
@@ -636,7 +636,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents1')) {
             $fileExt = $request->file('documents1')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
-                $fileName = $insurance->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents1')->storeAs('Vehicle/Insurance', $fileName);
                 //Update file name in the table
                 $insurance->document1 = $fileName;
@@ -672,7 +672,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $insurance->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/Insurance', $fileName);
                 //Update file name in the table
                 $insurance->document = $fileName;
@@ -684,7 +684,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents1')) {
             $fileExt = $request->file('documents1')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
-                $fileName = $insurance->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents1')->storeAs('Vehicle/Insurance', $fileName);
                 //Update file name in the table
                 $insurance->document1 = $fileName;
@@ -786,7 +786,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $serviceDetails->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('servicedetails/documents', $fileName);
                 //Update file name in the table
                 $serviceDetails->document = $fileName;
@@ -798,7 +798,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents1')) {
             $fileExt = $request->file('documents1')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
-                $fileName = $serviceDetails->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents1')->storeAs('Vehicle/servicedetails', $fileName);
                 //Update file name in the table
                 $serviceDetails->document1 = $fileName;
@@ -833,7 +833,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $details->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/servicedetails', $fileName);
                 //Update file name in the table
                 $details->document = $fileName;
@@ -845,7 +845,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents1')) {
             $fileExt = $request->file('documents1')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
-                $fileName = $details->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents1')->storeAs('Vehicle/servicedetails', $fileName);
                 //Update file name in the table
                 $details->document1 = $fileName;
@@ -951,7 +951,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $vehicle_fines->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/vehiclefines', $fileName);
                 //Update file name in the table
                 $vehicle_fines->document = $fileName;
@@ -963,7 +963,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents1')) {
             $fileExt = $request->file('documents1')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
-                $fileName = $vehicle_fines->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents1')->storeAs('Vehicle/vehiclefines', $fileName);
                 //Update file name in the table
                 $vehicle_fines->document1 = $fileName;
@@ -1015,7 +1015,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $fines->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/vehiclefines', $fileName);
                 //Update file name in the table
                 $fines->document = $fileName;
@@ -1027,7 +1027,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents1')) {
             $fileExt = $request->file('documents1')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents1')->isValid()) {
-                $fileName = $fines->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents1')->storeAs('Vehicle/vehiclefines', $fileName);
                 //Update file name in the table
                 $fines->document1 = $fileName;
@@ -1195,7 +1195,7 @@ class VehicleFleetController extends Controller
         if ($request->hasFile('documents')) {
            $fileExt = $request->file('documents')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('documents')->isValid()) {
-                $fileName = $incident->id . "_documents." . $fileExt;
+                $fileName = time() . "_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/vehicleIncidents', $fileName);
                 //Update file name in the table
                 $incident->document = $fileName;

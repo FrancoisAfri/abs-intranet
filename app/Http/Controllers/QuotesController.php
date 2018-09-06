@@ -116,7 +116,7 @@ class QuotesController extends Controller
         if ($request->hasFile('letter_head')) {
             $fileExt = $request->file('letter_head')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('letter_head')->isValid()) {
-                $fileName = $quoteProfile->id . '_letter_head_' . '.' . $fileExt;
+                $fileName = time() . '_letter_head_' . '.' . $fileExt;
                 $request->file('letter_head')->storeAs('letterheads', $fileName);
                 //Update file name in the appraisal_perks table
                 $quoteProfile->letter_head = $fileName;
@@ -152,7 +152,7 @@ class QuotesController extends Controller
         if ($request->hasFile('letter_head')) {
             $fileExt = $request->file('letter_head')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('letter_head')->isValid()) {
-                $fileName = $quoteProfile->id . '_letter_head_' . '.' . $fileExt;
+                $fileName = time() . '_letter_head_' . '.' . $fileExt;
                 $request->file('letter_head')->storeAs('letterheads', $fileName);
                 //Update file name in the appraisal_perks table
                 $quoteProfile->letter_head = $fileName;

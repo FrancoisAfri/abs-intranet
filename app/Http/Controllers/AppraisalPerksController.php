@@ -66,7 +66,7 @@ class AppraisalPerksController extends Controller
         if ($request->hasFile('img')) {
             $fileExt = $request->file('img')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('img')->isValid()) {
-                $fileName = $perk->id . "_perk_img_" . '.' . $fileExt;
+                $fileName = time() . "_perk_img_" . '.' . $fileExt;
                 $request->file('img')->storeAs('perks', $fileName);
                 //Update file name in the appraisal_perks table
                 $perk->img = $fileName;
