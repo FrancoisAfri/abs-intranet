@@ -14,49 +14,49 @@
                     <div id="success-alert"></div>
                     <div class="box-body" id="vehicle_details">
                      <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Barcode</label>
+                        <label for="bar_code" class="col-sm-2 control-label"> Barcode</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="bar_code" name="bar_code"
                                    value="" placeholder="Enter Barcode ">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Item</label>
+                        <label for="item_no" class="col-sm-2 control-label"> Item</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="item_no" name="item_no"
                                    value="" placeholder="Enter Item">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Description</label>
+                        <label for="Description" class="col-sm-2 control-label"> Description</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="Description" name="Description"
                                    value="" placeholder="Enter Description ">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Weight (kg)</label>
+                        <label for="Weight" class="col-sm-2 control-label"> Weight (kg)</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="Weight" name="Weight"
                                    value="" placeholder="Enter Weight (kg)">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Serial Number</label>
+                        <label for="Serial_number" class="col-sm-2 control-label"> Serial Number</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="Serial_number" name="Serial_number"
+                            <input type="text" class="form-control" id="Serial_number" name="Serial_number"
                                    value="" placeholder="Enter Serial Number">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Invoice Number</label>
+                        <label for="invoice_number" class="col-sm-2 control-label"> Invoice Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="invoice_number" name="invoice_number"
                                    value="" placeholder="Enter  Invoice Number">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Purchase Order Number</label>
+                        <label for="purchase_order" class="col-sm-2 control-label"> Purchase Order Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="purchase_order" name="purchase_order"
                                    value="" placeholder="Enter Purchase Order Number">
@@ -74,14 +74,14 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="path" class="col-sm-2 control-label">Date Purchased </label>
+                        <label for="date_purchased" class="col-sm-2 control-label">Date Purchased </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_purchased" name="date_purchased"
                                    value="{{ old('date_purchased') }}" placeholder="Select  Purchased date ...">
                         </div>
                     </div>   
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Cost</label>
+                        <label for="Cost" class="col-sm-2 control-label">Cost</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="Cost" name="Cost" value=""
                                    placeholder="Enter Cost">
@@ -101,7 +101,7 @@
                         </div>
                     </div>
 					<div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
-                        <label for="documents" class="col-sm-3 control-label">Document </label>
+                        <label for="documents" class="col-sm-2 control-label">Document </label>
                         <div class="col-sm-8">
 
                             <input type="file" id="documents" name="documents"
