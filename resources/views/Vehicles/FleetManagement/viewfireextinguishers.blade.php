@@ -111,7 +111,7 @@
 								<th>Date Purchased</th>
 								<th>Cost</th>
 								<th>Capturer By</th>
-								<th style="width: 5px; text-align: center;"></th>
+								<th>Status</th>
 								<th style="width: 5px; text-align: center;"></th>
                             </tr>
                             @if (count($fireextinguishers) > 0)
@@ -180,9 +180,13 @@
 								<th>Item</th>
 								<th>Service Provier</th>
 								<th>Serial Number</th>
+								<th>Weight</th>
+								<th>Invoice Number</th>
+								<th>PO Number</th>
 								<th>Date Purchased</th>
-								<th>Cost </th>
-								<th>Status </th>
+								<th>Cost</th>
+								<th>Capturer By</th>
+								<th>Status</th>
 								<th style="width: 5px; text-align: center;"></th>
                             </tr>
                             </tfoot>
