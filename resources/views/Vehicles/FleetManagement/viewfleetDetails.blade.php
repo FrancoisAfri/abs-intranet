@@ -272,14 +272,12 @@
 						   data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
 						   <a href="{{ '/vehicle_management/vehicle_history/' . $vehiclemaintenance->id }}"
 						   class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
-						<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
-									class="fa fa-arrow-left"></i> Back
-						</button>
 					@endif
 					@if(!empty($vehiclemaintenance->status) && $vehiclemaintenance->status == 2)
 						<button type="button" class="btn btn-primary btn-danger" id="client_declined" data-toggle="modal" data-target="#fleet-reject-single-modal"><i class="fa fa-times"></i> Reject Fleet</button>
 						<button type="button" class="btn btn-primary btn-success" id="fleet_approval" onclick="postData({{$vehiclemaintenance->id}}, 'fleet_approval');"><i class="fa fa-check"></i> Approve Fleet</button>
 					@endif
+					<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</button>
                 </div>
                 @endforeach
             </div>
