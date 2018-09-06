@@ -380,7 +380,7 @@ class FleetManagementController extends Controller
         $VehicleHistory->action_date = time();
         $VehicleHistory->save();
 		
-		if ($vehicleConfig == 1) {
+		/*if ($vehicleConfig == 1) {
 			$managerIDs = DB::table('security_modules_access')
 			   ->select('security_modules_access.*','security_modules.*') 
 			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
@@ -396,7 +396,7 @@ class FleetManagementController extends Controller
 				if (!empty($email))
 					Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
             }
-        }
+        }*/
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();
@@ -649,9 +649,6 @@ class FleetManagementController extends Controller
             ->orderBy('keytracking.id')
             ->where('vehicle_id', $ID)
             ->get();
-        
-      //  return $keytracking;
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -792,7 +789,6 @@ class FleetManagementController extends Controller
 
         $currentdate = time();
         $ID = $maintenance->id;
-        //return $ID;
 
         $permits = DB::table('permits_licence')
             ->select('permits_licence.*', 'contact_companies.name as comp_name'
@@ -804,7 +800,6 @@ class FleetManagementController extends Controller
             ->orderBy('permits_licence.id')
             ->where('vehicleID', $ID)
             ->get();
-	//return $permits;
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -907,9 +902,7 @@ class FleetManagementController extends Controller
                 $permits->update();
             }
         }
-
         return response()->json();
-
     }
 
     public function editPermit(Request $request, permits_licence $permit)
