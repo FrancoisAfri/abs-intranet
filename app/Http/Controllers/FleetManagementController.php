@@ -54,7 +54,6 @@ class FleetManagementController extends Controller
         $vehicledetail = vehicle_detail::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('name', 'asc')->get();
-//return $vehiclemake;
         $images = images::orderBy('id', 'asc')->get();
         //check  vehicle_configuration table if new_vehicle_approval is active
         

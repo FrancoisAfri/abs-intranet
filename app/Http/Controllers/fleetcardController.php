@@ -569,7 +569,36 @@ class fleetcardController extends Controller
 		$data['fleet'] = $fleet;
 		$data['active_mod'] = 'Fleet Management';
 		$data['active_rib'] = 'Manage Fleet';
-		AuditReportsController::store('Products', 'Job Titles Page Accessed', 'Accessed by User', 0);
+		AuditReportsController::store('Fleet Management', 'Vehicle History Page Accessed', 'Accessed by User', 0);
 		return view('Vehicles.vehicle_history')->with($data);
+    }	
+	public function vehicleHistoriesPrint(vehicle_detail $fleet)
+    {
+		$fleet = $fleet->load('vehicleHistory.userName');
+		
+		$data['page_title'] = 'View Vehicle History';
+		$data['page_description'] = 'Vehicle History';
+		$data['breadcrumb'] = [
+			['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+			['title' => 'Manage Fleet', 'active' => 1, 'is_module' => 0]
+		];
+		
+		$data['fleet'] = $fleet;
+		$data['active_mod'] = 'Fleet Management';
+		$data['active_rib'] = 'Manage Fleet';
+		
+		$companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+		
+		AuditReportsController::store('Fleet Management', 'Vehicle History Page Printed', 'Accessed by User', 0);
+		return view('Vehicles.vehicle_history_print')->with($data);
     }
 }
