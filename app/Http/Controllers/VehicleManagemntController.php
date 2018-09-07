@@ -595,6 +595,9 @@ class VehicleManagemntController extends Controller
         //return $config;
 		
         $configuration->alert_days = !empty($config['alert_days']) ? $config['alert_days'] : 0;
+        $configuration->approval_hod = 0;
+        $configuration->approval_admin = 0;
+        $configuration->approval_manager_driver = 0;
         $configuration->update(!empty($config) ? $config : 0);
         return back();
     }
