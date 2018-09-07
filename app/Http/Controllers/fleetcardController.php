@@ -498,6 +498,22 @@ class fleetcardController extends Controller
 		$VehicleHistory->action_date = time();
 		$VehicleHistory->save();
 		
+		$vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = $vehicleConfigs->first();
+		# Send email to admin and person who added the vehicle
+		if ($vehicleConfig == 1) {
+			
+			if (!empty($fleet->author_id))
+			{
+				$authoretails = HRPerson::where('id', $fleet->author_id)->select('first_name', 'surname', 'email')->first();
+				$email = !empty($authoretails->email) ? $authoretails->email : ''; 
+				$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
+				$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
+				if (!empty($authoretails->email))
+							Mail::to($email)->send(new VehicleApproved($firstname, $surname, $email, $fleet->id));
+			}
+		}
+		
 		AuditReportsController::store('Fleet Management', 'Approve Vehicle ', "Vehicle has been Approved", 0);
         return back();
     }
