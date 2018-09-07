@@ -218,8 +218,6 @@ class VehicleBookingController extends Controller
             ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-
-
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
@@ -274,7 +272,7 @@ class VehicleBookingController extends Controller
                 $details = array('status' => 2, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                 return $details;
             }
-        } elseif ($approvals->approval_manager_driver == 1) {
+        } elseif ($approvals->approval_manager_capturer == 2) {
 
             $driverHeadDetails = HRPerson::where('id', $driverHead)->where('status', 1)->select('first_name', 'surname', 'email')->first();
 
@@ -287,7 +285,7 @@ class VehicleBookingController extends Controller
                 $details = array('status' => 1, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                 return $details;
             }
-        } elseif ($approvals->approval_hod == 1) {
+        } elseif ($approvals->approval_manager_capturer == 3) {
 
             $Dept = DivisionLevelFour::where('manager_id', $hrDetails->division_level_4)->get()->first();
 
@@ -301,7 +299,7 @@ class VehicleBookingController extends Controller
                 $details = array('status' => 3, 'first_name' => $hrDetails->firstname, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                 return $details;
             }
-        } elseif ($approvals->approval_admin == 1) {
+        } elseif ($approvals->approval_manager_capturer == 4) {
             
 			$userID = DB::table('security_modules_access')
 			   ->select('security_modules_access.*','security_modules.*') 
@@ -333,7 +331,6 @@ class VehicleBookingController extends Controller
 
     public function status($status = 0)
     {
-
         $aStatusses = array(2 => "Pending Capturer Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
@@ -435,9 +432,9 @@ class VehicleBookingController extends Controller
 				Mail::to($usedetails->email)->send(new vehiclebooking_manager_notification($usedetails->first_name, $usedetails->surname, $usedetails->email, $request['required_from'], $request['required_to'], $request['Usage_type'], $driver, $request['destination'], $request['purpose'], $vehicle_model));
         }
 
-        #mail to user
+     /*   #mail to user
         Mail::to($BookingDetail['email'])->send(new vehicle_bookings($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
-
+*/
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed by User", 0);
         return redirect('/vehicle_management/vehiclebooking_results')->with('success_application', "Vehicle Booking application was successful.");
@@ -453,8 +450,6 @@ class VehicleBookingController extends Controller
         $BookingDetails = array();
 
         $hrID = $vehicleData['driver'];
-        $BookingDetail = VehicleBookingController::BookingDetails(0, $hrID, $hrID);
-
         $loggedInEmplID = Auth::user()->person->id;
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
@@ -474,7 +469,6 @@ class VehicleBookingController extends Controller
         $Vehicebookings->vehicle_id = $request['vehicle_id'];
         $Vehicebookings->capturer_id = $name;
         $Vehicebookings->UserID = $loggedInEmplID;
-        $Vehicebookings->status = $BookingDetail['status'];
         $Vehicebookings->cancel_status = 0;
         $Vehicebookings->update();
 
@@ -484,7 +478,6 @@ class VehicleBookingController extends Controller
 
     public function booking_results()
     {
-
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -548,7 +541,6 @@ class VehicleBookingController extends Controller
 
     public function vewApprovals()
     {
-
         $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
 
         $bookingStatus = array(2 => "Pending Capturer Manager Approval",
@@ -590,7 +582,6 @@ class VehicleBookingController extends Controller
 
     public function cancel_booking(Request $request, vehicle_booking $booking)
     {
-
         $booking->canceller_id = $loggedInEmplID = Auth::user()->person->id;
         $booking->canceller_timestamp = $currentDate = time();
         $booking->status = 13;
@@ -602,8 +593,7 @@ class VehicleBookingController extends Controller
 
         DB::table('vehicle_details')->where('id', $ID)->update(['booking_status' => 0]);
 
-        $BookingDetails = array();
-        $BookingDetail = VehicleBookingController::BookingDetails(0, $hrID, $hrID);
+        $BookingDetail = HRPerson::where('id', $booking->UserID)->select('first_name', 'surname', 'email')->first();
         $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
         #
         $required_from = $booking->require_datetime;
@@ -616,6 +606,7 @@ class VehicleBookingController extends Controller
         $vehicleypes = $booking->vehicle_type;
         $vehmake = $booking->vehicle_make;
         $year = $booking->year;
+		;
 
         $vehicle_model1 = vehiclemodel::where('id', $vehicmodel)->get()->first();
         $vehiclemaker = vehiclemake::where('id', $vehmake)->get()->first();
@@ -626,8 +617,8 @@ class VehicleBookingController extends Controller
         #Driver Details
         $drivers = HRPerson::where('id', $Driver)->select('first_name', 'surname')->first();
         $driver = $drivers->first_name . ' ' . $drivers->surname;
-
-        Mail::to($BookingDetail['email'])->send(new vehiclebooking_cancellation($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email'], $required_from, $required_to, $usageType[$Usage_type], $driver, $destination, $purpose, $vehicle_model));
+		if (!empty($BookingDetail->email))
+			Mail::to($BookingDetail->email)->send(new vehiclebooking_cancellation($BookingDetail->first_name, $BookingDetail->surname, $BookingDetail->email, $required_from, $required_to, $usageType[$Usage_type], $driver, $destination, $purpose, $vehicle_model));
         AuditReportsController::store('Fleet Management', 'Booking   Cancelled', "Booking has been Cancelled", 0);
         return back();
     }
@@ -645,10 +636,9 @@ class VehicleBookingController extends Controller
             ->update(['booking_status' => 1]);
 
         $hrID = Auth::user()->person->id;
-        $BookingDetails = array();
-        $BookingDetail = VehicleBookingController::BookingDetails(0, $hrID, $hrID);
-
-        Mail::to($BookingDetail['email'])->send(new vehiclebooking_approval($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
+		$BookingDetail = HRPerson::where('id', $approve->UserID)->select('first_name', 'surname', 'email')->first();
+		if (!empty($BookingDetail->email))
+			Mail::to($BookingDetail->email)->send(new vehiclebooking_approval($BookingDetail->first_name, $BookingDetail->surname, $BookingDetail->email));
 
         AuditReportsController::store('Fleet Management', 'Booking   Approved', "Booking has been Approved", 0);
         return back()->with('success_application', "vehiclebooking Booking Approval was successful.");
@@ -674,9 +664,9 @@ class VehicleBookingController extends Controller
             ->update(['booking_status' => 0]);
 
         $hrID = Auth::user()->person->id;
-        $BookingDetails = array();
-        $BookingDetail = VehicleBookingController::BookingDetails(0, $hrID, $hrID);
-        Mail::to($BookingDetail['email'])->send(new vehiclebooking_rejection($BookingDetail['first_name'], $BookingDetail['surname'], $BookingDetail['email']));
+        $BookingDetail = HRPerson::where('id', $booking->UserID)->select('first_name', 'surname', 'email')->first();
+		if (!empty($BookingDetail->email))
+        Mail::to($BookingDetail->email)->send(new vehiclebooking_rejection($BookingDetail->first_name, $BookingDetail->surname, $BookingDetail->email));
 
         AuditReportsController::store('Fleet Management', 'Booking   Declined', "Booking has been Declined", 0);
         return response()->json();

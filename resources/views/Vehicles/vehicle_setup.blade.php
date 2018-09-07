@@ -133,26 +133,17 @@
                                 <tr>
                                     <td class="caption" colspan="2">Approvals Done By</td>
                                     <td colspan="3">
-                                        <input type="hidden" name="approval_manager_capturer" value="0">
-                                        <input type="checkbox" name="approval_manager_capturer"
-                                               value="1" {{ $configuration->approval_manager_capturer === 1 ? 'checked ="checked"' : 0 }} >
-                                        Capturer Manager<br>
-
-                                        <input type="hidden" name="approval_manager_driver" value="0">
-                                        <input type="checkbox" name="approval_manager_driver"
-                                               value="1" {{ $configuration->approval_manager_driver === 1 ? 'checked ="checked"' : 0 }}>
-                                        Driver Manager<br>
-
-                                        <input type="hidden" name="approval_hod" value="0">
-                                        <input type="checkbox" name="approval_hod"
-                                               value="1" {{ $configuration->approval_hod === 1 ? 'checked ="checked"' : 0 }}>
-                                        Department Head<br>
-
-                                        <input type="hidden" name="approval_admin" value="0">
-                                        <input type="checkbox" name="approval_admin"
-                                               value="1" {{ $configuration->approval_admin === 1 ? 'checked ="checked"' : 0 }}>
-                                        Administrator
-                                    </td>
+                                        <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+										id="rdo_cap" name="approval_manager_capturer" value="1" 
+										{{ $configuration->approval_manager_capturer === 1 ? ' checked' : '' }}>  Capturer Manager  </label>
+										<label class="radio-inline"><input type="radio" id="rdo_dri" name="approval_manager_capturer"
+										value="2" {{ $configuration->approval_manager_capturer === 2 ? ' checked' : 0 }}> Driver Manager </label>
+										<label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+										id="rdo_deh" name="approval_manager_capturer" value="3" 
+										{{ $configuration->approval_manager_capturer === 3 ? ' checked' : 0 }}>  Department Head  </label>
+										<label class="radio-inline"><input type="radio" id="rdo_adm" name="approval_manager_capturer"
+										value="4" {{ $configuration->approval_manager_capturer === 4 ? ' checked' : 0 }}> Administrator </label>
+									</td>
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Return Overdue Notifications</td>
