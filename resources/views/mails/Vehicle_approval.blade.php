@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Confirmation Email</title>
+    <title>{{ $company_name }} - Vehicle Booking Approved</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that your the Vehicle you Added for  {{ $company_name }}  has been Approved! For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
+                                                    We would like to inform you that, your booking request on {{ $company_name }} has been Approved! For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
                                                 </td>
                                             </tr>
                                             <tr>
