@@ -248,15 +248,14 @@ class VehicleBookingController extends Controller
             $vehicleconfig->save();
         }
 
-
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
         $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
 
         $managerID = HRPerson::where('id', $driverDetails->manager_id)->where('status', 1)->first();
         $driverHead = !empty($managerID->manager_id) ? $managerID->manager_id : 0;
-        if (!empty($driverHead)) {
+        /*if (!empty($driverHead)) {
             $driverHead = HRPerson::where('id', $driverHead)->where('status', 1)->first();
-        }
+        }*/
 
         if ($approvals->approval_manager_capturer == 1) {
             # code...
@@ -267,24 +266,25 @@ class VehicleBookingController extends Controller
             $manageID = $managerID->manager_id;
 
             $managerDetails = HRPerson::where('id', $manageID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
-            if ($managerDetails == null) {
+            if (!empty($managerDetails->email)) {
                 $details = array('status' => 2, 'first_name' => $managerDetails->first_name, 'surname' => $managerDetails->surname, 'email' => $managerDetails->email);
                 return $details;
             } else {
 
-                $details = array('status' => 2, 'first_name' => $managerDetails->first_name, 'surname' => $managerDetails->surname, 'email' => $managerDetails->email);
+                $details = array('status' => 2, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                 return $details;
             }
         } elseif ($approvals->approval_manager_driver == 1) {
 
             $driverHeadDetails = HRPerson::where('id', $driverHead)->where('status', 1)->select('first_name', 'surname', 'email')->first();
 
-            if ($driverHeadDetails == null) {
+            if (!empty($driverHeadDetails)) 
+			{
                 $details = array('status' => 1, 'first_name' => $driverHeadDetails->first_name, 'surname' => $driverHeadDetails->surname, 'email' => $driverHeadDetails->email);
                 return $details;
             } else {
 
-                $details = array('status' => 1, 'first_name' => $driverHeadDetails->first_name, 'surname' => $driverHeadDetails->surname, 'email' => $driverHeadDetails->email);
+                $details = array('status' => 1, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                 return $details;
             }
         } elseif ($approvals->approval_hod == 1) {
@@ -293,32 +293,40 @@ class VehicleBookingController extends Controller
 
             $hodmamgerDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)->select('first_name', 'surname', 'email')->first();
 
-            if ($hodmamgerDetails == null) {
+            if (!empty($hodmamgerDetails)) {
                 $details = array('status' => 3, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
                 return $details;
             } else {
 
-                $details = array('status' => 3, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
+                $details = array('status' => 3, 'first_name' => $hrDetails->firstname, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                 return $details;
             }
         } elseif ($approvals->approval_admin == 1) {
-            $userID = DB::table('security_modules_access')->select('security_modules_access.*')->where('module_id', 9)->pluck('user_id');
+            
+			$userID = DB::table('security_modules_access')
+			   ->select('security_modules_access.*','security_modules.*') 
+			   ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+			   ->where('code_name', 'vehicle')
+			   ->where('access_level','>=', 4)
+			   ->pluck('user_id');
+			   
             foreach ($userID as $empID) {
-                $driverHeadDetails = HRPerson::where('id', $empID)->where('status', 1)
-                    ->select('first_name', 'surname', 'email')->first();
-                if ($approvals->approval_admin == null) {
+                $driverHeadDetails = HRPerson::where('user_id', $empID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
+                if (!empty($driverHeadDetails->email))
+				{
                     $details = array('status' => 4, 'first_name' => $driverHeadDetails->firstname, 'surname' => $driverHeadDetails->surname, 'email' => $driverHeadDetails->email);
                     return $details;
-                } else {
+                } 
+				else 
+				{
                     // array to store manager details
-                    $details = array('status' => 4, 'first_name' => $driverHeadDetails->firstname, 'surname' => $driverHeadDetails->surname, 'email' => $driverHeadDetails->email);
+                    $details = array('status' => 4, 'first_name' => $hrDetails->firstname, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
                     return $details;
                 }
             }
-        } else {
-
+        }
+		else {
             $details = array('status' => 10, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
-
             return $details;
         }
     }
