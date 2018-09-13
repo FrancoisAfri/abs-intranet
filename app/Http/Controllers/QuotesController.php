@@ -359,7 +359,7 @@ class QuotesController extends Controller
                     $discountPercent = $quote->discount_percent;
                     $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
                     $discountedAmount = $subtotal - $discountAmount;
-                    $vatAmount = ($quote->add_vat == 1) ? $discountedAmount * 0.14 : 0;
+                    $vatAmount = ($quote->add_vat == 1) ? $discountedAmount * 0.15 : 0;
                     $quoteTotal = $discountedAmount + $vatAmount;
 
                     $invoiceAmount = $quoteTotal / $quote->payment_term;
@@ -887,7 +887,7 @@ class QuotesController extends Controller
         $discountPercent = $quotation->discount_percent;
         $discountAmount = ($discountPercent > 0) ? ($subtotal * $discountPercent) / 100 : 0;
         $discountedAmount = $subtotal - $discountAmount;
-        $vatAmount = ($quotation->add_vat == 1) ? $discountedAmount * 0.14 : 0;
+        $vatAmount = ($quotation->add_vat == 1) ? $discountedAmount * 0.15 : 0;
         $total = $discountedAmount + $vatAmount;
 
         //return $quotation;
