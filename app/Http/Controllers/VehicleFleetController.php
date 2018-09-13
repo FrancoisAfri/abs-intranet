@@ -1556,15 +1556,10 @@ class VehicleFleetController extends Controller
 
     public function viewBookingLog(vehicle_maintenance $maintenance)
     {
-
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-        //return $ContactCompany;
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $servicestation = service_station::orderBy('id', 'desc')->get();
         $fueltank = tank::orderBy('id', 'desc')->get();
-
-
         $currentDate = time();
         //return $currentDate;
         ################## WELL DETAILS ###############
@@ -1612,8 +1607,6 @@ class VehicleFleetController extends Controller
             ->orderBy('vehicle_booking.id', 'desc')
             ->where('vehicle_booking.vehicle_id', $vehicleID)
             ->get();
-
-
         $vehiclebooking = $vehiclebookinglog->unique('id');
 
         $data['page_title'] = " View Fleet Details";
