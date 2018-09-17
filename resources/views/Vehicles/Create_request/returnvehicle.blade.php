@@ -366,7 +366,7 @@
             $('.transaction-field').hide();
             //Cancel button click event
             $('#cancel').click(function () {
-                location.href = '/vehicle_management/bookin_log/{$vehicle->id}';
+                location.href = '/vehicle_management/create_request';
             });
 
             //Phone mask

@@ -60,19 +60,18 @@
                                 </p>
                             </div>
                         </div>
-
                         <div class="box-body">
-                            @if (count($errors) > 0)
-                                <div class="alert alert-danger alert-dismissible fade in">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
-                                    </button>
-                                    <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                        @if (count($errors) > 0)
+							<div class="alert alert-danger alert-dismissible fade in">
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+								</button>
+								<h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+								<ul>
+									@foreach ($errors->all() as $error)
+										<li>{{ $error }}</li>
+									@endforeach
+								</ul>
+							</div>
                         @endif
                             <!--  -->
                             <div class="col-md-8 col-md-offset-2">
@@ -178,27 +177,27 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group notes-field{{ $errors->has('purpose') ? ' has-error' : '' }}">
-                                            <label for="purpose" class="col-sm-2 control-label">Purpose for Request</label>
+                                        <div class="form-group {{ $errors->has('purpose') ? ' has-error' : '' }}">
+                                            <label for="purpose" class="col-sm-2 control-label">Purpose</label>
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-sticky-note"></i>
                                                     </div>
                                                     <textarea class="form-control" id="purpose" name="purpose"
-                                                              placeholder="Enter Extras..."
-                                                              rows="3">{{ old('Extras') }}</textarea>
+                                                              placeholder="Enter Purpose..."
+                                                              rows="3">{{ old('purpose') }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group {{ $errors->has('destination') ? ' has-error' : '' }}">
                                             <label for="path" class="col-sm-2 control-label">Destination </label>
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-anchor"></i>
                                                     </div>
-                                                    <input type="text" id ="destination" class="form-control form-control-sm pull-left" name="destination" value=" " >
+                                                    <input type="text" id ="destination" class="form-control form-control-sm pull-left" name="destination" value="{{ old('purpose') }}">
                                                 </div>
                                             </div>
                                         </div>
