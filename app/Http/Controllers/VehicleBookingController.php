@@ -349,6 +349,8 @@ class VehicleBookingController extends Controller
             //'driver ' => 'required'
             'driver' => 'bail|required',
             'Usage_type' => 'bail|required',
+            'purpose' => 'required',
+            'destination' => 'required',
             // 'odometer_reading' => 'bail|required',
         ]);
         $vehicleData = $request->all();
