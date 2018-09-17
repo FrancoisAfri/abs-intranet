@@ -267,23 +267,28 @@
 						<a href="{{ '/vehicle_management/reminders/' . $vehiclemaintenance->id }}"
 						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
 						   data-id="{{ $vehiclemaintenance->id }}">Reminders</a>
-					   <a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
+						<a href="{{ '/vehicle_management/fire_extinguishers/' . $vehiclemaintenance->id }}"
 						   id="edit_compan" class="btn btn-sm btn-default btn-flat"
 						   data-id="{{ $vehiclemaintenance->id }}">Fire Extinguishers</a>
-						   <a href="{{ '/vehicle_management/vehicle_history/' . $vehiclemaintenance->id }}"
-						   class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
+						<button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
+							data-toggle="modal" data-target="#change-fleet-status-modal"
+							data-id="{{ $vehiclemaintenance->id }}" data-status="{{ $vehiclemaintenance->status }}"
+							><i class="fa fa-stack-overflow"></i> Change Status</button>
 					@endif
 					@if(!empty($vehiclemaintenance->status) && $vehiclemaintenance->status == 2)
 						<button type="button" class="btn btn-primary btn-danger" id="client_declined" data-toggle="modal" data-target="#fleet-reject-single-modal"><i class="fa fa-times"></i> Reject Fleet</button>
 						<button type="button" class="btn btn-primary btn-success" id="fleet_approval" onclick="postData({{$vehiclemaintenance->id}}, 'fleet_approval');"><i class="fa fa-check"></i> Approve Fleet</button>
 					@endif
 					<button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i class="fa fa-arrow-left"></i> Back</button>
+					<a href="{{ '/vehicle_management/vehicle_history/' . $vehiclemaintenance->id }}"
+						   class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
                 </div>
                 @endforeach
             </div>
         </div>
         @include('Vehicles.partials.edit_vehicledetails_modal')
         @include('Vehicles.partials.fleet_single_approval')
+		@include('Vehicles.partials.change_fleetstatus_modal')
     </div>
 @endsection
 @section('page_script')
@@ -538,6 +543,24 @@
 				var Method = 'PATCH';
 				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
 			});
+			
+			$('#change-fleet-status-modal').on('show.bs.modal', function (e) {
+				var btnChange = $(e.relatedTarget);
+				fireID = btnChange.data('id');
+				var Status = btnChange.data('status');
+				var modal = $(this);
+				modal.find('#status').val(Status);
+            });
+			$('#update-fleet-status').on('click', function() {
+				var strUrl = '/vehicle_management/change-fleet-status/{{ $vehiclemaintenance->id }}';
+				var formName = 'change-fleet-status-form';
+				var modalID = 'change-fleet-status-modal';
+				var submitBtnID = 'update-fleet-status';
+				var redirectUrl = '/vehicle_management/viewdetails/{{ $vehiclemaintenance->id }}';
+				var successMsgTitle = 'Status Updated successfully';
+				var successMsg = 'Status has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
         });
 		
         //Load divisions drop down

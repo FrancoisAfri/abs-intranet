@@ -13,23 +13,6 @@
                         <div id="invalid-input-alert"></div>
                         <div id="success-alert"></div>
                         <div class="box-body" id="vehicle_details">
-                           <div class="form-group">
-                            <label for="status" class="col-sm-2 control-label">Status</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
-                                    <select id="status" name="status" class="form-control">
-                                        <option value="0">*** Select Fuel Type ***</option>
-                                        <option value="1"> Active  </option>
-                                        <option value="2"> Require Approval </option>
-                                        <option value="3"> Rejected</option>
-                                        <option value="4"> Inactive </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                         @foreach($division_levels as $division_level)
                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"

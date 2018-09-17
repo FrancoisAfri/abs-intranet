@@ -592,7 +592,6 @@ class VehicleManagemntController extends Controller
 
         $config = $request->all();
         unset($config['_token']);
-        //return $config;
 		
         $configuration->alert_days = !empty($config['alert_days']) ? $config['alert_days'] : 0;
         $configuration->approval_hod = 0;

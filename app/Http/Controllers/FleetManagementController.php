@@ -310,7 +310,7 @@ class FleetManagementController extends Controller
         $Username = $userLogged->person->first_name . " " . $userLogged->person->surname;
 		if (!empty($SysData['financial_institution']) && $SysData['title_type'] == 1) $SysData['company'] = 0;
 		if (!empty($SysData['company'])  && $SysData['title_type'] == 2) $SysData['financial_institution'] = 0;
-		 if ($vehicleConfig == 1) {
+		 if ($vehicleConfig == 1 ) {
              $vehicle_maintenance->status = 2;
         } 
 		else
@@ -396,6 +396,29 @@ class FleetManagementController extends Controller
 					Mail::to($email)->send(new vehiclemanagerApproval($firstname, $surname, $email));
             }
         }
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
+        return response()->json();
+    }
+	public function changeVehicleStatus(Request $request, vehicle_maintenance $vehicle_maintenance)
+    {
+        $this->validate($request, [
+            'status' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+		
+        $vehicle_maintenance->status = !empty($SysData['status']) ? $SysData['status'] : 0;
+        $vehicle_maintenance->update();
+
+		//add to vehicle history 
+        $VehicleHistory = new VehicleHistory();
+        $VehicleHistory->vehicle_id = $vehicle_maintenance->id;
+        $VehicleHistory->user_id = Auth::user()->person->id;
+		$VehicleHistory->status = !empty($SysData['status']) ? $SysData['status'] : 0;
+        $VehicleHistory->comment = "Status Changed.";
+        $VehicleHistory->action_date = time();
+        $VehicleHistory->save();
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return response()->json();

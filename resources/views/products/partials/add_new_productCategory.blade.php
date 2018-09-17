@@ -26,7 +26,7 @@
                         </div>
                     </div>
 					<div class="form-group">
-                        <label for="fuel_type" class="col-sm-3 control-label">Stock Type</label>
+                        <label for="stock_type" class="col-sm-3 control-label">Stock Type</label>
                         <div class="col-sm-9">
                             <div class="input-group">
                                 <div class="input-group-addon">

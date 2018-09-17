@@ -18,6 +18,13 @@
                         <th>End Date</th>
                         <th style="width: 40px"></th>
                         </tr>
+						<tr id="jobtitles-list">
+							<td>{{ (!empty($products->price)) ?  'R' .' '.number_format($products->price, 2) : ''}} </td>
+							<td></td>
+							<td></td>
+							<td nowrap>
+							</td>
+						</tr>
                         @if (count($Productprice) > 0)
                             @foreach($Productprice as $product)
                                 <tr id="jobtitles-list">

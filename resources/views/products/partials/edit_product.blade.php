@@ -32,17 +32,13 @@
                         </div>
                     </div>
 					<div class="form-group">
-                        <label for="fuel_type" class="col-sm-2 control-label">Stock Type</label>
-                        <div class="col-sm-8">
+                        <label for="is_vatable" class="col-sm-3 control-label">Is Vatable</label>
+                        <div class="col-sm-9">
                             <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-filter"></i>
-                                </div>
-                                <select id="stock_type" name="stock_type" class="form-control">
-                                    <option value="0">*** Select product Type ***</option>
-                                    <option value="1"> Stock Item</option>
-                                    <option value="2"> Non Stock Item </option>
-                                    <option value="3"> Both </option>
+                                <select id="is_vatable" name="is_vatable" class="form-control">
+                                    <option value="0">*** Select VAT Type ***</option>
+                                    <option value="1">Yes</option>
+                                    <option value="2">No</option>
                                 </select>
                             </div>
                         </div>

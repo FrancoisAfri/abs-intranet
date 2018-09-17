@@ -23,6 +23,7 @@
                                 <th></th>
                             @endif
                             <th>Stock Type</th>
+                            <th>Available Stock</th>
                             <th style="width: 40px"></th>
                             <th style="width: 40px"></th>
                         </tr>
@@ -52,6 +53,7 @@
                                         <td></td>
                                     @endif
 									<td>{{ (!empty($category->stock_type)) ?  $stockTypeArray[$category->stock_type] : ''}} </td>
+									<td>{{ (!empty($category->is_vatable))  && $category->is_vatable == 2 ?  'No' : 'Yes'}} </td>
                                     @if ((!empty($category->stock_type))  && $category->stock_type == 1)
                                         <td><a href="/stock/stockinfo/{{$category->id}}" id="srock_info" class="btn btn-primary  btn-xs"><i class="fa fa-eye"></i> Stock Info</a> </td>
                                     @else
@@ -70,7 +72,7 @@
                             @endforeach
                         @else
                             <tr id="categorys-list">
-                                <td colspan="6">
+                                <td colspan="9">
                                     <div class="alert alert-danger alert-dismissable">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
@@ -146,6 +148,7 @@
                     price: $('#' + modalID).find('#price').val(),
                     product_code: $('#' + modalID).find('#product_code').val(),
                     stock_type: $('#' + modalID).find('#stock_type').val(),
+                    is_vatable: $('#' + modalID).find('#is_vatable').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-product_title';
@@ -165,6 +168,7 @@
                 var description = btnEdit.data('description');
                 var price = btnEdit.data('price');
                 var stockType = btnEdit.data('stock_type');
+                var isVatable = btnEdit.data('is_vatable');
 
                 //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
@@ -172,6 +176,7 @@
                 modal.find('#description').val(description);
                 modal.find('#price').val(price);
 				modal.find('select#stock_type').val(stockType);
+				modal.find('select#is_vatable').val(isVatable);
 
             });
             $('#update-product_title').on('click', function () {
@@ -184,6 +189,7 @@
                     price: $('#' + modalID).find('#price').val(),
                     product_code: $('#' + modalID).find('#product_code').val(),
                     stock_type: $('#' + modalID).find('#stock_type').val(),
+                    is_vatable: $('#' + modalID).find('#is_vatable').val(),
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'update-product_title';

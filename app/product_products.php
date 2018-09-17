@@ -7,14 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class product_products extends Model
 {
     protected $table = 'Product_products';
-    protected $fillable = ['name', 'description', 'status', 'status', 'category_id', 'productPrice_id', 'product_code', 'stock_type'];
+    protected $fillable = ['name', 'description', 'status', 'status', 'category_id', 'productPrice_id', 'product_code', 'stock_type'
+	, 'is_vatable'];
 
     // Product & category
     public function ProductPackages()
     {
         return $this->belongsTo(product_category::class, 'category_id')->orderBy('id');
     }
-
+	
+	public function stocks()
+    {
+        return $this->hasOne(stock::class, 'product_id');
+    }
+	
     public function PackadgesTypes()
     {
         return $this->belongsToMany('App\product_packages', 'packages_product_table', 'product_product_id', 'product_packages_id')->withPivot('description');

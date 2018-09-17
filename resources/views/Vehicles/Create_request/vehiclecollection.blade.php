@@ -34,7 +34,6 @@
                             <div class="col-sm-12">
                                 <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                     <strong class="lead">Vehicle Details</strong><br>
-
                                     @if(!empty($vehiclemaker))
                                         | &nbsp; &nbsp; <strong>Vehicle Make:</strong><em>{{ $vehiclemaker->name }}</em>
                                         &nbsp;&nbsp;
@@ -60,7 +59,6 @@
                                         -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
                                         <em>{{ $vehiclebookings->vehicle_reg->vehicle_color }}</em> &nbsp; &nbsp; -|
                                     @endif
-
                                 </p>
                             </div>
                         </div>
@@ -105,7 +103,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label">Required From </label>
                                 <div class="col-sm-8">
@@ -120,7 +117,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label">Required To </label>
                                 <div class="col-sm-8">
@@ -135,7 +131,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label">Capturer </label>
                                 <div class="col-sm-8">
@@ -149,7 +144,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label"> VehicleDriver </label>
                                 <div class="col-sm-8">
@@ -164,72 +158,37 @@
                                     </div>
                                 </div>
                             </div>
-                          @if (isset($vehiclebookings) && $vehiclebookings->metre_reading_type === 1)
-                             <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label">Odometer </label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                             <i class="fa fa-spinner"></i>
-                                        </div>
-                                        <input type="text" id="start_mileage_id" class="form-control pull-left"
-                                               name="start_mileage_id"
-                                               value="{{  (!empty($vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : '' }}"
-                                               readonly>
-                                    </div>
-                                </div>
-                            </div>
-                              @else
-                             <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label">HoursReading </label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                             <i class="fa fa-spinner"></i>
-                                        </div>
-                                        <input type="text" id="hours_reading" class="form-control pull-left"
-                                               name="hours_reading"
-                                               value="{{  (!empty($vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : '' }}"
-                                               readonly>
-                                    </div>
-                                </div>
-                            </div>
-                               @endif   
-                            
-<!--                            <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label">hours_reading
-                                    Reading </label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-spinner"></i>
-                                        </div>
-                                        {{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}
-                                        <input type="hidden" id="start_mileage_id" name="start_mileage_id"
-                                               value="{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}">
-                                        <input type="hidden" id="hours_reading" name="hours_reading"
-                                               value="{{ (!empty( $vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : ''}}">
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="path" class="col-sm-2 control-label">hours_reading
-                                    Reading </label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-spinner"></i>
-                                        </div>
-                                        {{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}
-                                        <input type="hidden" id="start_mileage_id" name="start_mileage_id"
-                                               value="{{ (!empty( $vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : ''}}">
-                                        <input type="hidden" id="hours_reading" name="hours_reading"
-                                               value="{{ (!empty( $vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : ''}}">
-                                    </div>
-                                </div>
-                            </div>-->
-                            
+							@if (isset($vehiclebookings) && $vehiclebookings->metre_reading_type === 1)
+								<div class="form-group">
+									<label for="path" class="col-sm-2 control-label">Odometer </label>
+									<div class="col-sm-8">
+										<div class="input-group">
+											<div class="input-group-addon">
+												 <i class="fa fa-spinner"></i>
+											</div>
+											<input type="text" id="start_mileage_id" class="form-control pull-left"
+												   name="start_mileage_id"
+												   value="{{  (!empty($vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : '' }}"
+												   readonly>
+										</div>
+									</div>
+								</div>
+                            @else
+								<div class="form-group">
+									<label for="path" class="col-sm-2 control-label">HoursReading </label>
+									<div class="col-sm-8">
+										<div class="input-group">
+											<div class="input-group-addon">
+												 <i class="fa fa-spinner"></i>
+											</div>
+											<input type="text" id="hours_reading" class="form-control pull-left"
+												   name="hours_reading"
+												   value="{{  (!empty($vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : '' }}"
+												   readonly>
+										</div>
+									</div>
+								</div>
+                            @endif
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label">Destination </label>
                                 <div class="col-sm-8">
@@ -243,7 +202,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label">Purpose </label>
                                 <div class="col-sm-8">
@@ -257,21 +215,15 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             <!-- /.box-body -->
                             <div class="box-footer">
-
-
                             </div>
                             <!-- /.box-footer -->
-
                             <div class="box-footer" style="text-align: center;">
                                 <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
                                 <button type="submit" name="command" id="update" class="btn btn-primary pull-right">
                                     Update
                                 </button>
-
                                 @if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_image === 1)
 
                                     <button type="button" id="cat_module"
@@ -280,14 +232,12 @@
                                     </button>
 
                                 @endif
-								
 								@if (isset($InforceVehiclerules) && $InforceVehiclerules->inforce_vehicle_documents === 1)
                                     <button type="button" id="cat_module"
                                             class="btn btn-muted btn-xs " data-toggle="modal"
                                             data-target="#add-document-modal">Inspection Documents
                                     </button>
 								@endif
-
                             </div>
                         </div>
                 </form>
