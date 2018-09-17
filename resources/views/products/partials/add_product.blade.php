@@ -16,21 +16,33 @@
 
                      
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Name</label>
-                             <div class="col-sm-8">
+                        <label for="path" class="col-sm-3 control-label">Name</label>
+                             <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" name="name" value="" placeholder="Enter Product Name">
                         </div>
                     </div>
 					<div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Price</label>
-                             <div class="col-sm-8">
+                        <label for="path" class="col-sm-3 control-label">Price</label>
+                             <div class="col-sm-9">
 								<input type="number" class="form-control" id="price" name="price" value="" placeholder="Enter Product Price" >
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Code</label>
-                             <div class="col-sm-8">
+                        <label for="path" class="col-sm-3 control-label">Code</label>
+                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="product_code" name="product_code" value="" placeholder="Enter Product Code" >
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <label for="is_vatable" class="col-sm-3 control-label">Is Vatable</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <select id="is_vatable" name="is_vatable" class="form-control">
+                                    <option value="0">*** Select VAT Type ***</option>
+                                    <option value="1">Yes</option>
+                                    <option value="2">No</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>  

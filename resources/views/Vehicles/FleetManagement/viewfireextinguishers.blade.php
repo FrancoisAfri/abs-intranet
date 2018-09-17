@@ -160,7 +160,7 @@
                                     <td>{{ !empty($extinguishers->firstname) ?  $extinguishers->firstname." ".$extinguishers->surname: '' }}</td>
                                     <td>{{ (!empty( $extinguishers->Status)) ?  $statusArray[$extinguishers->Status] : ''}} </td>
                                     <td nowrap>
-                                         <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
+                                        <button details="button" id="edit_compan" class="btn btn-warning  btn-xs"
                                                 data-toggle="modal" data-target="#change-fire-status-modal"
                                                 data-id="{{ $extinguishers->id }}" data-status="{{ $extinguishers->Status }}"
                                                 ><i class="fa fa-stack-overflow"></i>

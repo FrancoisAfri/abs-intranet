@@ -190,7 +190,6 @@ class Product_categoryController extends Controller
     {
         if ($price->status == 1) {
             $priceID = $price->id;
-            //$op =	$price->load('productPrice');
             $Productprice = product_price::where('product_product_id', $priceID)->get();
             $data['page_title'] = 'Manage Package_Products Price';
             $data['page_description'] = 'Products page';
@@ -452,6 +451,7 @@ class Product_categoryController extends Controller
         $documentType->price = $docData['price'];
         $documentType->product_code = $docData['product_code'];
         $documentType->stock_type = !empty($products->stock_type) ? $products->stock_type : 0;
+        $documentType->is_vatable = !empty($products->is_vatable) ? $products->is_vatable : 0;
         $documentType->save();
 
         $newName = $docData['name'];
@@ -473,6 +473,7 @@ class Product_categoryController extends Controller
         $product->product_code = $request->input('product_code');
         $product->price = $request->input('price');
 		$product->stock_type = $request->input('stock_type');
+		$product->is_vatable = $request->input('is_vatable');
         $product->update();
 
         $newName = $request->input('name');
