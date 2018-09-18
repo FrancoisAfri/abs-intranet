@@ -103,6 +103,8 @@
                                    class="btn btn-app">
                                     <i class="fa fa-money"></i> General Cost
                                 </a>
+								<a href="{{ '/vehicle_management/fleet-communications/' . $maintenance->id }}"
+                                   class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
 							@endif
                                 <!--  -->
                                 <tr>

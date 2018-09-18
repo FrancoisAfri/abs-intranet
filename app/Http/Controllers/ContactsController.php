@@ -70,9 +70,8 @@ class ContactsController extends Controller
 
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
 
-
-        $data['page_title'] = "Induction";
-        $data['page_description'] = "Create New Induction";
+        $data['page_title'] = "contacts";
+        $data['page_description'] = "Reports";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
             ['title' => 'Clients', 'path' => '/Clients/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],

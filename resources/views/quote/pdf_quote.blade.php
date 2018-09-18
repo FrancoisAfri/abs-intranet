@@ -57,12 +57,12 @@
 					@if($quotation->quote_type == 1)
 						<table class="table table-striped table-bordered">
 							<tr>
-								<th style="width: 10px">#</th>
-								<th>Product</th>
-								<th>Comment</th>
-								<th class="text-center">Quantity</th>
-								<th style="text-align: right;">Unit Price</th>
-								<th style="text-align: right;">Total</th>
+								<th style="width: 10px;">#</th>
+								<th style="width: 100px;">Product</th>
+								<th style="width: 100px;">Comment</th>
+								<th class="text-center; width: 30px;">Quantity</th>
+								<th style="text-align: right; width: 100px;">Unit Price</th>
+								<th style="text-align: right; width: 100px;">Total</th>
 							</tr>
 							@foreach ($quotation->products as $product)
 								@if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
@@ -74,16 +74,16 @@
 									</tr>
 								@endif
 								<tr>
-									<td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-									<td style="vertical-align: middle;">{{ $product->name }}</td>
-									<td style="vertical-align: middle;  width: 200px">{{ $product->pivot->comment }}</td>
-									<td style="vertical-align: middle; width: 80px; text-align: center;">
+									<td style="vertical-align: middle; width: 10px;">{{ $loop->iteration }}</td>
+									<td style="vertical-align: middle; width: 100px;">{{ $product->name }}</td>
+									<td style="vertical-align: middle;  width: 100px">{{ $product->pivot->comment }}</td>
+									<td style="vertical-align: middle; width: 30px; text-align: center;">
 										{{ $product->pivot->quantity }}
 									</td>
-									<td style="vertical-align: middle; text-align: right;">
+									<td style="vertical-align: middle; text-align: right; width: 100px;">
 										{{ $product->pivot->price ? 'R ' . number_format($product->pivot->price, 2) : '' }}
 									</td>
-									<td style="vertical-align: middle; text-align: right;">
+									<td style="vertical-align: middle; text-align: right; width: 100px;">
 										{{ $product->pivot->price ? 'R ' . number_format($product->pivot->price * $product->pivot->quantity , 2) : '' }}
 									</td>
 								</tr>

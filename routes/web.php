@@ -574,7 +574,8 @@ Route::get('vehicle_management/notes/{maintenance}', 'VehicleFleetController@vie
 Route::post('vehicle_management/add_new_note', 'FleetManagementController@newnotes');
 Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@editNote');
 Route::post('vehicle_management/delete_note/{note}', 'FleetManagementController@deleteNote');
-
+//
+Route::get('vehicle_management/fleet-communications/{maintenance}', 'VehicleFleetController@viewCommunications');
 //#
 Route::get('vehicle_management/general_cost/{maintenance}', 'VehicleFleetController@viewGeneralCost');
 Route::post('vehicle_management/addcosts', 'VehicleFleetController@addcosts');

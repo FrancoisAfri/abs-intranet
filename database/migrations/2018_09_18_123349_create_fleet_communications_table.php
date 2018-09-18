@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateContactsCommunicationsTable extends Migration
+class CreateFleetCommunicationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateContactsCommunicationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contacts_communications', function (Blueprint $table) {
+        Schema::create('fleet_communications', function (Blueprint $table) {
             $table->increments('id');
 			$table->integer('communication_type')->unsigned()->index()->nullable();
             $table->string('message')->nullable();
@@ -21,6 +21,7 @@ class CreateContactsCommunicationsTable extends Migration
             $table->integer('status')->nullable();
             $table->integer('sent_by')->nullable();
             $table->bigInteger('communication_date')->nullable();
+			$table->string('time_sent')->unsigned()->index()->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateContactsCommunicationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contacts_communications');
+       Schema::dropIfExists('vehicles_communications');
     }
 }
