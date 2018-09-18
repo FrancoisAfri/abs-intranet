@@ -61,8 +61,8 @@
 								<th style="width: 90px;">Product</th>
 								<th style="width: 80px;">Comment</th>
 								<th class="text-center; width: 30px;">Quantity</th>
-								<th style="text-align: right; width: 100px;">Unit Price</th>
-								<th style="text-align: right; width: 100px;">Total</th>
+								<th style="text-align: center; width: 100px;">Unit Price</th>
+								<th style="text-align: center; width: 100px;">Total</th>
 							</tr>
 							@foreach ($quotation->products as $product)
 								@if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
@@ -80,10 +80,10 @@
 									<td style="vertical-align: middle; width: 30px; text-align: center;">
 										{{ $product->pivot->quantity }}
 									</td>
-									<td style="vertical-align: middle; text-align: right; width: 100px;">
+									<td style="vertical-align: middle; text-align: center; width: 100px;">
 										{{ $product->pivot->price ? 'R ' . number_format($product->pivot->price, 2) : '' }}
 									</td>
-									<td style="vertical-align: middle; text-align: right; width: 100px;">
+									<td style="vertical-align: middle; text-align: center; width: 100px;">
 										{{ $product->pivot->price ? 'R ' . number_format($product->pivot->price * $product->pivot->quantity , 2) : '' }}
 									</td>
 								</tr>
