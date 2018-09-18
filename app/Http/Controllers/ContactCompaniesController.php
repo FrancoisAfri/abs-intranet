@@ -983,7 +983,7 @@ class ContactCompaniesController extends Controller
         ];
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Report';
-        AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
+        AuditReportsController::store('Contacts', 'View Contacts Communications Search Results', "view Contacts Results", 0);
         return view('contacts.reports.communications_report_result')->with($data);
     }
 

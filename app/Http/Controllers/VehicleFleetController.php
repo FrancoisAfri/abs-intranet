@@ -27,6 +27,7 @@ use App\ContactCompany;
 use App\general_cost;
 use App\VehicleIncidentsDocuments;
 use App\fleet_fillingstation;
+use App\VehicleCommunications;
 use App\vehicle_insurance;
 use App\module_ribbons;
 Use App\vehicle_serviceDetails;
@@ -91,7 +92,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.document')->with($data);
     }
 
@@ -326,7 +327,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewGeneralcost')->with($data);
     }
 
@@ -445,7 +446,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewWarranties')->with($data);
     }
 
@@ -592,7 +593,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewInsuarance')->with($data);
     }
 
@@ -756,7 +757,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewServiceDetails')->with($data);
     }
 
@@ -904,7 +905,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewVehicleFines')->with($data);
     }
 
@@ -1095,7 +1096,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewVehicleIncidents')->with($data);
     }
     
@@ -1634,7 +1635,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('Employee Records', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Booking Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewBookingLog')->with($data);
     }
 
@@ -1644,8 +1645,79 @@ class VehicleFleetController extends Controller
         AuditReportsController::store('Fleet Management', 'Vehicle Fuel Log  Deleted', "Document Type has been deleted", 0);
         return back();
     }
+	
+	public function viewCommunications(vehicle_maintenance $maintenance)
+    {
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        ################## WELL DETAILS ###############
+        $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        ################## WELL DETAILS ###############
+
+        $loggedInEmplID = Auth::user()->person->id;
+        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
+        $name = $Employee->first_name . ' ' . $Employee->surname;
+        ###################>>>>>#################
+        $costtype = array(1 => 'Oil');
+
+        $ID = $maintenance->id;
+        $generalcost = DB::table('vehicle_generalcosts')
+            ->select('vehicle_generalcosts.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
+            ->leftJoin('hr_people', 'vehicle_generalcosts.person_esponsible', '=', 'hr_people.id')
+            ->orderBy('vehicle_generalcosts.id')
+            ->where('vehicleID', $ID)
+            ->get();
+
+        $data['page_title'] = " View Fleet Details";
+        $data['page_description'] = "FleetManagement";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['name'] = $name;
+        $data['costtype'] = $costtype;
+        $data['employees'] = $employees;
+        $data['vehiclemaker'] = $vehiclemaker;
+        $data['vehicleTypes'] = $vehicleTypes;
+        $data['vehiclemodeler'] = $vehiclemodeler;
+        $data['generalcost'] = $generalcost;
+        $data['maintenance'] = $maintenance;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Manage Fleet';
+        AuditReportsController::store('Fleet Management', 'View Fleet Communications', "Accessed by User", 0);
+        return view('Vehicles.FleetManagement.view_communications')->with($data);
+    }
+
+    public function sendCommunication(Request $request)
+    {
+        $this->validate($request, [
+            'date' => 'required',
+            //'document_number' => 'required|unique:general_cost,document_number',
+            'supplier_name' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $date = $SysData['date'] = str_replace('/', '-', $SysData['date']);
+        $date = $SysData['date'] = strtotime($SysData['date']);
+
+        $generalcost = new general_cost();
+        $generalcost->date = $date;
+        $generalcost->document_number = $SysData['document_number'];
+        $generalcost->supplier_name = $SysData['supplier_name'];
+        $generalcost->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
+        $generalcost->cost = $SysData['cost'];
+        $generalcost->litres = $SysData['litres'];
+        $generalcost->description = $SysData['description'];
+        $generalcost->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
+        $generalcost->vehicleID = $SysData['valueID'];
+        $generalcost->vehiclebookingID = !empty($SysData['vehiclebookingID']) ? $SysData['vehiclebookingID'] : 0;
+        $generalcost->save();
+
+        AuditReportsController::store('Fleet Management', 'Fleet Communication sent', "Accessed By User", 0);
+        return response()->json();
+
+    }
 }
-
-
-       
-       
