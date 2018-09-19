@@ -93,6 +93,8 @@
                         <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-money"></i> General Cost
                         </a>
+						<a href="{{ '/vehicle_management/fleet-communications/' . $maintenance->id }}"
+                                   class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
                         <!--  -->
                     </div>
                     <div style="overflow-X:auto;">

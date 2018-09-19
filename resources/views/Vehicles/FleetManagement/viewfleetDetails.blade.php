@@ -108,14 +108,12 @@
 							@endif
                                 <!--  -->
                                 <tr>
-
                                     <td class="caption">Fleet Number</td>
                                     <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
                                     <td class="caption">Year</td>
                                     <td>{{ !empty($vehiclemaintenance->year) ? $vehiclemaintenance->year : ''}}</td>
                                 </tr>
                                 <tr>
-
                                     <td class="caption">vehicle registration Number</td>
                                     <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
                                     <td class="caption">Engine Number</td>

@@ -27,9 +27,7 @@
                 <!--    <form class="form-horizontal"  id="search_form" method="POST"> -->
                 <form class="form-horizontal" method="POST" action="/vehicle_management/vehicle/Search">
                     {{ csrf_field() }}
-
                     <div class="box-body">
-
                         <!--  -->
                         <div class="col-md-8 col-md-offset-2">
                             <div>
@@ -67,7 +65,6 @@
                                                 External </label>
                                         </div>
                                 </div>
-
                                     <div class="form-group">
                                         <label for="path" class="col-sm-3 control-label">Vehicle Type</label>
                                         <div class="col-sm-7">
@@ -85,7 +82,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="fleet_number" class="col-sm-3 control-label">Fleet Number </label>
                                         <div class="col-sm-7">
@@ -98,7 +94,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="registration_number" class="col-sm-3 control-label">Registration
                                             Number </label>
@@ -113,7 +108,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                      <div class="form-group{{ $errors->has('status_type') ? ' has-error' : '' }}">
                                         <label for="status_type" class="col-sm-3 control-label"> Status
                                              </label>

@@ -66,11 +66,9 @@
                        <a href="{{ '/vehicle_management/bookin_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-book"></i> Booking Log
                         </a>
-
                       <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
-
                        {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
                             {{--<i class="fa fa-file-o"></i> Oil Log--}}
                         {{--</a>--}}
@@ -93,6 +91,8 @@
                         <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-money"></i> General Cost
                         </a>
+						<a href="{{ '/vehicle_management/fleet-communications/' . $maintenance->id }}"
+                                   class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
                         <!--  -->
                     </div>
                     <table class="table table-bordered">
@@ -124,7 +124,6 @@
 
                                         </button>
                                     </td>
-
                                     <td>{{ !empty($reminder->companyName) ? $reminder->companyName : '' }}</td>
                                     <td>{{ !empty($reminder->policy_no) ?  $reminder->policy_no : '' }}</td>
                                     <td>{{ !empty($reminder->type) ? $reminder->type : '' }}</td>
@@ -142,8 +141,6 @@
                                                 <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                             @endif
                                         </div>
-
-
                                         {{--<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">--}}
                                             {{--<label for="document" class="control-label"></label>--}}
                                             {{--@if(!empty($reminder->document1))--}}
@@ -164,7 +161,6 @@
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($reminder->status) && $reminder->status == 1) ? "De-Activate" : "Activate"}}
                                         </button>
                                     </td>
-
                                 </tr>
                             @endforeach
                         @else

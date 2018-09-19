@@ -72,11 +72,9 @@
                         <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
-
                         {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
                             {{--<i class="fa fa-file-o"></i> Oil Log--}}
                         {{--</a>--}}
-
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
@@ -95,6 +93,8 @@
                         <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-money"></i> General Cost
                         </a>
+						<a href="{{ '/vehicle_management/fleet-communications/' . $maintenance->id }}"
+                           class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
                         <!--  -->
                     </div>
                     <table class="table table-bordered">
