@@ -31,14 +31,12 @@
                         </button>
                     </div>
                 </div>
-
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                                 <strong class="lead">Vehicle Details</strong><br>
-
                                 @if(!empty($vehiclemaker))
                                     | &nbsp; &nbsp; <strong>Vehicle Make:</strong> <em>{{ $vehiclemaker->name }}</em>
                                     &nbsp;
@@ -66,7 +64,6 @@
                                     -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
                                     <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
                                 @endif
-
                             </p>
                         </div>
                     </div>
@@ -82,11 +79,9 @@
                         <a href="{{ '/vehicle_management/fuel_log/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-tint"></i> Fuel Log
                         </a>
-
                         {{--<a href="{{ '/vehicle_management/oil_log/' . $maintenance->id }}" class="btn btn-app">--}}
                         {{--<i class="fa fa-file-o"></i> Oil Log--}}
                         {{--</a>--}}
-
                         <a href="{{ '/vehicle_management/incidents/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-medkit"></i> Incidents
                         </a>
@@ -105,22 +100,21 @@
                         <a href="{{ '/vehicle_management/general_cost/' . $maintenance->id }}" class="btn btn-app">
                             <i class="fa fa-money"></i> General Cost
                         </a>
+						<a href="{{ '/vehicle_management/fleet-communications/' . $maintenance->id }}"
+                                   class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
                         <!--  -->
                     </div>
-
                     <div class="box-changedate">
                         <button type="button" class="btn btn-default pull-left" id="previous_button" value=""><i
                                     class="fa fa-caret-square-o-left"></i> Previous Month
                         </button>
                         <input type="hidden" name="calendar_month" id="calendar_month" value="{{$imonth}}">
                         <input type="hidden" name="calendar_year" id="calendar_year" value="{{$iYear}}}">
-
                         {{--@if (isset($imonth) && $imonth === $icurrentmonth )--}}
                             <button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
                                         class="fa fa-caret-square-o-right"></i> Next Month
                             </button>
                         {{--@endif--}}
-
                     </div>
                     <table class="table table-bordered">
                         <tr>
@@ -138,7 +132,6 @@
                             @else
                                 <th>Hours Reading</th>
                             @endif
-
                             @if (isset($MetreType) && $MetreType === 1)
                             <th>Kilometre Per Litre</th>
                             @else
