@@ -640,7 +640,6 @@ class ContactsController extends Controller
         ];
         $data['active_mod'] = 'contacts';
         $data['active_rib'] = 'send message';
-        //$data['companies'] = $companies;
         $data['contactPersons'] = $contactPersons;
         AuditReportsController::store('Contacts', 'Send Message Page Accessed', "Actioned By User", 0);
         return view('contacts.send_message')->with($data);
@@ -691,7 +690,7 @@ class ContactsController extends Controller
             $CommunicationData['sms_content'] = str_replace("<", "-", $CommunicationData['sms_content']);
             BulkSMSController::send($mobileArray, $CommunicationData['sms_content']);
         }
-        AuditReportsController::store('Contacts', 'Client Communication Set', "Message: $ContactsCommunication->message", 0);
+        AuditReportsController::store('Contacts', 'Client Communication Sent', "Message: $ContactsCommunication->message", 0);
         return redirect("/contacts/send-message")->with('success_sent', "Communication Successfully Sent to Client");
     }
 

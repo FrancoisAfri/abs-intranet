@@ -57,7 +57,6 @@
                                     -| &nbsp; &nbsp; <strong>Vehicle Color:</strong>
                                     <em>{{ $maintenance->vehicle_color }}</em> &nbsp; &nbsp; -|
                                 @endif
-
                             </p>
                         </div>
                     </div>
@@ -94,7 +93,6 @@
                     </div>
                     <table class="table table-bordered">
                         <tr>
-							 <th>Company Name</th>
 							<th>Contact person</th>
 							<th>Communication Date</th>
 							<th>Communication Time</th>
@@ -102,16 +100,15 @@
 							<th>Message</th>
 							 <th>Sent By</th>
 						</tr>
-                        @if (count($contactsCommunications) > 0)
-							@foreach($contactsCommunications as $contactsCommunication)
-							   <tr>
-									<td>{{ (!empty($contactsCommunication->companyname)) ?  $contactsCommunication->companyname : ''}} </td>
-									<td>{{ !empty($contactsCommunication->first_name) && !empty($contactsCommunication->surname) ?  $contactsCommunication->first_name." ".$contactsCommunication->surname : '' }}</td>
-									<td>{{ !empty($contactsCommunication->communication_date) ? date('d M Y ', $contactsCommunication->communication_date) : '' }}</td>
-									<td>{{ !empty($contactsCommunication->time_sent) ? $contactsCommunication->time_sent : '' }}</td>
-									<td>{{ (!empty($contactsCommunication->communication_type)) ?  $communicationStatus[$contactsCommunication->communication_type] : ''}} </td>
-									<td>{{ (!empty($contactsCommunication->message)) ?  $contactsCommunication->message : ''}} </td> 
-									<td>{{ (!empty($contactsCommunication->hr_firstname) && !empty($contactsCommunication->hr_surname)) ?  $contactsCommunication->hr_firstname." ".$contactsCommunication->hr_surname : ''}} </td> 
+                        @if (count($communicaions) > 0)
+							@foreach($communicaions as $communicaion)
+								<tr>
+									<td>{{ !empty($communicaion->first_name) && !empty($communicaion->surname) ?  $communicaion->first_name." ".$communicaion->surname : '' }}</td>
+									<td>{{ !empty($communicaion->communication_date) ? date('d M Y ', $communicaion->communication_date) : '' }}</td>
+									<td>{{ !empty($communicaion->time_sent) ? $communicaion->time_sent : '' }}</td>
+									<td>{{ (!empty($communicaion->communication_type)) ?  $communicationStatus[$communicaion->communication_type] : ''}} </td>
+									<td>{{ (!empty($communicaion->message)) ?  $communicaion->message : ''}} </td> 
+									<td>{{ (!empty($communicaion->hr_firstname) && !empty($communicaion->hr_surname)) ?  $communicaion->hr_firstname." ".$communicaion->hr_surname : ''}} </td> 
 								</tr>
 							@endforeach
                         @else
@@ -121,7 +118,7 @@
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
                                         </button>
-                                        No Communication for this vehicle, please start by adding a new Record for this
+                                        No communication for this vehicle, please start by adding a new communicaion for this
                                         vehicle..
                                     </div>
                                 </td>
@@ -141,163 +138,78 @@
             <!-- Include add new prime rate modal -->
         @include('Vehicles.partials.add_generalcosts_modal')
         @include('Vehicles.partials.edit_generalcosts_modal')
-        <!-- Include delete warning Modal form-->
-            @if (count($generalcost) > 0)
-                @include('Vehicles.warnings.costs_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Safe ? This action cannot be undone.'])
-            @endif
-
-
         </div>
+	</div>
+@endsection
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
+	<!-- InputMask -->
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script>
+		$('#back_button').click(function () {
+			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+		});
+		$(function () {
+			var moduleId;
+			//Initialize Select2 Elements
+			$(".select2").select2();
+			$('.zip-field').hide();
+			//Tooltip
+			$('[data-toggle="tooltip"]').tooltip();
+			//Vertically center modals on page
+			function reposition() {
+				var modal = $(this),
+					dialog = modal.find('.modal-dialog');
+				modal.css('display', 'block');
 
-        @endsection
+				// Dividing by two centers the modal exactly, but dividing by three
+				// or four works better for larger screens.
+				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+			}
+			// Reposition when a modal is shown
+			$('.modal').on('show.bs.modal', reposition);
+			// Reposition when the window is resized
+			$(window).on('resize', function () {
+				$('.modal:visible').each(reposition);
+			});
+			//Show success action modal
+			$('#success-action-modal').modal('show');
+			//
+			$(".js-example-basic-multiple").select2();
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                    type="text/javascript"></script>
-            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-                    type="text/javascript"></script>
-            <!-- the main fileinput plugin file -->
-            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-            <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-            <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
-            <!-- InputMask -->
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/reminder_act/" + id;
-
-                }
-
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-                });
-
-
-                var moduleId;
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                $('.zip-field').hide();
-
-
-                //Tooltip
-
-                $('[data-toggle="tooltip"]').tooltip();
-
-                //Vertically center modals on page
-                function reposition() {
-                    var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                    modal.css('display', 'block');
-
-                    // Dividing by two centers the modal exactly, but dividing by three
-                    // or four works better for larger screens.
-                    dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                }
-
-                // Reposition when a modal is shown
-                $('.modal').on('show.bs.modal', reposition);
-                // Reposition when the window is resized
-                $(window).on('resize', function () {
-                    $('.modal:visible').each(reposition);
-                });
-
-                //Show success action modal
-                $('#success-action-modal').modal('show');
-
-                //
-
-                $(".js-example-basic-multiple").select2();
-
-
-                $(document).ready(function () {
-
-                    $('input[name="date"]').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                });
-
-                $('#ss_date').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
-                });
-
-
-                //Post perk form to server using ajax (add)
-                $('#add_costs').on('click', function () {
-                    var strUrl = '/vehicle_management/addcosts';
-                    var formName = 'add-costs-form';
-                    var modalID = 'add-costs-modal';
-                    var submitBtnID = 'add_costs';
-                    var redirectUrl = '/vehicle_management/general_cost/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-
-
-                var costsID;
-                $('#edit-costs-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    if (parseInt(btnEdit.data('id')) > 0) {
-                        costsID = btnEdit.data('id');
-                    }
-                    //console.log('gets here: ' + incidentID);
-                    //costsID = btnEdit.data('id');
-                    var date = btnEdit.data('date');
-                    var document_number = btnEdit.data('document_number');
-                    var supplier_name = btnEdit.data('supplier_name');
-                    var cost_type = btnEdit.data('cost_type');
-                    var cost = btnEdit.data('cost');
-                    var litres = btnEdit.data('litres');
-                    var description = btnEdit.data('description');
-                    var person_esponsible = btnEdit.data('person_esponsible');
-                    var valueID = btnEdit.data('valueID');
-                    var modal = $(this);
-                    modal.find('#date').val(date);
-                    modal.find('#document_number').val(document_number);
-                    modal.find('#supplier_name').val(supplier_name);
-                    modal.find('#cost_type').val(cost_type);
-                    modal.find('#cost').val(cost);
-                    modal.find('#litres').val(litres);
-                    modal.find('#description').val(description);
-                    modal.find('#person_esponsible').val(person_esponsible);
-                    modal.find('#valueID').val(valueID);
-                });
-
-
-                 $('#edit_costs').on('click', function () {
-                     var strUrl = '/vehicle_management/edit_costs/' + costsID;
-                    var formName = 'edit-costs-form';
-                    var modalID = 'edit-costs-modal';
-                    var submitBtnID = 'edit_costs';
-                    var redirectUrl = '/vehicle_management/general_cost/{{ $maintenance->id }}';
-                    var successMsgTitle = 'Changes Saved!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    var Method = 'PATCH';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-
-
-            </script>
+			//Post perk form to server using ajax (add)
+			$('#send_message').on('click', function () {
+				var strUrl = '/vehicle_management/send-communicaion';
+				var formName = 'add-vehicle-communication-form';
+				var modalID = 'add-vehicle-communication-modal';
+				var submitBtnID = 'send_message';
+				var redirectUrl = '/vehicle_management/fleet-communications/{{ $maintenance->id }}';
+				var successMsgTitle = 'New Record Added!';
+				var successMsg = 'The Record  has been updated successfully.';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
+		});
+	</script>
 @endsection

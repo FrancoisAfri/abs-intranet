@@ -1654,21 +1654,12 @@ class VehicleFleetController extends Controller
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-        $loggedInEmplID = Auth::user()->person->id;
-        $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
-        $name = $Employee->first_name . ' ' . $Employee->surname;
-        ###################>>>>>#################
-        $costtype = array(1 => 'Oil');
-
-        $ID = $maintenance->id;
-        $generalcost = DB::table('vehicle_generalcosts')
-            ->select('vehicle_generalcosts.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
-            ->leftJoin('hr_people', 'vehicle_generalcosts.person_esponsible', '=', 'hr_people.id')
-            ->orderBy('vehicle_generalcosts.id')
-            ->where('vehicleID', $ID)
-            ->get();
-
+		$contactPersons = DB::table('contacts_contacts')
+            ->select('contacts_contacts.*', 'contact_companies.name as comp_name')
+            ->leftJoin('contact_companies', 'contacts_contacts.company_id', '=', 'contact_companies.id')
+            ->where('contacts_contacts.status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+		
+		$communicaions = VehicleCommunications::where('vehicle_id',$maintenance->id)->get();
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -1676,14 +1667,13 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['name'] = $name;
-        $data['costtype'] = $costtype;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
-        $data['generalcost'] = $generalcost;
+        $data['communicaions'] = $communicaions;
         $data['maintenance'] = $maintenance;
+		$data['contactPersons'] = $contactPersons;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Fleet Management', 'View Fleet Communications', "Accessed by User", 0);
@@ -1693,31 +1683,65 @@ class VehicleFleetController extends Controller
     public function sendCommunication(Request $request)
     {
         $this->validate($request, [
-            'date' => 'required',
-            //'document_number' => 'required|unique:general_cost,document_number',
-            'supplier_name' => 'required',
+            'clients.*' => 'required',
+            'message_type' => 'required',
+            'email_content' => 'bail|required_if:message_type,1',
+            'sms_content' => 'bail|required_if:message_type,2|max:180',
         ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
+		$mobileArray = array();
+        $CommunicationData = $request->all();
+        unset($CommunicationData['_token']);
 
-        $date = $SysData['date'] = str_replace('/', '-', $SysData['date']);
-        $date = $SysData['date'] = strtotime($SysData['date']);
-
-        $generalcost = new general_cost();
-        $generalcost->date = $date;
-        $generalcost->document_number = $SysData['document_number'];
-        $generalcost->supplier_name = $SysData['supplier_name'];
-        $generalcost->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
-        $generalcost->cost = $SysData['cost'];
-        $generalcost->litres = $SysData['litres'];
-        $generalcost->description = $SysData['description'];
-        $generalcost->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
-        $generalcost->vehicleID = $SysData['valueID'];
-        $generalcost->vehiclebookingID = !empty($SysData['vehiclebookingID']) ? $SysData['vehiclebookingID'] : 0;
-        $generalcost->save();
+        # Save email
+        $user = Auth::user()->load('person');;
+		$email = !empty($user->person->email) ? $user->person->email : '';
+        foreach ($CommunicationData['clients'] as $clientID) {
+            $client = ContactPerson::where('id', $clientID)->first();
+			$companyID = !empty($client->company_id) ? $client->company_id :0 ;
+			if (!empty($companyID))
+			{
+				$ContactsCommunication = new ContactsCommunication;
+				$ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
+				$ContactsCommunication->communication_type = $CommunicationData['message_type'];
+				$ContactsCommunication->contact_id = $clientID;
+				$ContactsCommunication->company_id = $companyID;
+				$ContactsCommunication->status = 1;
+				$ContactsCommunication->sent_by = $user->person->id;
+				$ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
+				$ContactsCommunication->time_sent = date("h:i:sa");
+				$ContactsCommunication->save();
+				if ($CommunicationData['message_type'] == 1 && !empty($client->email))
+					# Send Email to Client
+					Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication, $email));
+				elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
+						$mobileArray[] = $this->formatCellNo($client->cell_number);
+			}
+        }
+        if ($CommunicationData['message_type'] == 2 && !empty($mobileArray)) {
+            #format cell numbers
+            # send out the message
+            $CommunicationData['sms_content'] = str_replace("<br>", "", $CommunicationData['sms_content']);
+            $CommunicationData['sms_content'] = str_replace(">", "-", $CommunicationData['sms_content']);
+            $CommunicationData['sms_content'] = str_replace("<", "-", $CommunicationData['sms_content']);
+            BulkSMSController::send($mobileArray, $CommunicationData['sms_content']);
+        }
 
         AuditReportsController::store('Fleet Management', 'Fleet Communication sent', "Accessed By User", 0);
         return response()->json();
 
+    }
+	
+	function formatCellNo($sCellNo)
+    {
+        # Remove the following characters from the phone number
+        $cleanup_chr = array("+", " ", "(", ")", "\r", "\n", "\r\n");
+
+        # clean phone number
+        $sCellNo = str_replace($cleanup_chr, '', $sCellNo);
+
+        #Internationalise  the number
+        if ($sCellNo{0} == "0") $sCellNo = "27" . substr($sCellNo, 1);
+
+        return $sCellNo;
     }
 }

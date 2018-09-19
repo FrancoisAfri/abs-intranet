@@ -131,7 +131,6 @@
 										<th style="width: 10px" nowrap>Total</th>
 									</tr>
 								</thead>
-
 								<tbody class="input-fields-wrap">
 									@foreach($quotation->services as $service)
 										<tr>

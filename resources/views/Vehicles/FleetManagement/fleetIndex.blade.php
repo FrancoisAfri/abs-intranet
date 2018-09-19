@@ -61,9 +61,6 @@
                                             Type </label>
                                         <div class="col-sm-7">
                                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_product"
-                                                name="property_type" value="" checked disabled="disabled">                                                           
-                                            </label>
-                                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_product"
                                                 name="property_type" value="1" > Internal                                                          
                                             </label>
                                             <label class="radio-inline"><input type="radio" id="rdo_product" name="property_type" value="2">
