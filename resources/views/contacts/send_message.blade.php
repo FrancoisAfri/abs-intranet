@@ -127,17 +127,16 @@
            $('#success-action-modal').modal('show');
         });
 		//function to hide/show fields depending on the registration type
-	function hideFields() {
-		var messageType = $("input[name='message_type']:checked").val();
-		if (messageType == 1) { //email
-			$('.sms-field').hide();
-			$('.email-field ').show();
+		function hideFields() {
+			var messageType = $("input[name='message_type']:checked").val();
+			if (messageType == 1) { //email
+				$('.sms-field').hide();
+				$('.email-field ').show();
+			}
+			else if (messageType == 2) { //sms
+				$('.email-field').hide();
+				$('.sms-field').show();
+			}
 		}
-		else if (messageType == 2) { //sms
-			$('.email-field').hide();
-			$('.sms-field').show();
-		}
-	}
-	
     </script>
 @endsection

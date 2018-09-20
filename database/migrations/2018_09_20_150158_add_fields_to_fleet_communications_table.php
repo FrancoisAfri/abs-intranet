@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddContactIdToVehicleCommunicationsTable extends Migration
+class AddFieldsToFleetCommunicationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddContactIdToVehicleCommunicationsTable extends Migration
      */
     public function up()
     {
-       Schema::table('fleet_communications', function ($table) {
-            $table->integer('contact_id')->unsigned()->index()->nullable();
-            $table->integer('company_id')->unsigned()->index()->nullable();
+        Schema::table('fleet_communications', function ($table) {
+            $table->integer('employee_id')->unsigned()->index()->nullable();
+            $table->integer('send_type')->unsigned()->index()->nullable();
         });
     }
 
@@ -27,8 +27,8 @@ class AddContactIdToVehicleCommunicationsTable extends Migration
     public function down()
     {
          Schema::table('fleet_communications', function ($table) {
-            $table->dropColumn('contact_id');
-            $table->dropColumn('company_id');
+            $table->dropColumn('employee_id');
+            $table->dropColumn('send_type');
         });
     }
 }

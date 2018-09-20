@@ -52,8 +52,7 @@ class BulkSMSController extends Controller
 		$numbers = (is_array($mobileArray)) ? implode(",", $mobileArray) : $mobileArray;
 		$numbers = ltrim($numbers, 0);
 		$msisdn = $numbers;
-		//echo $msisdn;
-		//die;
+
 		$seven_bit_msg = $message;
 		if(strlen($seven_bit_msg) > 160)
 		{
