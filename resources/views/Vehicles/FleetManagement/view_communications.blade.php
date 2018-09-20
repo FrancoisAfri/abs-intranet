@@ -8,8 +8,9 @@
     <!-- iCheck -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
     <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
+	<!-- iCheck -->
+	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
 @endsection
 @section('content')
     <div class="row">
@@ -132,14 +133,13 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-costs-modal">Add New Costs
+                                data-target="#add-vehicle-communication-modal">Send Communication
                         </button>
                     </div>
                 </div>
             </div>
             <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.add_generalcosts_modal')
-        @include('Vehicles.partials.edit_generalcosts_modal')
+        @include('Vehicles.partials.send_vehicle_communications_modal')
         </div>
 	</div>
 @endsection
@@ -169,49 +169,67 @@
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 	<script>
 		$('#back_button').click(function () {
 			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
 		});
 		$(function () {
-			var moduleId;
-			//Initialize Select2 Elements
-			$(".select2").select2();
-			$('.zip-field').hide();
-			//Tooltip
-			$('[data-toggle="tooltip"]').tooltip();
+            //Initialize Select2 Elements
+            $(".select2").select2();
+			 //Initialize iCheck/iRadio Elements
+			$('input').iCheck({
+				checkboxClass: 'icheckbox_square-green',
+				radioClass: 'iradio_square-green',
+				increaseArea: '20%' // optional
+			});
+			//call hide/show fields functions
+			hideFields();
+			$('#rdo_email, #rdo_sms').on('ifChecked', function(){
+			   hideFields();
+		   });
 			//Vertically center modals on page
 			function reposition() {
 				var modal = $(this),
-					dialog = modal.find('.modal-dialog');
+						dialog = modal.find('.modal-dialog');
 				modal.css('display', 'block');
 
 				// Dividing by two centers the modal exactly, but dividing by three
 				// or four works better for larger screens.
 				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 			}
-			// Reposition when a modal is shown
+		   //Reposition when a modal is shown
 			$('.modal').on('show.bs.modal', reposition);
 			// Reposition when the window is resized
 			$(window).on('resize', function () {
 				$('.modal:visible').each(reposition);
 			});
-			//Show success action modal
-			$('#success-action-modal').modal('show');
-			//
-			$(".js-example-basic-multiple").select2();
-
-			//Post perk form to server using ajax (add)
+		   //Show success action modal
+           $('#success-action-modal').modal('show');
+		   
+		   //Post perk form to server using ajax (add)
 			$('#send_message').on('click', function () {
-				var strUrl = '/vehicle_management/send-communicaion';
+				var strUrl = '/vehicle_management/send-communicaion/{{ $maintenance->id }}';
 				var formName = 'add-vehicle-communication-form';
 				var modalID = 'add-vehicle-communication-modal';
 				var submitBtnID = 'send_message';
 				var redirectUrl = '/vehicle_management/fleet-communications/{{ $maintenance->id }}';
-				var successMsgTitle = 'New Record Added!';
-				var successMsg = 'The Record  has been updated successfully.';
+				var successMsgTitle = 'communication Feedback!';
+				var successMsg = 'Communication successfully Sent.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
-		});
+        });
+		
+		function hideFields() {
+			var messageType = $("input[name='message_type']:checked").val();
+			if (messageType == 1) { //email
+				$('.sms-field').hide();
+				$('.email-field ').show();
+			}
+			else if (messageType == 2) { //sms
+				$('.email-field').hide();
+				$('.sms-field').show();
+			}
+	}
 	</script>
 @endsection

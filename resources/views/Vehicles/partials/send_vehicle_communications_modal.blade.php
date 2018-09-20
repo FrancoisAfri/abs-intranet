@@ -18,7 +18,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-users"></i>
                                     </div>
-                                    <select name="clients[]" id="clients" class="form-control select2" multiple data-placeholder="*** Select a Client ***">
+                                    <select name="clients[]" id="clients" class="form-control select2" multiple  style="width: 100%;" data-placeholder="*** Select a Client ***">
                                         @foreach($contactPersons as $contactPerson)
                                             <option value="{{ $contactPerson->id}}">{{$contactPerson->comp_name."|**|". $contactPerson->first_name." ".$contactPerson->surname }}</option>
                                         @endforeach
@@ -59,6 +59,18 @@
 									<i class="fa fa-envelope-o"></i>
 								</div>
 								<textarea name="email_content" id="email_content" class="form-control" placeholder="Message" rows="6" maxlength="1500">{{ old('email_content') }}</textarea>
+							</div>
+						</div>
+					</div>
+					<div class="form-group {{ $errors->has('email_content') ? ' has-error' : '' }}">
+						<label for="email_content" class="col-sm-2 control-label">Send Vehicle Deatails</label>
+
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-check"></i>
+								</div>
+									<input class="rdo-iCheck" type="checkbox" id="send_fleet_details" name="send_fleet_details" value="1">
 							</div>
 						</div>
 					</div>
