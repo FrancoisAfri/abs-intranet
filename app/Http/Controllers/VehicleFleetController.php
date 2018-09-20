@@ -37,17 +37,19 @@ use App\Fueltanks;
 use App\fleet_documentType;
 use App\vehicle_config;
 use App\ContactPerson;
+use App\SmS_Configuration;
 use App\vehicle;
 use App\FueltankTopUp;
 use App\vehicle_detail;
 use App\DivisionLevelFour;
 use App\DivisionLevelFive;
+use App\Http\Controllers\BulkSMSController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use Illuminate\Support\Facades\Storage;
-
+use App\Mail\VehicleCommunication;
 class VehicleFleetController extends Controller
 {
 
@@ -1680,7 +1682,7 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.view_communications')->with($data);
     }
 
-    public function sendCommunication(Request $request)
+    public function sendCommunication(Request $request, vehicle_maintenance $maintenance)
     {
         $this->validate($request, [
             'clients.*' => 'required',
@@ -1691,8 +1693,23 @@ class VehicleFleetController extends Controller
 		$mobileArray = array();
         $CommunicationData = $request->all();
         unset($CommunicationData['_token']);
-
+		$svehicleInfo = '';
+		//$sVehicleInfo = "Fleet#: $aVehicle[fleet_number], Reg#: $aVehicle[registration], Make: $aVehicle[make], Year : $aVehicle[year], Engine#: $aVehicle[engine_number], VIN (Chassis Number)#: $aVehicle[chassis_number]";
+		
         # Save email
+		$sendFleetDetails = !empty($CommunicationData['send_fleet_details']) ? $CommunicationData['send_fleet_details'] : 0;
+		if (!empty($sendFleetDetails))
+		{
+			################## WELL DETAILS ###############
+			$vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+			$svehicleInfo .= "Fleet#: $maintenance->fleet_number </br>";
+			$svehicleInfo .= "Reg#: $maintenance->vehicle_registration </br>";
+			if (!empty($vehiclemaker))
+			$svehicleInfo .= "Make: $vehiclemaker->name </br>";
+			$svehicleInfo .= "Year: $maintenance->year </br>";
+			$svehicleInfo .= "Engine#: $maintenance->engine_number </br>";
+			$svehicleInfo .= "VIN (Chassis Number)#: $maintenance->chassis_number";
+		}
         $user = Auth::user()->load('person');;
 		$email = !empty($user->person->email) ? $user->person->email : '';
         foreach ($CommunicationData['clients'] as $clientID) {
@@ -1700,19 +1717,20 @@ class VehicleFleetController extends Controller
 			$companyID = !empty($client->company_id) ? $client->company_id :0 ;
 			if (!empty($companyID))
 			{
-				$ContactsCommunication = new ContactsCommunication;
-				$ContactsCommunication->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content'] : $CommunicationData['sms_content'];
-				$ContactsCommunication->communication_type = $CommunicationData['message_type'];
-				$ContactsCommunication->contact_id = $clientID;
-				$ContactsCommunication->company_id = $companyID;
-				$ContactsCommunication->status = 1;
-				$ContactsCommunication->sent_by = $user->person->id;
-				$ContactsCommunication->communication_date = strtotime(date("Y-m-d"));
-				$ContactsCommunication->time_sent = date("h:i:sa");
-				$ContactsCommunication->save();
+				$VehicleCommunications = new VehicleCommunications;
+				$VehicleCommunications->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content']."
+				 ".$svehicleInfo : $CommunicationData['sms_content']." ".$svehicleInfo;
+				$VehicleCommunications->communication_type = $CommunicationData['message_type'];
+				$VehicleCommunications->contact_id = $clientID;
+				$VehicleCommunications->company_id = $companyID;
+				$VehicleCommunications->status = 1;
+				$VehicleCommunications->sent_by = $user->person->id;
+				$VehicleCommunications->communication_date = strtotime(date("Y-m-d"));
+				$VehicleCommunications->time_sent = date("h:i:sa");
+				$VehicleCommunications->save();
 				if ($CommunicationData['message_type'] == 1 && !empty($client->email))
 					# Send Email to Client
-					Mail::to($client->email)->send(new ClientCommunication($client, $ContactsCommunication, $email));
+					Mail::to($client->email)->send(new VehicleCommunication($client, $VehicleCommunications, $email));
 				elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
 						$mobileArray[] = $this->formatCellNo($client->cell_number);
 			}

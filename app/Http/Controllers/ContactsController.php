@@ -21,6 +21,7 @@ use App\User;
 use App\DivisionLevel;
 use App\Province;
 use App\Http\Controllers\AuditReportsController;
+use App\Http\Controllers\BulkSMSController;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -880,7 +881,6 @@ class ContactsController extends Controller
 		
         $document->status = $stastus;
         $document->update();
-		die;
 		AuditReportsController::store('Contacts', "Client Document Status Updated For Client: $clientDetails->first_name $clientDetails->surname To $label, Document Name: $document->document_name", "Updated By User", 0);
         return back();
     }

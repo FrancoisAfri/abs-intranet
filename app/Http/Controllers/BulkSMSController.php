@@ -45,18 +45,22 @@ class BulkSMSController extends Controller
 		$SmSConfiguration = SmS_Configuration::first();
 		$username = !empty($SmSConfiguration->sms_username) ? $SmSConfiguration->sms_username : '';
 		$password = !empty($SmSConfiguration->sms_password) ? $SmSConfiguration->sms_password : '';
+		//echo $username."</br>";
+		//echo $password;
 		$url = 'http://bulksms.2way.co.za/eapi/submission/send_sms/2/2.0';
 		$port = 80;
 		$numbers = (is_array($mobileArray)) ? implode(",", $mobileArray) : $mobileArray;
 		$numbers = ltrim($numbers, 0);
 		$msisdn = $numbers;
+		//echo $msisdn;
+		//die;
 		$seven_bit_msg = $message;
 		if(strlen($seven_bit_msg) > 160)
 		{
 			$messages = str_split($seven_bit_msg , 158);
 			foreach($messages as $message)
 			{
-				$post_body =self::seven_bit_sms( $username, $password, $message, $msisdn );
+				$post_body =self::seven_bit_sms($username, $password, $message, $msisdn );
 				$result = self::send_message( $post_body, $url, $port );
 			}
 		}
@@ -65,7 +69,8 @@ class BulkSMSController extends Controller
 			$post_body =self::seven_bit_sms( $username, $password, $seven_bit_msg, $msisdn );
 			$result = self::send_message( $post_body, $url, $port );
 		}
-		if( $result['success'] ) 
+
+		if( $result['success']) 
 			self::print_ln( self::formatted_server_response( $result ) );
 		else 
 			self::print_ln( self::formatted_server_response( $result ) );
