@@ -50,7 +50,9 @@ use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\VehicleCommunication;
+use App\Mail\VehicleCommunicationsEmployees;
 class VehicleFleetController extends Controller
 {
 
@@ -1766,7 +1768,7 @@ class VehicleFleetController extends Controller
 					$VehicleCommunications->save();
 					if ($CommunicationData['message_type'] == 1 && !empty($client->email))
 						# Send Email to Client
-						Mail::to($client->email)->send(new VehicleCommunication($client, $VehicleCommunications, $email));
+						Mail::to($client->email)->send(new VehicleCommunication($client, $VehicleCommunications, $client->email));
 					elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
 							$mobileArray[] = $this->formatCellNo($client->cell_number);
 				}
@@ -1792,7 +1794,7 @@ class VehicleFleetController extends Controller
 					$VehicleCommunications->save();
 					if ($CommunicationData['message_type'] == 1 && !empty($employee->email))
 						# Send Email to employee
-						Mail::to($employee->email)->send(new VehicleCommunication($client, $VehicleCommunications, $email));
+						Mail::to($employee->email)->send(new VehicleCommunicationsEmployees($employee, $VehicleCommunications, $employee->email));
 					elseif ($CommunicationData['message_type'] == 2 && !empty($employee->cell_number))
 							$mobileArray[] = $this->formatCellNo($employee->cell_number);
 				}
