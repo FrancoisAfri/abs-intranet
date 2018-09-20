@@ -1730,32 +1730,36 @@ class VehicleFleetController extends Controller
 		$mobileArray = array();
         $CommunicationData = $request->all();
         unset($CommunicationData['_token']);
-		$svehicleInfo = '';
+		$vehicleInfo = '';
         # Save email
 		$sendFleetDetails = !empty($CommunicationData['send_fleet_details']) ? $CommunicationData['send_fleet_details'] : 0;
 		if (!empty($sendFleetDetails) && $CommunicationData['message_type'] == 2)
 		{
 			################## WELL DETAILS ###############
 			$vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-			$svehicleInfo .= " \nFleet#: $maintenance->fleet_number \n";
-			$svehicleInfo .= "Reg#: $maintenance->vehicle_registration \n";
+			$vehicleInfo .= " \nFleet#: $maintenance->fleet_number \n";
+			$vehicleInfo .= "Reg#: $maintenance->vehicle_registration \n";
 			if (!empty($vehiclemaker))
-			$svehicleInfo .= "Make: $vehiclemaker->name \n";
-			$svehicleInfo .= "Year: $maintenance->year \n";
-			$svehicleInfo .= "Engine#: $maintenance->engine_number \n";
-			$svehicleInfo .= "VIN (Chassis Number)#: $maintenance->chassis_number";
+			$vehicleInfo .= "Make: $vehiclemaker->name \n";
+			$vehicleInfo .= "Year: $maintenance->year \n";
+			$vehicleInfo .= "Engine#: $maintenance->engine_number \n";
+			$vehicleInfo .= "VIN (Chassis Number)#: $maintenance->chassis_number";
 		}
 		else
 		{
 			################## WELL DETAILS ###############
 			$vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-			$svehicleInfo .= " </br>Fleet#: $maintenance->fleet_number </br>";
-			$svehicleInfo .= "Reg#: $maintenance->vehicle_registration </br>";
-			if (!empty($vehiclemaker))
-			$svehicleInfo .= "Make: $vehiclemaker->name </br>";
-			$svehicleInfo .= "Year: $maintenance->year </br>";
-			$svehicleInfo .= "Engine#: $maintenance->engine_number </br>";
-			$svehicleInfo .= "VIN (Chassis Number)#: $maintenance->chassis_number";
+			if (!empty($vehiclemaker)) $make = "Make: $vehiclemaker->name "; else $make =  '';
+			$vehicleInfo = <<<HTML
+<p>
+Fleet#: $maintenance->fleet_number<br>
+Reg#: $maintenance->vehicle_registration<br>
+$make<br>
+Year: $maintenance->year <br>
+Engine#: $maintenance->engine_number<br>
+VIN (Chassis Number)#: $maintenance->chassis_number<br>
+</p>
+HTML;
 		}
         $user = Auth::user()->load('person');
 		if (!empty($CommunicationData['clients']))
@@ -1767,7 +1771,7 @@ class VehicleFleetController extends Controller
 				{
 					$VehicleCommunications = new VehicleCommunications;
 					$VehicleCommunications->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content']."
-					 ".$svehicleInfo : $CommunicationData['sms_content']." ".$svehicleInfo;
+					 ".$vehicleInfo : $CommunicationData['sms_content']." ".$vehicleInfo;
 					$VehicleCommunications->communication_type = $CommunicationData['message_type'];
 					$VehicleCommunications->contact_id = $clientID;
 					$VehicleCommunications->company_id = $companyID;
@@ -1794,7 +1798,7 @@ class VehicleFleetController extends Controller
 				{
 					$VehicleCommunications = new VehicleCommunications;
 					$VehicleCommunications->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content']."
-					 ".$svehicleInfo : $CommunicationData['sms_content']." ".$svehicleInfo;
+					 ".$vehicleInfo : $CommunicationData['sms_content']." ".$vehicleInfo;
 					$VehicleCommunications->communication_type = $CommunicationData['message_type'];
 					$VehicleCommunications->employee_id = $hrPerson;
 					$VehicleCommunications->send_type = !empty($CommunicationData['send_type']) ? $CommunicationData['send_type'] : '';
@@ -1815,7 +1819,7 @@ class VehicleFleetController extends Controller
         if ($CommunicationData['message_type'] == 2 && !empty($mobileArray)) {
             #format cell numbers
             # send out the message
-            $CommunicationData['sms_content'] = $CommunicationData['sms_content']." ".$svehicleInfo;
+            $CommunicationData['sms_content'] = $CommunicationData['sms_content']." ".$vehicleInfo;
             $CommunicationData['sms_content'] = str_replace("<br>", "", $CommunicationData['sms_content']);
             $CommunicationData['sms_content'] = str_replace(">", "-", $CommunicationData['sms_content']);
             $CommunicationData['sms_content'] = str_replace("<", "-", $CommunicationData['sms_content']);
