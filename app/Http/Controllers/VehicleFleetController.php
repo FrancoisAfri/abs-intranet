@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Users;
+use App\CompanyIdentity;
 use App\DivisionLevel;
 use App\vehicle_warranties;
 use App\vehiclemodel;
@@ -762,7 +763,6 @@ class VehicleFleetController extends Controller
         AuditReportsController::store('Fleet Management', 'Job Titles Page Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewServiceDetails')->with($data);
     }
-
 
     public function addServiceDetails(Request $request)
     {
@@ -1615,7 +1615,7 @@ class VehicleFleetController extends Controller
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -1662,13 +1662,17 @@ class VehicleFleetController extends Controller
             ->where('contacts_contacts.status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
 		
 		$communicaions = VehicleCommunications::where('vehicle_id',$maintenance->id)->get();
+		if (!empty($communicaions)) $communicaions = $communicaions->load('contact','company','sender','employees');
         $data['page_title'] = " View Fleet Details";
-        $data['page_description'] = "FleetManagement";
+        $data['page_description'] = "Fleet Management";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/manage_fleet', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-
+		$communicationStatus = array(1 => 'Email', 2 => 'SMS');
+		$sendToStatus = array(1 => 'Client(s)', 2 => 'Employee(s)');
+        $data['communicationStatus'] = $communicationStatus;
+        $data['sendToStatus'] = $sendToStatus;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
         $data['vehicleTypes'] = $vehicleTypes;
@@ -1681,63 +1685,123 @@ class VehicleFleetController extends Controller
         AuditReportsController::store('Fleet Management', 'View Fleet Communications', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.view_communications')->with($data);
     }
+	
+	public function sendMessageIndex(vehicle_maintenance $maintenance)
+    {
+        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        ################## WELL DETAILS ###############
+        $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+        ################## WELL DETAILS ###############
+		$contactPersons = DB::table('contacts_contacts')
+            ->select('contacts_contacts.*', 'contact_companies.name as comp_name')
+            ->leftJoin('contact_companies', 'contacts_contacts.company_id', '=', 'contact_companies.id')
+            ->where('contacts_contacts.status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+		
+
+        $data['page_title'] = "Vehicle Communication";
+        $data['page_description'] = "";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/vehicle_management/manage_fleet', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Send Message', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Manage Fleet';
+        $data['employees'] = $employees;
+        $data['vehiclemaker'] = $vehiclemaker;
+        $data['vehicleTypes'] = $vehicleTypes;
+        $data['vehiclemodeler'] = $vehiclemodeler;
+        $data['maintenance'] = $maintenance;
+		$data['contactPersons'] = $contactPersons;
+        AuditReportsController::store('Fleet Management', 'Send Message Page Accessed', "Actioned By User", 0);
+        return view('Vehicles.FleetManagement.send_vehicle_communications')->with($data);
+    }
 
     public function sendCommunication(Request $request, vehicle_maintenance $maintenance)
     {
         $this->validate($request, [
-            'clients.*' => 'required',
-            'message_type' => 'required',
-            'email_content' => 'bail|required_if:message_type,1',
-            'sms_content' => 'bail|required_if:message_type,2|max:180',
+          'message_type' => 'required',
+          'email_content' => 'bail|required_if:message_type,1',
+          'sms_content' => 'bail|required_if:message_type,2|max:180',
         ]);
 		$mobileArray = array();
         $CommunicationData = $request->all();
         unset($CommunicationData['_token']);
 		$svehicleInfo = '';
-		//$sVehicleInfo = "Fleet#: $aVehicle[fleet_number], Reg#: $aVehicle[registration], Make: $aVehicle[make], Year : $aVehicle[year], Engine#: $aVehicle[engine_number], VIN (Chassis Number)#: $aVehicle[chassis_number]";
-		
         # Save email
 		$sendFleetDetails = !empty($CommunicationData['send_fleet_details']) ? $CommunicationData['send_fleet_details'] : 0;
 		if (!empty($sendFleetDetails))
 		{
 			################## WELL DETAILS ###############
 			$vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
-			$svehicleInfo .= "Fleet#: $maintenance->fleet_number </br>";
-			$svehicleInfo .= "Reg#: $maintenance->vehicle_registration </br>";
+			$svehicleInfo .= " \nFleet#: $maintenance->fleet_number \n";
+			$svehicleInfo .= "Reg#: $maintenance->vehicle_registration \n";
 			if (!empty($vehiclemaker))
-			$svehicleInfo .= "Make: $vehiclemaker->name </br>";
-			$svehicleInfo .= "Year: $maintenance->year </br>";
-			$svehicleInfo .= "Engine#: $maintenance->engine_number </br>";
+			$svehicleInfo .= "Make: $vehiclemaker->name \n";
+			$svehicleInfo .= "Year: $maintenance->year \n";
+			$svehicleInfo .= "Engine#: $maintenance->engine_number \n";
 			$svehicleInfo .= "VIN (Chassis Number)#: $maintenance->chassis_number";
 		}
-        $user = Auth::user()->load('person');;
-		$email = !empty($user->person->email) ? $user->person->email : '';
-        foreach ($CommunicationData['clients'] as $clientID) {
-            $client = ContactPerson::where('id', $clientID)->first();
-			$companyID = !empty($client->company_id) ? $client->company_id :0 ;
-			if (!empty($companyID))
-			{
-				$VehicleCommunications = new VehicleCommunications;
-				$VehicleCommunications->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content']."
-				 ".$svehicleInfo : $CommunicationData['sms_content']." ".$svehicleInfo;
-				$VehicleCommunications->communication_type = $CommunicationData['message_type'];
-				$VehicleCommunications->contact_id = $clientID;
-				$VehicleCommunications->company_id = $companyID;
-				$VehicleCommunications->status = 1;
-				$VehicleCommunications->sent_by = $user->person->id;
-				$VehicleCommunications->communication_date = strtotime(date("Y-m-d"));
-				$VehicleCommunications->time_sent = date("h:i:sa");
-				$VehicleCommunications->save();
-				if ($CommunicationData['message_type'] == 1 && !empty($client->email))
-					# Send Email to Client
-					Mail::to($client->email)->send(new VehicleCommunication($client, $VehicleCommunications, $email));
-				elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
-						$mobileArray[] = $this->formatCellNo($client->cell_number);
+        $user = Auth::user()->load('person');
+		if (!empty($CommunicationData['clients']))
+		{
+			foreach ($CommunicationData['clients'] as $clientID) {
+				$client = ContactPerson::where('id', $clientID)->first();
+				$companyID = !empty($client->company_id) ? $client->company_id :0 ;
+				if (!empty($companyID))
+				{
+					$VehicleCommunications = new VehicleCommunications;
+					$VehicleCommunications->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content']."
+					 ".$svehicleInfo : $CommunicationData['sms_content']." ".$svehicleInfo;
+					$VehicleCommunications->communication_type = $CommunicationData['message_type'];
+					$VehicleCommunications->contact_id = $clientID;
+					$VehicleCommunications->company_id = $companyID;
+					$VehicleCommunications->vehicle_id = $maintenance->id;
+					$VehicleCommunications->send_type = !empty($CommunicationData['send_type']) ? $CommunicationData['send_type'] : '';
+					$VehicleCommunications->status = 1;
+					$VehicleCommunications->sent_by = $user->person->id;
+					$VehicleCommunications->communication_date = strtotime(date("Y-m-d"));
+					$VehicleCommunications->time_sent = date("h:i:sa");
+					$VehicleCommunications->save();
+					if ($CommunicationData['message_type'] == 1 && !empty($client->email))
+						# Send Email to Client
+						Mail::to($client->email)->send(new VehicleCommunication($client, $VehicleCommunications, $email));
+					elseif ($CommunicationData['message_type'] == 2 && !empty($client->cell_number))
+							$mobileArray[] = $this->formatCellNo($client->cell_number);
+				}
 			}
-        }
+		}
+		elseif(!empty($CommunicationData['employees']))
+		{
+			foreach ($CommunicationData['employees'] as $hrPerson) {
+				$employee = HRPerson::where('id', $hrPerson)->first();
+				if (!empty($employee))
+				{
+					$VehicleCommunications = new VehicleCommunications;
+					$VehicleCommunications->message = !empty($CommunicationData['email_content']) ? $CommunicationData['email_content']."
+					 ".$svehicleInfo : $CommunicationData['sms_content']." ".$svehicleInfo;
+					$VehicleCommunications->communication_type = $CommunicationData['message_type'];
+					$VehicleCommunications->employee_id = $hrPerson;
+					$VehicleCommunications->send_type = !empty($CommunicationData['send_type']) ? $CommunicationData['send_type'] : '';
+					$VehicleCommunications->vehicle_id = $maintenance->id;
+					$VehicleCommunications->status = 1;
+					$VehicleCommunications->sent_by = $user->person->id;
+					$VehicleCommunications->communication_date = strtotime(date("Y-m-d"));
+					$VehicleCommunications->time_sent = date("h:i:sa");
+					$VehicleCommunications->save();
+					if ($CommunicationData['message_type'] == 1 && !empty($employee->email))
+						# Send Email to employee
+						Mail::to($employee->email)->send(new VehicleCommunication($client, $VehicleCommunications, $email));
+					elseif ($CommunicationData['message_type'] == 2 && !empty($employee->cell_number))
+							$mobileArray[] = $this->formatCellNo($employee->cell_number);
+				}
+			}
+		}
         if ($CommunicationData['message_type'] == 2 && !empty($mobileArray)) {
             #format cell numbers
             # send out the message
+            $CommunicationData['sms_content'] = $CommunicationData['sms_content']." ".$svehicleInfo;
             $CommunicationData['sms_content'] = str_replace("<br>", "", $CommunicationData['sms_content']);
             $CommunicationData['sms_content'] = str_replace(">", "-", $CommunicationData['sms_content']);
             $CommunicationData['sms_content'] = str_replace("<", "-", $CommunicationData['sms_content']);
@@ -1745,8 +1809,7 @@ class VehicleFleetController extends Controller
         }
 
         AuditReportsController::store('Fleet Management', 'Fleet Communication sent', "Accessed By User", 0);
-        return response()->json();
-
+        return redirect("/vehicle_management/fleet-communications/$maintenance->id")->with('success_sent', "Communication Successfully Sent.");
     }
 	
 	function formatCellNo($sCellNo)
@@ -1761,5 +1824,47 @@ class VehicleFleetController extends Controller
         if ($sCellNo{0} == "0") $sCellNo = "27" . substr($sCellNo, 1);
 
         return $sCellNo;
+    }
+	// Print Communication
+	public function communicationsPrint(vehicle_detail $maintenance)
+    {
+		################## Fleet DETAILS ###############
+        $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+        $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
+        $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
+		
+		$communicaions = VehicleCommunications::where('vehicle_id',$maintenance->id)->get();
+		if (!empty($communicaions)) $communicaions = $communicaions->load('contact','company','sender','employees');
+		
+		$companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+		$communicationStatus = array(1 => 'Email', 2 => 'SMS');
+		$sendToStatus = array(1 => 'Client(s)', 2 => 'Employee(s)');
+		$data['page_title'] = 'View Vehicle History';
+		$data['page_description'] = 'Vehicle History';
+		$data['breadcrumb'] = [
+			['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle/Search', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+			['title' => 'Manage Fleet', 'active' => 1, 'is_module' => 0]
+		];
+		
+		$data['communicationStatus'] = $communicationStatus;
+		$data['sendToStatus'] = $sendToStatus;
+		$data['vehiclemaker'] = $vehiclemaker;
+        $data['vehicleTypes'] = $vehicleTypes;
+        $data['vehiclemodeler'] = $vehiclemodeler;
+        $data['maintenance'] = $maintenance;
+		$data['communicaions'] = $communicaions;
+		$data['active_mod'] = 'Fleet Management';
+		$data['active_rib'] = 'Manage Fleet';
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+		
+		AuditReportsController::store('Fleet Management', 'Communication Printed', 'Accessed by User', 0);
+		return view('Vehicles.FleetManagement.communications_print')->with($data);
     }
 }

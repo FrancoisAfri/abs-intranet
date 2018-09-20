@@ -25,8 +25,6 @@
                         </button>
                     </div>
                 </div>
-           <!--  {{ csrf_field() }}
-            {{ method_field('PATCH') }} -->
             <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
@@ -94,53 +92,66 @@
                                    class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
                         <!--  -->
                     </div>
-                    <table class="table table-bordered">
-                        <tr>
-							<th>Contact person</th>
-							<th>Communication Date</th>
-							<th>Communication Time</th>
-							<th>Communication Type</th>
-							<th>Message</th>
-							 <th>Sent By</th>
-						</tr>
-                        @if (count($communicaions) > 0)
-							@foreach($communicaions as $communicaion)
-								<tr>
-									<td>{{ !empty($communicaion->first_name) && !empty($communicaion->surname) ?  $communicaion->first_name." ".$communicaion->surname : '' }}</td>
-									<td>{{ !empty($communicaion->communication_date) ? date('d M Y ', $communicaion->communication_date) : '' }}</td>
-									<td>{{ !empty($communicaion->time_sent) ? $communicaion->time_sent : '' }}</td>
-									<td>{{ (!empty($communicaion->communication_type)) ?  $communicationStatus[$communicaion->communication_type] : ''}} </td>
-									<td>{{ (!empty($communicaion->message)) ?  $communicaion->message : ''}} </td> 
-									<td>{{ (!empty($communicaion->hr_firstname) && !empty($communicaion->hr_surname)) ?  $communicaion->hr_firstname." ".$communicaion->hr_surname : ''}} </td> 
+					<div style="overflow-x: scroll;">
+						<table class="table table-bordered">
+							<tr>
+								<th style="width: 150px;">Sent To</th>
+								<th style="width: 150px;">Company</th>
+								<th style="width: 120px;">Contact person/Employee</th>
+								<th style="width: 120px;">Date</th>
+								<th style="width: 70px;">Time</th>
+								<th style="width: 100px;">Type</th>
+								<th style="width: 300px;">Message</th>
+								 <th>Sent By</th>
+							</tr>
+							@if (count($communicaions) > 0)
+								@foreach($communicaions as $communicaion)
+									<tr>
+										<td style="width: 50px;">{{ (!empty($communicaion->send_type)) ?  $sendToStatus[$communicaion->send_type] : ''}} </td>
+										<td style="width: 150px;">{{ !empty($communicaion->company->name) ?  $communicaion->company->name : '' }}</td>
+										@if (!empty($communicaion->send_type) && $communicaion->send_type == 1)
+											<td style="width: 120px;">{{ !empty($communicaion->contact->first_name) && !empty($communicaion->contact->surname) ? $communicaion->contact->first_name." ".$communicaion->contact->surname : ''}}</td>
+										@elseif (!empty($communicaion->send_type) && $communicaion->send_type == 2)
+											<td style="width: 100px;">{{ !empty($communicaion->employees->first_name) && !empty($communicaion->employees->surname) ? $communicaion->employees->first_name." ".$communicaion->employees->surname : ''}}</td>
+										@else
+											<td style="width: 100px;"></td>
+										@endif
+										<td style="width: 120px;">{{ !empty($communicaion->communication_date) ? date('d M Y ', $communicaion->communication_date) : '' }}</td>
+										<td  style="width: 70px;">{{ !empty($communicaion->time_sent) ? $communicaion->time_sent : '' }}</td>
+										<td style="width: 100px;">{{ (!empty($communicaion->communication_type)) ?  $communicationStatus[$communicaion->communication_type] : ''}} </td>
+										<td style="width: 300px;">{{ (!empty($communicaion->message)) ?  $communicaion->message : ''}} </td> 
+										<td>{{ (!empty($communicaion->sender->first_name) && !empty($communicaion->sender->surname)) ?  $communicaion->sender->first_name." ".$communicaion->sender->surname : ''}} </td> 
+									</tr>
+								@endforeach
+							@else
+								<tr id="categories-list">
+									<td colspan="10">
+										<div class="alert alert-danger alert-dismissable">
+											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+												&times;
+											</button>
+											No communication for this vehicle, please start by adding a new communicaion for this
+											vehicle..
+										</div>
+									</td>
 								</tr>
-							@endforeach
-                        @else
-                            <tr id="categories-list">
-                                <td colspan="10">
-                                    <div class="alert alert-danger alert-dismissable">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                            &times;
-                                        </button>
-                                        No communication for this vehicle, please start by adding a new communicaion for this
-                                        vehicle..
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
-                    </table>
+							@endif
+						</table>
+					</div>
                     <!--   </div> -->
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                        <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-vehicle-communication-modal">Send Communication
+						<a href="{{ '/vehicle_management/vehicle_communication_print/'.$maintenance->id.''}}" class="btn btn-success pull-right" target="_blank">Print Communication</a>   
+                        <button type="button" id="send_communication" class="btn btn-warning pull-right">Send Communication
                         </button>
                     </div>
                 </div>
             </div>
-            <!-- Include add new prime rate modal -->
-        @include('Vehicles.partials.send_vehicle_communications_modal')
         </div>
+		@if (session('success_sent'))
+			@include('contacts.partials.success_action', ['modal_title' => 'Communication Sent!', 'modal_content' => session('success_sent')])
+		@endif
 	</div>
 @endsection
 @section('page_script')
@@ -174,20 +185,11 @@
 		$('#back_button').click(function () {
 			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
 		});
+		$('#send_communication').click(function () {
+			location.href = '/vehicle_management/send-communication/{{ $maintenance->id }}';
+		});
+		
 		$(function () {
-            //Initialize Select2 Elements
-            $(".select2").select2();
-			 //Initialize iCheck/iRadio Elements
-			$('input').iCheck({
-				checkboxClass: 'icheckbox_square-green',
-				radioClass: 'iradio_square-green',
-				increaseArea: '20%' // optional
-			});
-			//call hide/show fields functions
-			hideFields();
-			$('#rdo_email, #rdo_sms').on('ifChecked', function(){
-			   hideFields();
-		   });
 			//Vertically center modals on page
 			function reposition() {
 				var modal = $(this),
@@ -206,30 +208,6 @@
 			});
 		   //Show success action modal
            $('#success-action-modal').modal('show');
-		   
-		   //Post perk form to server using ajax (add)
-			$('#send_message').on('click', function () {
-				var strUrl = '/vehicle_management/send-communicaion/{{ $maintenance->id }}';
-				var formName = 'add-vehicle-communication-form';
-				var modalID = 'add-vehicle-communication-modal';
-				var submitBtnID = 'send_message';
-				var redirectUrl = '/vehicle_management/fleet-communications/{{ $maintenance->id }}';
-				var successMsgTitle = 'communication Feedback!';
-				var successMsg = 'Communication successfully Sent.';
-				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-			});
         });
-		
-		function hideFields() {
-			var messageType = $("input[name='message_type']:checked").val();
-			if (messageType == 1) { //email
-				$('.sms-field').hide();
-				$('.email-field ').show();
-			}
-			else if (messageType == 2) { //sms
-				$('.email-field').hide();
-				$('.sms-field').show();
-			}
-	}
 	</script>
 @endsection

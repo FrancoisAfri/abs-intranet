@@ -9,22 +9,49 @@
                     <h4 class="modal-title"> Send Communication</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="invalid-input-alert"></div>
-                    <div id="success-alert"></div>
-                    <div class="form-group{{ $errors->has('clients') ? ' has-error' : '' }}">
-                            <label for="clients" class="col-sm-2 control-label">Client(s)</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-users"></i>
-                                    </div>
-                                    <select name="clients[]" id="clients" class="form-control select2" multiple  style="width: 100%;" data-placeholder="*** Select a Client ***">
-                                        @foreach($contactPersons as $contactPerson)
-                                            <option value="{{ $contactPerson->id}}">{{$contactPerson->comp_name."|**|". $contactPerson->first_name." ".$contactPerson->surname }}</option>
-                                        @endforeach
-                                    </select>
+					<div class="form-group{{ $errors->has('message_type') ? ' has-error' : '' }}">
+						<label for="message_type" class="col-sm-2 control-label">Send To</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-check-square-o"></i>
+								</div>
+								<label class="radio-inline"><input type="radio" id="rdo_clients" name="message_type" value="1" checked> Client(s</label>
+								<label class="radio-inline"><input type="radio" id="rdo_employees" name="message_type" value="2"> Employees</label>
+							</div>
+						</div>
+					</div>
+                    <div class="form-group send-clients {{ $errors->has('clients') ? ' has-error' : '' }}">
+						<label for="clients" class="col-sm-2 control-label">Client(s)</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-users"></i>
+								</div>
+								<select name="clients[]" id="clients" class="form-control select2" multiple  style="width: 100%;">
+									@foreach($contactPersons as $contactPerson)
+										<option value="{{ $contactPerson->id}}">{{$contactPerson->comp_name."|**|". $contactPerson->first_name." ".$contactPerson->surname }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group send-employee {{ $errors->has('employees') ? ' has-error' : '' }}">
+                        <label for="employees" class="col-sm-2 control-label">Employees </label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user"></i>
                                 </div>
+                                <select class="form-control select2" multiple style="width: 100%;" id="employees" name="employees[]">
+                                    <option value="0">*** Select Employee ***</option>
+                                    @foreach($hrDetails as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                    @endforeach
+
+                                </select>
                             </div>
+                        </div>
                     </div>
                     <div class="form-group{{ $errors->has('message_type') ? ' has-error' : '' }}">
 							<label for="message_type" class="col-sm-2 control-label">Type</label>

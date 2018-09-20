@@ -509,7 +509,6 @@ Route::post('vehicle_management/Manage_safe/{safe}', 'VehicleManagemntController
 Route::get('vehicle_management/manage_fleet', 'FleetManagementController@fleetManagent');
 Route::get('vehicle_management/add_vehicle', 'FleetManagementController@addvehicle');
 //
-Route::post('vehicle_management/send-communicaion/{maintenance}', 'VehicleFleetController@sendCommunication');
 Route::post('vehicle_management/add_vehicleDetails', 'FleetManagementController@addvehicleDetails');
 Route::patch('vehicle_management/change-fleet-status/{vehicle_maintenance}', 'FleetManagementController@changeVehicleStatus');
 Route::get('vehicle_management/viewdetails/{maintenance}', 'FleetManagementController@viewDetails');
@@ -577,6 +576,9 @@ Route::patch('vehicle_management/edit_note/{note}', 'FleetManagementController@e
 Route::post('vehicle_management/delete_note/{note}', 'FleetManagementController@deleteNote');
 //
 Route::get('vehicle_management/fleet-communications/{maintenance}', 'VehicleFleetController@viewCommunications');
+Route::get('vehicle_management/send-communication/{maintenance}', 'VehicleFleetController@sendMessageIndex');
+Route::get('vehicle_management/vehicle_communication_print/{maintenance}', 'VehicleFleetController@communicationsPrint');
+Route::post('vehicle_management/send-communicaions/{maintenance}', 'VehicleFleetController@sendCommunication');
 //#
 Route::get('vehicle_management/general_cost/{maintenance}', 'VehicleFleetController@viewGeneralCost');
 Route::post('vehicle_management/addcosts', 'VehicleFleetController@addcosts');
