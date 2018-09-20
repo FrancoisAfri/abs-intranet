@@ -1752,12 +1752,12 @@ class VehicleFleetController extends Controller
 			if (!empty($vehiclemaker)) $make = "Make: $vehiclemaker->name "; else $make =  '';
 			$vehicleInfo = <<<HTML
 <p>
-Fleet#: $maintenance->fleet_number<br>
-Reg#: $maintenance->vehicle_registration<br>
-$make<br>
-Year: $maintenance->year <br>
-Engine#: $maintenance->engine_number<br>
-VIN (Chassis Number)#: $maintenance->chassis_number<br>
+Fleet#: $maintenance->fleet_number
+Reg#: $maintenance->vehicle_registration
+$make
+Year: $maintenance->year
+Engine#: $maintenance->engine_number
+VIN (Chassis Number)#: $maintenance->chassis_number
 </p>
 HTML;
 		}
