@@ -1733,7 +1733,7 @@ class VehicleFleetController extends Controller
 		$svehicleInfo = '';
         # Save email
 		$sendFleetDetails = !empty($CommunicationData['send_fleet_details']) ? $CommunicationData['send_fleet_details'] : 0;
-		if (!empty($sendFleetDetails))
+		if (!empty($sendFleetDetails) && $CommunicationData['message_type'] == 2)
 		{
 			################## WELL DETAILS ###############
 			$vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
@@ -1743,6 +1743,18 @@ class VehicleFleetController extends Controller
 			$svehicleInfo .= "Make: $vehiclemaker->name \n";
 			$svehicleInfo .= "Year: $maintenance->year \n";
 			$svehicleInfo .= "Engine#: $maintenance->engine_number \n";
+			$svehicleInfo .= "VIN (Chassis Number)#: $maintenance->chassis_number";
+		}
+		else
+		{
+			################## WELL DETAILS ###############
+			$vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
+			$svehicleInfo .= " </br>Fleet#: $maintenance->fleet_number </br>";
+			$svehicleInfo .= "Reg#: $maintenance->vehicle_registration </br>";
+			if (!empty($vehiclemaker))
+			$svehicleInfo .= "Make: $vehiclemaker->name </br>";
+			$svehicleInfo .= "Year: $maintenance->year </br>";
+			$svehicleInfo .= "Engine#: $maintenance->engine_number </br>";
 			$svehicleInfo .= "VIN (Chassis Number)#: $maintenance->chassis_number";
 		}
         $user = Auth::user()->load('person');

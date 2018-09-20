@@ -43,7 +43,7 @@ class VehicleCommunicationsEmployees extends Mailable
 		$companyName = $companyDetails['company_name'];
 
 		//Should get these details from setup
-		$subject = "$companyName Client Communication.";
+		$subject = "$companyName Communication.";
 
 		$data['support_email'] = $companyDetails['support_email'];
 		$data['company_name'] = $companyDetails['full_company_name'] ;
