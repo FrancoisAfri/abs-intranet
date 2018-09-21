@@ -531,7 +531,7 @@
                     var loadAll = loadAllDivs;
                      loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
                     parentDDID = ddID;
-                    loadAllDivs = -1;
+                    loadAllDivs = 1;
                 @endforeach
             @endif
         });

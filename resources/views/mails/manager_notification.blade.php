@@ -232,6 +232,8 @@
                                                      <p>
                                                     Purpose:{{ $purpose}}
                                                      <p>
+													Comment:{{ $comment}}
+                                                     <p>
                                                      For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
                                                 </td>
                                             </tr>

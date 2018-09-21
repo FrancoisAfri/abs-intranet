@@ -23,6 +23,7 @@ class vehiclebooking_manager_notification extends Mailable
     public $destination;
     public $purpose;
     public $vehicle_model;
+    public $comment;
 
     /**
      * Create a new message instance.
@@ -30,7 +31,7 @@ class vehiclebooking_manager_notification extends Mailable
      * @return void
      */
      public function __construct($first_name, $surname, $email, $required_from , $required_to ,$Usage_type ,
-        $driver ,$destination , $purpose , $vehicle_model)
+        $driver ,$destination , $purpose , $vehicle_model, $comment)
 
     {
         $this->first_name = $first_name;
@@ -43,6 +44,7 @@ class vehiclebooking_manager_notification extends Mailable
         $this->destination = $destination;
         $this->purpose = $purpose;
         $this->vehicle_model = $vehicle_model;
+        $this->comment = $comment;
     }
 
     /**

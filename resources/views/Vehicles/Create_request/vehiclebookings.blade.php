@@ -77,7 +77,7 @@
                             <div class="col-md-8 col-md-offset-2">
                                 <div>
                                     <div class="box-header with-border" align="center">
-                                        <h3 class="box-title">Search for a Vehicle</h3>
+                                        <h3 class="box-title">Booking Request</h3>
                                     </div>
                                     <div class="box-body" id="vehicle_details">
 
@@ -149,7 +149,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-ravelry"></i>
                                                     </div>
-                                                    <select id="Usage_type" name="Usage_type" class="form-control">
+                                                    <select id="usage_type" name="usage_type" required class="form-control">
                                                         <option value="0">*** Select a Booking Type  ***</option>
                                                         <option value="1"> Usage</option>
                                                         <option value="2"> Service</option>
@@ -167,7 +167,7 @@
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-user-o"></i>
                                                     </div>
-                                                    <select class="form-control " style="width: 100%;"
+                                                    <select class="form-control" style="width: 100%;"
                                                             id="driver" name="driver">
                                                         <option value="">*** Select Driver ***</option>
                                                         @foreach($employees as $user)
