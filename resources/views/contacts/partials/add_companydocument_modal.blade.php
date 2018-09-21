@@ -7,7 +7,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add New Document Type </h4>
+                    <h4 class="modal-title">Add New Document </h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -27,36 +27,26 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label for="date_from" class="col-sm-2 control-label">Date From</label>
 
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
                                 <input type="text" class="form-control datepicker" id="date_from" name="date_from"
                                        value="{{ old('date_from') }}" placeholder="Click to Select a Date...">
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="exp_date" class="col-sm-2 control-label">Expiry Date</label>
 
                         <div class="col-sm-8">
                             <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
                                 <input type="text" class="form-control datepicker" id="exp_date" name="exp_date"
                                        value="{{ old('exp_date') }}" placeholder="Click to Select a Date...">
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group supDoc-field{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Supporting Document</label>
                         <div class="col-sm-8">
@@ -70,7 +60,6 @@
                             </div>
                         </div>
                     </div>
-
                     <input type="hidden" id="companyID" name="companyID"
                            value="{{ !empty($company->id) ? $company->id : ''}}">
 

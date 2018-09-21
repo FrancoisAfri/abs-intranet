@@ -1122,19 +1122,24 @@ class ContactCompaniesController extends Controller
     {
         $this->validate($request, [
             //'name' => 'required|unique:contactsCompanydocs,name',
-            'exp_date' => 'required',
+            //'exp_date' => 'required',
             'supporting_docs' => 'required',
         ]);
 
         $contactsCompanydocs = $request->all();
         unset($contactsCompanydocs['_token']);
-
-        $Datefrom = $contactsCompanydocs['date_from'] = str_replace('/', '-', $contactsCompanydocs['date_from']);
-        $Datefrom = $contactsCompanydocs['date_from'] = strtotime($contactsCompanydocs['date_from']);
-
-        $Expirydate = $contactsCompanydocs['exp_date'] = str_replace('/', '-', $contactsCompanydocs['exp_date']);
-        $Expirydate = $contactsCompanydocs['exp_date'] = strtotime($contactsCompanydocs['exp_date']);
-
+		if (!empty($contactsCompanydocs['date_from']))
+		{
+			$Datefrom = $contactsCompanydocs['date_from'] = str_replace('/', '-', $contactsCompanydocs['date_from']);
+			$Datefrom = $contactsCompanydocs['date_from'] = strtotime($contactsCompanydocs['date_from']);
+		}
+		else $Datefrom = 0;
+		if (!empty($contactsCompanydocs['exp_date']))
+		{
+			$Expirydate = $contactsCompanydocs['exp_date'] = str_replace('/', '-', $contactsCompanydocs['exp_date']);
+			$Expirydate = $contactsCompanydocs['exp_date'] = strtotime($contactsCompanydocs['exp_date']);
+		}
+		else $Expirydate = 0;
         $contactsCompany = new contactsCompanydocs();
         $contactsCompany->name = $contactsCompanydocs['name'];
         $contactsCompany->description = $contactsCompanydocs['description'];

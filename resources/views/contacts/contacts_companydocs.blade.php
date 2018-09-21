@@ -16,7 +16,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Company Documents for - {{ $company->name }} </h3>
+                    <h3 class="box-title"> Company Documents For - {{ $company->name }} </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -26,7 +26,6 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
@@ -51,7 +50,6 @@
                                         ><i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
-
                                     <td nowrap>
                                         <div class="form-group{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
                                             <label for="document" class="control-label"></label>
@@ -92,9 +90,7 @@
                                     <div class="callout callout-danger">
                                         <h4><i class="fa fa-database"></i> No Records found</h4>
 
-                                        <p>No Records matching your search criteria in the database. Please refine your
-                                            search
-                                            parameters.</p>
+                                        <p>No document found in the database. Please start by adding a document.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -117,7 +113,6 @@
             @if (count($document) > 0)
                 @include('contacts.partials.companydoc_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Document ? This action cannot be undone.'])
             @endif
-
         </div>
         @endsection
 
@@ -187,12 +182,9 @@
                     $(window).on('resize', function () {
                         $('.modal:visible').each(reposition);
                     });
-
                     //Show success action modal
                     $('#success-action-modal').modal('show');
-
                     //
-
                     $(".js-example-basic-multiple").select2();
 
                     $('.datepicker').datepicker({
