@@ -112,19 +112,17 @@ class VehicleBookingController extends Controller
 
     public function vehiclerequest()
     {
-        $Vehiclemanagemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('name', 'asc')->get();
 
-        $data['page_title'] = "Fleet Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Fleet Search";
+        $data['page_description'] = "Search Fleet For Booking";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Bookings', 'active' => 1, 'is_module' => 0]
         ];
         $data['Vehicle_types'] = $Vehicle_types;
         $data['division_levels'] = $divisionLevels;
-        $data['Vehiclemanagemnt'] = $Vehiclemanagemnt;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'My Bookings';
 
