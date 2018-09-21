@@ -215,7 +215,9 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $creator->first_name }},<br><br>
-                                                    We would like to inform you that, the quotation you submitted has been declined. To view  <a target="_blank" href="{{ $quote_url }}">click here.</a>
+                                                    We would like to inform you that, the quotation you submitted has been declined. 
+													Reason: {{ $rejectionReason }}.<br><br>
+													To view  <a target="_blank" href="{{ $quote_url }}">click here.</a>
                                                 </td>
                                             </tr>
 

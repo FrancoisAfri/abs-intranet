@@ -15,15 +15,17 @@ class QuotesRejectionMail extends Mailable
 	
 	public $creator;
     public $quoteID;
+    public $rejectionReason;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(HRPerson $creator, $quoteID)
+    public function __construct(HRPerson $creator, $quoteID, $rejectionReason)
     {
         $this->creator = $creator;
         $this->quoteID = $quoteID;
+        $this->quoteID = $rejectionReason;
     }
 
     /**

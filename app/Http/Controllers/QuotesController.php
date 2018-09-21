@@ -444,7 +444,7 @@ class QuotesController extends Controller
 		{
 			$creator = HRPerson::find($quote->hr_person_id);
 			if (!empty($creator->email))
-                Mail::to($creator->email)->send(new QuotesRejectionMail($creator, $quote->id));
+                Mail::to($creator->email)->send(new QuotesRejectionMail($creator, $quote->id, $changedStatus));
 		}
         AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", 'Edited by User', 0);
         return back();
