@@ -26,6 +26,7 @@ use App\QuoteCompanyProfile;
 use Illuminate\Http\Request;
 use App\QuoteApprovalHistory;
 use App\Mail\SendQuoteToClient;
+use App\Mail\QuotesRejectionMail;
 use App\ProductServiceSettings;
 use App\QuotesTermAndConditions;
 use Illuminate\Support\Facades\DB;
@@ -438,7 +439,13 @@ class QuotesController extends Controller
         $QuoteApprovalHistory->comment = $changedStatus;
         $QuoteApprovalHistory->approval_date = strtotime(date('Y-m-d'));
         $QuoteApprovalHistory->save();
-
+		// Email quote Creator		
+		if (!empty($quote->hr_person_id))
+		{
+			$creator = HRPerson::find($quote->hr_person_id);
+			if (!empty($creator->email))
+                Mail::to($creator->email)->send(new QuotesRejectionMail($creator, $quote->id));
+		}
         AuditReportsController::store('Quote', "Quote Status Changed: $changedStatus", 'Edited by User', 0);
         return back();
     }
@@ -697,7 +704,8 @@ class QuotesController extends Controller
             $managerID = $user->person->manager_id;
             if ($managerID) {
                 $manager = HRPerson::find($managerID);
-                Mail::to($manager->email)->send(new ApproveQuote($manager, $quote->id));
+				if (!empty($manager->email))
+					Mail::to($manager->email)->send(new ApproveQuote($manager, $quote->id));
             }
             //Add to quote history
             $QuoteApprovalHistory = new QuoteApprovalHistory();
@@ -829,7 +837,7 @@ class QuotesController extends Controller
      */
     public function viewQuote(Quotation $quotation, $companyID=false , $isPDF = false, $printQuote = false, $emailQuote = false, $isInvoice = false, CRMInvoice $paramInvoice = null)
     {
-        $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services');
+        $quotation->load('products.ProductPackages', 'packages.products_type', 'company', 'client', 'termsAndConditions', 'services', 'person');
         //return $quotation;
 		$invoice = null;
         $totalPaid = 0;
