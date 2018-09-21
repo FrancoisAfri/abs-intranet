@@ -116,9 +116,8 @@
                                 </div>
 
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary pull-right"><i
-                                                class="fa fa-search"></i> Search
-                                    </button>
+									<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+                                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-search"></i> Search </button>
                                 </div>
                             </div>
                         </div>
@@ -159,6 +158,10 @@
     <!-- time picker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
+		$('#back_button').click(function () {
+                    location.href = '/vehicle_management/create_request';
+                });
+
         $(function () {
             $(".select2").select2();
             $('.hours-field').hide();
