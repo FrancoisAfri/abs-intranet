@@ -291,11 +291,7 @@
             var redirectUrl = '/vehicle_management/manage_fleet';
             var successMsgTitle = 'New Vehicle Details Added!';
             var successMsg = 'TheVehicle Details has been updated successfully.';
-			var vehiclemakeID =$('form[name=' + formName + ']').find('#vehiclemake_id').val();
-			var vehiclemodelID= $('form[name=' + formName + ']').find('#vehiclemodel_id').val();
-			console.log(vehiclemakeID);
-			console.log(vehiclemodelID);
-            //modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
         //Load divisions drop down
