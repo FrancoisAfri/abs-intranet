@@ -14,7 +14,7 @@ class AddColumnToVehicleReturnDocuments extends Migration
     public function up()
     {
                 Schema::table('vehicle_return_documents', function (Blueprint $table) {
-            $table->Integer('bookingID')->nullable();
+            $table->Integer('bookingID ')->nullable();
         });
     }
 
