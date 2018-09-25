@@ -23,8 +23,8 @@
                             <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_single"
                                         name="image_type" value="1" checked> Single </label>
                                                                                           
-                            <label class="radio-inline"><input type="radio" id="rdo_zip" name="image_type" value="2">
-                                Bulk </label>
+                            <!-- <label class="radio-inline"><input type="radio" id="rdo_zip" name="image_type" value="2">
+                                Bulk </label>-->
                         </div>
                     </div>
 

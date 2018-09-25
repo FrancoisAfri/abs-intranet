@@ -47,7 +47,6 @@ rel="stylesheet">
                             <ul class="products-list product-list-in-box">
                                 @foreach ($vehiclebookings as $booking)
                                 <tr>
-                                   
                                     <td>
                                        <div class="product-img">
                                                         <img src="{{ (!empty($booking->image)) ? Storage::disk('local')->url("Vehicle/images/$booking->image") : 'http://placehold.it/60x50' }}"
@@ -56,34 +55,32 @@ rel="stylesheet">
                                     </td>
                                     {{--dnt allow editing for approved and rejected bookings--}}
                                     @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14 && $booking->status !== 11 && $booking->status !== 12)
-                                    <td nowrap>
-                                        <button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                        data-toggle="modal" data-target="#edit-booking-modal"
-                                        data-id="{{ $booking->id }}"
-                                        data-vehiclemodel="{{ $booking->vehicleModel }}"
-                                        data-vehicle_reg="{{ $booking->vehicle_reg }}"
-                                        data-required_from="{{date("y F  Y, g:i a", $booking->require_datetime)}}"
-                                        data-required_to="{{date("y F  Y, g:i a", $booking->return_datetime)}}"
-                                        data-usage_type="{{$booking->usage_type}}"
-                                        data-driver="{{$booking->driver_id}}"
-                                        data-purpose="{{$booking->purpose}}"
-                                        data-destination="{{$booking->destination}}"
-                                        data-vehicle_id="{{$booking->vehicle_id}}}"
-                                        ><i
-                                        class="fa fa-pencil-square-o"></i> Edit
-                                    </button>
-                                </td>@else
-                                <td></td>
-                                @endif
-                                <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
-                                <td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
-                                <td>{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : ''}}</td>
-                                <td>{{ !empty($booking->usage_type) ? $usageType[$booking->usage_type] : ''}}</td>
-                                <td>{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}</td>
-                                <td>{{ !empty($booking->return_datetime ) ? date("F j, Y, g:i a", $booking->return_datetime) : ''}}</td>
-                                <td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
-                                <td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
-                                <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
+										<td nowrap>
+											<button vehice="button" id="edit_compan" class="btn btn-warning  btn-xs"
+											data-toggle="modal" data-target="#edit-booking-modal"
+											data-id="{{ $booking->id }}"
+											data-vehiclemodel="{{ $booking->vehicleModel }}"
+											data-vehicle_reg="{{ $booking->vehicle_reg }}"
+											data-required_from="{{date("y F  Y, g:i a", $booking->require_datetime)}}"
+											data-required_to="{{date("y F  Y, g:i a", $booking->return_datetime)}}"
+											data-usage_type="{{$booking->usage_type}}"
+											data-driver="{{$booking->driver_id}}"
+											data-purpose="{{$booking->purpose}}"
+											data-destination="{{$booking->destination}}"
+											data-vehicle_id="{{$booking->vehicle_id}}}"><i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										</td>
+									@else <td></td>
+									@endif
+									<td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
+									<td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
+									<td>{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : ''}}</td>
+									<td>{{ !empty($booking->usage_type) ? $usageType[$booking->usage_type] : ''}}</td>
+									<td>{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}</td>
+									<td>{{ !empty($booking->return_datetime ) ? date("F j, Y, g:i a", $booking->return_datetime) : ''}}</td>
+									<td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
+									<td>{{ !empty($booking->firstname . ' ' . $booking->surname ) ? $booking->firstname . ' ' . $booking->surname : ''}}</td>
+									<td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
                                     @if (isset($booking) && $booking->status !== 10 && $booking->status !== 14  && $booking->status !== 11 && $booking->status !== 12)
                                         <td nowrap>
                                             <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
@@ -133,7 +130,7 @@ rel="stylesheet">
                 </table>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="button" id="cancel" class="btn btn-default pull-right"> Create a Request </button>
+                    <button type="button" id="search_booking" class="btn btn-default pull-right"> Create a Request </button>
 
                 </div>
             </div>
@@ -161,6 +158,9 @@ rel="stylesheet">
                     //Cancel button click event
                     document.getElementById("cancel").onclick = function () {
                         location.href = "/vehicle_management/vehicle_request";
+                    };
+					document.getElementById("search_booking").onclick = function () {
+                        location.href = "/vehicle_management/bookings_search";
                     };
                     $(function () {
                         $('#example2').DataTable({

@@ -390,6 +390,8 @@ Route::get('vehicle_management/approve-single/{fleet}','fleetcardController@vehi
 //Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 
 //##----bookings
+Route::get('vehicle_management/bookings_search', 'VehicleBookingController@bookingSearch');
+Route::post('vehicle_management/bookings_search_results', 'VehicleBookingController@bookingSearchResults');
 Route::get('vehicle_management/create_request', 'VehicleBookingController@index');
 Route::get('vehicle_management/vehicle_request', 'VehicleBookingController@vehiclerequest');
 Route::post('vehicle_management/vehiclesearch', 'VehicleBookingController@VehicleSearch');
@@ -422,6 +424,7 @@ Route::post('vehicle_management/return_Image', 'VehicleBookingController@Addretu
 Route::patch('vehicle_management/{confirm}/confirmreturn', 'VehicleBookingController@confirmReturn');
 // vehicle_ispection
 Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingController@viewVehicleIspectionDocs'); 
+Route::get('vehicle_management/view_booking/{booking}', 'VehicleBookingController@viewBookingDetails'); 
 
 ### fire_extinguishers
 Route::get('vehicle_management/fire_extinguishers/{maintenance}', 'FleetManagementController@viewfireExtinguishers'); 
