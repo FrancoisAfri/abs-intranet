@@ -26,7 +26,7 @@ class AddColumnToVehicleReturnDocuments extends Migration
     public function down()
     {
         Schema::table('vehicle_return_documents', function (Blueprint $table) {
-            $table->dropColumn('bookingID');
+            $table->dropColumn('bookingID ');
         });
     }
 }
