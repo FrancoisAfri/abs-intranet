@@ -49,7 +49,6 @@
                                 </div>
                             </div>
                         </div>
-						
 						<div class="form-group">
                             <label for="action" class="col-sm-3 control-label">Action</label>
                             <div class="col-sm-9">

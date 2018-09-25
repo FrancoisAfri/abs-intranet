@@ -120,11 +120,8 @@
                                     @foreach ($vehiclebooking as $booking)
                                         <tr>
                                             <td nowrap>
-                                                <button details="button" id="edit_compan"
-                                                        class="btn btn-warning  btn-xs"
-                                                        data-toggle="modal" data-target="#add-booking-modal"
-                                                        data-id="{{ $booking->id }}"><i class="fa fa-eye"></i> view
-                                                </button>
+                                                <a href="{{ '/vehicle_management/view_booking/' . $booking->id }}" 
+                                                       class="btn btn-success  btn-xs" target="_blank"><i class="fa fa-handshake-o"></i> View</a>
                                             </td>
                                             <td>{{ !empty($booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year  ) ? $booking->vehicleMake . ' ' .  $booking->vehicleModel . ' ' . $booking->vehicleType . ' ' . $booking->year : ''}}</td>
                                             <td>{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}</td>
@@ -134,36 +131,32 @@
                                             <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
                                             <td>{{ !empty($booking->start_mileage_id) ? $booking->start_mileage_id : ''}}</td>
                                             <td>{{ !empty($booking->end_mileage_id) ? $booking->end_mileage_id : ''}}</td>
-                                            <td>{{ !empty($booking->start_mileage_id - $booking->end_mileage_id ) ? $booking->start_mileage_id - $booking->end_mileage_id  : ''}}</td>
-
-
+                                            <td>{{ !empty($booking->end_mileage_id && !empty($booking->start_mileage_id) ) ? $booking->end_mileage_id - $booking->start_mileage_id  : ''}}</td>
                                             @if (isset($booking) && $booking->status === 10)
                                                 <td>
-                                                    <a href="{{ '/vehicle_management/collect/' . $booking->id }}"
+                                                    <a href="{{ '/vehicle_management/collect/' . $booking->id }}" 
                                                        id="collect"
-                                                       class="btn btn-success  btn-xs" data-id="{{ $booking->id }}"><i
+                                                       class="btn btn-success  btn-xs" target="_blank"><i
                                                                 class="fa fa-handshake-o"></i> collect</a>
                                                 </td>@elseif (isset($booking) && $booking->status == 11)
                                                 <td>
                                                     <a href="{{ '/vehicle_management/return_vehicle/' . $booking->id }}"
                                                        id="return"
-                                                       class="btn btn-info  btn-xs" data-id="{{ $booking->id }}"><i
+                                                       class="btn btn-info  btn-xs" target="_blank"><i
                                                                 class="fa fa-reply-all"></i> return Vehicle </a>
                                                 </td>
                                             @else
                                                 <td></td>
                                             @endif
-                                            @if (isset($booking) && $booking->status === 12)
+                                            @if (isset($booking) && $booking->status > 11)
                                                 <td>
                                                     <a href="{{ '/vehicle_management/vehicle_ispection/' . $booking->id }}"
                                                        id="collect"
-                                                       class="btn btn-primary  btn-xs" data-id="{{ $booking->id }}"><i
+                                                       class="btn btn-primary  btn-xs" target="_blank"><i
                                                                 class="fa fa-hand-lizard-o"></i> Inspection</a>
                                                 </td>
 											@else 
-												<td>
-                                                    
-                                                </td>
+												<td></td>
                                         </tr>
                             @endif
                             @endforeach
@@ -191,11 +184,9 @@
                             <button type="button" id="cancel" class="btn-sm btn-default btn-flat pull-left"><i
                                         class="fa fa-arrow-left"></i> Back
                             </button>
-                            
                         </div>
                     </div>
                 </div>
-
             </div>
         @endsection
 

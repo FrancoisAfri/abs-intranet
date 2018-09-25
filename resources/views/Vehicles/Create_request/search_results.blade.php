@@ -8,7 +8,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">Internal Vehicle Management</h3>
+                    <h3 class="box-title">Choose a Vehicle</h3>
                 </div>
                 <div class="box-body">
                     <div class="box">
