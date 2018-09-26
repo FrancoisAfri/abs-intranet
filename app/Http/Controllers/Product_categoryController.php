@@ -75,7 +75,23 @@ class Product_categoryController extends Controller
                 ->first();
             $jobCategories = product_category::orderBy('name', 'asc')->get();
             $products = product_products::orderBy('name', 'asc')->get();
-            $Category->load('productCategory');
+            //$Category->load('productCategory');
+			
+			$products = product_products::select('Product_products.*','vehicle_details.id as id'
+					,'vehicle_details.fleet_number as fleet_number'
+					,'vehicle_details.vehicle_registration as vehicle_registration' 
+					,'Product_products.name as product_name', 'hr_people.first_name as name',
+					'hr_people.surname as surname', 'hr.first_name as allocated_firstname'
+					, 'hr.surname as allocated_surname')
+            ->leftJoin('hr_people', 'stock_history.user_id', '=', 'hr_people.id')
+            ->leftJoin('hr_people as hr', 'stock_history.user_allocated_id', '=', 'hr.id')
+            ->leftJoin('Product_products', 'stock_history.product_id', '=', 'Product_products.id')
+            ->leftJoin('vehicle_details', 'stock_history.vehicle_id', '=', 'vehicle_details.id')
+             ->orderBy('product_name', 'asc')
+            ->orderBy('stock_history.id', 'asc')
+			->where('category_id', $Category->id)
+            ->get();
+			
             $data['page_title'] = 'Manage Products Product';
             $data['page_description'] = 'Products page';
             $data['breadcrumb'] = [
@@ -86,7 +102,8 @@ class Product_categoryController extends Controller
 			$stockTypeArray = array(1 => 'Stock Item', 2 => 'Non Stock Item', 3 => 'Both');
             $data['jobCategories'] = $jobCategories;
             $data['userAccess'] = $userAccess;
-            $data['products'] = $Category;
+            $data['category'] = $Category;
+            $data['products'] = $products;
             $data['stockTypeArray'] = $stockTypeArray;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';

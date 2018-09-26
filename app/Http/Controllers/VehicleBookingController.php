@@ -234,7 +234,6 @@ class VehicleBookingController extends Controller
 	
 	public function viewBookingDetails(vehicle_booking $booking)
     {
-
         $employee = HRPerson::where('status', 1)->where('id', $booking->driver_id)->first();
         $vehicle = vehicle_detail::where('id', $booking->vehicle_id)->where('status', 1)->first();
 
@@ -1099,7 +1098,7 @@ class VehicleBookingController extends Controller
         $vehicle = vehicle_detail::where('id', $ispection->vehicle_id)->get()->first();
 		
         #vehicle collect documents
-        $vehiclecollectdocuments = vehicle_collect_documents::where('bookingID', $ispection->id)->get()->first();
+        $vehiclecollectdocuments = vehicle_collect_documents::where('bookingID', $ispection->id)->get();
         #vehicle collect images
         $vehiclecollectimage = vehicle_collect_image::where('bookingID', $ispection->id)->get();
         #vehicle return documents
