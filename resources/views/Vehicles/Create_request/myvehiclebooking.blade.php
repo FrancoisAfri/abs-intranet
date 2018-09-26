@@ -155,10 +155,7 @@ rel="stylesheet">
     <!-- End Bootstrap File input -->
 
     <script>
-                    //Cancel button click event
-                    document.getElementById("cancel").onclick = function () {
-                        location.href = "/vehicle_management/vehicle_request";
-                    };
+                    
 					document.getElementById("search_booking").onclick = function () {
                         location.href = "/vehicle_management/bookings_search";
                     };
