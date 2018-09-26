@@ -14,8 +14,9 @@ class RenameBookingIDVehicleReturnDocumentsTable extends Migration
     public function up()
     {
         Schema::table('vehicle_return_documents', function (Blueprint $table) {
-			$table->renameColumn('bookingID ', 'bookingID');
+			$table->dropColumn('bookingID ');
 		});
+		
     }
 
     /**
