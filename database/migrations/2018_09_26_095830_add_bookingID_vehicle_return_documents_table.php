@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnToVehicleReturnDocuments extends Migration
+class AddBookingIDVehicleReturnDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddColumnToVehicleReturnDocuments extends Migration
     public function up()
     {
         Schema::table('vehicle_return_documents', function (Blueprint $table) {
-           $table->Integer('bookingID ')->nullable();
+           $table->Integer('bookingID')->nullable();
         });
     }
 
@@ -26,8 +26,7 @@ class AddColumnToVehicleReturnDocuments extends Migration
     public function down()
     {
         Schema::table('vehicle_return_documents', function (Blueprint $table) {
-            $table->dropColumn('bookingID ');
+            $table->dropColumn('bookingID');
         });
     }
 }
-
