@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Products({{$products->name}})</h3>
+                    <h3 class="box-title">Products({{$category->name}})</h3>
                 </div>
             {{ csrf_field() }}
             {{ method_field('PATCH') }}
@@ -16,56 +16,56 @@
                             <th style="width: 10px">#</th>
                             <th>Name</th>
                             <th>Product Code</th>
-                            <th>Quantity Available</th>
+                            <th>Available Stock</th>
                             @if (isset($userAccess) && $userAccess->access_level > 1)
                                 <th>Price</th>
                             @else
                                 <th></th>
                             @endif
                             <th>Stock Type</th>
-                            <th>Available Stock</th>
+                            <th>Is Vatable</th>
                             <th style="width: 40px"></th>
                             <th style="width: 40px"></th>
                         </tr>
-                        @if (count($products->productCategory) > 0)
-                            @foreach($products->productCategory as $category)
+                        @if (count($products) > 0)
+                            @foreach($products as $product)
                                 <tr id="categorys-list">
                                     <td nowrap>
                                         <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs"
                                                 data-toggle="modal" data-target="#edit-product_title-modal"
-                                                data-id="{{ $category->id }}" data-name="{{ $category->name }}"
-                                                data-description="{{ $category->description }}"
-                                                data-price="{{ $category->price }}"
-												data-stock_type="{{ $category->stock_type }}"><i
+                                                data-id="{{ $product->id }}" data-name="{{ $product->name }}"
+                                                data-description="{{ $product->description }}"
+                                                data-price="{{ $product->price }}"
+												data-stock_type="{{ $product->stock_type }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
-                                        <a href="{{ '/Product/price/' . $category->id }}" id="edit_compan"
-                                           class="btn btn-primary  btn-xs" data-id="{{ $category->id }}"
-                                           data-name="{{ $category->name }}"
-                                           data-description="{{$category->description}}"><i class="fa fa-money"></i>
+                                        <a href="{{ '/Product/price/' . $product->id }}" id="edit_compan"
+                                           class="btn btn-primary  btn-xs" data-id="{{ $product->id }}"
+                                           data-name="{{ $product->name }}"
+                                           data-description="{{$product->description}}"><i class="fa fa-money"></i>
                                             Prices</a></td>
-                                    <td>{{ (!empty($category->name)) ?  $category->name : ''}} </td>
-                                    <td>{{ (!empty($category->product_code)) ?  $category->product_code : ''}} </td>
-                                    <td>{{ (!empty($category->product_code)) ?  $category->product_code : ''}} </td>
+                                    <td>{{ (!empty($product->name)) ?  $product->name : ''}} </td>
+                                    <td>{{ (!empty($product->product_code)) ?  $product->product_code : ''}} </td>
+                                    <td>{{ (!empty($product->product_code)) ?  $product->product_code : ''}} </td>
                                     @if (isset($userAccess) && $userAccess->access_level > 1)
-                                        <td>{{ (!empty( $category->price)) ?  'R' .number_format($category->price, 2) : ''}} </td>
+                                        <td>{{ (!empty( $product->price)) ?  'R' .number_format($product->price, 2) : ''}} </td>
                                     @else
                                         <td></td>
                                     @endif
-									<td>{{ (!empty($category->stock_type)) ?  $stockTypeArray[$category->stock_type] : ''}} </td>
-									<td>{{ (!empty($category->is_vatable))  && $category->is_vatable == 2 ?  'No' : 'Yes'}} </td>
-                                    @if ((!empty($category->stock_type))  && $category->stock_type == 1)
-                                        <td><a href="/stock/stockinfo/{{$category->id}}" id="srock_info" class="btn btn-primary  btn-xs"><i class="fa fa-eye"></i> Stock Info</a> </td>
+									<td>{{ (!empty($product->stock_type)) ?  $stockTypeArray[$product->stock_type] : ''}} </td>
+									<td>{{ (!empty($product->is_vatable))  && $product->is_vatable == 2 ?  'No' : 'Yes'}} </td>
+                                    @if ((!empty($product->stock_type))  && $product->stock_type == 1)
+                                        <td><a href="/stock/stockinfo/{{$product->id}}" id="srock_info" class="btn btn-primary  btn-xs"><i class="fa fa-eye"></i> Stock Info</a> </td>
                                     @else
                                         <td></td>
 									@endif
 									<td>
                                         <!--   leave here  -->
                                         <button type="button" id="view_ribbons"
-                                                class="btn {{ (!empty($category->status) && $category->status == 1) ? " btn-danger " : "btn-success " }}
-                                                        btn-xs" onclick="postData({{$category->id}}, 'actdeac');"><i
-                                                    class="fa {{ (!empty($category->status) && $category->status == 1) ?
-                              " fa-times " : "fa-check " }}"></i> {{(!empty($category->status) && $category->status == 1) ? "De-Activate" : "Activate"}}
+                                                class="btn {{ (!empty($product->status) && $product->status == 1) ? " btn-danger " : "btn-success " }}
+                                                        btn-xs" onclick="postData({{$product->id}}, 'actdeac');"><i
+                                                    class="fa {{ (!empty($product->status) && $product->status == 1) ?
+                              " fa-times " : "fa-check " }}"></i> {{(!empty($product->status) && $product->status == 1) ? "De-Activate" : "Activate"}}
                                         </button>
                                     </td>
                                 </tr>
@@ -140,7 +140,7 @@
             //Post module form to server using ajax (ADD)
             $('#add-product_title').on('click', function () {
                 //console.log('strUrl');
-                var strUrl = 'add/{{$products->id}}';
+                var strUrl = 'add/{{$category->id}}';
                 var modalID = 'add-new-product_title-modal';
                 var objData = {
                     name: $('#' + modalID).find('#name').val(),
@@ -152,7 +152,7 @@
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-product_title';
-                var redirectUrl = '/Product/Product/{{ $products->id }}';
+                var redirectUrl = '/Product/Product/{{ $category->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The product has been saved successfully.';
                 //var formMethod = 'PATCH';
@@ -193,7 +193,7 @@
                     _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'update-product_title';
-                var redirectUrl = '/Product/Product/{{ $products->id }}';
+                var redirectUrl = '/Product/Product/{{ $category->id }}';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Category modal has been updated successfully.';
                 var Method = 'PATCH';
