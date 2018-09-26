@@ -19,7 +19,7 @@ rel="stylesheet">
         <div class="box box-primary">
             <div class="box-header with-border">
                 <i class="fa fa-truck pull-right"></i>
-                <h3 class="box-title"> My Vehicle Booking(s) </h3>
+                <h3 class="box-title"> My Vehicle Booking(s)</h3>
             </div>
             <div class="box-body">
                 <div style="overflow-X:auto;">
@@ -157,7 +157,7 @@ rel="stylesheet">
     <script>
                     
 					document.getElementById("search_booking").onclick = function () {
-                        location.href = "/vehicle_management/bookings_search";
+                        location.href = "/vehicle_management/vehicle_request";
                     };
                     $(function () {
                         $('#example2').DataTable({
