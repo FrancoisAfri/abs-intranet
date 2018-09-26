@@ -96,7 +96,7 @@
 									@endforeach
 								</td>
 							@else
-								<td>Nothing Uploaded</td>
+								<td><em>Nothing Uploaded</em></td>
 							@endif
                         </tr>
 						<tr><th colspan="2" style="text-align:center"> Image(s)</td></tr>
@@ -111,10 +111,8 @@
 									@endforeach
 								</td>
 							@else
-								<td>Nothing Uploaded</td>
+								<td><em>Nothing Uploaded</em></td>
 							@endif
-                        </tr>
-						<tr>
 							@if(!empty($vehiclereturnimages))
 								<td>
 									@foreach ($vehiclereturnimages as $returnimage)
@@ -125,7 +123,7 @@
 									@endforeach
 								</td>
 							@else
-								<td>Nothing Uploaded</td>
+								<td><em>Nothing Uploaded</em></td>
 							@endif
                         </tr>
                     </table>
