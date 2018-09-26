@@ -101,24 +101,32 @@
                         </tr>
 						<tr><th colspan="2" style="text-align:center"> Image(s)</td></tr>
                         <tr>
-                            <td>
-								@foreach ($vehiclecollectimage as $collectimage)
-									<div class="product-img">
-										<img src="{{ (!empty($collectimage->image)) ? Storage::disk('local')->url("Vehicle/collectionimages/$collectimage->image") : 'http://placehold.it/60x50' }}"
-									  alt="Product Image"width="250" height="120">
-									</div>
-								@endforeach
-                            </td>
+							@if(!empty($vehiclecollectimage))
+								<td>
+									@foreach ($vehiclecollectimage as $collectimage)
+										<div class="product-img">
+											<img src="{{ (!empty($collectimage->image)) ? Storage::disk('local')->url("Vehicle/collectionimages/$collectimage->image") : 'http://placehold.it/60x50' }}"
+										  alt="Product Image"width="250" height="120">
+										</div>
+									@endforeach
+								</td>
+							@else
+								<td>Nothing Uploaded</td>
+							@endif
                         </tr>
 						<tr>
-                            <td>
-								@foreach ($vehiclereturnimages as $returnimage)
-								   <div class="product-img">
-										<img src="{{ (!empty($returnimage->image)) ? Storage::disk('local')->url("Vehicle/returnImages/$returnimage->image") : 'http://placehold.it/60x50' }}"
-									  alt="Product Image"width="250" height="120">
-									</div>
-								@endforeach
-                            </td>
+							@if(!empty($vehiclereturnimages))
+								<td>
+									@foreach ($vehiclereturnimages as $returnimage)
+									   <div class="product-img">
+											<img src="{{ (!empty($returnimage->image)) ? Storage::disk('local')->url("Vehicle/returnImages/$returnimage->image") : 'http://placehold.it/60x50' }}"
+										  alt="Product Image"width="250" height="120">
+										</div>
+									@endforeach
+								</td>
+							@else
+								<td>Nothing Uploaded</td>
+							@endif
                         </tr>
                     </table>
                     <!--   </div> -->
